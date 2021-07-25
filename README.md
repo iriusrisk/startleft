@@ -112,8 +112,75 @@ startleft run --type cloudformation --map defaults_map.yaml --map cloudformation
 
 ## Terraform HCL2
 
+StartLeft can also parse Terraform source files and an example is provided in the `examples` directory.
+
+```
+startleft run --type hcl2 --map defaults_map.yaml --map terraform_aws_map.yaml --otm elb.otm --name "Terraform ELB" --id "terraform-elb" --ir-map ir_map.yaml --recreate elb.tf
+```
+
 ## Hand crafted OTM
 
+You can also write an OTM file without parsing any IaC source files. This is useful if you want to create a threat model in your IDE and have the diagram etc. generated for you. For example, the following short OTM file:
+
+```
+project:
+  name: Manual ThreatModel
+  id:   manual-threatmodel
+
+trustzones:
+  - id:   internet
+    name: Internet
+    type: internet
+
+  - id:   web
+    name: Web
+    type: private
+
+  - id:   data
+    name: Data
+    type: private
+
+components:
+  - id:     user
+    name:   User
+    type:   user
+    parent: internet
+
+  - id:     web-server
+    name:   Web server
+    type:   webapp
+    parent: web
+
+  - id:     database
+    name:   Database
+    type:   postgres
+    parent: data
+
+dataflows:
+  - id:     client-connection
+    name:   Client connection
+    type:   network
+    from:   user
+    to:     web-server
+
+  - id:     database-connection
+    name:   Database connection
+    type:   network
+    from:   web-server
+    to:     database
+```
+
+Will create this threat model in IriusRisk:
+
+![Threat Model](docs/images/manual_threat_model.png)
+
+![Threat Model Threats](docs/images/manual_threats.png)
+
+The example is provided and can be run using this command:
+
+```
+startleft threatmodel --ir-map ir_map.yaml --recreate manual.otm
+```
 
 
 # Source Mapping

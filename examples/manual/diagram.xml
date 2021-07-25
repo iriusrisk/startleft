@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="fraser.iriusrisk.com" modified="2021-06-17T09:59:40.298Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36" version="12.2.4" etag="yWk9nYPBV6YaXUT6rb4Y" pages="1">
+  <diagram id="u3LjUtK0nmesnV5ISQRV" name="Page-1">
+    <mxGraphModel dx="1468" dy="733" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="4681" pageHeight="3300" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="internet" value="Internet" style="editable=0;recursiveResize=0;rounded=0;whiteSpace=wrap;html=1;dashed=1;strokeColor=#FF3332;verticalAlign=top;strokeWidth=2;fillColor=#F5F5F5;fontColor=#000000;opacity=60;connectable=0;container=1;ir.ref=internet;ir.type=TRUSTZONE;" parent="1" vertex="1">
+          <mxGeometry x="50" y="50" width="164" height="164" as="geometry"/>
+        </mxCell>
+        <mxCell id="web" value="Web" style="editable=0;recursiveResize=0;rounded=0;whiteSpace=wrap;html=1;dashed=1;strokeColor=#FF3332;verticalAlign=top;strokeWidth=2;fillColor=#F5F5F5;fontColor=#000000;opacity=60;connectable=0;container=1;ir.ref=359916f7-3501-4f82-85c7-943bebf5f541;ir.type=TRUSTZONE;" parent="1" vertex="1">
+          <mxGeometry x="264" y="50" width="164" height="164" as="geometry"/>
+        </mxCell>
+        <mxCell id="data" value="Data" style="editable=0;recursiveResize=0;rounded=0;whiteSpace=wrap;html=1;dashed=1;strokeColor=#FF3332;verticalAlign=top;strokeWidth=2;fillColor=#F5F5F5;fontColor=#000000;opacity=60;connectable=0;container=1;ir.ref=359916f7-3501-4f82-85c7-943bebf5f541;ir.type=TRUSTZONE;" parent="1" vertex="1">
+          <mxGeometry x="50" y="264" width="164" height="164" as="geometry"/>
+        </mxCell>
+        <mxCell id="user" value="User" style="outlineConnect=0;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;fontStyle=0;aspect=fixed;rounded=1;whiteSpace=wrap;html=1;strokeWidth=3;fontColor=#064C79;fontSize=12;shape=mxgraph.aws4.resourceIcon;ir.ref=user;ir.type=COMPONENT;ir.synchronized=1;ir.componentDefinition.ref=generic-client;" parent="internet" vertex="1">
+          <mxGeometry width="64" height="64" as="geometry" x="50" y="50"/>
+        </mxCell>
+        <mxCell id="web-server" value="Web server" style="outlineConnect=0;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;fontStyle=0;aspect=fixed;rounded=1;whiteSpace=wrap;html=1;strokeWidth=3;fontColor=#064C79;fontSize=12;shape=mxgraph.aws4.resourceIcon;ir.ref=web-server;ir.type=COMPONENT;ir.synchronized=1;ir.componentDefinition.ref=web-application-server-side;" parent="web" vertex="1">
+          <mxGeometry width="64" height="64" as="geometry" x="50" y="50"/>
+        </mxCell>
+        <mxCell id="database" value="Database" style="outlineConnect=0;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;fontStyle=0;aspect=fixed;rounded=1;whiteSpace=wrap;html=1;strokeWidth=3;fontColor=#064C79;fontSize=12;shape=mxgraph.aws4.resourceIcon;ir.ref=database;ir.type=COMPONENT;ir.synchronized=1;ir.componentDefinition.ref=postgresql;" parent="data" vertex="1">
+          <mxGeometry width="64" height="64" as="geometry" x="50" y="50"/>
+        </mxCell>
+        <mxCell id="client-connection" value="Client connection" style="edgeStyle=none;curved=1;html=1;strokeColor=#27aae1;strokeWidth=3;ir.ref=client-connection;ir.synchronized=1;" parent="1" source="user" target="web-server" edge="1">
+          <mxGeometry as="geometry" relative="1"/>
+        </mxCell>
+        <mxCell id="database-connection" value="Database connection" style="edgeStyle=none;curved=1;html=1;strokeColor=#27aae1;strokeWidth=3;ir.ref=database-connection;ir.synchronized=1;" parent="1" source="web-server" target="database" edge="1">
+          <mxGeometry as="geometry" relative="1"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

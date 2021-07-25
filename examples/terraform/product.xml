@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project ref="terraform-elb" name="Terraform ELB" revision="1" type="STANDARD" status="OPEN" enabled="true" modelUpdated="" priority="0" tags="" workflowState="" locked="false">
+  <desc/>
+  <diagram draft="false">
+    <schema>PD94bWwgdmVyc2lvbj0nMS4wJyBlbmNvZGluZz0ndXRmLTgnPz4KPG14ZmlsZSBob3N0PSJmcmFzZXIuaXJpdXNyaXNrLmNvbSIgbW9kaWZpZWQ9IjIwMjEtMDYtMTdUMDk6NTk6NDAuMjk4WiIgYWdlbnQ9Ik1vemlsbGEvNS4wIChNYWNpbnRvc2g7IEludGVsIE1hYyBPUyBYIDEwXzE1XzcpIEFwcGxlV2ViS2l0LzUzNy4zNiAoS0hUTUwsIGxpa2UgR2Vja28pIENocm9tZS85MC4wLjQ0MzAuMjEyIFNhZmFyaS81MzcuMzYiIHZlcnNpb249IjEyLjIuNCIgZXRhZz0ieVdrOW5ZUEJWNllhWFVUNnJiNFkiIHBhZ2VzPSIxIj4KICA8ZGlhZ3JhbSBpZD0idTNMalV0SzBubWVzblY1SVNRUlYiIG5hbWU9IlBhZ2UtMSI+CiAgICA8bXhHcmFwaE1vZGVsIGR4PSIxNDY4IiBkeT0iNzMzIiBncmlkPSIxIiBncmlkU2l6ZT0iMTAiIGd1aWRlcz0iMSIgdG9vbHRpcHM9IjEiIGNvbm5lY3Q9IjEiIGFycm93cz0iMSIgZm9sZD0iMSIgcGFnZT0iMSIgcGFnZVNjYWxlPSIxIiBwYWdlV2lkdGg9IjQ2ODEiIHBhZ2VIZWlnaHQ9IjMzMDAiIG1hdGg9IjAiIHNoYWRvdz0iMCI+CiAgICAgIDxyb290PgogICAgICAgIDxteENlbGwgaWQ9IjAiLz4KICAgICAgICA8bXhDZWxsIGlkPSIxIiBwYXJlbnQ9IjAiLz4KICAgICAgICA8bXhDZWxsIGlkPSIyY2FlNzkyNy1iYmU1LTRkYzktODQ4NC01MDIzMDg2NjUxMmQiIHZhbHVlPSJEZWZhdWx0IiBzdHlsZT0iZWRpdGFibGU9MDtyZWN1cnNpdmVSZXNpemU9MDtyb3VuZGVkPTA7d2hpdGVTcGFjZT13cmFwO2h0bWw9MTtkYXNoZWQ9MTtzdHJva2VDb2xvcj0jRkYzMzMyO3ZlcnRpY2FsQWxpZ249dG9wO3N0cm9rZVdpZHRoPTI7ZmlsbENvbG9yPSNGNUY1RjU7Zm9udENvbG9yPSMwMDAwMDA7b3BhY2l0eT02MDtjb25uZWN0YWJsZT0wO2NvbnRhaW5lcj0xO2lyLnJlZj01M2M3NDg0Mi04MjkwLTQ4N2MtOGY3Yy1lZTE0Y2E0N2RiYmQ7aXIudHlwZT1UUlVTVFpPTkU7IiBwYXJlbnQ9IjEiIHZlcnRleD0iMSI+CiAgICAgICAgICA8bXhHZW9tZXRyeSB4PSI1MCIgeT0iNTAiIHdpZHRoPSIzMjgiIGhlaWdodD0iMzI4IiBhcz0iZ2VvbWV0cnkiLz4KICAgICAgICA8L214Q2VsbD4KICAgICAgICA8bXhDZWxsIGlkPSIzYWRkMjQ3OS1kZjQzLTQ4YzgtOWEyOS1iMTM5MGU1OWRjOWEiIHZhbHVlPSJmb28iIHN0eWxlPSJlZGl0YWJsZT0wO3JlY3Vyc2l2ZVJlc2l6ZT0wO3JvdW5kZWQ9MDt3aGl0ZVNwYWNlPXdyYXA7aHRtbD0xO2Rhc2hlZD0xO3N0cm9rZUNvbG9yPSNGRjMzMzI7dmVydGljYWxBbGlnbj10b3A7c3Ryb2tlV2lkdGg9MjtmaWxsQ29sb3I9I0Y1RjVGNTtmb250Q29sb3I9IzAwMDAwMDtvcGFjaXR5PTYwO2Nvbm5lY3RhYmxlPTA7Y29udGFpbmVyPTE7aXIucmVmPTUzYzc0ODQyLTgyOTAtNDg3Yy04ZjdjLWVlMTRjYTQ3ZGJiZDtpci50eXBlPVRSVVNUWk9ORTsiIHBhcmVudD0iMSIgdmVydGV4PSIxIj4KICAgICAgICAgIDxteEdlb21ldHJ5IHg9IjQyOCIgeT0iNTAiIHdpZHRoPSIzMjgiIGhlaWdodD0iMzI4IiBhcz0iZ2VvbWV0cnkiLz4KICAgICAgICA8L214Q2VsbD4KICAgICAgICA8bXhDZWxsIGlkPSIzOWMwMzU4ZC1jNDdhLTQ5YjYtOTA5Yy1hYjBlNGE3ODk2NzEiIHZhbHVlPSJmb28iIHN0eWxlPSJvdXRsaW5lQ29ubmVjdD0wO2dyYWRpZW50Q29sb3I9I0Y3OEUwNDtncmFkaWVudERpcmVjdGlvbj1ub3J0aDtmaWxsQ29sb3I9I0QwNUMxNztzdHJva2VDb2xvcj0jZmZmZmZmO2Rhc2hlZD0wO3ZlcnRpY2FsTGFiZWxQb3NpdGlvbj1ib3R0b207dmVydGljYWxBbGlnbj10b3A7YWxpZ249Y2VudGVyO2ZvbnRTdHlsZT0wO2FzcGVjdD1maXhlZDtyb3VuZGVkPTE7d2hpdGVTcGFjZT13cmFwO2h0bWw9MTtzdHJva2VXaWR0aD0zO2ZvbnRDb2xvcj0jMDY0Qzc5O2ZvbnRTaXplPTEyO3NoYXBlPW14Z3JhcGguYXdzNC5yZXNvdXJjZUljb247aXIucmVmPTM5YzAzNThkLWM0N2EtNDliNi05MDljLWFiMGU0YTc4OTY3MTtyZXNJY29uPW14Z3JhcGguYXdzNC5zdWJuZXQ7aXIudHlwZT1DT01QT05FTlQ7aXIuc3luY2hyb25pemVkPTE7aXIuY29tcG9uZW50RGVmaW5pdGlvbi5yZWY9ZW1wdHktY29tcG9uZW50OyIgcGFyZW50PSIzYWRkMjQ3OS1kZjQzLTQ4YzgtOWEyOS1iMTM5MGU1OWRjOWEiIHZlcnRleD0iMSI+CiAgICAgICAgICA8bXhHZW9tZXRyeSB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGFzPSJnZW9tZXRyeSIgeD0iNTAiIHk9IjUwIi8+CiAgICAgICAgPC9teENlbGw+CiAgICAgICAgPG14Q2VsbCBpZD0iMTI2MWE5NmEtMmZjNy00ZWUyLTg3YTctZWRjZDQwZjEyNWY2IiB2YWx1ZT0iYmFyIiBzdHlsZT0ib3V0bGluZUNvbm5lY3Q9MDtncmFkaWVudENvbG9yPSNGNzhFMDQ7Z3JhZGllbnREaXJlY3Rpb249bm9ydGg7ZmlsbENvbG9yPSNEMDVDMTc7c3Ryb2tlQ29sb3I9I2ZmZmZmZjtkYXNoZWQ9MDt2ZXJ0aWNhbExhYmVsUG9zaXRpb249Ym90dG9tO3ZlcnRpY2FsQWxpZ249dG9wO2FsaWduPWNlbnRlcjtmb250U3R5bGU9MDthc3BlY3Q9Zml4ZWQ7cm91bmRlZD0xO3doaXRlU3BhY2U9d3JhcDtodG1sPTE7c3Ryb2tlV2lkdGg9Mztmb250Q29sb3I9IzA2NEM3OTtmb250U2l6ZT0xMjtzaGFwZT1teGdyYXBoLmF3czQucmVzb3VyY2VJY29uO2lyLnJlZj0xMjYxYTk2YS0yZmM3LTRlZTItODdhNy1lZGNkNDBmMTI1ZjY7cmVzSWNvbj1teGdyYXBoLmF3czQuc3VibmV0O2lyLnR5cGU9Q09NUE9ORU5UO2lyLnN5bmNocm9uaXplZD0xO2lyLmNvbXBvbmVudERlZmluaXRpb24ucmVmPWVtcHR5LWNvbXBvbmVudDsiIHBhcmVudD0iM2FkZDI0NzktZGY0My00OGM4LTlhMjktYjEzOTBlNTlkYzlhIiB2ZXJ0ZXg9IjEiPgogICAgICAgICAgPG14R2VvbWV0cnkgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBhcz0iZ2VvbWV0cnkiIHg9IjE2NCIgeT0iNTAiLz4KICAgICAgICA8L214Q2VsbD4KICAgICAgICA8bXhDZWxsIGlkPSJlMTAxZTExNS02MzU4LTQyYzEtODFiZi0wYTEwYjM0OGM1ZWMiIHZhbHVlPSJpcHNldCIgc3R5bGU9Im91dGxpbmVDb25uZWN0PTA7ZmlsbENvbG9yPSNEQkVBRjc7c3Ryb2tlQ29sb3I9I0I5RDBFNjtkYXNoZWQ9MDt2ZXJ0aWNhbExhYmVsUG9zaXRpb249Ym90dG9tO3ZlcnRpY2FsQWxpZ249dG9wO2FsaWduPWNlbnRlcjtmb250U3R5bGU9MDthc3BlY3Q9Zml4ZWQ7cm91bmRlZD0xO3doaXRlU3BhY2U9d3JhcDtodG1sPTE7c3Ryb2tlV2lkdGg9Mztmb250Q29sb3I9IzA2NEM3OTtmb250U2l6ZT0xMjtzaGFwZT1teGdyYXBoLmF3czQucmVzb3VyY2VJY29uO2lyLnJlZj1lMTAxZTExNS02MzU4LTQyYzEtODFiZi0wYTEwYjM0OGM1ZWM7aXIudHlwZT1DT01QT05FTlQ7aXIuc3luY2hyb25pemVkPTE7aXIuY29tcG9uZW50RGVmaW5pdGlvbi5yZWY9ZW1wdHktY29tcG9uZW50OyIgcGFyZW50PSIyY2FlNzkyNy1iYmU1LTRkYzktODQ4NC01MDIzMDg2NjUxMmQiIHZlcnRleD0iMSI+CiAgICAgICAgICA8bXhHZW9tZXRyeSB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGFzPSJnZW9tZXRyeSIgeD0iNTAiIHk9IjUwIi8+CiAgICAgICAgPC9teENlbGw+CiAgICAgICAgPG14Q2VsbCBpZD0iMjBlMDM3OWMtNGE3Ni00NzNkLTk4ZDktZTJmOTA5YThhODgxIiB2YWx1ZT0iZm9vIiBzdHlsZT0ib3V0bGluZUNvbm5lY3Q9MDtmaWxsQ29sb3I9I0RCRUFGNztzdHJva2VDb2xvcj0jQjlEMEU2O2Rhc2hlZD0wO3ZlcnRpY2FsTGFiZWxQb3NpdGlvbj1ib3R0b207dmVydGljYWxBbGlnbj10b3A7YWxpZ249Y2VudGVyO2ZvbnRTdHlsZT0wO2FzcGVjdD1maXhlZDtyb3VuZGVkPTE7d2hpdGVTcGFjZT13cmFwO2h0bWw9MTtzdHJva2VXaWR0aD0zO2ZvbnRDb2xvcj0jMDY0Qzc5O2ZvbnRTaXplPTEyO3NoYXBlPW14Z3JhcGguYXdzNC5yZXNvdXJjZUljb247aXIucmVmPTIwZTAzNzljLTRhNzYtNDczZC05OGQ5LWUyZjkwOWE4YTg4MTtpci50eXBlPUNPTVBPTkVOVDtpci5zeW5jaHJvbml6ZWQ9MTtpci5jb21wb25lbnREZWZpbml0aW9uLnJlZj1lbXB0eS1jb21wb25lbnQ7IiBwYXJlbnQ9IjJjYWU3OTI3LWJiZTUtNGRjOS04NDg0LTUwMjMwODY2NTEyZCIgdmVydGV4PSIxIj4KICAgICAgICAgIDxteEdlb21ldHJ5IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgYXM9Imdlb21ldHJ5IiB4PSIxNjQiIHk9IjUwIi8+CiAgICAgICAgPC9teENlbGw+CiAgICAgICAgPG14Q2VsbCBpZD0iMWJjOWRjZTEtYzRmMC00ODk1LTkyZGUtNTJhNjczMDJlMjg2IiB2YWx1ZT0iZm9vIiBzdHlsZT0ib3V0bGluZUNvbm5lY3Q9MDtncmFkaWVudENvbG9yPSNGNzhFMDQ7Z3JhZGllbnREaXJlY3Rpb249bm9ydGg7ZmlsbENvbG9yPSNEMDVDMTc7c3Ryb2tlQ29sb3I9I2ZmZmZmZjtkYXNoZWQ9MDt2ZXJ0aWNhbExhYmVsUG9zaXRpb249Ym90dG9tO3ZlcnRpY2FsQWxpZ249dG9wO2FsaWduPWNlbnRlcjtmb250U3R5bGU9MDthc3BlY3Q9Zml4ZWQ7cm91bmRlZD0xO3doaXRlU3BhY2U9d3JhcDtodG1sPTE7c3Ryb2tlV2lkdGg9Mztmb250Q29sb3I9IzA2NEM3OTtmb250U2l6ZT0xMjtzaGFwZT1teGdyYXBoLmF3czQucmVzb3VyY2VJY29uO2lyLnJlZj0xYmM5ZGNlMS1jNGYwLTQ4OTUtOTJkZS01MmE2NzMwMmUyODY7cmVzSWNvbj1teGdyYXBoLmF3czQud2FmO2lyLnR5cGU9Q09NUE9ORU5UO2lyLnN5bmNocm9uaXplZD0xO2lyLmNvbXBvbmVudERlZmluaXRpb24ucmVmPWtpY3MtYXdzLXdhZjsiIHBhcmVudD0iMmNhZTc5MjctYmJlNS00ZGM5LTg0ODQtNTAyMzA4NjY1MTJkIiB2ZXJ0ZXg9IjEiPgogICAgICAgICAgPG14R2VvbWV0cnkgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBhcz0iZ2VvbWV0cnkiIHg9IjUwIiB5PSIxNjQiLz4KICAgICAgICA8L214Q2VsbD4KICAgICAgICA8bXhDZWxsIGlkPSI0ODBjOTI1Yy1hMzIyLTRjYmEtOWFiNS1mNmExZTEwYmFjMGMiIHZhbHVlPSJmb28iIHN0eWxlPSJvdXRsaW5lQ29ubmVjdD0wO2dyYWRpZW50Q29sb3I9I0Y3OEUwNDtncmFkaWVudERpcmVjdGlvbj1ub3J0aDtmaWxsQ29sb3I9I0QwNUMxNztzdHJva2VDb2xvcj0jZmZmZmZmO2Rhc2hlZD0wO3ZlcnRpY2FsTGFiZWxQb3NpdGlvbj1ib3R0b207dmVydGljYWxBbGlnbj10b3A7YWxpZ249Y2VudGVyO2ZvbnRTdHlsZT0wO2FzcGVjdD1maXhlZDtyb3VuZGVkPTE7d2hpdGVTcGFjZT13cmFwO2h0bWw9MTtzdHJva2VXaWR0aD0zO2ZvbnRDb2xvcj0jMDY0Qzc5O2ZvbnRTaXplPTEyO3NoYXBlPW14Z3JhcGguYXdzNC5yZXNvdXJjZUljb247aXIucmVmPTQ4MGM5MjVjLWEzMjItNGNiYS05YWI1LWY2YTFlMTBiYWMwYztyZXNJY29uPW14Z3JhcGguYXdzNC5lbGFzdGljX2xvYWRfYmFsYW5jaW5nO2lyLnR5cGU9Q09NUE9ORU5UO2lyLnN5bmNocm9uaXplZD0xO2lyLmNvbXBvbmVudERlZmluaXRpb24ucmVmPWxvYWQtYmFsYW5jZXI7IiBwYXJlbnQ9IjJjYWU3OTI3LWJiZTUtNGRjOS04NDg0LTUwMjMwODY2NTEyZCIgdmVydGV4PSIxIj4KICAgICAgICAgIDxteEdlb21ldHJ5IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgYXM9Imdlb21ldHJ5IiB4PSIxNjQiIHk9IjE2NCIvPgogICAgICAgIDwvbXhDZWxsPgogICAgICA8L3Jvb3Q+CiAgICA8L214R3JhcGhNb2RlbD4KICA8L2RpYWdyYW0+CjwvbXhmaWxlPgo=</schema>
+  </diagram>
+  <trustZones>
+    <trustZone ref="2cae7927-bbe5-4dc9-8484-50230866512d" name="Default"/>
+    <trustZone ref="3add2479-df43-48c8-9a29-b1390e59dc9a" name="foo"/>
+  </trustZones>
+  <questions/>
+  <assets/>
+  <settings>
+    <issueTrackers>
+      <jira>
+        <fields/>
+      </jira>
+    </issueTrackers>
+  </settings>
+  <dataflows/>
+  <udts/>
+  <components>
+    <component ref="39c0358d-c47a-49b6-909c-ab0e4a789671" name="foo" desc="" library="" parentComponentRef="" componentDefinitionRef="empty-component" asvsVersion="4">
+      <tags/>
+      <questions/>
+      <trustZones>
+        <trustZone ref="3add2479-df43-48c8-9a29-b1390e59dc9a"/>
+      </trustZones>
+      <assets/>
+      <settings>
+        <issueTrackers>
+          <jira>
+            <fields/>
+          </jira>
+        </issueTrackers>
+      </settings>
+      <weaknesses/>
+      <controls/>
+      <usecases/>
+    </component>
+    <component ref="1261a96a-2fc7-4ee2-87a7-edcd40f125f6" name="bar" desc="" library="" parentComponentRef="" componentDefinitionRef="empty-component" asvsVersion="4">
+      <tags/>
+      <questions/>
+      <trustZones>
+        <trustZone ref="3add2479-df43-48c8-9a29-b1390e59dc9a"/>
+      </trustZones>
+      <assets/>
+      <settings>
+        <issueTrackers>
+          <jira>
+            <fields/>
+          </jira>
+        </issueTrackers>
+      </settings>
+      <weaknesses/>
+      <controls/>
+      <usecases/>
+    </component>
+    <component ref="e101e115-6358-42c1-81bf-0a10b348c5ec" name="ipset" desc="" library="" parentComponentRef="" componentDefinitionRef="empty-component" asvsVersion="4">
+      <tags/>
+      <questions/>
+      <trustZones>
+        <trustZone ref="2cae7927-bbe5-4dc9-8484-50230866512d"/>
+      </trustZones>
+      <assets/>
+      <settings>
+        <issueTrackers>
+          <jira>
+            <fields/>
+          </jira>
+        </issueTrackers>
+      </settings>
+      <weaknesses/>
+      <controls/>
+      <usecases/>
+    </component>
+    <component ref="20e0379c-4a76-473d-98d9-e2f909a8a881" name="foo" desc="" library="" parentComponentRef="" componentDefinitionRef="empty-component" asvsVersion="4">
+      <tags/>
+      <questions/>
+      <trustZones>
+        <trustZone ref="2cae7927-bbe5-4dc9-8484-50230866512d"/>
+      </trustZones>
+      <assets/>
+      <settings>
+        <issueTrackers>
+          <jira>
+            <fields/>
+          </jira>
+        </issueTrackers>
+      </settings>
+      <weaknesses/>
+      <controls/>
+      <usecases/>
+    </component>
+    <component ref="1bc9dce1-c4f0-4895-92de-52a67302e286" name="foo" desc="" library="" parentComponentRef="" componentDefinitionRef="kics-aws-waf" asvsVersion="4">
+      <tags/>
+      <questions/>
+      <trustZones>
+        <trustZone ref="2cae7927-bbe5-4dc9-8484-50230866512d"/>
+      </trustZones>
+      <assets/>
+      <settings>
+        <issueTrackers>
+          <jira>
+            <fields/>
+          </jira>
+        </issueTrackers>
+      </settings>
+      <weaknesses/>
+      <controls/>
+      <usecases/>
+    </component>
+    <component ref="480c925c-a322-4cba-9ab5-f6a1e10bac0c" name="foo" desc="" library="" parentComponentRef="" componentDefinitionRef="load-balancer" asvsVersion="4">
+      <tags/>
+      <questions/>
+      <trustZones>
+        <trustZone ref="2cae7927-bbe5-4dc9-8484-50230866512d"/>
+      </trustZones>
+      <assets/>
+      <settings>
+        <issueTrackers>
+          <jira>
+            <fields/>
+          </jira>
+        </issueTrackers>
+      </settings>
+      <weaknesses/>
+      <controls/>
+      <usecases/>
+    </component>
+  </components>
+  <threadFixScans/>
+</project>

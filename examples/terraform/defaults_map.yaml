@@ -1,0 +1,7 @@
+trustzones:
+  - id:   default-zone
+    name: Default
+    type: public 
+
+components: []
+dataflows: []

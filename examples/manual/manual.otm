@@ -1,0 +1,47 @@
+project:
+  name: Manual ThreatModel
+  id:   manual-threatmodel
+
+trustzones:
+  - id:   internet
+    name: Internet
+    type: internet
+
+  - id:   web
+    name: Web
+    type: private
+
+  - id:   data
+    name: Data
+    type: private
+
+components:
+  - id:     user
+    name:   User
+    type:   user
+    parent: internet
+
+  - id:     web-server
+    name:   Web server
+    type:   webapp
+    parent: web
+
+  - id:     database
+    name:   Database
+    type:   postgres
+    parent: data
+
+dataflows:
+  - id:     client-connection
+    name:   Client connection
+    type:   network
+    from:   user
+    to:     web-server
+
+  - id:     database-connection
+    name:   Database connection
+    type:   network
+    from:   web-server
+    to:     database
+
+

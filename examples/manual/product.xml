@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project ref="manual-threatmodel" name="Manual ThreatModel" revision="1" type="STANDARD" status="OPEN" enabled="true" modelUpdated="" priority="0" tags="" workflowState="" locked="false">
+  <desc/>
+  <diagram draft="false">
+    <schema>PD94bWwgdmVyc2lvbj0nMS4wJyBlbmNvZGluZz0ndXRmLTgnPz4KPG14ZmlsZSBob3N0PSJmcmFzZXIuaXJpdXNyaXNrLmNvbSIgbW9kaWZpZWQ9IjIwMjEtMDYtMTdUMDk6NTk6NDAuMjk4WiIgYWdlbnQ9Ik1vemlsbGEvNS4wIChNYWNpbnRvc2g7IEludGVsIE1hYyBPUyBYIDEwXzE1XzcpIEFwcGxlV2ViS2l0LzUzNy4zNiAoS0hUTUwsIGxpa2UgR2Vja28pIENocm9tZS85MC4wLjQ0MzAuMjEyIFNhZmFyaS81MzcuMzYiIHZlcnNpb249IjEyLjIuNCIgZXRhZz0ieVdrOW5ZUEJWNllhWFVUNnJiNFkiIHBhZ2VzPSIxIj4KICA8ZGlhZ3JhbSBpZD0idTNMalV0SzBubWVzblY1SVNRUlYiIG5hbWU9IlBhZ2UtMSI+CiAgICA8bXhHcmFwaE1vZGVsIGR4PSIxNDY4IiBkeT0iNzMzIiBncmlkPSIxIiBncmlkU2l6ZT0iMTAiIGd1aWRlcz0iMSIgdG9vbHRpcHM9IjEiIGNvbm5lY3Q9IjEiIGFycm93cz0iMSIgZm9sZD0iMSIgcGFnZT0iMSIgcGFnZVNjYWxlPSIxIiBwYWdlV2lkdGg9IjQ2ODEiIHBhZ2VIZWlnaHQ9IjMzMDAiIG1hdGg9IjAiIHNoYWRvdz0iMCI+CiAgICAgIDxyb290PgogICAgICAgIDxteENlbGwgaWQ9IjAiLz4KICAgICAgICA8bXhDZWxsIGlkPSIxIiBwYXJlbnQ9IjAiLz4KICAgICAgICA8bXhDZWxsIGlkPSJpbnRlcm5ldCIgdmFsdWU9IkludGVybmV0IiBzdHlsZT0iZWRpdGFibGU9MDtyZWN1cnNpdmVSZXNpemU9MDtyb3VuZGVkPTA7d2hpdGVTcGFjZT13cmFwO2h0bWw9MTtkYXNoZWQ9MTtzdHJva2VDb2xvcj0jRkYzMzMyO3ZlcnRpY2FsQWxpZ249dG9wO3N0cm9rZVdpZHRoPTI7ZmlsbENvbG9yPSNGNUY1RjU7Zm9udENvbG9yPSMwMDAwMDA7b3BhY2l0eT02MDtjb25uZWN0YWJsZT0wO2NvbnRhaW5lcj0xO2lyLnJlZj1pbnRlcm5ldDtpci50eXBlPVRSVVNUWk9ORTsiIHBhcmVudD0iMSIgdmVydGV4PSIxIj4KICAgICAgICAgIDxteEdlb21ldHJ5IHg9IjUwIiB5PSI1MCIgd2lkdGg9IjE2NCIgaGVpZ2h0PSIxNjQiIGFzPSJnZW9tZXRyeSIvPgogICAgICAgIDwvbXhDZWxsPgogICAgICAgIDxteENlbGwgaWQ9IndlYiIgdmFsdWU9IldlYiIgc3R5bGU9ImVkaXRhYmxlPTA7cmVjdXJzaXZlUmVzaXplPTA7cm91bmRlZD0wO3doaXRlU3BhY2U9d3JhcDtodG1sPTE7ZGFzaGVkPTE7c3Ryb2tlQ29sb3I9I0ZGMzMzMjt2ZXJ0aWNhbEFsaWduPXRvcDtzdHJva2VXaWR0aD0yO2ZpbGxDb2xvcj0jRjVGNUY1O2ZvbnRDb2xvcj0jMDAwMDAwO29wYWNpdHk9NjA7Y29ubmVjdGFibGU9MDtjb250YWluZXI9MTtpci5yZWY9MzU5OTE2ZjctMzUwMS00ZjgyLTg1YzctOTQzYmViZjVmNTQxO2lyLnR5cGU9VFJVU1RaT05FOyIgcGFyZW50PSIxIiB2ZXJ0ZXg9IjEiPgogICAgICAgICAgPG14R2VvbWV0cnkgeD0iMjY0IiB5PSI1MCIgd2lkdGg9IjE2NCIgaGVpZ2h0PSIxNjQiIGFzPSJnZW9tZXRyeSIvPgogICAgICAgIDwvbXhDZWxsPgogICAgICAgIDxteENlbGwgaWQ9ImRhdGEiIHZhbHVlPSJEYXRhIiBzdHlsZT0iZWRpdGFibGU9MDtyZWN1cnNpdmVSZXNpemU9MDtyb3VuZGVkPTA7d2hpdGVTcGFjZT13cmFwO2h0bWw9MTtkYXNoZWQ9MTtzdHJva2VDb2xvcj0jRkYzMzMyO3ZlcnRpY2FsQWxpZ249dG9wO3N0cm9rZVdpZHRoPTI7ZmlsbENvbG9yPSNGNUY1RjU7Zm9udENvbG9yPSMwMDAwMDA7b3BhY2l0eT02MDtjb25uZWN0YWJsZT0wO2NvbnRhaW5lcj0xO2lyLnJlZj0zNTk5MTZmNy0zNTAxLTRmODItODVjNy05NDNiZWJmNWY1NDE7aXIudHlwZT1UUlVTVFpPTkU7IiBwYXJlbnQ9IjEiIHZlcnRleD0iMSI+CiAgICAgICAgICA8bXhHZW9tZXRyeSB4PSI1MCIgeT0iMjY0IiB3aWR0aD0iMTY0IiBoZWlnaHQ9IjE2NCIgYXM9Imdlb21ldHJ5Ii8+CiAgICAgICAgPC9teENlbGw+CiAgICAgICAgPG14Q2VsbCBpZD0idXNlciIgdmFsdWU9IlVzZXIiIHN0eWxlPSJvdXRsaW5lQ29ubmVjdD0wO2dyYWRpZW50Q29sb3I9I0Y3OEUwNDtncmFkaWVudERpcmVjdGlvbj1ub3J0aDtmaWxsQ29sb3I9I0QwNUMxNztzdHJva2VDb2xvcj0jZmZmZmZmO2Rhc2hlZD0wO3ZlcnRpY2FsTGFiZWxQb3NpdGlvbj1ib3R0b207dmVydGljYWxBbGlnbj10b3A7YWxpZ249Y2VudGVyO2ZvbnRTdHlsZT0wO2FzcGVjdD1maXhlZDtyb3VuZGVkPTE7d2hpdGVTcGFjZT13cmFwO2h0bWw9MTtzdHJva2VXaWR0aD0zO2ZvbnRDb2xvcj0jMDY0Qzc5O2ZvbnRTaXplPTEyO3NoYXBlPW14Z3JhcGguYXdzNC5yZXNvdXJjZUljb247aXIucmVmPXVzZXI7aXIudHlwZT1DT01QT05FTlQ7aXIuc3luY2hyb25pemVkPTE7aXIuY29tcG9uZW50RGVmaW5pdGlvbi5yZWY9Z2VuZXJpYy1jbGllbnQ7IiBwYXJlbnQ9ImludGVybmV0IiB2ZXJ0ZXg9IjEiPgogICAgICAgICAgPG14R2VvbWV0cnkgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBhcz0iZ2VvbWV0cnkiIHg9IjUwIiB5PSI1MCIvPgogICAgICAgIDwvbXhDZWxsPgogICAgICAgIDxteENlbGwgaWQ9IndlYi1zZXJ2ZXIiIHZhbHVlPSJXZWIgc2VydmVyIiBzdHlsZT0ib3V0bGluZUNvbm5lY3Q9MDtncmFkaWVudENvbG9yPSNGNzhFMDQ7Z3JhZGllbnREaXJlY3Rpb249bm9ydGg7ZmlsbENvbG9yPSNEMDVDMTc7c3Ryb2tlQ29sb3I9I2ZmZmZmZjtkYXNoZWQ9MDt2ZXJ0aWNhbExhYmVsUG9zaXRpb249Ym90dG9tO3ZlcnRpY2FsQWxpZ249dG9wO2FsaWduPWNlbnRlcjtmb250U3R5bGU9MDthc3BlY3Q9Zml4ZWQ7cm91bmRlZD0xO3doaXRlU3BhY2U9d3JhcDtodG1sPTE7c3Ryb2tlV2lkdGg9Mztmb250Q29sb3I9IzA2NEM3OTtmb250U2l6ZT0xMjtzaGFwZT1teGdyYXBoLmF3czQucmVzb3VyY2VJY29uO2lyLnJlZj13ZWItc2VydmVyO2lyLnR5cGU9Q09NUE9ORU5UO2lyLnN5bmNocm9uaXplZD0xO2lyLmNvbXBvbmVudERlZmluaXRpb24ucmVmPXdlYi1hcHBsaWNhdGlvbi1zZXJ2ZXItc2lkZTsiIHBhcmVudD0id2ViIiB2ZXJ0ZXg9IjEiPgogICAgICAgICAgPG14R2VvbWV0cnkgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBhcz0iZ2VvbWV0cnkiIHg9IjUwIiB5PSI1MCIvPgogICAgICAgIDwvbXhDZWxsPgogICAgICAgIDxteENlbGwgaWQ9ImRhdGFiYXNlIiB2YWx1ZT0iRGF0YWJhc2UiIHN0eWxlPSJvdXRsaW5lQ29ubmVjdD0wO2dyYWRpZW50Q29sb3I9I0Y3OEUwNDtncmFkaWVudERpcmVjdGlvbj1ub3J0aDtmaWxsQ29sb3I9I0QwNUMxNztzdHJva2VDb2xvcj0jZmZmZmZmO2Rhc2hlZD0wO3ZlcnRpY2FsTGFiZWxQb3NpdGlvbj1ib3R0b207dmVydGljYWxBbGlnbj10b3A7YWxpZ249Y2VudGVyO2ZvbnRTdHlsZT0wO2FzcGVjdD1maXhlZDtyb3VuZGVkPTE7d2hpdGVTcGFjZT13cmFwO2h0bWw9MTtzdHJva2VXaWR0aD0zO2ZvbnRDb2xvcj0jMDY0Qzc5O2ZvbnRTaXplPTEyO3NoYXBlPW14Z3JhcGguYXdzNC5yZXNvdXJjZUljb247aXIucmVmPWRhdGFiYXNlO2lyLnR5cGU9Q09NUE9ORU5UO2lyLnN5bmNocm9uaXplZD0xO2lyLmNvbXBvbmVudERlZmluaXRpb24ucmVmPXBvc3RncmVzcWw7IiBwYXJlbnQ9ImRhdGEiIHZlcnRleD0iMSI+CiAgICAgICAgICA8bXhHZW9tZXRyeSB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGFzPSJnZW9tZXRyeSIgeD0iNTAiIHk9IjUwIi8+CiAgICAgICAgPC9teENlbGw+CiAgICAgICAgPG14Q2VsbCBpZD0iY2xpZW50LWNvbm5lY3Rpb24iIHZhbHVlPSJDbGllbnQgY29ubmVjdGlvbiIgc3R5bGU9ImVkZ2VTdHlsZT1ub25lO2N1cnZlZD0xO2h0bWw9MTtzdHJva2VDb2xvcj0jMjdhYWUxO3N0cm9rZVdpZHRoPTM7aXIucmVmPWNsaWVudC1jb25uZWN0aW9uO2lyLnN5bmNocm9uaXplZD0xOyIgcGFyZW50PSIxIiBzb3VyY2U9InVzZXIiIHRhcmdldD0id2ViLXNlcnZlciIgZWRnZT0iMSI+CiAgICAgICAgICA8bXhHZW9tZXRyeSBhcz0iZ2VvbWV0cnkiIHJlbGF0aXZlPSIxIi8+CiAgICAgICAgPC9teENlbGw+CiAgICAgICAgPG14Q2VsbCBpZD0iZGF0YWJhc2UtY29ubmVjdGlvbiIgdmFsdWU9IkRhdGFiYXNlIGNvbm5lY3Rpb24iIHN0eWxlPSJlZGdlU3R5bGU9bm9uZTtjdXJ2ZWQ9MTtodG1sPTE7c3Ryb2tlQ29sb3I9IzI3YWFlMTtzdHJva2VXaWR0aD0zO2lyLnJlZj1kYXRhYmFzZS1jb25uZWN0aW9uO2lyLnN5bmNocm9uaXplZD0xOyIgcGFyZW50PSIxIiBzb3VyY2U9IndlYi1zZXJ2ZXIiIHRhcmdldD0iZGF0YWJhc2UiIGVkZ2U9IjEiPgogICAgICAgICAgPG14R2VvbWV0cnkgYXM9Imdlb21ldHJ5IiByZWxhdGl2ZT0iMSIvPgogICAgICAgIDwvbXhDZWxsPgogICAgICA8L3Jvb3Q+CiAgICA8L214R3JhcGhNb2RlbD4KICA8L2RpYWdyYW0+CjwvbXhmaWxlPgo=</schema>
+  </diagram>
+  <trustZones>
+    <trustZone ref="internet" name="Internet"/>
+    <trustZone ref="web" name="Web"/>
+    <trustZone ref="data" name="Data"/>
+  </trustZones>
+  <questions/>
+  <assets/>
+  <settings>
+    <issueTrackers>
+      <jira>
+        <fields/>
+      </jira>
+    </issueTrackers>
+  </settings>
+  <dataflows>
+    <dataflow name="Client connection" ref="client-connection" source="user" target="web-server">
+      <assets/>
+      <tags/>
+    </dataflow>
+    <dataflow name="Database connection" ref="database-connection" source="web-server" target="database">
+      <assets/>
+      <tags/>
+    </dataflow>
+  </dataflows>
+  <udts/>
+  <components>
+    <component ref="user" name="User" desc="" library="" parentComponentRef="" componentDefinitionRef="generic-client" asvsVersion="4">
+      <tags/>
+      <questions/>
+      <trustZones>
+        <trustZone ref="internet"/>
+      </trustZones>
+      <assets/>
+      <settings>
+        <issueTrackers>
+          <jira>
+            <fields/>
+          </jira>
+        </issueTrackers>
+      </settings>
+      <weaknesses/>
+      <controls/>
+      <usecases/>
+    </component>
+    <component ref="web-server" name="Web server" desc="" library="" parentComponentRef="" componentDefinitionRef="web-application-server-side" asvsVersion="4">
+      <tags/>
+      <questions/>
+      <trustZones>
+        <trustZone ref="web"/>
+      </trustZones>
+      <assets/>
+      <settings>
+        <issueTrackers>
+          <jira>
+            <fields/>
+          </jira>
+        </issueTrackers>
+      </settings>
+      <weaknesses/>
+      <controls/>
+      <usecases/>
+    </component>
+    <component ref="database" name="Database" desc="" library="" parentComponentRef="" componentDefinitionRef="postgresql" asvsVersion="4">
+      <tags/>
+      <questions/>
+      <trustZones>
+        <trustZone ref="data"/>
+      </trustZones>
+      <assets/>
+      <settings>
+        <issueTrackers>
+          <jira>
+            <fields/>
+          </jira>
+        </issueTrackers>
+      </settings>
+      <weaknesses/>
+      <controls/>
+      <usecases/>
+    </component>
+  </components>
+  <threadFixScans/>
+</project>
