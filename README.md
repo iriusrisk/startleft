@@ -172,7 +172,7 @@ dataflows:
 
 Will create this threat model in IriusRisk:
 
-![Threat Model](docs/images/manual_threat_model.png|width=50)
+![Threat Model](docs/images/manual_threat_model.png)
 
 ![Threat Model Threats](docs/images/manual_threats.png)
 
