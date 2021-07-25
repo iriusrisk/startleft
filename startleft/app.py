@@ -126,7 +126,7 @@ class OtmToIr:
         for filename in filenames:
             logger.debug(f"Loading OTM file {filename}")
             with open(filename, 'r') as f:
-                self.iriusrisk.load_otm_file(json.load(f))            
+                self.iriusrisk.load_otm_file(yaml.load(f, Loader=yaml.BaseLoader))            
 
     def load_map_files(self, filenames):
         for filename in filenames:

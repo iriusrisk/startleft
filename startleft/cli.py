@@ -90,7 +90,7 @@ def threatmodel(ir_map, recreate, filename):
     """
 
     otm_to_ir = app.OtmToIr()
-    logger.info("Parsing IaC source files into OTM")
+    logger.info("Uploading OTM files and generating the IriusRisk threat model")
     otm_to_ir.run(ir_map, recreate, filename)
 
 @cli.command()
