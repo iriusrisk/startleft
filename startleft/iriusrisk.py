@@ -3,8 +3,12 @@ logger = logging.getLogger(__name__)
 
 from lxml import etree
 from deepmerge import always_merger
+import pkg_resources
 import requests
 import base64
+import os
+import yaml
+from startleft.schema import Schema
 
 class IriusRisk:
     API_PATH = '/api/v1'
@@ -16,6 +20,7 @@ class IriusRisk:
         self.id = None
         self.map = {}
         self.otm = {}
+        self.schema = {}
 
         self.dataflows = []
         self.trustzones = []
@@ -174,9 +179,21 @@ class IriusRisk:
         else:
             self.create_product(diagram)
 
-
     def run_rules(self):
         url = self.base_url + IriusRisk.API_PATH + f"/rules/product/{self.id}"
         response = requests.put(url, headers=self.headers())
         logger.debug(f"Response received {response.status_code}: {response.text}")
         response.close()
+
+    def load_schema(self):
+        schema_path = pkg_resources.resource_filename('startleft', os.path.join('data', 'otm_schema.json'))
+        logger.debug(f"Loading schema from {schema_path}")
+        with open(schema_path, "r") as f:
+            schema = yaml.load(f, Loader=yaml.BaseLoader)
+            self.schema = Schema(schema)
+
+    def validate_otm(self):
+        self.load_schema()
+        logger.debug(f"--- Schema to validate against ---\n{self.schema.json()}\n--- End of schema ---")
+        self.schema.validate(self.otm)
+        return self.schema

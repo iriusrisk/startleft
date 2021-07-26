@@ -193,7 +193,7 @@ Source mapping files are made up of three main sections corresponding the main s
 
 Each contains a list of 0 or more objects that describe how to find the respective object in the source file, and each object has a number of required and optional fields. 
 
-Take a look at the JSONSchema file for more details: ...
+Take a look at the JSONSchema file for more details: https://github.com/iriusrisk/startleft/blob/main/startleft/data/mapping_schema.json
 
 ## JMESPath Queries
 

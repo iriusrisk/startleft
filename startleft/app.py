@@ -118,6 +118,9 @@ class IacToOtmApp:
 
 
 class OtmToIr:
+    EXIT_UNEXPECTED = 3
+    EXIT_VALIDATION_FAILED = 4
+
     def __init__(self):
         self.iriusrisk = iriusrisk.IriusRisk(os.getenv("IRIUS_SERVER"), os.getenv("IRIUS_API_TOKEN"))
         self.diagram = diagram.Diagram()
@@ -184,3 +187,20 @@ class OtmToIr:
             self.iriusrisk.upsert_diagram(diagram_xml)
         logger.debug("Running rules engine")
         self.iriusrisk.run_rules()
+
+    def validate(self, filename):
+        """
+        Vallidates a mapping file against the mapping file schema.
+        """
+
+        logger.debug(f"Validating mapper file '{filename}'")
+        self.load_otm_files(filename)
+        logger.debug(f"--- File to validate ---\n{self.iriusrisk.otm}\n--- End of file ---")
+
+        schema = self.iriusrisk.validate_otm()
+        if schema.valid:
+            logger.info('OTM file is valid')
+        else:
+            logger.error('OTM file is not valid')
+            logger.error(f"--- Schema errors---\n{schema.errors}\n--- End of schema errors ---")
+            sys.exit(OtmToIr.EXIT_VALIDATION_FAILED)

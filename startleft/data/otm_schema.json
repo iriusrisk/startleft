@@ -1,0 +1,55 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "OTM File",
+    "type": "object",
+    "required": ["project", "trustzones", "components", "dataflows"],
+    "properties": {
+        "project": {
+            "type": "object",
+            "required": ["name", "id"],
+            "properties": {
+                "name": {"type": "string"},
+                "id":   {"type": "string"}
+            }
+        },
+        "trustzones": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["id", "name", "type"],
+                "properties": {
+                    "id":   {"type": "string"},
+                    "name": {"type": "string"},
+                    "type": {"type": "string"}
+                }
+            }
+        },
+        "components": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["id", "name", "type"],
+                "properties": {
+                    "id":     {"type": "string"},
+                    "name":   {"type": "string"},
+                    "type":   {"type": "string"},
+                    "parent": {"type": "string"}
+                }
+            }        
+        },
+        "dataflows": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["id", "name", "type", "from", "to"],
+                "properties": {
+                    "id":   {"type": "string"},
+                    "name": {"type": "string"},
+                    "type": {"type": "string"},
+                    "from": {"type": "string"},
+                    "to":   {"type": "string"}
+                }
+            }    
+        }
+    }
+}
