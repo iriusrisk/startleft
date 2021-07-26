@@ -94,8 +94,8 @@ def threatmodel(ir_map, recreate, filename):
     otm_to_ir.run(ir_map, recreate, filename)
 
 @cli.command()
-@click.option('--map', '-m', help='Map file to validate')
-@click.option('--otm', '-o', help='OTM file to validate')
+@click.option('--map', '-m', multiple=True, help='Map file to validate')
+@click.option('--otm', '-o', multiple=True, help='OTM file to validate')
 def validate(map, otm):
     """
     Validates a mapping or OTM   file
@@ -105,7 +105,8 @@ def validate(map, otm):
         iac_to_otm = app.IacToOtmApp()
         logger.info("Validating source map file")
         iac_to_otm.validate(map)
-    elif otm:
+        
+    if otm:
         otm_to_ir = app.OtmToIr()
         logger.info("Validating OTM file")
         otm_to_ir.validate(otm)
