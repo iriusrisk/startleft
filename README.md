@@ -185,7 +185,7 @@ startleft threatmodel --ir-map ir_map.yaml --recreate manual.otm
 
 # Source Mapping
 
-Source mapping files are made up of three main sections corresponding the main sections in an OTM file, plus a lookup section described below:
+Source mapping files are basically additional logic around a collection of JMESPath queries which are used describe how to find components, dataflows, and trustzones in source file data structures. Source mapping files are made up of three main sections corresponding the main sections in an OTM file, plus a lookup section described below:
 
 * trustzones
 * components
@@ -197,7 +197,7 @@ Take a look at the JSONSchema file for more details: https://github.com/iriusris
 
 ## JMESPath Queries
 
-A mapping file is basically additional login around a collection of JMESPath queries which are used describe how to find components, dataflows, and trustzones in source file data structures. Special $action fields begin with a dollar sign ($) and do not directly contribute to the OTM output. Instead they specify an action and behaviour used to process the source files or generate the OTM output. 
+Special $action fields begin with a dollar sign ($) and do not directly contribute to the OTM output. Instead they specify an action and behaviour used to process the source files or generate the OTM output. 
 
 This table describes each special $actions.
 
