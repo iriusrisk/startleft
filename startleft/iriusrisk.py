@@ -87,6 +87,7 @@ class IriusRisk:
     def product_exists(self):
         url = self.base_url + IriusRisk.API_PATH + "/products"
         response = requests.get(url, headers=self.headers())
+        logger.debug(f"Response received {response.status_code}: {response.text}")
         for product in response.json():
             if product["ref"] == self.id:
                 return True
