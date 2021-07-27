@@ -26,7 +26,8 @@ class TrustzoneMapper:
             if not source_id in self.id_map:
                 tz_id = str(uuid.uuid4())
                 self.id_map[source_id] = tz_id
-
+            else:
+                tz_id = self.id_map[source_id]
             trustzone["id"] = tz_id
 
             trustzones.append(trustzone)
