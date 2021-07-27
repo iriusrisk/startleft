@@ -34,8 +34,8 @@ class Transformer:
         always_merger.merge(self.map, mapping)
 
     def build_lookup(self):
-        if "$lookup" in self.map:
-            self.source_model.lookup = self.map["$lookup"]
+        if "lookup" in self.map:
+            self.source_model.lookup = self.map["lookup"]
 
     def transform_trustzones(self):
         for mapping in self.map["trustzones"]:
