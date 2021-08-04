@@ -6,8 +6,8 @@ import os
 import json
 import yaml
 import hcl2
+import xmltodict
 from startleft import threatmodel, sourcemodel, transformer, iriusrisk, diagram
-
 
 class IacToOtmApp:
 
@@ -25,8 +25,14 @@ class IacToOtmApp:
             'YAML': self.load_yaml_source,
             'CLOUDFORMATION': self.load_yaml_source,
             'HCL2': self.load_hcl2_source,
-            'TERRAFORM': self.load_hcl2_source
+            'TERRAFORM': self.load_hcl2_source,
+            'XML': self.load_xml_source
         }
+
+    def load_xml_source(self, filename):
+        logger.debug(f"Loading XML source file: {filename}")
+        with open(filename, 'rb') as f:
+            self.source_model.load(xmltodict.parse(f.read(), xml_attribs=True))
 
     def load_yaml_source(self, filename):
         logger.debug(f"Loading YAML source file: {filename}")

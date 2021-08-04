@@ -28,7 +28,7 @@ def configure_logger(level, verbose):
 @click.group()
 @click.option('--log-level', '-l', callback=validate_logging, default='info', help='Set the log level. Must be one of: crit, error, warn, info, debug, none.')
 @click.option('--verbose/--no-verbose', default=False, help='Makes logging more verbose.')
-@click.version_option()
+#@click.version_option(package_name='startleft')
 def cli(log_level, verbose):
     """
     Parse IaC and other files to the Open Threat Model format and upload them to IriusRisk
@@ -38,7 +38,7 @@ def cli(log_level, verbose):
 
 @cli.command()
 @click.option('--type', '-t', 
-    type=click.Choice(['JSON', 'YAML', 'CloudFormation', 'HCL2', 'Terraform'], case_sensitive=False),
+    type=click.Choice(['JSON', 'YAML', 'CloudFormation', 'HCL2', 'Terraform', 'XML'], case_sensitive=False),
     default="JSON",
     help='Specify the source file type.')
 @click.option('--map', '-m', multiple=True, help='Map file to use when parsing source files')
@@ -64,7 +64,7 @@ def run(type, map, otm, name, id, ir_map, recreate, filename):
 
 @cli.command()
 @click.option('--type', '-t', 
-    type=click.Choice(['JSON', 'YAML', 'CloudFormation', 'HCL2', 'Terraform'], case_sensitive=False),
+    type=click.Choice(['JSON', 'YAML', 'CloudFormation', 'HCL2', 'Terraform', 'XML'], case_sensitive=False),
     default="JSON",
     help='Specify the source file type.')
 @click.option('--map', '-m', multiple=True, help='Map file to use when parsing source files')
@@ -113,7 +113,7 @@ def validate(map, otm):
 
 @cli.command()
 @click.option('--type', '-t', 
-    type=click.Choice(['JSON', 'YAML', 'CloudFormation', 'HCL2', 'Terraform'], case_sensitive=False),
+    type=click.Choice(['JSON', 'YAML', 'CloudFormation', 'HCL2', 'Terraform', 'XML'], case_sensitive=False),
     default="JSON",
     help='Specify the source file type.')
 @click.option('--query', help='JMESPath query to run against source files')
@@ -123,7 +123,7 @@ def search(type, query, filename):
     Searches source files for the given query
     """
 
-    iac_to_otm = app.IacToOtmApp()
+    iac_to_otm = app.IacToOtmApp(None, None)
     logger.info("Running JMESPath search query against source files")
     iac_to_otm.search(type, query, filename)
 
