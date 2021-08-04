@@ -47,14 +47,16 @@ def cli(log_level, verbose):
 @click.option('--id', help='Project ID')
 @click.option('--ir-map', '-i', multiple=True, help='path to IriusRisk map file')
 @click.option('--recreate/--no-recreate', default=False, help='Delete and recreate the product each time')
+@click.option('--server', default='', envvar='IRIUS_SERVER', help='IriusRisk server to connect to (proto://server[:port])')
+@click.option('--api-token', default='', envvar='IRIUS_API_TOKEN', help='IriusRisk API token')
 @click.argument('filename', nargs=-1)
-def run(type, map, otm, name, id, ir_map, recreate, filename):
+def run(type, map, otm, name, id, ir_map, recreate, server, api_token, filename):
     """
     Parses IaC source files into Open Threat Model and immediately uploads threat model to IriusRisk
     """
 
     iac_to_otm = app.IacToOtmApp(name, id)
-    otm_to_ir = app.OtmToIr()
+    otm_to_ir = app.OtmToIr(server, api_token)
 
     logger.info("Parsing IaC source files into OTM")
     iac_to_otm.run(type, map, otm, filename)
@@ -83,13 +85,15 @@ def parse(type, map, otm, name, id, filename):
 @cli.command()
 @click.option('--ir-map', '-i', multiple=True, help='path to map file')
 @click.option('--recreate/--no-recreate', default=False, help='Delete and recreate the product each time')
+@click.option('--server', default='', envvar='IRIUS_SERVER', help='IriusRisk server to connect to (proto://server[:port])')
+@click.option('--api-token', default='', envvar='IRIUS_API_TOKEN', help='IriusRisk API token')
 @click.argument('filename', nargs=-1)
-def threatmodel(ir_map, recreate, filename):
+def threatmodel(ir_map, recreate, server, api_token, filename):
     """
     Builds an IriusRisk threat model from OTM files
     """
 
-    otm_to_ir = app.OtmToIr()
+    otm_to_ir = app.OtmToIr(server, api_token)
     logger.info("Uploading OTM files and generating the IriusRisk threat model")
     otm_to_ir.run(ir_map, recreate, filename)
 

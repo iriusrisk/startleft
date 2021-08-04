@@ -127,8 +127,15 @@ class OtmToIr:
     EXIT_UNEXPECTED = 3
     EXIT_VALIDATION_FAILED = 4
 
-    def __init__(self):
-        self.iriusrisk = iriusrisk.IriusRisk(os.getenv("IRIUS_SERVER"), os.getenv("IRIUS_API_TOKEN"))
+    def __init__(self, server, api_token):
+        if not server:
+            logger.error('IriusRisk server must be set')
+            sys.exit(OtmToIr.EXIT_UNEXPECTED)
+        if not api_token:
+            logger.error('API token must be set')
+            sys.exit(OtmToIr.EXIT_UNEXPECTED)
+
+        self.iriusrisk = iriusrisk.IriusRisk(server, api_token)
         self.diagram = diagram.Diagram()
 
     def load_otm_files(self, filenames):
