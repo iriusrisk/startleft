@@ -2,6 +2,8 @@
 
 Parse IaC and other files to the Open Threat Model format and upload them to IriusRisk.
 
+Note: This software is early release and is provded as-is.
+
 # Installation
 
 ```
