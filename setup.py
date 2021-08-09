@@ -20,17 +20,19 @@ setup(
         'lxml',
         'python-hcl2',
         'requests',
-        'xmltodict'
+        'xmltodict',
+        'setuptools_scm'
     ],
     use_scm_version=True,
-    setup_requires=[
-        "pytest-runner",
-        "setuptools_scm"
-    ],
-    tests_require=[
-        'tox',
-        'pytest'
-    ],
+    extras_require={
+        "setup": [
+            "pytest-runner",
+        ],
+        "test": [
+            'tox',
+            'pytest'
+        ]
+    },
     entry_points='''
         [console_scripts]
         startleft=startleft.cli:cli

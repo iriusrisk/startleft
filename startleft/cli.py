@@ -4,6 +4,9 @@ logger = logging.getLogger(__name__)
 import click
 from startleft import app
 
+from setuptools_scm import get_version
+__version__ = get_version(root='..', relative_to=__file__)
+
 def validate_logging(ctx, param, value):
     levels = {
         'none': 100,
@@ -28,7 +31,7 @@ def configure_logger(level, verbose):
 @click.group()
 @click.option('--log-level', '-l', callback=validate_logging, default='info', help='Set the log level. Must be one of: crit, error, warn, info, debug, none.')
 @click.option('--verbose/--no-verbose', default=False, help='Makes logging more verbose.')
-#@click.version_option(package_name='startleft')
+@click.version_option(__version__)
 def cli(log_level, verbose):
     """
     Parse IaC and other files to the Open Threat Model format and upload them to IriusRisk
