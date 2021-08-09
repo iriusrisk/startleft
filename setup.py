@@ -3,14 +3,14 @@ from setuptools import setup, find_packages
 setup(
     name='IriusRisk StartLeft',
     description='Parse Infrastructure as Code files to the Open Threat Model format and upload them to IriusRisk',
-    license='MIT',
+    license='Apache2',
     author='Fraser Scott',
     author_email='fscott@iriusrisk.com',
     url='https://github.com/iriusrisk/startleft',
     keywords=['threat modeling', 'cyber security', 'appsec'],
     packages=find_packages(),
     include_package_data=True,
-    python_requires='>=3.5',
+    python_requires='>=3.6',
     install_requires=[
         'click',
         'pyyaml',
@@ -19,13 +19,16 @@ setup(
         'jmespath',
         'lxml',
         'python-hcl2',
-        'requests'
+        'requests',
+        'xmltodict'
     ],
     use_scm_version=True,
     setup_requires=[
-        "pytest-runner"
+        "pytest-runner",
+        "setuptools_scm"
     ],
     tests_require=[
+        'tox',
         'pytest'
     ],
     entry_points='''
@@ -37,8 +40,9 @@ setup(
         'Intended Audience :: Developers',
         'Topic :: Security',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7'
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9'
     ]
 )

@@ -102,16 +102,16 @@ def threatmodel(ir_map, recreate, server, api_token, filename):
 @click.option('--otm', '-o', multiple=True, help='OTM file to validate')
 def validate(map, otm):
     """
-    Validates a mapping or OTM   file
+    Validates a mapping or OTM file
     """
 
     if map:
-        iac_to_otm = app.IacToOtmApp()
+        iac_to_otm = app.IacToOtmApp(None, None)
         logger.info("Validating source map file")
         iac_to_otm.validate(map)
         
     if otm:
-        otm_to_ir = app.OtmToIr()
+        otm_to_ir = app.OtmToIr(None, None)
         logger.info("Validating OTM file")
         otm_to_ir.validate(otm)
 

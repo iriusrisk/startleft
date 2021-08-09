@@ -128,13 +128,6 @@ class OtmToIr:
     EXIT_VALIDATION_FAILED = 4
 
     def __init__(self, server, api_token):
-        if not server:
-            logger.error('IriusRisk server must be set')
-            sys.exit(OtmToIr.EXIT_UNEXPECTED)
-        if not api_token:
-            logger.error('API token must be set')
-            sys.exit(OtmToIr.EXIT_UNEXPECTED)
-
         self.iriusrisk = iriusrisk.IriusRisk(server, api_token)
         self.diagram = diagram.Diagram()
 
@@ -142,7 +135,13 @@ class OtmToIr:
         for filename in filenames:
             logger.debug(f"Loading OTM file {filename}")
             with open(filename, 'r') as f:
-                self.iriusrisk.load_otm_file(yaml.load(f, Loader=yaml.BaseLoader))            
+                self.iriusrisk.load_otm_file(yaml.load(f, Loader=yaml.BaseLoader))
+            schema = self.iriusrisk.validate_otm()
+            if not schema.valid:
+                logger.error('OTM file is not valid')
+                logger.error(f"--- Schema errors---\n{schema.errors}\n--- End of schema errors ---")
+                sys.exit(OtmToIr.EXIT_VALIDATION_FAILED)            
+            self.iriusrisk.set_project()          
 
     def load_map_files(self, filenames):
         for filename in filenames:

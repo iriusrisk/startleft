@@ -10,6 +10,12 @@ import os
 import yaml
 from startleft.schema import Schema
 
+class IriusTokenError(Exception):
+    pass
+
+class IriusServerError(Exception):
+    pass
+
 class IriusRisk:
     API_PATH = '/api/v1'
 
@@ -27,10 +33,19 @@ class IriusRisk:
         self.components = []
 
     def headers(self):
+        if not self.token:
+            raise IriusTokenError        
         return {"api-token" : "{}".format(self.token)}
+
+    def irius_url(self, path):
+        if not self.base_url:
+            raise IriusServerError
+        return self.base_url + IriusRisk.API_PATH + path
 
     def load_otm_file(self, data):
         always_merger.merge(self.otm, data)
+
+    def set_project(self):
         if not self.name:
             self.name = self.otm["project"]["name"]
         if not self.id:
@@ -85,7 +100,7 @@ class IriusRisk:
             component["trustzone"] = self.find_trustzone(component)
 
     def product_exists(self):
-        url = self.base_url + IriusRisk.API_PATH + "/products"
+        url = self.irius_url("/products")
         response = requests.get(url, headers=self.headers())
         logger.debug(f"Response received {response.status_code}: {response.text}")
         for product in response.json():
@@ -96,7 +111,7 @@ class IriusRisk:
     def update_product(self, diagram):
         product_xml = self.create_product_xml(diagram, draft="true")
 
-        url = self.base_url + IriusRisk.API_PATH + f"/products/upload/{self.id}"
+        url = self.irius_rul(f"/products/upload/{self.id}")
         headers = self.headers()
         logger.debug("Writing product XML to 'product.xml'")
         with open("product.xml", "wb") as f:
@@ -107,7 +122,7 @@ class IriusRisk:
         response.close()
 
     def delete_product(self):
-        url = self.base_url + IriusRisk.API_PATH + f"/products/{self.id}"
+        url = self.irius_url(f"/products/{self.id}")
         headers = self.headers()
         logger.debug("Deleting product")
         response = requests.delete(url, headers=headers)
@@ -117,7 +132,7 @@ class IriusRisk:
     def create_product(self, diagram):
         product_xml = self.create_product_xml(diagram)
 
-        url = self.base_url + IriusRisk.API_PATH + "/products/upload/"
+        url = self.irius_url("/products/upload/")
         data = {"ref": self.id, "name": self.name, "type": "STANDARD"}
         headers = self.headers()
         logger.debug("Writing product XML to 'product.xml'")
@@ -181,17 +196,18 @@ class IriusRisk:
             self.create_product(diagram)
 
     def run_rules(self):
-        url = self.base_url + IriusRisk.API_PATH + f"/rules/product/{self.id}"
+        url = self.irius_url(f"/rules/product/{self.id}")
         response = requests.put(url, headers=self.headers())
         logger.debug(f"Response received {response.status_code}: {response.text}")
         response.close()
 
     def load_schema(self):
-        schema_path = pkg_resources.resource_filename('startleft', os.path.join('data', 'otm_schema.json'))
-        logger.debug(f"Loading schema from {schema_path}")
-        with open(schema_path, "r") as f:
-            schema = yaml.load(f, Loader=yaml.BaseLoader)
-            self.schema = Schema(schema)
+        if not self.schema:
+            schema_path = pkg_resources.resource_filename('startleft', os.path.join('data', 'otm_schema.json'))
+            logger.debug(f"Loading schema from {schema_path}")
+            with open(schema_path, "r") as f:
+                schema = yaml.load(f, Loader=yaml.BaseLoader)
+                self.schema = Schema(schema)
 
     def validate_otm(self):
         self.load_schema()
