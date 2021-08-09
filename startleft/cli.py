@@ -4,8 +4,9 @@ logger = logging.getLogger(__name__)
 import click
 from startleft import app
 
-from setuptools_scm import get_version
-__version__ = get_version(root='..', relative_to=__file__)
+#from setuptools_scm import get_version
+#__version__ = get_version(root='..', relative_to=__file__)
+__version__ = "0.1.0"
 
 def validate_logging(ctx, param, value):
     levels = {
