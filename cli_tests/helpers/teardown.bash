@@ -7,7 +7,5 @@ teardown_common() {
         rm "diagram.xml"
     fi
 
-    if [ -f bats_test_*.*]; then
-        rm bats_test_*.*
-    fi
+    rm bats_test_*.*
 }

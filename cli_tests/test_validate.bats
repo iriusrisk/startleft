@@ -3,6 +3,12 @@ load helpers/bats-assert/load
 load helpers/setup
 load helpers/teardown
 
+teardown() {
+  if [ "$BATS_TEST_NUMBER" -eq ${#BATS_TEST_NAMES[@]} ]; then
+    teardown_common
+  fi
+}
+
 @test "validate map valid" {
     cat <<'EOF' > bats_test_map.yaml
 trustzones: []

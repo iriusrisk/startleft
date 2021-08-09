@@ -4,6 +4,12 @@ load helpers/other-asserts
 load helpers/setup
 load helpers/teardown
 
+teardown() {
+  if [ "$BATS_TEST_NUMBER" -eq ${#BATS_TEST_NAMES[@]} ]; then
+    teardown_common
+  fi
+}
+
 @test "parse json" {
     cat <<'EOF' > bats_test_source.json
 {
