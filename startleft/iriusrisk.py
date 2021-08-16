@@ -131,7 +131,7 @@ class IriusRisk:
             f.write(product_xml)
         logger.debug("Submitting updated product to IriusRisk")
         response = requests.post(url, files={"fileName": open("product.xml", "r")}, headers=headers)
-        logger.debug(f"Response received {response.status_code}: {response.text}")
+        self.check_response(response)
         response.close()
 
     def delete_product(self):
@@ -139,7 +139,7 @@ class IriusRisk:
         headers = self.headers()
         logger.debug("Deleting product")
         response = requests.delete(url, headers=headers)
-        logger.debug(f"Response received {response.status_code}: {response.text}")
+        self.check_response(response)
         response.close()
 
     def create_product(self, diagram):
@@ -154,7 +154,7 @@ class IriusRisk:
 
         logger.debug("Submitting new product to IriusRisk")
         response = requests.post(url, data=data, files={"fileName": open("product.xml", "r")}, headers=headers)
-        logger.debug(f"Response received {response.status_code}: {response.text}")
+        self.check_response(response)
         response.close()
 
     def create_product_xml(self, diagram_schema, draft="false"):
@@ -211,7 +211,7 @@ class IriusRisk:
     def run_rules(self):
         url = self.irius_url(f"/rules/product/{self.id}")
         response = requests.put(url, headers=self.headers())
-        logger.debug(f"Response received {response.status_code}: {response.text}")
+        self.check_response(response)
         response.close()
 
     def load_schema(self):
