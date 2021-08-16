@@ -191,12 +191,20 @@ class OtmToIr:
 
         logger.debug("Resolving component trustzones")
         self.iriusrisk.resolve_component_trustzones()
-        if recreate:
-            logger.debug("Recreating diagram in IriusRisk")
-            self.iriusrisk.recreate_diagram(diagram_xml)
-        else:
-            logger.debug("Upserting diagram to IriusRisk")
-            self.iriusrisk.upsert_diagram(diagram_xml)
+        try:
+            if recreate:
+                self.iriusrisk.recreate_diagram(diagram_xml)
+                logger.debug("Recreating diagram in IriusRisk")
+            else:
+                logger.debug("Upserting diagram to IriusRisk")
+                self.iriusrisk.upsert_diagram(diagram_xml)
+        except iriusrisk.IriusServerError:
+            logger.error("IRIUS_SERVER not set")
+            sys.exit(OtmToIr.EXIT_UNEXPECTED)
+        except iriusrisk.IriusTokenError:
+            logger.error("IRIUS_API_TOKEN not set")
+            sys.exit(OtmToIr.EXIT_UNEXPECTED)        
+                        
         logger.debug("Running rules engine")
         self.iriusrisk.run_rules()
 
