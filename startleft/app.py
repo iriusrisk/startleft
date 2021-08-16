@@ -203,7 +203,10 @@ class OtmToIr:
             sys.exit(OtmToIr.EXIT_UNEXPECTED)
         except iriusrisk.IriusTokenError:
             logger.error("IRIUS_API_TOKEN not set")
-            sys.exit(OtmToIr.EXIT_UNEXPECTED)        
+            sys.exit(OtmToIr.EXIT_UNEXPECTED)
+        except iriusrisk.IriusApiError as e:
+            logger.error(f"API error: {e}")
+            sys.exit(OtmToIr.EXIT_UNEXPECTED)
                         
         logger.debug("Running rules engine")
         self.iriusrisk.run_rules()

@@ -1,3 +1,4 @@
+from json.decoder import JSONDecodeError
 import logging
 logger = logging.getLogger(__name__)
 
@@ -5,6 +6,7 @@ from lxml import etree
 from deepmerge import always_merger
 import pkg_resources
 import requests
+from urllib.parse import urljoin
 import base64
 import os
 import yaml
@@ -14,6 +16,9 @@ class IriusTokenError(Exception):
     pass
 
 class IriusServerError(Exception):
+    pass
+
+class IriusApiError(Exception):
     pass
 
 class IriusRisk:
@@ -40,7 +45,12 @@ class IriusRisk:
     def irius_url(self, path):
         if not self.base_url:
             raise IriusServerError
-        return self.base_url + IriusRisk.API_PATH + path
+        return urljoin(self.base_url, IriusRisk.API_PATH, path)
+
+    def check_response(self, response):
+        if not response.ok:
+            raise IriusApiError(f"API return an unexpected response: {response.status_code}\nResponse url: {response.url}\nResponse bod:{response.text}")
+        logger.debug(f"Response received {response.status_code}: {response.text}")
 
     def load_otm_file(self, data):
         always_merger.merge(self.otm, data)
@@ -102,10 +112,13 @@ class IriusRisk:
     def product_exists(self):
         url = self.irius_url("/products")
         response = requests.get(url, headers=self.headers())
-        logger.debug(f"Response received {response.status_code}: {response.text}")
-        for product in response.json():
-            if product["ref"] == self.id:
-                return True
+        self.check_response(response)
+        try:
+            for product in response.json():
+                if product["ref"] == self.id:
+                    return True
+        except JSONDecodeError:
+            raise IriusApiError(f"API did not return a JSON response: {response.text}")
         return False
 
     def update_product(self, diagram):
