@@ -45,7 +45,8 @@ class IriusRisk:
     def irius_url(self, path):
         if not self.base_url:
             raise IriusServerError
-        return urljoin(self.base_url, IriusRisk.API_PATH, path)
+        #return urljoin(self.base_url, IriusRisk.API_PATH, path)
+        return self.base_url + IriusRisk.API_PATH + path
 
     def check_response(self, response):
         if not response.ok:
