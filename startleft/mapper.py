@@ -14,10 +14,11 @@ class TrustzoneMapper:
                 source_objs = [source_objs]
         else:
             source_objs = [self.mapping]
+
         for source_obj in source_objs:
             trustzone = {}
             trustzone["name"] = source_model.search(self.mapping["name"], source=source_obj)
-            trustzone["type"] = self.mapping["type"]
+            trustzone["type"] = source_model.search(self.mapping["type"], source=source_obj)
             trustzone["source"] = source_obj
             if "properties" in self.mapping:
                 trustzone["properties"] = self.mapping["properties"]
