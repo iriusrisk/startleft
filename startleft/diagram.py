@@ -250,8 +250,8 @@ class Diagram:
                     for child_id in node_obj["children"]:
                         child = self.root.find(".//mxCell[@id='{}']".format(child_id))    
                         childgeo = child[0]
-                        child_x = self.tz_delta + (col * (self.tz_delta + max_child_size))
-                        child_y = self.tz_delta + (row * (self.tz_delta + max_child_size))
+                        child_x = self.tz_delta + (col * (self.tz_delta + max_child_size)) * 1.5
+                        child_y = self.tz_delta + (row * (self.tz_delta + max_child_size)) + 20*(col % 2)
                         #print("    child {} x {} y {}".format(child.attrib["id"], child_x, child_y))
                         childgeo.attrib["x"] = str(child_x)
                         childgeo.attrib["y"] = str(child_y)
