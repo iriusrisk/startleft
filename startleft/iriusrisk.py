@@ -125,7 +125,7 @@ class IriusRisk:
     def update_product(self, diagram):
         product_xml = self.create_product_xml(diagram, draft="true")
 
-        url = self.irius_rul(f"/products/upload/{self.id}")
+        url = self.irius_url(f"/products/upload/{self.id}")
         headers = self.headers()
         logger.debug("Writing product XML to 'product.xml'")
         with open("product.xml", "wb") as f:
