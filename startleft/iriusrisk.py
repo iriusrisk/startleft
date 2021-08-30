@@ -182,7 +182,9 @@ class IriusRisk:
         xml_components = etree.SubElement(xml_project, "components")
         for component in self.components:
             xml_component = etree.SubElement(xml_components, "component", ref=component["id"], name=component["name"], desc="", library="", parentComponentRef="", componentDefinitionRef=component["component_definition"], asvsVersion="4")
-            etree.SubElement(xml_component, "tags")
+            xml_component_tags = etree.SubElement(xml_component, "tags")
+            # add type as tags in xml
+            etree.SubElement(xml_component_tags, "tag", tag=component['type'])
             etree.SubElement(xml_component, "questions")
             xml_component_trustzones = etree.SubElement(xml_component, "trustZones")
             etree.SubElement(xml_component_trustzones, "trustZone", ref=component["trustzone"])
