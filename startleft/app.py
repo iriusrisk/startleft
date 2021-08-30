@@ -131,16 +131,35 @@ class OtmToIr:
         self.iriusrisk = iriusrisk.IriusRisk(server, api_token)
         self.diagram = diagram.Diagram()
 
+    def check_otm_files(self):
+        logger.debug("Checking IDs consistency on OTM file")
+        if self.iriusrisk.check_otm_ids():
+            logger.info('OTM file has consistent IDs')
+        else:
+            logger.error('OTM file has inconsistent IDs')
+            sys.exit(OtmToIr.EXIT_VALIDATION_FAILED)
+
+    def validate_otm_files(self):
+        logger.debug("Validating OTM schema")
+        schema = self.iriusrisk.validate_otm()
+        if schema.valid:
+            logger.info('OTM file is valid')
+        if not schema.valid:
+            logger.error('OTM file is not valid')
+            logger.error(f"--- Schema errors---\n{schema.errors}\n--- End of schema errors ---")
+            sys.exit(OtmToIr.EXIT_VALIDATION_FAILED)
+
     def load_otm_files(self, filenames):
         for filename in filenames:
             logger.debug(f"Loading OTM file {filename}")
-            with open(filename, 'r') as f:
-                self.iriusrisk.load_otm_file(yaml.load(f, Loader=yaml.BaseLoader))
-            schema = self.iriusrisk.validate_otm()
-            if not schema.valid:
-                logger.error('OTM file is not valid')
-                logger.error(f"--- Schema errors---\n{schema.errors}\n--- End of schema errors ---")
-                sys.exit(OtmToIr.EXIT_VALIDATION_FAILED)            
+            try:
+                with open(filename, 'r') as f:
+                    self.iriusrisk.load_otm_file(yaml.load(f, Loader=yaml.BaseLoader))
+            except FileNotFoundError:
+                logger.error(f"Cannot find OTM file '{filename}'")
+                sys.exit(OtmToIr.EXIT_UNEXPECTED)
+            self.validate_otm_files()
+            self.check_otm_files()
             self.iriusrisk.set_project()          
 
     def load_map_files(self, filenames):
@@ -213,17 +232,9 @@ class OtmToIr:
 
     def validate(self, filename):
         """
-        Vallidates a mapping file against the mapping file schema.
+        Validates an OTM file against the OTM file schema.
         """
 
-        logger.debug(f"Validating mapper file '{filename}'")
+        logger.debug(f"Validating OTM file '{filename}'")
         self.load_otm_files(filename)
         logger.debug(f"--- File to validate ---\n{self.iriusrisk.otm}\n--- End of file ---")
-
-        schema = self.iriusrisk.validate_otm()
-        if schema.valid:
-            logger.info('OTM file is valid')
-        else:
-            logger.error('OTM file is not valid')
-            logger.error(f"--- Schema errors---\n{schema.errors}\n--- End of schema errors ---")
-            sys.exit(OtmToIr.EXIT_VALIDATION_FAILED)

@@ -228,3 +228,38 @@ class IriusRisk:
         logger.debug(f"--- Schema to validate against ---\n{self.schema.json()}\n--- End of schema ---")
         self.schema.validate(self.otm)
         return self.schema
+
+    def check_otm_ids(self):
+        all_valid_ids = []
+        wrong_trustzone_ids = []
+        wrong_component_ids = []
+        wrong_component_parent_ids = []
+
+        for trustzone in self.otm['trustzones']:
+            if trustzone['id'].strip() == '':
+                wrong_trustzone_ids.append(trustzone['id'])
+            elif trustzone['id'] not in all_valid_ids:
+                all_valid_ids.append(trustzone['id'])
+        for component in self.otm['components']:
+            if component['id'].strip() == '':
+                wrong_component_ids.append(component['id'])
+            elif component['id'] not in all_valid_ids:
+                all_valid_ids.append(component['id'])
+
+            if component['parent'] not in all_valid_ids:
+                wrong_component_parent_ids.append(component['parent'])
+
+        if len(wrong_trustzone_ids) > 0:
+            logger.error(f"Trustzone identifiers inconsistent: {wrong_trustzone_ids}")
+
+        if len(wrong_component_ids) > 0:
+            logger.error(f"Component identifiers inconsistent: {wrong_component_ids}")
+
+        if len(wrong_component_parent_ids) > 0:
+            logger.error(f"Component parent identifiers inconsistent: {wrong_component_parent_ids}")
+
+        if len(wrong_trustzone_ids) > 0 or len(wrong_component_ids) > 0 or len(wrong_component_parent_ids) > 0:
+            return False
+        else:
+            return True
+
