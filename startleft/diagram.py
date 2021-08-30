@@ -79,7 +79,8 @@ class Component(Cell):
         self.ir_map = {
             "ir.type": "COMPONENT",
             "ir.synchronized": "1",
-            "ir.componentDefinition.ref": "empty-component"
+            "ir.componentDefinition.ref": "empty-component",
+            "ir.tags": ""
         }
         self.style_map = {
             "outlineConnect": "0",
@@ -140,6 +141,10 @@ class Diagram:
 
     def load_map(self, map):
         always_merger.merge(self.map, map)
+        # add type as tags in diagram
+        for mapElement in map['components']:
+            if mapElement['type'] != 'default':
+                mapElement['properties']['ir.tags'] = mapElement['type']
 
     def add_trustzone(self, trustzone):
         tz = Trustzone(trustzone)
