@@ -143,9 +143,9 @@ class OtmToIr:
         logger.debug("Validating OTM schema")
         schema = self.iriusrisk.validate_otm()
         if schema.valid:
-            logger.info('OTM file is valid')
+            logger.info('OTM schema is valid')
         if not schema.valid:
-            logger.error('OTM file is not valid')
+            logger.error('OTM schema is not valid')
             logger.error(f"--- Schema errors---\n{schema.errors}\n--- End of schema errors ---")
             sys.exit(OtmToIr.EXIT_VALIDATION_FAILED)
 
