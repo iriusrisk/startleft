@@ -233,23 +233,47 @@ class IriusRisk:
 
     def check_otm_ids(self):
         all_valid_ids = []
+        repeated_ids = []
         wrong_trustzone_ids = []
         wrong_component_ids = []
         wrong_component_parent_ids = []
+        wrong_dataflow_ids = []
+        wrong_dataflow_from_ids = []
+        wrong_dataflow_to_ids = []
 
         for trustzone in self.otm['trustzones']:
             if trustzone['id'].strip() == '':
                 wrong_trustzone_ids.append(trustzone['id'])
+            elif trustzone['id'] in all_valid_ids:
+                repeated_ids.append(trustzone['id'])
             elif trustzone['id'] not in all_valid_ids:
                 all_valid_ids.append(trustzone['id'])
+
         for component in self.otm['components']:
             if component['id'].strip() == '':
                 wrong_component_ids.append(component['id'])
+            elif component['id'] in all_valid_ids:
+                repeated_ids.append(component['id'])
             elif component['id'] not in all_valid_ids:
                 all_valid_ids.append(component['id'])
 
             if component['parent'] not in all_valid_ids:
                 wrong_component_parent_ids.append(component['parent'])
+
+        for dataflow in self.otm['dataflows']:
+            if dataflow['id'].strip() == '':
+                wrong_dataflow_ids.append(dataflow['id'])
+            elif dataflow['id'] in all_valid_ids:
+                repeated_ids.append(dataflow['id'])
+            elif dataflow['id'] not in all_valid_ids:
+                all_valid_ids.append(dataflow['id'])
+
+            if dataflow['from'] not in all_valid_ids:
+                wrong_dataflow_from_ids.append(dataflow['from'])
+
+            if dataflow['to'] not in all_valid_ids:
+                wrong_dataflow_to_ids.append(dataflow['to'])
+
 
         if len(wrong_trustzone_ids) > 0:
             logger.error(f"Trustzone identifiers inconsistent: {wrong_trustzone_ids}")
@@ -260,7 +284,21 @@ class IriusRisk:
         if len(wrong_component_parent_ids) > 0:
             logger.error(f"Component parent identifiers inconsistent: {wrong_component_parent_ids}")
 
-        if len(wrong_trustzone_ids) > 0 or len(wrong_component_ids) > 0 or len(wrong_component_parent_ids) > 0:
+        if len(wrong_dataflow_ids) > 0:
+            logger.error(f"Dataflow identifiers inconsistent: {wrong_dataflow_ids}")
+
+        if len(wrong_dataflow_from_ids) > 0:
+            logger.error(f"Dataflow 'from' identifiers inconsistent: {wrong_dataflow_from_ids}")
+
+        if len(wrong_dataflow_to_ids) > 0:
+            logger.error(f"Dataflow 'to' identifiers inconsistent: {wrong_dataflow_to_ids}")
+
+        if len(repeated_ids) > 0:
+            logger.error(f"Repeated identifiers inconsistent: {repeated_ids}")
+
+        if len(wrong_trustzone_ids) > 0 or len(wrong_component_ids) > 0 or len(wrong_component_parent_ids) > 0\
+                or len(wrong_dataflow_ids) > 0 or len(wrong_dataflow_from_ids) > 0 or len(wrong_dataflow_to_ids) > 0\
+                or len(repeated_ids) > 0:
             return False
         else:
             return True
