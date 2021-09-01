@@ -154,8 +154,8 @@ class Diagram:
 
     def add_component(self, component):
         c = Component(component)
+        c.ir_map["ir.tags"] = ",".join(c.data['tags'])
         c.merge_properties(self.map["components"])
-        c.data['properties']['ir.tags'] = c.data['type']
 
         c_cell = c.to_cell()        
         cell = etree.SubElement(self.root, "mxCell", id=c_cell["data"]["id"], value=c_cell["data"]["name"], style=c_cell["style"], parent=c_cell["data"]["parent"], vertex="1")

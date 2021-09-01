@@ -108,3 +108,11 @@ venv.bak/
 
 # caret editor
 caret
+
+# IntelliJ/Pycharm folder
+.idea
+
+# Intermediate files
+startleft/diagram.xml
+startleft/product.xml
+startleft/*.otm
