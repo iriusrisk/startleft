@@ -265,16 +265,16 @@ class IriusRisk:
             if dataflow['to'] not in all_valid_ids:
                 wrong_dataflow_to_ids.append(dataflow['to'])
 
-        if len(wrong_component_parent_ids):
+        if wrong_component_parent_ids:
             logger.error(f"Component parent identifiers inconsistent: {wrong_component_parent_ids}")
 
-        if len(wrong_dataflow_from_ids):
+        if wrong_dataflow_from_ids:
             logger.error(f"Dataflow 'from' identifiers inconsistent: {wrong_dataflow_from_ids}")
 
-        if len(wrong_dataflow_to_ids):
+        if wrong_dataflow_to_ids:
             logger.error(f"Dataflow 'to' identifiers inconsistent: {wrong_dataflow_to_ids}")
 
-        if len(repeated_ids):
+        if repeated_ids:
             logger.error(f"Repeated identifiers inconsistent: {repeated_ids}")
 
-        return wrong_component_parent_ids or wrong_dataflow_from_ids or wrong_dataflow_to_ids or repeated_ids
+        return not wrong_component_parent_ids and not wrong_dataflow_from_ids and not wrong_dataflow_to_ids and not repeated_ids
