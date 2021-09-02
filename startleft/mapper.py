@@ -1,15 +1,16 @@
 import uuid
 
+
 class TrustzoneMapper:
     def __init__(self, mapping):
         self.mapping = mapping
-        self.id_map = {} 
+        self.id_map = {}
 
     def run(self, source_model):
         trustzones = []
 
         if "$source" in self.mapping:
-            source_objs =  source_model.search(self.mapping["$source"])
+            source_objs = source_model.search(self.mapping["$source"])
             if not isinstance(source_objs, list):
                 source_objs = [source_objs]
         else:
@@ -60,6 +61,14 @@ class ComponentMapper:
             else:
                 c_name = None
 
+            c_tags = []
+            if "tags" in self.mapping:
+                if isinstance(self.mapping["tags"], list):
+                    for tag in self.mapping["tags"]:
+                        c_tags.append(source_model.search(tag, source=source_obj))
+                else:
+                    c_tags.append(source_model.search(self.mapping["tags"], source=source_obj))
+
             c_type = source_model.search(self.mapping["type"], source=source_obj)
 
             if isinstance(parent, str):
@@ -69,18 +78,19 @@ class ComponentMapper:
 
                 component["name"] = c_name
                 component["type"] = c_type
+                component["tags"] = c_tags
 
                 if parent_element in self.id_map:
                     parent_id = self.id_map[parent_element]
                 else:
                     parent_id = str(uuid.uuid4())
-                    self.id_map[parent_element] = parent_id 
+                    self.id_map[parent_element] = parent_id
 
                 component["parent"] = parent_id
                 component["source"] = source_obj
 
                 if "properties" in self.mapping:
-                    component["properties"] = self.mapping["properties"] 
+                    component["properties"] = self.mapping["properties"]
 
                 if "id" in self.mapping:
                     source_id = source_model.search(self.mapping["id"], source=component)
@@ -91,7 +101,7 @@ class ComponentMapper:
                     c_id = str(uuid.uuid4())
                     self.id_map[source_id] = c_id
                 else:
-                    c_id = self.id_map[source_id]                    
+                    c_id = self.id_map[source_id]
                 component["id"] = c_id
 
                 components.append(component)
@@ -132,8 +142,8 @@ class DataflowMapper:
                 for to_node in to_mapper.run(source_model, source_obj):
                     # skip self referencing dataflows
                     if from_node == to_node:
-                        continue               
-                    
+                        continue
+
                     dataflow = {}
                     dataflow["name"] = df_name
                     dataflow["type"] = df_type
@@ -160,7 +170,7 @@ class DataflowMapper:
                     if not source_id in self.id_map:
                         df_id = str(uuid.uuid4())
                         self.id_map[source_id] = df_id
-                    dataflow["id"] = df_id     
+                    dataflow["id"] = df_id
 
                     dataflows.append(dataflow)
         return dataflows

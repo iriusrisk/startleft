@@ -49,8 +49,8 @@ class ThreatModel:
     def add_trustzone(self, id=None, name=None, type=None, source=None, properties=None):
         self.trustzones.append(Trustzone(id=id, name=name, type=type, source=source, properties=properties))
 
-    def add_component(self, id=None, name=None, type=None, parent=None, source=None, properties=None):
-        self.components.append(Component(id=id, name=name, type=type, parent=parent, source=source, properties=properties))
+    def add_component(self, id=None, name=None, type=None, parent=None, source=None, properties=None, tags=[]):
+        self.components.append(Component(id=id, name=name, type=type, parent=parent, source=source, properties=properties, tags=tags))
 
     def add_dataflow(self, id=None, name=None, type=None, from_node=None, to_node=None, source=None, properties=None):
         self.dataflows.append(Dataflow(id=id, name=name, type=type, from_node=from_node, to_node=to_node, source=source, properties=properties))
@@ -76,20 +76,22 @@ class Trustzone:
 
 
 class Component:
-    def __init__(self, id=None, name=None, type=None, parent=None, source=None, properties=None):
+    def __init__(self, id=None, name=None, type=None, parent=None, source=None, properties=None, tags=[]):
         self.id = id
         self.name = name
         self.type = type
         self.parent = parent
         self.source = source
         self.properties = properties
+        self.tags = tags
 
     def json(self):
         result = {
             "id": self.id,
             "name": self.name,
             "type": self.type,
-            "parent": self.parent
+            "parent": self.parent,
+            "tags": self.tags
         }
         if self.properties:
             result["properties"] = self.properties

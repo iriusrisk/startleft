@@ -33,7 +33,13 @@
                     "id":     {"$ref": "#/definitions/uuid"},
                     "name":   {"type": "string"},
                     "type":   {"type": "string"},
-                    "parent": {"$ref": "#/definitions/uuid"}
+                    "parent": {"$ref": "#/definitions/uuid"},
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
                 }
             }        
         },

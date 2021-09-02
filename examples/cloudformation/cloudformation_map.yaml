@@ -3,6 +3,8 @@ trustzones:
     type:        {$path: "Type"}
     $source:     {$root: "Resources|squash(@)[?Type=='AWS::EC2::VPC']"}
     name:        {$path: "_key"}
+    tags:
+      - { $path: "Type" }
 
 components:
   - id:          {$format: "{name}"}
@@ -10,24 +12,33 @@ components:
     name:        {$path: "_key"}
     $source:     {$root: "Resources|squash(@)[?Type=='AWS::EC2::Subnet']"}
     parent:      {$path: "Properties.VpcId.Ref"}
+    tags:
+      - {$path: "Properties.CidrBlock"}
+      - {$path: "Type"}
 
   - id:          {$format: "{name}-{parent}"}
     type:        {$path: "Type"}
     $source:     {$root: "Resources|squash(@)[?Type=='AWS::ElasticLoadBalancingV2::LoadBalancer']"}
     name:        {$path: "_key"}
     parent:      {$path: "Properties.Subnets[]|map(&values(@), @)[]|map(&re_sub('[:]', '-', @), @)"}
+    tags:
+      - { $path: "Type" }
 
   - id:          {$format: "{name}"}
     type:        {$path: "Type"}
     name:        {$path: "_key"}
     $source:     {$root: "Resources|squash(@)[?Type=='AWS::Route53::HostedZone']"}
     parent:      {$path: "Properties.VPCs[].VPCId|map(&values(@), @)[]|map(&re_sub('[:]', '-', @), @)"}
+    tags:
+      - { $path: "Type" }
 
   - id:          {$format: "{name}"}
     type:        {$path: "Type"}
     name:        {$path: "_key"}
     $source:     {$root: "Resources|squash(@)[?Type=='AWS::Route53::RecordSet']"}
     parent:      {$path: "Properties.HostedZoneId.Ref"}
+    tags:
+      - { $path: "Type" }
 
 ### Default catchall ###
 
@@ -37,6 +48,8 @@ components:
     type:        {$path: "Type"}
     name:        {$path: "_key"}
     parent:      default-zone
+    tags:
+      - { $path: "Type" }
 
 ### Skip this stuff ###
 
