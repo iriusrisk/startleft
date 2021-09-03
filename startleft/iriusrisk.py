@@ -1,25 +1,19 @@
-from json.decoder import JSONDecodeError
 import logging
+from json.decoder import JSONDecodeError
+
+from startleft.api.errors import IriusTokenError, IriusServerError, IriusApiError
+
 logger = logging.getLogger(__name__)
 
 from lxml import etree
 from deepmerge import always_merger
 import pkg_resources
 import requests
-from urllib.parse import urljoin
 import base64
 import os
 import yaml
 from startleft.schema import Schema
 
-class IriusTokenError(Exception):
-    pass
-
-class IriusServerError(Exception):
-    pass
-
-class IriusApiError(Exception):
-    pass
 
 class IriusRisk:
     API_PATH = '/api/v1'
@@ -39,18 +33,17 @@ class IriusRisk:
 
     def headers(self):
         if not self.token:
-            raise IriusTokenError        
+            raise IriusTokenError
         return {"api-token" : "{}".format(self.token)}
 
     def irius_url(self, path):
         if not self.base_url:
             raise IriusServerError
-        #return urljoin(self.base_url, IriusRisk.API_PATH, path)
         return self.base_url + IriusRisk.API_PATH + path
 
     def check_response(self, response):
         if not response.ok:
-            raise IriusApiError(f"API return an unexpected response: {response.status_code}\nResponse url: {response.url}\nResponse bod:{response.text}")
+            raise IriusApiError(f"API return an unexpected response: {response.status_code}\nResponse url: {response.url}\nResponse body:{response.text}")
         logger.debug(f"Response received {response.status_code}: {response.text}")
 
     def load_otm_file(self, data):

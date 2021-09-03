@@ -1,13 +1,12 @@
-import logging
-logger = logging.getLogger(__name__)
-
 import sys
-import os
 import json
 import yaml
 import hcl2
 import xmltodict
 from startleft import threatmodel, sourcemodel, transformer, iriusrisk, diagram
+import logging
+logger = logging.getLogger(__name__)
+
 
 class IacToOtmApp:
 
@@ -36,8 +35,11 @@ class IacToOtmApp:
 
     def load_yaml_source(self, filename):
         logger.debug(f"Loading YAML source file: {filename}")
-        with open(filename, 'r') as f:
-            self.source_model.load(yaml.load(f, Loader=yaml.BaseLoader))
+        if isinstance(filename, str):
+            with open(filename, 'r') as f:
+                self.source_model.load(yaml.load(f, Loader=yaml.BaseLoader))
+        else:
+            self.source_model.load(yaml.load(filename, Loader=yaml.BaseLoader))
 
     def load_hcl2_source(self, filename):
         logger.debug(f"Loading HCL2 source file: {filename}")

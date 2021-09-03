@@ -21,7 +21,9 @@ setup(
         'python-hcl2',
         'requests',
         'xmltodict',
-        'setuptools_scm'
+        'setuptools_scm',
+        'flask',
+        'marshmallow'
     ],
     use_scm_version=True,
     extras_require={
