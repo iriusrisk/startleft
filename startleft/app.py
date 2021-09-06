@@ -1,13 +1,12 @@
-import logging
-logger = logging.getLogger(__name__)
-
 import sys
-import os
 import json
 import yaml
 import hcl2
 import xmltodict
 from startleft import threatmodel, sourcemodel, transformer, iriusrisk, diagram
+import logging
+logger = logging.getLogger(__name__)
+
 
 class IacToOtmApp:
 
@@ -31,18 +30,27 @@ class IacToOtmApp:
 
     def load_xml_source(self, filename):
         logger.debug(f"Loading XML source file: {filename}")
-        with open(filename, 'rb') as f:
-            self.source_model.load(xmltodict.parse(f.read(), xml_attribs=True))
+        if isinstance(filename, str):
+            with open(filename, 'rb') as f:
+                self.source_model.load(xmltodict.parse(f.read(), xml_attribs=True))
+        else:
+            self.source_model.load(xmltodict.parse(filename.read(), xml_attribs=True))
 
     def load_yaml_source(self, filename):
         logger.debug(f"Loading YAML source file: {filename}")
-        with open(filename, 'r') as f:
-            self.source_model.load(yaml.load(f, Loader=yaml.BaseLoader))
+        if isinstance(filename, str):
+            with open(filename, 'r') as f:
+                self.source_model.load(yaml.load(f, Loader=yaml.BaseLoader))
+        else:
+            self.source_model.load(yaml.load(filename, Loader=yaml.BaseLoader))
 
     def load_hcl2_source(self, filename):
         logger.debug(f"Loading HCL2 source file: {filename}")
-        with open(filename, 'r') as f:
-            self.source_model.load(hcl2.load(f))
+        if isinstance(filename, str):
+            with open(filename, 'r') as f:
+                self.source_model.load(hcl2.load(f))
+        else:
+            self.source_model.load(hcl2.load(filename))
 
     def load_source_files(self, loader, filenames):
         logger.debug(f"Parsing IaC source files of type {type} to OTM")
@@ -61,11 +69,13 @@ class IacToOtmApp:
         for filename in filenames:
             logger.debug(f"Loading mapping file {filename}")
             try:
-                with open(filename, 'r') as f:
-                    self.transformer.load(yaml.load(f, Loader=yaml.BaseLoader))
+                if isinstance(filename, str):
+                    with open(filename, 'r') as f:
+                        self.transformer.load(yaml.load(f, Loader=yaml.BaseLoader))
+                else:
+                    self.transformer.load(yaml.load(filename, Loader=yaml.BaseLoader))
             except FileNotFoundError:
-                logger.error(f"Cannot find mapping file '{filename}'")
-                sys.exit(IacToOtmApp.EXIT_UNEXPECTED)
+                logger.warning(f"Cannot find mapping file '{filename}', skipping")
         logger.debug("Validating mapping schema")
         schema = self.transformer.validate_mapping()
         if not schema.valid:
