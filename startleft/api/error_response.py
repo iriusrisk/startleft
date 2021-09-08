@@ -3,26 +3,18 @@ from typing import List
 from pydantic import BaseModel
 
 
-class ErrorResponseMessage(BaseModel):
-    type: str
-
-    def __init__(self, type: str):
-        super().__init__(type=type)
-
-
 class ErrorResponseItem(BaseModel):
-    item: ErrorResponseMessage
+    errorMessage: str
 
-    def __init__(self, item: ErrorResponseMessage):
-        super().__init__(item=item)
+    def __init__(self, error_message: str):
+        super().__init__(errorMessage=error_message)
 
 
 class ErrorResponse(BaseModel):
-    status: int
+    status: str
     errors: List[ErrorResponseItem] = []
 
-    def __init__(self, status: int, message_type: str):
-        message = ErrorResponseMessage(message_type)
+    def __init__(self, status: str, message: str):
         item = ErrorResponseItem(message)
 
         super().__init__(status=status, errors=[item])

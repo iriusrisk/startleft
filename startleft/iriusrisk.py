@@ -7,7 +7,7 @@ import os
 import yaml
 from startleft.schema import Schema
 from json.decoder import JSONDecodeError
-from startleft.api.errors import IriusTokenError, IriusServerError, IriusApiError
+from startleft.api.errors import IriusTokenError, IriusServerError, IriusApiError, IriusUnauthorizedError
 import logging
 logger = logging.getLogger(__name__)
 
@@ -39,9 +39,14 @@ class IriusRisk:
         return self.base_url + IriusRisk.API_PATH + path
 
     def check_response(self, response):
+        if response.status_code == 401:
+            raise IriusUnauthorizedError(self.get_error_message(response))
         if not response.ok:
-            raise IriusApiError(f"API return an unexpected response: {response.status_code}\nResponse url: {response.url}\nResponse body:{response.text}")
+            raise IriusApiError(self.get_error_message(response))
         logger.debug(f"Response received {response.status_code}: {response.text}")
+
+    def get_error_message(self, response):
+        return f"API return an unexpected response: {response.status_code}\nResponse url: {response.url}\nResponse body:{response.text}"
 
     def load_otm_file(self, data):
         always_merger.merge(self.otm, data)

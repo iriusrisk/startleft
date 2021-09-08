@@ -12,6 +12,8 @@ pip install git+https://github.com/iriusrisk/startleft.git
 
 # Usage
 
+## Command line client
+
 You'll need to export two enviroment variables. The first is the IriusRisk server which should include protocol and hostname (with optional port) but not path. The second is your API token.
 
 ```
@@ -63,6 +65,22 @@ Options:
   --recreate / --no-recreate      Delete and recreate the product each time
   --help                          Show this message and exit.
 ```
+
+## API server
+
+StartLeft can also be deployed as a standalone webserver if you prefer the communication via API. We use uvicorn to deploy it and you can run it directly with the commandline using:
+
+```
+uvicorn startleft.api.fastapi_server:webapp
+```
+
+or using the --server option on the application
+
+```
+startleft run --server
+```
+
+You should see a message like "Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)" and after that you will be able to access the application via API. You can see the endpoints provided by opening the following URL in a web browser: http://127.0.0.1:8000/docs 
 
 # Examples
 

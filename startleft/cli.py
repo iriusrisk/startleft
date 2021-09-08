@@ -1,7 +1,10 @@
+import logging
+
 import click
 import uvicorn
+
 from startleft import app
-import logging
+
 logger = logging.getLogger(__name__)
 
 __version__ = "0.1.0"
@@ -147,10 +150,12 @@ def search(type, query, filename):
     iac_to_otm.search(type, query, filename)
 
 
+@click.option('--server', default='http://localhost:8080', envvar='IRIUS_SERVER',
+              help='IriusRisk server to connect to (proto://server[:port])')
 @cli.command()
-def server():
-    from startleft.api.fastapi_server import create_app
-    webapp = create_app()
+def server(server: str):
+    from startleft.api import fastapi_server
+    webapp = fastapi_server.initialize_webapp(server)
     uvicorn.run(webapp, host="127.0.0.1", port=5000, log_level="info")
 
 
