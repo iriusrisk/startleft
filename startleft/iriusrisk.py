@@ -88,7 +88,15 @@ class IriusRisk:
                 return
             parent = self.parent_tree[parent_id]
             if parent["type"] == "trustzone":
-                return parent_id
+                assigned_trustzone = next(
+                        filter(
+                            lambda tz: tz["id"] == parent_id,
+                            self.trustzones),
+                        None)
+                if assigned_trustzone is None:
+                    return None
+                else:
+                    return assigned_trustzone["properties"]["ir.ref"]
             else:
                 return self.find_trustzone(parent["component"])
         
@@ -166,7 +174,7 @@ class IriusRisk:
         xml_schema.text = str(base64.b64encode(diagram_schema), "utf-8")
         xml_trustzones = etree.SubElement(xml_project, "trustZones")
         for trustzone in self.trustzones:
-            etree.SubElement(xml_trustzones, "trustZone", ref=trustzone["id"], name=trustzone["name"])
+            etree.SubElement(xml_trustzones, "trustZone", ref=trustzone["properties"]["ir.ref"], name=trustzone["type"])
         etree.SubElement(xml_project, "questions")
         etree.SubElement(xml_project, "assets")
         xml_settings = etree.SubElement(xml_project, "settings")

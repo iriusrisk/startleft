@@ -146,9 +146,13 @@ class Diagram:
         tz = Trustzone(trustzone)
         tz.ir_map["ir.ref"] = tz.data["id"]
         tz.merge_properties(self.map["trustzones"])
+        # If our given trustzone was not linked previously to an IriusRisk trustzone, we assign the newly generated
+        # Ref for the diagram to it, so that data can be reused when generating the project.xml file.
+        if "ir.ref" not in trustzone["properties"]:
+            trustzone["properties"]["ir.ref"] = tz.ir_map["ir.ref"]
 
         tz_cell = tz.to_cell()
-        cell = etree.SubElement(self.root, "mxCell", id=tz_cell["data"]["id"], value=tz_cell["data"]["name"], style=tz_cell["style"], parent="1", vertex="1")
+        cell = etree.SubElement(self.root, "mxCell", id=tz_cell["data"]["id"], value=tz_cell["data"]["type"], style=tz_cell["style"], parent="1", vertex="1")
         tzgeo = etree.SubElement(cell, "mxGeometry",  x="750", y="160", width="180", height="230")
         tzgeo.attrib["as"] = "geometry"
 
