@@ -213,7 +213,8 @@ class IriusRisk:
     def embed_trustzones_into_project_xml(self, trustzones_xml_element) -> None:
         trustzone_type_map = set()
         for trustzone in self.trustzones:
-            project_trust_zone = ProjectTrustZone(trustzone["type"], trustzone["properties"]["ir.ref"])
+            trustzone_applicable_name = trustzone["properties"].get("ir.name", trustzone["type"])
+            project_trust_zone = ProjectTrustZone(trustzone_applicable_name, trustzone["properties"]["ir.ref"])
             if project_trust_zone not in trustzone_type_map:
                 etree.SubElement(trustzones_xml_element, "trustZone", ref=project_trust_zone.ref, name=project_trust_zone.name)
                 trustzone_type_map.add(project_trust_zone)
