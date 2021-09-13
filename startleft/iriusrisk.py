@@ -1,14 +1,18 @@
-from lxml import etree
-from deepmerge import always_merger
+import base64
+import logging
+import os
+from json.decoder import JSONDecodeError
+
 import pkg_resources
 import requests
-import base64
-import os
 import yaml
+from deepmerge import always_merger
+from lxml import etree
+
+from startleft.api.errors import IriusTokenNotSettedError, IriusServerNotSettedError, IriusCommonApiError, \
+    IriusUnauthorizedError, IriusForbiddenError
 from startleft.schema import Schema
-from json.decoder import JSONDecodeError
-from startleft.api.errors import IriusTokenError, IriusServerError, IriusApiError, IriusUnauthorizedError
-import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -30,19 +34,21 @@ class IriusRisk:
 
     def headers(self):
         if not self.token:
-            raise IriusTokenError
+            raise IriusTokenNotSettedError
         return {"api-token" : "{}".format(self.token)}
 
     def irius_url(self, path):
         if not self.base_url:
-            raise IriusServerError
+            raise IriusServerNotSettedError
         return self.base_url + IriusRisk.API_PATH + path
 
     def check_response(self, response):
         if response.status_code == 401:
             raise IriusUnauthorizedError(self.get_error_message(response))
+        if response.status_code == 403:
+            raise IriusForbiddenError(self.get_error_message(response))
         if not response.ok:
-            raise IriusApiError(self.get_error_message(response))
+            raise IriusCommonApiError(http_status_code=response.status_code, message=response.text)
         logger.debug(f"Response received {response.status_code}: {response.text}")
 
     def get_error_message(self, response):
@@ -114,7 +120,8 @@ class IriusRisk:
                 if product["ref"] == self.id:
                     return True
         except JSONDecodeError:
-            raise IriusApiError(f"API did not return a JSON response: {response.text}")
+            raise IriusCommonApiError(http_status_code=500,
+                                      message=f"API did not return a JSON response: {response.text}")
         return False
 
     def update_product(self, diagram):

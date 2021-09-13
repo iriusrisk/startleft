@@ -14,7 +14,9 @@ class ErrorResponse(BaseModel):
     status: str
     errors: List[ErrorResponseItem] = []
 
-    def __init__(self, status: str, message: str):
-        item = ErrorResponseItem(message)
+    def __init__(self, status: str, messages: List[str]):
+        items = []
+        for message in messages:
+            items.append(ErrorResponseItem(message))
 
-        super().__init__(status=status, errors=[item])
+        super().__init__(status=status, errors=items)

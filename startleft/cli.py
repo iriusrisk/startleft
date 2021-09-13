@@ -1,9 +1,11 @@
 import logging
+import sys
 
 import click
 import uvicorn
 
 from startleft import app
+from startleft.api.errors import CommonError
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +35,18 @@ def configure_logger(level, verbose):
         logging.basicConfig(format='%(message)s', level=level)
 
 
-@click.group()
+class CatchAllExceptions(click.Group):
+    def __call__(self, *args, **kwargs):
+        try:
+            return self.main(*args, **kwargs)
+        except CommonError as e:
+            logger.exception(e.message)
+            sys.exit(e.system_exit_status)
+        except Exception as exc:
+            logger.exception(exc)
+
+
+@click.group(cls=CatchAllExceptions)
 @click.option('--log-level', '-l', callback=validate_logging, default='info',
               help='Set the log level. Must be one of: crit, error, warn, info, debug, none.')
 @click.option('--verbose/--no-verbose', default=False, help='Makes logging more verbose.')
@@ -42,7 +55,6 @@ def cli(log_level, verbose):
     """
     Parse IaC and other files to the Open Threat Model format and upload them to IriusRisk
     """
-
     configure_logger(log_level, verbose)
 
 
@@ -154,6 +166,9 @@ def search(type, query, filename):
               help='IriusRisk server to connect to (proto://server[:port])')
 @cli.command()
 def server(server: str):
+    """
+    Launches the REST server in development mode to test the API
+    """
     from startleft.api import fastapi_server
     webapp = fastapi_server.initialize_webapp(server)
     uvicorn.run(webapp, host="127.0.0.1", port=5000, log_level="info")

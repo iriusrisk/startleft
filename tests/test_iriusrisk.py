@@ -30,7 +30,7 @@ class TestIriusRisk:
         ir = iriusrisk.IriusRisk('example.com', 'abc-123')
 
         # When check_response, then exception is raised
-        with pytest.raises(iriusrisk.IriusApiError):
+        with pytest.raises(iriusrisk.IriusCommonApiError):
             ir.check_response(response)
 
     @patch('startleft.iriusrisk.requests.get')
@@ -46,7 +46,7 @@ class TestIriusRisk:
         ir.check_response = MagicMock()
 
         # when product_exists()
-        with pytest.raises(iriusrisk.IriusApiError):
+        with pytest.raises(iriusrisk.IriusCommonApiError):
             ir.product_exists()
 
         assert ir.check_response.called

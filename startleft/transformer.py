@@ -1,12 +1,15 @@
 import logging
-logger = logging.getLogger(__name__)
-
 import os
+
 import pkg_resources
 import yaml
 from deepmerge import always_merger
+
 from startleft.mapper import TrustzoneMapper, ComponentMapper, DataflowMapper
 from startleft.schema import Schema
+
+logger = logging.getLogger(__name__)
+
 
 class Transformer:
     def __init__(self, source_model=None, threat_model=None):

@@ -12,7 +12,6 @@ setup(
     include_package_data=True,
     python_requires='>=3.6',
     install_requires=[
-        'click',
         'pyyaml',
         'jsonschema',
         'deepmerge',
@@ -20,6 +19,7 @@ setup(
         'lxml',
         'python-hcl2',
         'requests',
+        'responses'
         'xmltodict',
         'setuptools_scm',
         'fastapi',

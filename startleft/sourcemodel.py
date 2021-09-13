@@ -3,6 +3,7 @@ import json
 import re
 from deepmerge import always_merger
 
+
 class CustomFunctions(jmespath.functions.Functions):
     @jmespath.functions.signature({'types': ['string']}, {'types': ['number']})
     def _func_tail(self, string, count):
@@ -22,6 +23,7 @@ class CustomFunctions(jmespath.functions.Functions):
                 v["_key"] = k
             temp.append(v)
         return temp 
+
 
 class SourceModel:
     def __init__(self):

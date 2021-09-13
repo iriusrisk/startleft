@@ -1,12 +1,16 @@
 from fastapi import APIRouter
 from startleft.api.api_config import ApiConfig
 
-router = APIRouter()
+PREFIX = ''
+URL = '/health'
+RESPONSE_BODY = {"status": "StartLeft server is ok"}
+
+router = APIRouter(prefix=PREFIX)
 
 
-@router.get("/health", tags=["health"])
+@router.get(URL, tags=["health"])
 async def health():
-    return {"status": "StartLeft server is ok"}
+    return RESPONSE_BODY
 
 
 @router.get("/health2", tags=["health"])
