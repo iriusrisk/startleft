@@ -1,16 +1,20 @@
 trustzones:
   - type: aws_vpc
     properties:
-      ir.ref: 53c74842-8290-487c-8f7c-ee14ca47dbbd
+      ir.ref: 53c74842-8290-487c-8f7c-ee14ca47dbb3
+      ir.name: aws_vpc
   - type: AWS::EC2::VPC
     properties:
-      ir.ref: 53c74842-8290-487c-8f7c-ee14ca47dbbd      
+      ir.ref: e6e6e73e-c55c-4227-bca0-725a2e232070
+      ir.name: My AWS VPC
   - type: public
     properties:
-      ir.ref: 53c74842-8290-487c-8f7c-ee14ca47dbbd
+      ir.ref: ecf746b4-511d-42d8-ae1e-0a0978a18740
+      ir.name: Public
   - type: private
     properties:
       ir.ref: 359916f7-3501-4f82-85c7-943bebf5f541
+      #ir.name: This one has no name, so it'll use the "type" instead
 
 components:
   - type: user

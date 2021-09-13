@@ -155,7 +155,13 @@ class Diagram:
                 {"type": trustzone["type"], "properties": {"ir.ref": trustzone["properties"]["ir.ref"]}})
 
         tz_cell = tz.to_cell()
-        cell = etree.SubElement(self.root, "mxCell", id=tz_cell["data"]["id"], value=tz_cell["data"]["type"], style=tz_cell["style"], parent="1", vertex="1")
+
+        # If no proper name is mapped for the Trust Zone, we use the Trust Zone type provided
+        human_readable_trustzone_name = tz_cell["data"]["properties"].get("ir.name", tz_cell["data"]["type"])
+        cell = etree.SubElement(self.root, "mxCell",
+                                id=tz_cell["data"]["id"],
+                                value=human_readable_trustzone_name,
+                                style=tz_cell["style"], parent="1", vertex="1")
         tzgeo = etree.SubElement(cell, "mxGeometry",  x="750", y="160", width="180", height="230")
         tzgeo.attrib["as"] = "geometry"
 
