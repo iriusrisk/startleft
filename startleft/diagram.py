@@ -147,9 +147,12 @@ class Diagram:
         tz.ir_map["ir.ref"] = tz.data["id"]
         tz.merge_properties(self.map["trustzones"])
         # If our given trustzone was not linked previously to an IriusRisk trustzone, we assign the newly generated
-        # Ref for the diagram to it, so that data can be reused when generating the project.xml file.
+        # Ref for the diagram to it, so that data can be reused when generating the project.xml file. Also, we will
+        # store it in our map so other TZ's of same "new" type can be autopopulated.
         if "ir.ref" not in trustzone["properties"]:
             trustzone["properties"]["ir.ref"] = tz.ir_map["ir.ref"]
+            self.map["trustzones"].append(
+                {"type": trustzone["type"], "properties": {"ir.ref": trustzone["properties"]["ir.ref"]}})
 
         tz_cell = tz.to_cell()
         cell = etree.SubElement(self.root, "mxCell", id=tz_cell["data"]["id"], value=tz_cell["data"]["type"], style=tz_cell["style"], parent="1", vertex="1")
