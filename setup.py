@@ -19,7 +19,6 @@ setup(
         'lxml',
         'python-hcl2',
         'requests',
-        'responses'
         'xmltodict',
         'setuptools_scm',
         'fastapi',
@@ -32,7 +31,8 @@ setup(
         ],
         "test": [
             'tox',
-            'pytest'
+            'pytest',
+            'responses'
         ]
     },
     entry_points='''
