@@ -11,5 +11,5 @@ class ApiConfig:
     @classmethod
     def get_iriusrisk_server(cls):
         if not hasattr(cls, 'iriusrisk_server'):
-            cls.iriusrisk_server = os.environ['IRIUSRISK_SERVER']
+            cls.iriusrisk_server = os.environ['IRIUS_SERVER']
         return cls.iriusrisk_server
