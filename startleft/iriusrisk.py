@@ -168,7 +168,7 @@ class IriusRisk:
         response.close()
 
     def create_product_xml(self, diagram_schema, draft="false"):
-        xml_project = etree.Element("project", ref=self.id, name=self.name, revision="1", type="STANDARD", status="OPEN", enabled="true", modelUpdated="", priority="0", tags="", workflowState="", locked="false")
+        xml_project = etree.Element("project", ref=self.id, name=self.name, modelUpdated="", tags="", workflowState="", locked="false")
         etree.SubElement(xml_project, "desc")
         xml_diagram = etree.SubElement(xml_project, "diagram", draft=draft)
         xml_schema = etree.SubElement(xml_diagram, "schema")
@@ -188,10 +188,10 @@ class IriusRisk:
             xml_dataflow = etree.SubElement(xml_dataflows, "dataflow", name=dataflow["name"], ref=dataflow["id"], source=dataflow["from"], target=dataflow["to"])
             etree.SubElement(xml_dataflow, "assets")
             etree.SubElement(xml_dataflow, "tags")
-        etree.SubElement(xml_project, "udts")
+        etree.SubElement(xml_project, "customFields")
         xml_components = etree.SubElement(xml_project, "components")
         for component in self.components:
-            xml_component = etree.SubElement(xml_components, "component", ref=component["id"], name=component["name"], desc="", library="", parentComponentRef="", componentDefinitionRef=component["component_definition"], asvsVersion="4")
+            xml_component = etree.SubElement(xml_components, "component", ref=component["id"], name=component["name"], desc="", library="", parentComponentRef="", componentDefinitionRef=component["component_definition"])
             xml_component_tags = etree.SubElement(xml_component, "tags")
             for tag in component['tags']:
                 etree.SubElement(xml_component_tags, "tag", tag=tag)
@@ -204,7 +204,7 @@ class IriusRisk:
             xml_component_jira = etree.SubElement(xml_component_issue_trackers, "jira") 
             etree.SubElement(xml_component_jira, "fields")
             etree.SubElement(xml_component, "weaknesses")
-            etree.SubElement(xml_component, "controls")
+            etree.SubElement(xml_component, "countermeasures")
             etree.SubElement(xml_component, "usecases")
         etree.SubElement(xml_project, "threadFixScans")
 
