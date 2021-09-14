@@ -240,7 +240,7 @@ class Diagram:
                         child_sizes.append(int(childgeo.attrib["height"]))
 
                     max_child_size = max(child_sizes)
-                    child_count_length  = math.ceil(math.sqrt(num_children))
+                    child_count_length = math.ceil(math.sqrt(num_children))
                     size = child_count_length * (max_child_size + self.tz_delta + self.tz_delta)
 
                     if nodegeo is not None:
@@ -253,8 +253,7 @@ class Diagram:
                         child = self.root.find(".//mxCell[@id='{}']".format(child_id))    
                         childgeo = child[0]
                         child_x = self.tz_delta + (col * (self.tz_delta + max_child_size)) * 1.5
-                        child_y = self.tz_delta + (row * (self.tz_delta + max_child_size)) + 20*(col % 2)
-                        #print("    child {} x {} y {}".format(child.attrib["id"], child_x, child_y))
+                        child_y = self.tz_delta + (row * (self.tz_delta + max_child_size))
                         childgeo.attrib["x"] = str(child_x)
                         childgeo.attrib["y"] = str(child_y)
 
