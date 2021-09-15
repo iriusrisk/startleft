@@ -2,7 +2,6 @@ import logging
 import sys
 
 import click
-import uvicorn
 
 from startleft import app
 from startleft.api.errors import CommonError
@@ -69,20 +68,20 @@ def cli(log_level, verbose):
 @click.option('--id', help='Project ID')
 @click.option('--ir-map', '-i', multiple=True, help='path to IriusRisk map file')
 @click.option('--recreate/--no-recreate', default=False, help='Delete and recreate the product each time')
-@click.option('--server', default='', envvar='IRIUS_SERVER',
+@click.option('--irius-server', default='', envvar='IRIUS_SERVER',
               help='IriusRisk server to connect to (proto://server[:port])')
 @click.option('--api-token', default='', envvar='IRIUS_API_TOKEN', help='IriusRisk API token')
 @click.argument('filename', nargs=-1)
-def run(type, map, otm, name, id, ir_map, recreate, server, api_token, filename):
+def run(type, map, otm, name, id, ir_map, recreate, irius_server, api_token, filename):
     """
     Parses IaC source files into Open Threat Model and immediately uploads threat model to IriusRisk
     """
-    inner_run(type, map, otm, name, id, ir_map, recreate, server, api_token, filename)
+    inner_run(type, map, otm, name, id, ir_map, recreate, irius_server, api_token, filename)
 
 
-def inner_run(type, map, otm, name, id, ir_map, recreate, server, api_token, filename):
+def inner_run(type, map, otm, name, id, ir_map, recreate, irius_server, api_token, filename):
     iac_to_otm = app.IacToOtmApp(name, id)
-    otm_to_ir = app.OtmToIr(server, api_token)
+    otm_to_ir = app.OtmToIr(irius_server, api_token)
 
     logger.info("Parsing IaC source files into OTM")
     iac_to_otm.run(type, map, otm, filename)
@@ -112,16 +111,16 @@ def parse(type, map, otm, name, id, filename):
 @cli.command()
 @click.option('--ir-map', '-i', multiple=True, help='path to map file')
 @click.option('--recreate/--no-recreate', default=False, help='Delete and recreate the product each time')
-@click.option('--server', default='', envvar='IRIUS_SERVER',
+@click.option('--irius-server', default='', envvar='IRIUS_SERVER',
               help='IriusRisk server to connect to (proto://server[:port])')
 @click.option('--api-token', default='', envvar='IRIUS_API_TOKEN', help='IriusRisk API token')
 @click.argument('filename', nargs=-1)
-def threatmodel(ir_map, recreate, server, api_token, filename):
+def threatmodel(ir_map, recreate, irius_server, api_token, filename):
     """
     Builds an IriusRisk threat model from OTM files
     """
 
-    otm_to_ir = app.OtmToIr(server, api_token)
+    otm_to_ir = app.OtmToIr(irius_server, api_token)
     logger.info("Uploading OTM files and generating the IriusRisk threat model")
     otm_to_ir.run(ir_map, recreate, filename)
 
@@ -162,16 +161,18 @@ def search(type, query, filename):
     iac_to_otm.search(type, query, filename)
 
 
-@click.option('--server', default='http://localhost:8080', envvar='IRIUS_SERVER',
+@click.option('--irius-server', default='', envvar='IRIUS_SERVER',
               help='IriusRisk server to connect to (proto://server[:port])')
+@click.option('--port', default=5000, envvar='application port',
+              help='The port to deploy this application to')
 @cli.command()
-def server(server: str):
+def server(irius_server: str, port: int):
     """
     Launches the REST server in development mode to test the API
     """
     from startleft.api import fastapi_server
-    webapp = fastapi_server.initialize_webapp(server)
-    uvicorn.run(webapp, host="127.0.0.1", port=5000, log_level="info")
+    fastapi_server.initialize_webapp(irius_server)
+    fastapi_server.run_webapp(port)
 
 
 if __name__ == '__main__':

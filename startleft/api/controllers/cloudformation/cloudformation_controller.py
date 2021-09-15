@@ -14,7 +14,7 @@ RESPONSE_STATUS_CODE = 201
 
 router = APIRouter(
     prefix=PREFIX,
-    tags=["otm", "cft", "cloudformation", "cloud", "aws"],
+    tags=["cloudformation"],
     responses={
         201: {"description": messages.PROJECT_SUCCESSFULLY_CREATED},
         400: {"description": messages.BAD_REQUEST,
@@ -28,13 +28,14 @@ router = APIRouter(
 
 @router.post(URL, status_code=RESPONSE_STATUS_CODE)
 def cloudformation(cft_file: UploadFile = File(..., description="File that contains the CloudFormation Template"),
-                   mapping_file: UploadFile = File(None, description="File that contains the mapping between AWS "
-                                                                     "components and IriusRisk components. Providing "
-                                                                     "this file will completely override default values"),
+                   type: FileType = Form(..., description="Format of the CloudFormation Template"),
                    id: str = Form(..., description="ID of the new project"),
                    name: str = Form(..., description="Name of the new project"),
-                   type: FileType = Form(..., description="Format of the CloudFormation Template"),
-                   api_token: str = Header(None)
+                   api_token: str = Header(None, description="IriusRisk API token"),
+                   mapping_file: UploadFile = File(None, description="File that contains the mapping between AWS "
+                                                                     "components and IriusRisk components. Providing "
+                                                                     "this file will completely override default values"
+                                                   )
                    ):
     # Add custom mapping provided by customer
     cf_mapping_files = paths.default_cf_mapping_files
@@ -43,7 +44,7 @@ def cloudformation(cft_file: UploadFile = File(..., description="File that conta
 
     # Run client
     cli.inner_run(type=type, map=cf_mapping_files, otm='threatmodel.otm', name=name, id=id,
-                  ir_map=paths.default_ir_map, recreate=1, server=ApiConfig.get_iriusrisk_server(), api_token=api_token,
-                  filename=[cft_file.file])
+                  ir_map=paths.default_ir_map, recreate=1, irius_server=ApiConfig.get_iriusrisk_server(),
+                  api_token=api_token, filename=[cft_file.file])
 
     return RESPONSE_BODY

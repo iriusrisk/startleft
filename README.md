@@ -43,6 +43,7 @@ Commands:
   search       Searches source files for the given query
   threatmodel  Builds an IriusRisk threat model from OTM files
   validate     Validates a mapping or OTM file
+  server       Launches the REST server in development mode to test the API
 ```
 
 You can also get help for the specific commands.
@@ -55,7 +56,7 @@ Usage: startleft run [OPTIONS] [FILENAME]...
   threat model to IriusRisk
 
 Options:
-  -t, --type [JSON|YAML|CloudFormation|HCL2|Terraform]
+  -t, --type                      [JSON|YAML|CloudFormation|HCL2|Terraform]
                                   Specify the source file type.
   -m, --map TEXT                  Map file to use when parsing source files
   -o, --otm TEXT                  OTM output file name
@@ -63,6 +64,8 @@ Options:
   --id TEXT                       Project ID
   -i, --ir-map TEXT               path to IriusRisk map file
   --recreate / --no-recreate      Delete and recreate the product each time
+  --irius-server                  IriusRisk server to connect to (proto://server[:port])'
+  --api-token                     IriusRisk API token
   --help                          Show this message and exit.
 ```
 
@@ -74,13 +77,37 @@ StartLeft can also be deployed as a standalone webserver if you prefer the commu
 uvicorn startleft.api.fastapi_server:webapp
 ```
 
-or using the --server option on the application
+or using the server option on the application:
 
 ```
-startleft run --server
+$ startleft server --help
+Usage: startleft server [OPTIONS]...
+
+  Launches the REST server in development mode to test the API
+
+Options:
+  --irius-server                  IriusRisk server to connect to (proto://server[:port])'
+  --port                          The port to deploy this application to
+  --help                          Show this message and exit.
+
 ```
 
-You should see a message like "Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)" and after that you will be able to access the application via API. You can see the endpoints provided by opening the following URL in a web browser: http://127.0.0.1:8000/docs 
+You should see a message like "Uvicorn running on http://127.0.0.1:5000 (Press CTRL+C to quit)" and after that you will be able to access the application via API. You can see the endpoints provided by opening the following URL in a web browser: http://127.0.0.1:8000/docs
+
+Available endpoints:
+```
+GET /health
+```
+```
+POST /api/beta/startleft/cloudformation
+Request Body:
+    cft_file:                   Required. File that contains the CloudFormation Template
+    type                        Required. Format of the CloudFormation Template
+    id                          Required. ID of the new project
+    name                        Required. Name of the new project
+    api_token                   Required: IriusRisk API token
+    mapping_file                Optional. File that contains the mapping between AWS components and IriusRisk components. Providing this file will completely override default values
+```
 
 # Examples
 

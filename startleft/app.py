@@ -80,7 +80,7 @@ class IacToOtmApp:
                 else:
                     self.transformer.load(yaml.load(filename, Loader=yaml.BaseLoader))
             except FileNotFoundError:
-                logger.warning(f"Cannot find mapping file '{filename}', skipping")
+                logger.warning(f"Cannot find mapping file '{filename}'")
                 raise MappingFileNotFoundError()
         logger.debug("Validating mapping schema")
         schema = self.transformer.validate_mapping()
