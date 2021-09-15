@@ -71,10 +71,10 @@ Options:
 
 ## API server
 
-StartLeft can also be deployed as a standalone webserver if you prefer the communication via API. We use uvicorn to deploy it and you can run it directly with the commandline using:
+StartLeft can also be deployed as a standalone webserver if you prefer the communication via API. We use uvicorn to deploy it, so you will have to manually install this extra dependency if you want to use this feature:
 
 ```
-uvicorn startleft.api.fastapi_server:webapp
+pip install uvicorn
 ```
 
 or using the server option on the application:
