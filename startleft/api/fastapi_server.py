@@ -1,6 +1,7 @@
 import logging
 from typing import Dict, Any, List
 
+import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
@@ -26,6 +27,10 @@ def initialize_webapp(iriusrisk_server: str):
     webapp.exception_handler(handle_unexpected_exceptions)
 
     return webapp
+
+
+def run_webapp(port: int):
+    uvicorn.run(webapp, host="127.0.0.1", port=port, log_level="info")
 
 
 @webapp.exception_handler(CommonError)
