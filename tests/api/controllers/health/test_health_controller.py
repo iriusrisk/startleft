@@ -13,4 +13,4 @@ class TestHealth:
     def test_response(self):
         response = client.get("/health")
         assert response.status_code == 200
-        assert response.json() == startleft.api.controllers.health.health_controller.RESPONSE_BODY
+        assert response.json() == startleft.api.controllers.health.health_controller.RESPONSE_BODY_IRIUSRISK_OK

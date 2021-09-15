@@ -12,6 +12,7 @@ from lxml import etree
 from startleft.api.errors import IriusTokenNotSettedError, IriusServerNotSettedError, IriusCommonApiError, \
     IriusUnauthorizedError, IriusForbiddenError
 from startleft.schema import Schema
+from requests.exceptions import ConnectionError
 
 logger = logging.getLogger(__name__)
 
@@ -226,6 +227,14 @@ class IriusRisk:
             with open(schema_path, "r") as f:
                 schema = yaml.load(f, Loader=yaml.SafeLoader)
                 self.schema = Schema(schema)
+
+    def is_healthy(self) -> bool:
+        try:
+            url = self.base_url + "/health"
+            response = requests.get(url)
+            return response.status_code == 200
+        except ConnectionError:
+            return False
 
     def validate_otm(self):
         self.load_schema()
