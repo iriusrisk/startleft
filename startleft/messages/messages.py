@@ -1,4 +1,4 @@
-PROJECT_SUCCESSFULLY_CREATED = "Provided CloudFormation Template has been processes successfully and a new IriusRisk " \
+PROJECT_SUCCESSFULLY_CREATED = "Provided CloudFormation Template has been processed successfully and a new IriusRisk " \
                                "project has been created with the provided metadata."
 UNAUTHORIZED_EXCEPTION = 'Authentication information is missing or invalid or not granted to perform this action.'
 BAD_REQUEST = 'Bad request'
