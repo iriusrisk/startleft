@@ -124,13 +124,12 @@ class Diagram:
         self.map = {}
         self.width = 1468
         self.height = 733
-        self.delta = 100
         self.tz_delta = 50
         self.component_width = 64
         self.component_height = 64
         self.component_space_x = 256
         self.component_space_y = 256
-        self.default_node_size = 64
+        self.default_node_size = 100
 
         self.file = etree.Element("mxfile", host="fraser.iriusrisk.com", modified="2021-06-17T09:59:40.298Z", agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36", version="12.2.4", etag="yWk9nYPBV6YaXUT6rb4Y", pages="1")
         diagram = etree.SubElement(self.file, "diagram", id="u3LjUtK0nmesnV5ISQRV", name="Page-1")
@@ -232,38 +231,47 @@ class Diagram:
 
                 num_children = len(node_obj["children"])
                 if num_children > 0:
-                    child_sizes = []
+                    # Add size to components with children
+                    child_widths = []
                     for child_id in node_obj["children"]:
                         child = self.root.find(".//mxCell[@id='{}']".format(child_id))
                         childgeo = child[0]
-                        child_sizes.append(int(childgeo.attrib["width"]))
-                        child_sizes.append(int(childgeo.attrib["height"]))
+                        child_widths.append(int(childgeo.attrib["width"]))
 
-                    max_child_size = max(child_sizes)
-                    child_count_length  = math.ceil(math.sqrt(num_children))
-                    size = child_count_length * (max_child_size + self.tz_delta + self.tz_delta)
-
-                    if nodegeo is not None:
-                        nodegeo.attrib["width"] = str(size)
-                        nodegeo.attrib["height"] = str(size)
+                    max_child_size = max(child_widths)
+                    max_columns_number = math.ceil(math.sqrt(num_children))
 
                     row = 0
                     col = 0
+                    max_component_x = 0
+                    max_component_y = 0
                     for child_id in node_obj["children"]:
-                        child = self.root.find(".//mxCell[@id='{}']".format(child_id))    
+                        child = self.root.find(".//mxCell[@id='{}']".format(child_id))
                         childgeo = child[0]
-                        child_x = self.tz_delta + (col * (self.tz_delta + max_child_size)) * 1.5
-                        child_y = self.tz_delta + (row * (self.tz_delta + max_child_size)) + 20*(col % 2)
-                        #print("    child {} x {} y {}".format(child.attrib["id"], child_x, child_y))
+                        # Sets the position of the elements using a grid distribution
+                        child_x = self.tz_delta + (col * (self.tz_delta + max_child_size))
+                        child_y = self.tz_delta + (row * (self.tz_delta + max_child_size))
                         childgeo.attrib["x"] = str(child_x)
                         childgeo.attrib["y"] = str(child_y)
 
+                        # Set the size of the parent component by looking the last x and y position of its children
+                        component_x = int(childgeo.attrib['x']) + int(childgeo.attrib['width'])
+                        component_y = int(childgeo.attrib['y']) + int(childgeo.attrib['height'])
+                        max_component_x = max(component_x, max_component_x)
+                        max_component_y = max(component_y, max_component_y)
+
                         col += 1
 
-                        if col >= child_count_length:
+                        if col >= max_columns_number:
                             col = 0
                             row += 1
+
+                    if nodegeo is not None:
+                        nodegeo.attrib["width"] = str(max_component_x + self.tz_delta)
+                        nodegeo.attrib["height"] = str(max_component_y + self.tz_delta)
+
                 else:
+                    # Add size to components without children
                     if nodegeo is not None:
                         nodegeo.attrib["width"] = str(self.default_node_size)
                         nodegeo.attrib["height"] = str(self.default_node_size)
