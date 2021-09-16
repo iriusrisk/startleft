@@ -241,33 +241,30 @@ class Diagram:
                     max_child_size = max(child_widths)
                     max_columns_number = math.ceil(math.sqrt(num_children))
 
-                    # Sets the position of the elements using a grid distribution
                     row = 0
                     col = 0
+                    max_component_x = 0
+                    max_component_y = 0
                     for child_id in node_obj["children"]:
                         child = self.root.find(".//mxCell[@id='{}']".format(child_id))
                         childgeo = child[0]
+                        # Sets the position of the elements using a grid distribution
                         child_x = self.tz_delta + (col * (self.tz_delta + max_child_size))
                         child_y = self.tz_delta + (row * (self.tz_delta + max_child_size))
                         childgeo.attrib["x"] = str(child_x)
                         childgeo.attrib["y"] = str(child_y)
+
+                        # Set the size of the parent component by looking the last x and y position of its children
+                        component_x = int(childgeo.attrib['x']) + int(childgeo.attrib['width'])
+                        component_y = int(childgeo.attrib['y']) + int(childgeo.attrib['height'])
+                        max_component_x = max(component_x, max_component_x)
+                        max_component_y = max(component_y, max_component_y)
 
                         col += 1
 
                         if col >= max_columns_number:
                             col = 0
                             row += 1
-
-                    # Set the size of the parent component by looking the last x and y position of its children
-                    max_component_x = 0
-                    max_component_y = 0
-                    for child_id in node_obj["children"]:
-                        child = self.root.find(".//mxCell[@id='{}']".format(child_id))
-                        childgeo = child[0]
-                        component_x = int(round(float(childgeo.attrib['x']) + float(childgeo.attrib['width'])))
-                        component_y = int(round(float(childgeo.attrib['y']) + float(childgeo.attrib['height'])))
-                        max_component_x = max(component_x, max_component_x)
-                        max_component_y = max(component_y, max_component_y)
 
                     if nodegeo is not None:
                         nodegeo.attrib["width"] = str(max_component_x + self.tz_delta)
