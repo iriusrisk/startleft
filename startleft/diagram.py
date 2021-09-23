@@ -131,9 +131,9 @@ class Diagram:
         self.component_space_y = 256
         self.default_node_size = 100
 
-        self.file = etree.Element("mxfile", host="fraser.iriusrisk.com", modified="2021-06-17T09:59:40.298Z", agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36", version="12.2.4", etag="yWk9nYPBV6YaXUT6rb4Y", pages="1")
+        self.file = etree.Element("mxfile", host="", modified="2021-06-17T09:59:40.298Z", agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36", version="12.2.4", etag="yWk9nYPBV6YaXUT6rb4Y", pages="1")
         diagram = etree.SubElement(self.file, "diagram", id="u3LjUtK0nmesnV5ISQRV", name="Page-1")
-        graph = etree.SubElement(diagram, "mxGraphModel", dx=str(self.width), dy=str(self.height), grid="1", gridSize="10", guides="1", tooltips="1", connect="1", arrows="1", fold="1", page="1", pageScale="1", pageWidth="4681", pageHeight="3300", math="0", shadow="0")
+        graph = etree.SubElement(diagram, "mxGraphModel", dx=str(self.width), dy=str(self.height), grid="1", gridSize="10", guides="1", tooltips="1", connect="1", arrows="1", fold="1", page="1", pageScale="1", pageWidth="4681", pageHeight="3300", math="0", shadow="0", irDrawioVersion="3.0.0-SNAPSHOT")
         self.root = etree.SubElement(graph, "root")
         etree.SubElement(self.root, "mxCell", id="0")
         etree.SubElement(self.root, "mxCell", id="1", parent="0")

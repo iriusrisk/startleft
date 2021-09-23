@@ -84,12 +84,12 @@ class ComponentMapper:
                 if parent_element in self.id_map:
                     parent_id = self.id_map[parent_element]
                     found = True
-                # if not found:
-                #     for key in self.id_map:
-                #         if key in parent_element:
-                #             parent_id = self.id_map[key]
-                #             found = True
-                #             break
+                if not found:
+                    for key in self.id_map:
+                        if key in parent_element:
+                            parent_id = self.id_map[key]
+                            found = True
+                            break
 
                 if not found:
                     parent_id = str(uuid.uuid4())
@@ -106,11 +106,11 @@ class ComponentMapper:
                 else:
                     source_id = str(uuid.uuid4())
 
-                if source_id not in self.id_map:
-                    c_id = str(uuid.uuid4())
-                    self.id_map[source_id] = c_id
-                else:
-                    c_id = self.id_map[source_id]
+                # if source_id not in self.id_map:
+                c_id = str(uuid.uuid4())
+                self.id_map[source_id] = c_id
+                # else:
+                #     c_id = self.id_map[source_id]
                 component["id"] = c_id
 
                 components.append(component)
