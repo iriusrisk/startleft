@@ -80,9 +80,18 @@ class ComponentMapper:
                 component["type"] = c_type
                 component["tags"] = c_tags
 
+                found = False
                 if parent_element in self.id_map:
                     parent_id = self.id_map[parent_element]
-                else:
+                    found = True
+                # if not found:
+                #     for key in self.id_map:
+                #         if key in parent_element:
+                #             parent_id = self.id_map[key]
+                #             found = True
+                #             break
+
+                if not found:
                     parent_id = str(uuid.uuid4())
                     self.id_map[parent_element] = parent_id
 

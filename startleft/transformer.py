@@ -45,7 +45,11 @@ class Transformer:
             mapper = TrustzoneMapper(mapping)
             mapper.id_map = self.id_map
             for trustzone in mapper.run(self.source_model):
-                self.threat_model.add_trustzone(**trustzone)
+                # If no components are linked to a trustzone it shouldn't appear in the OTM
+                for x in self.map["components"]:
+                    if x.get("parent", "") == trustzone["type"]:
+                        self.threat_model.add_trustzone(**trustzone)
+                        break
 
     def transform_components(self):
         components = []
