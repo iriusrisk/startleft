@@ -45,13 +45,10 @@ class Transformer:
             mapper = TrustzoneMapper(mapping)
             mapper.id_map = self.id_map
             for trustzone in mapper.run(self.source_model):
-                # If no components are linked to a trustzone it shouldn't appear in the OTM
-                for x in self.map["components"]:
-                    if x.get("parent", "") == trustzone["type"]:
-                        self.threat_model.add_trustzone(**trustzone)
-                        break
+                self.threat_model.add_trustzone(**trustzone)
 
     def transform_components(self):
+        singleton = []
         components = []
         catchall = []
         skip = []
@@ -66,9 +63,12 @@ class Transformer:
                     elif "$catchall" in mapping["$source"]:
                         catchall.append(component)
                         continue
-    
+                    elif "$singleton" in mapping["$source"]:
+                        singleton.append(component)
+                        continue
+
                 components.append(component)
-                
+
         results = []
         for component in components:
             skip_this = False
@@ -95,6 +95,19 @@ class Transformer:
             if not skip_this:
                 results.append(component)
 
+        singletonAdded = []
+        for component in singleton:
+            skip_this = False
+            for skip_component in skip:
+                if component["id"] == skip_component["id"]:
+                    logger.debug("Skipping singleton component '{}'".format(component["id"]))
+                    skip_this = True
+                    break
+            if not skip_this:
+                if component["type"] not in singletonAdded:
+                    results.append(component)
+                    singletonAdded.append(component["type"])
+
         for component in results:
             self.threat_model.add_component(**component)
 
@@ -107,6 +120,6 @@ class Transformer:
 
     def run(self):
         self.build_lookup()
-        self.transform_trustzones()
         self.transform_components()
+        self.transform_trustzones()
         self.transform_dataflows()

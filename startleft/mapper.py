@@ -17,15 +17,15 @@ class TrustzoneMapper:
             source_objs = [self.mapping]
 
         for source_obj in source_objs:
-            trustzone = {}
-            trustzone["name"] = source_model.search(self.mapping["name"], source=source_obj)
-            trustzone["type"] = source_model.search(self.mapping["type"], source=source_obj)
-            trustzone["source"] = source_obj
+            trustzone = {"name": source_model.search(self.mapping["name"], source=source_obj),
+                         "type": source_model.search(self.mapping["type"], source=source_obj),
+                         "source": source_obj
+                         }
             if "properties" in self.mapping:
                 trustzone["properties"] = self.mapping["properties"]
 
             source_id = source_model.search(self.mapping["id"], source=trustzone)
-            if not source_id in self.id_map:
+            if source_id not in self.id_map:
                 tz_id = str(uuid.uuid4())
                 self.id_map[source_id] = tz_id
             else:
@@ -54,7 +54,7 @@ class ComponentMapper:
             if "parent" in self.mapping:
                 parent = source_model.search(self.mapping["parent"], source=source_obj)
             else:
-                parent = [None]
+                parent = []
 
             if "name" in self.mapping:
                 c_name = source_model.search(self.mapping["name"], source=source_obj)
@@ -71,14 +71,13 @@ class ComponentMapper:
 
             c_type = source_model.search(self.mapping["type"], source=source_obj)
 
+            if c_type == "AWS::ECS::Service":
+                print(c_type)
+
             if isinstance(parent, str):
                 parent = [parent]
             for parent_element in parent:
-                component = {}
-
-                component["name"] = c_name
-                component["type"] = c_type
-                component["tags"] = c_tags
+                component = {"name": c_name, "type": c_type, "tags": c_tags}
 
                 found = False
                 if parent_element in self.id_map:
@@ -153,9 +152,7 @@ class DataflowMapper:
                     if from_node == to_node:
                         continue
 
-                    dataflow = {}
-                    dataflow["name"] = df_name
-                    dataflow["type"] = df_type
+                    dataflow = {"name": df_name, "type": df_type}
 
                     if from_node in self.id_map:
                         from_node_id = self.id_map[from_node]
@@ -176,7 +173,7 @@ class DataflowMapper:
                         dataflow["properties"] = self.mapping["properties"]
 
                     source_id = source_model.search(self.mapping["id"], source=dataflow)
-                    if not source_id in self.id_map:
+                    if source_id not in self.id_map:
                         df_id = str(uuid.uuid4())
                         self.id_map[source_id] = df_id
                     dataflow["id"] = df_id

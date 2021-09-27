@@ -1,42 +1,28 @@
 trustzones:
-  - type: aws_vpc
-    properties:
-      ir.ref: 53c74842-8290-487c-8f7c-ee14ca47dbbd
-  - type: AWS::EC2::VPC
-    properties:
-      ir.ref: 53c74842-8290-487c-8f7c-ee14ca47dbbd      
   - type: public
     properties:
       ir.ref: 53c74842-8290-487c-8f7c-ee14ca47dbbd
   - type: private
     properties:
       ir.ref: 359916f7-3501-4f82-85c7-943bebf5f541
+  - type: public-cloud
+    properties:
+      ir.ref: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
 components:
-  - type: user
-    properties:
-      ir.componentDefinition.ref: generic-client
-
-  - type: webapp
-    properties:
-      ir.componentDefinition.ref: web-application-server-side
-
-  - type: postgres
-    properties:
-      ir.componentDefinition.ref: postgresql
 
   - type: AWS::WAFRegional::WebACL
     properties:
-      ir.componentDefinition.ref: kics-aws-waf
+      ir.componentDefinition.ref: CD-WAF
       style:
         resIcon: mxgraph.aws4.waf
 
-  - type: aws_wafregional_web_acl
+  - type: CD-ACM
     properties:
-      ir.componentDefinition.ref: kics-aws-waf
+      ir.componentDefinition.ref: CD-ACM
       style:
-        resIcon: mxgraph.aws4.waf  
-        
+        resIcon: mxgraph.aws4.certificate_manager_3
+
   - type: AWS::Redshift::Cluster
     properties:
       ir.componentDefinition.ref: redshift
@@ -51,25 +37,25 @@ components:
 
   - type: AWS::KinesisAnalyticsV2::ApplicationCloudWatchLoggingOption
     properties:
-      ir.componentDefinition.ref: kinesis_data_analytics
+      ir.componentDefinition.ref: kinesis-data-analytics
       style:
         resIcon: mxgraph.aws4.kinesis_data_analytics
 
   - type: AWS::KinesisAnalyticsV2::Application
     properties:
-      ir.componentDefinition.ref: kinesis_data_analytics
+      ir.componentDefinition.ref: kinesis-data-analytics
       style:
         resIcon: mxgraph.aws4.kinesis_data_analytics
 
   - type: AWS::StepFunctions::Activity
     properties:
-      ir.componentDefinition.ref: step_functions
+      ir.componentDefinition.ref: step-functions
       style:
         resIcon: mxgraph.aws4.step_functions
 
   - type: AWS::StepFunctions::StateMachine
     properties:
-      ir.componentDefinition.ref: step_functions
+      ir.componentDefinition.ref: step-functions
       style:
         resIcon: mxgraph.aws4.step_functions
 
@@ -93,7 +79,7 @@ components:
 
   - type: AWS::Serverless::Function
     properties:
-      ir.componentDefinition.ref: lambda
+      ir.componentDefinition.ref: aws-lambda-function
       style:
         resIcon: mxgraph.aws4.lambda
 
@@ -133,35 +119,28 @@ components:
       style:
         resIcon: mxgraph.aws4.cloudfront
 
+  - type: cloudwatch
+    properties:
+      ir.componentDefinition.ref: cloudwatch
+      style:
+        resIcon: mxgraph.aws4.cloudwatch
+
   - type: AWS::EC2::Instance
     properties:
       ir.componentDefinition.ref: ec2
       style:
         resIcon: mxgraph.aws4.ec2
 
-  - type: aws_instance
-    properties:
-      ir.componentDefinition.ref: ec2
-      style:
-        resIcon: mxgraph.aws4.ec2 
-
   - type: AWS::EC2::InternetGateway
     properties:
-      ir.componentDefinition.ref: api-gateway
+      ir.componentDefinition.ref: empty-component
       style:
-        resIcon: mxgraph.aws4.api_gateway
+        shape: mxgraph.aws3.internet_gateway
+
 
   - type: AWS::EC2::SecurityGroup
     properties:
       ir.componentDefinition.ref: empty-component
-
-  - type: aws_security_group
-    properties:
-      ir.componentDefinition.ref: empty-component
-
-  - type: aws_security_group_rule
-    properties:
-      ir.componentDefinition.ref: empty-component          
 
   - type: AWS::EC2::Subnet
     properties:
@@ -169,19 +148,7 @@ components:
       style:
         resIcon: mxgraph.aws4.subnet
 
-  - type: aws_subnet
-    properties:
-      ir.componentDefinition.ref: empty-component
-      style:
-        resIcon: mxgraph.aws4.subnet
-
   - type: AWS::EC2::VPC
-    properties:
-      ir.componentDefinition.ref: vpc
-      style:
-        resIcon: mxgraph.aws4.vpc
-
-  - type: aws_vpc
     properties:
       ir.componentDefinition.ref: vpc
       style:
@@ -193,17 +160,23 @@ components:
       style:
         resIcon: mxgraph.aws4.api_gateway
 
+  - type: AWS::ECS::Service
+    properties:
+      ir.componentDefinition.ref: elastic-container-service
+      style:
+        resIcon: mxgraph.aws4.ecs
+
+  - type: AWS::ECS::TaskDefinition
+    properties:
+      ir.componentDefinition.ref: docker-container
+      style:
+        shape: isoCube
+
   - type: AWS::ElasticLoadBalancingV2::LoadBalancer
     properties:
       ir.componentDefinition.ref: load-balancer
       style:
         resIcon: mxgraph.aws4.elastic_load_balancing
-
-  - type: aws_alb
-    properties:
-      ir.componentDefinition.ref: load-balancer
-      style:
-        resIcon: mxgraph.aws4.elastic_load_balancing  
 
   - type: AWS::IAM::ManagedPolicy
     properties:
@@ -211,7 +184,7 @@ components:
       style:
         resIcon: mxgraph.aws4.organizations_account
 
-  - type: AWS::KMS::Key
+  - type: kms
     properties:
       ir.componentDefinition.ref: kms
       style:
@@ -229,35 +202,11 @@ components:
       style:
         resIcon: mxgraph.aws4.rds
 
-  - type: AWS::Route53::RecordSet
+  - type: AWS::Route53::HostedZone
     properties:
       ir.componentDefinition.ref: route-53
       style:
         resIcon: mxgraph.aws4.route_53
-
-  - type: AWS::EC2::RouteTable
-    properties:
-      ir.componentDefinition.ref: route-53
-      style:
-        resIcon: mxgraph.aws4.route_53
-
-  - type: aws_route_table
-    properties:
-      ir.componentDefinition.ref: route-53
-      style:
-        resIcon: mxgraph.aws4.route_53
-
-  - type: AWS::EC2::SubnetRouteTableAssociation
-    properties:
-      ir.componentDefinition.ref: route-53
-      style:
-        resIcon: mxgraph.aws4.route_53
-
-  - type: aws_route_table_association
-    properties:
-      ir.componentDefinition.ref: route-53
-      style:
-        resIcon: mxgraph.aws4.route_53 
 
   - type: AWS::S3::Bucket
     properties:
@@ -275,7 +224,19 @@ components:
     properties:
       ir.componentDefinition.ref: sns
       style:
-        resIcon: mxgraph.aws4.sns      
+        resIcon: mxgraph.aws4.sns
+
+  - type: CD-SECRETS-MANAGER
+    properties:
+      ir.componentDefinition.ref: CD-SECRETS-MANAGER
+      style:
+        resIcon: mxgraph.aws4.secrets_manager
+
+  - type: CD-SYSTEMS-MANAGER
+    properties:
+      ir.componentDefinition.ref: CD-SYSTEMS-MANAGER
+      style:
+        resIcon: mxgraph.aws4.systems_manager
 
   - type: default
     properties:
