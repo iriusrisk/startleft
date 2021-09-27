@@ -66,6 +66,9 @@ class SourceModel:
             if "$skip" in obj:
                 return self.search(obj["$skip"], source)
 
+            if "$singleton" in obj:
+                return self.search(obj["$singleton"], source)
+
             if "$root" in obj:
                 return jmespath.search(obj["$root"], self.data, options=self.jmespath_options)
 

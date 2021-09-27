@@ -71,9 +71,6 @@ class ComponentMapper:
 
             c_type = source_model.search(self.mapping["type"], source=source_obj)
 
-            if c_type == "AWS::ECS::Service":
-                print(c_type)
-
             if isinstance(parent, str):
                 parent = [parent]
             for parent_element in parent:

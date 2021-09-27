@@ -84,6 +84,18 @@
                         },
                         {
                             "type": "object",
+                            "required": ["$singleton"],
+                            "properties": {
+                                "$singleton": {
+                                    "anyOf": [
+                                        {"type": "string"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
                             "required": ["$root"],
                             "properties": {
                                 "$root": {
