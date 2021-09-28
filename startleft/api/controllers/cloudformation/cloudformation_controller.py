@@ -1,6 +1,6 @@
 from fastapi import APIRouter, File, UploadFile, Form, Header
 
-from examples import paths
+from startleft.config import paths
 from startleft import cli
 from startleft.api.api_config import ApiConfig
 from startleft.api.controllers.cloudformation.file_type import FileType
@@ -39,7 +39,7 @@ def cloudformation(cft_file: UploadFile = File(..., description="File that conta
                    ):
     # Add custom mapping provided by customer
     cf_mapping_files = paths.default_cf_mapping_files
-    if mapping_file:
+    if len(mapping_file.filename) != 0:
         cf_mapping_files = [mapping_file.file]
 
     # Run client
