@@ -78,7 +78,7 @@ class ComponentMapper:
                     # TODO: What if the object can't find a parent component? Should it have a default parent in case the path didn't find anything?
                     parent = source_model.search(self.mapping["parent"], source=source_obj)
             else:
-                parent = []
+                parent = ""
 
             # Retrieves the tags
             c_tags = []
@@ -91,8 +91,14 @@ class ComponentMapper:
 
             c_type = source_model.search(self.mapping["type"], source=source_obj)
 
+            if isinstance(parent, list):
+                if len(parent) == 0:
+                    parent = ["public-cloud"]
             if isinstance(parent, str):
-                parent = [parent]
+                if parent == "":
+                    parent = ["public-cloud"]
+                else:
+                    parent = [parent]
             for parent_element in parent:
                 # A component won't be added if it has no parent component
                 component = {"name": c_name, "type": c_type, "tags": c_tags}
@@ -134,6 +140,7 @@ class ComponentMapper:
                 # If the component is defining child components the ID must be saved in a parent dict
                 if "$children" in self.mapping["$source"]:
                     children = source_model.search(self.mapping["$source"]["$children"], source=source_obj)
+                    # TODO: Alternative options for $path when nothing is returned
                     if children not in id_parents:
                         id_parents[children] = list()
                     id_parents[children].append(c_id)
