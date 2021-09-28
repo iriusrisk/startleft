@@ -1,5 +1,7 @@
 import uuid
 
+id_parents = dict()
+
 
 class TrustzoneMapper:
     def __init__(self, mapping):
@@ -44,6 +46,11 @@ class ComponentMapper:
         self.id_map = {}
 
     def run(self, source_model):
+        """
+        Iterates through the source model and returns the parameters to create the components
+        :param source_model:
+        :return:
+        """
         components = []
 
         source_objs = source_model.search(self.mapping["$source"], source=None)
@@ -51,16 +58,29 @@ class ComponentMapper:
             source_objs = [source_objs]
 
         for source_obj in source_objs:
-            if "parent" in self.mapping:
-                parent = source_model.search(self.mapping["parent"], source=source_obj)
-            else:
-                parent = []
 
+            # Retrieves the name from the source model
             if "name" in self.mapping:
                 c_name = source_model.search(self.mapping["name"], source=source_obj)
             else:
                 c_name = None
 
+            # Retrieves the parent component of the element.
+            parentsFromComponent = False
+            if "parent" in self.mapping:
+                if "$parent" in self.mapping["parent"]:
+                    # In this case the parent component is the one in charge of defining which components
+                    # are their childs, so it's ID should be stored before reaching the child components
+                    parent = id_parents[c_name]
+                    parentsFromComponent = True
+                else:
+                    # Just takes the parent component from the "parent" field in the mapping file
+                    # TODO: What if the object can't find a parent component? Should it have a default parent in case the path didn't find anything?
+                    parent = source_model.search(self.mapping["parent"], source=source_obj)
+            else:
+                parent = []
+
+            # Retrieves the tags
             c_tags = []
             if "tags" in self.mapping:
                 if isinstance(self.mapping["tags"], list):
@@ -74,22 +94,27 @@ class ComponentMapper:
             if isinstance(parent, str):
                 parent = [parent]
             for parent_element in parent:
+                # A component won't be added if it has no parent component
                 component = {"name": c_name, "type": c_type, "tags": c_tags}
 
-                found = False
-                if parent_element in self.id_map:
-                    parent_id = self.id_map[parent_element]
-                    found = True
-                if not found:
-                    for key in self.id_map:
-                        if key in parent_element:
-                            parent_id = self.id_map[key]
-                            found = True
-                            break
-
-                if not found:
-                    parent_id = str(uuid.uuid4())
+                if parentsFromComponent:
+                    # If the parent component was detected outside the component we need to look at the parent dict
+                    parent_id = parent_element
                     self.id_map[parent_element] = parent_id
+                else:
+                    found = False
+                    if parent_element in self.id_map:
+                        parent_id = self.id_map[parent_element]
+                        found = True
+                    if not found:
+                        for key in self.id_map:
+                            if key in parent_element:
+                                parent_id = self.id_map[key]
+                                found = True
+                                break
+                    if not found:
+                        parent_id = str(uuid.uuid4())
+                        self.id_map[parent_element] = parent_id
 
                 component["parent"] = parent_id
                 component["source"] = source_obj
@@ -102,12 +127,16 @@ class ComponentMapper:
                 else:
                     source_id = str(uuid.uuid4())
 
-                # if source_id not in self.id_map:
                 c_id = str(uuid.uuid4())
                 self.id_map[source_id] = c_id
-                # else:
-                #     c_id = self.id_map[source_id]
                 component["id"] = c_id
+
+                # If the component is defining child components the ID must be saved in a parent dict
+                if "$children" in self.mapping["$source"]:
+                    children = source_model.search(self.mapping["$source"]["$children"], source=source_obj)
+                    if children not in id_parents:
+                        id_parents[children] = list()
+                    id_parents[children].append(c_id)
 
                 components.append(component)
         return components

@@ -1,12 +1,13 @@
 import jsonschema
 import json
 
+
 class Schema:
     def __init__(self, schema):
         self.schema = schema
         self.errors = ""
         self.valid = None
-    
+
     def validate(self, document):
         try:
             jsonschema.validate(document, self.schema)

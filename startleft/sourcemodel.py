@@ -66,6 +66,9 @@ class SourceModel:
             if "$skip" in obj:
                 return self.search(obj["$skip"], source)
 
+            if "$parent" in obj:
+                return self.search(obj["$parent"], source)
+
             if "$singleton" in obj:
                 return self.search(obj["$singleton"], source)
 
@@ -84,6 +87,9 @@ class SourceModel:
             if "$catchall" in obj:
                 #eturn jmespath.search(obj["$catchall"], self.data, options=self.jmespath_options)
                 return self.search(obj["$catchall"], source)
+
+            if "$children" in obj:
+                return self.search(obj["$children"], source)
 
             if "$search" in obj:
                 results = []

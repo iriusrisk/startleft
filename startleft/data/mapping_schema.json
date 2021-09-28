@@ -144,6 +144,30 @@
                         },
                         {
                             "type": "object",
+                            "required": ["$children"],
+                            "properties": {
+                                "$children": {
+                                    "anyOf": [
+                                        {"type": "string"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["$parent"],
+                            "properties": {
+                                "$parent": {
+                                    "anyOf": [
+                                        {"type": "string"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
                             "required": ["$search"],
                             "properties": {
                                 "$search": {

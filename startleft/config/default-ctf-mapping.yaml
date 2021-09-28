@@ -9,7 +9,7 @@ components:
   - id:     {$format: "{name}"}
     type:   CD-ACM
     name:   {$path: "_key"}
-    $source: {$singleton: "true", $root: "Resources|squash(@)[?Type=='AWS::CertificateManager::Certificate']"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::CertificateManager::Certificate']"}}
     parent:      public-cloud
     tags:
       - { $path: "Type" }
@@ -17,7 +17,7 @@ components:
   - id:     {$format: "{name}"}
     type:   cloudwatch
     name:   {$path: "_key"}
-    $source: {$singleton: "true", $root: "Resources|squash(@)[?Type=='AWS::CloudWatch::Alarm']"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::CloudWatch::Alarm']"}}
     parent:      public-cloud
     tags:
       - { $path: "Type" }
@@ -73,7 +73,10 @@ components:
   - id:     {$format: "{name}"}
     type:   {$path: "Type"}
     name:   {$path: "_key"}
-    $source: {$root: "Resources|squash(@)[?Type=='AWS::ECS::Service']"}
+    $source: {
+      $children: {$path: "Properties.TaskDefinition.Ref"},
+      $root: "Resources|squash(@)[?Type=='AWS::ECS::Service']"
+    }
     parent:  {$path: "Properties.NetworkConfiguration.AwsvpcConfiguration.Subnets[]|map(&values(@), @)[]"}
     tags:
       - { $path: "Type" }
@@ -82,7 +85,7 @@ components:
     type:   {$path: "Type"}
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::ECS::TaskDefinition']"}
-    parent:      public-cloud
+    parent:  {$parent: {$path: "_key"}}
     tags:
       - { $path: "Type" }
 
@@ -97,7 +100,7 @@ components:
   - id:     {$format: "{name}"}
     type:   kms
     name:   {$path: "_key"}
-    $source: {$singleton: "true", $root: "Resources|squash(@)[?Type=='AWS::KMS::Key']"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::KMS::Key']"}}
     parent:      public-cloud
     tags:
       - { $path: "Type" }
@@ -113,7 +116,7 @@ components:
   - id:     {$format: "{name}"}
     type:   cloudwatch
     name:   {$path: "_key"}
-    $source: {$singleton: "true", $root: "Resources|squash(@)[?Type=='AWS::Logs::LogGroup']"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::Logs::LogGroup']"}}
     parent:      public-cloud
     tags:
       - { $path: "Type" }
@@ -149,7 +152,7 @@ components:
   - id:     {$format: "{name}"}
     type:   CD-SECRETS-MANAGER
     name:   {$path: "_key"}
-    $source: {$singleton: "true", $root: "Resources|squash(@)[?Type=='AWS::SecretsManager::Secret']"}
+    $source: {$singleton: { $root: "Resources|squash(@)[?Type=='AWS::SecretsManager::Secret']"}}
     parent:      public-cloud
     tags:
       - { $path: "Type" }
@@ -165,7 +168,7 @@ components:
   - id:     {$format: "{name}"}
     type:   CD-SYSTEMS-MANAGER
     name:   {$path: "_key"}
-    $source: {$singleton: "true", $root: "Resources|squash(@)[?starts_with(Type, 'AWS::SSM')]"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::SSM')]"}}
     parent:      public-cloud
     tags:
       - { $path: "Type" }
