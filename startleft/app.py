@@ -14,7 +14,9 @@ logger = logging.getLogger(__name__)
 
 
 class IacToOtmApp:
-
+    """
+    This class in in charge of the methods to convert IaC code to OTM files
+    """
     EXIT_UNEXPECTED = 1
     EXIT_VALIDATION_FAILED = 2
 
@@ -105,7 +107,6 @@ class IacToOtmApp:
         loader = self.source_loader_map[type.upper()]
         self.load_source_files(loader, filenames)
         self.load_mapping_files(map_filenames)
-
         self.transformer.run()
         self.write_threatmodel(out_file)
 
@@ -140,6 +141,9 @@ class IacToOtmApp:
 
 
 class OtmToIr:
+    """
+    This class in in charge of the methods to convert OTM files to IR XML files
+    """
     EXIT_UNEXPECTED = 3
     EXIT_VALIDATION_FAILED = 4
 

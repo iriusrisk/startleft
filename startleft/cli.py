@@ -5,6 +5,7 @@ import click
 
 from startleft import app
 from startleft.api.errors import CommonError
+from startleft.config import paths
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +77,10 @@ def run(type, map, otm, name, id, ir_map, recreate, irius_server, api_token, fil
     """
     Parses IaC source files into Open Threat Model and immediately uploads threat model to IriusRisk
     """
-    inner_run(type, map, otm, name, id, ir_map, recreate, irius_server, api_token, filename)
+
+    cf_mapping_files, ir_mapping_files = get_default_mappings(map, ir_map)
+
+    inner_run(type, cf_mapping_files, otm, name, id, ir_mapping_files, recreate, irius_server, api_token, filename)
 
 
 def inner_run(type, map, otm, name, id, ir_map, recreate, irius_server, api_token, filename):
@@ -104,8 +108,10 @@ def parse(type, map, otm, name, id, filename):
     Parses IaC source files into Open Threat Model
     """
 
+    cf_mapping_files, ir_mapping_files = get_default_mappings(map, {})
+
     iac_to_otm = app.IacToOtmApp(name, id)
-    iac_to_otm.run(type, map, otm, filename)
+    iac_to_otm.run(type, cf_mapping_files, otm, filename)
 
 
 @cli.command()
@@ -119,10 +125,11 @@ def threatmodel(ir_map, recreate, irius_server, api_token, filename):
     """
     Builds an IriusRisk threat model from OTM files
     """
+    cf_mapping_files, ir_mapping_files = get_default_mappings({}, ir_map)
 
     otm_to_ir = app.OtmToIr(irius_server, api_token)
     logger.info("Uploading OTM files and generating the IriusRisk threat model")
-    otm_to_ir.run(ir_map, recreate, filename)
+    otm_to_ir.run(ir_mapping_files, recreate, filename)
 
 
 @cli.command()
@@ -133,10 +140,13 @@ def validate(map, otm):
     Validates a mapping or OTM file
     """
 
-    if map:
+    cf_mapping_files, ir_mapping_files = get_default_mappings(map, {})
+
+
+    if cf_mapping_files:
         iac_to_otm = app.IacToOtmApp(None, None)
         logger.info("Validating source map file")
-        iac_to_otm.validate(map)
+        iac_to_otm.validate(cf_mapping_files)
         
     if otm:
         otm_to_ir = app.OtmToIr(None, None)
@@ -174,6 +184,18 @@ def server(irius_server: str, port: int):
     fastapi_server.initialize_webapp(irius_server)
     fastapi_server.run_webapp(port)
 
+
+def get_default_mappings(map, ir_map):
+    # If map is empty then we load the default map file
+    cf_mapping_files = paths.default_cf_mapping_files
+    if len(map) != 0:
+        cf_mapping_files = map
+
+    ir_mapping_files = paths.default_ir_map
+    if len(ir_map) != 0:
+        ir_mapping_files = ir_map
+
+    return cf_mapping_files, ir_mapping_files
 
 if __name__ == '__main__':
     cli(None, None)

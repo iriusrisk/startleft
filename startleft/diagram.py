@@ -1,20 +1,22 @@
 import logging
+
 logger = logging.getLogger(__name__)
 
 import math
 from lxml import etree
 from deepmerge import always_merger
 
+
 class Cell:
     def merge_styles(self):
-        self.style_map["ir.ref"] = self.data["id"]      
+        self.style_map["ir.ref"] = self.data["id"]
         if "properties" in self.data:
             if "style" in self.data["properties"]:
-              for k,v in self.data["properties"]["style"].items():
-                if v:
-                    self.style_map[k] = v
-                else:
-                    self.style_map.pop(k, None)
+                for k, v in self.data["properties"]["style"].items():
+                    if v:
+                        self.style_map[k] = v
+                    else:
+                        self.style_map.pop(k, None)
             for k, v in self.ir_map.items():
                 if v:
                     self.style_map[k] = v
@@ -26,13 +28,13 @@ class Cell:
                         self.style_map[k] = self.data["properties"][k]
                     else:
                         self.style_map.pop(k, None)
-        return ";".join("{}={}".format(k, v) for k, v in self.style_map.items())+";"
+        return ";".join("{}={}".format(k, v) for k, v in self.style_map.items()) + ";"
 
     def merge_properties(self, maps):
-        map_found = False    
-  
+        map_found = False
+
         if not "properties" in self.data:
-            self.data["properties"] = {}        
+            self.data["properties"] = {}
         for map in maps:
             if map["type"] == self.data["type"]:
                 map_found = True
@@ -52,7 +54,7 @@ class Cell:
 class Trustzone(Cell):
     def __init__(self, trustzone):
         self.ir_map = {
-            "ir.type":  "TRUSTZONE",
+            "ir.type": "TRUSTZONE",
             "ir.ref": ""
         }
         self.style_map = {
@@ -104,6 +106,7 @@ class Component(Cell):
         }
         self.data = component
 
+
 class Dataflow(Cell):
     def __init__(self, dataflow):
         self.ir_map = {
@@ -119,6 +122,7 @@ class Dataflow(Cell):
         }
         self.data = dataflow
 
+
 class Diagram:
     def __init__(self):
         self.map = {}
@@ -131,9 +135,14 @@ class Diagram:
         self.component_space_y = 256
         self.default_node_size = 100
 
-        self.file = etree.Element("mxfile", host="fraser.iriusrisk.com", modified="2021-06-17T09:59:40.298Z", agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36", version="12.2.4", etag="yWk9nYPBV6YaXUT6rb4Y", pages="1")
+        self.file = etree.Element("mxfile", host="", modified="2021-06-17T09:59:40.298Z",
+                                  agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
+                                  version="12.2.4", etag="yWk9nYPBV6YaXUT6rb4Y", pages="1")
         diagram = etree.SubElement(self.file, "diagram", id="u3LjUtK0nmesnV5ISQRV", name="Page-1")
-        graph = etree.SubElement(diagram, "mxGraphModel", dx=str(self.width), dy=str(self.height), grid="1", gridSize="10", guides="1", tooltips="1", connect="1", arrows="1", fold="1", page="1", pageScale="1", pageWidth="4681", pageHeight="3300", math="0", shadow="0")
+        graph = etree.SubElement(diagram, "mxGraphModel", dx=str(self.width), dy=str(self.height), grid="1",
+                                 gridSize="10", guides="1", tooltips="1", connect="1", arrows="1", fold="1", page="1",
+                                 pageScale="1", pageWidth="4681", pageHeight="3300", math="0", shadow="0",
+                                 irDrawioVersion="3.0.0-SNAPSHOT")
         self.root = etree.SubElement(graph, "root")
         etree.SubElement(self.root, "mxCell", id="0")
         etree.SubElement(self.root, "mxCell", id="1", parent="0")
@@ -147,8 +156,9 @@ class Diagram:
         tz.merge_properties(self.map["trustzones"])
 
         tz_cell = tz.to_cell()
-        cell = etree.SubElement(self.root, "mxCell", id=tz_cell["data"]["id"], value=tz_cell["data"]["name"], style=tz_cell["style"], parent="1", vertex="1")
-        tzgeo = etree.SubElement(cell, "mxGeometry",  x="750", y="160", width="180", height="230")
+        cell = etree.SubElement(self.root, "mxCell", id=tz_cell["data"]["id"], value=tz_cell["data"]["name"],
+                                style=tz_cell["style"], parent="1", vertex="1")
+        tzgeo = etree.SubElement(cell, "mxGeometry", x="750", y="160", width="180", height="230")
         tzgeo.attrib["as"] = "geometry"
 
     def add_component(self, component):
@@ -156,8 +166,9 @@ class Diagram:
         c.ir_map["ir.tags"] = ",".join(c.data['tags'])
         c.merge_properties(self.map["components"])
 
-        c_cell = c.to_cell()        
-        cell = etree.SubElement(self.root, "mxCell", id=c_cell["data"]["id"], value=c_cell["data"]["name"], style=c_cell["style"], parent=c_cell["data"]["parent"], vertex="1")
+        c_cell = c.to_cell()
+        cell = etree.SubElement(self.root, "mxCell", id=c_cell["data"]["id"], value=c_cell["data"]["name"],
+                                style=c_cell["style"], parent=c_cell["data"]["parent"], vertex="1")
         cgeo = etree.SubElement(cell, "mxGeometry")
 
         if "width" in c_cell["data"]["properties"]:
@@ -177,7 +188,9 @@ class Diagram:
         d.merge_properties(self.map["dataflows"])
 
         d_cell = d.to_cell()
-        cell = etree.SubElement(self.root, "mxCell", id=d_cell["data"]["id"], value=d_cell["data"]["name"], style=d_cell["style"], parent="1", source=d_cell["data"]["from"], target=d_cell["data"]["to"], edge="1")
+        cell = etree.SubElement(self.root, "mxCell", id=d_cell["data"]["id"], value=d_cell["data"]["name"],
+                                style=d_cell["style"], parent="1", source=d_cell["data"]["from"],
+                                target=d_cell["data"]["to"], edge="1")
         cgeo = etree.SubElement(cell, "mxGeometry")
         cgeo.attrib["as"] = "geometry"
         cgeo.attrib["relative"] = "1"
@@ -189,7 +202,7 @@ class Diagram:
                 continue
 
             if "edge" in child.attrib:
-                continue # skip dataflows
+                continue  # skip dataflows
 
             list_child_parent.append((child.attrib["id"], child.attrib["parent"]))
 
@@ -212,10 +225,10 @@ class Diagram:
     def traverse_to_layers(self, tree, layers, layer_index):
         if not layer_index in layers:
             layers[layer_index] = []
-        
+
         for parent, children in tree.items():
             layers[layer_index].append({"parent": parent, "children": list(children.keys())})
-            self.traverse_to_layers(children, layers, layer_index+1)
+            self.traverse_to_layers(children, layers, layer_index + 1)
 
     def generate_layout(self):
         tree = self.build_tree()

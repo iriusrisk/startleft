@@ -1,5 +1,7 @@
 import logging
+
 logger = logging.getLogger(__name__)
+
 
 class ThreatModel:
     def __init__(self, name, id):
@@ -50,10 +52,12 @@ class ThreatModel:
         self.trustzones.append(Trustzone(id=id, name=name, type=type, source=source, properties=properties))
 
     def add_component(self, id=None, name=None, type=None, parent=None, source=None, properties=None, tags=[]):
-        self.components.append(Component(id=id, name=name, type=type, parent=parent, source=source, properties=properties, tags=tags))
+        self.components.append(
+            Component(id=id, name=name, type=type, parent=parent, source=source, properties=properties, tags=tags))
 
     def add_dataflow(self, id=None, name=None, type=None, from_node=None, to_node=None, source=None, properties=None):
-        self.dataflows.append(Dataflow(id=id, name=name, type=type, from_node=from_node, to_node=to_node, source=source, properties=properties))
+        self.dataflows.append(Dataflow(id=id, name=name, type=type, from_node=from_node, to_node=to_node, source=source,
+                                       properties=properties))
 
 
 class Trustzone:
@@ -114,7 +118,7 @@ class Dataflow:
             "name": self.name,
             "type": self.type,
             "from": self.from_node,
-            "to":   self.to_node
+            "to": self.to_node
         }
         if self.properties:
             result["properties"] = self.properties

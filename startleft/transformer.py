@@ -17,6 +17,7 @@ class Transformer:
         self.threat_model = threat_model
         self.map = {}
         self.id_map = {}
+        self.id_parents = dict()
         self.schema = None
 
     def load_schema(self):
@@ -48,13 +49,14 @@ class Transformer:
                 self.threat_model.add_trustzone(**trustzone)
 
     def transform_components(self):
+        singleton = []
         components = []
         catchall = []
         skip = []
         for mapping in self.map["components"]:
             mapper = ComponentMapper(mapping)
             mapper.id_map = self.id_map
-            for component in mapper.run(self.source_model):
+            for component in mapper.run(self.source_model, self.id_parents):
                 if isinstance(mapping["$source"], dict):
                     if "$skip" in mapping["$source"]:
                         skip.append(component)
@@ -62,9 +64,12 @@ class Transformer:
                     elif "$catchall" in mapping["$source"]:
                         catchall.append(component)
                         continue
-    
+                    elif "$singleton" in mapping["$source"]:
+                        singleton.append(component)
+                        continue
+
                 components.append(component)
-                
+
         results = []
         for component in components:
             skip_this = False
@@ -91,6 +96,19 @@ class Transformer:
             if not skip_this:
                 results.append(component)
 
+        singletonAdded = []
+        for component in singleton:
+            skip_this = False
+            for skip_component in skip:
+                if component["id"] == skip_component["id"]:
+                    logger.debug("Skipping singleton component '{}'".format(component["id"]))
+                    skip_this = True
+                    break
+            if not skip_this:
+                if component["type"] not in singletonAdded:
+                    results.append(component)
+                    singletonAdded.append(component["type"])
+
         for component in results:
             self.threat_model.add_component(**component)
 
@@ -103,6 +121,6 @@ class Transformer:
 
     def run(self):
         self.build_lookup()
-        self.transform_trustzones()
         self.transform_components()
+        self.transform_trustzones()
         self.transform_dataflows()
