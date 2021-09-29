@@ -1,7 +1,5 @@
 import uuid
 
-id_parents = dict()
-
 
 class TrustzoneMapper:
     def __init__(self, mapping):
@@ -45,10 +43,11 @@ class ComponentMapper:
         self.source = None
         self.id_map = {}
 
-    def run(self, source_model):
+    def run(self, source_model, id_parents):
         """
         Iterates through the source model and returns the parameters to create the components
         :param source_model:
+        :param id_parents:
         :return:
         """
         components = []

@@ -17,6 +17,7 @@ class Transformer:
         self.threat_model = threat_model
         self.map = {}
         self.id_map = {}
+        self.id_parents = dict()
         self.schema = None
 
     def load_schema(self):
@@ -55,7 +56,7 @@ class Transformer:
         for mapping in self.map["components"]:
             mapper = ComponentMapper(mapping)
             mapper.id_map = self.id_map
-            for component in mapper.run(self.source_model):
+            for component in mapper.run(self.source_model, self.id_parents):
                 if isinstance(mapping["$source"], dict):
                     if "$skip" in mapping["$source"]:
                         skip.append(component)
