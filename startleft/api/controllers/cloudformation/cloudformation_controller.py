@@ -56,6 +56,7 @@ def cloudformation(cft_file: UploadFile = File(..., description="File that conta
 def cloudformation(project_id: str,
                    cft_file: UploadFile = File(..., description="File that contains the CloudFormation Template"),
                    type: FileType = Form(..., description="Format of the CloudFormation Template"),
+                   name: str = Form(..., description="Name of the new project"),
                    api_token: str = Header(None, description="IriusRisk API token"),
                    mapping_file: UploadFile = File(None, description="File that contains the mapping between AWS "
                                                                      "components and IriusRisk components. Providing "
@@ -68,7 +69,7 @@ def cloudformation(project_id: str,
         cf_mapping_files = [mapping_file.file]
 
     # Run client
-    cli.inner_run(type=type, map=cf_mapping_files, otm='threatmodel.otm', name=None, id=project_id,
+    cli.inner_run(type=type, map=cf_mapping_files, otm='threatmodel.otm', name=name, id=project_id,
                   ir_map=paths.default_ir_map, recreate=0, irius_server=ApiConfig.get_iriusrisk_server(),
                   api_token=api_token, filename=[cft_file.file])
 
