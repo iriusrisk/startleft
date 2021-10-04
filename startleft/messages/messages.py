@@ -1,8 +1,11 @@
 PROJECT_SUCCESSFULLY_CREATED = "Provided CloudFormation Template has been processed successfully and a new IriusRisk " \
                                "project has been created with the provided metadata."
+PROJECT_SUCCESSFULLY_UPDATED = "IriusRisk project has been updated with the last changes coming from the provided " \
+                               "CloudFormation Template."
 UNAUTHORIZED_EXCEPTION = 'Authentication information is missing or invalid or not granted to perform this action.'
 BAD_REQUEST = 'Bad request'
 FORBIDDEN_OPERATION = 'Forbidden operation'
+ITEM_NOT_FOUND = 'Item/s not found.'
 UNEXPECTED_API_ERROR = 'Unexpected API error'
 INCONSISTENT_IDS = 'Generated OTM file has inconsistent IDs'
 IRIUS_SERVER_NOT_SETTED = 'Irius server not setted'

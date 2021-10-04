@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, UploadFile, Form, Header
+from fastapi import APIRouter, File, UploadFile, Form, Header, Response
 
 from startleft.config import paths
 from startleft import cli
@@ -9,22 +9,25 @@ from startleft.messages import messages
 
 PREFIX = '/api/beta/startleft/cloudformation'
 URL = ''
-RESPONSE_BODY = {}
+RESPONSE_BODY_POST = {}
 RESPONSE_STATUS_CODE_POST = 201
 RESPONSE_STATUS_CODE_PUT = 204
+RESPONSE_BODY_PUT = Response(status_code=RESPONSE_STATUS_CODE_PUT)
 
 router = APIRouter(
     prefix=PREFIX,
     tags=["cloudformation"],
     responses={
         201: {"description": messages.PROJECT_SUCCESSFULLY_CREATED},
-        204: {"description": messages.PROJECT_SUCCESSFULLY_CREATED},
+        204: {"description": messages.PROJECT_SUCCESSFULLY_UPDATED},
         400: {"description": messages.BAD_REQUEST,
               "model": ErrorResponse},
         401: {"description": messages.UNAUTHORIZED_EXCEPTION,
               "model": ErrorResponse},
         403: {"description": messages.FORBIDDEN_OPERATION,
-              "model": ErrorResponse}},
+              "model": ErrorResponse},
+        404: {"description": messages.ITEM_NOT_FOUND,
+              "model": ErrorResponse}}
 )
 
 
@@ -49,7 +52,7 @@ def cloudformation(cft_file: UploadFile = File(..., description="File that conta
                   ir_map=paths.default_ir_map, recreate=1, irius_server=ApiConfig.get_iriusrisk_server(),
                   api_token=api_token, filename=[cft_file.file])
 
-    return RESPONSE_BODY
+    return RESPONSE_BODY_POST
 
 
 @router.put('/projects/{project_id}', status_code=RESPONSE_STATUS_CODE_PUT)
@@ -73,4 +76,4 @@ def cloudformation(project_id: str,
                   ir_map=paths.default_ir_map, recreate=0, irius_server=ApiConfig.get_iriusrisk_server(),
                   api_token=api_token, filename=[cft_file.file])
 
-    return RESPONSE_BODY
+    return RESPONSE_BODY_PUT
