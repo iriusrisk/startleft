@@ -184,7 +184,7 @@ class IriusRisk:
         etree.SubElement(xml_project, "customFields")
         xml_components = etree.SubElement(xml_project, "components")
         for component in self.components:
-            xml_component = etree.SubElement(xml_components, "component", ref=component["id"], name=component["name"], desc="", library="", parentComponentRef="", componentDefinitionRef=component["component_definition"])
+            xml_component = etree.SubElement(xml_components, "component", ref=component["id"], name=component["name"], desc="", library="", parentComponentRef=component["parent"], componentDefinitionRef=component["component_definition"])
             xml_component_tags = etree.SubElement(xml_component, "tags")
             for tag in component['tags']:
                 etree.SubElement(xml_component_tags, "tag", tag=tag)
