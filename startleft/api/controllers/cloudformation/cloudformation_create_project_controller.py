@@ -37,11 +37,11 @@ def cloudformation(cft_file: UploadFile = File(..., description="File that conta
                                                                      "this file will completely override default values"
                                                    )
                    ):
-    # Check custom mapping provided by customer or adds default otherwise
-    cf_mapping_files = cli.check_external_cf_mapping_file(mapping_file)
+
+    mapping_files = [mapping_file.file] if mapping_file else []
 
     # Run client
-    cli.inner_run(type=type, map=cf_mapping_files, otm='threatmodel.otm', name=name, id=id,
+    cli.inner_run(type=type, map=mapping_files, otm='threatmodel.otm', name=name, id=id,
                   ir_map=paths.default_ir_map, recreate=1, irius_server=ApiConfig.get_iriusrisk_server(),
                   api_token=api_token, filename=[cft_file.file])
 
