@@ -10,7 +10,7 @@ from deepmerge import always_merger
 from lxml import etree
 
 from startleft.api.errors import IriusTokenNotSettedError, IriusServerNotSettedError, IriusCommonApiError, \
-    IriusUnauthorizedError, IriusForbiddenError, IriusItemNotFoundError
+    IriusUnauthorizedError, IriusForbiddenError, IriusProjectNotFoundError
 from startleft.schema import Schema
 from requests.exceptions import ConnectionError
 
@@ -49,7 +49,7 @@ class IriusRisk:
         if response.status_code == 403:
             raise IriusForbiddenError(self.get_error_message(response))
         if response.status_code == 404:
-            raise IriusItemNotFoundError(self.get_error_message(response))
+            raise IriusProjectNotFoundError(self.get_error_message(response))
         if not response.ok:
             raise IriusCommonApiError(http_status_code=response.status_code, message=response.text)
         logger.debug(f"Response received {response.status_code}: {response.text}")

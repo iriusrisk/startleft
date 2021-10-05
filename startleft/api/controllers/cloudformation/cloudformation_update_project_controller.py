@@ -23,7 +23,7 @@ router = APIRouter(
               "model": ErrorResponse},
         403: {"description": messages.FORBIDDEN_OPERATION,
               "model": ErrorResponse},
-        404: {"description": messages.ITEM_NOT_FOUND,
+        404: {"description": messages.PROJECT_NOT_FOUND,
               "model": ErrorResponse}}
 )
 
@@ -32,7 +32,7 @@ router = APIRouter(
 def cloudformation(project_id: str,
                    cft_file: UploadFile = File(..., description="File that contains the CloudFormation Template"),
                    type: FileType = Form(..., description="Format of the CloudFormation Template"),
-                   name: str = Form(..., description="Name of the new project"),
+                   name: str = Form(..., description="Name of the project to update"),
                    api_token: str = Header(None, description="IriusRisk API token"),
                    mapping_file: UploadFile = File(None, description="File that contains the mapping between AWS "
                                                                      "components and IriusRisk components. Providing "

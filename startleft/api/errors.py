@@ -30,8 +30,8 @@ class IriusForbiddenError(CommonError):
     system_exit_status = OTM_TO_IR_EXIT_UNEXPECTED
 
 
-class IriusItemNotFoundError(CommonError):
-    message = messages.ITEM_NOT_FOUND
+class IriusProjectNotFoundError(CommonError):
+    message = messages.PROJECT_NOT_FOUND
     http_status_code = 404
     system_exit_status = OTM_TO_IR_EXIT_UNEXPECTED
 

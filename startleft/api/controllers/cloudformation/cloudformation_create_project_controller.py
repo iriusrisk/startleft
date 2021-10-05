@@ -22,8 +22,6 @@ router = APIRouter(
         401: {"description": messages.UNAUTHORIZED_EXCEPTION,
               "model": ErrorResponse},
         403: {"description": messages.FORBIDDEN_OPERATION,
-              "model": ErrorResponse},
-        404: {"description": messages.ITEM_NOT_FOUND,
               "model": ErrorResponse}}
 )
 
