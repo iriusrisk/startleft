@@ -197,5 +197,14 @@ def get_default_mappings(map, ir_map):
 
     return cf_mapping_files, ir_mapping_files
 
+
+def check_external_cf_mapping_file(mapping_file):
+    # Add custom mapping provided by customer
+    cf_mapping_files = paths.default_cf_mapping_files
+    if mapping_file and len(mapping_file.filename) != 0:
+        cf_mapping_files = [mapping_file.file]
+
+    return cf_mapping_files
+
 if __name__ == '__main__':
     cli(None, None)

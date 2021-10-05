@@ -39,10 +39,8 @@ def cloudformation(project_id: str,
                                                                      "this file will completely override default values"
                                                    )
                    ):
-    # Add custom mapping provided by customer
-    cf_mapping_files = paths.default_cf_mapping_files
-    if mapping_file and len(mapping_file.filename) != 0:
-        cf_mapping_files = [mapping_file.file]
+    # Check custom mapping provided inside request or adds default otherwise
+    cf_mapping_files = cli.check_external_cf_mapping_file(mapping_file)
 
     # Run client
     cli.inner_run(type=type, map=cf_mapping_files, otm='threatmodel.otm', name=name, id=project_id,
