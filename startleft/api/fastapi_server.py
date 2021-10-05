@@ -8,7 +8,8 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from startleft.api.api_config import ApiConfig
-from startleft.api.controllers.cloudformation import cloudformation_controller
+from startleft.api.controllers.cloudformation import cloudformation_create_project_controller
+from startleft.api.controllers.cloudformation import cloudformation_update_project_controller
 from startleft.api.controllers.health import health_controller
 from startleft.api.error_response import ErrorResponse
 from startleft.api.errors import CommonError
@@ -17,7 +18,8 @@ webapp = FastAPI()
 logger = logging.getLogger(__name__)
 
 webapp.include_router(health_controller.router)
-webapp.include_router(cloudformation_controller.router)
+webapp.include_router(cloudformation_create_project_controller.router)
+webapp.include_router(cloudformation_update_project_controller.router)
 
 
 def initialize_webapp(iriusrisk_server: str):

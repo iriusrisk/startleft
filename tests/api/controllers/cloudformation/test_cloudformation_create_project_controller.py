@@ -3,7 +3,7 @@ import responses
 from fastapi.testclient import TestClient
 
 from startleft.api import fastapi_server
-from startleft.api.controllers.cloudformation import cloudformation_controller
+from startleft.api.controllers.cloudformation import cloudformation_create_project_controller
 from startleft.iriusrisk import IriusRisk
 from tests.resources import test_resource_paths
 
@@ -15,10 +15,10 @@ client = TestClient(webapp)
 
 
 def get_url():
-    return cloudformation_controller.PREFIX + cloudformation_controller.URL
+    return cloudformation_create_project_controller.PREFIX + cloudformation_create_project_controller.URL
 
 
-class TestCloudFormationController:
+class TestCloudFormationCreateProjectController:
 
     def test_create_project_api_token_not_set(self):
         files = {'cft_file': open(test_resource_paths.example_json, 'r')}
@@ -66,5 +66,5 @@ class TestCloudFormationController:
         response = client.post(get_url(), files=files, data=body, headers=headers)
 
         # Then
-        assert response.status_code == cloudformation_controller.RESPONSE_STATUS_CODE
-        assert response.json() == cloudformation_controller.RESPONSE_BODY
+        assert response.status_code == cloudformation_create_project_controller.RESPONSE_STATUS_CODE
+        assert response.json() == cloudformation_create_project_controller.RESPONSE_BODY
