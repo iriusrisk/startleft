@@ -23,7 +23,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   {$path: "Type"}
+    type:   dinamodb
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::DynamoDB::Table']"}
     parent:      public-cloud
@@ -31,7 +31,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   {$path: "Type"}
+    type:   vpc
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::VPC']"}
     parent:      public-cloud
@@ -39,7 +39,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   {$path: "Type"}
+    type:   ec2
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::Instance']"}
     parent:      public-cloud
@@ -47,7 +47,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   {$path: "Type"}
+    type:   empty-component
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::Subnet']"}
     parent:      {$path: "Properties.VpcId.Ref"}
@@ -55,7 +55,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   {$path: "Type"}
+    type:   vpc
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::VPCEndpoint']"}
     parent:      {$path: "Properties.VpcId.Ref"}
@@ -63,7 +63,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   {$path: "Type"}
+    type:   empty-component
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::InternetGateway']"}
     parent:      public-cloud
@@ -71,7 +71,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   {$path: "Type"}
+    type:   elastic-container-service
     name:   {$path: "_key"}
     $source: {
       $children: {$path: "Properties.TaskDefinition.Ref"},
@@ -82,7 +82,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   {$path: "Type"}
+    type:   docker-container
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::ECS::TaskDefinition']"}
     parent:  {$parent: {$path: "_key"}}
@@ -90,7 +90,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   {$path: "Type"}
+    type:   load-balancer
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::ElasticLoadBalancingV2::LoadBalancer']"}
     parent:  {$path: "Properties.Subnets[]|map(&values(@), @)[]|map(&re_sub('[:]', '-', @), @)"}
@@ -106,7 +106,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   {$path: "Type"}
+    type:   aws-lambda-function
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::Lambda::Function']"}
     parent:      public-cloud
@@ -123,7 +123,7 @@ components:
 
 
   - id:     {$format: "{name}"}
-    type:   {$path: "Type"}
+    type:   rds
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::RDS::DBInstance']"}
     parent:      public-cloud
@@ -132,7 +132,7 @@ components:
 
 
   - id:     {$format: "{name}"}
-    type:   {$path: "Type"}
+    type:   route-53
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::Route53::HostedZone']"}
     parent:      public-cloud
@@ -141,7 +141,7 @@ components:
 
 
   - id:     {$format: "{name}"}
-    type:   {$path: "Type"}
+    type:   s3
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::S3::Bucket']"}
     parent:      public-cloud
@@ -158,7 +158,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   {$path: "Type"}
+    type:   sqs-simple-queue-service
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::SQS::Queue']"}
     parent:      public-cloud
@@ -174,7 +174,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   {$path: "Type"}
+    type:   empty-component
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Synthetics')]"}
     parent:  {$path: "Properties.VPCConfig.SubnetIds[]|map(&values(@), @)[]"}
