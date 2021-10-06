@@ -23,7 +23,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   dinamodb
+    type:   dynamodb
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::DynamoDB::Table']"}
     parent:      public-cloud
@@ -55,7 +55,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   vpc
+    type:   empty-component
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::VPCEndpoint']"}
     parent:      {$path: "Properties.VpcId.Ref"}
