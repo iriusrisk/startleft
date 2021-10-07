@@ -29,7 +29,7 @@ components:
       style:
         resIcon: mxgraph.aws4.redshift
 
-  - type: AWS::DynamoDB::Table
+  - type: dynamodb
     properties:
       ir.componentDefinition.ref: dynamodb
       style:
@@ -125,54 +125,31 @@ components:
       style:
         resIcon: mxgraph.aws4.cloudwatch
 
-  - type: AWS::EC2::Instance
+  - type: ec2
     properties:
       ir.componentDefinition.ref: ec2
       style:
         resIcon: mxgraph.aws4.ec2
 
-  - type: AWS::EC2::InternetGateway
-    properties:
-      ir.componentDefinition.ref: empty-component
-      style:
-        shape: mxgraph.aws3.internet_gateway
-
-
-  - type: AWS::EC2::SecurityGroup
-    properties:
-      ir.componentDefinition.ref: empty-component
-
-  - type: AWS::EC2::Subnet
-    properties:
-      ir.componentDefinition.ref: empty-component
-      style:
-        resIcon: mxgraph.aws4.subnet
-
-  - type: AWS::EC2::VPC
+  - type: vpc
     properties:
       ir.componentDefinition.ref: vpc
       style:
         resIcon: mxgraph.aws4.vpc
-        
-  - type: AWS::EC2::VPCGatewayAttachment
-    properties:
-      ir.componentDefinition.ref: empty-component
-      style:
-        resIcon: mxgraph.aws4.api_gateway
 
-  - type: AWS::ECS::Service
+  - type: elastic-container-service
     properties:
       ir.componentDefinition.ref: elastic-container-service
       style:
         resIcon: mxgraph.aws4.ecs
 
-  - type: AWS::ECS::TaskDefinition
+  - type: docker-container
     properties:
       ir.componentDefinition.ref: docker-container
       style:
         shape: isoCube
 
-  - type: AWS::ElasticLoadBalancingV2::LoadBalancer
+  - type: load-balancer
     properties:
       ir.componentDefinition.ref: load-balancer
       style:
@@ -190,31 +167,31 @@ components:
       style:
         resIcon: mxgraph.aws4.key_management_service
 
-  - type: AWS::Lambda::Function
+  - type: aws-lambda-function
     properties:
       ir.componentDefinition.ref: aws-lambda-function
       style:
         resIcon: mxgraph.aws4.lambda
 
-  - type: AWS::RDS::DBInstance
+  - type: rds
     properties:
       ir.componentDefinition.ref: rds
       style:
         resIcon: mxgraph.aws4.rds
 
-  - type: AWS::Route53::HostedZone
+  - type: route-53
     properties:
       ir.componentDefinition.ref: route-53
       style:
         resIcon: mxgraph.aws4.route_53
 
-  - type: AWS::S3::Bucket
+  - type: s3
     properties:
       ir.componentDefinition.ref: s3
       style:
         resIcon: mxgraph.aws4.s3
 
-  - type: AWS::SQS::Queue
+  - type: sqs-simple-queue-service
     properties:
       ir.componentDefinition.ref: sqs-simple-queue-service
       style:
