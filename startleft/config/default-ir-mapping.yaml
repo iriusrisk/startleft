@@ -10,114 +10,17 @@ trustzones:
       ir.ref: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
 components:
-
-  - type: AWS::WAFRegional::WebACL
-    properties:
-      ir.componentDefinition.ref: CD-WAF
-      style:
-        resIcon: mxgraph.aws4.waf
-
   - type: CD-ACM
     properties:
       ir.componentDefinition.ref: CD-ACM
       style:
         resIcon: mxgraph.aws4.certificate_manager_3
 
-  - type: AWS::Redshift::Cluster
-    properties:
-      ir.componentDefinition.ref: redshift
-      style:
-        resIcon: mxgraph.aws4.redshift
-
   - type: dynamodb
     properties:
       ir.componentDefinition.ref: dynamodb
       style:
         resIcon: mxgraph.aws4.dynamodb
-
-  - type: AWS::KinesisAnalyticsV2::ApplicationCloudWatchLoggingOption
-    properties:
-      ir.componentDefinition.ref: kinesis-data-analytics
-      style:
-        resIcon: mxgraph.aws4.kinesis_data_analytics
-
-  - type: AWS::KinesisAnalyticsV2::Application
-    properties:
-      ir.componentDefinition.ref: kinesis-data-analytics
-      style:
-        resIcon: mxgraph.aws4.kinesis_data_analytics
-
-  - type: AWS::StepFunctions::Activity
-    properties:
-      ir.componentDefinition.ref: step-functions
-      style:
-        resIcon: mxgraph.aws4.step_functions
-
-  - type: AWS::StepFunctions::StateMachine
-    properties:
-      ir.componentDefinition.ref: step-functions
-      style:
-        resIcon: mxgraph.aws4.step_functions
-
-  - type: AWS::Cognito::IdentityPool
-    properties:
-      ir.componentDefinition.ref: cognito
-      style:
-        resIcon: mxgraph.aws4.cognito
-
-  - type: AWS::Cognito::UserPool
-    properties:
-      ir.componentDefinition.ref: cognito
-      style:
-        resIcon: mxgraph.aws4.cognito
-
-  - type: AWS::Cognito::UserPoolClient
-    properties:
-      ir.componentDefinition.ref: cognito
-      style:
-        resIcon: mxgraph.aws4.cognito
-
-  - type: AWS::Serverless::Function
-    properties:
-      ir.componentDefinition.ref: aws-lambda-function
-      style:
-        resIcon: mxgraph.aws4.lambda
-
-  - type: AWS::KinesisFirehose::DeliveryStream
-    properties:
-      ir.componentDefinition.ref: kinesis-data-firehose
-      style:
-        resIcon: mxgraph.aws4.kinesis_data_firehose
-
-  - type: AWS::Kinesis::Stream
-    properties:
-      ir.componentDefinition.ref: kinesis-data-streams
-      style:
-        resIcon: mxgraph.aws4.kinesis_data_streams
-
-  - type: AWS::Athena::NamedQuery
-    properties:
-      ir.componentDefinition.ref: athena
-      style:
-        resIcon: mxgraph.aws4.athena
-
-  - type: AWS::ApiGateway::RestApi
-    properties:
-      ir.componentDefinition.ref: api-gateway
-      style:
-        resIcon: mxgraph.aws4.api_gateway
-
-  - type: AWS::AutoScaling::AutoScalingGroup
-    properties:
-      ir.componentDefinition.ref: ec2
-      style:
-        resIcon: mxgraph.aws4.ec2
-
-  - type: AWS::CloudFront::Distribution
-    properties:
-      ir.componentDefinition.ref: cf-cloudfront
-      style:
-        resIcon: mxgraph.aws4.cloudfront
 
   - type: cloudwatch
     properties:
@@ -155,12 +58,6 @@ components:
       style:
         resIcon: mxgraph.aws4.elastic_load_balancing
 
-  - type: AWS::IAM::ManagedPolicy
-    properties:
-      ir.componentDefinition.ref: amazon-web-services-environment
-      style:
-        resIcon: mxgraph.aws4.organizations_account
-
   - type: kms
     properties:
       ir.componentDefinition.ref: kms
@@ -197,12 +94,6 @@ components:
       style:
         resIcon: mxgraph.aws4.sqs
 
-  - type: AWS::SNS::Topic
-    properties:
-      ir.componentDefinition.ref: sns
-      style:
-        resIcon: mxgraph.aws4.sns
-
   - type: CD-SECRETS-MANAGER
     properties:
       ir.componentDefinition.ref: CD-SECRETS-MANAGER
@@ -214,6 +105,356 @@ components:
       ir.componentDefinition.ref: CD-SYSTEMS-MANAGER
       style:
         resIcon: mxgraph.aws4.systems_manager
+
+  - type: CD-WAF
+    properties:
+      ir.componentDefinition.ref: CD-WAF
+      style:
+        resIcon: mxgraph.aws4.waf
+
+  - type: redshift
+    properties:
+      ir.componentDefinition.ref: redshift
+      style:
+        resIcon: mxgraph.aws4.redshift
+
+  - type: kinesis-data-analytics
+    properties:
+      ir.componentDefinition.ref: kinesis-data-analytics
+      style:
+        resIcon: mxgraph.aws4.kinesis_data_analytics
+
+  - type: step-functions
+    properties:
+      ir.componentDefinition.ref: step-functions
+      style:
+        resIcon: mxgraph.aws4.step_functions
+
+  - type: cognito
+    properties:
+      ir.componentDefinition.ref: cognito
+      style:
+        resIcon: mxgraph.aws4.cognito
+
+  - type: kinesis-data-firehose
+    properties:
+      ir.componentDefinition.ref: kinesis-data-firehose
+      style:
+        resIcon: mxgraph.aws4.kinesis_data_firehose
+
+#  - type: AWS::Kinesis::Stream
+#    properties:
+#      ir.componentDefinition.ref: kinesis-data-streams
+#      style:
+#        resIcon: mxgraph.aws4.kinesis_data_streams
+
+  - type: athena
+    properties:
+      ir.componentDefinition.ref: athena
+      style:
+        resIcon: mxgraph.aws4.athena
+
+  - type: api-gateway
+    properties:
+      ir.componentDefinition.ref: api-gateway
+      style:
+        resIcon: mxgraph.aws4.api_gateway
+
+  - type: cf-cloudfront
+    properties:
+      ir.componentDefinition.ref: cf-cloudfront
+      style:
+        resIcon: mxgraph.aws4.cloudfront
+
+  - type: sns
+    properties:
+      ir.componentDefinition.ref: sns
+      style:
+        resIcon: mxgraph.aws4.sns
+
+  - type: CD-AURORA
+    properties:
+      ir.componentDefinition.ref: CD-AURORA
+
+  - type: amazon-web-services-environment
+    properties:
+      ir.componentDefinition.ref: amazon-web-services-environment
+
+  - type: CD-AWS-NETWORK-FIREWALL
+    properties:
+      ir.componentDefinition.ref: CD-AWS-NETWORK-FIREWALL
+
+  - type: CD-AWS-ORGANIZATIONS
+    properties:
+      ir.componentDefinition.ref: CD-AWS-ORGANIZATIONS
+
+  - type: client-vpn
+    properties:
+      ir.componentDefinition.ref: client-vpn
+
+  - type: CD-CLOUD-MAP
+    properties:
+      ir.componentDefinition.ref: CD-CLOUD-MAP
+
+  - type: CD-CLOUD9
+    properties:
+      ir.componentDefinition.ref: CD-CLOUD9
+
+  - type: CD-CLOUDFORMATION
+    properties:
+      ir.componentDefinition.ref: CD-CLOUDFORMATION
+
+  - type: CD-CLOUDHSM
+    properties:
+      ir.componentDefinition.ref: CD-CLOUDHSM
+
+  - type: CD-CLOUDSEARCH
+    properties:
+      ir.componentDefinition.ref: CD-CLOUDSEARCH
+
+  - type: cloudtrail
+    properties:
+      ir.componentDefinition.ref: cloudtrail
+
+  - type: CD-CLI
+    properties:
+      ir.componentDefinition.ref: CD-CLI
+
+  - type: CD-DETECTIVE
+    properties:
+      ir.componentDefinition.ref: CD-DETECTIVE
+
+  - type: direct-connect
+    properties:
+      ir.componentDefinition.ref: direct-connect
+
+  - type: CD-EC2-IMAGE-BUILDER
+    properties:
+      ir.componentDefinition.ref: CD-EC2-IMAGE-BUILDER
+
+  - type: elastic-block-store
+    properties:
+      ir.componentDefinition.ref: elastic-block-store
+
+  - type: elastic-container-registry
+    properties:
+      ir.componentDefinition.ref: elastic-container-registry
+
+  - type: elastic-container-kubernetes
+    properties:
+      ir.componentDefinition.ref: elastic-container-kubernetes
+
+  - type: elastic-file-system
+    properties:
+      ir.componentDefinition.ref: elastic-file-system
+
+  - type: elasticache
+    properties:
+      ir.componentDefinition.ref: elasticache
+
+  - type: elasticsearch
+    properties:
+      ir.componentDefinition.ref: elasticsearch
+
+  - type: eventbridge
+    properties:
+      ir.componentDefinition.ref: eventbridge
+
+  - type: fargate
+    properties:
+      ir.componentDefinition.ref: fargate
+
+  - type: firewall-manager
+    properties:
+      ir.componentDefinition.ref: firewall-manager
+
+  - type: fsx-windows-file-server
+    properties:
+      ir.componentDefinition.ref: fsx-windows-file-server
+
+  - type: glacier
+    properties:
+      ir.componentDefinition.ref: glacier
+
+  - type: CD-GLUE
+    properties:
+      ir.componentDefinition.ref: CD-GLUE
+
+  - type: CD-GLUE-SCHEMA-REGISTRY
+    properties:
+      ir.componentDefinition.ref: CD-GLUE-SCHEMA-REGISTRY
+
+  - type: CD-GUARDDUTY
+    properties:
+      ir.componentDefinition.ref: CD-GUARDDUTY
+
+  - type: CD-HEALTH
+    properties:
+      ir.componentDefinition.ref: CD-HEALTH
+
+  - type: CD-INSPECTOR
+    properties:
+      ir.componentDefinition.ref: CD-INSPECTOR
+
+  - type: CD-IOT-1-CLICK
+    properties:
+      ir.componentDefinition.ref: CD-IOT-1-CLICK
+
+  - type: CD-IOT-ANALYTICS
+    properties:
+      ir.componentDefinition.ref: CD-IOT-ANALYTICS
+
+  - type: CD-IOT-CORE
+    properties:
+      ir.componentDefinition.ref: CD-IOT-CORE
+
+  - type: CD-IOT-DEV-DEF
+    properties:
+      ir.componentDefinition.ref: CD-IOT-DEV-DEF
+
+  - type: CD-IOT-DEV-MAN
+    properties:
+      ir.componentDefinition.ref: CD-IOT-DEV-MAN
+
+  - type: CD-IOT-EVENTS
+    properties:
+      ir.componentDefinition.ref: CD-IOT-EVENTS
+
+  - type: CD-IOT-GREENGRASS
+    properties:
+      ir.componentDefinition.ref: CD-IOT-GREENGRASS
+
+  - type: CD-IOT-SITEWISE
+    properties:
+      ir.componentDefinition.ref: CD-IOT-SITEWISE
+
+  - type: CD-IOT-THINGS-GRAPH
+    properties:
+      ir.componentDefinition.ref: CD-IOT-THINGS-GRAPH
+
+  - type: kinesis-data-streams
+    properties:
+      ir.componentDefinition.ref: kinesis-data-streams
+
+  - type: kinesis-video-streams
+    properties:
+      ir.componentDefinition.ref: kinesis-video-streams
+
+  - type: CD-MACIE
+    properties:
+      ir.componentDefinition.ref: CD-MACIE
+
+  - type: CD-MANAGEDBLOCKCHAIN
+    properties:
+      ir.componentDefinition.ref: CD-MANAGEDBLOCKCHAIN
+
+  - type: CD-MSK
+    properties:
+      ir.componentDefinition.ref: CD-MSK
+
+  - type: CD-AWS-MANAGEMENT-CONSOLE
+    properties:
+      ir.componentDefinition.ref: CD-AWS-MANAGEMENT-CONSOLE
+
+  - type: CD-NEPTUNE
+    properties:
+      ir.componentDefinition.ref: CD-NEPTUNE
+
+  - type: CD-OPSWORKS
+    properties:
+      ir.componentDefinition.ref: CD-OPSWORKS
+
+  - type: CD-PINPOINT
+    properties:
+      ir.componentDefinition.ref: CD-PINPOINT
+
+  - type: privatelink
+    properties:
+      ir.componentDefinition.ref: privatelink
+
+  - type: CD-QLDB
+    properties:
+      ir.componentDefinition.ref: CD-QLDB
+
+  - type: CD-QUICKSIGHT
+    properties:
+      ir.componentDefinition.ref: CD-QUICKSIGHT
+
+  - type: CD-AWS-RAM
+    properties:
+      ir.componentDefinition.ref: CD-AWS-RAM
+
+  - type: CD-SDK
+    properties:
+      ir.componentDefinition.ref: CD-SDK
+
+  - type: CD-SECURITY-HUB
+    properties:
+      ir.componentDefinition.ref: CD-SECURITY-HUB
+
+  - type: CD-SMS
+    properties:
+      ir.componentDefinition.ref: CD-SMS
+
+  - type: CD-SERVERLESS-APP-REPO
+    properties:
+      ir.componentDefinition.ref: CD-SERVERLESS-APP-REPO
+
+  - type: CD-SERVICE-CATALOG
+    properties:
+      ir.componentDefinition.ref: CD-SERVICE-CATALOG
+
+  - type: CD-SHIELD
+    properties:
+      ir.componentDefinition.ref: CD-SHIELD
+
+  - type: CD-SES
+    properties:
+      ir.componentDefinition.ref: CD-SES
+
+  - type: site-to-site-vpn
+    properties:
+      ir.componentDefinition.ref: site-to-site-vpn
+
+  - type: CD-SNOWBALL
+    properties:
+      ir.componentDefinition.ref: CD-SNOWBALL
+
+  - type: CD-STORAGE-GATEWAY
+    properties:
+      ir.componentDefinition.ref: CD-STORAGE-GATEWAY
+
+  - type: CD-SUPPORT
+    properties:
+      ir.componentDefinition.ref: CD-SUPPORT
+
+  - type: swf-simple-workflow-service
+    properties:
+      ir.componentDefinition.ref: swf-simple-workflow-service
+
+  - type: trusted-advisor
+    properties:
+      ir.componentDefinition.ref: trusted-advisor
+
+  - type: CD-WORKDOCS
+    properties:
+      ir.componentDefinition.ref: CD-WORKDOCS
+
+  - type: CD-WORKLINK
+    properties:
+      ir.componentDefinition.ref: CD-WORKLINK
+
+  - type: CD-WORKMAIL
+    properties:
+      ir.componentDefinition.ref: CD-WORKMAIL
+
+  - type: CD-WORKSPACES
+    properties:
+      ir.componentDefinition.ref: CD-WORKSPACES
+
+  - type: CD-XRAY
+    properties:
+      ir.componentDefinition.ref: CD-XRAY
 
   - type: default
     properties:

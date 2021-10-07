@@ -181,6 +181,176 @@ components:
     tags:
       - { $path: "Type" }
 
+  - id:     {$format: "{name}"}
+    type:   api-gateway
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::ApiGateway')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   athena
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Athena')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   CD-MQ
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::AmazonMQ')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   cf-cloudfront
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::CloudFront')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   cognito
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Cognito')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   CD-CONFIG
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Config')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   elastic-container-registry
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::ECR')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   elastic-container-kubernetes
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::EKS')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   elasticache
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::ElastiCache')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+
+  - id:     {$format: "{name}"}
+    type:   CD-GUARDDUTY
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::GuardDuty')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   CD-INSPECTOR
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Inspector')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   CD-MACIE
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Macie')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   CD-AWS-NETWORK-FIREWALL
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::NetworkFirewall')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   redshift
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Redshift')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   CD-SES
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::SES')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   sns
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::SNS')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   step-functions
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::StepFunctions')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+
+  - id:     {$format: "{name}"}
+    type:   CD-WAF
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::WAF')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   kinesis-data-analytics
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::KinesisA')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   kinesis-data-analytics
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Kinesis::')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   kinesis-data-firehose
+    name:   {$path: "_key"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::KinesisFirehose')]"}}
+    parent:      public-cloud
+    tags:
+      - { $path: "Type" }
+
 
   # Default catchall
 #  - id:          { $format: "{name}"}
