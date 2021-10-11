@@ -10,7 +10,7 @@ components:
     type:   CD-ACM
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::CertificateManager::Certificate']"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -18,7 +18,7 @@ components:
     type:   cloudwatch
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::CloudWatch::Alarm']"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -26,7 +26,7 @@ components:
     type:   dynamodb
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::DynamoDB::Table']"}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -34,7 +34,7 @@ components:
     type:   vpc
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::VPC']"}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -42,7 +42,7 @@ components:
     type:   ec2
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::Instance']"}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -66,7 +66,7 @@ components:
     type:   empty-component
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::InternetGateway']"}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -98,10 +98,18 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
+    type:   load-balancer
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::ElasticLoadBalancing::LoadBalancer']"}
+    parent:  {$path: "Properties.Subnets[]|map(&values(@), @)[]|map(&re_sub('[:]', '-', @), @)"}
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
     type:   kms
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::KMS::Key']"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -109,7 +117,7 @@ components:
     type:   aws-lambda-function
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::Lambda::Function']"}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -117,7 +125,7 @@ components:
     type:   cloudwatch
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::Logs::LogGroup']"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -126,7 +134,7 @@ components:
     type:   rds
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::RDS::DBInstance']"}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -135,7 +143,7 @@ components:
     type:   route-53
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::Route53::HostedZone']"}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -144,7 +152,7 @@ components:
     type:   s3
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::S3::Bucket']"}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -153,7 +161,7 @@ components:
     type:   CD-SECRETS-MANAGER
     name:   {$path: "_key"}
     $source: {$singleton: { $root: "Resources|squash(@)[?Type=='AWS::SecretsManager::Secret']"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -161,7 +169,7 @@ components:
     type:   sqs-simple-queue-service
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::SQS::Queue']"}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -169,7 +177,7 @@ components:
     type:   CD-SYSTEMS-MANAGER
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::SSM')]"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -185,7 +193,7 @@ components:
     type:   api-gateway
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::ApiGateway')]"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -193,15 +201,15 @@ components:
     type:   athena
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Athena')]"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
     type:   CD-MQ
     name:   {$path: "_key"}
-    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::AmazonMQ')]"}}
-    parent:      public-cloud
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::AmazonMQ::Broker']"}
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -209,15 +217,31 @@ components:
     type:   cf-cloudfront
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::CloudFront')]"}}
-    parent:      public-cloud
+    parent:  public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   cloudtrail
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::CloudTrail')]"}
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
     type:   cognito
     name:   {$path: "_key"}
-    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Cognito')]"}}
-    parent:      public-cloud
+    $source: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Cognito::UserPool')]"}
+    parent:  public-cloud
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   cognito
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Cognito::IdentityPool')]"}
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -225,7 +249,7 @@ components:
     type:   CD-CONFIG
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Config')]"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -233,15 +257,15 @@ components:
     type:   elastic-container-registry
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::ECR')]"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
     type:   elastic-container-kubernetes
     name:   {$path: "_key"}
-    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::EKS')]"}}
-    parent:      public-cloud
+    $source: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::EKS::Cluster')]"}
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -249,16 +273,15 @@ components:
     type:   elasticache
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::ElastiCache')]"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
-
 
   - id:     {$format: "{name}"}
     type:   CD-GUARDDUTY
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::GuardDuty')]"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -266,7 +289,7 @@ components:
     type:   CD-INSPECTOR
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Inspector')]"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -274,23 +297,23 @@ components:
     type:   CD-MACIE
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Macie')]"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
     type:   CD-AWS-NETWORK-FIREWALL
     name:   {$path: "_key"}
-    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::NetworkFirewall')]"}}
-    parent:      public-cloud
+    $source: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::NetworkFirewall::Firewall')]"}
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
     type:   redshift
     name:   {$path: "_key"}
-    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Redshift')]"}}
-    parent:      public-cloud
+    $source: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Redshift::Cluster')]"}
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -298,7 +321,7 @@ components:
     type:   CD-SES
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::SES')]"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -306,15 +329,15 @@ components:
     type:   sns
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::SNS')]"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
     type:   step-functions
     name:   {$path: "_key"}
-    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::StepFunctions')]"}}
-    parent:      public-cloud
+    $source: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::StepFunctions::StateMachine')]"}
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -323,15 +346,15 @@ components:
     type:   CD-WAF
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::WAF')]"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
     type:   kinesis-data-analytics
     name:   {$path: "_key"}
-    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::KinesisA')]"}}
-    parent:      public-cloud
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::KinesisAnalytics')]"}}
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -339,7 +362,7 @@ components:
     type:   kinesis-data-analytics
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Kinesis::')]"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -347,7 +370,7 @@ components:
     type:   kinesis-data-firehose
     name:   {$path: "_key"}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::KinesisFirehose')]"}}
-    parent:      public-cloud
+    parent:  public-cloud
     tags:
       - { $path: "Type" }
 
@@ -358,7 +381,7 @@ components:
 #      $catchall: {$root: "Resources|squash(@)"}
 #    type:        {$path: "Type"}
 #    name:        {$path: "_key"}
-#    parent:      public-cloud
+#    parent:  public-cloud
 #    tags:
 #      - { $path: "Type" }
 

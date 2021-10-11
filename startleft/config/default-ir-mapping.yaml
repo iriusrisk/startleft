@@ -142,12 +142,6 @@ components:
       style:
         resIcon: mxgraph.aws4.kinesis_data_firehose
 
-#  - type: AWS::Kinesis::Stream
-#    properties:
-#      ir.componentDefinition.ref: kinesis-data-streams
-#      style:
-#        resIcon: mxgraph.aws4.kinesis_data_streams
-
   - type: athena
     properties:
       ir.componentDefinition.ref: athena
