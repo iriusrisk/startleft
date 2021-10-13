@@ -113,6 +113,8 @@ caret
 .idea
 
 # Intermediate files
-startleft/diagram.xml
-startleft/product.xml
+**/diagram.xml
+**/product.xml
+**/threatmodel.otm
 startleft/*.otm
+customerexamples
