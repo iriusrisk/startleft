@@ -1,4 +1,7 @@
+import logging
 import uuid
+
+logger = logging.getLogger(__name__)
 
 
 class TrustzoneMapper:
@@ -32,6 +35,7 @@ class TrustzoneMapper:
                 tz_id = self.id_map[source_id]
             trustzone["id"] = tz_id
 
+            logger.debug(f"Added trustzone: [{trustzone['id']}][{trustzone['name']}][{trustzone['type']}]")
             trustzones.append(trustzone)
 
         return trustzones
@@ -61,8 +65,10 @@ class ComponentMapper:
             # Retrieves the name from the source model
             if "name" in self.mapping:
                 c_name = source_model.search(self.mapping["name"], source=source_obj)
+                logger.debug(f"+Found source object with name {c_name}")
             else:
                 c_name = None
+                logger.error(f"+Found source object with name None")
 
             # Retrieves the parent component of the element.
             parentsFromComponent = False
@@ -101,23 +107,29 @@ class ComponentMapper:
             for parent_element in parent:
                 # A component won't be added if it has no parent component
                 component = {"name": c_name, "type": c_type, "tags": c_tags}
-
                 if parentsFromComponent:
                     # If the parent component was detected outside the component we need to look at the parent dict
                     parent_id = parent_element
                     self.id_map[parent_element] = parent_id
+                    logger.debug(f"Component {c_name} gets parent ID from existing component")
                 else:
                     found = False
+
+                    logger.debug("Trying to get parent ID from existing component...")
                     if parent_element in self.id_map:
                         parent_id = self.id_map[parent_element]
                         found = True
+                        logger.debug(f"Parent ID detected: [{parent_id}][{parent_element}]")
                     if not found:
+                        logger.debug("ID not found. Trying to get parent ID from parent substring...")
                         for key in self.id_map:
                             if key in parent_element:
                                 parent_id = self.id_map[key]
                                 found = True
+                                logger.debug(f"Parent ID detected: [{parent_id}][{key}]")
                                 break
                     if not found:
+                        logger.debug("No ID found. Creating new parent ID...")
                         parent_id = str(uuid.uuid4())
                         self.id_map[parent_element] = parent_id
 
@@ -138,13 +150,16 @@ class ComponentMapper:
 
                 # If the component is defining child components the ID must be saved in a parent dict
                 if "$children" in self.mapping["$source"]:
+                    logger.debug("Component is defining child components...")
                     children = source_model.search(self.mapping["$source"]["$children"], source=source_obj)
                     # TODO: Alternative options for $path when nothing is returned
                     if children not in id_parents:
                         id_parents[children] = list()
                     id_parents[children].append(c_id)
 
+                logger.debug(f"Added component: [{component['id']}][{component['type']}] | Parent: [{component['parent']}]")
                 components.append(component)
+                logger.debug("")
         return components
 
 
