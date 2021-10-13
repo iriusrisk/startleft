@@ -232,7 +232,7 @@ components:
   - id:     {$format: "{name}"}
     type:   cognito
     name:   {$path: "_key"}
-    $source: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Cognito::UserPool')]"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::Cognito::UserPool']"}
     parent:  public-cloud
     tags:
       - { $path: "Type" }
@@ -240,7 +240,7 @@ components:
   - id:     {$format: "{name}"}
     type:   cognito
     name:   {$path: "_key"}
-    $source: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Cognito::IdentityPool')]"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::Cognito::IdentityPool']"}
     parent:  public-cloud
     tags:
       - { $path: "Type" }
@@ -305,7 +305,7 @@ components:
     type:   CD-AWS-NETWORK-FIREWALL
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::NetworkFirewall::Firewall')]"}
-    parent:  public-cloud
+    parent:  {$path: "Properties.VpcId.Ref"}
     tags:
       - { $path: "Type" }
 
