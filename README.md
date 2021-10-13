@@ -112,8 +112,9 @@ Request Body:
 PUT /api/beta/startleft/cloudformation/projects/{project_id}
 Headers:
     api_token                   Required: IriusRisk API token
-Request Body:
+Path parameter:
     project_id:                 Required. IriusRisk project identifier
+Request Body:
     cft_file:                   Required. File that contains the CloudFormation Template
     type:                       Required. Format of the CloudFormation Template
     name                        Required. Name of the project to update
