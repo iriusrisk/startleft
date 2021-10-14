@@ -101,7 +101,7 @@ class IriusRisk:
                 if assigned_trustzone is None:
                     return None
                 else:
-                    return assigned_trustzone["properties"]["ir.ref"]
+                    return assigned_trustzone["properties"]["ref"]
             else:
                 return self.find_trustzone(parent["component"])
         
@@ -219,9 +219,19 @@ class IriusRisk:
         trustzone_type_map = set()
         for trustzone in self.trustzones:
             trustzone_applicable_name = trustzone["properties"].get("ir.name", trustzone["type"])
-            project_trust_zone = ProjectTrustZone(trustzone_applicable_name, trustzone["properties"]["ir.ref"])
+            project_trust_zone = ProjectTrustZone(trustzone_applicable_name,
+                                                  trustzone["properties"]["ref"],
+                                                  trustzone["properties"]["uuid"],
+                                                  trustzone["properties"]["desc"],
+                                                  trustzone["properties"]["trust-rating"])
             if project_trust_zone not in trustzone_type_map:
-                etree.SubElement(trustzones_xml_element, "trustZone", ref=project_trust_zone.ref, name=project_trust_zone.name)
+                etree.SubElement(trustzones_xml_element,
+                                 "trustZone",
+                                 ref=project_trust_zone.ref,
+                                 name=project_trust_zone.name,
+                                 uuid=project_trust_zone.uuid,
+                                 desc=project_trust_zone.desc,
+                                 trustRating=project_trust_zone.trust_rating)
                 trustzone_type_map.add(project_trust_zone)
 
     def recreate_diagram(self, diagram):
