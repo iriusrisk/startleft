@@ -1,16 +1,22 @@
-import logging
-logger = logging.getLogger(__name__)
-
-import sys
-import os
 import json
-import yaml
+import json
+import logging
+
 import hcl2
 import xmltodict
+import yaml
+
 from startleft import threatmodel, sourcemodel, transformer, iriusrisk, diagram
+from startleft.api.errors import OTMInconsistentIdsError, OTMSchemaNotValidError, OTMFileNotFoundError, \
+    MappingFileNotFoundError, MappingFileSchemaNotValidError, WriteThreatModelError
+
+logger = logging.getLogger(__name__)
+
 
 class IacToOtmApp:
-
+    """
+    This class in in charge of the methods to convert IaC code to OTM files
+    """
     EXIT_UNEXPECTED = 1
     EXIT_VALIDATION_FAILED = 2
 
@@ -31,18 +37,27 @@ class IacToOtmApp:
 
     def load_xml_source(self, filename):
         logger.debug(f"Loading XML source file: {filename}")
-        with open(filename, 'rb') as f:
-            self.source_model.load(xmltodict.parse(f.read(), xml_attribs=True))
+        if isinstance(filename, str):
+            with open(filename, 'rb') as f:
+                self.source_model.load(xmltodict.parse(f.read(), xml_attribs=True))
+        else:
+            self.source_model.load(xmltodict.parse(filename.read(), xml_attribs=True))
 
     def load_yaml_source(self, filename):
         logger.debug(f"Loading YAML source file: {filename}")
-        with open(filename, 'r') as f:
-            self.source_model.load(yaml.load(f, Loader=yaml.BaseLoader))
+        if isinstance(filename, str):
+            with open(filename, 'r') as f:
+                self.source_model.load(yaml.load(f, Loader=yaml.BaseLoader))
+        else:
+            self.source_model.load(yaml.load(filename, Loader=yaml.BaseLoader))
 
     def load_hcl2_source(self, filename):
         logger.debug(f"Loading HCL2 source file: {filename}")
-        with open(filename, 'r') as f:
-            self.source_model.load(hcl2.load(f))
+        if isinstance(filename, str):
+            with open(filename, 'r') as f:
+                self.source_model.load(hcl2.load(f))
+        else:
+            self.source_model.load(hcl2.load(filename))
 
     def load_source_files(self, loader, filenames):
         logger.debug(f"Parsing IaC source files of type {type} to OTM")
@@ -61,17 +76,20 @@ class IacToOtmApp:
         for filename in filenames:
             logger.debug(f"Loading mapping file {filename}")
             try:
-                with open(filename, 'r') as f:
-                    self.transformer.load(yaml.load(f, Loader=yaml.BaseLoader))
+                if isinstance(filename, str):
+                    with open(filename, 'r') as f:
+                        self.transformer.load(yaml.load(f, Loader=yaml.BaseLoader))
+                else:
+                    self.transformer.load(yaml.load(filename, Loader=yaml.BaseLoader))
             except FileNotFoundError:
-                logger.error(f"Cannot find mapping file '{filename}'")
-                sys.exit(IacToOtmApp.EXIT_UNEXPECTED)
+                logger.warning(f"Cannot find mapping file '{filename}'")
+                raise MappingFileNotFoundError()
         logger.debug("Validating mapping schema")
         schema = self.transformer.validate_mapping()
         if not schema.valid:
             logger.error('Mapping files are not valid')
             logger.error(f"--- Schema errors---\n{schema.errors}\n--- End of schema errors ---")
-            sys.exit(IacToOtmApp.EXIT_VALIDATION_FAILED)            
+            raise MappingFileSchemaNotValidError(schema.errors)
 
     def write_threatmodel(self, out_file):
         logger.info(f"Writing threat model to '{out_file}'")
@@ -80,7 +98,7 @@ class IacToOtmApp:
                 json.dump(self.threat_model.json(), f, indent=2)
         except Exception as e:
             logger.error(f"Unable to create the threat model: {e}")
-            sys.exit(IacToOtmApp.EXIT_UNEXPECTED)
+            raise WriteThreatModelError()
 
     def run(self, type, map_filenames, out_file, filenames):
         """
@@ -89,7 +107,6 @@ class IacToOtmApp:
         loader = self.source_loader_map[type.upper()]
         self.load_source_files(loader, filenames)
         self.load_mapping_files(map_filenames)
-
         self.transformer.run()
         self.write_threatmodel(out_file)
 
@@ -120,10 +137,13 @@ class IacToOtmApp:
         else:
             logger.error('Mapper file is not valid')
             logger.error(f"--- Schema errors---\n{schema.errors}\n--- End of schema errors ---")
-            sys.exit(IacToOtmApp.EXIT_VALIDATION_FAILED)
+            raise MappingFileSchemaNotValidError()
 
 
 class OtmToIr:
+    """
+    This class in in charge of the methods to convert OTM files to IR XML files
+    """
     EXIT_UNEXPECTED = 3
     EXIT_VALIDATION_FAILED = 4
 
@@ -137,7 +157,7 @@ class OtmToIr:
             logger.info('OTM file has consistent IDs')
         else:
             logger.error('OTM file has inconsistent IDs')
-            sys.exit(OtmToIr.EXIT_VALIDATION_FAILED)
+            raise OTMInconsistentIdsError()
 
     def validate_otm_files(self):
         logger.debug("Validating OTM schema")
@@ -147,7 +167,7 @@ class OtmToIr:
         if not schema.valid:
             logger.error('OTM schema is not valid')
             logger.error(f"--- Schema errors---\n{schema.errors}\n--- End of schema errors ---")
-            sys.exit(OtmToIr.EXIT_VALIDATION_FAILED)
+            raise OTMSchemaNotValidError()
 
     def load_otm_files(self, filenames):
         for filename in filenames:
@@ -157,10 +177,10 @@ class OtmToIr:
                     self.iriusrisk.load_otm_file(yaml.load(f, Loader=yaml.BaseLoader))
             except FileNotFoundError:
                 logger.error(f"Cannot find OTM file '{filename}'")
-                sys.exit(OtmToIr.EXIT_UNEXPECTED)
+                raise OTMFileNotFoundError()
             self.validate_otm_files()
             self.check_otm_files()
-            self.iriusrisk.set_project()          
+            self.iriusrisk.set_project()
 
     def load_map_files(self, filenames):
         for filename in filenames:
@@ -210,23 +230,14 @@ class OtmToIr:
 
         logger.debug("Resolving component trustzones")
         self.iriusrisk.resolve_component_trustzones()
-        try:
-            if recreate:
-                self.iriusrisk.recreate_diagram(diagram_xml)
-                logger.debug("Recreating diagram in IriusRisk")
-            else:
-                logger.debug("Upserting diagram to IriusRisk")
-                self.iriusrisk.upsert_diagram(diagram_xml)
-        except iriusrisk.IriusServerError:
-            logger.error("IRIUS_SERVER not set")
-            sys.exit(OtmToIr.EXIT_UNEXPECTED)
-        except iriusrisk.IriusTokenError:
-            logger.error("IRIUS_API_TOKEN not set")
-            sys.exit(OtmToIr.EXIT_UNEXPECTED)
-        except iriusrisk.IriusApiError as e:
-            logger.error(f"API error: {e}")
-            sys.exit(OtmToIr.EXIT_UNEXPECTED)
-                        
+
+        if recreate:
+            self.iriusrisk.recreate_diagram(diagram_xml)
+            logger.debug("Recreating diagram in IriusRisk")
+        else:
+            logger.debug("Upserting diagram to IriusRisk")
+            self.iriusrisk.upsert_diagram(diagram_xml)
+
         logger.debug("Running rules engine")
         self.iriusrisk.run_rules()
 

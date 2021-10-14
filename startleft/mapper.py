@@ -1,4 +1,7 @@
+import logging
 import uuid
+
+logger = logging.getLogger(__name__)
 
 
 class TrustzoneMapper:
@@ -17,21 +20,22 @@ class TrustzoneMapper:
             source_objs = [self.mapping]
 
         for source_obj in source_objs:
-            trustzone = {}
-            trustzone["name"] = source_model.search(self.mapping["name"], source=source_obj)
-            trustzone["type"] = source_model.search(self.mapping["type"], source=source_obj)
-            trustzone["source"] = source_obj
+            trustzone = {"name": source_model.search(self.mapping["name"], source=source_obj),
+                         "type": source_model.search(self.mapping["type"], source=source_obj),
+                         "source": source_obj
+                         }
             if "properties" in self.mapping:
                 trustzone["properties"] = self.mapping["properties"]
 
             source_id = source_model.search(self.mapping["id"], source=trustzone)
-            if not source_id in self.id_map:
+            if source_id not in self.id_map:
                 tz_id = str(uuid.uuid4())
                 self.id_map[source_id] = tz_id
             else:
                 tz_id = self.id_map[source_id]
             trustzone["id"] = tz_id
 
+            logger.debug(f"Added trustzone: [{trustzone['id']}][{trustzone['name']}][{trustzone['type']}]")
             trustzones.append(trustzone)
 
         return trustzones
@@ -43,7 +47,13 @@ class ComponentMapper:
         self.source = None
         self.id_map = {}
 
-    def run(self, source_model):
+    def run(self, source_model, id_parents):
+        """
+        Iterates through the source model and returns the parameters to create the components
+        :param source_model:
+        :param id_parents:
+        :return:
+        """
         components = []
 
         source_objs = source_model.search(self.mapping["$source"], source=None)
@@ -51,16 +61,31 @@ class ComponentMapper:
             source_objs = [source_objs]
 
         for source_obj in source_objs:
-            if "parent" in self.mapping:
-                parent = source_model.search(self.mapping["parent"], source=source_obj)
-            else:
-                parent = [None]
 
+            # Retrieves the name from the source model
             if "name" in self.mapping:
                 c_name = source_model.search(self.mapping["name"], source=source_obj)
+                logger.debug(f"+Found source object with name {c_name}")
             else:
                 c_name = None
+                logger.error(f"+Found source object with name None")
 
+            # Retrieves the parent component of the element.
+            parentsFromComponent = False
+            if "parent" in self.mapping:
+                if "$parent" in self.mapping["parent"]:
+                    # In this case the parent component is the one in charge of defining which components
+                    # are their childs, so it's ID should be stored before reaching the child components
+                    parent = id_parents[c_name]
+                    parentsFromComponent = True
+                else:
+                    # Just takes the parent component from the "parent" field in the mapping file
+                    # TODO: What if the object can't find a parent component? Should it have a default parent in case the path didn't find anything?
+                    parent = source_model.search(self.mapping["parent"], source=source_obj)
+            else:
+                parent = ""
+
+            # Retrieves the tags
             c_tags = []
             if "tags" in self.mapping:
                 if isinstance(self.mapping["tags"], list):
@@ -71,20 +96,42 @@ class ComponentMapper:
 
             c_type = source_model.search(self.mapping["type"], source=source_obj)
 
+            if isinstance(parent, list):
+                if len(parent) == 0:
+                    parent = ["public-cloud"]
             if isinstance(parent, str):
-                parent = [parent]
-            for parent_element in parent:
-                component = {}
-
-                component["name"] = c_name
-                component["type"] = c_type
-                component["tags"] = c_tags
-
-                if parent_element in self.id_map:
-                    parent_id = self.id_map[parent_element]
+                if parent == "":
+                    parent = ["public-cloud"]
                 else:
-                    parent_id = str(uuid.uuid4())
+                    parent = [parent]
+            for parent_element in parent:
+                # A component won't be added if it has no parent component
+                component = {"name": c_name, "type": c_type, "tags": c_tags}
+                if parentsFromComponent:
+                    # If the parent component was detected outside the component we need to look at the parent dict
+                    parent_id = parent_element
                     self.id_map[parent_element] = parent_id
+                    logger.debug(f"Component {c_name} gets parent ID from existing component")
+                else:
+                    found = False
+
+                    logger.debug("Trying to get parent ID from existing component...")
+                    if parent_element in self.id_map:
+                        parent_id = self.id_map[parent_element]
+                        found = True
+                        logger.debug(f"Parent ID detected: [{parent_id}][{parent_element}]")
+                    if not found:
+                        logger.debug("ID not found. Trying to get parent ID from parent substring...")
+                        for key in self.id_map:
+                            if key in parent_element:
+                                parent_id = self.id_map[key]
+                                found = True
+                                logger.debug(f"Parent ID detected: [{parent_id}][{key}]")
+                                break
+                    if not found:
+                        logger.debug("No ID found. Creating new parent ID...")
+                        parent_id = str(uuid.uuid4())
+                        self.id_map[parent_element] = parent_id
 
                 component["parent"] = parent_id
                 component["source"] = source_obj
@@ -97,14 +144,22 @@ class ComponentMapper:
                 else:
                     source_id = str(uuid.uuid4())
 
-                if source_id not in self.id_map:
-                    c_id = str(uuid.uuid4())
-                    self.id_map[source_id] = c_id
-                else:
-                    c_id = self.id_map[source_id]
+                c_id = str(uuid.uuid4())
+                self.id_map[source_id] = c_id
                 component["id"] = c_id
 
+                # If the component is defining child components the ID must be saved in a parent dict
+                if "$children" in self.mapping["$source"]:
+                    logger.debug("Component is defining child components...")
+                    children = source_model.search(self.mapping["$source"]["$children"], source=source_obj)
+                    # TODO: Alternative options for $path when nothing is returned
+                    if children not in id_parents:
+                        id_parents[children] = list()
+                    id_parents[children].append(c_id)
+
+                logger.debug(f"Added component: [{component['id']}][{component['type']}] | Parent: [{component['parent']}]")
                 components.append(component)
+                logger.debug("")
         return components
 
 
@@ -144,9 +199,7 @@ class DataflowMapper:
                     if from_node == to_node:
                         continue
 
-                    dataflow = {}
-                    dataflow["name"] = df_name
-                    dataflow["type"] = df_type
+                    dataflow = {"name": df_name, "type": df_type}
 
                     if from_node in self.id_map:
                         from_node_id = self.id_map[from_node]
@@ -167,7 +220,7 @@ class DataflowMapper:
                         dataflow["properties"] = self.mapping["properties"]
 
                     source_id = source_model.search(self.mapping["id"], source=dataflow)
-                    if not source_id in self.id_map:
+                    if source_id not in self.id_map:
                         df_id = str(uuid.uuid4())
                         self.id_map[source_id] = df_id
                     dataflow["id"] = df_id

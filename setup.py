@@ -12,7 +12,6 @@ setup(
     include_package_data=True,
     python_requires='>=3.6',
     install_requires=[
-        'click',
         'pyyaml',
         'jsonschema',
         'deepmerge',
@@ -21,7 +20,9 @@ setup(
         'python-hcl2',
         'requests',
         'xmltodict',
-        'setuptools_scm'
+        'setuptools_scm',
+        'fastapi',
+        'python-multipart'
     ],
     use_scm_version=True,
     extras_require={
@@ -30,7 +31,8 @@ setup(
         ],
         "test": [
             'tox',
-            'pytest'
+            'pytest',
+            'responses'
         ]
     },
     entry_points='''
