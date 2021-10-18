@@ -100,12 +100,24 @@ GET /health
 ```
 ```
 POST /api/beta/startleft/cloudformation
+Headers:
+    api_token                   Required: IriusRisk API token
 Request Body:
     cft_file:                   Required. File that contains the CloudFormation Template
     type                        Required. Format of the CloudFormation Template
     id                          Required. ID of the new project
     name                        Required. Name of the new project
+    mapping_file                Optional. File that contains the mapping between AWS components and IriusRisk components. Providing this file will completely override default values
+    
+PUT /api/beta/startleft/cloudformation/projects/{project_id}
+Headers:
     api_token                   Required: IriusRisk API token
+Path parameter:
+    project_id:                 Required. IriusRisk project identifier
+Request Body:
+    cft_file:                   Required. File that contains the CloudFormation Template
+    type:                       Required. Format of the CloudFormation Template
+    name                        Required. Name of the project to update
     mapping_file                Optional. File that contains the mapping between AWS components and IriusRisk components. Providing this file will completely override default values
 ```
 
