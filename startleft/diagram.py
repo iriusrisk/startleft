@@ -135,15 +135,11 @@ class Diagram:
         self.component_space_y = 256
         self.default_node_size = 100
 
-        self.file = etree.Element("mxfile", host="", modified="2021-06-17T09:59:40.298Z",
-                                  agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36",
-                                  version="12.2.4", etag="yWk9nYPBV6YaXUT6rb4Y", pages="1")
-        diagram = etree.SubElement(self.file, "diagram", id="u3LjUtK0nmesnV5ISQRV", name="Page-1")
-        graph = etree.SubElement(diagram, "mxGraphModel", dx=str(self.width), dy=str(self.height), grid="1",
+        self.file = etree.Element("mxGraphModel", dx=str(self.width), dy=str(self.height), grid="1",
                                  gridSize="10", guides="1", tooltips="1", connect="1", arrows="1", fold="1", page="1",
                                  pageScale="1", pageWidth="4681", pageHeight="3300", math="0", shadow="0",
                                  irDrawioVersion="3.0.0-SNAPSHOT")
-        self.root = etree.SubElement(graph, "root")
+        self.root = etree.SubElement(self.file, "root")
         etree.SubElement(self.root, "mxCell", id="0")
         etree.SubElement(self.root, "mxCell", id="1", parent="0")
 
@@ -154,11 +150,23 @@ class Diagram:
         tz = Trustzone(trustzone)
         tz.ir_map["ir.ref"] = tz.data["id"]
         tz.merge_properties(self.map["trustzones"])
+        # If our given trustzone was not linked previously to an IriusRisk trustzone, we assign the newly generated
+        # Ref for the diagram to it, so that data can be reused when generating the project.xml file. Also, we will
+        # store it in our map so other TZ's of same "new" type can be autopopulated.
+        if "ir.ref" not in trustzone["properties"]:
+            trustzone["properties"]["ir.ref"] = tz.ir_map["ir.ref"]
+            self.map["trustzones"].append(
+                {"type": trustzone["type"], "properties": {"ir.ref": trustzone["properties"]["ir.ref"]}})
 
         tz_cell = tz.to_cell()
-        cell = etree.SubElement(self.root, "mxCell", id=tz_cell["data"]["id"], value=tz_cell["data"]["name"],
+
+        # If no proper name is mapped for the Trust Zone, we use the Trust Zone type provided
+        human_readable_trustzone_name = tz_cell["data"]["properties"].get("ir.name", tz_cell["data"]["type"])
+        cell = etree.SubElement(self.root, "mxCell",
+                                id=tz_cell["data"]["id"],
+                                value=human_readable_trustzone_name,
                                 style=tz_cell["style"], parent="1", vertex="1")
-        tzgeo = etree.SubElement(cell, "mxGeometry", x="750", y="160", width="180", height="230")
+        tzgeo = etree.SubElement(cell, "mxGeometry",  x="750", y="160", width="180", height="230")
         tzgeo.attrib["as"] = "geometry"
 
     def add_component(self, component):
