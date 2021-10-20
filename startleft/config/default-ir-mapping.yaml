@@ -1,13 +1,25 @@
 trustzones:
   - type: public
     properties:
-      ir.ref: 53c74842-8290-487c-8f7c-ee14ca47dbbd
+      ir.ref: 6376d53e-6461-412b-8e04-7b3fe2b397de
+      ref: public
+      uuid: 6376d53e-6461-412b-8e04-7b3fe2b397de
+      desc: Untrusted public zone
+      trust-rating: 1
   - type: private
     properties:
-      ir.ref: 359916f7-3501-4f82-85c7-943bebf5f541
+      ir.ref: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+      ref: private-secured
+      uuid: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+      desc: A secured zone within a trusted private zone
+      trust-rating: 100
   - type: public-cloud
     properties:
       ir.ref: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      ref: public-cloud
+      uuid: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      desc: Public cloud services
+      trust-rating: 60
 
 components:
   - type: CD-ACM

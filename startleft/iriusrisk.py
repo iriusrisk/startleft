@@ -13,6 +13,7 @@ from startleft.api.errors import IriusTokenNotSettedError, IriusServerNotSettedE
     IriusUnauthorizedError, IriusForbiddenError, IriusProjectNotFoundError
 from startleft.schema import Schema
 from requests.exceptions import ConnectionError
+from startleft.xmldto.ProjectTrustZone import ProjectTrustZone
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +93,15 @@ class IriusRisk:
                 return
             parent = self.parent_tree[parent_id]
             if parent["type"] == "trustzone":
-                return parent_id
+                assigned_trustzone = next(
+                        filter(
+                            lambda tz: tz["id"] == parent_id,
+                            self.trustzones),
+                        None)
+                if assigned_trustzone is None:
+                    return None
+                else:
+                    return assigned_trustzone["properties"]["ref"]
             else:
                 return self.find_trustzone(parent["component"])
         
@@ -167,11 +176,11 @@ class IriusRisk:
         xml_project = etree.Element("project", ref=self.id, name=self.name, modelUpdated="", tags="", workflowState="", locked="false")
         etree.SubElement(xml_project, "desc")
         xml_diagram = etree.SubElement(xml_project, "diagram", draft=draft)
-        xml_schema = etree.SubElement(xml_diagram, "schema")
-        xml_schema.text = str(base64.b64encode(diagram_schema), "utf-8")
+        etree.SubElement(xml_diagram, "schema")
         xml_trustzones = etree.SubElement(xml_project, "trustZones")
-        for trustzone in self.trustzones:
-            etree.SubElement(xml_trustzones, "trustZone", ref=trustzone["id"], name=trustzone["name"])
+
+        self.embed_trustzones_into_project_xml(xml_trustzones)
+
         etree.SubElement(xml_project, "questions")
         etree.SubElement(xml_project, "assets")
         xml_settings = etree.SubElement(xml_project, "settings")
@@ -203,7 +212,26 @@ class IriusRisk:
             etree.SubElement(xml_component, "usecases")
         etree.SubElement(xml_project, "threadFixScans")
 
-        return etree.tostring(xml_project, pretty_print=True, xml_declaration=True, encoding='utf-8', method='xml') 
+        return etree.tostring(xml_project, pretty_print=True, xml_declaration=True, encoding='utf-8', method='xml')
+
+    def embed_trustzones_into_project_xml(self, trustzones_xml_element) -> None:
+        trustzone_type_map = set()
+        for trustzone in self.trustzones:
+            trustzone_applicable_name = trustzone["properties"].get("ir.name", trustzone["type"])
+            project_trust_zone = ProjectTrustZone(trustzone_applicable_name,
+                                                  trustzone["properties"]["ref"],
+                                                  trustzone["properties"]["uuid"],
+                                                  trustzone["properties"]["desc"],
+                                                  trustzone["properties"]["trust-rating"])
+            if project_trust_zone not in trustzone_type_map:
+                etree.SubElement(trustzones_xml_element,
+                                 "trustZone",
+                                 ref=project_trust_zone.ref,
+                                 name=project_trust_zone.name,
+                                 uuid=project_trust_zone.uuid,
+                                 desc=project_trust_zone.desc,
+                                 trustRating=project_trust_zone.trust_rating)
+                trustzone_type_map.add(project_trust_zone)
 
     def recreate_diagram(self, diagram):
         if self.product_exists():

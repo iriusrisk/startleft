@@ -92,7 +92,7 @@ Options:
 
 ```
 
-You should see a message like "Uvicorn running on http://127.0.0.1:5000 (Press CTRL+C to quit)" and after that you will be able to access the application via API. You can see the endpoints provided by opening the following URL in a web browser: http://127.0.0.1:8000/docs
+You should see a message like "Uvicorn running on http://127.0.0.1:5000 (Press CTRL+C to quit)" and after that you will be able to access the application via API. You can see the endpoints provided by opening the following URL in a web browser: http://127.0.0.1:5000/docs
 
 Available endpoints:
 ```
@@ -132,17 +132,27 @@ You can find some example source files inside the `examples` directory.
 The following command will parse the cloudformation source file `elb-no-waf.json` creating a OTM file `elb-no-waf.otm` in the process.
 
 ```
-startleft parse --type cloudformation --map defaults_map.yaml --map cloudformation_map.yaml --otm elb-no-waf.otm --name "CFT ELB No Waf" --id "cft-elb-no-waf" elb-no-waf.json
+startleft parse --type cloudformation --otm elb-no-waf.otm --name "CFT ELB No Waf" --id "cft-elb-no-waf" elb-no-waf.json
 ```
-
+It is also possible to include your own mapping files, thus overriding the internal cloudformation mapper files:
+```
+startleft parse --type cloudformation --map cloudformation_mapping_file_1.yaml --map cloudformation_mapping_file_2.yaml --otm elb-no-waf.otm --name "CFT ELB No Waf" --id "cft-elb-no-waf" elb-no-waf.json
+```
 The next command takes the OTM file and generates an IriusRisk threat model which is uploaded to the server.
+```
+startleft threatmodel --recreate elb-no-waf.otm
+```
+It is also possible to use your own IriusRisk mapping file:
 
 ```
 startleft threatmodel --ir-map ir_map.yaml --recreate elb-no-waf.otm
 ```
 
-For convinience, you can run the above two commands in one go.
-
+For convenience, you can run the above two commands in one go:
+```
+startleft run --type cloudformation --otm elb-no-waf.otm --name "CFT ELB No Waf" --id "cft-elb-no-waf" --recreate elb-no-waf.json
+```
+Of course, it is also possible to use custom mapping files:
 ```
 startleft run --type cloudformation --map defaults_map.yaml --map cloudformation_map.yaml --otm elb-no-waf.otm --name "CFT ELB No Waf" --id "cft-elb-no-waf" --ir-map ir_map.yaml --recreate elb-no-waf.json
 ```
@@ -154,19 +164,19 @@ This example can be run in the same way, but this Cloudformation also includes a
 Parsing the Cloudformation.
 
 ```
-startleft parse --type cloudformation --map defaults_map.yaml --map cloudformation_map.yaml --otm elb-with-waf.otm --name "CFT ELB With Waf" --id "cft-elb-with-waf" elb-with-waf.json
+startleft parse --type cloudformation --otm elb-with-waf.otm --name "CFT ELB With Waf" --id "cft-elb-with-waf" elb-with-waf.json
 ```
 
 Uploading OTM to IriusRisk.
 
 ```
-startleft threatmodel --ir-map ir_map.yaml --recreate elb-with-waf.otm
+startleft threatmodel --recreate elb-with-waf.otm
 ```
 
 Or both in one step.
 
 ```
-startleft run --type cloudformation --map defaults_map.yaml --map cloudformation_map.yaml --otm elb-with-waf.otm --name "CFT ELB With Waf" --id "cft-elb-with-waf" --ir-map ir_map.yaml --recreate elb-with-waf.json
+startleft run --type cloudformation --otm elb-with-waf.otm --name "CFT ELB With Waf" --id "cft-elb-with-waf" --recreate elb-with-waf.json
 ```
 
 ## Terraform HCL2
@@ -238,7 +248,7 @@ Will create this threat model in IriusRisk:
 The example is provided and can be run using this command:
 
 ```
-startleft threatmodel --ir-map ir_map.yaml --recreate manual.otm
+startleft threatmodel --recreate manual.otm
 ```
 
 
