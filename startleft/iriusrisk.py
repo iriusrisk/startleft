@@ -176,8 +176,7 @@ class IriusRisk:
         xml_project = etree.Element("project", ref=self.id, name=self.name, modelUpdated="", tags="", workflowState="", locked="false")
         etree.SubElement(xml_project, "desc")
         xml_diagram = etree.SubElement(xml_project, "diagram", draft=draft)
-        xml_schema = etree.SubElement(xml_diagram, "schema")
-        xml_schema.text = str(base64.b64encode(diagram_schema), "utf-8")
+        etree.SubElement(xml_diagram, "schema")
         xml_trustzones = etree.SubElement(xml_project, "trustZones")
 
         self.embed_trustzones_into_project_xml(xml_trustzones)
