@@ -105,4 +105,13 @@ class SourceModel:
                             results.append(refobj.id) 
                 return results
 
+            if "$findFirst" in obj:
+                for search_path in obj["$findFirst"]:
+                    try:
+                        search_result = jmespath.search(search_path, source, options=self.jmespath_options)
+                        if search_result is not None:
+                            return search_result
+                    except:
+                        return []
+
             return obj
