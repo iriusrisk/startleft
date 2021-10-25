@@ -48,7 +48,11 @@ class SourceModel:
         if isinstance(obj, list):
             results = []
             for element in obj:
-                results = results + self.search(element, source)
+                mapping_path_value = self.search(element, source)
+                if isinstance(mapping_path_value, list):
+                    results = results + mapping_path_value
+                else:
+                    results = results + [str(mapping_path_value)]
             return results           
 
         if isinstance(obj, dict):

@@ -1,8 +1,10 @@
 import logging
 import uuid
+import re
 
 logger = logging.getLogger(__name__)
 
+DEFAULT_TRUSTZONE = "public-cloud"
 
 class TrustzoneMapper:
     def __init__(self, mapping):
@@ -98,10 +100,10 @@ class ComponentMapper:
 
             if isinstance(parent, list):
                 if len(parent) == 0:
-                    parent = ["public-cloud"]
+                    parent = [DEFAULT_TRUSTZONE]
             if isinstance(parent, str):
                 if parent == "":
-                    parent = ["public-cloud"]
+                    parent = [DEFAULT_TRUSTZONE]
                 else:
                     parent = [parent]
             for parent_element in parent:
@@ -160,6 +162,42 @@ class ComponentMapper:
                 logger.debug(f"Added component: [{component['id']}][{component['type']}] | Parent: [{component['parent']}]")
                 components.append(component)
                 logger.debug("")
+
+        # Here we should already have all the components
+
+        if "$altsource" in self.mapping and components == []:
+            logger.debug("No components found. Trying to find components from alternative source")
+            altsource = self.mapping["$altsource"]
+
+            for alt in altsource:
+                mappingType = alt["$mappingType"]
+                mappingPath = alt["$mappingPath"]
+                mappingLookups = alt["$mappingLookups"]
+
+                alt_source_objs = source_model.search(mappingType, source=None)
+                if not isinstance(alt_source_objs, list):
+                    alt_source_objs = [alt_source_objs]
+
+                for alt_source_obj in alt_source_objs:
+                    mapping_path_value = source_model.search(mappingPath, source=alt_source_obj)
+
+                    value = ""
+
+                    if isinstance(mapping_path_value, str):
+                        value = mapping_path_value
+                    elif isinstance(mapping_path_value, dict):
+                        if "Fn::Join" in mapping_path_value:
+                            value = mapping_path_value["Fn::Join"][1][-1]
+                        elif "Fn::Sub" in mapping_path_value:
+                            value = mapping_path_value["Fn::Sub"]
+
+                    for x in mappingLookups:
+                        result = re.match(x["regex"], value)
+
+                        if result is not None:
+                            component = {"id": str(uuid.uuid4()), "name": x["name"], "type": x["type"], "tags": [], "parent":DEFAULT_TRUSTZONE}
+                            components.append(component)
+
         return components
 
 
