@@ -58,7 +58,7 @@ components:
     type:   empty-component
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::VPCEndpoint']"}
-    parent:      {$path: "Properties.VpcId.Ref"}
+    parent: {$findFirst:[ "Properties.SubnetIds[].Ref", "Properties.VpcId.Ref"]}
     tags:
       - { $path: "Type" }
 

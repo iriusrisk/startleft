@@ -177,6 +177,18 @@
                                     ]
                                 }
                             }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["$findFirst"],
+                            "properties": {
+                                "$findFirst": {
+                                    "anyOf": [
+                                        {"type": "array"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
                         }
                     ]
                 }
