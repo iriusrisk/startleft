@@ -195,7 +195,7 @@ class ComponentMapper:
                         result = re.match(x["regex"], value)
 
                         if result is not None:
-                            component = {"id": str(uuid.uuid4()), "name": x["name"], "type": x["type"], "tags": [], "parent":DEFAULT_TRUSTZONE}
+                            component = {"id": str(uuid.uuid4()), "name": x["name"], "type": x["type"], "tags": [], "parent":self.id_map[DEFAULT_TRUSTZONE]}
                             components.append(component)
 
         return components
