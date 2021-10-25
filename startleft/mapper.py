@@ -187,7 +187,15 @@ class ComponentMapper:
                         value = mapping_path_value
                     elif isinstance(mapping_path_value, dict):
                         if "Fn::Join" in mapping_path_value:
-                            value = mapping_path_value["Fn::Join"][1][-1]
+                            value = []
+                            separator = mapping_path_value["Fn::Join"][0]
+                            for e in mapping_path_value["Fn::Join"][1]:
+                                if isinstance(e, str):
+                                    value.append(e)
+                                else:
+                                    pass
+
+                            value = separator.join(value)
                         elif "Fn::Sub" in mapping_path_value:
                             value = mapping_path_value["Fn::Sub"]
 
