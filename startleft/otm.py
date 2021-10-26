@@ -3,7 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class ThreatModel:
+class OTM:
     def __init__(self, name, id):
         self.name = name
         self.id = id
@@ -23,6 +23,7 @@ class ThreatModel:
 
     def json(self):
         data = {
+            "otmVersion": "0.1.0",
             "project": {
                 "name": self.name,
                 "id": self.id
@@ -31,16 +32,19 @@ class ThreatModel:
                 {
                     "name": self.representation,
                     "id": self.representation,
-                    "type": "code"
+                    "type": "code",
+                    "repository": {
+                        "url": "http://mockedurl"
+                    }
                 }
             ],
-            "trustzones": [],
+            "trustZones": [],
             "components": [],
             "dataflows": []
         }
 
         for trustzone in self.trustzones:
-            data["trustzones"].append(trustzone.json())
+            data["trustZones"].append(trustzone.json())
         for component in self.components:
             data["components"].append(component.json())
         for dataflow in self.dataflows:
@@ -48,12 +52,14 @@ class ThreatModel:
 
         return data
 
-    def add_trustzone(self, id=None, name=None, type=None, source=None, properties=None):
-        self.trustzones.append(Trustzone(id=id, name=name, type=type, source=source, properties=properties))
+    def add_trustzone(self, id=None, name=None, source=None, properties=None):
+        self.trustzones.append(Trustzone(id=id, name=name, source=source, properties=properties))
 
-    def add_component(self, id=None, name=None, type=None, parent=None, source=None, properties=None, tags=[]):
+    def add_component(self, id=None, name=None, type=None, parent=None, parent_type=None, source=None,
+                      properties=None, tags=[]):
         self.components.append(
-            Component(id=id, name=name, type=type, parent=parent, source=source, properties=properties, tags=tags))
+            Component(id=id, name=name, type=type, parent=parent, parent_type=parent_type,
+                      source=source, properties=properties, tags=tags))
 
     def add_dataflow(self, id=None, name=None, type=None, from_node=None, to_node=None, source=None, properties=None):
         self.dataflows.append(Dataflow(id=id, name=name, type=type, from_node=from_node, to_node=to_node, source=source,
@@ -61,10 +67,9 @@ class ThreatModel:
 
 
 class Trustzone:
-    def __init__(self, id=None, name=None, type=None, source=None, properties=None):
+    def __init__(self, id=None, name=None, source=None, properties=None):
         self.id = id
         self.name = name
-        self.type = type
         self.source = source
         self.properties = properties
 
@@ -72,7 +77,9 @@ class Trustzone:
         result = {
             "id": self.id,
             "name": self.name,
-            "type": self.type
+            "risk": {
+                "trustRating": 10
+            }
         }
         if self.properties:
             result["properties"] = self.properties
@@ -80,11 +87,13 @@ class Trustzone:
 
 
 class Component:
-    def __init__(self, id=None, name=None, type=None, parent=None, source=None, properties=None, tags=[]):
+    def __init__(self, id=None, name=None, type=None, parent=None, parent_type=None, source=None,
+                 properties=None, tags=[]):
         self.id = id
         self.name = name
         self.type = type
         self.parent = parent
+        self.parent_type: str = parent_type
         self.source = source
         self.properties = properties
         self.tags = tags
@@ -94,9 +103,12 @@ class Component:
             "id": self.id,
             "name": self.name,
             "type": self.type,
-            "parent": self.parent,
+            "parent": {
+                self.parent_type: self.parent
+            },
             "tags": self.tags
         }
+
         if self.properties:
             result["properties"] = self.properties
         return result
