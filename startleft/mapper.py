@@ -1,7 +1,10 @@
 import logging
 import uuid
+import re
 
 logger = logging.getLogger(__name__)
+
+DEFAULT_TRUSTZONE = "public-cloud"
 
 
 class TrustzoneMapper:
@@ -71,13 +74,13 @@ class ComponentMapper:
                 logger.error(f"+Found source object with name None")
 
             # Retrieves the parent component of the element.
-            parentsFromComponent = False
+            parents_from_component = False
             if "parent" in self.mapping:
                 if "$parent" in self.mapping["parent"]:
                     # In this case the parent component is the one in charge of defining which components
                     # are their childs, so it's ID should be stored before reaching the child components
                     parent = id_parents[c_name]
-                    parentsFromComponent = True
+                    parents_from_component = True
                 else:
                     # Just takes the parent component from the "parent" field in the mapping file
                     # TODO: What if the object can't find a parent component? Should it have a default parent in case the path didn't find anything?
@@ -98,16 +101,16 @@ class ComponentMapper:
 
             if isinstance(parent, list):
                 if len(parent) == 0:
-                    parent = ["public-cloud"]
+                    parent = [DEFAULT_TRUSTZONE]
             if isinstance(parent, str):
                 if parent == "":
-                    parent = ["public-cloud"]
+                    parent = [DEFAULT_TRUSTZONE]
                 else:
                     parent = [parent]
             for parent_element in parent:
                 # A component won't be added if it has no parent component
                 component = {"name": c_name, "type": c_type, "tags": c_tags}
-                if parentsFromComponent:
+                if parents_from_component:
                     # If the parent component was detected outside the component we need to look at the parent dict
                     parent_id = parent_element
                     self.id_map[parent_element] = parent_id
@@ -160,6 +163,53 @@ class ComponentMapper:
                 logger.debug(f"Added component: [{component['id']}][{component['type']}] | Parent: [{component['parent']}]")
                 components.append(component)
                 logger.debug("")
+
+        # Here we should already have all the components
+
+        if "$altsource" in self.mapping and components == []:
+            logger.debug("No components found. Trying to find components from alternative source")
+            alt_source = self.mapping["$altsource"]
+
+            for alt in alt_source:
+                mapping_type = alt["$mappingType"]
+                mapping_path = alt["$mappingPath"]
+                mapping_lookups = alt["$mappingLookups"]
+
+                alt_source_objs = source_model.search(mapping_type, source=None)
+                if not isinstance(alt_source_objs, list):
+                    alt_source_objs = [alt_source_objs]
+
+                for alt_source_obj in alt_source_objs:
+                    mapping_path_value = source_model.search(mapping_path, source=alt_source_obj)
+
+                    value = ""
+
+                    if isinstance(mapping_path_value, str):
+                        value = mapping_path_value
+                    elif isinstance(mapping_path_value, dict):
+                        if "Fn::Join" in mapping_path_value:
+                            value = []
+                            separator = mapping_path_value["Fn::Join"][0]
+                            for e in mapping_path_value["Fn::Join"][1]:
+                                if isinstance(e, str):
+                                    value.append(e)
+                                else:
+                                    pass
+
+                            value = separator.join(value)
+                        elif "Fn::Sub" in mapping_path_value:
+                            value = mapping_path_value["Fn::Sub"]
+
+                    for x in mapping_lookups:
+                        result = re.match(x["regex"], value)
+
+                        if result is not None:
+                            if DEFAULT_TRUSTZONE not in self.id_map:
+                                self.id_map[DEFAULT_TRUSTZONE] = str(uuid.uuid4())
+                            component = {"id": str(uuid.uuid4()), "name": x["name"], "type": x["type"], "tags": [],
+                                         "parent": self.id_map[DEFAULT_TRUSTZONE]}
+                            components.append(component)
+
         return components
 
 
