@@ -4,7 +4,7 @@ import re
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_TRUSTZONE = "public-cloud"
+DEFAULT_TRUSTZONE = "b61d6911-338d-46a8-9f39-8dcd24abfe91"
 
 
 class TrustzoneMapper:
@@ -24,21 +24,16 @@ class TrustzoneMapper:
 
         for source_obj in source_objs:
             trustzone = {"name": source_model.search(self.mapping["name"], source=source_obj),
-                         "type": source_model.search(self.mapping["type"], source=source_obj),
                          "source": source_obj
                          }
             if "properties" in self.mapping:
                 trustzone["properties"] = self.mapping["properties"]
 
             source_id = source_model.search(self.mapping["id"], source=trustzone)
-            if source_id not in self.id_map:
-                tz_id = str(uuid.uuid4())
-                self.id_map[source_id] = tz_id
-            else:
-                tz_id = self.id_map[source_id]
-            trustzone["id"] = tz_id
+            self.id_map[source_id] = source_id
+            trustzone["id"] = source_id
 
-            logger.debug(f"Added trustzone: [{trustzone['id']}][{trustzone['name']}][{trustzone['type']}]")
+            logger.debug(f"Added trustzone: [{trustzone['id']}][{trustzone['name']}]")
             trustzones.append(trustzone)
 
         return trustzones

@@ -1,6 +1,5 @@
 from fastapi import APIRouter, File, UploadFile, Form, Header
 
-from startleft.config import paths
 from startleft import cli
 from startleft.api.api_config import ApiConfig
 from startleft.api.controllers.cloudformation.file_type import FileType
@@ -42,7 +41,7 @@ def cloudformation(cft_file: UploadFile = File(..., description="File that conta
 
     # Run client
     cli.inner_run(type=type, map=mapping_files, otm='threatmodel.otm', name=name, id=id,
-                  ir_map=paths.default_ir_map, recreate=1, irius_server=ApiConfig.get_iriusrisk_server(),
+                  recreate=1, irius_server=ApiConfig.get_iriusrisk_server(),
                   api_token=api_token, filename=[cft_file.file])
 
     return RESPONSE_BODY

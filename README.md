@@ -41,9 +41,9 @@ Commands:
   parse        Parses IaC source files into Open Threat Model
   run          Parses IaC source files into Open Threat Model and...
   search       Searches source files for the given query
-  threatmodel  Builds an IriusRisk threat model from OTM files
+  threatmodel  Uploads an OTM file to IriusRisk
   validate     Validates a mapping or OTM file
-  server       Launches the REST server in development mode to test the API
+  server       Launches the REST server in development mode
 ```
 
 You can also get help for the specific commands.
@@ -62,7 +62,6 @@ Options:
   -o, --otm TEXT                  OTM output file name
   -n, --name TEXT                 Project name
   --id TEXT                       Project ID
-  -i, --ir-map TEXT               path to IriusRisk map file
   --recreate / --no-recreate      Delete and recreate the product each time
   --irius-server                  IriusRisk server to connect to (proto://server[:port])'
   --api-token                     IriusRisk API token
@@ -77,7 +76,7 @@ StartLeft can also be deployed as a standalone webserver if you prefer the commu
 pip install uvicorn
 ```
 
-or using the server option on the application:
+and use the server option on the application:
 
 ```
 $ startleft server --help
@@ -108,7 +107,8 @@ Request Body:
     id                          Required. ID of the new project
     name                        Required. Name of the new project
     mapping_file                Optional. File that contains the mapping between AWS components and IriusRisk components. Providing this file will completely override default values
-    
+```
+```
 PUT /api/beta/startleft/cloudformation/projects/{project_id}
 Headers:
     api_token                   Required: IriusRisk API token
@@ -142,11 +142,6 @@ The next command takes the OTM file and generates an IriusRisk threat model whic
 ```
 startleft threatmodel --recreate elb-no-waf.otm
 ```
-It is also possible to use your own IriusRisk mapping file:
-
-```
-startleft threatmodel --ir-map ir_map.yaml --recreate elb-no-waf.otm
-```
 
 For convenience, you can run the above two commands in one go:
 ```
@@ -154,7 +149,7 @@ startleft run --type cloudformation --otm elb-no-waf.otm --name "CFT ELB No Waf"
 ```
 Of course, it is also possible to use custom mapping files:
 ```
-startleft run --type cloudformation --map defaults_map.yaml --map cloudformation_map.yaml --otm elb-no-waf.otm --name "CFT ELB No Waf" --id "cft-elb-no-waf" --ir-map ir_map.yaml --recreate elb-no-waf.json
+startleft run --type cloudformation --map defaults_map.yaml --map cloudformation_map.yaml --otm elb-no-waf.otm --name "CFT ELB No Waf" --id "cft-elb-no-waf" --recreate elb-no-waf.json
 ```
 
 ### ELB with a WAF
@@ -184,7 +179,7 @@ startleft run --type cloudformation --otm elb-with-waf.otm --name "CFT ELB With 
 StartLeft can also parse Terraform source files and an example is provided in the `examples` directory.
 
 ```
-startleft run --type hcl2 --map defaults_map.yaml --map terraform_aws_map.yaml --otm elb.otm --name "Terraform ELB" --id "terraform-elb" --ir-map ir_map.yaml --recreate elb.tf
+startleft run --type hcl2 --map defaults_map.yaml --map terraform_aws_map.yaml --otm elb.otm --name "Terraform ELB" --id "terraform-elb" --recreate elb.tf
 ```
 
 ## Hand crafted OTM

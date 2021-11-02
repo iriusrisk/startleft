@@ -3,9 +3,14 @@ import sys
 
 import click
 
-from startleft import app
 from startleft.api.errors import CommonError
 from startleft.config import paths
+from startleft.iac_to_otm import IacToOtm
+from startleft.mapping.mapping_file_loader import MappingFileLoader
+from startleft.mapping.otm_file_loader import OtmFileLoader
+from startleft.otm_to_ir import OtmToIr
+from startleft.validators.mapping_validator import MappingValidator
+from startleft.validators.otm_validator import OtmValidator
 
 logger = logging.getLogger(__name__)
 
@@ -67,31 +72,30 @@ def cli(log_level, verbose):
 @click.option('--otm', '-o', default='threatmodel.otm', help='OTM output file name')
 @click.option('--name', '-n', help='Project name')
 @click.option('--id', help='Project ID')
-@click.option('--ir-map', '-i', multiple=True, help='path to IriusRisk map file')
-@click.option('--recreate/--no-recreate', default=False, help='Delete and recreate the product each time')
+@click.option('--recreate/--no-recreate', default=False, help='Delete and recreate the project each time')
 @click.option('--irius-server', default='', envvar='IRIUS_SERVER',
               help='IriusRisk server to connect to (proto://server[:port])')
 @click.option('--api-token', default='', envvar='IRIUS_API_TOKEN', help='IriusRisk API token')
 @click.argument('filename', nargs=-1)
-def run(type, map, otm, name, id, ir_map, recreate, irius_server, api_token, filename):
+def run(type, map, otm, name, id, recreate, irius_server, api_token, filename):
     """
     Parses IaC source files into Open Threat Model and immediately uploads threat model to IriusRisk
     """
 
-    inner_run(type, map, otm, name, id, ir_map, recreate, irius_server, api_token, filename)
+    inner_run(type, map, otm, name, id, recreate, irius_server, api_token, filename)
 
 
-def inner_run(type, map, otm, name, id, ir_map, recreate, irius_server, api_token, filename):
+def inner_run(type, map, otm, name, id, recreate, irius_server, api_token, filename):
 
-    cf_mapping_files, ir_mapping_files = get_default_mappings(map, ir_map)
+    cf_mapping_files = get_default_mappings(map)
 
-    iac_to_otm = app.IacToOtmApp(name, id)
-    otm_to_ir = app.OtmToIr(irius_server, api_token)
+    iac_to_otm = IacToOtm(name, id)
+    otm_to_ir = OtmToIr(irius_server, api_token)
 
     logger.info("Parsing IaC source files into OTM")
     iac_to_otm.run(type, cf_mapping_files, otm, filename)
     logger.info("Uploading OTM files and generating the IriusRisk threat model")
-    otm_to_ir.run(ir_mapping_files, recreate, [otm])
+    otm_to_ir.run(recreate, otm)
 
 
 @cli.command()
@@ -109,28 +113,25 @@ def parse(type, map, otm, name, id, filename):
     Parses IaC source files into Open Threat Model
     """
 
-    cf_mapping_files, ir_mapping_files = get_default_mappings(map, {})
+    cf_mapping_files = get_default_mappings(map)
 
-    iac_to_otm = app.IacToOtmApp(name, id)
+    iac_to_otm = IacToOtm(name, id)
     iac_to_otm.run(type, cf_mapping_files, otm, filename)
 
 
 @cli.command()
-@click.option('--ir-map', '-i', multiple=True, help='path to map file')
-@click.option('--recreate/--no-recreate', default=False, help='Delete and recreate the product each time')
+@click.option('--recreate/--no-recreate', default=False, help='Delete and recreate the project each time')
 @click.option('--irius-server', default='', envvar='IRIUS_SERVER',
               help='IriusRisk server to connect to (proto://server[:port])')
 @click.option('--api-token', default='', envvar='IRIUS_API_TOKEN', help='IriusRisk API token')
 @click.argument('filename', nargs=-1)
-def threatmodel(ir_map, recreate, irius_server, api_token, filename):
+def threatmodel(recreate, irius_server, api_token, filename):
     """
-    Builds an IriusRisk threat model from OTM files
+    Uploads an OTM file to IriusRisk
     """
-    cf_mapping_files, ir_mapping_files = get_default_mappings({}, ir_map)
-
-    otm_to_ir = app.OtmToIr(irius_server, api_token)
+    otm_to_ir = OtmToIr(irius_server, api_token)
     logger.info("Uploading OTM files and generating the IriusRisk threat model")
-    otm_to_ir.run(ir_mapping_files, recreate, filename)
+    otm_to_ir.run(recreate, filename)
 
 
 @cli.command()
@@ -141,18 +142,15 @@ def validate(map, otm):
     Validates a mapping or OTM file
     """
 
-    cf_mapping_files, ir_mapping_files = get_default_mappings(map, {})
+    iac_mapping_files = get_default_mappings(map)
 
-
-    if cf_mapping_files:
-        iac_to_otm = app.IacToOtmApp(None, None)
-        logger.info("Validating source map file")
-        iac_to_otm.validate(cf_mapping_files)
+    if iac_mapping_files:
+        iac_mapping = MappingFileLoader().load(iac_mapping_files)
+        MappingValidator().validate(iac_mapping)
         
     if otm:
-        otm_to_ir = app.OtmToIr(None, None)
-        logger.info("Validating OTM file")
-        otm_to_ir.validate(otm)
+        otm = OtmFileLoader().load(otm)
+        OtmValidator().validate(otm)
 
 
 @cli.command()
@@ -167,7 +165,7 @@ def search(type, query, filename):
     Searches source files for the given query
     """
 
-    iac_to_otm = app.IacToOtmApp(None, None)
+    iac_to_otm = IacToOtm(None, None)
     logger.info("Running JMESPath search query against source files")
     iac_to_otm.search(type, query, filename)
 
@@ -186,17 +184,13 @@ def server(irius_server: str, port: int):
     fastapi_server.run_webapp(port)
 
 
-def get_default_mappings(mapping_file: [], ir_mapping_file: []):
+def get_default_mappings(mapping_file: []):
     # If map is empty then we load the default map file
     cf_mapping_files = paths.default_cf_mapping_files
     if mapping_file and len(mapping_file) != 0:
         cf_mapping_files = mapping_file
 
-    ir_mapping_files = paths.default_ir_map
-    if ir_mapping_file and len(ir_mapping_file) != 0:
-        ir_mapping_files = ir_mapping_file
-
-    return cf_mapping_files, ir_mapping_files
+    return cf_mapping_files
 
 
 if __name__ == '__main__':
