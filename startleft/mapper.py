@@ -4,7 +4,7 @@ import re
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_TRUSTZONE = "public-cloud"
+DEFAULT_TRUSTZONE = "b61d6911-338d-46a8-9f39-8dcd24abfe91"
 
 
 class TrustzoneMapper:

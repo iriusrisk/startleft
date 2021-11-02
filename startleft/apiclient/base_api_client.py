@@ -20,13 +20,6 @@ class BaseApiClient:
         self.token = token
         self.name = None
         self.id = None
-        self.map = {}
-        self.otm = {}
-        self.schema = {}
-
-        self.dataflows = []
-        self.trustzones = []
-        self.components = []
 
     def headers(self):
         if not self.token:

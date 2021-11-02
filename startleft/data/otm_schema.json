@@ -43,7 +43,7 @@
         },
         "assets": {
             "type": "array",
-            "required": ["name", "id", "type"],
+            "required": ["name", "id", "risk"],
             "properties": {
                 "name": {"type": "string"},
                 "id": {"$ref": "#/definitions/uuid"},
