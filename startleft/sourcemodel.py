@@ -48,7 +48,11 @@ class SourceModel:
         if isinstance(obj, list):
             results = []
             for element in obj:
-                results = results + self.search(element, source)
+                mapping_path_value = self.search(element, source)
+                if isinstance(mapping_path_value, list):
+                    results = results + mapping_path_value
+                else:
+                    results = results + [str(mapping_path_value)]
             return results           
 
         if isinstance(obj, dict):
@@ -76,16 +80,15 @@ class SourceModel:
                 return jmespath.search(obj["$root"], self.data, options=self.jmespath_options)
 
             if "$path" in obj:
-                try:
-                    return jmespath.search(obj["$path"], source, options=self.jmespath_options)
-                except:
-                    return []
+                if "$searchParams" in obj["$path"]:
+                    return self.__search_with_default(obj, source, "$path")
+                else:
+                    return self.__jmespath_search(obj["$path"], source)
 
             if "$format" in obj:
                 return obj["$format"].format(**source)
 
             if "$catchall" in obj:
-                #eturn jmespath.search(obj["$catchall"], self.data, options=self.jmespath_options)
                 return self.search(obj["$catchall"], source)
 
             if "$children" in obj:
@@ -105,4 +108,48 @@ class SourceModel:
                             results.append(refobj.id) 
                 return results
 
+            if "$findFirst" in obj:
+                if "$searchParams" in obj["$findFirst"]:
+                    return self.__search_with_default(obj, source, "$findFirst")
+                else:
+                    return self.__find_first_search(obj["$findFirst"], source)
             return obj
+
+    def __search_with_default(self, obj, source, action):
+        try:
+            search_params = obj[action]["$searchParams"]
+
+            if "searchPath" in search_params:
+                if action == "$path":
+                    search_result = self.__jmespath_search(search_params["searchPath"], source)
+                elif action == "$findFirst":
+                    search_result = self.__find_first_search(search_params["searchPath"], source)
+                else:
+                    return []
+
+                if search_result is None:
+                    if "defaultValue" in search_params:
+                        try:
+                            return search_params["defaultValue"]
+                        except:
+                            return []
+                    else:
+                        return []
+                else:
+                    return search_result
+            else:
+                return []
+        except:
+            return []
+
+    def __jmespath_search(self, search_path, source):
+        try:
+            return jmespath.search(search_path, source, options=self.jmespath_options)
+        except:
+            return []
+
+    def __find_first_search(self, search_path_root, source):
+        for search_path in search_path_root:
+            search_result = self.__jmespath_search(search_path, source)
+            if search_result is not None:
+                return search_result

@@ -11,11 +11,10 @@
             "type": "array",
             "items": {
                 "type": "object",
-                "required": ["id", "name", "type"],
+                "required": ["id", "name"],
                 "properties": {
                     "id": {"$ref": "#/definitions/query"},
                     "name": {"$ref": "#/definitions/query"},
-                    "type": {"$ref": "#/definitions/query"},
                     "$source": {"$ref": "#/definitions/query"}
                 }
             }
@@ -177,8 +176,39 @@
                                     ]
                                 }
                             }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["$findFirst"],
+                            "properties": {
+                                "$findFirst": {
+                                    "anyOf": [
+                                        {"type": "array"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
                         }
                     ]
+                },
+                {
+                    "type": "object",
+                    "required": ["$searchParams"],
+                    "properties": {
+                        "searchPath": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },{
+                                    "type": "array"
+                                }
+                            ]
+                        },
+                        "defaultValue": {
+                            "type": "string"
+                        }
+                    }
+
                 }
             ]
         }

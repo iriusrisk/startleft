@@ -1,12 +1,6 @@
 import logging
-import os
-
-import pkg_resources
-import yaml
-from deepmerge import always_merger
 
 from startleft.mapper import TrustzoneMapper, ComponentMapper, DataflowMapper
-from startleft.schema import Schema
 
 logger = logging.getLogger(__name__)
 
@@ -18,24 +12,6 @@ class Transformer:
         self.map = {}
         self.id_map = {}
         self.id_parents = dict()
-        self.schema = None
-
-    def load_schema(self):
-        schema_path = pkg_resources.resource_filename('startleft', os.path.join('data', 'mapping_schema.json'))
-        logger.debug(f"Loading schema from {schema_path}")
-        with open(schema_path, "r") as f:
-            schema = yaml.load(f, Loader=yaml.BaseLoader)
-            self.schema = Schema(schema)
-
-    def validate_mapping(self):
-        self.load_schema()
-        logger.debug(f"--- Schema to validate against ---\n{self.schema.json()}\n--- End of schema ---")
-        self.schema.validate(self.map)
-        return self.schema
-
-    def load(self, mapping):
-        logger.debug('Loading mapping file')
-        always_merger.merge(self.map, mapping)
 
     def build_lookup(self):
         if "lookup" in self.map:
@@ -96,7 +72,7 @@ class Transformer:
             if not skip_this:
                 results.append(component)
 
-        singletonAdded = []
+        singleton_added = []
         for component in singleton:
             skip_this = False
             for skip_component in skip:
@@ -105,11 +81,17 @@ class Transformer:
                     skip_this = True
                     break
             if not skip_this:
-                if component["type"] not in singletonAdded:
+                if component["type"] not in singleton_added:
                     results.append(component)
-                    singletonAdded.append(component["type"])
+                    singleton_added.append(component["type"])
 
         for component in results:
+            parent_component = next(filter(lambda x: x["id"] == component['parent'], results), None)
+            if parent_component:
+                component["parent_type"] = "component"
+            else:
+                component["parent_type"] = "trustZone"
+
             self.threat_model.add_component(**component)
 
     def transform_dataflows(self):
@@ -119,8 +101,9 @@ class Transformer:
             for dataflow in mapper.run(self.source_model):
                 self.threat_model.add_dataflow(**dataflow)
 
-    def run(self):
+    def run(self, iac_mapping):
+        self.map = iac_mapping
         self.build_lookup()
-        self.transform_components()
         self.transform_trustzones()
+        self.transform_components()
         self.transform_dataflows()

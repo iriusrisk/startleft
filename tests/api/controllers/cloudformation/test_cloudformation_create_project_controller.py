@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 
 from startleft.api import fastapi_server
 from startleft.api.controllers.cloudformation import cloudformation_create_project_controller
-from startleft.iriusrisk import IriusRisk
+from startleft.apiclient.base_api_client import IriusRiskApiVersion
 from tests.resources import test_resource_paths
 
 IRIUSRISK_URL = 'http://localhost:8080'
@@ -49,15 +49,12 @@ class TestCloudFormationCreateProjectController:
         project_id: str = 'project_A_id'
 
         # And a IriusRisk response mock with the list of existing projects
-        responses.add(responses.GET, IRIUSRISK_URL + IriusRisk.API_PATH + '/products',
+        responses.add(responses.GET, IRIUSRISK_URL + IriusRiskApiVersion.v1.value + '/products',
                       json=[{'ref': 'project_B_id'}, {'ref': 'project_C_id'}], status=200)
 
         # And a IriusRisk response mock with the creation of the project
-        responses.add(responses.POST, IRIUSRISK_URL + IriusRisk.API_PATH + '/products/upload/',
+        responses.add(responses.POST, IRIUSRISK_URL + IriusRiskApiVersion.beta.value + '/project/import/otm',
                       status=200)
-
-        # And a response mock with the execution of the rules
-        responses.add(responses.PUT, IRIUSRISK_URL + IriusRisk.API_PATH + f"/rules/product/{project_id}")
 
         # When I do post on cloudformation endpoint
         files = {'cft_file': open(test_resource_paths.example_json, 'r')}
