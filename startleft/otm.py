@@ -61,8 +61,8 @@ class OTM:
             Component(id=id, name=name, type=type, parent=parent, parent_type=parent_type,
                       source=source, properties=properties, tags=tags))
 
-    def add_dataflow(self, id=None, name=None, type=None, from_node=None, to_node=None, source=None, properties=None):
-        self.dataflows.append(Dataflow(id=id, name=name, type=type, from_node=from_node, to_node=to_node, source=source,
+    def add_dataflow(self, id=None, name=None, source_node=None, destination_node=None, source=None, properties=None):
+        self.dataflows.append(Dataflow(id=id, name=name, source_node=source_node, destination_node=destination_node, source=source,
                                        properties=properties))
 
 
@@ -115,12 +115,11 @@ class Component:
 
 
 class Dataflow:
-    def __init__(self, id=None, name=None, type=None, from_node=None, to_node=None, source=None, properties=None):
+    def __init__(self, id=None, name=None, source_node=None, destination_node=None, source=None, properties=None):
         self.id = id
         self.name = name
-        self.type = type
-        self.from_node = from_node
-        self.to_node = to_node
+        self.source_node = source_node
+        self.destination_node = destination_node
         self.source = source
         self.properties = properties
 
@@ -128,9 +127,8 @@ class Dataflow:
         result = {
             "id": self.id,
             "name": self.name,
-            "type": self.type,
-            "from": self.from_node,
-            "to": self.to_node
+            "source": self.source_node,
+            "destination": self.destination_node
         }
         if self.properties:
             result["properties"] = self.properties
