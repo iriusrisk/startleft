@@ -415,4 +415,9 @@ components:
 #    tags:
 #      - { $path: "Type" }
 
-dataflows: []
+dataflows:
+  - id: { $format: "{name}" }
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::Lambda::EventSourceMapping']" }
+    source: { $path: "Properties.EventSourceArn|squash(@)[0][0]" }
+    destination: { $path: "Properties.FunctionName.Ref" }

@@ -262,6 +262,11 @@ class DataflowMapper:
                     dataflow["source"] = source_obj
                     if "properties" in self.mapping:
                         dataflow["properties"] = self.mapping["properties"]
+                    if "bidirectional" in self.mapping:
+                        if self.mapping["bidirectional"] == "true":
+                            dataflow["bidirectional"] = True
+                        elif self.mapping["bidirectional"] == "false":
+                            dataflow["bidirectional"] = False
 
                     source_id = source_model.search(self.mapping["id"], source=dataflow)
                     if source_id not in self.id_map:

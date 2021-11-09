@@ -61,7 +61,7 @@ class OTM:
             Component(id=id, name=name, type=type, parent=parent, parent_type=parent_type,
                       source=source, properties=properties, tags=tags))
 
-    def add_dataflow(self, id=None, name=None, bidirectional=False, source_node=None, destination_node=None, source=None, properties=None):
+    def add_dataflow(self, id=None, name=None, bidirectional=None, source_node=None, destination_node=None, source=None, properties=None):
         self.dataflows.append(Dataflow(id=id, name=name, bidirectional=bidirectional, source_node=source_node,
                                        destination_node=destination_node, source=source, properties=properties))
 
@@ -128,10 +128,11 @@ class Dataflow:
         result = {
             "id": self.id,
             "name": self.name,
-            "bidirectional": False,
             "source": self.source_node,
             "destination": self.destination_node
         }
+        if self.bidirectional is not None:
+            result["bidirectional"] = self.bidirectional
         if self.properties:
             result["properties"] = self.properties
         return result
