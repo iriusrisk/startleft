@@ -61,9 +61,9 @@ class OTM:
             Component(id=id, name=name, type=type, parent=parent, parent_type=parent_type,
                       source=source, properties=properties, tags=tags))
 
-    def add_dataflow(self, id=None, name=None, source_node=None, destination_node=None, source=None, properties=None):
-        self.dataflows.append(Dataflow(id=id, name=name, source_node=source_node, destination_node=destination_node, source=source,
-                                       properties=properties))
+    def add_dataflow(self, id=None, name=None, bidirectional=False, source_node=None, destination_node=None, source=None, properties=None):
+        self.dataflows.append(Dataflow(id=id, name=name, bidirectional=bidirectional, source_node=source_node,
+                                       destination_node=destination_node, source=source, properties=properties))
 
 
 class Trustzone:
@@ -115,9 +115,10 @@ class Component:
 
 
 class Dataflow:
-    def __init__(self, id=None, name=None, source_node=None, destination_node=None, source=None, properties=None):
+    def __init__(self, id=None, name=None, bidirectional=None, source_node=None, destination_node=None, source=None, properties=None):
         self.id = id
         self.name = name
+        self.bidirectional = bidirectional
         self.source_node = source_node
         self.destination_node = destination_node
         self.source = source
@@ -127,6 +128,7 @@ class Dataflow:
         result = {
             "id": self.id,
             "name": self.name,
+            "bidirectional": False,
             "source": self.source_node,
             "destination": self.destination_node
         }
