@@ -224,14 +224,14 @@ dataflows:
   - id:     client-connection
     name:   Client connection
     type:   network
-    from:   user
-    to:     web-server
+    source:   user
+    destination:     web-server
 
   - id:     database-connection
     name:   Database connection
     type:   network
-    from:   web-server
-    to:     database
+    source:   web-server
+    destination:     database
 ```
 
 Will create this threat model in IriusRisk:

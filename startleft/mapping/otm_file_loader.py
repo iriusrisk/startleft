@@ -23,7 +23,7 @@ class OtmFileLoader:
             logger.debug(f"Loading OTM file {filename}")
             try:
                 with open(filename, 'r') as f:
-                    self.__load_otm_file(otm, yaml.load(f, Loader=yaml.BaseLoader))
+                    self.__load_otm_file(otm, yaml.load(f, Loader=yaml.SafeLoader))
             except FileNotFoundError:
                 logger.error(f"Cannot find OTM file '{filename}'")
                 raise OTMFileNotFoundError()
