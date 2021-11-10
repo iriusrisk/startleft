@@ -234,35 +234,39 @@ class DataflowMapper:
             source_objs = [source_objs]
         for source_obj in source_objs:
             df_name = source_model.search(self.mapping["name"], source=source_obj)
-            df_type = source_model.search(self.mapping["type"], source=source_obj)
 
-            from_mapper = DataflowNodeMapper(self.mapping["from"])
-            to_mapper = DataflowNodeMapper(self.mapping["to"])
-            for from_node in from_mapper.run(source_model, source_obj):
-                for to_node in to_mapper.run(source_model, source_obj):
+            source_mapper = DataflowNodeMapper(self.mapping["source"])
+            destination_mapper = DataflowNodeMapper(self.mapping["destination"])
+            for source_node in source_mapper.run(source_model, source_obj):
+                for destination_node in destination_mapper.run(source_model, source_obj):
                     # skip self referencing dataflows
-                    if from_node == to_node:
+                    if source_node == destination_node:
                         continue
 
-                    dataflow = {"name": df_name, "type": df_type}
+                    dataflow = {"name": df_name}
 
-                    if from_node in self.id_map:
-                        from_node_id = self.id_map[from_node]
+                    if source_node in self.id_map:
+                        source_node_id = self.id_map[source_node]
                     else:
-                        from_node_id = str(uuid.uuid4())
-                        self.id_map[from_node] = from_node_id
+                        source_node_id = str(uuid.uuid4())
+                        self.id_map[source_node] = source_node_id
 
-                    if to_node in self.id_map:
-                        to_node_id = self.id_map[to_node]
+                    if destination_node in self.id_map:
+                        destination_node_id = self.id_map[destination_node]
                     else:
-                        to_node_id = str(uuid.uuid4())
-                        self.id_map[to_node] = to_node_id
+                        destination_node_id = str(uuid.uuid4())
+                        self.id_map[destination_node] = destination_node_id
 
-                    dataflow["from_node"] = from_node_id
-                    dataflow["to_node"] = to_node_id
+                    dataflow["source_node"] = source_node_id
+                    dataflow["destination_node"] = destination_node_id
                     dataflow["source"] = source_obj
                     if "properties" in self.mapping:
                         dataflow["properties"] = self.mapping["properties"]
+                    if "bidirectional" in self.mapping:
+                        if self.mapping["bidirectional"] == "true":
+                            dataflow["bidirectional"] = True
+                        elif self.mapping["bidirectional"] == "false":
+                            dataflow["bidirectional"] = False
 
                     source_id = source_model.search(self.mapping["id"], source=dataflow)
                     if source_id not in self.id_map:

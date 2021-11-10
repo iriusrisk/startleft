@@ -64,11 +64,11 @@ class OtmValidator:
             elif dataflow['id'] not in all_valid_ids:
                 all_valid_ids.add(dataflow['id'])
 
-            if dataflow['from'] not in all_valid_ids:
-                wrong_dataflow_from_ids.add(dataflow['from'])
+            if dataflow['source'] not in all_valid_ids:
+                wrong_dataflow_from_ids.add(dataflow['source'])
 
-            if dataflow['to'] not in all_valid_ids:
-                wrong_dataflow_to_ids.add(dataflow['to'])
+            if dataflow['destination'] not in all_valid_ids:
+                wrong_dataflow_to_ids.add(dataflow['destination'])
 
         if wrong_component_parent_ids:
             logger.error(f"Component parent identifiers inconsistent: {wrong_component_parent_ids}")

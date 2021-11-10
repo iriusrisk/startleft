@@ -37,14 +37,13 @@
             "type": "array",
             "items": {
                 "type": "object",
-                "required": ["id", "name", "type", "from", "to"],
+                "required": ["id", "name", "source", "destination"],
                 "properties": {
                     "id": {"$ref": "#/definitions/query"},
                     "name": {"$ref": "#/definitions/query"},
-                    "type": {"$ref": "#/definitions/query"},
                     "$source": {"$ref": "#/definitions/query"},
-                    "from": {"$ref": "#/definitions/query"},
-                    "to": {"$ref": "#/definitions/query"}
+                    "source": {"$ref": "#/definitions/query"},
+                    "destination": {"$ref": "#/definitions/query"}
                 }
             }    
         }

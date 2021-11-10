@@ -415,4 +415,15 @@ components:
 #    tags:
 #      - { $path: "Type" }
 
-dataflows: []
+dataflows:
+  - id: { $format: "{name}" }
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::Lambda::EventSourceMapping']" }
+    source: { $path: "Properties.EventSourceArn|squash(@)[0][0]" }
+    destination: { $path: "Properties.FunctionName.Ref" }
+
+  - id:     {$format: "concat({name},_key)"}
+    name:   {$format: "s3 dataflow"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::S3::Bucket']"}
+    source:  {$path: "_key"}
+    destination: {$path: {$searchParams:{ searchPath: "Properties.LoggingConfiguration.DestinationBucketName.Ref"}}}
