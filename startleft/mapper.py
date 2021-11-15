@@ -74,8 +74,13 @@ class ComponentMapper:
                 if "$parent" in self.mapping["parent"]:
                     # In this case the parent component is the one in charge of defining which components
                     # are their childs, so it's ID should be stored before reaching the child components
-                    parent = id_parents[c_name]
-                    parents_from_component = True
+                    # With $parent, it will check if the supposed id_parents exist,
+                    # otherwise performing a standard search using action inside $parent
+                    if len(id_parents) > 0:
+                        parent = id_parents[c_name]
+                        parents_from_component = True
+                    else:
+                        parent = source_model.search(self.mapping["parent"]["$parent"], source=source_obj)
                 else:
                     # Just takes the parent component from the "parent" field in the mapping file
                     # TODO: What if the object can't find a parent component? Should it have a default parent in case the path didn't find anything?
@@ -102,7 +107,7 @@ class ComponentMapper:
                     parent = [DEFAULT_TRUSTZONE]
                 else:
                     parent = [parent]
-            for parent_element in parent:
+            for parent_number, parent_element in enumerate(parent):
                 # A component won't be added if it has no parent component
                 component = {"name": c_name, "type": c_type, "tags": c_tags}
                 if parents_from_component:
@@ -142,7 +147,14 @@ class ComponentMapper:
                 else:
                     source_id = str(uuid.uuid4())
 
-                c_id = str(uuid.uuid4())
+                #make a previous lookup on the list of parent mappings
+                c_id = None
+                if source_id is not None and len(self.id_map) > 0:
+                    if c_name in self.id_map.keys():
+                        c_id = self.id_map[c_name]
+                #a new ID can be generated if there is more a parent and this is not the first one
+                if c_id is None or parent_number > 0:
+                    c_id = str(uuid.uuid4())
                 self.id_map[source_id] = c_id
                 component["id"] = c_id
 
@@ -237,42 +249,46 @@ class DataflowMapper:
 
             source_mapper = DataflowNodeMapper(self.mapping["source"])
             destination_mapper = DataflowNodeMapper(self.mapping["destination"])
-            for source_node in source_mapper.run(source_model, source_obj):
-                for destination_node in destination_mapper.run(source_model, source_obj):
-                    # skip self referencing dataflows
-                    if source_node == destination_node:
-                        continue
+            source_mapper_nodes = source_mapper.run(source_model, source_obj)
+            if source_mapper_nodes is not None and len(source_mapper_nodes) > 0:
+                for source_node in source_mapper_nodes:
+                    destination_mapper_nodes = destination_mapper.run(source_model, source_obj)
+                    if destination_mapper_nodes is not None and len(destination_mapper_nodes) > 0:
+                        for destination_node in destination_mapper_nodes:
+                            # skip self referencing dataflows
+                            if source_node == destination_node:
+                                continue
 
-                    dataflow = {"name": df_name}
+                            dataflow = {"name": df_name}
 
-                    if source_node in self.id_map:
-                        source_node_id = self.id_map[source_node]
-                    else:
-                        source_node_id = str(uuid.uuid4())
-                        self.id_map[source_node] = source_node_id
+                            if source_node in self.id_map:
+                                source_node_id = self.id_map[source_node]
+                            else:
+                                # not generate component IDs that may have been generated on component mapping
+                                continue
 
-                    if destination_node in self.id_map:
-                        destination_node_id = self.id_map[destination_node]
-                    else:
-                        destination_node_id = str(uuid.uuid4())
-                        self.id_map[destination_node] = destination_node_id
+                            if destination_node in self.id_map:
+                                destination_node_id = self.id_map[destination_node]
+                            else:
+                                # not generate components that may have been generated on components mapping
+                                continue
 
-                    dataflow["source_node"] = source_node_id
-                    dataflow["destination_node"] = destination_node_id
-                    dataflow["source"] = source_obj
-                    if "properties" in self.mapping:
-                        dataflow["properties"] = self.mapping["properties"]
-                    if "bidirectional" in self.mapping:
-                        if self.mapping["bidirectional"] == "true":
-                            dataflow["bidirectional"] = True
-                        elif self.mapping["bidirectional"] == "false":
-                            dataflow["bidirectional"] = False
+                            dataflow["source_node"] = source_node_id
+                            dataflow["destination_node"] = destination_node_id
+                            dataflow["source"] = source_obj
+                            if "properties" in self.mapping:
+                                dataflow["properties"] = self.mapping["properties"]
+                            if "bidirectional" in self.mapping:
+                                if self.mapping["bidirectional"] == "true":
+                                    dataflow["bidirectional"] = True
+                                elif self.mapping["bidirectional"] == "false":
+                                    dataflow["bidirectional"] = False
 
-                    source_id = source_model.search(self.mapping["id"], source=dataflow)
-                    if source_id not in self.id_map:
-                        df_id = str(uuid.uuid4())
-                        self.id_map[source_id] = df_id
-                    dataflow["id"] = df_id
+                            source_id = source_model.search(self.mapping["id"], source=dataflow)
+                            if source_id not in self.id_map:
+                                df_id = str(uuid.uuid4())
+                                self.id_map[source_id] = df_id
+                            dataflow["id"] = df_id
 
-                    dataflows.append(dataflow)
+                            dataflows.append(dataflow)
         return dataflows
