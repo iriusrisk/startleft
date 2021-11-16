@@ -249,12 +249,12 @@ class DataflowMapper:
 
             source_mapper = DataflowNodeMapper(self.mapping["source"])
             destination_mapper = DataflowNodeMapper(self.mapping["destination"])
-            source_mapper_nodes = source_mapper.run(source_model, source_obj)
-            if source_mapper_nodes is not None and len(source_mapper_nodes) > 0:
-                for source_node in source_mapper_nodes:
-                    destination_mapper_nodes = destination_mapper.run(source_model, source_obj)
-                    if destination_mapper_nodes is not None and len(destination_mapper_nodes) > 0:
-                        for destination_node in destination_mapper_nodes:
+            source_nodes = source_mapper.run(source_model, source_obj)
+            if source_nodes is not None and len(source_nodes) > 0:
+                for source_node in source_nodes:
+                    destination_nodes = destination_mapper.run(source_model, source_obj)
+                    if destination_nodes is not None and len(destination_nodes) > 0:
+                        for destination_node in destination_nodes:
                             # skip self referencing dataflows
                             if source_node == destination_node:
                                 continue
