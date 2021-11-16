@@ -21,8 +21,12 @@ class Transformer:
         for mapping in self.map["trustzones"]:
             mapper = TrustzoneMapper(mapping)
             mapper.id_map = self.id_map
-            for trustzone in mapper.run(self.source_model):
-                self.threat_model.add_trustzone(**trustzone)
+            source_trustzones = mapper.run(self.source_model)
+            for trustzone_number, trustzone_element in enumerate(source_trustzones):
+                if "$source" in mapping and isinstance(mapping["$source"], dict):
+                    if "$singleton" in mapping["$source"] and trustzone_number > 0:
+                        continue
+                self.threat_model.add_trustzone(**trustzone_element)
 
     def transform_components(self):
         singleton = []
