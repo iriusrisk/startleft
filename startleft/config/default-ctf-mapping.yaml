@@ -48,7 +48,7 @@ components:
     type:   ec2
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::Instance']"}
-    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    parent:  {$findFirst: {$searchParams:{ searchPath: ["Properties.SubnetId.Ref","Properties.SubnetId"], defaultValue: "b61d6911-338d-46a8-9f39-8dcd24abfe91"}}}
     tags:
       - { $path: "Type" }
 
@@ -56,7 +56,7 @@ components:
     type:   empty-component
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::Subnet']"}
-    parent:      {$path: "Properties.VpcId.Ref"}
+    parent:      {$findFirst: ["Properties.VpcId.Ref", "Properties.VpcId"]}
     tags:
       - { $path: "Type" }
 
@@ -91,7 +91,7 @@ components:
     type:   docker-container
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::ECS::TaskDefinition']"}
-    parent:  {$parent: {$path: "_key"}}
+    parent:  {$parent: b61d6911-338d-46a8-9f39-8dcd24abfe91}
     tags:
       - { $path: "Type" }
 
@@ -416,14 +416,27 @@ components:
 #      - { $path: "Type" }
 
 dataflows:
-  - id: { $format: "{name}" }
-    name: { $path: "_key" }
-    $source: { $root: "Resources|squash(@)[?Type=='AWS::Lambda::EventSourceMapping']" }
-    source: { $path: "Properties.EventSourceArn|squash(@)[0][0]" }
-    destination: { $path: "Properties.FunctionName.Ref" }
+  - id:     {$format: "{name}"}
+    name:   {$format: "dataflow to Lambda function in {_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::Lambda::EventSourceMapping']"}
+    source:  {$path: "Properties.EventSourceArn|squash(@)[0][0]"}
+    destination: {$path: "Properties.FunctionName.Ref"}
 
-  - id:     {$format: "concat({name},_key)"}
-    name:   {$format: "s3 dataflow"}
+  - id:     {$format: "{name}"}
+    name:   {$format: "dataflow from Lambda function on Failure {_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::Lambda::EventSourceMapping']"}
+    source:  {$findFirst: ["Properties.FunctionName.Ref", "Properties.FunctionName"]}
+    destination: {$path: {$searchParams:{ searchPath: "Properties.DestinationConfig.OnFailure.Destination|squash(@)[0][0]"}}}
+
+  - id:     {$format: "{name}"}
+    name:   {$format: "S3 dataflow from {_key}"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::S3::Bucket']"}
     source:  {$path: "_key"}
     destination: {$path: {$searchParams:{ searchPath: "Properties.LoggingConfiguration.DestinationBucketName.Ref"}}}
+
+  - id:     {$format: "{name}"}
+    name:    {$format: "API gateway data flow from {_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::ApiGateway::Authorizer']"}
+    source:  {$path: "_key"}
+    destination: {$path: "Properties.ProviderARNs[0]|squash(@)[0][0]"}
+

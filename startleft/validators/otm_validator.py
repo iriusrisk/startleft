@@ -38,6 +38,7 @@ class OtmValidator:
     def __check_otm_ids(self, otm):
         all_valid_ids = set()
         repeated_ids = set()
+        parent_ids = set()
         wrong_component_parent_ids = set()
         wrong_dataflow_from_ids = set()
         wrong_dataflow_to_ids = set()
@@ -55,8 +56,11 @@ class OtmValidator:
                 all_valid_ids.add(component['id'])
 
             trustzone_id = self.__get_trustzone_id(component)
-            if trustzone_id not in all_valid_ids:
-                wrong_component_parent_ids.add(trustzone_id)
+            parent_ids.add(trustzone_id)
+
+        for parent_id in parent_ids:
+            if parent_id not in all_valid_ids:
+                wrong_component_parent_ids.add(parent_id)
 
         for dataflow in otm['dataflows']:
             if dataflow['id'] in all_valid_ids:
@@ -74,10 +78,10 @@ class OtmValidator:
             logger.error(f"Component parent identifiers inconsistent: {wrong_component_parent_ids}")
 
         if wrong_dataflow_from_ids:
-            logger.error(f"Dataflow 'from' identifiers inconsistent: {wrong_dataflow_from_ids}")
+            logger.error(f"Dataflow 'source' identifiers inconsistent: {wrong_dataflow_from_ids}")
 
         if wrong_dataflow_to_ids:
-            logger.error(f"Dataflow 'to' identifiers inconsistent: {wrong_dataflow_to_ids}")
+            logger.error(f"Dataflow 'destination' identifiers inconsistent: {wrong_dataflow_to_ids}")
 
         if repeated_ids:
             logger.error(f"Repeated identifiers inconsistent: {repeated_ids}")
