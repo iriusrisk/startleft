@@ -7,7 +7,7 @@ trustzones:
 components:
   - id:     {$format: "{name}"}
     type:   CD-ACM
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-ACM (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::CertificateManager::Certificate']"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -15,7 +15,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   cloudwatch
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "cloudwatch (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::CloudWatch::Alarm']"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -113,7 +113,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   kms
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "kms (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::KMS::Key']"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -129,7 +129,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   cloudwatch
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "cloudwatch (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::Logs::LogGroup']"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -172,7 +172,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   CD-SECRETS-MANAGER
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-SECRETS-MANAGER (grouped)" }}}
     $source: {$singleton: { $root: "Resources|squash(@)[?Type=='AWS::SecretsManager::Secret']"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -188,7 +188,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   CD-SYSTEMS-MANAGER
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-SYSTEMS-MANAGER (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::SSM')]"}}
     $altsource:
       - $mappingType: {$root: "Resources|squash(@)[?Type=='AWS::EC2::VPCEndpoint']"}
@@ -214,7 +214,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   api-gateway
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "api-gateway (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::ApiGateway')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -222,7 +222,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   athena
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "athena (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Athena')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -230,7 +230,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   CD-MQ
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-MQ (grouped)" }}}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::AmazonMQ::Broker']"}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -238,7 +238,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   cf-cloudfront
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "cf-cloudfront (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::CloudFront')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -270,7 +270,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   CD-CONFIG
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-CONFIG (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Config')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -278,7 +278,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   elastic-container-registry
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "elastic-container-registry (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::ECR')]"}}
     $altsource:
       - $mappingType: {$root: "Resources|squash(@)[?Type=='AWS::EC2::VPCEndpoint']"}
@@ -301,7 +301,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   elasticache
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "elasticache (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::ElastiCache')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -309,7 +309,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   CD-GUARDDUTY
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-GUARDDUTY (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::GuardDuty')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -317,7 +317,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   CD-INSPECTOR
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-INSPECTOR (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Inspector')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -325,7 +325,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   CD-MACIE
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-MACIE (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Macie')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -349,7 +349,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   CD-SES
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-SES (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::SES')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -357,7 +357,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   sns
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "sns (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::SNS')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -374,7 +374,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   CD-WAF
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-WAF (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::WAF')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -382,7 +382,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   kinesis-data-analytics
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "kinesis-data-analytics (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::KinesisAnalytics')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -390,7 +390,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   kinesis-data-analytics
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "kinesis-data-analytics (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Kinesis::')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
@@ -398,7 +398,7 @@ components:
 
   - id:     {$format: "{name}"}
     type:   kinesis-data-firehose
-    name:   {$path: "_key"}
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "kinesis-data-firehose (grouped)" }}}
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::KinesisFirehose')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:

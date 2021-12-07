@@ -208,6 +208,25 @@
                         }
                     }
 
+                },
+                {
+                    "type": "object",
+                    "required": ["$numberOfSources"],
+                    "properties": {
+                        "oneSource": {
+                            "anyOf": [
+                                {"type": "string"},
+                                {"$ref": "#/definitions/query"}
+                            ]
+                        },
+                        "multipleSource": {
+                            "anyOf": [
+                                {"type": "string"},
+                                {"$ref": "#/definitions/query"}
+                            ]
+                        }
+                    }
+
                 }
             ]
         }

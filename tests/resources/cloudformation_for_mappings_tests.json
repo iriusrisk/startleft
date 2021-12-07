@@ -1,0 +1,165 @@
+ {
+  "Resources": {
+    "CustomVPC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16"
+      }
+    },
+    "PrivateSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "AvailabilityZone": "Select",
+        "CidrBlock": "10.0.2.0/24",
+        "MapPublicIpOnLaunch": false
+      }
+    },
+    "PrivateSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "AvailabilityZone": "elect",
+        "CidrBlock": "10.0.3.0/24",
+        "MapPublicIpOnLaunch": false
+      }
+    },
+    "PublicSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "AvailabilityZone": "Select",
+        "CidrBlock": "10.0.0.0/24",
+        "MapPublicIpOnLaunch": false
+      }
+    },
+    "PublicSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "AvailabilityZone": "Select",
+        "CidrBlock": "10.0.1.0/24",
+        "MapPublicIpOnLaunch": false
+      }
+    },
+    "DummyCertificate": {
+      "Type": "AWS::CertificateManager::Certificate",
+      "Properties": {
+        "DomainName": "api.example.com",
+        "CertificateAuthorityArn": {
+          "Fn::GetAtt": [
+            "PrivateCA",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "AnotherDummyComponent"
+      ],
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "ServiceStack/Certificate/Resource"
+      }
+    },
+    "DummyTableKey": {
+      "Type": "AWS::KMS::Key",
+      "Properties": {
+        "Description": "Component for testing singleton component with multiple source components of the same type"
+      }
+    },
+    "DummyCanaryBucketKey": {
+      "Type": "AWS::KMS::Key",
+      "Properties": {
+        "Description": "Component for testing singleton component with multiple source components of the same type"
+      }
+    },
+    "DummyTopic": {
+      "Type": "AWS::SNS::Topic"
+    },
+    "DummySubscription": {
+      "Type": "AWS::SNS::Subscription"
+    },
+    "DummyCWAlarm": {
+      "Type": "AWS::CloudWatch::Alarm"
+    },
+    "DummyLogGroupA": {
+      "Type": "AWS::Logs::LogGroup"
+    },
+    "DummyLogGroupB": {
+      "Type": "AWS::Logs::LogGroup"
+    },
+    "DummyVPCssm": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "ServiceName": "com.amazonaws.us-east-1.ssm",
+        "VpcId": {
+          "Ref": "VPCB9E5F0B4"
+        },
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "VPCssmSecurityGroup448FF1C2",
+              "GroupId"
+            ]
+          }
+        ],
+        "SubnetIds": [
+          {
+            "Ref": "PrivateSubnet1"
+          },
+          {
+            "Ref": "PrivateSubnet2"
+          }
+        ],
+        "VpcEndpointType": "Interface"
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "ECSFargateGoVPCStack/VPC/ssm/Resource"
+      }
+    },
+    "DummyVPCssmmessages": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "ServiceName": "com.amazonaws.us-east-1.ssmmessages",
+        "VpcId": {
+          "Ref": "VPCB9E5F0B4"
+        },
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "VPCssmmessagesSecurityGroup666B89DA",
+              "GroupId"
+            ]
+          }
+        ],
+        "SubnetIds": [
+          {
+            "Ref": "PrivateSubnet1"
+          },
+          {
+            "Ref": "PrivateSubnet2"
+          }
+        ],
+        "VpcEndpointType": "Interface"
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "ECSFargateGoVPCStack/VPC/ssmmessages/Resource"
+      }
+    }
+  }
+}

@@ -76,7 +76,7 @@ class Transformer:
             if not skip_this:
                 results.append(component)
 
-        singleton_added = []
+        singleton_types_added = []
         for component in singleton:
             skip_this = False
             for skip_component in skip:
@@ -85,9 +85,22 @@ class Transformer:
                     skip_this = True
                     break
             if not skip_this:
-                if component["type"] not in singleton_added:
+                if component["type"] not in singleton_types_added:
+                    if "singleton_multiple_name" in component:
+                        del component["singleton_multiple_name"]
                     results.append(component)
-                    singleton_added.append(component["type"])
+                    singleton_types_added.append(component["type"])
+                else:
+                    # if the component is singleton and it already exists in otm (from a previous mapping)
+                    # no new component is generated but the existing component is updated
+                    # a)with the group name (even more if had a component name)
+                    # b)with a new tag with data from this source component
+                    for result in results:
+                        if result["type"] == component["type"]:
+                            if "singleton_multiple_name" in component:
+                                result["name"] = component["singleton_multiple_name"]
+                            #TODO: add component tags to result tags in this line
+                            continue
 
         for component in results:
             parent_component = next(filter(lambda x: x["id"] == component['parent'], results), None)

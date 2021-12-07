@@ -113,6 +113,10 @@ class SourceModel:
                     return self.__search_with_default(obj, source, "$findFirst")
                 else:
                     return self.__find_first_search(obj["$findFirst"], source)
+
+            if "$numberOfSources" in obj:
+                return self.__multiple_source_search(source, obj)
+
             return obj
 
     def __search_with_default(self, obj, source, action):
@@ -153,3 +157,13 @@ class SourceModel:
             search_result = self.__jmespath_search(search_path, source)
             if search_result is not None:
                 return search_result
+
+    def __multiple_source_search(self, source, object):
+
+        single_value = None
+        multiple_value = None
+        if "multipleSource" in object["$numberOfSources"]:
+            multiple_value = self.search(object["$numberOfSources"]["multipleSource"], source)
+        if "oneSource" in object["$numberOfSources"]:
+            single_value = self.search(object["$numberOfSources"]["oneSource"], source)
+        return single_value, multiple_value
