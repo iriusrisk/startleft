@@ -102,13 +102,13 @@
       "Properties": {
         "ServiceName": "com.amazonaws.us-east-1.ssm",
         "VpcId": {
-          "Ref": "VPCB9E5F0B4"
+          "Ref": "CustomVPC"
         },
         "PrivateDnsEnabled": true,
         "SecurityGroupIds": [
           {
             "Fn::GetAtt": [
-              "VPCssmSecurityGroup448FF1C2",
+              "DummySecurityGroup",
               "GroupId"
             ]
           }
@@ -124,23 +124,20 @@
         "VpcEndpointType": "Interface"
       },
       "UpdateReplacePolicy": "Delete",
-      "DeletionPolicy": "Delete",
-      "Metadata": {
-        "aws:cdk:path": "ECSFargateGoVPCStack/VPC/ssm/Resource"
-      }
+      "DeletionPolicy": "Delete"
     },
     "DummyVPCssmmessages": {
       "Type": "AWS::EC2::VPCEndpoint",
       "Properties": {
         "ServiceName": "com.amazonaws.us-east-1.ssmmessages",
         "VpcId": {
-          "Ref": "VPCB9E5F0B4"
+          "Ref": "CustomVPC"
         },
         "PrivateDnsEnabled": true,
         "SecurityGroupIds": [
           {
             "Fn::GetAtt": [
-              "VPCssmmessagesSecurityGroup666B89DA",
+              "DummyVPCssmmessagesSecurityGroup",
               "GroupId"
             ]
           }
@@ -156,10 +153,7 @@
         "VpcEndpointType": "Interface"
       },
       "UpdateReplacePolicy": "Delete",
-      "DeletionPolicy": "Delete",
-      "Metadata": {
-        "aws:cdk:path": "ECSFargateGoVPCStack/VPC/ssmmessages/Resource"
-      }
+      "DeletionPolicy": "Delete"
     }
   }
 }
