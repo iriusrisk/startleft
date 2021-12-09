@@ -41,5 +41,12 @@ class TestApp:
         iac_to_otm = IacToOtm('name', 'id')
         iac_to_otm.run('Cloudformation', mapping_filename, 'threatmodel.otm', filename)
         assert iac_to_otm.source_model.otm
-        assert len(iac_to_otm.source_model.otm.trustzones) == 1
-        assert len(iac_to_otm.source_model.otm.components) > 1
+        assert len(iac_to_otm.otm.trustzones) == 1
+        assert len(iac_to_otm.otm.components) > 1
+        assert len(iac_to_otm.otm.dataflows) == 1
+        assert list(filter(lambda obj: obj.name == 'DummyCertificate', iac_to_otm.otm.components))
+        assert list(filter(lambda obj: obj.name == 'kms (grouped)', iac_to_otm.otm.components))
+        assert list(filter(lambda obj: obj.name == 'sns (grouped)', iac_to_otm.otm.components))
+        assert list(filter(lambda obj: obj.name == 'cloudwatch (grouped)', iac_to_otm.otm.components))
+        assert list(filter(lambda obj: obj.name == 'Systems Manager from VPCEndpoint', iac_to_otm.otm.components))
+        assert list(filter(lambda obj: obj.name == 'API gateway data flow from DummyApiAuthorizer', iac_to_otm.otm.dataflows))
