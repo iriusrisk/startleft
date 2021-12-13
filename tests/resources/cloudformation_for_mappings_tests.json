@@ -250,6 +250,27 @@
       },
       "UpdateReplacePolicy": "Retain",
       "DeletionPolicy": "Retain"
+    },
+    "DummyVPCdynamodb": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "ServiceName": {
+          "Fn::Join": [
+            "",
+            [
+              "com.amazonaws.",
+              {
+                "Ref": "AWS::Region"
+              },
+              ".dynamodb"
+            ]
+          ]
+        },
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "VpcEndpointType": "Gateway"
+      }
     }
   }
 }
