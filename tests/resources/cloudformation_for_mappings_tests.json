@@ -1,0 +1,255 @@
+{
+  "Resources": {
+    "CustomVPC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16"
+      }
+    },
+    "PrivateSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "AvailabilityZone": "Select",
+        "CidrBlock": "10.0.2.0/24",
+        "MapPublicIpOnLaunch": false
+      }
+    },
+    "PrivateSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "AvailabilityZone": "elect",
+        "CidrBlock": "10.0.3.0/24",
+        "MapPublicIpOnLaunch": false
+      }
+    },
+    "PublicSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "AvailabilityZone": "Select",
+        "CidrBlock": "10.0.0.0/24",
+        "MapPublicIpOnLaunch": false
+      }
+    },
+    "PublicSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "AvailabilityZone": "Select",
+        "CidrBlock": "10.0.1.0/24",
+        "MapPublicIpOnLaunch": false
+      }
+    },
+    "DummyCertificate": {
+      "Type": "AWS::CertificateManager::Certificate",
+      "Properties": {
+        "DomainName": "api.example.com",
+        "CertificateAuthorityArn": {
+          "Fn::GetAtt": [
+            "PrivateCA",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "AnotherDummyComponent"
+      ],
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "ServiceStack/Certificate/Resource"
+      }
+    },
+    "DummyTableKey": {
+      "Type": "AWS::KMS::Key",
+      "Properties": {
+        "Description": "Component for testing singleton component with multiple source components of the same type"
+      }
+    },
+    "DummyCanaryBucketKey": {
+      "Type": "AWS::KMS::Key",
+      "Properties": {
+        "Description": "Component for testing singleton component with multiple source components of the same type"
+      }
+    },
+    "DummyTopic": {
+      "Type": "AWS::SNS::Topic"
+    },
+    "DummySubscription": {
+      "Type": "AWS::SNS::Subscription"
+    },
+    "DummyCWAlarm": {
+      "Type": "AWS::CloudWatch::Alarm"
+    },
+    "DummyLogGroupA": {
+      "Type": "AWS::Logs::LogGroup"
+    },
+    "DummyLogGroupB": {
+      "Type": "AWS::Logs::LogGroup"
+    },
+    "DummyVPCssm": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "ServiceName": "com.amazonaws.us-east-1.ssm",
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "DummySecurityGroup",
+              "GroupId"
+            ]
+          }
+        ],
+        "SubnetIds": [
+          {
+            "Ref": "PrivateSubnet1"
+          },
+          {
+            "Ref": "PrivateSubnet2"
+          }
+        ],
+        "VpcEndpointType": "Interface"
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+    },
+    "DummyVPCssmmessages": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "ServiceName": "com.amazonaws.us-east-1.ssmmessages",
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "DummyVPCssmmessagesSecurityGroup",
+              "GroupId"
+            ]
+          }
+        ],
+        "SubnetIds": [
+          {
+            "Ref": "PrivateSubnet1"
+          },
+          {
+            "Ref": "PrivateSubnet2"
+          }
+        ],
+        "VpcEndpointType": "Interface"
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete"
+    },
+    "DummyApiAuthorizer": {
+      "Type": "AWS::ApiGateway::Authorizer",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "DummyApiGwKdsRestApi"
+        },
+        "Type": "COGNITO_USER_POOLS",
+        "IdentitySource": "method.request.header.Authorization",
+        "Name": "DummyawsstreamingdatasolutionforkinesisusingapigatewayandlambdaApiAuthorizer",
+        "ProviderARNs": [
+          {
+            "Fn::GetAtt": [
+              "DummyApiUserPool",
+              "Arn"
+            ]
+          }
+        ]
+      }
+    },
+    "DummyApiGwKdsRestApi": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "EndpointConfiguration": {
+          "Types": [
+            "EDGE"
+          ]
+        },
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::StackName"
+              },
+              "-kinesis-proxy"
+            ]
+          ]
+        }
+      }
+    },
+    "DummyApiUserPool": {
+      "Type": "AWS::Cognito::UserPool",
+      "Properties": {
+        "AccountRecoverySetting": {
+          "RecoveryMechanisms": [
+            {
+              "Name": "verified_phone_number",
+              "Priority": 1
+            },
+            {
+              "Name": "verified_email",
+              "Priority": 2
+            }
+          ]
+        },
+        "AdminCreateUserConfig": {
+          "AllowAdminCreateUserOnly": true
+        },
+        "EmailVerificationMessage": "The verification code to your new account is {####}",
+        "EmailVerificationSubject": "Verify your new account",
+        "Policies": {
+          "PasswordPolicy": {
+            "MinimumLength": 8,
+            "RequireLowercase": true,
+            "RequireNumbers": true,
+            "RequireSymbols": true,
+            "RequireUppercase": true,
+            "TemporaryPasswordValidityDays": 1
+          }
+        },
+        "Schema": [
+          {
+            "Mutable": true,
+            "Name": "given_name",
+            "Required": true
+          },
+          {
+            "Mutable": true,
+            "Name": "email",
+            "Required": true
+          }
+        ],
+        "SmsVerificationMessage": "The verification code to your new account is {####}",
+        "UserPoolAddOns": {
+          "AdvancedSecurityMode": "ENFORCED"
+        },
+        "VerificationMessageTemplate": {
+          "DefaultEmailOption": "CONFIRM_WITH_CODE",
+          "EmailMessage": "The verification code to your new account is {####}",
+          "EmailSubject": "Verify your new account",
+          "SmsMessage": "The verification code to your new account is {####}"
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain"
+    }
+  }
+}
