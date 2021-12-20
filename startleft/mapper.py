@@ -7,6 +7,71 @@ logger = logging.getLogger(__name__)
 DEFAULT_TRUSTZONE = "b61d6911-338d-46a8-9f39-8dcd24abfe91"
 
 
+def format_source_objects(source_objects):
+    if not isinstance(source_objects, list):
+        source_objects = [source_objects]
+    return source_objects
+
+
+def get_mappings_for_name_and_tags(mapping_definition):
+    mapping_tags = None
+    if "name" in mapping_definition:
+        mapping_name = mapping_definition["name"]
+    else:
+        logger.debug(f"Required mandatory field: 'name' in mapping definition: {mapping_definition}")
+    if "tags" in mapping_definition:
+        mapping_tags = mapping_definition["tags"]
+    return mapping_name, mapping_tags
+
+
+def get_tags(source_model, source_object, mapping):
+    c_tags = []
+    if mapping is not None:
+        if isinstance(mapping, list):
+            for tag in mapping:
+                c_tags.append(source_model.search(tag, source=source_object))
+        else:
+            c_tags.append(source_model.search(mapping, source=source_object))
+
+    return c_tags
+
+
+def set_optional_parameters_to_resource(resource, mapping_tags, resource_tags, singleton_multiple_name=None,
+                                        singleton_multiple_tags=None):
+    if mapping_tags is not None and resource_tags is not None and len(
+            list(filter(lambda tag: tag is not None and tag is not '', resource_tags))) > 0:
+        resource["tags"] = resource_tags
+    if singleton_multiple_name is not None:
+        resource["singleton_multiple_name"] = singleton_multiple_name
+    if mapping_tags is not None and singleton_multiple_tags is not None:
+        resource["singleton_multiple_tags"] = singleton_multiple_tags
+
+    return resource
+
+
+def get_altsource_mapping_path_value(source_model, alt_source_object, mapping_path):
+    value = None
+
+    mapping_path_value = source_model.search(mapping_path, source=alt_source_object)
+    if isinstance(mapping_path_value, str):
+        value = mapping_path_value
+    elif isinstance(mapping_path_value, dict):
+        if "Fn::Join" in mapping_path_value:
+            value = []
+            separator = mapping_path_value["Fn::Join"][0]
+            for e in mapping_path_value["Fn::Join"][1]:
+                if isinstance(e, str):
+                    value.append(e)
+                else:
+                    pass
+
+            value = separator.join(value)
+        elif "Fn::Sub" in mapping_path_value:
+            value = mapping_path_value["Fn::Sub"]
+
+    return value
+
+
 class TrustzoneMapper:
     def __init__(self, mapping):
         self.mapping = mapping
@@ -16,9 +81,7 @@ class TrustzoneMapper:
         trustzones = []
 
         if "$source" in self.mapping:
-            source_objs = source_model.search(self.mapping["$source"])
-            if not isinstance(source_objs, list):
-                source_objs = [source_objs]
+            source_objs = format_source_objects(source_model.search(self.mapping["$source"]))
         else:
             source_objs = [self.mapping]
 
@@ -54,32 +117,27 @@ class ComponentMapper:
         """
         components = []
 
-        source_objects = source_model.search(self.mapping["$source"], source=None)
-        if not isinstance(source_objects, list):
-            source_objects = [source_objects]
+        source_objects = format_source_objects(source_model.search(self.mapping["$source"], source=None))
+        mapping_name, mapping_tags = get_mappings_for_name_and_tags(self.mapping)
 
         for source_object in source_objects:
             component_type = source_model.search(self.mapping["type"], source=source_object)
-
-            if "$singleton" in self.mapping["$source"] and "$numberOfSources" in self.mapping["name"]:
-                component_name, singleton_multiple_name = self.__get_component_singleton_names(source_model,source_object)
-            else:
-                component_name = self.__get_component_name(source_model, source_object)
-
-            parents, parents_from_component = self.__get_parent_resources_ids(source_model, source_object, id_parents, component_name)
-            component_tags = self.__get_component_tags(source_model, source_object)
+            component_name, singleton_multiple_name = self.__get_component_names(source_model, source_object,
+                                                                                 mapping_name)
+            parents, parents_from_component = self.__get_parent_resources_ids(source_model, source_object, id_parents,
+                                                                              component_name)
+            component_tags, singleton_multiple_tags = self.__get_component_tags(source_model, source_object,
+                                                                                mapping_tags)
 
             for parent_number, parent_element in enumerate(parents):
                 # If there is more than one parent (i.e. subnets), the component will replicated inside each
-                component = {"name": component_name, "type": component_type, "tags": component_tags,
-                             "parent": self.__get_parent_id(parent_element, parents_from_component, component_name),
-                             "source": source_object}
+                component = {"name": component_name, "type": component_type, "source": source_object,
+                             "parent": self.__get_parent_id(parent_element, parents_from_component, component_name)}
 
                 if "properties" in self.mapping:
                     component["properties"] = self.mapping["properties"]
-                if "$singleton" in self.mapping["$source"] and "$numberOfSources" in self.mapping["name"]:
-                    component["singleton_multiple_name"] = singleton_multiple_name
-
+                component = set_optional_parameters_to_resource(component, mapping_tags, component_tags,
+                                                                singleton_multiple_name, singleton_multiple_tags)
                 component_id = self.__generate_id(source_model, component, component_name, parent_number)
                 component["id"] = component_id
 
@@ -92,8 +150,8 @@ class ComponentMapper:
                         id_parents[children] = list()
                     id_parents[children].append(component_id)
 
-
-                logger.debug(f"Added component: [{component['id']}][{component['type']}] | Parent: [{component['parent']}]")
+                logger.debug(
+                    f"Added component: [{component['id']}][{component['type']}] | Parent: [{component['parent']}]")
                 components.append(component)
                 logger.debug("")
 
@@ -107,44 +165,100 @@ class ComponentMapper:
                 mapping_type = alt["$mappingType"]
                 mapping_path = alt["$mappingPath"]
                 mapping_lookups = alt["$mappingLookups"]
-
-                alt_source_objects = source_model.search(mapping_type, source=None)
-                if not isinstance(alt_source_objects, list):
-                    alt_source_objects = [alt_source_objects]
+                alt_source_objects = format_source_objects(source_model.search(mapping_type, source=None))
 
                 for alt_source_object in alt_source_objects:
-                    value = self.__get_altsource_mapping_path_value(source_model, alt_source_object, mapping_path)
+                    value = get_altsource_mapping_path_value(source_model, alt_source_object, mapping_path)
 
-                    for x in mapping_lookups:
-                        result = re.match(x["regex"], value)
+                    for mapping_lookup in mapping_lookups:
+                        result = re.match(mapping_lookup["regex"], value)
 
                         if result is not None:
                             if DEFAULT_TRUSTZONE not in self.id_map:
                                 self.id_map[DEFAULT_TRUSTZONE] = str(uuid.uuid4())
-                            component = {"id": str(uuid.uuid4()), "name": x["name"], "type": x["type"], "tags": [],
-                                         "parent": self.id_map[DEFAULT_TRUSTZONE]}
+
+                            mapping_name, mapping_tags = get_mappings_for_name_and_tags(mapping_lookup)
+                            component_name, singleton_multiple_name = self.__get_component_names(source_model,
+                                                                                                 alt_source_object,
+                                                                                                 mapping_name)
+                            component_tags, singleton_multiple_tags = self.__get_component_tags(source_model,
+                                                                                                alt_source_object,
+                                                                                                mapping_tags)
+                            component = {"id": str(uuid.uuid4()), "name": component_name,
+                                         "type": mapping_lookup["type"], "parent": self.id_map[DEFAULT_TRUSTZONE]}
+
+                            component = set_optional_parameters_to_resource(component, mapping_tags, component_tags,
+                                                                            singleton_multiple_name,
+                                                                            singleton_multiple_tags)
+
                             components.append(component)
 
         return components
 
-    def __get_component_name(self, source_model, source_object):
+    def __get_component_names(self, source_model, source_object, mapping):
+        singleton_multiple_name = None
+        if self.__multiple_sources_mapping_inside(mapping):
+            component_name, singleton_multiple_name = self.__get_component_singleton_names(source_model, source_object,
+                                                                                           mapping)
+        else:
+            component_name = self.__get_component_individual_name(source_model, source_object, mapping)
+        return component_name, singleton_multiple_name
+
+    def __get_component_individual_name(self, source_model, source_object, mapping):
         if "name" in self.mapping:
-            source_component_name = source_model.search(self.mapping["name"], source=source_object)
+            source_component_name = source_model.search(mapping, source=source_object)
             logger.debug(f"+Found source object with name {source_component_name}")
         else:
             source_component_name = None
             logger.error(f"+Found source object with name None")
         return source_component_name
 
-    def __get_component_singleton_names(self, source_model, source_object):
+    def __get_component_singleton_names(self, source_model, source_object, mapping):
         if "name" in self.mapping:
-            source_component_name, source_component_multiple_name = source_model.search(self.mapping["name"],
-                                                                                        source=source_object)
+            source_component_name, source_component_multiple_name = source_model.search(mapping, source=source_object)
             logger.debug(f"+Found singleton source object with multiple name {source_component_name}")
         else:
             source_component_name = None
             logger.error(f"+Found singleton source object with name None")
         return source_component_name, source_component_multiple_name
+
+    def __get_component_tags(self, source_model, source_object, mapping):
+        component_tags = None
+        singleton_multiple_tags = None
+
+        if mapping is not None:
+            if self.__multiple_sources_mapping_inside(mapping):
+                component_tags, singleton_multiple_tags = self.__get_component_singleton_tags(source_model, source_object,
+                                                                                              mapping)
+            else:
+                component_tags = get_tags(source_model, source_object, mapping)
+        return component_tags, singleton_multiple_tags
+
+    def __get_component_singleton_tags(self, source_model, source_object, mapping):
+        c_tags = []
+        c_multiple_tags = []
+
+        if "tags" in self.mapping:
+            if isinstance(mapping, list):
+                for tag in mapping:
+                    if self.__multiple_sources_mapping_inside(tag):
+                        c_temp_tags, c_temp_multiple_tags = source_model.search(tag, source=source_object)
+                        c_tags.append(c_temp_tags)
+                        c_multiple_tags.append(c_temp_multiple_tags)
+                    else:
+                        c_temp_tags = source_model.search(tag, source=source_object)
+                        c_tags.append(c_temp_tags)
+                        c_multiple_tags.append(c_temp_tags)
+            else:
+                c_temp_tags, c_temp_multiple_tags = source_model.search(mapping, source=source_object)
+                c_tags.append(c_temp_tags)
+                c_multiple_tags.append(c_temp_multiple_tags)
+
+        return c_tags, c_multiple_tags
+
+    def __multiple_sources_mapping_inside(self, mapping_definition):
+        return "$singleton" in self.mapping["$source"] and \
+               len(list(filter(lambda obj: "$numberOfSources" in obj, mapping_definition))) > 0
 
     def __get_parent_resources_ids(self, source_model, source_object, id_parents, component_name):
         # Retrieves a list of parent resources (components or trustZones) of the element.
@@ -177,17 +291,6 @@ class ComponentMapper:
                 parent = [parent]
 
         return parent, parents_from_component
-
-    def __get_component_tags(self, source_model, source_object):
-        c_tags = []
-        if "tags" in self.mapping:
-            if isinstance(self.mapping["tags"], list):
-                for tag in self.mapping["tags"]:
-                    c_tags.append(source_model.search(tag, source=source_object))
-            else:
-                c_tags.append(source_model.search(self.mapping["tags"], source=source_object))
-
-        return c_tags
 
     def __get_parent_id(self, parent_element, parents_from_component, component_name):
         if parents_from_component:
@@ -236,28 +339,6 @@ class ComponentMapper:
 
         return c_id
 
-    def __get_altsource_mapping_path_value(self, source_model, alt_source_object, mapping_path):
-        value = None
-
-        mapping_path_value = source_model.search(mapping_path, source=alt_source_object)
-        if isinstance(mapping_path_value, str):
-            value = mapping_path_value
-        elif isinstance(mapping_path_value, dict):
-            if "Fn::Join" in mapping_path_value:
-                value = []
-                separator = mapping_path_value["Fn::Join"][0]
-                for e in mapping_path_value["Fn::Join"][1]:
-                    if isinstance(e, str):
-                        value.append(e)
-                    else:
-                        pass
-
-                value = separator.join(value)
-            elif "Fn::Sub" in mapping_path_value:
-                value = mapping_path_value["Fn::Sub"]
-
-        return value
-
 
 class DataflowNodeMapper:
     def __init__(self, mapping):
@@ -280,11 +361,11 @@ class DataflowMapper:
 
         dataflows = []
 
-        source_objs = source_model.search(self.mapping["$source"], source=None)
-        if not isinstance(source_objs, list):
-            source_objs = [source_objs]
+        source_objs = format_source_objects(source_model.search(self.mapping["$source"], source=None))
+        mapping_name, mapping_tags = get_mappings_for_name_and_tags(self.mapping)
+
         for source_obj in source_objs:
-            df_name = source_model.search(self.mapping["name"], source=source_obj)
+            df_name = source_model.search(mapping_name, source=source_obj)
 
             source_mapper = DataflowNodeMapper(self.mapping["source"])
             destination_mapper = DataflowNodeMapper(self.mapping["destination"])
@@ -328,6 +409,9 @@ class DataflowMapper:
                                 df_id = str(uuid.uuid4())
                                 self.id_map[source_id] = df_id
                             dataflow["id"] = df_id
+
+                            dataflow_tags = get_tags(source_model, source_obj, mapping_tags)
+                            dataflow = set_optional_parameters_to_resource(dataflow, mapping_tags, dataflow_tags)
 
                             dataflows.append(dataflow)
         return dataflows

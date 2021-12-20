@@ -86,8 +86,6 @@ class Transformer:
                     break
             if not skip_this:
                 if component["type"] not in singleton_types_added:
-                    if "singleton_multiple_name" in component:
-                        del component["singleton_multiple_name"]
                     results.append(component)
                     singleton_types_added.append(component["type"])
                 else:
@@ -99,17 +97,34 @@ class Transformer:
                         if result["type"] == component["type"]:
                             if "singleton_multiple_name" in component:
                                 result["name"] = component["singleton_multiple_name"]
-                            #TODO: add component tags to result tags in this line
+
+                            #update "result" component with its multiple tags before adding tags from "component"
+                            if "singleton_multiple_tags" in result:
+                                if len(result["tags"]) <= len(result["singleton_multiple_tags"])\
+                                        and result["tags"] is not result["singleton_multiple_tags"]:
+                                    result["tags"] = result["singleton_multiple_tags"]
+
+                            if "singleton_multiple_tags" in component:
+                                for tag in component["singleton_multiple_tags"]:
+                                    if tag not in result["tags"]:
+                                        result["tags"].append(tag)
                             continue
 
+        #removal of auxiliary data before adding components
         for component in results:
-            parent_component = next(filter(lambda x: x["id"] == component['parent'], results), None)
-            if parent_component:
-                component["parent_type"] = "component"
-            else:
-                component["parent_type"] = "trustZone"
+            if "singleton_multiple_name" in component:
+                del component["singleton_multiple_name"]
+            if "singleton_multiple_tags" in component:
+                del component["singleton_multiple_tags"]
 
-            self.threat_model.add_component(**component)
+        for final_component in results:
+            parent_component = next(filter(lambda x: x["id"] == final_component['parent'], results), None)
+            if parent_component:
+                final_component["parent_type"] = "component"
+            else:
+                final_component["parent_type"] = "trustZone"
+
+            self.threat_model.add_component(**final_component)
 
     def transform_dataflows(self):
         for mapping in self.map["dataflows"]:

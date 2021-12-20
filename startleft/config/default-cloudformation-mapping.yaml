@@ -11,7 +11,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::CertificateManager::Certificate']"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   cloudwatch
@@ -19,7 +19,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::CloudWatch::Alarm']"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   dynamodb
@@ -32,6 +32,8 @@ components:
           - regex: ^(.*)dynamodb$
             name: DynamoDB from VPCEndpoint
             type: dynamodb
+            tags:
+              - {$format: "{_key} ({Type})"}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - { $path: "Type" }
@@ -117,7 +119,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::KMS::Key']"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   aws-lambda-function
@@ -133,7 +135,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::Logs::LogGroup']"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
 
   - id:     {$format: "{name}"}
@@ -165,6 +167,8 @@ components:
           - regex: ^(.*)s3$
             name: S3 from VPCEndpoint
             type: s3
+            tags:
+              - { $format: "{_key} ({Type})" }
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - { $path: "Type" }
@@ -176,7 +180,7 @@ components:
     $source: {$singleton: { $root: "Resources|squash(@)[?Type=='AWS::SecretsManager::Secret']"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   sqs-simple-queue-service
@@ -195,14 +199,18 @@ components:
         $mappingPath: {$path: "Properties.ServiceName"}
         $mappingLookups:
           - regex: ^(.*)ssm$
-            name: Systems Manager from VPCEndpoint
+            name: {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "Systems Manager from VPCEndpoint (grouped)" }}}
             type: CD-SYSTEMS-MANAGER
+            tags:
+              - {$numberOfSources: {oneSource:{$format: "AWS::EC2::VPCEndpoint"}, multipleSource:{ $format: "{_key} ({Type})"}}}
           - regex: ^(.*)ssmmessages$
-            name: Systems Manager from VPCEndpoint
+            name: {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "Systems Manager from VPCEndpoint (grouped)" }}}
             type: CD-SYSTEMS-MANAGER
+            tags:
+              - {$numberOfSources: {oneSource:{$format: "AWS::EC2::VPCEndpoint"}, multipleSource:{ $format: "{_key} ({Type})"}}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   empty-component
@@ -218,7 +226,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::ApiGateway')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   athena
@@ -226,7 +234,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Athena')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   CD-MQ
@@ -242,7 +250,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::CloudFront')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   cloudtrail
@@ -274,7 +282,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Config')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   elastic-container-registry
@@ -287,9 +295,11 @@ components:
           - regex: ^(.*)ecr.dkr$
             name: ECR from VPCEndpoint
             type: elastic-container-registry
+            tags:
+              - { $format: "{_key} ({Type})" }
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   elastic-container-kubernetes
@@ -305,7 +315,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::ElastiCache')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   CD-GUARDDUTY
@@ -313,7 +323,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::GuardDuty')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   CD-INSPECTOR
@@ -321,7 +331,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Inspector')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   CD-MACIE
@@ -329,7 +339,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Macie')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   CD-AWS-NETWORK-FIREWALL
@@ -353,7 +363,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::SES')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   sns
@@ -361,7 +371,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::SNS')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   step-functions
@@ -378,7 +388,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::WAF')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   kinesis-data-analytics
@@ -386,7 +396,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::KinesisAnalytics')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   kinesis-data-analytics
@@ -394,7 +404,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Kinesis::')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
   - id:     {$format: "{name}"}
     type:   kinesis-data-firehose
@@ -402,7 +412,7 @@ components:
     $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::KinesisFirehose')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
-      - { $path: "Type" }
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
 
   # Default catchall
@@ -439,4 +449,6 @@ dataflows:
     $source: {$root: "Resources|squash(@)[?Type=='AWS::ApiGateway::Authorizer']"}
     source:  {$path: "_key"}
     destination: {$path: "Properties.ProviderARNs[0]|squash(@)[0][0]"}
+    tags:
+      - API gateway dataflow
 
