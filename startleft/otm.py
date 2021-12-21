@@ -56,14 +56,16 @@ class OTM:
         self.trustzones.append(Trustzone(id=id, name=name, source=source, properties=properties))
 
     def add_component(self, id=None, name=None, type=None, parent=None, parent_type=None, source=None,
-                      properties=None, tags=[]):
+                      properties=None, tags=None):
         self.components.append(
             Component(id=id, name=name, type=type, parent=parent, parent_type=parent_type,
                       source=source, properties=properties, tags=tags))
 
-    def add_dataflow(self, id=None, name=None, bidirectional=None, source_node=None, destination_node=None, source=None, properties=None):
+    def add_dataflow(self, id=None, name=None, bidirectional=None, source_node=None, destination_node=None,
+                     source=None, properties=None, tags=None):
         self.dataflows.append(Dataflow(id=id, name=name, bidirectional=bidirectional, source_node=source_node,
-                                       destination_node=destination_node, source=source, properties=properties))
+                                       destination_node=destination_node, source=source, properties=properties,
+                                       tags=tags))
 
 
 class Trustzone:
@@ -88,7 +90,7 @@ class Trustzone:
 
 class Component:
     def __init__(self, id=None, name=None, type=None, parent=None, parent_type=None, source=None,
-                 properties=None, tags=[]):
+                 properties=None, tags=None):
         self.id = id
         self.name = name
         self.type = type
@@ -105,17 +107,19 @@ class Component:
             "type": self.type,
             "parent": {
                 self.parent_type: self.parent
-            },
-            "tags": self.tags
+            }
         }
 
         if self.properties:
             result["properties"] = self.properties
+        if self.tags:
+            result["tags"] = self.tags
         return result
 
 
 class Dataflow:
-    def __init__(self, id=None, name=None, bidirectional=None, source_node=None, destination_node=None, source=None, properties=None):
+    def __init__(self, id=None, name=None, bidirectional=None, source_node=None, destination_node=None, source=None,
+                 properties=None, tags=None):
         self.id = id
         self.name = name
         self.bidirectional = bidirectional
@@ -123,6 +127,7 @@ class Dataflow:
         self.destination_node = destination_node
         self.source = source
         self.properties = properties
+        self.tags = tags
 
     def json(self):
         result = {
@@ -135,4 +140,6 @@ class Dataflow:
             result["bidirectional"] = self.bidirectional
         if self.properties:
             result["properties"] = self.properties
+        if self.tags:
+            result["tags"] = self.tags
         return result

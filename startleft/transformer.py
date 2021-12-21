@@ -76,7 +76,7 @@ class Transformer:
             if not skip_this:
                 results.append(component)
 
-        singleton_added = []
+        singleton_types_added = []
         for component in singleton:
             skip_this = False
             for skip_component in skip:
@@ -85,18 +85,46 @@ class Transformer:
                     skip_this = True
                     break
             if not skip_this:
-                if component["type"] not in singleton_added:
+                if component["type"] not in singleton_types_added:
                     results.append(component)
-                    singleton_added.append(component["type"])
+                    singleton_types_added.append(component["type"])
+                else:
+                    # if the component is singleton and it already exists in otm (from a previous mapping)
+                    # no new component is generated but the existing component is updated
+                    # a)with the group name (even more if had a component name)
+                    # b)with a new tag with data from this source component
+                    for result in results:
+                        if result["type"] == component["type"]:
+                            if "singleton_multiple_name" in component:
+                                result["name"] = component["singleton_multiple_name"]
 
+                            #update "result" component with its multiple tags before adding tags from "component"
+                            if "singleton_multiple_tags" in result:
+                                if len(result["tags"]) <= len(result["singleton_multiple_tags"])\
+                                        and result["tags"] is not result["singleton_multiple_tags"]:
+                                    result["tags"] = result["singleton_multiple_tags"]
+
+                            if "singleton_multiple_tags" in component:
+                                for tag in component["singleton_multiple_tags"]:
+                                    if tag not in result["tags"]:
+                                        result["tags"].append(tag)
+                            continue
+
+        #removal of auxiliary data before adding components
         for component in results:
-            parent_component = next(filter(lambda x: x["id"] == component['parent'], results), None)
-            if parent_component:
-                component["parent_type"] = "component"
-            else:
-                component["parent_type"] = "trustZone"
+            if "singleton_multiple_name" in component:
+                del component["singleton_multiple_name"]
+            if "singleton_multiple_tags" in component:
+                del component["singleton_multiple_tags"]
 
-            self.threat_model.add_component(**component)
+        for final_component in results:
+            parent_component = next(filter(lambda x: x["id"] == final_component['parent'], results), None)
+            if parent_component:
+                final_component["parent_type"] = "component"
+            else:
+                final_component["parent_type"] = "trustZone"
+
+            self.threat_model.add_component(**final_component)
 
     def transform_dataflows(self):
         for mapping in self.map["dataflows"]:

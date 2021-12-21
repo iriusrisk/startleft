@@ -22,7 +22,9 @@ setup(
         'xmltodict',
         'setuptools_scm',
         'fastapi',
-        'python-multipart'
+        'python-multipart',
+        'click',
+        'uvicorn'
     ],
     use_scm_version=True,
     extras_require={
