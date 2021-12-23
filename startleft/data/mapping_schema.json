@@ -227,6 +227,18 @@
                         }
                     }
 
+                },
+                {
+                    "type": "object",
+                    "required": ["$hub"],
+                    "properties": {
+                        "$hub": {
+                            "anyOf": [
+                                {"type": "string"},
+                                {"$ref": "#/definitions/query"}
+                            ]
+                        }
+                    }
                 }
             ]
         }
