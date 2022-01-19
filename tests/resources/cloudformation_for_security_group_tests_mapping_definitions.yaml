@@ -459,34 +459,34 @@ dataflows:
     name:   {$format: "Security group dataflow found in {_key}"}
     $source: {$root: "Resources|squash(@)[?Properties.SecurityGroupIds]"}
     source: {$path: "_key"}
-    destination: {$hub: {$path: "Properties.SecurityGroupIds|map(&values(@), @)[0][0]"}}
+    destination: {$hub: {$path: "Properties.SecurityGroupIds|map(&values(@), @)[0][0][0]"}}
     tags: case 1 - data flow from component to a Security Group (found in field SecurityGroupIds)
 
   - id:     {$format: "{name}"}
     name:   {$format: "Security group dataflow found in {_key}"}
     $source: {$root: "Resources|squash(@)[?Properties.SecurityGroups]"}
     source: {$path: "_key"}
-    destination: {$hub: {$path: "Properties.SecurityGroups|map(&values(@), @)[0][0]"}}
+    destination: {$hub: {$path: "Properties.SecurityGroups|map(&values(@), @)[0][0][0]"}}
     tags: case 1 - data flow from a component to a Security Group (found in field SecurityGroups)
 
   - id:     {$format: "{name}"}
     name:   {$format: "Security group dataflow found in {_key}"}
     $source: {$root: "Resources|squash(@)[?Properties.NetworkConfiguration.AwsvpcConfiguration.SecurityGroups]"}
     source: {$path: "_key"}
-    destination: {$hub: {$path: "Properties.NetworkConfiguration.AwsvpcConfiguration.SecurityGroups|map(&values(@), @)[0][0]"}}
+    destination: {$hub: {$path: "Properties.NetworkConfiguration.AwsvpcConfiguration.SecurityGroups|map(&values(@), @)[0][0][0]"}}
     tags: case 1 - data flow from a component to a Security Group (found in field NetworkConfiguration.AwsvpcConfiguration.SecurityGroups)
 
   - id:     {$format: "{name}"}
     name:   {$format: "Security group dataflow found in {_key}"}
     $source: {$root: "Resources|squash(@)[?Properties.VPCConfig.SecurityGroupIds]"}
     source: {$path: "_key"}
-    destination: {$hub: {$path: "Properties.VPCConfig.SecurityGroupIds|map(&values(@), @)[0][0]"}}
+    destination: {$hub: {$path: "Properties.VPCConfig.SecurityGroupIds|map(&values(@), @)[0][0][0]"}}
     tags: case 1 - data flow from a component to a Security Group (found in field VPCConfig.SecurityGroupIds)
 #2
   - id:     {$format: "{name}"}
     name:   {$format: "Outer Security Group Ingress dataflow found in {_key}"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroupIngress']"}
-    source: {$hub: {$path: "Properties.SourceSecurityGroupId|squash(@)[0]"}}
+    source: {$hub: {$path: "Properties.SourceSecurityGroupId|squash(@)[0][0]"}}
     destination: {$hub: {$path: "Properties.GroupId"}}
     tags:
       - case 2a - inbound connection information
@@ -499,7 +499,7 @@ dataflows:
     name:   {$format: "Outer Security Group Egress dataflow found in {_key}"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroupEgress']"}
     source: {$hub: {$path: "Properties.GroupId"}}
-    destination: {$hub: {$path: "Properties.DestinationSecurityGroupId|squash(@)[0]"}}
+    destination: {$hub: {$path: "Properties.DestinationSecurityGroupId|squash(@)[0][0]"}}
     tags:
       - case 2b - outbound connection information
       - $path: "Properties.Description"
