@@ -7,9 +7,20 @@ logger = logging.getLogger(__name__)
 DEFAULT_TRUSTZONE = "b61d6911-338d-46a8-9f39-8dcd24abfe91"
 
 
+def format_AWS_Fns(source_objects):
+    if 'Fn::ImportValue' in source_objects:
+        source_objects = get_import_value_resource_name(source_objects['Fn::ImportValue'])
+    elif 'Fn::GetAtt' in source_objects:
+        source_objects = source_objects['Fn::GetAtt'][0]
+    return source_objects
+
+
 def format_source_objects(source_objects):
-    if not isinstance(source_objects, list):
+    if isinstance(source_objects, dict):
+        source_objects = format_AWS_Fns(source_objects)
+    if isinstance(source_objects, str):
         source_objects = [source_objects]
+
     return source_objects
 
 
@@ -72,6 +83,18 @@ def get_altsource_mapping_path_value(source_model, alt_source_object, mapping_pa
     return value
 
 
+def get_import_value_resource_name(import_value_string):
+    # gets resource name from an AWS Fn::ImportValue field in format:
+    # "Fn::ImportValue": "ECSFargateGoServiceStack:ExportsOutputFnGetAttResourceNameGroupIdNNNNNNNN"
+    lower_limit = import_value_string.index("FnGetAtt")+len("FnGetAtt")
+    upper_limit = import_value_string.index("GroupId")
+    if isinstance(lower_limit, int) and isinstance(upper_limit, int):
+        result = import_value_string[lower_limit:upper_limit]
+        return result
+    else:
+        return None
+
+
 class TrustzoneMapper:
     def __init__(self, mapping):
         self.mapping = mapping
@@ -121,7 +144,7 @@ class ComponentMapper:
         mapping_name, mapping_tags = get_mappings_for_name_and_tags(self.mapping)
 
         for source_object in source_objects:
-            component_type = source_model.search(self.mapping["type"], source=source_object)
+            component_type = format_AWS_Fns(source_model.search(self.mapping["type"], source=source_object))
             component_name, singleton_multiple_name = self.__get_component_names(source_model, source_object,
                                                                                  mapping_name)
             parents, parents_from_component = self.__get_parent_resources_ids(source_model, source_object, id_parents,
@@ -206,7 +229,7 @@ class ComponentMapper:
 
     def __get_component_individual_name(self, source_model, source_object, mapping):
         if "name" in self.mapping:
-            source_component_name = source_model.search(mapping, source=source_object)
+            source_component_name = format_AWS_Fns(source_model.search(mapping, source=source_object))
             logger.debug(f"+Found source object with name {source_component_name}")
         else:
             source_component_name = None
@@ -216,6 +239,7 @@ class ComponentMapper:
     def __get_component_singleton_names(self, source_model, source_object, mapping):
         if "name" in self.mapping:
             source_component_name, source_component_multiple_name = source_model.search(mapping, source=source_object)
+            source_component_name = format_AWS_Fns(source_component_name)
             logger.debug(f"+Found singleton source object with multiple name {source_component_name}")
         else:
             source_component_name = None
@@ -375,8 +399,10 @@ class DataflowMapper:
                     destination_nodes = destination_mapper.run(source_model, source_obj)
                     if destination_nodes is not None and len(destination_nodes) > 0:
                         for destination_node in destination_nodes:
-                            # skip self referencing dataflows
-                            if source_node == destination_node:
+                            # skip self referencing dataflows unless they are temporary (action $hub)
+                            if "$hub" not in source_mapper.mapping\
+                                    and "$hub" not in destination_mapper.mapping\
+                                    and source_node == destination_node:
                                 continue
 
                             dataflow = {"name": df_name}
@@ -384,14 +410,24 @@ class DataflowMapper:
                             if source_node in self.id_map:
                                 source_node_id = self.id_map[source_node]
                             else:
-                                # not generate component IDs that may have been generated on component mapping
-                                continue
+                                #check first if is a temporary dataflow
+                                if "$hub" in source_mapper.mapping:
+                                    self.id_map[source_node] = "source-hub-"+source_node
+                                    source_node_id = self.id_map[source_node]
+                                else:
+                                    # not generate component IDs that may have been generated on component mapping
+                                    continue
 
                             if destination_node in self.id_map:
                                 destination_node_id = self.id_map[destination_node]
                             else:
-                                # not generate components that may have been generated on components mapping
-                                continue
+                                # check first if is a temporary dataflow
+                                if "$hub" in destination_mapper.mapping:
+                                    self.id_map[destination_node] = "destination-hub-"+destination_node
+                                    destination_node_id = self.id_map[destination_node]
+                                else:
+                                    # not generate component IDs that may have been generated on component mapping
+                                    continue
 
                             dataflow["source_node"] = source_node_id
                             dataflow["destination_node"] = destination_node_id
