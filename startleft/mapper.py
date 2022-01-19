@@ -370,9 +370,8 @@ class DataflowNodeMapper:
         self.id_map = {}
 
     def run(self, source_model, source):
-        source_objs = source_model.search(self.mapping, source=source)
-        if isinstance(source_objs, str):
-            source_objs = [source_objs]
+        source_objs = format_source_objects(source_model.search(self.mapping, source=source))
+
         return source_objs
 
 
