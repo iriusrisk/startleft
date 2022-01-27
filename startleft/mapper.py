@@ -96,6 +96,12 @@ def get_import_value_resource_name(import_value_string):
         return None
 
 
+def create_core_dataflow(df_name, source_obj, source_resource_id, destination_resource_id):
+    dataflow = {"name": df_name, "source": source_obj, "source_node": source_resource_id,
+                "destination_node": destination_resource_id}
+    return dataflow
+
+
 class TrustzoneMapper:
     def __init__(self, mapping):
         self.mapping = mapping
@@ -153,12 +159,12 @@ class ComponentMapper:
             component_tags, singleton_multiple_tags = self.__get_component_tags(source_model, source_object,
                                                                                 mapping_tags)
 
-            for parent_number, parent_name in enumerate(parent_names):
+            for parent_name_number, parent_name in enumerate(parent_names):
                 # If there is more than one parent (i.e. subnets), the component will replicated inside each
                 parent_ids = self.__get_parent_id(parent_name, parents_from_component, component_name)
                 if isinstance(parent_ids, str):
                     parent_ids = [parent_ids]
-                for parent_id in parent_ids:
+                for parent_number, parent_id in enumerate(parent_ids):
                     base_component = {"name": component_name, "type": component_type, "source": source_object,
                                  "parent": parent_id}
 
@@ -167,7 +173,7 @@ class ComponentMapper:
                     base_component = set_optional_parameters_to_resource(base_component, mapping_tags, component_tags,
                                                                          singleton_multiple_name,
                                                                          singleton_multiple_tags)
-                    component_ids = self.__generate_id(source_model, base_component, component_name, parent_number)
+                    component_ids = self.__generate_id(source_model, base_component, component_name, parent_name_number)
 
                     if isinstance(component_ids, str):
                         component_ids = [component_ids]
@@ -205,11 +211,8 @@ class ComponentMapper:
                         elif "$parent" in self.mapping["parent"]:
                             # $parent and $children are related mappings
                             # In this case, component_id may be a list with a different treatment
-                            if parent_number == component_number:
-                                if component_id not in id_parents:
-                                    id_parents[component_id] = parent_id
-                            else:
-                                break
+                            if parent_number != component_number:
+                                continue
                         # For the rest of cases that are not $children, id_parents must be set with new parents found
                         else:
                             if component_id not in id_parents:
@@ -497,8 +500,8 @@ class DataflowMapper:
                                     and source_resource_id == destination_resource_id:
                                 continue
 
-                            dataflow = {"name": df_name, "source": source_obj, "source_node": source_resource_id,
-                                        "destination_node": destination_resource_id}
+                            dataflow = create_core_dataflow(df_name, source_obj, source_resource_id
+                                                            , destination_resource_id)
                             if "properties" in self.mapping:
                                 dataflow["properties"] = self.mapping["properties"]
                             if "bidirectional" in self.mapping:

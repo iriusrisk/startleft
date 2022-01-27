@@ -1,6 +1,6 @@
-import logging
+import logging, uuid
 
-from startleft.mapper import TrustzoneMapper, ComponentMapper, DataflowMapper
+from startleft.mapper import TrustzoneMapper, ComponentMapper, DataflowMapper, create_core_dataflow
 
 logger = logging.getLogger(__name__)
 
@@ -134,6 +134,7 @@ class Transformer:
                 self.threat_model.add_dataflow(**dataflow)
 
         self.__generate_dataflows_from_hubs()
+        self.__clean_hub_dataflows()
 
     def run(self, iac_mapping):
         self.map = iac_mapping
@@ -145,6 +146,50 @@ class Transformer:
     def __generate_dataflows_from_hubs(self):
         for dataflow in self.threat_model.dataflows:
             if "-hub" in dataflow.source_node or "-hub" in dataflow.destination_node:
-                print("SG DATAFLOW-> source: " + dataflow.source_node
-                      + " destination: " + dataflow.destination_node)
+                for cursor_dataflow in self.threat_model.dataflows:
+                    if dataflow.source_node == cursor_dataflow.source_node \
+                            and dataflow.destination_node == cursor_dataflow.destination_node:
+                        continue
+
+                    # look for 1 to 1 dataflows like in VPCEndpoints - Security Group - IP
+                    if "-hub" in dataflow.destination_node \
+                        and "-hub" not in dataflow.source_node \
+                        and "-hub" in cursor_dataflow.source_node \
+                        and "-hub" not in cursor_dataflow.destination_node \
+                        and dataflow.destination_node == cursor_dataflow.source_node:
+
+                        # determine if it is inbound or outbound
+                        if "-hub" not in dataflow.source_node and "-hub" not in cursor_dataflow.destination_node:
+                            self.__generate_dataflow_from_hub(dataflow, cursor_dataflow)
+
+                        elif "-hub" not in dataflow.destination_node and "-hub" not in cursor_dataflow.target_node:
+                            # NO CASES GENERATED (class 1 - class 3 dfs only are covered by first if)
+                            # the opposite case may show the same dataflows but from the opposite view
+                            print("DETECTED a final (reverse) dataflow with ORIGIN: " + dataflow.source_node + " and DESTINATION: "
+                                  + cursor_dataflow.destination_node)
+                        else:
+                            # NO CASES GENERATED (class 1 - class 3 dfs only are covered by first if)
+                            print("DETECTED a final dataflow between: " + dataflow.source_node + " and: "
+                                  + cursor_dataflow.destination_node)
+
+    def __generate_dataflow_from_hub(self, origin_dataflow, target_dataflow):
+        df_name = origin_dataflow.name + " -> " + target_dataflow.name
+        source_obj = None
+        source_resource_id = origin_dataflow.source_node
+        destination_resource_id = target_dataflow.destination_node
+        # creates a dataflow with common fields to both
+        dataflow = create_core_dataflow(df_name, source_obj, source_resource_id, destination_resource_id)
+        # adds additional fields
+        dataflow["id"] = str(uuid.uuid4())
+        dataflow["tags"] = origin_dataflow.tags + target_dataflow.tags
+        self.threat_model.add_dataflow(**dataflow)
+        print("GENERATED dataflow with name: " + df_name)
+
+    def __clean_hub_dataflows(self):
+        # code for cleaning temporary dataflows coming from $hub action
+        for dataflow in reversed(self.threat_model.dataflows):
+            if "-hub" in dataflow.source_node or "-hub" in dataflow.destination_node:
+                self.threat_model.dataflows.remove(dataflow)
+                print("cleaning dataflow temporary")
+
 
