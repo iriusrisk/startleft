@@ -4,6 +4,12 @@ from startleft.mapper import TrustzoneMapper, ComponentMapper, DataflowMapper, c
 
 logger = logging.getLogger(__name__)
 
+DESTINATION_HUB_TYPE = "destination_hub_type"
+DESTINATION_NODE_NAME = "destination_node_name"
+SOURCE_HUB_TYPE = "source_hub_type"
+SOURCE_NODE_NAME = "source_node_name"
+DEFINED = "defined"
+REFERENCED = "referenced"
 
 class Transformer:
     def __init__(self, source_model=None, threat_model=None):
@@ -12,6 +18,7 @@ class Transformer:
         self.map = {}
         self.id_map = {}
         self.id_parents = dict()
+        self.id_dataflows = dict()
 
     def build_lookup(self):
         if "lookup" in self.map:
@@ -98,7 +105,7 @@ class Transformer:
                             if "singleton_multiple_name" in component:
                                 result["name"] = component["singleton_multiple_name"]
 
-                            #update "result" component with its multiple tags before adding tags from "component"
+                            # update "result" component with its multiple tags before adding tags from "component"
                             if "singleton_multiple_tags" in result:
                                 if len(result["tags"]) <= len(result["singleton_multiple_tags"])\
                                         and result["tags"] is not result["singleton_multiple_tags"]:
@@ -110,7 +117,7 @@ class Transformer:
                                         result["tags"].append(tag)
                             continue
 
-        #removal of auxiliary data before adding components
+        # removal of auxiliary data before adding components
         for component in results:
             if "singleton_multiple_name" in component:
                 del component["singleton_multiple_name"]
@@ -130,7 +137,7 @@ class Transformer:
         for mapping in self.map["dataflows"]:
             mapper = DataflowMapper(mapping)
             mapper.id_map = self.id_map
-            for dataflow in mapper.run(self.source_model, self.id_parents):
+            for dataflow in mapper.run(self.source_model, self.id_dataflows):
                 self.threat_model.add_dataflow(**dataflow)
 
         self.__generate_dataflows_from_hubs()
@@ -147,49 +154,131 @@ class Transformer:
         for dataflow in self.threat_model.dataflows:
             if "-hub" in dataflow.source_node or "-hub" in dataflow.destination_node:
                 for cursor_dataflow in self.threat_model.dataflows:
-                    if dataflow.source_node == cursor_dataflow.source_node \
-                            and dataflow.destination_node == cursor_dataflow.destination_node:
+
+                    if self.__same_dataflows(dataflow, cursor_dataflow):
                         continue
 
-                    # look for 1 to 1 dataflows like in VPCEndpoints - Security Group - IP
-                    if "-hub" in dataflow.destination_node \
-                        and "-hub" not in dataflow.source_node \
-                        and "-hub" in cursor_dataflow.source_node \
-                        and "-hub" not in cursor_dataflow.destination_node \
-                        and dataflow.destination_node == cursor_dataflow.source_node:
+                    if self.__case_1_dataflow(dataflow, cursor_dataflow):
 
-                        # determine if it is inbound or outbound
-                        if "-hub" not in dataflow.source_node and "-hub" not in cursor_dataflow.destination_node:
+                        if self.__case_1_outbound_dataflow(dataflow, cursor_dataflow):
                             self.__generate_dataflow_from_hub(dataflow, cursor_dataflow)
+                            logger.debug("generated from case 1 outbound")
 
-                        elif "-hub" not in dataflow.destination_node and "-hub" not in cursor_dataflow.target_node:
-                            # NO CASES GENERATED (class 1 - class 3 dfs only are covered by first if)
-                            # the opposite case may show the same dataflows but from the opposite view
-                            print("DETECTED a final (reverse) dataflow with ORIGIN: " + dataflow.source_node + " and DESTINATION: "
-                                  + cursor_dataflow.destination_node)
-                        else:
-                            # NO CASES GENERATED (class 1 - class 3 dfs only are covered by first if)
-                            print("DETECTED a final dataflow between: " + dataflow.source_node + " and: "
-                                  + cursor_dataflow.destination_node)
+                        elif self.__case_1_inbound_dataflow(dataflow, cursor_dataflow):
+                            self.__generate_dataflow_from_hub(cursor_dataflow, dataflow)
+                            logger.debug("generated from case 1 inbound")
+
+    def __separate_hub_type_and_hub_dataflow(self, node_id):
+        hub_type = None
+        if "referenced-hub-" in node_id:
+            hub_type = REFERENCED
+            node_id = node_id[15:]
+        if "defined-hub-" in node_id:
+            hub_type = DEFINED
+            node_id = node_id[12:]
+        return hub_type, node_id
 
     def __generate_dataflow_from_hub(self, origin_dataflow, target_dataflow):
         df_name = origin_dataflow.name + " -> " + target_dataflow.name
         source_obj = None
+        # the origin of dataflow is always the same
         source_resource_id = origin_dataflow.source_node
-        destination_resource_id = target_dataflow.destination_node
+        # guess the end of dataflow
+        origin_dataflow_hub_info = self.__get_hub_dataflow_info(origin_dataflow)
+        target_dataflow_hub_info = self.__get_hub_dataflow_info(target_dataflow)
+
+        if origin_dataflow_hub_info[DESTINATION_NODE_NAME] == target_dataflow_hub_info[DESTINATION_NODE_NAME]:
+            destination_resource_id = target_dataflow.source_node
+        else:
+            destination_resource_id = target_dataflow.destination_node
+
+        # cleansing of names of hub tagging
+        source_hub_type, source_resource_id = self.__separate_hub_type_and_hub_dataflow(source_resource_id)
+        destination_hub_type, destination_resource_id =\
+            self.__separate_hub_type_and_hub_dataflow(destination_resource_id)
+        # getting IDs if type is REFERENCED
+        if source_hub_type is not None:
+            source_resource_id = self.id_map[source_resource_id]
+        if destination_hub_type is not None:
+            destination_resource_id = self.id_map[destination_resource_id]
+
         # creates a dataflow with common fields to both
         dataflow = create_core_dataflow(df_name, source_obj, source_resource_id, destination_resource_id)
         # adds additional fields
         dataflow["id"] = str(uuid.uuid4())
         dataflow["tags"] = origin_dataflow.tags + target_dataflow.tags
         self.threat_model.add_dataflow(**dataflow)
-        print("GENERATED dataflow with name: " + df_name)
+        logger.debug(": " + df_name)
+
+    def __same_dataflows(self, dataflow_1, dataflow_2):
+        dataflow_1_hub_info = self.__get_hub_dataflow_info(dataflow_1)
+        dataflow_2_hub_info = self.__get_hub_dataflow_info(dataflow_2)
+
+        if dataflow_1_hub_info[SOURCE_NODE_NAME] == dataflow_2_hub_info[SOURCE_NODE_NAME] \
+                and dataflow_1_hub_info[DESTINATION_NODE_NAME] == dataflow_2_hub_info[DESTINATION_NODE_NAME]:
+            return True
+        elif dataflow_1.name == dataflow_2.name and dataflow_1.source == dataflow_2.source:
+            return True
+        else:
+            return False
+
+    def __case_1_dataflow(self, dataflow, cursor_dataflow):
+        # look for 1 to 1 dataflows like in VPCEndpoints - Security Group - IP
+        # basic requirements for origin node: to be a real end component
+        dataflow_hub_info = self.__get_hub_dataflow_info(dataflow)
+        cursor_dataflow_hub_info = self.__get_hub_dataflow_info(cursor_dataflow)
+
+        # first condition: the component is a real end component "referencing" a hub i.e. a Security Group
+        if dataflow_hub_info[SOURCE_HUB_TYPE] is None and dataflow_hub_info[DESTINATION_HUB_TYPE] is not None:
+            # second condition: the cursor dataflow is an inbound/outbound, "defined" from a hub i.e. a Security Group
+            if (cursor_dataflow_hub_info[SOURCE_HUB_TYPE] is not None\
+                    and cursor_dataflow_hub_info[DESTINATION_HUB_TYPE])\
+                    or (cursor_dataflow_hub_info[DESTINATION_HUB_TYPE] is not None
+                        and cursor_dataflow_hub_info[DESTINATION_HUB_TYPE] is None):
+                return True
+            else:
+                return False
+        else:
+            return False
+
+    def __case_1_outbound_dataflow(self, dataflow, cursor_dataflow):
+        # additional requirements for outbound dataflows
+        dataflow_hub_info = self.__get_hub_dataflow_info(dataflow)
+        cursor_dataflow_hub_info = self.__get_hub_dataflow_info(cursor_dataflow)
+
+        if cursor_dataflow_hub_info[SOURCE_HUB_TYPE] is DEFINED \
+                and cursor_dataflow_hub_info[DESTINATION_HUB_TYPE] is DEFINED\
+                and dataflow_hub_info[DESTINATION_NODE_NAME] == cursor_dataflow_hub_info[SOURCE_NODE_NAME]:
+            return True
+        else:
+            return False
+
+    def __case_1_inbound_dataflow(self, dataflow, cursor_dataflow):
+        # additional requirements for inbound dataflows
+        dataflow_hub_info = self.__get_hub_dataflow_info(dataflow)
+        cursor_dataflow_hub_info = self.__get_hub_dataflow_info(cursor_dataflow)
+
+        if cursor_dataflow_hub_info[SOURCE_HUB_TYPE] is DEFINED \
+                and cursor_dataflow_hub_info[DESTINATION_HUB_TYPE] is DEFINED\
+                and dataflow_hub_info[DESTINATION_NODE_NAME] == cursor_dataflow_hub_info[DESTINATION_NODE_NAME]:
+            return True
+        else:
+            return False
+
+    def __get_hub_dataflow_info(self, dataflow):
+        dataflow_hub_type_source, dataflow_source_node_name = \
+            self.__separate_hub_type_and_hub_dataflow(dataflow.source_node)
+        dataflow_hub_type_destination, dataflow_destination_node_name = \
+            self.__separate_hub_type_and_hub_dataflow(dataflow.destination_node)
+
+        hub_dataflow_info = {SOURCE_HUB_TYPE: dataflow_hub_type_source, SOURCE_NODE_NAME: dataflow_source_node_name,
+                             DESTINATION_HUB_TYPE: dataflow_hub_type_destination,
+                             DESTINATION_NODE_NAME: dataflow_destination_node_name}
+        return hub_dataflow_info
 
     def __clean_hub_dataflows(self):
         # code for cleaning temporary dataflows coming from $hub action
         for dataflow in reversed(self.threat_model.dataflows):
             if "-hub" in dataflow.source_node or "-hub" in dataflow.destination_node:
                 self.threat_model.dataflows.remove(dataflow)
-                print("cleaning dataflow temporary")
-
-
+                logger.debug("cleaning temp dataflow:"+dataflow.name)

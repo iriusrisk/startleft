@@ -459,7 +459,7 @@ class DataflowMapper:
         self.mapping = mapping
         self.id_map = {}
 
-    def run(self, source_model, id_parents):
+    def run(self, source_model, id_dataflows):
         df_id = None
         dataflows = []
 
@@ -475,23 +475,32 @@ class DataflowMapper:
             destination_resource_names = destination_mapper.run(source_model, source_obj)
 
             for source_resource_name in source_resource_names or []:
+                source_hub_type = None
                 # components should be located
                 source_resource_ids = self.__get_dataflows_component_ids(source_resource_name)
                 # if a component is not on list, it may be a Security Group
-                if source_resource_ids is None:
-                    if "$hub" in source_mapper.mapping:
-                        source_resource_ids = ["source-hub-" + source_resource_name]
-                        self.id_map[source_resource_name] = source_resource_ids
+                if "$hub" in source_mapper.mapping:
+                    source_hub_type = self.__determine_hub_mapping_type(source_mapper, destination_mapper)
+                    if source_hub_type is not None:
+                        source_resource_ids = [source_hub_type + source_resource_name]
 
                 for source_resource_id in source_resource_ids or []:
                     for destination_resource_name in destination_resource_names or []:
+                        destination_hub_type = None
                         # components should be located
                         destination_resource_ids = self.__get_dataflows_component_ids(destination_resource_name)
+
                         # if a component is not on list, it may be a Security Group
+                        if "$hub" in destination_mapper.mapping:
+                            if destination_resource_ids is None:
+                                destination_resource_id_for_hub_mapping = ["hub-"+destination_resource_name]
+                                self.id_map[destination_resource_name] = destination_resource_id_for_hub_mapping
+                            destination_hub_type = self.__determine_hub_mapping_type(source_mapper, destination_mapper)
+                            if destination_hub_type is not None:
+                                destination_resource_ids = [destination_hub_type + destination_resource_name]
+
                         if destination_resource_ids is None:
-                            if "$hub" in destination_mapper.mapping:
-                                destination_resource_ids = ["destination-hub-" + destination_resource_name]
-                                self.id_map[destination_resource_name] = destination_resource_ids
+                            continue
 
                         for destination_resource_id in destination_resource_ids:
                             # skip self referencing dataflows unless they are temporary (action $hub)
@@ -519,6 +528,9 @@ class DataflowMapper:
                             dataflow_tags = get_tags(source_model, source_obj, mapping_tags)
                             dataflow = set_optional_parameters_to_resource(dataflow, mapping_tags, dataflow_tags)
 
+                            id_dataflows[source_resource_id] = {"source-hub-type": source_hub_type,
+                                                                "destination_id": destination_resource_id,
+                                                                "destination-hub-type": destination_hub_type}
                             dataflows.append(dataflow)
         return dataflows
 
@@ -529,3 +541,16 @@ class DataflowMapper:
         if isinstance(node_ids, str):
             node_ids = [node_ids]
         return node_ids
+
+    def __determine_hub_mapping_type(self, source_mapper, destination_mapper):
+        # defined-hub: A mapping type that has both $hub in source and destination is a definition (Security Group)
+        # referenced-hub: A mapping type that only has $hub in source or in destination is a component referencing to
+        # a referenced component such as a Security Group
+        if "$hub" in source_mapper.mapping and "$hub" in destination_mapper.mapping:
+            return "defined-hub-"
+        elif ("$hub" in source_mapper.mapping and "$hub" not in destination_mapper.mapping) \
+                or ("$hub" not in source_mapper.mapping and "$hub" in destination_mapper.mapping):
+            return "referenced-hub-"
+        else:
+            return None
+
