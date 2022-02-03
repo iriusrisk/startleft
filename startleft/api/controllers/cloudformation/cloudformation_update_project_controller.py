@@ -6,7 +6,7 @@ from startleft.api.controllers.cloudformation.file_type import FileType
 from startleft.api.error_response import ErrorResponse
 from startleft.messages import messages
 
-PREFIX = '/api/beta/startleft/cloudformation'
+PREFIX = '/api/v1/startleft/cloudformation'
 URL = ''
 RESPONSE_STATUS_CODE = 204
 RESPONSE_BODY = Response(status_code=RESPONSE_STATUS_CODE)

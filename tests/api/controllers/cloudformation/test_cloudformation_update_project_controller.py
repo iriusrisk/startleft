@@ -57,7 +57,7 @@ class TestCloudFormationUpdateProjectController:
 
         # And a IriusRisk response mock with the update of the project
         responses.add(responses.PUT,
-                      IRIUSRISK_URL + IriusRiskApiVersion.beta.value + f"/project/import/otm/{project_id}",
+                      IRIUSRISK_URL + IriusRiskApiVersion.v1.value + f"/products/otm/{project_id}",
                       status=200)
 
         # When I do put on cloudformation endpoint
@@ -81,7 +81,7 @@ class TestCloudFormationUpdateProjectController:
 
         # And a IriusRisk response mock with the update of the nonexistent project
         responses.add(responses.PUT,
-                      IRIUSRISK_URL + IriusRiskApiVersion.beta.value + f'/project/import/otm/{project_id}',
+                      IRIUSRISK_URL + IriusRiskApiVersion.v1.value + f'/products/otm/{project_id}',
                       status=404)
 
         # When I do put on cloudformation endpoint
