@@ -130,8 +130,10 @@ class Transformer:
         for mapping in self.map["dataflows"]:
             mapper = DataflowMapper(mapping)
             mapper.id_map = self.id_map
-            for dataflow in mapper.run(self.source_model):
+            for dataflow in mapper.run(self.source_model, self.id_parents):
                 self.threat_model.add_dataflow(**dataflow)
+
+        self.__generate_dataflows_from_hubs()
 
     def run(self, iac_mapping):
         self.map = iac_mapping
@@ -139,3 +141,10 @@ class Transformer:
         self.transform_trustzones()
         self.transform_components()
         self.transform_dataflows()
+
+    def __generate_dataflows_from_hubs(self):
+        for dataflow in self.threat_model.dataflows:
+            if "-hub" in dataflow.source_node or "-hub" in dataflow.destination_node:
+                print("SG DATAFLOW-> source: " + dataflow.source_node
+                      + " destination: " + dataflow.destination_node)
+

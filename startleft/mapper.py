@@ -7,13 +7,25 @@ logger = logging.getLogger(__name__)
 DEFAULT_TRUSTZONE = "b61d6911-338d-46a8-9f39-8dcd24abfe91"
 
 
+def format_aws_fns(source_objects):
+    if 'Fn::ImportValue' in source_objects:
+        source_objects = get_import_value_resource_name(source_objects['Fn::ImportValue'])
+    elif 'Fn::GetAtt' in source_objects:
+        source_objects = source_objects['Fn::GetAtt'][0]
+    return source_objects
+
+
 def format_source_objects(source_objects):
-    if not isinstance(source_objects, list):
+    if isinstance(source_objects, dict):
+        source_objects = format_aws_fns(source_objects)
+    if isinstance(source_objects, str):
         source_objects = [source_objects]
+
     return source_objects
 
 
 def get_mappings_for_name_and_tags(mapping_definition):
+    mapping_name = None
     mapping_tags = None
     if "name" in mapping_definition:
         mapping_name = mapping_definition["name"]
@@ -72,6 +84,18 @@ def get_altsource_mapping_path_value(source_model, alt_source_object, mapping_pa
     return value
 
 
+def get_import_value_resource_name(import_value_string):
+    # gets resource name from an AWS Fn::ImportValue field in format:
+    # "Fn::ImportValue": "ECSFargateGoServiceStack:ExportsOutputFnGetAttResourceNameGroupIdNNNNNNNN"
+    lower_limit = import_value_string.index("FnGetAtt")+len("FnGetAtt")
+    upper_limit = import_value_string.index("GroupId")
+    if isinstance(lower_limit, int) and isinstance(upper_limit, int):
+        result = import_value_string[lower_limit:upper_limit]
+        return result
+    else:
+        return None
+
+
 class TrustzoneMapper:
     def __init__(self, mapping):
         self.mapping = mapping
@@ -121,39 +145,80 @@ class ComponentMapper:
         mapping_name, mapping_tags = get_mappings_for_name_and_tags(self.mapping)
 
         for source_object in source_objects:
-            component_type = source_model.search(self.mapping["type"], source=source_object)
+            component_type = format_aws_fns(source_model.search(self.mapping["type"], source=source_object))
             component_name, singleton_multiple_name = self.__get_component_names(source_model, source_object,
                                                                                  mapping_name)
-            parents, parents_from_component = self.__get_parent_resources_ids(source_model, source_object, id_parents,
-                                                                              component_name)
+            parent_names, parents_from_component = self.__get_parent_names(source_model, source_object, id_parents,
+                                                                           component_name)
             component_tags, singleton_multiple_tags = self.__get_component_tags(source_model, source_object,
                                                                                 mapping_tags)
 
-            for parent_number, parent_element in enumerate(parents):
+            for parent_number, parent_name in enumerate(parent_names):
                 # If there is more than one parent (i.e. subnets), the component will replicated inside each
-                component = {"name": component_name, "type": component_type, "source": source_object,
-                             "parent": self.__get_parent_id(parent_element, parents_from_component, component_name)}
+                parent_ids = self.__get_parent_id(parent_name, parents_from_component, component_name)
+                if isinstance(parent_ids, str):
+                    parent_ids = [parent_ids]
+                for parent_id in parent_ids:
+                    base_component = {"name": component_name, "type": component_type, "source": source_object,
+                                 "parent": parent_id}
 
-                if "properties" in self.mapping:
-                    component["properties"] = self.mapping["properties"]
-                component = set_optional_parameters_to_resource(component, mapping_tags, component_tags,
-                                                                singleton_multiple_name, singleton_multiple_tags)
-                component_id = self.__generate_id(source_model, component, component_name, parent_number)
-                component["id"] = component_id
+                    if "properties" in self.mapping:
+                        base_component["properties"] = self.mapping["properties"]
+                    base_component = set_optional_parameters_to_resource(base_component, mapping_tags, component_tags,
+                                                                         singleton_multiple_name,
+                                                                         singleton_multiple_tags)
+                    component_ids = self.__generate_id(source_model, base_component, component_name, parent_number)
 
-                # If the component is defining child components the ID must be saved in a parent dict
-                if "$children" in self.mapping["$source"]:
-                    logger.debug("Component is defining child components...")
-                    children = source_model.search(self.mapping["$source"]["$children"], source=source_object)
-                    # TODO: Alternative options for $path when nothing is returned
-                    if children not in id_parents:
-                        id_parents[children] = list()
-                    id_parents[children].append(component_id)
+                    if isinstance(component_ids, str):
+                        component_ids = [component_ids]
 
-                logger.debug(
-                    f"Added component: [{component['id']}][{component['type']}] | Parent: [{component['parent']}]")
-                components.append(component)
-                logger.debug("")
+                    for component_number, component_id in enumerate(component_ids):
+                        component = base_component.copy()
+                        component["id"] = component_id
+
+                        # If the component is defining child components the ID must be saved in a parent dict
+                        if "$children" in self.mapping["$source"]:
+                            logger.debug("Component is defining child components...")
+                            child_name = source_model.search(self.mapping["$source"]["$children"], source=source_object)
+
+                            if child_name not in self.id_map:
+                                # This child has not been mapped yet but its ID must be created
+                                # Because the own child mapping definition has no information about its own parent
+                                child_id = str(uuid.uuid4())
+                                self.id_map[child_name] = child_id
+                            else:
+                                # Every generated child is unique
+                                # And has 1:1 correspondence with its parent
+                                # But self.id_map is a dict that groups by name
+                                # And the same parent and children may be in different subnets
+                                # So for this $children case:
+                                #  self.id_map[parent_name] = [parent_1_id, parent_2_id...parent_N_id]
+                                #  self.id_map[child_name] = [child_parent_1_id, child_parent_2_id...child_parent_N_id]
+                                child_id = str(uuid.uuid4())
+                                if isinstance(self.id_map[child_name], str):
+                                    self.id_map[child_name] = [self.id_map[child_name], child_id]
+                                elif isinstance(self.id_map[child_name], list):
+                                    self.id_map[child_name].append(child_id)
+                            if child_id not in id_parents:
+                                id_parents[child_id] = list()
+                            id_parents[child_id].append(component_id)
+                        elif "$parent" in self.mapping["parent"]:
+                            # $parent and $children are related mappings
+                            # In this case, component_id may be a list with a different treatment
+                            if parent_number == component_number:
+                                if component_id not in id_parents:
+                                    id_parents[component_id] = parent_id
+                            else:
+                                break
+                        # For the rest of cases that are not $children, id_parents must be set with new parents found
+                        else:
+                            if component_id not in id_parents:
+                                id_parents[component_id] = parent_id
+
+                        logger.debug(
+                            f"Added component: [{component['id']}][{component['type']}] | Parent: [{component['parent']}]")
+                        components.append(component)
+                        logger.debug("")
 
         # Here we should already have all the components
 
@@ -206,7 +271,7 @@ class ComponentMapper:
 
     def __get_component_individual_name(self, source_model, source_object, mapping):
         if "name" in self.mapping:
-            source_component_name = source_model.search(mapping, source=source_object)
+            source_component_name = format_aws_fns(source_model.search(mapping, source=source_object))
             logger.debug(f"+Found source object with name {source_component_name}")
         else:
             source_component_name = None
@@ -214,8 +279,10 @@ class ComponentMapper:
         return source_component_name
 
     def __get_component_singleton_names(self, source_model, source_object, mapping):
+        source_component_multiple_name = None
         if "name" in self.mapping:
             source_component_name, source_component_multiple_name = source_model.search(mapping, source=source_object)
+            source_component_name = format_aws_fns(source_component_name)
             logger.debug(f"+Found singleton source object with multiple name {source_component_name}")
         else:
             source_component_name = None
@@ -228,8 +295,8 @@ class ComponentMapper:
 
         if mapping is not None:
             if self.__multiple_sources_mapping_inside(mapping):
-                component_tags, singleton_multiple_tags = self.__get_component_singleton_tags(source_model, source_object,
-                                                                                              mapping)
+                component_tags, singleton_multiple_tags = self.__get_component_singleton_tags(source_model,
+                                                                                              source_object, mapping)
             else:
                 component_tags = get_tags(source_model, source_object, mapping)
         return component_tags, singleton_multiple_tags
@@ -260,23 +327,48 @@ class ComponentMapper:
         return "$singleton" in self.mapping["$source"] and \
                len(list(filter(lambda obj: "$numberOfSources" in obj, mapping_definition))) > 0
 
-    def __get_parent_resources_ids(self, source_model, source_object, id_parents, component_name):
-        # Retrieves a list of parent resources (components or trustZones) of the element.
+    def __get_parent_names(self, source_model, source_object, id_parents, component_name):
+        # Retrieves a list of parent resource names (components or trustZones) of the element.
         parents_from_component = False
         if "parent" in self.mapping:
             if "$parent" in self.mapping["parent"]:
-                # In this case the parent component is the one in charge of defining which components
-                # are their children, so it's ID should be stored before reaching the child components
+                # Special case with $parent, where the parent component is in charge of defining which components
+                # are their children, so its ID should be stored before reaching the child components
                 # With $parent, it will check if the supposed id_parents exist,
                 # otherwise performing a standard search using action inside $parent
                 if len(id_parents) > 0:
-                    parent = id_parents[component_name]
+                    component_id = self.id_map[component_name]
+                    # for $parent elements, all parents have the same name (but IDs may be different)
+                    if isinstance(component_id, list):
+                        # so to get the name of the element, any of the children id is needed (the first, in this case)
+                        component_id = component_id[0]
+                    parent_ids = id_parents[component_id]
+                    parent = []
+                    for parent_id in parent_ids:
+                        # reverse search in the dictionary of resource names
+                        # some of those entries have got lists
+                        for resource_name, resource_ids in self.id_map.items():
+                            found = False
+                            if isinstance(resource_ids, str):
+                                if parent_id == resource_ids:
+                                    parent = resource_name
+                                    found = True
+                                    break
+                            elif isinstance(resource_ids, list):
+                                for resource_id in resource_ids:
+                                    if parent_id == resource_id:
+                                        parent = resource_name
+                                        found = True
+                                        break
+                            if found:
+                                break
+
                     parents_from_component = True
                 else:
                     parent = source_model.search(self.mapping["parent"]["$parent"], source=source_object)
             else:
                 # Just takes the parent component from the "parent" field in the mapping file
-                # TODO: What if the object can't find a parent component? Should it have a default parent in case the path didn't find anything?
+                # If the object were not to find a parent component: use path or findFirst actions with default value
                 parent = source_model.search(self.mapping["parent"], source=source_object)
         else:
             parent = ""
@@ -293,9 +385,10 @@ class ComponentMapper:
         return parent, parents_from_component
 
     def __get_parent_id(self, parent_element, parents_from_component, component_name):
+        parent_id = None
         if parents_from_component:
             # If the parent component was detected outside the component we need to look at the parent dict
-            parent_id = parent_element
+            parent_id = self.id_map[parent_element]
             self.id_map[parent_element] = parent_id
             logger.debug(f"Component {component_name} gets parent ID from existing component")
         else:
@@ -323,6 +416,7 @@ class ComponentMapper:
 
     def __generate_id(self, source_model, component, component_name, parent_number):
         if "id" in self.mapping:
+            # The usual case, as "id" field is mandatory in mapping definitions
             source_id = source_model.search(self.mapping["id"], source=component)
         else:
             source_id = str(uuid.uuid4())
@@ -335,7 +429,13 @@ class ComponentMapper:
         # a new ID can be generated if there is more a parent and this is not the first one
         if c_id is None or parent_number > 0:
             c_id = str(uuid.uuid4())
-        self.id_map[source_id] = c_id
+        if parent_number > 0:
+            if isinstance(self.id_map[source_id], list):
+                self.id_map[source_id].append(c_id)
+            if isinstance(self.id_map[source_id], str):
+                self.id_map[source_id] = [self.id_map[source_id], c_id]
+        else:
+            self.id_map[source_id] = c_id
 
         return c_id
 
@@ -346,10 +446,9 @@ class DataflowNodeMapper:
         self.id_map = {}
 
     def run(self, source_model, source):
-        source_objs = source_model.search(self.mapping, source=source)
-        if isinstance(source_objs, str):
-            source_objs = [source_objs]
-        return source_objs
+        source_resource_names = format_source_objects(source_model.search(self.mapping, source=source))
+
+        return source_resource_names
 
 
 class DataflowMapper:
@@ -357,8 +456,8 @@ class DataflowMapper:
         self.mapping = mapping
         self.id_map = {}
 
-    def run(self, source_model):
-
+    def run(self, source_model, id_parents):
+        df_id = None
         dataflows = []
 
         source_objs = format_source_objects(source_model.search(self.mapping["$source"], source=None))
@@ -369,33 +468,37 @@ class DataflowMapper:
 
             source_mapper = DataflowNodeMapper(self.mapping["source"])
             destination_mapper = DataflowNodeMapper(self.mapping["destination"])
-            source_nodes = source_mapper.run(source_model, source_obj)
-            if source_nodes is not None and len(source_nodes) > 0:
-                for source_node in source_nodes:
-                    destination_nodes = destination_mapper.run(source_model, source_obj)
-                    if destination_nodes is not None and len(destination_nodes) > 0:
-                        for destination_node in destination_nodes:
-                            # skip self referencing dataflows
-                            if source_node == destination_node:
+            source_resource_names = source_mapper.run(source_model, source_obj)
+            destination_resource_names = destination_mapper.run(source_model, source_obj)
+
+            for source_resource_name in source_resource_names or []:
+                # components should be located
+                source_resource_ids = self.__get_dataflows_component_ids(source_resource_name)
+                # if a component is not on list, it may be a Security Group
+                if source_resource_ids is None:
+                    if "$hub" in source_mapper.mapping:
+                        source_resource_ids = ["source-hub-" + source_resource_name]
+                        self.id_map[source_resource_name] = source_resource_ids
+
+                for source_resource_id in source_resource_ids or []:
+                    for destination_resource_name in destination_resource_names or []:
+                        # components should be located
+                        destination_resource_ids = self.__get_dataflows_component_ids(destination_resource_name)
+                        # if a component is not on list, it may be a Security Group
+                        if destination_resource_ids is None:
+                            if "$hub" in destination_mapper.mapping:
+                                destination_resource_ids = ["destination-hub-" + destination_resource_name]
+                                self.id_map[destination_resource_name] = destination_resource_ids
+
+                        for destination_resource_id in destination_resource_ids:
+                            # skip self referencing dataflows unless they are temporary (action $hub)
+                            if "$hub" not in source_mapper.mapping\
+                                    and "$hub" not in destination_mapper.mapping\
+                                    and source_resource_id == destination_resource_id:
                                 continue
 
-                            dataflow = {"name": df_name}
-
-                            if source_node in self.id_map:
-                                source_node_id = self.id_map[source_node]
-                            else:
-                                # not generate component IDs that may have been generated on component mapping
-                                continue
-
-                            if destination_node in self.id_map:
-                                destination_node_id = self.id_map[destination_node]
-                            else:
-                                # not generate components that may have been generated on components mapping
-                                continue
-
-                            dataflow["source_node"] = source_node_id
-                            dataflow["destination_node"] = destination_node_id
-                            dataflow["source"] = source_obj
+                            dataflow = {"name": df_name, "source": source_obj, "source_node": source_resource_id,
+                                        "destination_node": destination_resource_id}
                             if "properties" in self.mapping:
                                 dataflow["properties"] = self.mapping["properties"]
                             if "bidirectional" in self.mapping:
@@ -415,3 +518,11 @@ class DataflowMapper:
 
                             dataflows.append(dataflow)
         return dataflows
+
+    def __get_dataflows_component_ids(self, resource_name):
+        node_ids = None
+        if resource_name in self.id_map:
+            node_ids = self.id_map[resource_name]
+        if isinstance(node_ids, str):
+            node_ids = [node_ids]
+        return node_ids

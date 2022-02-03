@@ -2,8 +2,13 @@ trustzones:
   - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
     name: Public Cloud
 
+#SG MAPPING (AUXILIARY SG)
+#4
+  - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    name: Internet
+    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupEgress[0].CidrIp=='0.0.0.0/0']"}}
+
 # The order of the components is important because parent components must be defined before child components
-# TODO: 1- Order shoudn't matter because every object could appear inside other components
 components:
   - id:     {$format: "{name}"}
     type:   CD-ACM
@@ -414,6 +419,28 @@ components:
     tags:
       - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
+#NEW SG MAPPINGS (AUXILIARY SG)
+
+#4
+# internet custom component for a security group egress (typ.represented as the cidr IP 0.0.0.0/0)
+  - id:   {$format: "{name}"}
+    type: {$path: "Properties.SecurityGroupEgress[0].CidrIp"}
+    name:   {$path: "Properties.SecurityGroupEgress[0].CidrIp"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupEgress[0].CidrIp]"}}
+    parent: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    tags:
+      - case 4a - Internet component generated from SecurityGroupEgress
+
+# internet custom component for a security group ingress (typ.represented as the cidr IP 255.255.255.255/32)
+# All those Cidrips that are not ips such as vpc names will not generate an unnecessary document
+  - id:   {$format: "{name}"}
+    type: {$path: "Properties.SecurityGroupIngress[0].CidrIp"}
+    name:   {$path: "Properties.SecurityGroupIngress[0].CidrIp"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupIngress[0].CidrIp && !starts_with(Properties.SecurityGroupIngress[0].CidrIp.\"Fn::GetAtt\"[1], 'CidrBlock')]"}}
+    parent: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    tags:
+      - case 4b - Internet component generated from SecurityGroupIngress
+
 
 # Default catchall
 #  - id:          { $format: "{name}"}
@@ -426,17 +453,119 @@ components:
 #      - { $path: "Type" }
 
 dataflows:
+#NEW SG MAPPINGS
+#1
+  - id:     {$format: "{name}"}
+    name:   {$format: "Security group dataflow found in {_key}"}
+    $source: {$root: "Resources|squash(@)[?Properties.SecurityGroupIds]"}
+    source: {$path: "_key"}
+    destination: {$hub: {$path: "Properties.SecurityGroupIds|map(&values(@), @)[0][0][0]"}}
+    tags: case 1 - data flow from component to a Security Group (found in field SecurityGroupIds)
+
+  - id:     {$format: "{name}"}
+    name:   {$format: "Security group dataflow found in {_key}"}
+    $source: {$root: "Resources|squash(@)[?Properties.SecurityGroups]"}
+    source: {$path: "_key"}
+    destination: {$hub: {$path: "Properties.SecurityGroups|map(&values(@), @)[0][0][0]"}}
+    tags: case 1 - data flow from a component to a Security Group (found in field SecurityGroups)
+
+  - id:     {$format: "{name}"}
+    name:   {$format: "Security group dataflow found in {_key}"}
+    $source: {$root: "Resources|squash(@)[?Properties.NetworkConfiguration.AwsvpcConfiguration.SecurityGroups]"}
+    source: {$path: "_key"}
+    destination: {$hub: {$path: "Properties.NetworkConfiguration.AwsvpcConfiguration.SecurityGroups|map(&values(@), @)[0][0][0]"}}
+    tags: case 1 - data flow from a component to a Security Group (found in field NetworkConfiguration.AwsvpcConfiguration.SecurityGroups)
+
+  - id:     {$format: "{name}"}
+    name:   {$format: "Security group dataflow found in {_key}"}
+    $source: {$root: "Resources|squash(@)[?Properties.VPCConfig.SecurityGroupIds]"}
+    source: {$path: "_key"}
+    destination: {$hub: {$path: "Properties.VPCConfig.SecurityGroupIds|map(&values(@), @)[0][0][0]"}}
+    tags: case 1 - data flow from a component to a Security Group (found in field VPCConfig.SecurityGroupIds)
+#2
+  - id:     {$format: "{name}"}
+    name:   {$format: "Outer Security Group Ingress dataflow found in {_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroupIngress']"}
+    source: {$hub: {$path: "Properties.SourceSecurityGroupId|squash(@)[0][0]"}}
+    destination: {$hub: {$path: "Properties.GroupId"}}
+    tags:
+      - case 2a - inbound connection information
+      - $path: "Properties.Description"
+      - $path: "Properties.IpProtocol"
+      - $path: "Properties.FromPort"
+      - $path: "Properties.ToPort"
+
+  - id:     {$format: "{name}"}
+    name:   {$format: "Outer Security Group Egress dataflow found in {_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroupEgress']"}
+    source: {$hub: {$path: "Properties.GroupId"}}
+    destination: {$hub: {$path: "Properties.DestinationSecurityGroupId|squash(@)[0][0]"}}
+    tags:
+      - case 2b - outbound connection information
+      - $path: "Properties.Description"
+      - $path: "Properties.IpProtocol"
+      - $path: "Properties.FromPort"
+      - $path: "Properties.ToPort"
+#3
+  - id:     {$format: "{name}"}
+    name:   {$format: "Inner Security Group Ingress dataflow found in {_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup']"}
+    source: {$hub:{$path: "Properties.SecurityGroupIngress[0].CidrIp"}}
+    destination: {$hub:{$path: "_key"}}
+    tags:
+      - case 3a - inbound connection information
+      - $path: "Properties.SecurityGroupEgress[0].Description"
+      - $path: "Properties.SecurityGroupIngress[0].IpProtocol"
+      - $path: "Properties.SecurityGroupIngress[0].FromPort"
+      - $path: "Properties.SecurityGroupIngress[0].ToPort"
+
+  - id:     {$format: "{name}"}
+    name:   {$format: "Inner Security Group Egress dataflow found in {_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup']"}
+    source: {$hub:{$path: "_key"}}
+    destination: {$hub:{$path: "Properties.SecurityGroupEgress[0].CidrIp"}}
+    tags:
+      - case 3b - outbound connection information
+      - $path: "Properties.SecurityGroupEgress[0].Description"
+      - $path: "Properties.SecurityGroupEgress[0].IpProtocol"
+      - $path: "Properties.SecurityGroupEgress[0].CidrIp"
+
+#mapping aws-lambda-function->firehose
+#difficult because those components do not reference their names but their delivery stream names (internal fields)
+  #- id:     {$format: "{name}"}
+  #  name:  { $path: "Properties.DeliveryStreamName" }
+  #  $source: { $root: "Resources|squash(@)[?Type=='AWS::KinesisFirehose::DeliveryStream']" }
+  #  source: { $path: "Resources|squash(@)|contains('CL-Firehose')" } #CLTransformer433F8853
+  #  destination: {$path: "_key"}
+
+  #- id:     {$format: "concat({name},_key)"}
+  #  name:   {$format: "logstream"}
+  #  $source: {$root: "Resources|squash(@)[?Type=='AWS::KinesisFirehose::DeliveryStream']"}
+  #  source:  {$path: "_key"}
+  #  destination: {$path: {$searchParams:{ searchPath: "Properties.LoggingConfiguration.DestinationBucketName.Ref"}}}
+
+#not only generates duplicates but also with inconsistent source ids and in one case a destination id
+#the reason is: aws::apigateway::xx is singleton
+#if the component referenced in source or destination has not been or will not be generated
+# (that is the case of aws::apigateway::method) then it generates wrong source or destination ids.
+#  - id:     {$format: "{name}"}
+#    name:   {$format: "API gateway data stream from {_key}"}
+#    $source: {$root: "Resources|squash(@)[?Type=='AWS::ApiGateway::Method']"}
+#    source:  {$path: {$searchParams:{ searchPath: "_key"}}}
+#    destination:  {$path: {$searchParams:{ searchPath: "Properties.Integration.RequestTemplates|squash(@)[0]|squash(@)[0][1][1]"}}}
+
+
   - id:     {$format: "{name}"}
     name:   {$format: "dataflow to Lambda function in {_key}"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::Lambda::EventSourceMapping']"}
-    source:  {$path: "Properties.EventSourceArn|squash(@)[0][0]"}
+    source:  {$path: "Properties.EventSourceArn|squash(@)[0]"}
     destination: {$path: "Properties.FunctionName.Ref"}
 
   - id:     {$format: "{name}"}
     name:   {$format: "dataflow from Lambda function on Failure {_key}"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::Lambda::EventSourceMapping']"}
     source:  {$findFirst: ["Properties.FunctionName.Ref", "Properties.FunctionName"]}
-    destination: {$path: {$searchParams:{ searchPath: "Properties.DestinationConfig.OnFailure.Destination|squash(@)[0][0]"}}}
+    destination: {$path: {$searchParams:{ searchPath: "Properties.DestinationConfig.OnFailure.Destination|squash(@)[0]"}}}
 
   - id:     {$format: "{name}"}
     name:   {$format: "S3 dataflow from {_key}"}
@@ -448,7 +577,7 @@ dataflows:
     name:    {$format: "API gateway data flow from {_key}"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::ApiGateway::Authorizer']"}
     source:  {$path: "_key"}
-    destination: {$path: "Properties.ProviderARNs[0]|squash(@)[0][0]"}
+    destination: {$path: "Properties.ProviderARNs[0]|squash(@)[0]"}
     tags:
       - API gateway dataflow
 
