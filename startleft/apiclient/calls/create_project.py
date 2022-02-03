@@ -12,7 +12,7 @@ class CreateProject(BaseApiClient):
     def do_call(self, otm_file):
         logger.debug("Creating project")
 
-        url = self.irius_beta_url(f"/project/import/otm")
+        url = self.irius_v1_url(f"/products/otm")
         headers = self.headers()
         files = self.open_file(otm_file)
 

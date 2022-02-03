@@ -92,7 +92,7 @@ Available endpoints:
 GET /health
 ```
 ```
-POST /api/beta/startleft/cloudformation
+POST /api/v1/startleft/cloudformation
 Headers:
     api_token                   Required: IriusRisk API token
 Request Body:
@@ -103,7 +103,7 @@ Request Body:
     mapping_file                Optional. File that contains the mapping between AWS components and IriusRisk components. Providing this file will completely override default values
 ```
 ```
-PUT /api/beta/startleft/cloudformation/projects/{project_id}
+PUT /api/v1/startleft/cloudformation/projects/{project_id}
 Headers:
     api_token                   Required: IriusRisk API token
 Path parameter:
