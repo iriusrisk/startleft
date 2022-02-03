@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 class IriusRiskApiVersion(Enum):
     v1 = "/api/v1"
     v2 = "/api/v2"
-    beta = "/api/beta"
 
 
 class BaseApiClient:
@@ -28,9 +27,6 @@ class BaseApiClient:
 
     def irius_v1_url(self, path):
         return self.__irius_url(path, IriusRiskApiVersion.v1)
-
-    def irius_beta_url(self, path):
-        return self.__irius_url(path, IriusRiskApiVersion.beta)
 
     def __irius_url(self, path, api_version: IriusRiskApiVersion):
         if not self.base_url:

@@ -53,7 +53,7 @@ class TestCloudFormationCreateProjectController:
                       json=[{'ref': 'project_B_id'}, {'ref': 'project_C_id'}], status=200)
 
         # And a IriusRisk response mock with the creation of the project
-        responses.add(responses.POST, IRIUSRISK_URL + IriusRiskApiVersion.beta.value + '/project/import/otm',
+        responses.add(responses.POST, IRIUSRISK_URL + IriusRiskApiVersion.v1.value + '/products/otm',
                       status=200)
 
         # When I do post on cloudformation endpoint
