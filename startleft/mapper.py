@@ -96,6 +96,14 @@ def get_import_value_resource_name(import_value_string):
         return None
 
 
+def repeated_type4_hub_definition_component(mapping, id_map, component_name):
+    if str(mapping["name"]) == str(mapping["type"]):
+        same_name_component = component_name in id_map
+        return same_name_component
+    else:
+        return False
+
+
 def create_core_dataflow(df_name, source_obj, source_resource_id, destination_resource_id):
     dataflow = {"name": df_name, "source": source_obj, "source_node": source_resource_id,
                 "destination_node": destination_resource_id}
@@ -173,6 +181,12 @@ class ComponentMapper:
                     base_component = set_optional_parameters_to_resource(base_component, mapping_tags, component_tags,
                                                                          singleton_multiple_name,
                                                                          singleton_multiple_tags)
+
+                    # Special case related with support components for Security Groups
+                    # To avoid repeated components generated from AWS Cidr IP fields
+                    if repeated_type4_hub_definition_component(self.mapping, self.id_map, component_name):
+                        continue
+
                     component_ids = self.__generate_id(source_model, base_component, component_name, parent_name_number)
 
                     if isinstance(component_ids, str):
