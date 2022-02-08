@@ -4,12 +4,12 @@ from startleft.mapper import TrustzoneMapper, ComponentMapper, DataflowMapper, c
 
 logger = logging.getLogger(__name__)
 
-DESTINATION_HUB_TYPE = "destination_hub_type"
 DESTINATION_NODE_NAME = "destination_node_name"
-SOURCE_HUB_TYPE = "source_hub_type"
+HUB_TYPE = "hub_type"
 SOURCE_NODE_NAME = "source_node_name"
-DEFINED = "defined"
-REFERENCED = "referenced"
+TYPE1 = "type1"
+TYPE2 = "type2"
+TYPE3 = "type3"
 
 class Transformer:
     def __init__(self, source_model=None, threat_model=None):
@@ -159,23 +159,23 @@ class Transformer:
                         continue
 
                     if self.__case_1_dataflow(dataflow, cursor_dataflow):
-
                         if self.__case_1_outbound_dataflow(dataflow, cursor_dataflow):
                             self.__generate_dataflow_from_hub(dataflow, cursor_dataflow)
-                            logger.debug("generated from case 1 outbound")
 
                         elif self.__case_1_inbound_dataflow(dataflow, cursor_dataflow):
                             self.__generate_dataflow_from_hub(cursor_dataflow, dataflow)
-                            logger.debug("generated from case 1 inbound")
 
     def __separate_hub_type_and_hub_dataflow(self, node_id):
         hub_type = None
-        if "referenced-hub-" in node_id:
-            hub_type = REFERENCED
-            node_id = node_id[15:]
-        if "defined-hub-" in node_id:
-            hub_type = DEFINED
-            node_id = node_id[12:]
+        if "type1-hub-" in node_id:
+            hub_type = TYPE1
+            node_id = node_id[10:]
+        if "type2-hub-" in node_id:
+            hub_type = TYPE2
+            node_id = node_id[10:]
+        if "type3-hub-" in node_id:
+            hub_type = TYPE3
+            node_id = node_id[10:]
         return hub_type, node_id
 
     def __generate_dataflow_from_hub(self, origin_dataflow, target_dataflow):
@@ -223,18 +223,14 @@ class Transformer:
             return False
 
     def __case_1_dataflow(self, dataflow, cursor_dataflow):
-        # look for 1 to 1 dataflows like in VPCEndpoints - Security Group - IP
-        # basic requirements for origin node: to be a real end component
+        """ Look for 1 to 1 dataflows like in VPCEndpoints - Security Group - IP
+         Basic requirements for origin node: to be a real end component """
         dataflow_hub_info = self.__get_hub_dataflow_info(dataflow)
         cursor_dataflow_hub_info = self.__get_hub_dataflow_info(cursor_dataflow)
-
         # first condition: the component is a real end component "referencing" a hub i.e. a Security Group
-        if dataflow_hub_info[SOURCE_HUB_TYPE] is None and dataflow_hub_info[DESTINATION_HUB_TYPE] is not None:
+        if dataflow_hub_info[HUB_TYPE] is TYPE1:
             # second condition: the cursor dataflow is an inbound/outbound, "defined" from a hub i.e. a Security Group
-            if (cursor_dataflow_hub_info[SOURCE_HUB_TYPE] is not None\
-                    and cursor_dataflow_hub_info[DESTINATION_HUB_TYPE])\
-                    or (cursor_dataflow_hub_info[DESTINATION_HUB_TYPE] is not None
-                        and cursor_dataflow_hub_info[DESTINATION_HUB_TYPE] is None):
+            if cursor_dataflow_hub_info[HUB_TYPE] is TYPE3:
                 return True
             else:
                 return False
@@ -246,9 +242,7 @@ class Transformer:
         dataflow_hub_info = self.__get_hub_dataflow_info(dataflow)
         cursor_dataflow_hub_info = self.__get_hub_dataflow_info(cursor_dataflow)
 
-        if cursor_dataflow_hub_info[SOURCE_HUB_TYPE] is DEFINED \
-                and cursor_dataflow_hub_info[DESTINATION_HUB_TYPE] is DEFINED\
-                and dataflow_hub_info[DESTINATION_NODE_NAME] == cursor_dataflow_hub_info[SOURCE_NODE_NAME]:
+        if dataflow_hub_info[DESTINATION_NODE_NAME] == cursor_dataflow_hub_info[SOURCE_NODE_NAME]:
             return True
         else:
             return False
@@ -258,10 +252,24 @@ class Transformer:
         dataflow_hub_info = self.__get_hub_dataflow_info(dataflow)
         cursor_dataflow_hub_info = self.__get_hub_dataflow_info(cursor_dataflow)
 
-        if cursor_dataflow_hub_info[SOURCE_HUB_TYPE] is DEFINED \
-                and cursor_dataflow_hub_info[DESTINATION_HUB_TYPE] is DEFINED\
-                and dataflow_hub_info[DESTINATION_NODE_NAME] == cursor_dataflow_hub_info[DESTINATION_NODE_NAME]:
+        if dataflow_hub_info[DESTINATION_NODE_NAME] == cursor_dataflow_hub_info[DESTINATION_NODE_NAME]:
             return True
+        else:
+            return False
+
+    def __case_2_dataflow(self, dataflow, cursor_dataflow):
+        """ Look for dataflows amongst more than one Security Group: Component A - SG A - SG B - Component B
+         Basic requirements for origin node: to be a real end component """
+        dataflow_hub_info = self.__get_hub_dataflow_info(dataflow)
+        cursor_dataflow_hub_info = self.__get_hub_dataflow_info(cursor_dataflow)
+
+        # first condition: the component is a real end component "referencing" a hub i.e. a Security Group
+        if dataflow_hub_info[HUB_TYPE] is TYPE1:
+            # second condition: the cursor dataflow is an inbound/outbound, "defined" from a hub i.e. a Security Group
+            if cursor_dataflow_hub_info[HUB_TYPE] is TYPE2:
+                return True
+            else:
+                return False
         else:
             return False
 
@@ -271,8 +279,12 @@ class Transformer:
         dataflow_hub_type_destination, dataflow_destination_node_name = \
             self.__separate_hub_type_and_hub_dataflow(dataflow.destination_node)
 
-        hub_dataflow_info = {SOURCE_HUB_TYPE: dataflow_hub_type_source, SOURCE_NODE_NAME: dataflow_source_node_name,
-                             DESTINATION_HUB_TYPE: dataflow_hub_type_destination,
+        if dataflow_hub_type_source is not None:
+            dataflow_hub_type = dataflow_hub_type_source
+        else:
+            dataflow_hub_type = dataflow_hub_type_destination
+
+        hub_dataflow_info = {HUB_TYPE: dataflow_hub_type, SOURCE_NODE_NAME: dataflow_source_node_name,
                              DESTINATION_NODE_NAME: dataflow_destination_node_name}
         return hub_dataflow_info
 

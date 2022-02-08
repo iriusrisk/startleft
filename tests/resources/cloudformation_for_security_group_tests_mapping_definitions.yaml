@@ -516,7 +516,7 @@ dataflows:
   - id:     {$format: "{name}"}
     name:   {$format: "{_key}"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup']"}
-    source: {$hub:{$path: "Properties.SecurityGroupIngress[0].CidrIp"}}
+    source: {$path: "Properties.SecurityGroupIngress[0].CidrIp"}
     destination: {$hub:{$path: "_key"}}
     tags:
       - $format: "Inner Security Group Ingress dataflow defined in {_key}"
@@ -529,7 +529,7 @@ dataflows:
     name:   {$format: "{_key}"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup']"}
     source: {$hub:{$path: "_key"}}
-    destination: {$hub:{$path: "Properties.SecurityGroupEgress[0].CidrIp"}}
+    destination: {$path: "Properties.SecurityGroupEgress[0].CidrIp"}
     tags:
       - $format: "Inner Security Group Egress dataflow defined in {_key}"
       - $path: "Properties.SecurityGroupEgress[0].Description"

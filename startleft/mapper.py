@@ -473,16 +473,15 @@ class DataflowMapper:
             destination_mapper = DataflowNodeMapper(self.mapping["destination"])
             source_resource_names = source_mapper.run(source_model, source_obj)
             destination_resource_names = destination_mapper.run(source_model, source_obj)
+            hub_type = self.__determine_hub_mapping_type(source_mapper, destination_mapper)
 
             for source_resource_name in source_resource_names or []:
-                source_hub_type = None
                 # components should be located
                 source_resource_ids = self.__get_dataflows_component_ids(source_resource_name)
                 # if a component is not on list, it may be a Security Group
                 if "$hub" in source_mapper.mapping:
-                    source_hub_type = self.__determine_hub_mapping_type(source_mapper, destination_mapper)
-                    if source_hub_type is not None:
-                        source_resource_ids = [source_hub_type + source_resource_name]
+                    if hub_type is not None:
+                        source_resource_ids = [hub_type + source_resource_name]
 
                 for source_resource_id in source_resource_ids or []:
                     for destination_resource_name in destination_resource_names or []:
@@ -495,9 +494,8 @@ class DataflowMapper:
                             if destination_resource_ids is None:
                                 destination_resource_id_for_hub_mapping = ["hub-"+destination_resource_name]
                                 self.id_map[destination_resource_name] = destination_resource_id_for_hub_mapping
-                            destination_hub_type = self.__determine_hub_mapping_type(source_mapper, destination_mapper)
-                            if destination_hub_type is not None:
-                                destination_resource_ids = [destination_hub_type + destination_resource_name]
+                            if hub_type is not None:
+                                destination_resource_ids = [hub_type + destination_resource_name]
 
                         if destination_resource_ids is None:
                             continue
@@ -528,9 +526,8 @@ class DataflowMapper:
                             dataflow_tags = get_tags(source_model, source_obj, mapping_tags)
                             dataflow = set_optional_parameters_to_resource(dataflow, mapping_tags, dataflow_tags)
 
-                            id_dataflows[source_resource_id] = {"source-hub-type": source_hub_type,
-                                                                "destination_id": destination_resource_id,
-                                                                "destination-hub-type": destination_hub_type}
+                            id_dataflows[source_resource_id] = {"hub_type": hub_type,
+                                                                "destination_id": destination_resource_id}
                             dataflows.append(dataflow)
         return dataflows
 
@@ -543,14 +540,27 @@ class DataflowMapper:
         return node_ids
 
     def __determine_hub_mapping_type(self, source_mapper, destination_mapper):
-        # defined-hub: A mapping type that has both $hub in source and destination is a definition (Security Group)
-        # referenced-hub: A mapping type that only has $hub in source or in destination is a component referencing to
-        # a referenced component such as a Security Group
+
+        # SG mapping type 2
         if "$hub" in source_mapper.mapping and "$hub" in destination_mapper.mapping:
-            return "defined-hub-"
-        elif ("$hub" in source_mapper.mapping and "$hub" not in destination_mapper.mapping) \
-                or ("$hub" not in source_mapper.mapping and "$hub" in destination_mapper.mapping):
-            return "referenced-hub-"
+            return "type2-hub-"
+
+        # SG mappings: type 1
+        elif "$hub" not in source_mapper.mapping and "$hub" in destination_mapper.mapping\
+                and "$path" in source_mapper.mapping and "_key" in source_mapper.mapping["$path"]:
+            return "type1-hub-"
+
+        # SG mapping type 3 inbound
+        elif "$hub" not in source_mapper.mapping and "$hub" in destination_mapper.mapping \
+                and "$path" in destination_mapper.mapping["$hub"] \
+                and "_key" in destination_mapper.mapping["$hub"]["$path"]:
+            return "type3-hub-"
+
+        # SG mapping type 3 outbound
+        elif "$hub" in source_mapper.mapping and "$path" in source_mapper.mapping["$hub"] \
+                and "_key" in source_mapper.mapping["$hub"]["$path"]:
+            return "type3-hub-"
+
         else:
             return None
 
