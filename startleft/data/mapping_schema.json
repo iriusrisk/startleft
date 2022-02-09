@@ -187,6 +187,18 @@
                                     ]
                                 }
                             }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["$ip"],
+                            "properties": {
+                                "$ip": {
+                                    "anyOf": [
+                                        {"type": "string"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
                         }
                     ]
                 },

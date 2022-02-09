@@ -97,7 +97,7 @@ def get_import_value_resource_name(import_value_string):
 
 
 def repeated_type4_hub_definition_component(mapping, id_map, component_name):
-    if str(mapping["name"]) == str(mapping["type"]):
+    if "$ip" in str(mapping["name"]) or "$ip" in str(mapping["type"]):
         same_name_component = component_name in id_map
         return same_name_component
     else:

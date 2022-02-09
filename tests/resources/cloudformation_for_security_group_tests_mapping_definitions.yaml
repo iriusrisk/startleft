@@ -423,20 +423,20 @@ components:
 
 #4
 # internet custom component for a security group egress (typ.represented as the cidr IP 0.0.0.0/0)
-  - id:   {$format: "{name}"}
-    type: {$path: "Properties.SecurityGroupEgress[0].CidrIp"}
-    name:   {$path: "Properties.SecurityGroupEgress[0].CidrIp"}
-    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupEgress[0].CidrIp]"}}
+  - id:   {$format: "{name}" }
+    type: generic-client
+    name: { $ip: { $path: "Properties.SecurityGroupEgress[0].CidrIp" } }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupEgress[0].CidrIp]" }
     parent: f0ba7722-39b6-4c81-8290-a30a248bb8d9
     tags:
       - Outbound connection destination IP
 
-# internet custom component for a security group ingress (typ.represented as the cidr IP 255.255.255.255/32)
-# All those Cidrips that are not ips such as vpc names will not generate an unnecessary document
-  - id:   {$format: "{name}"}
-    type: {$path: "Properties.SecurityGroupIngress[0].CidrIp"}
-    name:   {$path: "Properties.SecurityGroupIngress[0].CidrIp"}
-    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupIngress[0].CidrIp && !starts_with(Properties.SecurityGroupIngress[0].CidrIp.\"Fn::GetAtt\"[1], 'CidrBlock')]"}}
+  # internet custom component for a security group ingress (typ.represented as the cidr IP 255.255.255.255/32)
+  # All those Cidrips that are not ips such as vpc names will not generate an unnecessary document
+  - id: { $format: "{name}" }
+    type: generic-client
+    name: { $ip: { $path: "Properties.SecurityGroupIngress[0].CidrIp" } }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupIngress[0].CidrIp && !starts_with(Properties.SecurityGroupIngress[0].CidrIp.\"Fn::GetAtt\"[1], 'CidrBlock')]" }
     parent: f0ba7722-39b6-4c81-8290-a30a248bb8d9
     tags:
       - Inbound connection source IP
