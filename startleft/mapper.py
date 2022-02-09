@@ -353,7 +353,7 @@ class ComponentMapper:
                 # are their children, so its ID should be stored before reaching the child components
                 # With $parent, it will check if the supposed id_parents exist,
                 # otherwise performing a standard search using action inside $parent
-                if len(id_parents) > 0:
+                if len(id_parents) > 0 and component_name in self.id_map:
                     component_id = self.id_map[component_name]
                     # for $parent elements, all parents have the same name (but IDs may be different)
                     if isinstance(component_id, list):
