@@ -10,7 +10,7 @@ class TestApp:
         filename = test_resource_paths.cloudformation_for_security_group_tests_json
         mapping_filename = test_resource_paths.cloudformation_for_security_groups_mapping
         iac_to_otm = IacToOtm('name', 'id')
-        iac_to_otm.run('Cloudformation', mapping_filename, 'threatmodel-security-groups-a-1.otm', filename)
+        iac_to_otm.run('Cloudformation', mapping_filename, 'threatmodel-security-groups.otm', filename)
 
         assert iac_to_otm.source_model.otm
         assert len(iac_to_otm.otm.trustzones) == 2
@@ -33,7 +33,7 @@ class TestApp:
         filename = test_resource_paths.cloudformation_for_security_group_tests_json
         mapping_filename = test_resource_paths.cloudformation_for_security_groups_mapping
         iac_to_otm = IacToOtm('name', 'id')
-        iac_to_otm.run('Cloudformation', mapping_filename, 'threatmodel-security-groups-a-2.otm', filename)
+        iac_to_otm.run('Cloudformation', mapping_filename, 'threatmodel-security-groups.otm', filename)
 
         assert iac_to_otm.source_model.otm
         assert len(iac_to_otm.otm.trustzones) == 2
@@ -70,7 +70,7 @@ class TestApp:
         filename = test_resource_paths.cloudformation_for_security_group_tests_json
         mapping_filename = test_resource_paths.cloudformation_for_security_groups_mapping
         iac_to_otm = IacToOtm('name', 'id')
-        iac_to_otm.run('Cloudformation', mapping_filename, 'threatmodel-security-groups-a-3.otm', filename)
+        iac_to_otm.run('Cloudformation', mapping_filename, 'threatmodel-security-groups.otm', filename)
 
         assert iac_to_otm.source_model.otm
         assert len(iac_to_otm.otm.trustzones) == 2
@@ -100,7 +100,7 @@ class TestApp:
         filename = test_resource_paths.cloudformation_for_security_group_tests_json
         mapping_filename = test_resource_paths.cloudformation_for_security_groups_mapping
         iac_to_otm = IacToOtm('name', 'id')
-        iac_to_otm.run('Cloudformation', mapping_filename, 'threatmodel-security-groups-b.otm', filename)
+        iac_to_otm.run('Cloudformation', mapping_filename, 'threatmodel-security-groups.otm', filename)
 
         assert iac_to_otm.source_model.otm
         assert len(iac_to_otm.otm.trustzones) == 2
