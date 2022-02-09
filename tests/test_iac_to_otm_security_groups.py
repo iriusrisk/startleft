@@ -7,7 +7,7 @@ class TestApp:
     def test_run_security_groups_use_case_a_1(self):
         """ Develop use case A.1: two components and their SGs linked by outer SG Ingress / Egress resource """
 
-        filename = test_resource_paths.cloudformation_for_security_group_tests_json_a
+        filename = test_resource_paths.cloudformation_for_security_group_tests_json
         mapping_filename = test_resource_paths.cloudformation_for_security_groups_mapping
         iac_to_otm = IacToOtm('name', 'id')
         iac_to_otm.run('Cloudformation', mapping_filename, 'threatmodel-security-groups-a-1.otm', filename)
@@ -30,7 +30,7 @@ class TestApp:
     def test_run_security_groups_use_case_a_2(self):
         """ Develop use case A.2: two components in a SG, two components in another one """
 
-        filename = test_resource_paths.cloudformation_for_security_group_tests_json_a
+        filename = test_resource_paths.cloudformation_for_security_group_tests_json
         mapping_filename = test_resource_paths.cloudformation_for_security_groups_mapping
         iac_to_otm = IacToOtm('name', 'id')
         iac_to_otm.run('Cloudformation', mapping_filename, 'threatmodel-security-groups-a-2.otm', filename)
@@ -67,7 +67,7 @@ class TestApp:
     def test_run_security_groups_use_case_a_3(self):
         """ Develop use case A.3: three components and their Security Groups """
 
-        filename = test_resource_paths.cloudformation_for_security_group_tests_json_a
+        filename = test_resource_paths.cloudformation_for_security_group_tests_json
         mapping_filename = test_resource_paths.cloudformation_for_security_groups_mapping
         iac_to_otm = IacToOtm('name', 'id')
         iac_to_otm.run('Cloudformation', mapping_filename, 'threatmodel-security-groups-a-3.otm', filename)
@@ -97,7 +97,7 @@ class TestApp:
         #            and "-hub-" not in obj.destination_node, iac_to_otm.otm.dataflows))
 
     def test_run_security_groups_use_case_b(self):
-        filename = test_resource_paths.cloudformation_for_security_group_tests_json_b
+        filename = test_resource_paths.cloudformation_for_security_group_tests_json
         mapping_filename = test_resource_paths.cloudformation_for_security_groups_mapping
         iac_to_otm = IacToOtm('name', 'id')
         iac_to_otm.run('Cloudformation', mapping_filename, 'threatmodel-security-groups-b.otm', filename)

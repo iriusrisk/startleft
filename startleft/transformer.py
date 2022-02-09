@@ -11,6 +11,7 @@ TYPE1 = "type1"
 TYPE2 = "type2"
 TYPE3 = "type3"
 
+
 class Transformer:
     def __init__(self, source_model=None, threat_model=None):
         self.source_model = source_model
