@@ -110,14 +110,27 @@ class TestApp:
         assert list(filter(lambda obj: obj.name == 'VPCssm', iac_to_otm.otm.components))
         assert list(filter(lambda obj: obj.name == 'VPCssmmessages', iac_to_otm.otm.components))
         assert list(filter(lambda obj: obj.name == 'VPCmonitoring', iac_to_otm.otm.components))
-        assert list(filter(lambda obj: obj.name == '0.0.0.0/0', iac_to_otm.otm.components))
+        assert list(filter(lambda obj: obj.name == '0.0.0.0/0'
+                    and obj.type == 'generic-client', iac_to_otm.otm.components))
+        assert list(filter(lambda obj: obj.name == '255.255.255.255/32'
+                    and obj.type == 'generic-client', iac_to_otm.otm.components))
 
         assert list(filter(lambda obj: obj.name == 'VPCssm -> VPCssmSecurityGroup'
                     and "-hub-" not in obj.source_node
                     and "-hub-" not in obj.destination_node
                     , iac_to_otm.otm.dataflows))
 
+        assert list(filter(lambda obj: obj.name == 'VPCssmSecurityGroup -> VPCssm'
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node
+                           , iac_to_otm.otm.dataflows))
+
         assert list(filter(lambda obj: obj.name == 'VPCssmmessages -> VPCssmmessagesSecurityGroup'
+                    and "-hub-" not in obj.source_node
+                    and "-hub-" not in obj.destination_node
+                    , iac_to_otm.otm.dataflows))
+
+        assert list(filter(lambda obj: obj.name == 'VPCssmmessagesSecurityGroup -> VPCssmmessages'
                     and "-hub-" not in obj.source_node
                     and "-hub-" not in obj.destination_node
                     , iac_to_otm.otm.dataflows))
@@ -127,3 +140,12 @@ class TestApp:
                     and "-hub-" not in obj.destination_node
                     , iac_to_otm.otm.dataflows))
 
+        assert list(filter(lambda obj: obj.name == 'VPCmonitoringSecurityGroup -> VPCmonitoring'
+                    and "-hub-" not in obj.source_node
+                    and "-hub-" not in obj.destination_node
+                    , iac_to_otm.otm.dataflows))
+
+        assert list(filter(lambda obj: obj.name == 'Service -> OutboundSecurityGroup'
+                    and "-hub-" not in obj.source_node
+                    and "-hub-" not in obj.destination_node
+                    , iac_to_otm.otm.dataflows))
