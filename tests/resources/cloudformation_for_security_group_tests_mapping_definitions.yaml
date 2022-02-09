@@ -436,7 +436,7 @@ components:
   - id: { $format: "{name}" }
     type: generic-client
     name: { $ip: { $path: "Properties.SecurityGroupIngress[0].CidrIp" } }
-    $source: { $root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupIngress[0].CidrIp && !starts_with(Properties.SecurityGroupIngress[0].CidrIp.\"Fn::GetAtt\"[1], 'CidrBlock')]" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupIngress[0].CidrIp]" }
     parent: f0ba7722-39b6-4c81-8290-a30a248bb8d9
     tags:
       - Inbound connection source IP
