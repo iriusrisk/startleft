@@ -20,8 +20,9 @@ You'll need to export two enviroment variables. The first is the IriusRisk serve
 $ export IRIUS_SERVER=https://instance.iriusrisk.com
 $ export IRIUS_API_TOKEN=123-123-123-123-123
 ```
+The alternative is to include those values as command-line parameters `--irius-server` and `--api-token`, respectively. 
 
-For help, just run startleft without any arguments.
+For help, just run `startleft without any arguments.
 
 ```
 $ startleft
@@ -41,9 +42,9 @@ Commands:
   parse        Parses IaC source files into Open Threat Model
   run          Parses IaC source files into Open Threat Model and...
   search       Searches source files for the given query
+  server       Launches the REST server in development mode
   threatmodel  Uploads an OTM file to IriusRisk
   validate     Validates a mapping or OTM file
-  server       Launches the REST server in development mode
 ```
 
 You can also get help for the specific commands.
