@@ -12,7 +12,7 @@ pip install git+https://github.com/iriusrisk/startleft.git
 
 # Usage
 
-## Command line client
+## Command line client 
 
 You'll need to export two enviroment variables. The first is the IriusRisk server which should include protocol and hostname (with optional port) but not path. The second is your API token.
 
@@ -87,7 +87,11 @@ Options:
 
 ```
 
-You should see a message like "Uvicorn running on http://127.0.0.1:5000 (Press CTRL+C to quit)" and after that you will be able to access the application via API. You can see the endpoints provided by opening the following URL in a web browser: http://127.0.0.1:5000/docs
+By executing `startleft server` it is possible to see the command-line messages finishing with the following:
+
+```Uvicorn running on http://127.0.0.1:5000 (Press CTRL+C to quit)```
+
+and after that, the application via API will be ready. You can see the endpoints provided by opening the following URL in a web browser: http://127.0.0.1:5000/docs
 
 Available endpoints:
 ```
@@ -130,7 +134,7 @@ The following command will parse the cloudformation source file `elb-no-waf.json
 ```
 startleft parse --type cloudformation --otm elb-no-waf.otm --name "CFT ELB No Waf" --id "cft-elb-no-waf" elb-no-waf.json
 ```
-It is also possible to include your own mapping files, thus overriding the internal cloudformation mapper files:
+It is also possible to include your own mapping file or files, thus overriding the default internal cloudformation mapper file:
 ```
 startleft parse --type cloudformation --map cloudformation_mapping_file_1.yaml --map cloudformation_mapping_file_2.yaml --otm elb-no-waf.otm --name "CFT ELB No Waf" --id "cft-elb-no-waf" elb-no-waf.json
 ```
@@ -139,32 +143,32 @@ The next command takes the OTM file and generates an IriusRisk threat model whic
 startleft threatmodel --recreate elb-no-waf.otm
 ```
 
-For convenience, you can run the above two commands in one go:
+For convenience, `parse` and `threatmodel` can be `run` in one go:
 ```
 startleft run --type cloudformation --otm elb-no-waf.otm --name "CFT ELB No Waf" --id "cft-elb-no-waf" --recreate elb-no-waf.json
 ```
-Of course, it is also possible to use custom mapping files:
+Of course, it is also possible to parse by using custom mapping files with `run`:
 ```
 startleft run --type cloudformation --map defaults_map.yaml --map cloudformation_map.yaml --otm elb-no-waf.otm --name "CFT ELB No Waf" --id "cft-elb-no-waf" --recreate elb-no-waf.json
 ```
-
+Note: with `threatmodel` or `run` commands it is mandatory to include api token and IriusRisk URL via environment variables or as command-line arguments, as shown in [Command Line Client](#command-line-client). 
 ### ELB with a WAF
 
 This example can be run in the same way, but this Cloudformation also includes a WAF and dataflow.
 
-Parsing the Cloudformation.
+Parsing the Cloudformation template file.
 
 ```
 startleft parse --type cloudformation --otm elb-with-waf.otm --name "CFT ELB With Waf" --id "cft-elb-with-waf" elb-with-waf.json
 ```
 
-Uploading OTM to IriusRisk.
+Uploading OTM file to IriusRisk.
 
 ```
 startleft threatmodel --recreate elb-with-waf.otm
 ```
 
-Or both in one step.
+Or both commands in one step.
 
 ```
 startleft run --type cloudformation --otm elb-with-waf.otm --name "CFT ELB With Waf" --id "cft-elb-with-waf" --recreate elb-with-waf.json
