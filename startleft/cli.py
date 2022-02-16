@@ -79,7 +79,7 @@ def cli(log_level, verbose):
 @click.argument('filename', nargs=-1)
 def run(type, map, otm, name, id, recreate, irius_server, api_token, filename):
     """
-    Parses IaC source files into Open Threat Model and immediately uploads threat model to IriusRisk
+    Parses IaC source files into OTM and uploads it to IriusRisk
     """
 
     inner_run(type, map, otm, name, id, recreate, irius_server, api_token, filename)
@@ -110,7 +110,7 @@ def inner_run(type, map, otm, name, id, recreate, irius_server, api_token, filen
 @click.argument('filename', nargs=-1)
 def parse(type, map, otm, name, id, filename):
     """
-    Parses IaC source files into Open Threat Model
+    Parses IaC source files into Open Threat Model (OTM)
     """
 
     cf_mapping_files = get_default_mappings(map)
@@ -177,7 +177,7 @@ def search(type, query, filename):
 @cli.command()
 def server(irius_server: str, port: int):
     """
-    Launches the REST server in development mode to test the API
+    Launches the REST server to send IaC files for parse + upload
     """
     from startleft.api import fastapi_server
     fastapi_server.initialize_webapp(irius_server)
