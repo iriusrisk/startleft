@@ -28,8 +28,7 @@ For help, just run `startleft without any arguments.
 $ startleft
 Usage: startleft [OPTIONS] COMMAND [ARGS]...
 
-  Parse IaC and other files to the Open Threat Model format and upload them to
-  IriusRisk
+  Parse IaC files to the Open Threat Model format and upload them to IriusRisk
 
 Options:
   -l, --log-level TEXT      Set the log level. Must be one of: crit, error,
@@ -39,10 +38,10 @@ Options:
   --help                    Show this message and exit.
 
 Commands:
-  parse        Parses IaC source files into Open Threat Model
-  run          Parses IaC source files into Open Threat Model and...
+  parse        Parses IaC files to the Open Threat Model format
+  run          Parses IaC files to the Open Threat Model format and...
   search       Searches source files for the given query
-  server       Launches the REST server in development mode
+  server       Launches a REST server to receive and parse IaC files,...
   threatmodel  Uploads an OTM file to IriusRisk
   validate     Validates a mapping or OTM file
 ```
@@ -53,19 +52,20 @@ You can also get help for the specific commands.
 $ startleft run --help
 Usage: startleft run [OPTIONS] [FILENAME]...
 
-  Parses IaC source files into Open Threat Model and immediately uploads
-  threat model to IriusRisk
+  Parses IaC files to the Open Threat Model and upload them to 
+  IriusRisk
 
 Options:
-  -t, --type                      [JSON|YAML|CloudFormation|HCL2|Terraform]
+  -t, --type  [JSON|YAML|CloudFormation|HCL2|Terraform]
                                   Specify the source file type.
   -m, --map TEXT                  Map file to use when parsing source files
   -o, --otm TEXT                  OTM output file name
   -n, --name TEXT                 Project name
   --id TEXT                       Project ID
   --recreate / --no-recreate      Delete and recreate the product each time
-  --irius-server                  IriusRisk server to connect to (proto://server[:port])'
-  --api-token                     IriusRisk API token
+  --irius-server TEXT             IriusRisk server to connect to
+                                  (proto://server[:port])'
+  --api-token  TEXT               IriusRisk API token
   --help                          Show this message and exit.
 ```
 
@@ -77,11 +77,12 @@ StartLeft can also be deployed as a standalone webserver if you prefer the commu
 $ startleft server --help
 Usage: startleft server [OPTIONS]...
 
-  Launches the REST server in development mode to test the API
+  Launches a REST server to receive and parse IaC files, finally uploading
+  resultant OTM files to IriusRisk
 
 Options:
-  --irius-server                  IriusRisk server to connect to (proto://server[:port])'
-  --port                          The port to deploy this application to
+  --port INTEGER                  The port to deploy this application to
+  --irius-server TEXT             IriusRisk server to connect to (proto://server[:port])
   --help                          Show this message and exit.
 
 ```
