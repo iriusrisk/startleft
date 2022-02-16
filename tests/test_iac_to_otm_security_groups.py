@@ -23,9 +23,9 @@ class TestApp:
         assert list(filter(lambda obj: obj.name == '0.0.0.0/0', iac_to_otm.otm.components))
 
         # Expected final dataflow
-        # assert list(filter(lambda obj: obj.name == 'ServiceLB -> Service'
-        #            and "-hub-" not in obj.source_node
-        #            and "-hub-" not in obj.destination_node, iac_to_otm.otm.dataflows))
+        assert list(filter(lambda obj: obj.name == 'ServiceLB -> Service'
+                    and "-hub-" not in obj.source_node
+                    and "-hub-" not in obj.destination_node, iac_to_otm.otm.dataflows))
 
     def test_run_security_groups_use_case_a_2(self):
         """ Develop use case A.2: two components in a SG, two components in another one """
@@ -64,7 +64,7 @@ class TestApp:
         #            and "-hub-" not in obj.source_node
         #            and "-hub-" not in obj.destination_node, iac_to_otm.otm.dataflows))
 
-    def test_run_security_groups_use_case_a_3(self):
+    def test_run_security_groups_use_case_a_1_with_3_components(self):
         """ Develop use case A.3: three components and their Security Groups """
 
         filename = test_resource_paths.cloudformation_for_security_group_tests_json
@@ -78,6 +78,7 @@ class TestApp:
         assert len(iac_to_otm.otm.dataflows) > 1
 
         assert list(filter(lambda obj: obj.name == 'ServiceLB', iac_to_otm.otm.components))
+        assert list(filter(lambda obj: obj.name == 'Canary', iac_to_otm.otm.components))
         assert list(filter(lambda obj: obj.name == 'ServiceTaskDefinition', iac_to_otm.otm.components))
         assert list(filter(lambda obj: obj.name == 'Service', iac_to_otm.otm.components))
         #        assert list(filter(lambda obj: obj.name == 'Canary', iac_to_otm.otm.components))
@@ -89,10 +90,6 @@ class TestApp:
         #            and "-hub-" not in obj.destination_node, iac_to_otm.otm.dataflows))
 
         # assert list(filter(lambda obj: obj.name == 'Canary -> ServiceLB'
-        #            and "-hub-" not in obj.source_node
-        #            and "-hub-" not in obj.destination_node, iac_to_otm.otm.dataflows))
-
-        # assert list(filter(lambda obj: obj.name == 'Canary -> Service'
         #            and "-hub-" not in obj.source_node
         #            and "-hub-" not in obj.destination_node, iac_to_otm.otm.dataflows))
 

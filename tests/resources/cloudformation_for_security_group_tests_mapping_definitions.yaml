@@ -6,7 +6,7 @@ trustzones:
 #4
   - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
     name: Internet
-    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupEgress[0].CidrIp=='0.0.0.0/0']"}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupEgress[0].CidrIp]"}}
 
 # The order of the components is important because parent components must be defined before child components
 components:
