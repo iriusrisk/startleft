@@ -151,7 +151,7 @@ Of course, it is also possible to parse by using custom mapping files with `run`
 ```
 startleft run --type cloudformation --map defaults_map.yaml --map cloudformation_map.yaml --otm elb-no-waf.otm --name "CFT ELB No Waf" --id "cft-elb-no-waf" --recreate elb-no-waf.json
 ```
-Note: with `threatmodel` or `run` commands it is mandatory to include api token and IriusRisk URL via environment variables or as command-line arguments, as shown in [Command Line Client](#command-line-client). 
+Note: with `threatmodel` or `run` commands it is mandatory to include the IriusRisk API token and IriusRisk URL via environment variables or as command-line arguments, as shown in [Command Line Client](#command-line-client). 
 ### ELB with a WAF
 
 This example can be run in the same way, but this Cloudformation also includes a WAF and dataflow.
