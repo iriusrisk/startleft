@@ -154,21 +154,21 @@ startleft run --type cloudformation --map defaults_map.yaml --map cloudformation
 Note: with `threatmodel` or `run` commands it is mandatory to include the IriusRisk API token and IriusRisk URL via environment variables or as command-line arguments, as shown in [Command Line Client](#command-line-client). 
 ### ELB with a WAF
 
-This example can be run in the same way, but this Cloudformation also includes a WAF and dataflow.
+This example can be run in the same way, but this Cloudformation also includes a WAF.
 
-Parsing the Cloudformation template file.
+Parsing the Cloudformation template file:
 
 ```
 startleft parse --type cloudformation --otm elb-with-waf.otm --name "CFT ELB With Waf" --id "cft-elb-with-waf" elb-with-waf.json
 ```
 
-Uploading OTM file to IriusRisk.
+Uploading OTM file to IriusRisk:
 
 ```
 startleft threatmodel --recreate elb-with-waf.otm
 ```
 
-Or both commands in one step.
+Or both commands in one step:
 
 ```
 startleft run --type cloudformation --otm elb-with-waf.otm --name "CFT ELB With Waf" --id "cft-elb-with-waf" --recreate elb-with-waf.json
@@ -187,49 +187,55 @@ startleft run --type hcl2 --map defaults_map.yaml --map terraform_aws_map.yaml -
 You can also write an OTM file without parsing any IaC source files. This is useful if you want to create a threat model in your IDE and have the diagram etc. generated for you. For example, the following short OTM file:
 
 ```
+otmVersion: 0.1.0
+
 project:
   name: Manual ThreatModel
   id:   manual-threatmodel
 
-trustzones:
-  - id:   internet
+trustZones:
+  - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
     name: Internet
-    type: internet
+    risk:
+      trustRating: 1
 
-  - id:   web
-    name: Web
-    type: private
+  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+    risk:
+      trustRating: 60
 
-  - id:   data
-    name: Data
-    type: private
+  - id:   2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+    name: Private Secured
+    risk:
+      trustRating: 100
 
 components:
   - id:     user
     name:   User
-    type:   user
-    parent: internet
+    type:   end-user
+    parent:
+      trustZone: f0ba7722-39b6-4c81-8290-a30a248bb8d9
 
   - id:     web-server
     name:   Web server
-    type:   webapp
-    parent: web
+    type:   web-application-server-side
+    parent:
+      trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
   - id:     database
     name:   Database
-    type:   postgres
-    parent: data
+    type:   other-sql-database
+    parent:
+      trustZone: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
 
 dataflows:
   - id:     client-connection
     name:   Client connection
-    type:   network
     source:   user
-    destination:     web-server
+    destination:   web-server
 
   - id:     database-connection
     name:   Database connection
-    type:   network
     source:   web-server
     destination:     database
 ```

@@ -74,7 +74,7 @@
                         "type": "object",
                         "required": ["trustRating"],
                         "properties": {
-                            "trustRating": {"type": "string"}
+                            "trustRating": {"type": "number"}
                         }
                     },
                     "parent": {"$ref": "#/definitions/parent"},
