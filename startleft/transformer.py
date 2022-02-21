@@ -382,28 +382,19 @@ class Transformer:
         """"Traverse Transformer tree for final case 2 dataflows creation, looking for connections between
          type 2 nodes in both origin and destination branches in the tree"""
         for parent in self.tree:
+            logger.debug("PARENT: "+parent)
             children = self.tree[parent]
             for child in children:
+                logger.debug("|-CHILDREN: "+child)
                 child_hub_type, child_hub_name = self.__separate_hub_type_and_hub_dataflow(child)
                 grandchildren = self.tree[parent][child]
                 for grandchild in grandchildren:
                     bound = self.tree[parent][child][grandchild]
-                    # grandchild_hub_type, grandchild_hub_name = self.__separate_hub_type_and_hub_dataflow(grandchild)
-                    type_2_child_name = TYPE2+"-hub-"+child_hub_name
-                    grandchild_as_dataflow = list(filter(lambda x: x.source_node == type_2_child_name
-                                                         and x.destination_node == grandchild
-                                                  , self.threat_model.dataflows))
-                    if len(grandchild_as_dataflow) == 0:
-                        grandchild_as_dataflow = list(filter(lambda x: x.source_node == grandchild
-                                                             and x.destination_node == type_2_child_name
-                                                             , self.threat_model.dataflows))
-                    additional_tags = None
-                    if len(grandchild_as_dataflow) > 0:
-                        additional_tags = []
-                        for grandchild_element in grandchild_as_dataflow:
-                            additional_tags += grandchild_element.tags
+                    logger.debug("  |-GRANDCHILD: " + grandchild + " " + bound)
 
-                    end_components = self.__case_2_look_for_end_component(parent, type_2_child_name)
+                    additional_tags = self.__get_additional_tags(child_hub_name, grandchild)
+                    end_components = self.__case_2_look_for_end_component(parent, grandchild)
+
                     for end_component in end_components:
                         # assumed that all end components are TYPE1 components
                         source_dataflows = list(filter(lambda x: x.source_node == parent
@@ -421,21 +412,41 @@ class Transformer:
                                     self.__generate_dataflow_from_hub(source_dataflows[0], destination_dataflow
                                                                       , additional_tags)
 
-    def __case_2_look_for_end_component(self, component, hub_node_as_child=None):
+    def __get_additional_tags(self, child_hub_name, grandchild):
+        additional_tags = None
+        type_2_child_name = TYPE2 + "-hub-" + child_hub_name
+        grandchild_as_dataflow = list(filter(lambda x: x.source_node == type_2_child_name
+                                             and x.destination_node == grandchild
+                                             , self.threat_model.dataflows))
+
+        if len(grandchild_as_dataflow) == 0:
+            grandchild_as_dataflow = list(filter(lambda x: x.source_node == grandchild
+                                                 and x.destination_node == type_2_child_name
+                                                 , self.threat_model.dataflows))
+
+        if len(grandchild_as_dataflow) > 0:
+            additional_tags = []
+            for grandchild_element in grandchild_as_dataflow:
+                additional_tags += grandchild_element.tags
+        logger.debug("additional tags for type_2_child_name: "+type_2_child_name + " and grandchild: "+grandchild+" are: "+str(additional_tags))
+        return additional_tags
+
+    def __case_2_look_for_end_component(self, end_component, hub_node_as_child):
         """Traverse Transformer to look for components that may be connected to the parameter component throughout
         the type_2 hub node"""
         end_components = []
         for parent in self.tree:
-            if parent == component:
+            if parent == end_component:
                 continue
 
             children = self.tree[parent]
             for child in children:
-                grandchildren = self.tree[parent][child]
-                for grandchild in grandchildren:
-                    if grandchild == hub_node_as_child:
-                        if parent not in end_components:
-                            end_components.append(parent)
+                child_hub_type, child_hub_name = self.__separate_hub_type_and_hub_dataflow(child)
+                type_2_child_name = TYPE2 + "-hub-" + child_hub_name
+
+                if type_2_child_name == hub_node_as_child:
+                    if parent not in end_components:
+                        end_components.append(parent)
 
         return end_components
 
