@@ -1,6 +1,6 @@
-# IriusRisk StartLeft
-
-Parse IaC and other files to the Open Threat Model format and upload them to IriusRisk.
+IriusRisk StartLeft
+===================
+Parses IaC and other files to the Open Threat Model format and uploads them to IriusRisk.
 
 Note: This software is early release and is provided as-is.
 
@@ -91,7 +91,7 @@ By executing `startleft server` it is possible to see the command-line messages 
 
 ```Uvicorn running on http://127.0.0.1:5000 (Press CTRL+C to quit)```
 
-and after that, the application via API will be ready. You can see the endpoints provided by opening the following URL in a web browser: http://127.0.0.1:5000/docs
+so indicating Startleft's REST API is ready. You can see the endpoints provided by opening the following URL in a web browser: http://127.0.0.1:5000/docs
 
 Available endpoints:
 ```
@@ -123,7 +123,13 @@ Request Body:
 
 # Examples
 
-You can find some example source files inside the `examples` directory.
+You can find some example source files inside the `examples` directory:
+
+* `examples/cloudformation` contains CloudFormation Template example files to convert into OTM format.
+
+* `examples/manual` contains the OTM example file detailed in [Hand Crafted OTM](#hand-crafted-OTM).
+
+* `examples/terraform` contains Terraform example files to convert into OTM format. 
 
 ## Cloudformation
 
@@ -199,10 +205,10 @@ trustZones:
     risk:
       trustRating: 1
 
-  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
-    name: Public Cloud
+  - id:   6376d53e-6461-412b-8e04-7b3fe2b397de
+    name: Public
     risk:
-      trustRating: 60
+      trustRating: 1
 
   - id:   2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
     name: Private Secured
@@ -212,7 +218,7 @@ trustZones:
 components:
   - id:     user
     name:   User
-    type:   end-user
+    type:   generic-client
     parent:
       trustZone: f0ba7722-39b6-4c81-8290-a30a248bb8d9
 
@@ -220,11 +226,11 @@ components:
     name:   Web server
     type:   web-application-server-side
     parent:
-      trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      trustZone: 6376d53e-6461-412b-8e04-7b3fe2b397de
 
   - id:     database
     name:   Database
-    type:   other-sql-database
+    type:   postgresql
     parent:
       trustZone: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
 
@@ -255,9 +261,14 @@ startleft threatmodel --recreate manual.otm
 
 # Source Mapping
 
-Source mapping files are basically additional logic around a collection of JMESPath queries which are used describe how to find components, dataflows, and trustzones in source file data structures. Source mapping files are made up of three main sections corresponding the main sections in an OTM file, plus a lookup section described below:
+A source mapping file (or 'mapping files' for short) describe how to find components, dataflows, and trustzones in source file data structures.
 
-* trustzones
+To accomplish this, a mapping file contains additional logic around a collection of JMESPath queries which are used.
+Also, some exclusive Startleft actions based upon JMESPath may be used in mapping files to solve the most complex mappings.
+
+Source mapping files are made up of three main sections corresponding the main sections in an OTM file, plus an optional lookup section described below:
+
+* trustZones
 * components
 * dataflows
 
@@ -271,19 +282,20 @@ Special $action fields begin with a dollar sign ($) and do not directly contribu
 
 This table describes each special $actions.
 
-| $action         | Description                                                                                              | Example                                                                                                |
-| --------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| $source         | Specifies the source of the object type                                                                  | $source: {$root: "Resources&#124;squash(@)[?Type=='AWS::EC2::VPC']"}                                   |
-| $root           | JMESPath search through the entire source file data structure                                            | $root: "Resources&#124;squash(@)[?Type=='AWS::EC2::VPC']"                                            |
-| $path           | JMESPath search through the object identified in the $source. A default value is optional by using the $searchParams structure | $path: "Type" <br/>$path: "Properties.VpcId.Ref"<br/>$path: {$searchParams:{ searchPath: "Properties.SubnetId.Ref", defaultValue: "b61d6911-338d-46a8-9f39-8dcd24abfe91"}} |
-| $findFirst      | JMESPath search through the list of objects identified in the $source and returning the first successful match. A default value is optional by using the $searchParams structure | $findFirst: ["Properties.FunctionName.Ref", "Properties.FunctionName"] <br/> $findFirst: {$searchParams:{ searchPath: ["Properties.SubnetId.Ref","Properties.SubnetId"], defaultValue: "b61d6911-338d-46a8-9f39-8dcd24abfe91"}} |
-| $format         | A named format string based on the output of other $special fields. Note, only to be used for id fields. | $format: "{name}"                                                                                |
-| $catchall       | A sub-field of $source, specifying a default search for all other objects not explicitly defined         | $catchall: {$root: "Resources&#124;squash(@)"}                                                         |
-| $skip           | A sub-field of $source, specifying specific objects to skip if not explicitly defined                    | $skip: {$root: "Resources&#124;squash(@)[?Type=='AWS::EC2::Route']"}                                   |
-| $singleton      | A sub-field of $source, specifying specific objects to be unified under a single component or trustzone  | $singleton: { $root: "Resources&#124;squash(@)[?Type=='AWS::SecretsManager::Secret']"} |
-| $numberOfSources| When using singleton, allows you to set different values for output name or tags when the number of sources for the same mapping are single or multiple | $numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-ACM (grouped)" }}|
-| $altsource      | Specifies an alternative mapping when $source returns no object. | $altsource:<br/>       - $mappingType: {$root: "Resources&#124;squash(@)[?Type=='AWS::EC2::VPCEndpoint']"}<br/>         $mappingPath: {$path: "Properties.ServiceName"}<br/>         $mappingLookups:<br/>           - regex: ^(.*)s3$<br/>             name: S3 from VPCEndpoint<br/>             type: s3|
-| $lookup         | Allows you to look up the output of a $special field against a key-value lookup table                    | $lookup:   {path: "Properties.Subnets[]&#124;map(&values(@), @)[]&#124;map(&re_sub('[:]', '-', @), @)"} |
+| $action          | Description                                                                                                                                                                      | Example                                                                                                                                                                                                                                                                                                     |
+|------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| $source          | Specifies the source of the object type                                                                                                                                          | $source: {$root: "Resources&#124;squash(@)[?Type=='AWS::EC2::VPC']"}                                                                                                                                                                                                                                        |
+| $root            | JMESPath search through the entire source file data structure                                                                                                                    | $root: "Resources&#124;squash(@)[?Type=='AWS::EC2::VPC']"                                                                                                                                                                                                                                                   |
+| $path            | JMESPath search through the object identified in the $source. A default value is optional by using the $searchParams structure                                                   | $path: "Type" <br/>$path: "Properties.VpcId.Ref"<br/>$path: {$searchParams:{ searchPath: "Properties.SubnetId.Ref", defaultValue: "b61d6911-338d-46a8-9f39-8dcd24abfe91"}}                                                                                                                                  |
+| $findFirst       | JMESPath search through the list of objects identified in the $source and returning the first successful match. A default value is optional by using the $searchParams structure | $findFirst: ["Properties.FunctionName.Ref", "Properties.FunctionName"] <br/> $findFirst: {$searchParams:{ searchPath: ["Properties.SubnetId.Ref","Properties.SubnetId"], defaultValue: "b61d6911-338d-46a8-9f39-8dcd24abfe91"}}                                                                             |
+| $format          | A named format string based on the output of other $special fields. Note, only to be used for id fields.                                                                         | $format: "{name}"                                                                                                                                                                                                                                                                                           |
+| $catchall        | A sub-field of $source, specifying a default search for all other objects not explicitly defined                                                                                 | $catchall: {$root: "Resources&#124;squash(@)"}                                                                                                                                                                                                                                                              |
+| $skip            | A sub-field of $source, specifying specific objects to skip if not explicitly defined                                                                                            | $skip: {$root: "Resources&#124;squash(@)[?Type=='AWS::EC2::Route']"}                                                                                                                                                                                                                                        |
+| $singleton       | A sub-field of $source, specifying specific objects to be unified under a single component or trustzone                                                                          | $singleton: { $root: "Resources&#124;squash(@)[?Type=='AWS::SecretsManager::Secret']"}                                                                                                                                                                                                                      |
+| $numberOfSources | When using singleton, allows you to set different values for output name or tags when the number of sources for the same mapping are single or multiple                          | $numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-ACM (grouped)" }}                                                                                                                                                                                                               |
+| $altsource       | Specifies an alternative mapping when $source returns no object.                                                                                                                 | $altsource:<br/>       - $mappingType: {$root: "Resources&#124;squash(@)[?Type=='AWS::EC2::VPCEndpoint']"}<br/>         $mappingPath: {$path: "Properties.ServiceName"}<br/>         $mappingLookups:<br/>           - regex: ^(.*)s3$<br/>             name: S3 from VPCEndpoint<br/>             type: s3 |
+| $lookup          | Allows you to look up the output of a $special field against a key-value lookup table                                                                                            | $lookup:   {path: "Properties.Subnets[]&#124;map(&values(@), @)[]&#124;map(&re_sub('[:]', '-', @), @)"}                                                                                                                                                                                                     |
+
 
 
 
@@ -298,10 +310,12 @@ trustzones:
   - id:   default-zone
     name: Default
 ```
+For mapping trustzones to IriusRisk trusztones, `id` field must take internal IriusRisk values depending on the type of trustzone.
+These values are defined in the internal CloudFormation mapping file.
 
 ## Lookup table
 
-A simple lookup key-value table section can be added to the mapping file. This is useful if there are inconsistencies in naming conventions used, and you need to be able to translate one name into another.
+Just in case there are some inconsistencies in naming conventions used, and you need to be able to translate one name into another, a simple lookup key-value table section can be added to the mapping file.
 
 For example, if we have a situation where a subnet name is written using a short naming convention, but is actually referred to via a longer name elsewhere, we can use the $lookup action.
 
@@ -347,4 +361,15 @@ name:    {$path: "_key"}
 $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::Subnet']"}
 ```
 
-# OTM Mapping
+# Open Threat Model (OTM)
+## Open Threat Model standard
+Defined in https://github.com/iriusrisk/OpenThreatModel/wiki
+
+# OTM Tutorials
+
+## Introduction to OTM
+(external link)
+
+## How to create an OTM parser
+(external link)
+
