@@ -81,17 +81,16 @@ class TestApp:
         assert list(filter(lambda obj: obj.name == 'Canary', iac_to_otm.otm.components))
         assert list(filter(lambda obj: obj.name == 'ServiceTaskDefinition', iac_to_otm.otm.components))
         assert list(filter(lambda obj: obj.name == 'Service', iac_to_otm.otm.components))
-        #        assert list(filter(lambda obj: obj.name == 'Canary', iac_to_otm.otm.components))
         assert list(filter(lambda obj: obj.name == '0.0.0.0/0', iac_to_otm.otm.components))
 
         # Expected final dataflow
-        # assert list(filter(lambda obj: obj.name == 'ServiceLB -> Service'
-        #            and "-hub-" not in obj.source_node
-        #            and "-hub-" not in obj.destination_node, iac_to_otm.otm.dataflows))
+        assert list(filter(lambda obj: obj.name == 'ServiceLB -> Service'
+                    and "-hub-" not in obj.source_node
+                    and "-hub-" not in obj.destination_node, iac_to_otm.otm.dataflows))
 
-        # assert list(filter(lambda obj: obj.name == 'Canary -> ServiceLB'
-        #            and "-hub-" not in obj.source_node
-        #            and "-hub-" not in obj.destination_node, iac_to_otm.otm.dataflows))
+        assert list(filter(lambda obj: obj.name == 'Canary -> ServiceLB'
+                    and "-hub-" not in obj.source_node
+                    and "-hub-" not in obj.destination_node, iac_to_otm.otm.dataflows))
 
     def test_run_security_groups_use_case_b(self):
         filename = test_resource_paths.cloudformation_for_security_group_tests_json

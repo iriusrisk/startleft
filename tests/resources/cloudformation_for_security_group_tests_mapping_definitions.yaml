@@ -422,7 +422,7 @@ components:
 #NEW SG MAPPINGS (AUXILIARY SG)
 
 #4
-# internet custom component for a security group egress (typ.represented as the cidr IP 0.0.0.0/0)
+# internet custom component for a security group egress
   - id:   {$format: "{name}" }
     type: generic-client
     name: { $ip: { $path: "Properties.SecurityGroupEgress[0].CidrIp" } }
@@ -431,7 +431,7 @@ components:
     tags:
       - Outbound connection destination IP
 
-  # internet custom component for a security group ingress (typ.represented as the cidr IP 255.255.255.255/32)
+  # internet custom component for a security group ingress
   # All those Cidrips that are not ips such as vpc names will not generate an unnecessary document
   - id: { $format: "{name}" }
     type: generic-client
