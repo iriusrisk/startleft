@@ -96,6 +96,20 @@ def get_import_value_resource_name(import_value_string):
         return None
 
 
+def repeated_type4_hub_definition_component(mapping, id_map, component_name):
+    if "$ip" in str(mapping["name"]) or "$ip" in str(mapping["type"]):
+        same_name_component = component_name in id_map
+        return same_name_component
+    else:
+        return False
+
+
+def create_core_dataflow(df_name, source_obj, source_resource_id, destination_resource_id):
+    dataflow = {"name": df_name, "source": source_obj, "source_node": source_resource_id,
+                "destination_node": destination_resource_id}
+    return dataflow
+
+
 class TrustzoneMapper:
     def __init__(self, mapping):
         self.mapping = mapping
@@ -153,12 +167,12 @@ class ComponentMapper:
             component_tags, singleton_multiple_tags = self.__get_component_tags(source_model, source_object,
                                                                                 mapping_tags)
 
-            for parent_number, parent_name in enumerate(parent_names):
+            for parent_name_number, parent_name in enumerate(parent_names):
                 # If there is more than one parent (i.e. subnets), the component will replicated inside each
                 parent_ids = self.__get_parent_id(parent_name, parents_from_component, component_name)
                 if isinstance(parent_ids, str):
                     parent_ids = [parent_ids]
-                for parent_id in parent_ids:
+                for parent_number, parent_id in enumerate(parent_ids):
                     base_component = {"name": component_name, "type": component_type, "source": source_object,
                                  "parent": parent_id}
 
@@ -167,7 +181,13 @@ class ComponentMapper:
                     base_component = set_optional_parameters_to_resource(base_component, mapping_tags, component_tags,
                                                                          singleton_multiple_name,
                                                                          singleton_multiple_tags)
-                    component_ids = self.__generate_id(source_model, base_component, component_name, parent_number)
+
+                    # Special case related with support components for Security Groups
+                    # To avoid repeated components generated from AWS Cidr IP fields
+                    if repeated_type4_hub_definition_component(self.mapping, self.id_map, component_name):
+                        continue
+
+                    component_ids = self.__generate_id(source_model, base_component, component_name, parent_name_number)
 
                     if isinstance(component_ids, str):
                         component_ids = [component_ids]
@@ -205,11 +225,8 @@ class ComponentMapper:
                         elif "$parent" in self.mapping["parent"]:
                             # $parent and $children are related mappings
                             # In this case, component_id may be a list with a different treatment
-                            if parent_number == component_number:
-                                if component_id not in id_parents:
-                                    id_parents[component_id] = parent_id
-                            else:
-                                break
+                            if parent_number != component_number:
+                                continue
                         # For the rest of cases that are not $children, id_parents must be set with new parents found
                         else:
                             if component_id not in id_parents:
@@ -336,7 +353,7 @@ class ComponentMapper:
                 # are their children, so its ID should be stored before reaching the child components
                 # With $parent, it will check if the supposed id_parents exist,
                 # otherwise performing a standard search using action inside $parent
-                if len(id_parents) > 0:
+                if len(id_parents) > 0 and component_name in self.id_map:
                     component_id = self.id_map[component_name]
                     # for $parent elements, all parents have the same name (but IDs may be different)
                     if isinstance(component_id, list):
@@ -456,7 +473,7 @@ class DataflowMapper:
         self.mapping = mapping
         self.id_map = {}
 
-    def run(self, source_model, id_parents):
+    def run(self, source_model, id_dataflows):
         df_id = None
         dataflows = []
 
@@ -470,25 +487,32 @@ class DataflowMapper:
             destination_mapper = DataflowNodeMapper(self.mapping["destination"])
             source_resource_names = source_mapper.run(source_model, source_obj)
             destination_resource_names = destination_mapper.run(source_model, source_obj)
+            hub_type = self.__determine_hub_mapping_type(source_mapper, destination_mapper)
 
             for source_resource_name in source_resource_names or []:
                 # components should be located
                 source_resource_ids = self.__get_dataflows_component_ids(source_resource_name)
                 # if a component is not on list, it may be a Security Group
-                if source_resource_ids is None:
-                    if "$hub" in source_mapper.mapping:
-                        source_resource_ids = ["source-hub-" + source_resource_name]
-                        self.id_map[source_resource_name] = source_resource_ids
+                if "$hub" in source_mapper.mapping:
+                    if hub_type is not None:
+                        source_resource_ids = [hub_type + source_resource_name]
 
                 for source_resource_id in source_resource_ids or []:
                     for destination_resource_name in destination_resource_names or []:
+                        destination_hub_type = None
                         # components should be located
                         destination_resource_ids = self.__get_dataflows_component_ids(destination_resource_name)
+
                         # if a component is not on list, it may be a Security Group
+                        if "$hub" in destination_mapper.mapping:
+                            if destination_resource_ids is None:
+                                destination_resource_id_for_hub_mapping = ["hub-"+destination_resource_name]
+                                self.id_map[destination_resource_name] = destination_resource_id_for_hub_mapping
+                            if hub_type is not None:
+                                destination_resource_ids = [hub_type + destination_resource_name]
+
                         if destination_resource_ids is None:
-                            if "$hub" in destination_mapper.mapping:
-                                destination_resource_ids = ["destination-hub-" + destination_resource_name]
-                                self.id_map[destination_resource_name] = destination_resource_ids
+                            continue
 
                         for destination_resource_id in destination_resource_ids:
                             # skip self referencing dataflows unless they are temporary (action $hub)
@@ -497,8 +521,8 @@ class DataflowMapper:
                                     and source_resource_id == destination_resource_id:
                                 continue
 
-                            dataflow = {"name": df_name, "source": source_obj, "source_node": source_resource_id,
-                                        "destination_node": destination_resource_id}
+                            dataflow = create_core_dataflow(df_name, source_obj, source_resource_id
+                                                            , destination_resource_id)
                             if "properties" in self.mapping:
                                 dataflow["properties"] = self.mapping["properties"]
                             if "bidirectional" in self.mapping:
@@ -516,6 +540,8 @@ class DataflowMapper:
                             dataflow_tags = get_tags(source_model, source_obj, mapping_tags)
                             dataflow = set_optional_parameters_to_resource(dataflow, mapping_tags, dataflow_tags)
 
+                            id_dataflows[source_resource_id] = {"hub_type": hub_type,
+                                                                "destination_id": destination_resource_id}
                             dataflows.append(dataflow)
         return dataflows
 
@@ -526,3 +552,29 @@ class DataflowMapper:
         if isinstance(node_ids, str):
             node_ids = [node_ids]
         return node_ids
+
+    def __determine_hub_mapping_type(self, source_mapper, destination_mapper):
+
+        # SG mapping type 2
+        if "$hub" in source_mapper.mapping and "$hub" in destination_mapper.mapping:
+            return "type2-hub-"
+
+        # SG mappings: type 1
+        elif "$hub" not in source_mapper.mapping and "$hub" in destination_mapper.mapping\
+                and "$path" in source_mapper.mapping and "_key" in source_mapper.mapping["$path"]:
+            return "type1-hub-"
+
+        # SG mapping type 3 inbound
+        elif "$hub" not in source_mapper.mapping and "$hub" in destination_mapper.mapping \
+                and "$path" in destination_mapper.mapping["$hub"] \
+                and "_key" in destination_mapper.mapping["$hub"]["$path"]:
+            return "type3-hub-"
+
+        # SG mapping type 3 outbound
+        elif "$hub" in source_mapper.mapping and "$path" in source_mapper.mapping["$hub"] \
+                and "_key" in source_mapper.mapping["$hub"]["$path"]:
+            return "type3-hub-"
+
+        else:
+            return None
+

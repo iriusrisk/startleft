@@ -120,6 +120,9 @@ class SourceModel:
             if "$hub" in obj:
                 return self.search(obj["$hub"], source)
 
+            if "$ip" in obj:
+                return self.search(obj["$ip"], source)
+
             return obj
 
     def __search_with_default(self, obj, source, action):
