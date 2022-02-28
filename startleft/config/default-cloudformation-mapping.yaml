@@ -3,10 +3,10 @@ trustzones:
     name: Public Cloud
 
 #SG MAPPING (AUXILIARY SG)
-#4
+#type 4
   - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
     name: Internet
-    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupEgress[0].CidrIp=='0.0.0.0/0']"}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupEgress[0].CidrIp]"}}
 
 # The order of the components is important because parent components must be defined before child components
 components:
@@ -244,7 +244,7 @@ components:
   - id:     {$format: "{name}"}
     type:   CD-MQ
     name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-MQ (grouped)" }}}
-    $source: {$root: "Resources|squash(@)[?Type=='AWS::AmazonMQ::Broker']"}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::AmazonMQ')]"}}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - { $path: "Type" }
@@ -421,8 +421,8 @@ components:
 
 #NEW SG MAPPINGS (AUXILIARY SG)
 
-#4
-# internet custom component for a security group egress (typ.represented as the cidr IP 0.0.0.0/0)
+#type 4
+# internet custom component for a security group egress
   - id:   {$format: "{name}" }
     type: generic-client
     name: { $ip: { $path: "Properties.SecurityGroupEgress[0].CidrIp" } }
@@ -431,7 +431,7 @@ components:
     tags:
       - Outbound connection destination IP
 
-  # internet custom component for a security group ingress (typ.represented as the cidr IP 255.255.255.255/32)
+  # internet custom component for a security group ingress
   # All those Cidrips that are not ips such as vpc names will not generate an unnecessary document
   - id: { $format: "{name}" }
     type: generic-client
@@ -453,15 +453,14 @@ components:
 #      - { $path: "Type" }
 
 dataflows:
-#NEW SG MAPPINGS
-#1
+#Begin: SG MAPPINGS
+#type 1
   - id:     {$format: "{name}"}
     name:   {$format: "{_key}"}
     $source: {$root: "Resources|squash(@)[?Properties.SecurityGroupIds]"}
     source: {$path: "_key"}
     destination: {$hub: {$path: "Properties.SecurityGroupIds|map(&values(@), @)[0][0][0]"}}
     tags:
-      - {$format: "Component: {_key}"}
 
   - id:     {$format: "{name}"}
     name:   {$format: "{_key}"}
@@ -469,7 +468,6 @@ dataflows:
     source: {$path: "_key"}
     destination: {$hub: {$path: "Properties.SecurityGroups|map(&values(@), @)[0][0][0]"}}
     tags:
-      - {$format: "Component: {_key}"}
 
   - id:     {$format: "{name}"}
     name:   {$format: "{_key}"}
@@ -477,7 +475,6 @@ dataflows:
     source: {$path: "_key"}
     destination: {$hub: {$path: "Properties.NetworkConfiguration.AwsvpcConfiguration.SecurityGroups|map(&values(@), @)[0][0][0]"}}
     tags:
-      - {$format: "Component: {_key}"}
 
   - id:     {$format: "{name}"}
     name:   {$format: "{_key}"}
@@ -485,16 +482,36 @@ dataflows:
     source: {$path: "_key"}
     destination: {$hub: {$path: "Properties.VPCConfig.SecurityGroupIds|map(&values(@), @)[0][0][0]"}}
     tags:
-      - {$format: "Component: {_key}"}
 
-#3
+#type 2
+  - id:     {$format: "{name}"}
+    name:   {$format: "{_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroupIngress']"}
+    source: {$hub: {$path: "Properties.SourceSecurityGroupId|squash(@)[0][0]"}}
+    destination: {$hub: {$path: "Properties.GroupId"}}
+    tags:
+      - $path: "Properties.Description"
+      - $path: "Properties.IpProtocol"
+      - $path: "Properties.FromPort"
+      - $path: "Properties.ToPort"
+
+  - id:     {$format: "{name}"}
+    name:   {$format: "{_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroupEgress']"}
+    source: {$hub: {$path: "Properties.GroupId"}}
+    destination: {$hub: {$path: "Properties.DestinationSecurityGroupId|squash(@)[0][0]"}}
+    tags:
+      - $path: "Properties.Description"
+      - $path: "Properties.IpProtocol"
+      - $path: "Properties.FromPort"
+      - $path: "Properties.ToPort"
+#type 3
   - id:     {$format: "{name}"}
     name:   {$format: "{_key}"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup']"}
     source: {$path: "Properties.SecurityGroupIngress[0].CidrIp"}
     destination: {$hub:{$path: "_key"}}
     tags:
-      - $format: "Inner Security Group Ingress dataflow defined in {_key}"
       - $path: "Properties.SecurityGroupEgress[0].Description"
       - $path: "Properties.SecurityGroupIngress[0].IpProtocol"
       - $path: "Properties.SecurityGroupIngress[0].FromPort"
@@ -506,35 +523,11 @@ dataflows:
     source: {$hub:{$path: "_key"}}
     destination: {$path: "Properties.SecurityGroupEgress[0].CidrIp"}
     tags:
-      - $format: "Inner Security Group Egress dataflow defined in {_key}"
       - $path: "Properties.SecurityGroupEgress[0].Description"
       - $path: "Properties.SecurityGroupEgress[0].IpProtocol"
       - $path: "Properties.SecurityGroupEgress[0].CidrIp"
 
-#mapping aws-lambda-function->firehose
-#difficult because those components do not reference their names but their delivery stream names (internal fields)
-  #- id:     {$format: "{name}"}
-  #  name:  { $path: "Properties.DeliveryStreamName" }
-  #  $source: { $root: "Resources|squash(@)[?Type=='AWS::KinesisFirehose::DeliveryStream']" }
-  #  source: { $path: "Resources|squash(@)|contains('CL-Firehose')" } #CLTransformer433F8853
-  #  destination: {$path: "_key"}
-
-  #- id:     {$format: "concat({name},_key)"}
-  #  name:   {$format: "logstream"}
-  #  $source: {$root: "Resources|squash(@)[?Type=='AWS::KinesisFirehose::DeliveryStream']"}
-  #  source:  {$path: "_key"}
-  #  destination: {$path: {$searchParams:{ searchPath: "Properties.LoggingConfiguration.DestinationBucketName.Ref"}}}
-
-#not only generates duplicates but also with inconsistent source ids and in one case a destination id
-#the reason is: aws::apigateway::xx is singleton
-#if the component referenced in source or destination has not been or will not be generated
-# (that is the case of aws::apigateway::method) then it generates wrong source or destination ids.
-#  - id:     {$format: "{name}"}
-#    name:   {$format: "API gateway data stream from {_key}"}
-#    $source: {$root: "Resources|squash(@)[?Type=='AWS::ApiGateway::Method']"}
-#    source:  {$path: {$searchParams:{ searchPath: "_key"}}}
-#    destination:  {$path: {$searchParams:{ searchPath: "Properties.Integration.RequestTemplates|squash(@)[0]|squash(@)[0][1][1]"}}}
-
+#End: SG MAPPINGS
 
   - id:     {$format: "{name}"}
     name:   {$format: "dataflow to Lambda function in {_key}"}

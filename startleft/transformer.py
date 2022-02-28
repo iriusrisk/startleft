@@ -225,7 +225,14 @@ class Transformer:
         dataflow = create_core_dataflow(df_name, source_obj, source_resource_id, destination_resource_id)
         # adds additional fields
         dataflow["id"] = str(uuid.uuid4())
-        tags = origin_dataflow.tags + target_dataflow.tags
+
+        if origin_dataflow.tags is not None:
+            tags = origin_dataflow.tags
+        else:
+            tags = list()
+        if target_dataflow.tags is not None:
+            tags += target_dataflow.tags
+
         if additional_tags is not None:
             tags += additional_tags
             same_dataflow = list(filter(lambda x: x.source_node == source_resource_id
