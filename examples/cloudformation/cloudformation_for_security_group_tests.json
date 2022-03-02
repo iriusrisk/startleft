@@ -127,6 +127,160 @@
         "VpcEndpointType": "Interface"
       }
     },
+    "VPCssmmessagesSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "ECSFargateGoVPCStack/VPC/ssmmessages/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": {
+              "Fn::GetAtt": [
+                "CustomVPC",
+                "CidrBlock"
+              ]
+            },
+            "Description": {
+              "Fn::Join": [
+                "",
+                [
+                  "from ",
+                  {
+                    "Fn::GetAtt": [
+                      "CustomVPC",
+                      "CidrBlock"
+                    ]
+                  },
+                  ":443"
+                ]
+              ]
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ECSFargateGoVPCStack/VPC"
+          }
+        ],
+        "VpcId": {
+          "Ref": "CustomVPC"
+        }
+      }
+    },
+    "VPCssmmessages": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "ServiceName": "com.amazonaws.us-east-1.ssmmessages",
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "VPCssmmessagesSecurityGroup",
+              "GroupId"
+            ]
+          }
+        ],
+        "SubnetIds": [
+          {
+            "Ref": "VPCPrivateSubnet1SubnetXYZ"
+          },
+          {
+            "Ref": "VPCPrivateSubnet2SubnetABC"
+          }
+        ],
+        "VpcEndpointType": "Interface"
+      }
+    },
+    "VPCmonitoringSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "ECSFargateGoVPCStack/VPC/monitoring/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": {
+              "Fn::GetAtt": [
+                "CustomVPC",
+                "CidrBlock"
+              ]
+            },
+            "Description": {
+              "Fn::Join": [
+                "",
+                [
+                  "from ",
+                  {
+                    "Fn::GetAtt": [
+                      "CustomVPC",
+                      "CidrBlock"
+                    ]
+                  },
+                  ":443"
+                ]
+              ]
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ECSFargateGoVPCStack/VPC"
+          }
+        ],
+        "VpcId": {
+          "Ref": "CustomVPC"
+        }
+      }
+    },
+    "VPCmonitoring": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "ServiceName": "com.amazonaws.us-east-1.monitoring",
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "VPCmonitoringSecurityGroup",
+              "GroupId"
+            ]
+          }
+        ],
+        "SubnetIds": [
+          {
+            "Ref": "VPCPrivateSubnet1SubnetXYZ"
+          },
+          {
+            "Ref": "VPCPrivateSubnet2SubnetABC"
+          }
+        ],
+        "VpcEndpointType": "Interface"
+      }
+    },
     "OutboundSecurityGroup": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
@@ -313,6 +467,74 @@
         },
         "TaskDefinition": {
           "Ref": "ServiceTaskDefinition"
+        }
+      }
+    },
+    "CanarySecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "ECSFargateGoCanaryStack/CanarySecurityGroup",
+        "VpcId": {
+          "Fn::ImportValue": "ECSFargateGoVPCStack:ExportsOutputRefCustomVPCBDGHIJK"
+        }
+      }
+    },
+    "CanarySecurityGroupEgresstoServiceLBSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Properties": {
+        "GroupId": {
+          "Fn::GetAtt": [
+            "CanarySecurityGroup",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "Description": "to ECSFargateGoServiceStackServiceLBSecurityGroup:443",
+        "DestinationSecurityGroupId": {
+          "Fn::ImportValue": "ECSFargateGoServiceStack:ExportsOutputFnGetAttServiceLBSecurityGroupGroupId1122AABB"
+        },
+        "FromPort": 443,
+        "ToPort": 443
+      }
+    },
+    "ServiceLBSecurityGroupIngressfromCanarySecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "Description": "from ECSFargateGoCanaryStackCanarySecurityGroup:443",
+        "FromPort": 443,
+        "GroupId": {
+          "Fn::ImportValue": "ECSFargateGoServiceStack:ExportsOutputFnGetAttServiceLBSecurityGroupGroupId3006B9B0"
+        },
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "CanarySecurityGroup",
+            "GroupId"
+          ]
+        },
+        "ToPort": 443
+      }
+    },
+    "Canary": {
+      "Type": "AWS::Synthetics::Canary",
+      "Properties": {
+        "VPCConfig": {
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "CanarySecurityGroup",
+                "GroupId"
+              ]
+            }
+          ],
+          "SubnetIds": [
+            {
+              "Fn::ImportValue": "ECSFargateGoVPCStack:ExportsOutputRefVPCPublicSubnet1SubnetHIJ"
+            },
+            {
+              "Fn::ImportValue": "ECSFargateGoVPCStack:ExportsOutputRefVPCPublicSubnet2SubnetKLM"
+            }
+          ]
         }
       }
     }

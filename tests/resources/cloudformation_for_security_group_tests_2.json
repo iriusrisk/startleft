@@ -1,0 +1,301 @@
+{
+  "Resources": {
+    "CustomVPC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16"
+      }
+    },
+    "PrivateSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "AvailabilityZone": "Select",
+        "CidrBlock": "10.0.2.0/24",
+        "MapPublicIpOnLaunch": false
+      }
+    },
+    "PrivateSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "AvailabilityZone": "elect",
+        "CidrBlock": "10.0.3.0/24",
+        "MapPublicIpOnLaunch": false
+      }
+    },
+    "PublicSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "AvailabilityZone": "Select",
+        "CidrBlock": "10.0.0.0/24",
+        "MapPublicIpOnLaunch": false
+      }
+    },
+    "PublicSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "AvailabilityZone": "Select",
+        "CidrBlock": "10.0.1.0/24",
+        "MapPublicIpOnLaunch": false
+      }
+    },
+    "SuperSecurityGroup1": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "ECSFargateGoServiceStack/SuperSecurityGroup1",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "255.255.255.255/32",
+            "Description": "Disallow all traffic",
+            "FromPort": 252,
+            "IpProtocol": "icmp",
+            "ToPort": 86
+          }
+        ],
+        "VpcId": {
+          "Fn::ImportValue": "ECSFargateGoVPCStack:ExportsOutputRefCustomVPCBDGHIJK"
+        }
+      }
+    },
+    "SuperSecurityGroup1IngressfromSuperSecurityGroup2": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "IpProtocol": "tcp",
+        "Description": "Load balancer to target",
+        "FromPort": 80,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "SuperSecurityGroup1",
+            "GroupId"
+          ]
+        },
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "SuperSecurityGroup2",
+            "GroupId"
+          ]
+        },
+        "ToPort": 80
+      }
+    },
+    "ServiceLB": {
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      "Properties": {
+        "LoadBalancerAttributes": [
+          {
+            "Key": "deletion_protection.enabled",
+            "Value": "false"
+          }
+        ],
+        "Scheme": "internal",
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "SuperSecurityGroup2",
+              "GroupId"
+            ]
+          }
+        ],
+        "Subnets": [
+          {
+            "Fn::ImportValue": "ECSFargateGoVPCStack:ExportsOutputRefVPCPrivateSubnet1SubnetXYZ"
+          },
+          {
+            "Fn::ImportValue": "ECSFargateGoVPCStack:ExportsOutputRefVPCPrivateSubnet2SubnetABC"
+          }
+        ],
+        "Type": "application"
+      }
+    },
+    "ServiceLB2": {
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      "Properties": {
+        "LoadBalancerAttributes": [
+          {
+            "Key": "deletion_protection.enabled",
+            "Value": "false"
+          }
+        ],
+        "Scheme": "internal",
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "SuperSecurityGroup2",
+              "GroupId"
+            ]
+          }
+        ],
+        "Subnets": [
+          {
+            "Fn::ImportValue": "ECSFargateGoVPCStack:ExportsOutputRefVPCPrivateSubnet1SubnetXYZ"
+          },
+          {
+            "Fn::ImportValue": "ECSFargateGoVPCStack:ExportsOutputRefVPCPrivateSubnet2SubnetABC"
+          }
+        ],
+        "Type": "application"
+      }
+    },
+    "SuperSecurityGroup2": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Automatically created Security Group for ELB ECSFargateGoServiceStackServiceLB",
+        "VpcId": {
+          "Fn::ImportValue": "ECSFargateGoVPCStack:ExportsOutputRefCustomVPCBDGHIJK"
+        }
+      }
+    },
+    "SuperSecurityGroup2EgresstoSuperSecurityGroup1": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Properties": {
+        "GroupId": {
+          "Fn::GetAtt": [
+            "SuperSecurityGroup2",
+            "GroupId"
+          ]
+        },
+        "IpProtocol": "tcp",
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "SuperSecurityGroup1",
+            "GroupId"
+          ]
+        },
+        "FromPort": 80,
+        "ToPort": 80
+      }
+    },
+    "ServiceTaskDefinition": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [
+              {
+                "Name": "COUNTER_TABLE_NAME",
+                "Value": {
+                  "Fn::ImportValue": "ECSFargateGoDataStack:ExportsOutputRefCounterTable0011223344556677"
+                }
+              }
+            ],
+            "Essential": true,
+            "Image": {
+              "Fn::Sub": "${AWS::AccountId}.dkr.ecr.us-east-1.${AWS::URLSuffix}/cdk-aa001122ds-container-assets-${AWS::AccountId}-us-east-1:00112233445566778899"
+            },
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "CounterServiceTaskDefwebLogGroupAABBCCDD"
+                },
+                "awslogs-stream-prefix": "CounterService",
+                "awslogs-region": "us-east-1"
+              }
+            },
+            "Name": "web",
+            "PortMappings": [
+              {
+                "ContainerPort": 80,
+                "Protocol": "tcp"
+              }
+            ]
+          }
+        ],
+        "Cpu": "256",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "CounterServiceTaskDefExecutionRoleBBDDEEFF",
+            "Arn"
+          ]
+        },
+        "Family": "ECSFargateGoServiceStackCounterServiceTaskDefAABBCCDD",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "ECSTaskRoleF2ADB362",
+            "Arn"
+          ]
+        }
+      },
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "ECSFargateGoServiceStack/CounterService/TaskDef/Resource"
+      }
+    },
+    "Service": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "SuperSecurityGroup1",
+                  "GroupId"
+                ]
+              }
+            ],
+            "Subnets": [
+              {
+                "Fn::ImportValue": "ECSFargateGoVPCStack:ExportsOutputRefVPCPrivateSubnet1SubnetXYZ"
+              },
+              {
+                "Fn::ImportValue": "ECSFargateGoVPCStack:ExportsOutputRefVPCPrivateSubnet2SubnetABC"
+              }
+            ]
+          }
+        },
+        "TaskDefinition": {
+          "Ref": "ServiceTaskDefinition"
+        }
+      }
+    },
+    "Service2": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "SuperSecurityGroup1",
+                  "GroupId"
+                ]
+              }
+            ],
+            "Subnets": [
+              {
+                "Fn::ImportValue": "ECSFargateGoVPCStack:ExportsOutputRefVPCPrivateSubnet1SubnetXYZ"
+              },
+              {
+                "Fn::ImportValue": "ECSFargateGoVPCStack:ExportsOutputRefVPCPrivateSubnet2SubnetABC"
+              }
+            ]
+          }
+        },
+        "TaskDefinition": {
+          "Ref": "ServiceTaskDefinition"
+        }
+      }
+    }
+  }
+}
