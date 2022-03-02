@@ -3,7 +3,7 @@ trustzones:
     name: Public Cloud
 
 #SG MAPPING (AUXILIARY SG)
-#4
+#type 4
   - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
     name: Internet
     $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupEgress[0].CidrIp]"}}
