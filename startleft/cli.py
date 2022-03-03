@@ -113,10 +113,10 @@ def parse(type, map, otm, name, id, filename):
     Parses IaC source files into Open Threat Model
     """
 
-    cf_mapping_files = get_default_mappings(map)
+    mapping_files = get_default_mappings(map, type)
 
     iac_to_otm = IacToOtm(name, id)
-    iac_to_otm.run(type, cf_mapping_files, otm, filename)
+    iac_to_otm.run(type, mapping_files, otm, filename)
 
 
 @cli.command()
@@ -184,13 +184,17 @@ def server(irius_server: str, port: int):
     fastapi_server.run_webapp(port)
 
 
-def get_default_mappings(mapping_file: []):
-    # If map is empty then we load the default map file
-    cf_mapping_files = paths.default_cf_mapping_files
-    if mapping_file and len(mapping_file) != 0:
-        cf_mapping_files = mapping_file
+def get_default_mappings(mapping_file: [], type=None):
+    if type.upper() == 'HCL2':
+        mapping_files = paths.default_tf_aws_mapping_files
+    else:
+        # If map is empty then we load the default map file
+        mapping_files = paths.default_cf_mapping_files
 
-    return cf_mapping_files
+    if mapping_file and len(mapping_file) != 0:
+        mapping_files = mapping_file
+
+    return mapping_files
 
 
 if __name__ == '__main__':
