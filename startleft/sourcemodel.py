@@ -117,6 +117,12 @@ class SourceModel:
             if "$numberOfSources" in obj:
                 return self.__multiple_source_search(source, obj)
 
+            if "$hub" in obj:
+                return self.search(obj["$hub"], source)
+
+            if "$ip" in obj:
+                return self.search(obj["$ip"], source)
+
             return obj
 
     def __search_with_default(self, obj, source, action):
