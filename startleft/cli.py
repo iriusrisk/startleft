@@ -189,7 +189,6 @@ def get_default_mappings(mapping_file_paths: [], type=None):
         if type is not None and type.upper() == 'HCL2':
             mapping_file_paths = paths.default_tf_aws_mapping_file
         else:
-            # If map is empty then we load the default map file
             mapping_file_paths = paths.default_cf_mapping_file
 
     return mapping_file_paths
