@@ -33,15 +33,17 @@ class OtmToIr:
 
         project_id: str = otm["project"]["id"]
 
+        logger.info("Uploading OTM file to IriusRisk")
         if recreate:
-            logger.debug("Recreating diagram in IriusRisk")
+            logger.info("Recreating diagram in IriusRisk")
             if self.check_project_exists.do_call(project_id):
                 self.delete_project.do_call(project_id)
 
             self.create_project.do_call(otm_file)
         else:
-            logger.debug("Upserting diagram to IriusRisk")
             if self.check_project_exists.do_call(project_id):
+                logger.info("Updating diagram in IriusRisk")
                 self.update_project.do_call(project_id, otm_file)
             else:
+                logger.info("Creating diagram in IriusRisk")
                 self.create_project.do_call(otm_file)
