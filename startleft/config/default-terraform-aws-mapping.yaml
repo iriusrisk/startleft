@@ -1,8 +1,11 @@
 trustzones:
-  - id:          {$format: "{type}.{name}.id"}
-    type:        aws_vpc
-    $source:     {$root: "resource[].aws_vpc"}
-    name:        {$path: "keys(@)[0]"}
+  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+
+ # - id:          {$format: "{type}.{name}.id"}
+ #   type:        aws_vpc
+ #   $source:     {$root: "resource[].aws_vpc"}
+ #   name:        {$path: "keys(@)[0]"}
 
 components:
   - id:          {$format: "{type}.{name}.id"}
@@ -45,13 +48,14 @@ components:
     type:        aws_vpc
     name:        {$path: "keys(@)[0]"}
     $source:
-      $skip:     {$root: "resource[].aws_vpc"}    
+      $skip:     {$root: "resource[].aws_vpc"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
 
   - id:          {$format: "{type}.{name}.id"}
     $source:
       $catchall: {$root: "resource[]"}
     type:        {$path: "keys(@)[0]"}
     name:        {$path: "*|[0]|keys(@)[0]"}
-    parent:      default-zone
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
 
 dataflows: []

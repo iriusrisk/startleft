@@ -87,7 +87,7 @@ def run(type, map, otm, name, id, recreate, irius_server, api_token, filename):
 
 def inner_run(type, map, otm, name, id, recreate, irius_server, api_token, filename):
 
-    cf_mapping_files = get_default_mappings(map)
+    cf_mapping_files = get_default_mappings(map, type)
 
     iac_to_otm = IacToOtm(name, id)
     otm_to_ir = OtmToIr(irius_server, api_token)
@@ -113,10 +113,10 @@ def parse(type, map, otm, name, id, filename):
     Parses IaC source files into Open Threat Model
     """
 
-    cf_mapping_files = get_default_mappings(map)
+    mapping_files = get_default_mappings(map, type)
 
     iac_to_otm = IacToOtm(name, id)
-    iac_to_otm.run(type, cf_mapping_files, otm, filename)
+    iac_to_otm.run(type, mapping_files, otm, filename)
 
 
 @cli.command()
@@ -184,13 +184,14 @@ def server(irius_server: str, port: int):
     fastapi_server.run_webapp(port)
 
 
-def get_default_mappings(mapping_file: []):
-    # If map is empty then we load the default map file
-    cf_mapping_files = paths.default_cf_mapping_files
-    if mapping_file and len(mapping_file) != 0:
-        cf_mapping_files = mapping_file
+def get_default_mappings(mapping_file_paths: [], type=None):
+    if not mapping_file_paths:
+        if type is not None and type.upper() == 'HCL2':
+            mapping_file_paths = paths.default_tf_aws_mapping_file
+        else:
+            mapping_file_paths = paths.default_cf_mapping_file
 
-    return cf_mapping_files
+    return mapping_file_paths
 
 
 if __name__ == '__main__':
