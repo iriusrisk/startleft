@@ -37,7 +37,7 @@ class IriusProjectNotFoundError(CommonError):
 
 
 class IriusServerNotSettedError(CommonError):
-    message = messages.IRIUS_SERVER_NOT_SETTED
+    message = messages.IRIUS_SERVER_NOT_SET
     http_status_code = 500
     system_exit_status = OTM_TO_IR_EXIT_UNEXPECTED
 
