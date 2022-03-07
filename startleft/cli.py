@@ -185,7 +185,7 @@ def server(irius_server: str, port: int):
 
 
 def get_default_mappings(mapping_file: [], type=None):
-    if type.upper() == 'HCL2':
+    if type is not None and type.upper() == 'HCL2':
         mapping_files = paths.default_tf_aws_mapping_files
     else:
         # If map is empty then we load the default map file

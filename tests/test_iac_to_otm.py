@@ -83,3 +83,13 @@ class TestApp:
                                        and "DummyVPCdynamodb (AWS::EC2::VPCEndpoint)" in obj.tags
                                        and len(obj.tags) == 1, iac_to_otm.otm.components))
 
+    def test_run_terraform_mappings(self):
+        filename = test_resource_paths.terraform_for_mappings_tests_json
+        mapping_filename = test_resource_paths.default_terraform_aws_mapping
+        iac_to_otm = IacToOtm('name', 'id')
+        iac_to_otm.run('HCL2', mapping_filename, 'threatmodel-from-terraform.otm', filename)
+
+        assert iac_to_otm.source_model.otm
+        assert len(iac_to_otm.otm.trustzones) == 1
+        assert len(iac_to_otm.otm.components) > 1
+        assert len(iac_to_otm.otm.dataflows) == 0
