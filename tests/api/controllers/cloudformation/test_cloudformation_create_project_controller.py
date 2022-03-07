@@ -64,4 +64,4 @@ class TestCloudFormationCreateProjectController:
 
         # Then
         assert response.status_code == cloudformation_create_project_controller.RESPONSE_STATUS_CODE
-        assert response.json() == cloudformation_create_project_controller.RESPONSE_BODY
+        assert response.text == ''

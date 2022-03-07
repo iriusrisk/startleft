@@ -1,4 +1,6 @@
-from fastapi import APIRouter, File, UploadFile, Form, Header
+from http import HTTPStatus
+
+from fastapi import APIRouter, File, UploadFile, Form, Header, Response
 
 from startleft import cli
 from startleft.api.api_config import ApiConfig
@@ -8,8 +10,8 @@ from startleft.messages import messages
 
 PREFIX = '/api/v1/startleft/cloudformation'
 URL = ''
-RESPONSE_BODY = {}
-RESPONSE_STATUS_CODE = 201
+RESPONSE_STATUS_CODE = HTTPStatus.CREATED
+RESPONSE_BODY = Response(status_code=RESPONSE_STATUS_CODE)
 
 router = APIRouter(
     prefix=PREFIX,
@@ -21,7 +23,10 @@ router = APIRouter(
         401: {"description": messages.UNAUTHORIZED_EXCEPTION,
               "model": ErrorResponse},
         403: {"description": messages.FORBIDDEN_OPERATION,
-              "model": ErrorResponse}}
+              "model": ErrorResponse},
+        'default': {"description": messages.UNEXPECTED_API_ERROR,
+                    "model": ErrorResponse}
+    }
 )
 
 
