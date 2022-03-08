@@ -92,10 +92,10 @@ def inner_run(type, map, otm, name, id, recreate, irius_server, api_token, filen
     iac_to_otm = IacToOtm(name, id)
     otm_to_ir = OtmToIr(irius_server, api_token)
 
-    logger.info("Parsing IaC source files into OTM")
+    logger.info("Generating OTM file")
     iac_to_otm.run(type, cf_mapping_files, otm, filename)
-    logger.info("Uploading OTM files and generating the IriusRisk threat model")
     otm_to_ir.run(recreate, otm)
+    logger.info("Uploading successful")
 
 
 @cli.command()
@@ -130,7 +130,7 @@ def threatmodel(recreate, irius_server, api_token, filename):
     Uploads an OTM file to IriusRisk
     """
     otm_to_ir = OtmToIr(irius_server, api_token)
-    logger.info("Uploading OTM files and generating the IriusRisk threat model")
+    logger.info("Uploading OTM file and generating the IriusRisk threat model")
     otm_to_ir.run(recreate, filename)
 
 
