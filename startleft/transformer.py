@@ -40,9 +40,9 @@ class Transformer:
                 if "$source" in mapping and isinstance(mapping["$source"], dict):
                     if "$singleton" in mapping["$source"] and trustzone_number > 0:
                         continue
-                logger.debug(f"Added trustzone: [{trustzone_element['name']}][{trustzone_element['id']}]")
-                numTrustzones += 1
                 self.threat_model.add_trustzone(**trustzone_element)
+                numTrustzones += 1
+                logger.debug(f"Added trustzone: [{trustzone_element['name']}][{trustzone_element['id']}]")
         logger.info(f"Added {numTrustzones} trustzones successfully")
 
     def transform_components(self):

@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class Schema:
     def __init__(self, schema_file_name: str):
         self.schema = self.__load_schema(schema_file_name)
-        logger.debug("OTM schema file loaded successfully")
+        logger.debug("Schema file loaded successfully")
         self.errors = ""
         self.valid = None
 
@@ -32,7 +32,7 @@ class Schema:
 
     def __load_schema(self, schema_file_name):
         schema_path = pkg_resources.resource_filename('startleft', os.path.join('data', schema_file_name))
-        logger.info(f"Loading OTM schema file '{schema_path}'")
+        logger.info(f"Loading schema file '{schema_path}'")
         with open(schema_path, "r") as f:
             return yaml.load(f, Loader=yaml.BaseLoader)
 
