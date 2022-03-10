@@ -1,7 +1,7 @@
 import logging
 from enum import Enum
 
-from startleft.api.errors import IriusTokenNotSettedError, IriusServerNotSettedError, IriusCommonApiError, \
+from startleft.api.errors import IriusTokenNotSetError, IriusServerNotSetError, IriusCommonApiError, \
     IriusUnauthorizedError, IriusForbiddenError, IriusProjectNotFoundError
 
 logger = logging.getLogger(__name__)
@@ -22,7 +22,7 @@ class BaseApiClient:
 
     def headers(self):
         if not self.token:
-            raise IriusTokenNotSettedError
+            raise IriusTokenNotSetError
         return {"api-token": "{}".format(self.token)}
 
     def irius_v1_url(self, path):
@@ -30,7 +30,7 @@ class BaseApiClient:
 
     def __irius_url(self, path, api_version: IriusRiskApiVersion):
         if not self.base_url:
-            raise IriusServerNotSettedError
+            raise IriusServerNotSetError
         return self.base_url + api_version.value + path
 
     def check_response(self, response):

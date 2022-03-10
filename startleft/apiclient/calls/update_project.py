@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 class UpdateProject(BaseApiClient):
 
-    def do_call(self, project_id: int, otm_file):
+    def do_call(self, project_id: str, otm_file):
         logger.debug("Updating project")
 
         url = self.irius_v1_url(f"/products/otm/{project_id}")
