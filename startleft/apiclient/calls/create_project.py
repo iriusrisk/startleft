@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 class CreateProject(BaseApiClient):
 
     def do_call(self, otm_file):
-        logger.debug("Creating project")
+        logger.debug("Creating project in IriusRisk")
 
         url = self.irius_v1_url(f"/products/otm")
         headers = self.headers()

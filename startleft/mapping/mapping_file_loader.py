@@ -17,7 +17,7 @@ class MappingFileLoader:
         if isinstance(filenames, str):
             filenames = [filenames]
         for filename in filenames:
-            logger.debug(f"Loading mapping file {filename}")
+            logger.info(f"Loading mapping file '{filename}'")
             try:
                 if isinstance(filename, str):
                     with open(filename, 'r') as f:
@@ -27,9 +27,9 @@ class MappingFileLoader:
             except FileNotFoundError:
                 logger.warning(f"Cannot find mapping file '{filename}'")
                 raise MappingFileNotFoundError()
+            logger.debug("Mapping files loaded successfully")
 
         return self.map
 
     def __load(self, mapping):
-        logger.debug('Loading mapping file')
         always_merger.merge(self.map, mapping)
