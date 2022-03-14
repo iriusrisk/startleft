@@ -11,15 +11,6 @@ from startleft.validators.otm_validator import OtmValidator
 logger = logging.getLogger(__name__)
 
 
-def get_project_id(otm_file: str) -> int:
-    logger.info("Validating OTM file")
-
-    otm = OtmFileLoader().load(otm_file)
-    OtmValidator().validate(otm)
-
-    return otm
-
-
 class IriusriskProjectRepository:
     """
     This class is in charge of the methods to send OTM files to IR

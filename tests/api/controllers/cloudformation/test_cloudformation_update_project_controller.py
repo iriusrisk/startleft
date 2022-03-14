@@ -82,7 +82,7 @@ class TestCloudFormationUpdateProjectController:
 
         # When I do put on cloudformation endpoint
         files = {'cft_file': open(test_resource_paths.example_json, 'r')}
-        body = {'name': 'project_A_name', 'type': 'JSON'}
+        body = {'name': project_id, 'type': 'JSON'}
         headers = {'api-token': 'fd865d7d-3e8a-4499-a3e2-937de70bf5c2'}
         response = client.put(get_url(project_id), files=files, data=body, headers=headers)
 

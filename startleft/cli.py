@@ -82,12 +82,7 @@ def run(type, map, otm, name, id, recreate, irius_server, api_token, filename):
     otm_project = OtmProject.from_iac_file(id, name, type, filename, map, otm)
     otm_service = OtmProjectService(IriusriskProjectRepository(api_token, irius_server))
 
-    if recreate:
-        logger.info("Uploading OTM files and recreating the IriusRisk threat model")
-        otm_service.recreate_project(otm_project)
-    else:
-        logger.info("Uploading OTM files and generating the IriusRisk threat model")
-        otm_service.update_or_create_project(otm_project)
+    __create_or_recreate_otm_project(recreate, otm_service, otm_project)
 
 
 @cli.command()
@@ -121,12 +116,7 @@ def threatmodel(recreate, irius_server, api_token, filename):
     otm_project = OtmProject.from_otm_file(filename)
     otm_service = OtmProjectService(IriusriskProjectRepository(api_token, irius_server))
 
-    if recreate:
-        logger.info("Uploading OTM files and recreating the IriusRisk threat model")
-        otm_service.recreate_project(otm_project)
-    else:
-        logger.info("Uploading OTM files and generating the IriusRisk threat model")
-        otm_service.update_or_create_project(otm_project)
+    __create_or_recreate_otm_project(recreate, otm_service, otm_project)
 
 
 @cli.command()
@@ -174,6 +164,15 @@ def server(irius_server: str, port: int):
     from startleft.api import fastapi_server
     fastapi_server.initialize_webapp(irius_server)
     fastapi_server.run_webapp(port)
+
+
+def __create_or_recreate_otm_project(recreate: bool, otm_service: OtmProjectService, otm_project: OtmProject):
+    if recreate:
+        logger.info("Uploading OTM files and recreating the IriusRisk threat model")
+        otm_service.recreate_project(otm_project)
+    else:
+        logger.info("Uploading OTM files and generating the IriusRisk threat model")
+        otm_service.update_or_create_project(otm_project)
 
 
 if __name__ == '__main__':
