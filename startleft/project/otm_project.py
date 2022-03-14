@@ -41,10 +41,8 @@ class OtmProject:
 
     @staticmethod
     def from_iac_file(project_id: str, project_name: str, iac_type: str, iac_file: [Optional[IO]],
-                      custom_iac_mapping_files: [str] = None, otm_filename: str = DEFAULT_OTM_FILENAME):
-        mapping_iac_files: [Optional[IO]] = custom_iac_mapping_files or get_default_iac_mapping_files(iac_type)
-        OtmProject.validate_iac_mappings_file(mapping_iac_files)
-
+                      custom_iac_mapping_files: [Optional[IO]] = None, otm_filename: str = DEFAULT_OTM_FILENAME):
+        mapping_iac_files = custom_iac_mapping_files or get_default_iac_mapping_files(iac_type)
         logger.info("Parsing IaC file to OTM")
         iac_to_otm = IacToOtm(project_name, project_id)
         iac_to_otm.run(iac_type, mapping_iac_files, otm_filename, iac_file)
@@ -52,7 +50,7 @@ class OtmProject:
         return OtmProject.from_otm_file(otm_filename, project_id, project_name)
 
     @staticmethod
-    def validate_iac_mappings_file(mapping_files: [str]):
+    def validate_iac_mappings_file(mapping_files: [Optional[IO]]):
         logger.info("Validating IaC mapping files")
         iac_mapping = MappingFileLoader().load(mapping_files)
         MappingValidator().validate(iac_mapping)
