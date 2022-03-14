@@ -51,8 +51,8 @@ class BaseApiClient:
 
     def open_file(self, otm_file):
         if isinstance(otm_file, tuple):
-            files = {"otmFile": open(otm_file[0], 'rb')}
+            files = {"file": open(otm_file[0], 'rb')}
         else:
-            files = {"otmFile": open(otm_file, 'rb')}
+            files = {"file": open(otm_file, 'rb')}
 
         return files

@@ -5,6 +5,7 @@ from fastapi import APIRouter, File, UploadFile, Form, Header
 from startleft.api.controllers.cloudformation.file_type import FileType
 from startleft.api.error_response import ErrorResponse
 from startleft.messages import messages
+from startleft.project.iriusrisk_project_repository import IriusriskProjectRepository
 from startleft.project.otm_project import OtmProject
 from startleft.project.otm_project_service import OtmProjectService
 
@@ -46,7 +47,7 @@ def cloudformation(cft_file: UploadFile = File(..., description="File that conta
     otm_project = OtmProject.from_iac_file(id, name, type, [cft_file.file], [mapping_file.file] if mapping_file else [])
 
     logger.info("Creating new project")
-    otm_service = OtmProjectService(api_token)
+    otm_service = OtmProjectService(IriusriskProjectRepository(api_token))
     otm_service.create_project(otm_project)
 
     return RESPONSE_BODY

@@ -1,6 +1,6 @@
 import logging
+from os.path import exists
 
-from startleft.api.api_config import ApiConfig
 from startleft.project.iriusrisk_project_repository import IriusriskProjectRepository
 from startleft.project.otm_project import OtmProject
 
@@ -8,9 +8,8 @@ logger = logging.getLogger(__name__)
 
 
 class OtmProjectService:
-    def __init__(self, server_token: str, server_url: str = None):
-        self.project_repository = IriusriskProjectRepository(
-            server_url or ApiConfig.get_iriusrisk_server(), server_token)
+    def __init__(self, iriusrisk_project_repository: IriusriskProjectRepository):
+        self.project_repository = iriusrisk_project_repository
 
     def create_project(self, otm_project: OtmProject):
         logger.debug(f"Creating new project with id {otm_project.project_id}")

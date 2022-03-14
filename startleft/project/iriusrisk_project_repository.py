@@ -1,5 +1,6 @@
 import logging
 
+from startleft.api.api_config import ApiConfig
 from startleft.apiclient.calls.check_project_exists import CheckProjectExists
 from startleft.apiclient.calls.create_project import CreateProject
 from startleft.apiclient.calls.delete_project import DeleteProject
@@ -26,13 +27,13 @@ class IriusriskProjectRepository:
     EXIT_UNEXPECTED = 3
     EXIT_VALIDATION_FAILED = 4
 
-    def __init__(self, server, api_token):
-        self.server = server
+    def __init__(self, api_token, api_url: str = None):
+        self.api_url = api_url or ApiConfig.get_iriusrisk_server()
         self.api_token = api_token
-        self.check_project_exists = CheckProjectExists(self.server, self.api_token)
-        self.ir_project_updater = UpdateProject(self.server, self.api_token)
-        self.ir_project_creator = CreateProject(self.server, self.api_token)
-        self.ir_project_deleter = DeleteProject(self.server, self.api_token)
+        self.check_project_exists = CheckProjectExists(self.api_url, self.api_token)
+        self.ir_project_updater = UpdateProject(self.api_url, self.api_token)
+        self.ir_project_creator = CreateProject(self.api_url, self.api_token)
+        self.ir_project_deleter = DeleteProject(self.api_url, self.api_token)
 
     def exists(self, project_id: str) -> bool:
         return self.check_project_exists.do_call(project_id)

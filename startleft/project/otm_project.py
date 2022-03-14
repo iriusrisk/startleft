@@ -7,6 +7,7 @@ from startleft.config import paths
 from startleft.iac_to_otm import IacToOtm
 from startleft.mapping.mapping_file_loader import MappingFileLoader
 from startleft.mapping.otm_file_loader import OtmFileLoader
+from startleft.otm import OTM
 from startleft.validators.mapping_validator import MappingValidator
 from startleft.validators.otm_validator import OtmValidator
 
@@ -23,20 +24,25 @@ def get_default_iac_mapping_files(iac_type=None) -> [str]:
 
 
 class OtmProject:
-    def __init__(self, project_id: str, project_name: str, otm_filename: str):
-        self.otm = OtmProject.load_and_validate_otm_file(otm_filename)
+    def __init__(self, project_id: str, project_name: str, otm_filename: str, otm: OTM):
+        self.otm = otm
         self.otm_filename = otm_filename
-        self.project_id = project_id or self.otm['project']['id']
-        self.project_name = project_name or self.otm['project']['name']
+        self.project_id = project_id
+        self.project_name = project_name
 
     @staticmethod
     def from_otm_file(otm_filename: str, project_id: str = None, project_name: str = None):
-        return OtmProject(project_id, project_name, otm_filename)
+        otm = OtmProject.load_and_validate_otm_file(otm_filename)
+
+        project_id = project_id or otm['project']['id']
+        project_name = project_name or otm['project']['name']
+
+        return OtmProject(project_id, project_name, otm_filename, otm)
 
     @staticmethod
     def from_iac_file(project_id: str, project_name: str, iac_type: str, iac_file: [Optional[IO]],
-                      custom_iac_mapping_files: [str], otm_filename: str = DEFAULT_OTM_FILENAME):
-        mapping_iac_files = custom_iac_mapping_files or get_default_iac_mapping_files(iac_type)
+                      custom_iac_mapping_files: [str] = None, otm_filename: str = DEFAULT_OTM_FILENAME):
+        mapping_iac_files: [Optional[IO]] = custom_iac_mapping_files or get_default_iac_mapping_files(iac_type)
         OtmProject.validate_iac_mappings_file(mapping_iac_files)
 
         logger.info("Parsing IaC file to OTM")

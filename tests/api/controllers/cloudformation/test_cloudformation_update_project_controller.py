@@ -73,11 +73,7 @@ class TestCloudFormationUpdateProjectController:
     @responses.activate
     def test_update_existing_project_not_found(self):
         # Given a project_id that is always nonexistent
-        project_id: str = ''
-
-        # And a IriusRisk response mock with the list of existing projects
-        responses.add(responses.GET, IRIUSRISK_URL + IriusRiskApiVersion.v1.value + '/products',
-                      json=[{'ref': 'project_A_id'}, {'ref': 'project_B_id'}], status=200)
+        project_id: str = 'non-existing'
 
         # And a IriusRisk response mock with the update of the nonexistent project
         responses.add(responses.PUT,
@@ -92,3 +88,4 @@ class TestCloudFormationUpdateProjectController:
 
         # Then
         assert response.status_code == 404
+        assert len(responses.calls) == 1

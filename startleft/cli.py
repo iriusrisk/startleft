@@ -5,6 +5,7 @@ import click
 
 from startleft.api.errors import CommonError
 from startleft.iac_to_otm import IacToOtm
+from startleft.project.iriusrisk_project_repository import IriusriskProjectRepository
 from startleft.project.otm_project import OtmProject
 from startleft.project.otm_project_service import OtmProjectService
 
@@ -79,7 +80,7 @@ def run(type, map, otm, name, id, recreate, irius_server, api_token, filename):
     """
     logger.info("Parsing IaC source files into OTM")
     otm_project = OtmProject.from_iac_file(id, name, type, filename, map, otm)
-    otm_service = OtmProjectService(api_token, irius_server)
+    otm_service = OtmProjectService(IriusriskProjectRepository(api_token, irius_server))
 
     if recreate:
         logger.info("Uploading OTM files and recreating the IriusRisk threat model")
@@ -118,7 +119,7 @@ def threatmodel(recreate, irius_server, api_token, filename):
     Uploads an OTM file to IriusRisk
     """
     otm_project = OtmProject.from_otm_file(filename)
-    otm_service = OtmProjectService(api_token, irius_server)
+    otm_service = OtmProjectService(IriusriskProjectRepository(api_token, irius_server))
 
     if recreate:
         logger.info("Uploading OTM files and recreating the IriusRisk threat model")
