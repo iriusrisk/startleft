@@ -1,3 +1,5 @@
+from unittest.mock import Mock, patch
+
 import pytest
 from requests import Response
 
@@ -7,26 +9,30 @@ from startleft.apiclient.base_api_client import BaseApiClient
 
 class TestBaseApiClient:
 
-    def test_check_response_unauthorized_response(self):
-        # Given a response with status 401
-        response = Response()
-        response.status_code = 401
+    @patch('startleft.apiclient.base_api_client.requests.get')
+    def test_check_response_api_error_response(self, mock_response):
+        # Given a mocked unauthorized response
+        mock_response.return_value.ok = False
+        mock_response.return_value.status_code = 500
 
-        # And an IriusRisk object
+        # And an BaseApiClient
         base_api_client = BaseApiClient('example.com', 'abc-123')
 
-        # When check_response, then exception is raised
-        with pytest.raises(IriusUnauthorizedError):
-            base_api_client.check_response(response)
-
-    def test_check_response_api_error_response(self):
-        # Given a response with error status not controlled
-        response = Response()
-        response.status_code = 500
-
-        # And an IriusRisk object
-        base_api_client = BaseApiClient('example.com', 'abc-123')
-
-        # When check_response, then exception is raised
+        # When perform some operation
+        # Then
         with pytest.raises(IriusCommonApiError):
-            base_api_client.check_response(response)
+            base_api_client.get("/path")
+
+    @patch('startleft.apiclient.base_api_client.requests.get')
+    def test_check_response_unauthorized_response(self, mock_response):
+        # Given a mocked unauthorized response
+        mock_response.return_value.ok = False
+        mock_response.return_value.status_code = 401
+
+        # And an BaseApiClient
+        base_api_client = BaseApiClient('example.com', 'abc-123')
+
+        # When perform some operation
+        # Then
+        with pytest.raises(IriusUnauthorizedError):
+            base_api_client.get("/path")

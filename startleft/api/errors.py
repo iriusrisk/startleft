@@ -42,6 +42,12 @@ class IriusServerNotSetError(CommonError):
     system_exit_status = OTM_TO_IR_EXIT_UNEXPECTED
 
 
+class IriusServerUnreachable(CommonError):
+    message = messages.IRIUS_SERVER_UNREACHABLE
+    http_status_code = 500
+    system_exit_status = OTM_TO_IR_EXIT_UNEXPECTED
+
+
 class IriusCommonApiError(CommonError):
     message = messages.UNEXPECTED_API_ERROR
     http_status_code = 500
