@@ -123,6 +123,7 @@ class TrustzoneMapper:
         else:
             source_objs = [self.mapping]
 
+        logger.debug("Finding trustzones")
         for source_obj in source_objs:
             trustzone = {"name": source_model.search(self.mapping["name"], source=source_obj),
                          "source": source_obj
@@ -134,7 +135,7 @@ class TrustzoneMapper:
             self.id_map[source_id] = source_id
             trustzone["id"] = source_id
 
-            logger.debug(f"Added trustzone: [{trustzone['id']}][{trustzone['name']}]")
+            logger.debug(f"Found trustzone: [{trustzone['id']}][{trustzone['name']}]")
             trustzones.append(trustzone)
 
         return trustzones
@@ -233,9 +234,8 @@ class ComponentMapper:
                                 id_parents[component_id] = parent_id
 
                         logger.debug(
-                            f"Added component: [{component['id']}][{component['type']}] | Parent: [{component['parent']}]")
+                            f"Found component: [{component['id']}][{component['type']}] | Parent: [{component['parent']}]")
                         components.append(component)
-                        logger.debug("")
 
         # Here we should already have all the components
 
@@ -289,10 +289,10 @@ class ComponentMapper:
     def __get_component_individual_name(self, source_model, source_object, mapping):
         if "name" in self.mapping:
             source_component_name = format_aws_fns(source_model.search(mapping, source=source_object))
-            logger.debug(f"+Found source object with name {source_component_name}")
+            logger.debug(f"Found source object with name {source_component_name}")
         else:
             source_component_name = None
-            logger.error(f"+Found source object with name None")
+            logger.error(f"Found source object with name None")
         return source_component_name
 
     def __get_component_singleton_names(self, source_model, source_object, mapping):
@@ -300,10 +300,10 @@ class ComponentMapper:
         if "name" in self.mapping:
             source_component_name, source_component_multiple_name = source_model.search(mapping, source=source_object)
             source_component_name = format_aws_fns(source_component_name)
-            logger.debug(f"+Found singleton source object with multiple name {source_component_name}")
+            logger.debug(f"Found singleton source object with multiple name {source_component_name}")
         else:
             source_component_name = None
-            logger.error(f"+Found singleton source object with name None")
+            logger.error(f"Found singleton source object with name None")
         return source_component_name, source_component_multiple_name
 
     def __get_component_tags(self, source_model, source_object, mapping):

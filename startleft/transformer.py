@@ -29,6 +29,9 @@ class Transformer:
             self.source_model.lookup = self.map["lookup"]
 
     def transform_trustzones(self):
+        logger.info("Adding trustzones")
+
+        numTrustzones = 0
         for mapping in self.map["trustzones"]:
             mapper = TrustzoneMapper(mapping)
             mapper.id_map = self.id_map
@@ -38,12 +41,19 @@ class Transformer:
                     if "$singleton" in mapping["$source"] and trustzone_number > 0:
                         continue
                 self.threat_model.add_trustzone(**trustzone_element)
+                numTrustzones += 1
+                logger.debug(f"Added trustzone: [{trustzone_element['name']}][{trustzone_element['id']}]")
+        logger.info(f"Added {numTrustzones} trustzones successfully")
 
     def transform_components(self):
+        logger.info("Adding components")
+
         singleton = []
         components = []
         catchall = []
         skip = []
+
+        logger.debug("Finding components")
         for mapping in self.map["components"]:
             mapper = ComponentMapper(mapping)
             mapper.id_map = self.id_map
@@ -135,9 +145,13 @@ class Transformer:
             else:
                 final_component["parent_type"] = "trustZone"
 
+            logger.debug(f"Added component: [{final_component['name']}][{final_component['id']}]{final_component['tags']}")
             self.threat_model.add_component(**final_component)
+        logger.info(f"Added {results.__len__()} components successfully")
 
     def transform_dataflows(self):
+        logger.info("Adding dataflows")
+        logger.debug("Finding dataflows")
         for mapping in self.map["dataflows"]:
             mapper = DataflowMapper(mapping)
             mapper.id_map = self.id_map
@@ -245,7 +259,6 @@ class Transformer:
 
         dataflow["tags"] = tags
         self.threat_model.add_dataflow(**dataflow)
-        logger.debug(": " + df_name)
 
     def __same_dataflows(self, dataflow_1, dataflow_2):
         dataflow_1_hub_info = self.__get_hub_dataflow_info(dataflow_1)
@@ -474,7 +487,13 @@ class Transformer:
 
     def __clean_hub_dataflows(self):
         # code for cleaning temporary dataflows coming from $hub action
+        numDataflows = 0
         for dataflow in reversed(self.threat_model.dataflows):
             if "-hub" in dataflow.source_node or "-hub" in dataflow.destination_node:
                 self.threat_model.dataflows.remove(dataflow)
 
+            else:
+                numDataflows += 1
+                logger.debug(f"Dataflow added: [{dataflow.name}][{dataflow.id}]{dataflow.tags} from [{dataflow.source_node}] to [{dataflow.destination_node}]")
+
+        logger.info(f"Added {numDataflows} dataflows successfully")

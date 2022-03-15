@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class IacToOtm:
     """
-    This class in in charge of the methods to convert IaC code to OTM files
+    This class is in charge of the methods to convert IaC code to OTM files
     """
     EXIT_UNEXPECTED = 1
     EXIT_VALIDATION_FAILED = 2
@@ -38,7 +38,6 @@ class IacToOtm:
         }
 
     def load_xml_source(self, filename):
-        logger.debug(f"Loading XML source file: {filename}")
         if isinstance(filename, str):
             with open(filename, 'rb') as f:
                 self.source_model.load(xmltodict.parse(f.read(), xml_attribs=True))
@@ -46,7 +45,6 @@ class IacToOtm:
             self.source_model.load(xmltodict.parse(filename.read(), xml_attribs=True))
 
     def load_yaml_source(self, filename):
-        logger.debug(f"Loading YAML source file: {filename}")
         if isinstance(filename, str):
             with open(filename, 'r') as f:
                 self.source_model.load(yaml.load(f, Loader=yaml.BaseLoader))
@@ -54,7 +52,6 @@ class IacToOtm:
             self.source_model.load(yaml.load(filename, Loader=yaml.BaseLoader))
 
     def load_hcl2_source(self, filename):
-        logger.debug(f"Loading HCL2 source file: {filename}")
         if isinstance(filename, str):
             with open(filename, 'r') as f:
                 self.source_model.load(hcl2.load(f))
@@ -62,18 +59,18 @@ class IacToOtm:
             self.source_model.load(hcl2.load(filename))
 
     def load_source_files(self, loader, filenames):
-        logger.debug(f"Parsing IaC source files of type {type} to OTM")
         if isinstance(filenames, str):
             filenames = [filenames]        
         for filename in filenames:
-            logger.debug(f"Parsing source file '{filename}'")
+            logger.info(f"Loading source file '{filename}'")
             try:
                 loader(filename)
             except FileNotFoundError:
                 logger.warning(f"Cannot find source file '{filename}', skipping")
+        logger.debug("Source files loaded successfully")
 
     def write_otm(self, out_file):
-        logger.info(f"Writing threat model to '{out_file}'")
+        logger.info(f"Writing OTM file to '{out_file}'")
         try:
             with open(out_file, "w") as f:
                 json.dump(self.otm.json(), f, indent=2)
