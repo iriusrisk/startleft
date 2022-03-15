@@ -1,15 +1,20 @@
+import logging
+
 from fastapi import APIRouter, File, UploadFile, Form, Header
 
-from startleft import cli
-from startleft.api.api_config import ApiConfig
 from startleft.api.controllers.cloudformation.file_type import FileType
 from startleft.api.error_response import ErrorResponse
 from startleft.messages import messages
+from startleft.project.iriusrisk_project_repository import IriusriskProjectRepository
+from startleft.project.otm_project import OtmProject
+from startleft.project.otm_project_service import OtmProjectService
 
 PREFIX = '/api/v1/startleft/cloudformation'
 URL = ''
 RESPONSE_BODY = {}
 RESPONSE_STATUS_CODE = 201
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix=PREFIX,
@@ -36,12 +41,13 @@ def cloudformation(cft_file: UploadFile = File(..., description="File that conta
                                                                      "this file will completely override default values"
                                                    )
                    ):
+    logger.info(f"POST request received for creating new project with id {id} and name {name} from CFT file")
 
-    mapping_files = [mapping_file.file] if mapping_file else []
+    logger.info("Parsing CFT file to OTM")
+    otm_project = OtmProject.from_iac_file(id, name, type, [cft_file.file], [mapping_file.file] if mapping_file else [])
 
-    # Run client
-    cli.inner_run(type=type, map=mapping_files, otm='threatmodel.otm', name=name, id=id,
-                  recreate=1, irius_server=ApiConfig.get_iriusrisk_server(),
-                  api_token=api_token, filename=[cft_file.file])
+    logger.info("Creating new project")
+    otm_service = OtmProjectService(IriusriskProjectRepository(api_token))
+    otm_service.create_project(otm_project)
 
     return RESPONSE_BODY

@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 class DeleteProject(BaseApiClient):
 
-    def do_call(self, project_id: int):
+    def do_call(self, project_id: str):
         logger.debug("Deleting project in IriusRisk")
 
         url = self.irius_v1_url(f"/products/{project_id}")

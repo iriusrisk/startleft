@@ -73,11 +73,7 @@ class TestCloudFormationUpdateProjectController:
     @responses.activate
     def test_update_existing_project_not_found(self):
         # Given a project_id that is always nonexistent
-        project_id: str = ''
-
-        # And a IriusRisk response mock with the list of existing projects
-        responses.add(responses.GET, IRIUSRISK_URL + IriusRiskApiVersion.v1.value + '/products',
-                      json=[{'ref': 'project_A_id'}, {'ref': 'project_B_id'}], status=200)
+        project_id: str = 'non-existing'
 
         # And a IriusRisk response mock with the update of the nonexistent project
         responses.add(responses.PUT,
@@ -86,9 +82,10 @@ class TestCloudFormationUpdateProjectController:
 
         # When I do put on cloudformation endpoint
         files = {'cft_file': open(test_resource_paths.example_json, 'r')}
-        body = {'name': 'project_A_name', 'type': 'JSON'}
+        body = {'name': project_id, 'type': 'JSON'}
         headers = {'api-token': 'fd865d7d-3e8a-4499-a3e2-937de70bf5c2'}
         response = client.put(get_url(project_id), files=files, data=body, headers=headers)
 
         # Then
         assert response.status_code == 404
+        assert len(responses.calls) == 1

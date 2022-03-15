@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class CheckProjectExists(BaseApiClient):
 
     def do_call(self, project_id: str) -> bool:
-        logger.debug("Checking project exists")
+        logger.debug("Checking if project exists")
 
         url = self.irius_v1_url("/products")
         response = requests.get(url, headers=self.headers())
