@@ -12,8 +12,4 @@ class DeleteProject(BaseApiClient):
     def do_call(self, project_id: str):
         logger.debug("Deleting project in IriusRisk")
 
-        url = self.irius_v1_url(f"/products/{project_id}")
-        headers = self.headers()
-        response = requests.delete(url, headers=headers)
-        self.check_response(response)
-        response.close()
+        self.delete(f"/products/{project_id}", self._build_token_header(),)

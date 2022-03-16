@@ -42,6 +42,12 @@ class IriusServerNotSetError(CommonError):
     system_exit_status = OTM_TO_IR_EXIT_UNEXPECTED
 
 
+class IriusServerUnreachableError(CommonError):
+    message = messages.IRIUS_SERVER_UNREACHABLE
+    http_status_code = 500
+    system_exit_status = OTM_TO_IR_EXIT_UNEXPECTED
+
+
 class IriusCommonApiError(CommonError):
     message = messages.UNEXPECTED_API_ERROR
     http_status_code = 500
@@ -50,6 +56,12 @@ class IriusCommonApiError(CommonError):
     def __init__(self, http_status_code: int, message: str):
         self.http_status_code = http_status_code
         self.message = message
+
+
+class IriusInvalidResponseError(CommonError):
+    message = messages.IRIUS_INVALID_RESPONSE
+    http_status_code = 500
+    system_exit_status = OTM_TO_IR_EXIT_VALIDATION_FAILED
 
 
 class OTMInconsistentIdsError(CommonError):

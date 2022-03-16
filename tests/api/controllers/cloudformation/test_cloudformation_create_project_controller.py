@@ -47,13 +47,10 @@ class TestCloudFormationCreateProjectController:
         # Given a project_id
         project_id: str = 'project_A_id'
 
-        # And a IriusRisk response mock with the list of existing projects
-        responses.add(responses.GET, IRIUSRISK_URL + IriusRiskApiVersion.v1.value + '/products',
-                      json=[{'ref': 'project_B_id'}, {'ref': 'project_C_id'}], status=200)
-
         # And a IriusRisk response mock with the creation of the project
+        response_body = '{"ref":"project-ref","name":"Project Name"}'
         responses.add(responses.POST, IRIUSRISK_URL + IriusRiskApiVersion.v1.value + '/products/otm',
-                      status=200)
+                      status=200, body=response_body)
 
         # When I do post on cloudformation endpoint
         files = {'cft_file': open(test_resource_paths.example_json, 'r')}
@@ -63,4 +60,5 @@ class TestCloudFormationCreateProjectController:
 
         # Then
         assert response.status_code == cloudformation_create_project_controller.RESPONSE_STATUS_CODE
-        assert response.json() == cloudformation_create_project_controller.RESPONSE_BODY
+        assert response.text == response_body
+        assert len(responses.calls) == 1

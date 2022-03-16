@@ -1,6 +1,8 @@
 import logging
 
-from fastapi import APIRouter, File, UploadFile, Form, Header
+from http import HTTPStatus
+
+from fastapi import APIRouter, File, UploadFile, Form, Header, Response
 
 from startleft.api.error_response import ErrorResponse
 from startleft.messages import messages
@@ -10,8 +12,7 @@ from startleft.project.otm_project_service import OtmProjectService
 
 PREFIX = '/api/v1/products/cloudformation'
 URL = ''
-RESPONSE_BODY = {}
-RESPONSE_STATUS_CODE = 201
+RESPONSE_STATUS_CODE = HTTPStatus.CREATED
 FILE_TYPE = "CLOUDFORMATION"
 
 logger = logging.getLogger(__name__)
@@ -26,7 +27,10 @@ router = APIRouter(
         401: {"description": messages.UNAUTHORIZED_EXCEPTION,
               "model": ErrorResponse},
         403: {"description": messages.FORBIDDEN_OPERATION,
-              "model": ErrorResponse}}
+              "model": ErrorResponse},
+        'default': {"description": messages.UNEXPECTED_API_ERROR,
+                    "model": ErrorResponse}
+    }
 )
 
 
@@ -47,6 +51,5 @@ def cloudformation(cft_file: UploadFile = File(..., description="File that conta
 
     logger.info("Creating new project")
     otm_service = OtmProjectService(IriusriskProjectRepository(api_token))
-    otm_service.create_project(otm_project)
 
-    return RESPONSE_BODY
+    return otm_service.create_project(otm_project)
