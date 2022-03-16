@@ -2,17 +2,17 @@ import logging
 
 from fastapi import APIRouter, File, UploadFile, Form, Header
 
-from startleft.api.controllers.cloudformation.file_type import FileType
 from startleft.api.error_response import ErrorResponse
 from startleft.messages import messages
 from startleft.project.iriusrisk_project_repository import IriusriskProjectRepository
 from startleft.project.otm_project import OtmProject
 from startleft.project.otm_project_service import OtmProjectService
 
-PREFIX = '/api/v1/startleft/cloudformation'
+PREFIX = '/api/v1/products/cloudformation'
 URL = ''
 RESPONSE_BODY = {}
 RESPONSE_STATUS_CODE = 201
+FILE_TYPE = "CLOUDFORMATION"
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,6 @@ router = APIRouter(
 
 @router.post(URL, status_code=RESPONSE_STATUS_CODE)
 def cloudformation(cft_file: UploadFile = File(..., description="File that contains the CloudFormation Template"),
-                   type: FileType = Form(..., description="Format of the CloudFormation Template"),
                    id: str = Form(..., description="ID of the new project"),
                    name: str = Form(..., description="Name of the new project"),
                    api_token: str = Header(None, description="IriusRisk API token"),
@@ -44,7 +43,7 @@ def cloudformation(cft_file: UploadFile = File(..., description="File that conta
     logger.info(f"POST request received for creating new project with id {id} and name {name} from CFT file")
 
     logger.info("Parsing CFT file to OTM")
-    otm_project = OtmProject.from_iac_file(id, name, type, [cft_file.file], [mapping_file.file] if mapping_file else [])
+    otm_project = OtmProject.from_iac_file(id, name, FILE_TYPE, [cft_file.file], [mapping_file.file] if mapping_file else [])
 
     logger.info("Creating new project")
     otm_service = OtmProjectService(IriusriskProjectRepository(api_token))

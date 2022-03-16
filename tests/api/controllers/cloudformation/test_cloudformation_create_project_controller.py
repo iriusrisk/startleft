@@ -22,18 +22,17 @@ class TestCloudFormationCreateProjectController:
 
     def test_create_project_api_token_not_set(self):
         files = {'cft_file': open(test_resource_paths.example_json, 'r')}
-        body = {'id': 'project_id', 'name': 'project_name', 'type': 'JSON'}
+        body = {'id': 'project_id', 'name': 'project_name'}
         response = client.post(get_url(), files=files, data=body)
         assert response.status_code == 401
 
-    @pytest.mark.parametrize('project_id,project_name,project_type,cft_file',
-                             [(None, 'name', 'type', open(test_resource_paths.example_json, 'r')),
-                              ('id', None, 'type', open(test_resource_paths.example_json, 'r')),
-                              ('id', 'name', None, open(test_resource_paths.example_json, 'r')),
-                              ('id', 'name', 'type', None)])
-    def test_create_project_validation_error(self, project_id: str, project_name: str, project_type: str, cft_file):
+    @pytest.mark.parametrize('project_id,project_name,cft_file',
+                             [(None, 'name', open(test_resource_paths.example_json, 'r')),
+                              ('id', None, open(test_resource_paths.example_json, 'r')),
+                              ('id', 'name', None)])
+    def test_create_project_validation_error(self, project_id: str, project_name: str, cft_file):
         # Given a body
-        body = {'id': project_id, 'name': project_name, 'type': project_type}
+        body = {'id': project_id, 'name': project_name}
 
         # When I do post on cloudformation endpoint
         files = {'cft_file': cft_file}
@@ -58,7 +57,7 @@ class TestCloudFormationCreateProjectController:
 
         # When I do post on cloudformation endpoint
         files = {'cft_file': open(test_resource_paths.example_json, 'r')}
-        body = {'id': f'{project_id}', 'name': 'project_A_name', 'type': 'JSON'}
+        body = {'id': f'{project_id}', 'name': 'project_A_name'}
         headers = {'api-token': 'fd865d7d-3e8a-4499-a3e2-937de70bf5c2'}
         response = client.post(get_url(), files=files, data=body, headers=headers)
 
