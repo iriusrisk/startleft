@@ -4,6 +4,7 @@ from startleft.api.api_config import ApiConfig
 from startleft.apiclient.calls.check_project_exists import CheckProjectExists
 from startleft.apiclient.calls.create_project import CreateProject
 from startleft.apiclient.calls.delete_project import DeleteProject
+from startleft.apiclient.calls.get_project import GetProject
 from startleft.apiclient.calls.update_project import UpdateProject
 from startleft.mapping.otm_file_loader import OtmFileLoader
 from startleft.validators.otm_validator import OtmValidator
@@ -25,6 +26,7 @@ class IriusriskProjectRepository:
         self.ir_project_updater = UpdateProject(self.api_url, self.api_token)
         self.ir_project_creator = CreateProject(self.api_url, self.api_token)
         self.ir_project_deleter = DeleteProject(self.api_url, self.api_token)
+        self.ir_project_get_name = GetProject(self.api_url, self.api_token)
 
     def exists(self, project_id: str) -> bool:
         return self.check_project_exists.do_call(project_id)
@@ -37,3 +39,6 @@ class IriusriskProjectRepository:
 
     def delete(self, project_id: str):
         self.ir_project_deleter.do_call(project_id)
+
+    def get_name(self, project_id: str):
+        return self.ir_project_get_name.do_call(project_id).get('name')

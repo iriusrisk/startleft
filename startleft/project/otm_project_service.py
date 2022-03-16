@@ -36,3 +36,7 @@ class OtmProjectService:
         else:
             logger.debug(f"Project {otm_project.project_id} does not exists, so it has to be created")
             self.project_repository.create(otm_project.otm_filename)
+
+    def get_project_name(self, project_id: str):
+        logger.info(f"Getting project name from project id '{project_id}'")
+        return self.project_repository.get_name(project_id)
