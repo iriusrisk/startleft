@@ -8,7 +8,7 @@ You can find some example source files inside the `examples` directory:
 ## CloudFormation
 CloudFormation is the AWS tool which lets you model, provision, and manage AWS and third-party resources by treating infrastructure as code. Startleft's repository contains a default CloudFormation mapping file that enables you to generate threat models based on the OTM standard from a CloudFormation template file and update them to IriusRisk using a single command.
 
-The following examples, which are located in the `examples/cloudformation` directory, show you how to carry out the different stages of the process separately or in a single step. They also demonstrate how to use custom mapping files, or even combine them, in order to generate OTM resources that fulfill exactly your needs.
+The following examples, which are located in the `examples/cloudformation` directory, show you how to carry out the different stages of the process separately or in a single step. They also demonstrate how to use a custom mapping file in order to generate OTM resources that fulfill exactly your needs.
 
 ### Security Groups on multinetwork with Load Balancer
 This is a rich example when you can see in action some the capabilities of startleft. It represents the threat model for an architecture with two trust zones and several _Virtual Private Networks_ which contain elements such as:
@@ -27,12 +27,11 @@ startleft parse \
 	--id "cft-mn-sg-lb" \
 	multinetwork_security_groups_with_lb.json
 ```
-It is also possible to include your own mapping file or files, thus overriding the default internal CloudFormation mapping file:
+It is also possible to include your own mapping file, thus overriding the default internal CloudFormation mapping file:
 ```shell
 startleft parse \
 	--type cloudformation \
-	--map my_cloudformation_mapping_file_1.yaml \
-	--map my_cloudformation_mapping_file_2.yaml \
+	--map my_cloudformation_mapping_file.yaml \
 	--otm multinetwork_security_groups_with_lb.otm \
 	--name "CFT MN Security Groups with LB" \
 	--id "cft-mn-sg-lb" \
@@ -53,12 +52,11 @@ startleft run \
 	--recreate \
 	multinetwork_security_groups_with_lb.json
 ```
-Of course, it is also possible to parse by using custom mapping files with `run`:
+Of course, it is also possible to parse by using a custom mapping file with `run`:
 ```shell
 startleft run \
 	--type cloudformation \
-	--map my_cloudformation_mapping_file_1.yaml \
-	--map my_cloudformation_mapping_file_2.yaml \
+	--map my_cloudformation_mapping_file.yaml \
 	--otm multinetwork_security_groups_with_lb.otm \
 	--name "CFT MN Security Groups with LB" \
 	--id "cft-mn-sg-lb" \
