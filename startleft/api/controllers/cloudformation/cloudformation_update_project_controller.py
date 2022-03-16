@@ -1,4 +1,5 @@
 import logging
+from http import HTTPStatus
 
 from fastapi import APIRouter, File, UploadFile, Form, Header, Response
 
@@ -10,7 +11,7 @@ from startleft.project.otm_project_service import OtmProjectService
 
 PREFIX = '/api/v1/products/cloudformation'
 URL = ''
-RESPONSE_STATUS_CODE = 200
+RESPONSE_STATUS_CODE = HTTPStatus.OK
 FILE_TYPE = "CLOUDFORMATION"
 
 logger = logging.getLogger(__name__)

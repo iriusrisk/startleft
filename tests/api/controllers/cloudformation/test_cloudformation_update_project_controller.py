@@ -143,7 +143,7 @@ class TestCloudFormationUpdateProjectController:
         response = client.put(get_url(project_id), files=files, data=body, headers=headers)
 
         # Then
-        assert response.status_code == 204
+        assert response.status_code == 200
         assert len(responses.calls) == 2
         assert responses.calls[0].request.url == 'http://localhost:8080/api/v1/products/test-id'
         assert responses.calls[1].request.url == 'http://localhost:8080/api/v1/products/otm/test-id'
