@@ -1,9 +1,9 @@
 from json import JSONDecodeError
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 
 import pytest
 
-from startleft.api.errors import IriusCommonApiError
+from startleft.api.errors import IriusInvalidResponseError
 from startleft.apiclient.calls.check_project_exists import CheckProjectExists
 
 
@@ -20,7 +20,7 @@ class TestBaseApiClient:
 
         # when project_exists()
         # Then
-        with pytest.raises(IriusCommonApiError):
+        with pytest.raises(IriusInvalidResponseError):
             check_project_exists.do_call(project_id='1')
 
         assert mock_query.call_count == 1

@@ -30,10 +30,10 @@ class IriusriskProjectRepository:
         return self.check_project_exists.do_call(project_id)
 
     def create(self, otm_file: str):
-        self.ir_project_creator.do_call(otm_file)
+        return self.ir_project_creator.do_call(otm_file)
 
     def update(self, project_id: str, otm_file: str):
-        self.ir_project_updater.do_call(project_id, otm_file)
+        return self.ir_project_updater.do_call(project_id, otm_file)
 
     def delete(self, project_id: str):
         self.ir_project_deleter.do_call(project_id)

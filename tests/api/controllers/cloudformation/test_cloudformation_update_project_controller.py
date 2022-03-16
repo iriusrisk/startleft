@@ -56,9 +56,11 @@ class TestCloudFormationUpdateProjectController:
                       json=[{'ref': 'project_A_id'}, {'ref': 'project_B_id'}], status=200)
 
         # And a IriusRisk response mock with the update of the project
+        response_body = '{"ref":"project-ref","name":"Project Name"}'
         responses.add(responses.PUT,
                       IRIUSRISK_URL + IriusRiskApiVersion.v1.value + f"/products/otm/{project_id}",
-                      status=200)
+                      status=200, body=response_body
+                      )
 
         # When I do put on cloudformation endpoint
         files = {'cft_file': open(test_resource_paths.example_json, 'r')}
@@ -68,7 +70,8 @@ class TestCloudFormationUpdateProjectController:
 
         # Then
         assert response.status_code == cloudformation_update_project_controller.RESPONSE_STATUS_CODE
-        assert response.text == ''
+        assert response.text == response_body
+        assert len(responses.calls) == 1
 
     @responses.activate
     def test_update_existing_project_not_found(self):

@@ -11,8 +11,7 @@ from startleft.project.otm_project_service import OtmProjectService
 
 PREFIX = '/api/v1/startleft/cloudformation'
 URL = ''
-RESPONSE_STATUS_CODE = 204
-RESPONSE_BODY = Response(status_code=RESPONSE_STATUS_CODE)
+RESPONSE_STATUS_CODE = 200
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +19,7 @@ router = APIRouter(
     prefix=PREFIX,
     tags=["cloudformation"],
     responses={
-        204: {"description": messages.PROJECT_SUCCESSFULLY_UPDATED},
+        200: {"description": messages.PROJECT_SUCCESSFULLY_UPDATED},
         400: {"description": messages.BAD_REQUEST,
               "model": ErrorResponse},
         401: {"description": messages.UNAUTHORIZED_EXCEPTION,
@@ -51,6 +50,5 @@ def cloudformation(project_id: str,
 
     logger.info(f"Updating project {project_id}")
     otm_service = OtmProjectService(IriusriskProjectRepository(api_token))
-    otm_service.update_project(otm_project)
 
-    return RESPONSE_BODY
+    return otm_service.update_project(otm_project)

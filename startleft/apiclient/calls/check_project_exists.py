@@ -17,7 +17,7 @@ class CheckProjectExists(BaseApiClient):
         response = self.get("/products", self._build_token_header())
 
         try:
-            for project in response.json():
+            for project in response:
                 if project["ref"] == project_id:
                     return True
         except JSONDecodeError:

@@ -10,4 +10,4 @@ class CreateProject(BaseApiClient):
     def do_call(self, otm_file):
         logger.debug("Creating project in IriusRisk")
 
-        self.post(f"/products/otm", self._build_token_header(), otm_file)
+        return self.post(f"/products/otm", self._build_token_header(), otm_file)

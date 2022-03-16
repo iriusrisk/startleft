@@ -1,10 +1,14 @@
 import logging
+import traceback
 from enum import Enum
+from json import JSONDecodeError
 
 import requests
 
+from requests.exceptions import ConnectionError
+
 from startleft.api.errors import IriusTokenNotSetError, IriusServerNotSetError, IriusCommonApiError, \
-    IriusUnauthorizedError, IriusForbiddenError, IriusProjectNotFoundError, IriusServerUnreachable
+    IriusUnauthorizedError, IriusForbiddenError, IriusProjectNotFoundError, IriusServerUnreachableError, IriusInvalidResponseError
 
 logger = logging.getLogger(__name__)
 
@@ -41,13 +45,16 @@ class BaseApiClient:
 
     def __execute_request(self, request_api, resource_path: str, headers: str = None, file=None):
         opened_file = self.__open_file(file) if file else None
+        url = self.__irius_v1_url(resource_path)
         try:
-            response = request_api(self.__irius_v1_url(resource_path), headers=headers, files=opened_file)
-
+            response = request_api(url, headers=headers, files=opened_file)
             self.__check_response(response)
-            return response
+
+            return self.__get_json_content(response)
         except ConnectionError:
-            raise IriusServerUnreachable
+            logger.error(f"Cannot connect to IriusRisk server on {url}")
+            traceback.print_exc()
+            raise IriusServerUnreachableError
 
     def __irius_v1_url(self, path):
         return self.__irius_url(path, IriusRiskApiVersion.v1)
@@ -59,19 +66,25 @@ class BaseApiClient:
 
     def __check_response(self, response):
         if response.status_code == 401:
-            raise IriusUnauthorizedError(self.__get_error_message(response))
+            raise IriusUnauthorizedError
         if response.status_code == 403:
-            raise IriusForbiddenError(self.__get_error_message(response))
+            raise IriusForbiddenError
         if response.status_code == 404:
-            raise IriusProjectNotFoundError(self.__get_error_message(response))
+            raise IriusProjectNotFoundError
         if not response.ok:
-            raise IriusCommonApiError(http_status_code=response.status_code, message=response.text)
+            raise IriusCommonApiError(
+                http_status_code=response.status_code, message=self.__get_error_message(response) or response.text)
         logger.debug(f"Response received {response.status_code}: {response.text}")
 
     def __get_error_message(self, response):
-        return f"API return an unexpected response: {response.status_code}\n" \
-               f"Response url: {response.url}\n" \
-               f"Response body:{response.text}"
+        json_response = self.__get_json_content(response)
+        return json_response['errors'][0]['message'] if json_response else None
+
+    def __get_json_content(self, response):
+        try:
+            return response.json() if response.content else None
+        except JSONDecodeError:
+            raise IriusInvalidResponseError
 
     def __open_file(self, file):
         if isinstance(file, tuple):

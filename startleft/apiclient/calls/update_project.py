@@ -10,4 +10,4 @@ class UpdateProject(BaseApiClient):
     def do_call(self, project_id: str, otm_file):
         logger.debug("Updating project")
 
-        self.put(f"/products/otm/{project_id}", self._build_token_header(), otm_file)
+        return self.put(f"/products/otm/{project_id}", self._build_token_header(), otm_file)

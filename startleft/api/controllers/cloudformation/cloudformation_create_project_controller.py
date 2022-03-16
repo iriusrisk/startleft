@@ -14,7 +14,6 @@ from startleft.project.otm_project_service import OtmProjectService
 PREFIX = '/api/v1/startleft/cloudformation'
 URL = ''
 RESPONSE_STATUS_CODE = HTTPStatus.CREATED
-RESPONSE_BODY = Response(status_code=RESPONSE_STATUS_CODE)
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +52,5 @@ def cloudformation(cft_file: UploadFile = File(..., description="File that conta
 
     logger.info("Creating new project")
     otm_service = OtmProjectService(IriusriskProjectRepository(api_token))
-    otm_service.create_project(otm_project)
-
-    return RESPONSE_BODY
+    
+    return otm_service.create_project(otm_project)

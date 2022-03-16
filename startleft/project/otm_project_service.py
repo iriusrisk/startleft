@@ -11,13 +11,13 @@ class OtmProjectService:
     def __init__(self, iriusrisk_project_repository: IriusriskProjectRepository):
         self.project_repository = iriusrisk_project_repository
 
-    def create_project(self, otm_project: OtmProject):
+    def create_project(self, otm_project: OtmProject) -> str:
         logger.debug(f"Creating new project with id {otm_project.project_id}")
-        self.project_repository.create(otm_project.otm_filename)
+        return self.project_repository.create(otm_project.otm_filename)
 
-    def update_project(self, otm_project: OtmProject):
+    def update_project(self, otm_project: OtmProject) -> str:
         logger.debug(f"Updating project with id {otm_project.project_id}")
-        self.project_repository.update(otm_project.project_id, otm_project.otm_filename)
+        return self.project_repository.update(otm_project.project_id, otm_project.otm_filename)
 
     def recreate_project(self, otm_project: OtmProject):
         logger.debug("Recreating diagram in IriusRisk")
