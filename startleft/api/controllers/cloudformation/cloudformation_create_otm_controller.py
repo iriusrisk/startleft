@@ -6,9 +6,7 @@ from fastapi import APIRouter, File, UploadFile, Form, Response
 
 from startleft.api.error_response import ErrorResponse
 from startleft.messages import messages
-from startleft.project.iriusrisk_project_repository import IriusriskProjectRepository
 from startleft.project.otm_project import OtmProject
-from startleft.project.otm_project_service import OtmProjectService
 
 PREFIX = '/api/v1/startleft/cloudformation'
 URL = ''
