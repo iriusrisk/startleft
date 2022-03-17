@@ -13,6 +13,8 @@ IRIUS_SERVER_UNREACHABLE = 'Connection refused to IriusRisk server'
 IRIUS_INVALID_RESPONSE = 'Cannot process IriusRisk server response'
 OTM_SCHEMA_IS_NOT_VALID = 'OTM schema is not valid'
 OTM_FILE_NOT_FOUND = 'Cannot find OTM file'
+OTM_SUCCESSFULLY_CREATED = 'Provided CloudFormation Template has been successfully processed and a new OTM file ' \
+                               'has been created'
 MAPPING_FILE_NOT_FOUND = 'Cannot find mapping file'
 MAPPING_FILE_SCHEMA_NOT_VALID = 'Mapping files are not valid'
 ERROR_WRITING_THREAT_MODEL = 'Unable to create the threat model'
