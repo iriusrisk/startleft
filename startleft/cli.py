@@ -65,7 +65,7 @@ def cli(log_level, verbose):
               type=click.Choice(['JSON', 'YAML', 'CloudFormation', 'HCL2', 'Terraform', 'XML'], case_sensitive=False),
               default="JSON",
               help='Specify the source file type.')
-@click.option('--map', '-m', multiple=True, help='Map file to use when parsing source files')
+@click.option('--map', '-m', help='Map file to use when parsing source files')
 @click.option('--otm', '-o', default='threatmodel.otm', help='OTM output file name')
 @click.option('--name', '-n', help='Project name')
 @click.option('--id', help='Project ID')
@@ -90,7 +90,7 @@ def run(type, map, otm, name, id, recreate, irius_server, api_token, filename):
               type=click.Choice(['JSON', 'YAML', 'CloudFormation', 'HCL2', 'Terraform', 'XML'], case_sensitive=False),
               default="JSON",
               help='Specify the source file type.')
-@click.option('--map', '-m', multiple=True, help='Map file to use when parsing source files')
+@click.option('--map', '-m', help='Map file to use when parsing source files')
 @click.option('--otm', '-o', default='threatmodel.otm', help='OTM output file name')
 @click.option('--name', '-n', help='Project name')
 @click.option('--id', help='Project ID')
