@@ -152,17 +152,14 @@ def search(type, query, filename):
     iac_to_otm.search(type, query, filename)
 
 
-@click.option('--irius-server', default='', envvar='IRIUS_SERVER',
-              help='IriusRisk server to connect to (proto://server[:port])')
 @click.option('--port', default=5000, envvar='application port',
               help='The port to deploy this application to')
 @cli.command()
-def server(irius_server: str, port: int):
+def server(port: int):
     """
-    Launches the REST server in development mode to test the API
+    Launches the REST server to generate OTMs from requests
     """
     from startleft.api import fastapi_server
-    fastapi_server.initialize_webapp(irius_server)
     fastapi_server.run_webapp(port)
 
 
