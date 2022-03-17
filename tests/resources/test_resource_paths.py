@@ -11,4 +11,7 @@ default_terraform_aws_mapping = os.path.dirname(__file__)+'/../../startleft/conf
 example_json = os.path.dirname(__file__) + '/example.json'
 example_yaml = os.path.dirname(__file__) + '/example.yaml'
 terraform_for_mappings_tests_json = os.path.dirname(__file__) + '/terraform_for_mappings_tests.tf'
+invalid_yaml = os.path.dirname(__file__) + '/invalid-yaml.yaml'
+
+otm_file_example = os.path.dirname(__file__) + '/otm_file_example.otm'
 

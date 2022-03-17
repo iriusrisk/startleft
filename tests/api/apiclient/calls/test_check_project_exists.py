@@ -1,15 +1,15 @@
 from json import JSONDecodeError
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 
 import pytest
 
-from startleft.api.errors import IriusCommonApiError
+from startleft.api.errors import IriusInvalidResponseError
 from startleft.apiclient.calls.check_project_exists import CheckProjectExists
 
 
 class TestBaseApiClient:
 
-    @patch('startleft.apiclient.calls.check_project_exists.requests.get')
+    @patch('startleft.apiclient.base_api_client.requests.get')
     def test_project_exists_invalid_not_json_response(self, mock_query):
         # Given a mocked bad response
         mock_query.return_value.ok = True
@@ -18,16 +18,14 @@ class TestBaseApiClient:
         # And an IriusRisk object
         check_project_exists = CheckProjectExists('example.com', 'abc-123')
 
-        # And a mock to check_response method
-        check_project_exists.check_response = MagicMock()
-
         # when project_exists()
-        with pytest.raises(IriusCommonApiError):
-            check_project_exists.do_call(project_id=1)
+        # Then
+        with pytest.raises(IriusInvalidResponseError):
+            check_project_exists.do_call(project_id='1')
 
-        assert check_project_exists.check_response.called
+        assert mock_query.call_count == 1
 
-    @patch('startleft.apiclient.calls.check_project_exists.requests.get')
+    @patch('startleft.apiclient.base_api_client.requests.get')
     def test_project_exists_valid_matching_response(self, mock_query):
         # Given a mocked good response
         mock_query.return_value.ok = True
@@ -36,15 +34,13 @@ class TestBaseApiClient:
         # And an IriusRisk object
         check_project_exists = CheckProjectExists('example.com', 'abc-123')
 
-        # And a mock to check_response method
-        check_project_exists.check_response = MagicMock()
-
         # when project_exists()
-        # Then exception is raised
-        assert check_project_exists.do_call(project_id="matchingid")
-        assert check_project_exists.check_response.called
 
-    @patch('startleft.apiclient.calls.check_project_exists.requests.get')
+        # Then
+        assert check_project_exists.do_call(project_id="matchingid")
+        assert mock_query.call_count == 1
+
+    @patch('startleft.apiclient.base_api_client.requests.get')
     def test_project_exists_valid_nonmatching_response(self, mock_query):
         # Given a mocked good response
         mock_query.return_value.ok = True
@@ -53,9 +49,6 @@ class TestBaseApiClient:
         # And an IriusRisk object with a different project ref
         check_project_exists = CheckProjectExists('example.com', 'abc-123')
 
-        # And a mock to check_response method
-        check_project_exists.check_response = MagicMock()
-
         # Then project_exists will return false
         assert not check_project_exists.do_call(project_id="matchingid")
-        assert check_project_exists.check_response.called
+        assert mock_query.call_count == 1

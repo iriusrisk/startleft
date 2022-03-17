@@ -145,8 +145,9 @@ class Transformer:
             else:
                 final_component["parent_type"] = "trustZone"
 
-            logger.debug(f"Added component: [{final_component['name']}][{final_component['id']}]{final_component['tags']}")
             self.threat_model.add_component(**final_component)
+            logger.debug(f"Added component: [{final_component['name']}][{final_component['id']}]"
+                         f"{final_component['tags']}" if 'tags' in final_component else "")
         logger.info(f"Added {results.__len__()} components successfully")
 
     def transform_dataflows(self):

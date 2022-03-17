@@ -1,14 +1,16 @@
-PROJECT_SUCCESSFULLY_CREATED = "Provided CloudFormation Template has been processed successfully and a new IriusRisk " \
-                               "project has been created with the provided metadata."
-PROJECT_SUCCESSFULLY_UPDATED = "IriusRisk project has been updated with the last changes coming from the provided " \
-                               "CloudFormation Template."
-UNAUTHORIZED_EXCEPTION = 'Authentication information is missing or invalid or not granted to perform this action.'
+PROJECT_SUCCESSFULLY_CREATED = 'Provided CloudFormation Template has been successfully processed and a new IriusRisk ' \
+                               'project has been created with the provided metadata'
+PROJECT_SUCCESSFULLY_UPDATED = 'IriusRisk project has been updated with the latest changes from the CloudFormation ' \
+                               'Template provided'
+UNAUTHORIZED_EXCEPTION = 'Authentication information is missing, invalid or not granted to perform this action'
 BAD_REQUEST = 'Bad request'
 FORBIDDEN_OPERATION = 'Forbidden operation'
-PROJECT_NOT_FOUND = 'Project not found.'
+PROJECT_NOT_FOUND = 'Project not found'
 UNEXPECTED_API_ERROR = 'Unexpected API error'
 INCONSISTENT_IDS = 'Generated OTM file has inconsistent IDs'
-IRIUS_SERVER_NOT_SETTED = 'Irius server not setted'
+IRIUS_SERVER_NOT_SET = 'IriusRisk URL is not set'
+IRIUS_SERVER_UNREACHABLE = 'Connection refused to IriusRisk server'
+IRIUS_INVALID_RESPONSE = 'Cannot process IriusRisk server response'
 OTM_SCHEMA_IS_NOT_VALID = 'OTM schema is not valid'
 OTM_FILE_NOT_FOUND = 'Cannot find OTM file'
 MAPPING_FILE_NOT_FOUND = 'Cannot find mapping file'
