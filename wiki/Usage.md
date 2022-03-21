@@ -77,7 +77,7 @@ GET /health
 ```
 POST /api/v1/startleft/iac
 Request Body:
-    iac_file:                   Required. File that contains the IaC File
+    iac_file:                   Required. File that contains the IaC definition
     iac_type:                   Required. Type of the IaC File: CLOUDFORMATION
     id                          Required. ID of the new project
     name                        Required. Name of the new project
