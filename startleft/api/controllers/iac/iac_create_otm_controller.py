@@ -33,7 +33,7 @@ router = APIRouter(
 
 @router.post(URL, status_code=RESPONSE_STATUS_CODE)
 def iac(iac_file: UploadFile = File(..., description="File that contains the IaC File"),
-        iac_type: str = Form(..., description="Type of IaC File: CLOUDFORMATION, TERRAFORM, XML"),
+        iac_type: str = Form(..., description="Type of IaC File: CLOUDFORMATION"),
         id: str = Form(..., description="ID of the new project"),
         name: str = Form(..., description="Name of the new project"),
         mapping_file: UploadFile = File(..., description="File that contains the mapping between IaC "
