@@ -32,14 +32,13 @@ router = APIRouter(
 )
 
 
-@router.post(URL, status_code=RESPONSE_STATUS_CODE)
+@router.post(URL, status_code=RESPONSE_STATUS_CODE, description="Generates an OTM threat model from an IaC file")
 def iac(iac_file: UploadFile = File(..., description="File that contains the Iac definition"),
         iac_type: IacType = Form(..., description="Type of IaC File: CLOUDFORMATION"),
         id: str = Form(..., description="ID of the new project"),
         name: str = Form(..., description="Name of the new project"),
         mapping_file: UploadFile = File(..., description="File that contains the mapping between IaC "
-                                                         "resources and IriusRisk resources. Providing "
-                                                         "this file will completely override default values")):
+                                                         "resources and threat model resources.")):
     logger.info(f"POST request received for creating new project with id {id} and name {name} from IaC {iac_type} file")
 
     logger.info("Parsing IaC file to OTM")

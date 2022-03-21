@@ -81,5 +81,5 @@ Request Body:
     iac_type:                   Required. Type of the IaC File: CLOUDFORMATION
     id                          Required. ID of the new project
     name                        Required. Name of the new project
-    mapping_file                Required. File that contains the mapping between IaC resources and IriusRisk resources. Providing this file will completely override default values
+    mapping_file                Required. File that contains the mapping between IaC resources and threat model resources.
 ```
