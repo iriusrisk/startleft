@@ -51,5 +51,5 @@ class TestCloudFormationCreateProjectController:
         assert '"otmVersion": "0.1.0"' in response.text
         assert '"project": ' in response.text
         assert '"name": "project_A_name"' in response.text
-        assert '"trustZones":' in response.text
+        assert '"trustZones": ' in response.text
         assert '"components": ' in response.text

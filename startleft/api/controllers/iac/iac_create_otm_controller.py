@@ -42,8 +42,8 @@ def iac(iac_file: UploadFile = File(..., description="File that contains the Iac
     logger.info(f"POST request received for creating new project with id {id} and name {name} from IaC {iac_type} file")
 
     logger.info("Parsing IaC file to OTM")
-    otm_project = OtmProject.from_iac_file(id, name, iac_type, [iac_file.file], [mapping_file.file] if mapping_file else [])
+    otm_project = OtmProject.from_iac_file_to_otm_stream(id, name, iac_type, [iac_file.file]
+                                                         , [mapping_file.file] if mapping_file else [])
 
-    logger.info("Creating new project")
+    return Response(status_code=201, media_type="application/json", content=otm_project.get_otm_as_json())
 
-    return Response(status_code=201, media_type="application/json", content=open(otm_project.otm_filename, 'rb').read())
