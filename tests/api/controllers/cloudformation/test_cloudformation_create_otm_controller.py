@@ -3,7 +3,7 @@ import responses
 from fastapi.testclient import TestClient
 
 from startleft.api import fastapi_server
-from startleft.api.controllers.cloudformation import cloudformation_create_otm_controller
+from startleft.api.controllers.iac import iac_create_otm_controller
 from tests.resources import test_resource_paths
 
 IRIUSRISK_URL = ''
@@ -14,7 +14,7 @@ client = TestClient(webapp)
 
 
 def get_url():
-    return cloudformation_create_otm_controller.PREFIX + cloudformation_create_otm_controller.URL
+    return iac_create_otm_controller.PREFIX + iac_create_otm_controller.URL
 
 
 class TestCloudFormationCreateProjectController:
@@ -40,12 +40,13 @@ class TestCloudFormationCreateProjectController:
         project_id: str = 'project_A_id'
 
         # When I do post on cloudformation endpoint
-        files = {'cft_file': open(test_resource_paths.example_json, 'r')}
-        body = {'id': f'{project_id}', 'name': 'project_A_name'}
+        files = {'iac_file': open(test_resource_paths.example_json, 'r'),
+                 'mapping_file': open(test_resource_paths.default_mapping)}
+        body = {'iac_type': 'CLOUDFORMATION', 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
         # Then the OTM is returned inside the response as JSON
-        assert response.status_code == cloudformation_create_otm_controller.RESPONSE_STATUS_CODE
+        assert response.status_code == iac_create_otm_controller.RESPONSE_STATUS_CODE
         assert response.headers.get('content-type') == 'application/json'
         assert '"otmVersion": "0.1.0"' in response.text
         assert '"project": ' in response.text

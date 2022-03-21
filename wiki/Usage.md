@@ -49,7 +49,7 @@ Options:
 ## API server
 
 StartLeft can also be deployed as a standalone REST server if you prefer the communication via API.
-In this operation mode, startleft gives back the OTM file in the HTTP response. 
+In this operation mode, Startleft gives back the OTM file in the HTTP response. 
 If you want to use the server option on the application:
 
 ```
@@ -75,10 +75,11 @@ Available endpoints:
 GET /health
 ```
 ```
-POST /api/v1/startleft/cloudformation
+POST /api/v1/startleft/iac
 Request Body:
-    cft_file:                   Required. File that contains the CloudFormation Template
+    iac_file:                   Required. File that contains the IaC File
+    iac_type:                   Required. Type of the IaC file: CLOUDFORMATION, TERRAFORM, XML
     id                          Required. ID of the new project
     name                        Required. Name of the new project
-    mapping_file                Optional. File that contains the mapping between AWS components and IriusRisk components. Providing this file will completely override default values
+    mapping_file                Required. File that contains the mapping between IaC resources and IriusRisk resources. Providing this file will completely override default values
 ```
