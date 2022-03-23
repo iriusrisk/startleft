@@ -78,6 +78,10 @@ class IacToOtm:
             logger.error(f"Unable to create the threat model: {e}")
             raise WriteThreatModelError()
 
+    def get_otm_stream(self):
+        logger.info(f"Getting OTM stream")
+        return self.otm.json()
+
     def run(self, type, map_filenames, out_file, filenames):
         """
         Parses selected source files and maps them to the Open Threat Model format
@@ -89,7 +93,8 @@ class IacToOtm:
         self.mapping_validator.validate(iac_mapping)
 
         self.transformer.run(iac_mapping)
-        self.write_otm(out_file)
+        if out_file is not None:
+            self.write_otm(out_file)
 
     def search(self, type, query, filenames):
         """

@@ -18,7 +18,7 @@ Commands:
   parse        Parses IaC files to the Open Threat Model format
   run          Parses IaC files to the Open Threat Model format and...
   search       Searches source files for the given query
-  server       Launches a REST server to receive and parse IaC files,...
+  server       Launches the REST server to generate OTMs from requests
   threatmodel  Uploads an OTM file to IriusRisk
   validate     Validates a mapping or OTM file
 ```
@@ -48,18 +48,18 @@ Options:
 
 ## API server
 
-StartLeft can also be deployed as a standalone webserver if you prefer the communication via API. If you want to use the server option on the application:
+StartLeft can also be deployed as a standalone REST server if you prefer the communication via API.
+In this operation mode, Startleft gives back the OTM file in the HTTP response. 
+If you want to use the server option on the application:
 
 ```
 $ startleft server --help
 Usage: startleft server [OPTIONS]...
 
-  Launches a REST server to receive and parse IaC files, finally uploading
-  resultant OTM files to IriusRisk
+  Launches the REST server to generate OTMs from requests
 
 Options:
   --port INTEGER                  The port to deploy this application to
-  --irius-server TEXT             IriusRisk server to connect to (proto://server[:port])
   --help                          Show this message and exit.
 
 ```
@@ -75,25 +75,11 @@ Available endpoints:
 GET /health
 ```
 ```
-POST /api/v1/startleft/cloudformation
-Headers:
-    api_token                   Required: IriusRisk API token
+POST /api/v1/startleft/iac
 Request Body:
-    cft_file:                   Required. File that contains the CloudFormation Template
-    type                        Required. Format of the CloudFormation Template
+    iac_file:                   Required. File that contains the IaC definition
+    iac_type:                   Required. Type of the IaC File: CLOUDFORMATION
     id                          Required. ID of the new project
     name                        Required. Name of the new project
-    mapping_file                Optional. File that contains the mapping between AWS components and IriusRisk components. Providing this file will completely override default values
-```
-```
-PUT /api/v1/startleft/cloudformation/projects/{project_id}
-Headers:
-    api_token                   Required: IriusRisk API token
-Path parameter:
-    project_id:                 Required. IriusRisk project identifier
-Request Body:
-    cft_file:                   Required. File that contains the CloudFormation Template
-    type:                       Required. Format of the CloudFormation Template
-    name                        Required. Name of the project to update
-    mapping_file                Optional. File that contains the mapping between AWS components and IriusRisk components. Providing this file will completely override default values
+    mapping_file                Required. File that contains the mapping between IaC resources and threat model resources.
 ```
