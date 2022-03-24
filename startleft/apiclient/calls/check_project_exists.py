@@ -12,13 +12,12 @@ logger = logging.getLogger(__name__)
 class CheckProjectExists(BaseApiClient):
 
     def do_call(self, project_id: str) -> bool:
-        logger.debug("Checking project exists")
+        logger.debug("Checking if project exists")
 
-        url = self.irius_v1_url("/products")
-        response = requests.get(url, headers=self.headers())
-        self.check_response(response)
+        response = self.get("/products", self._build_token_header())
+
         try:
-            for project in response.json():
+            for project in response:
                 if project["ref"] == project_id:
                     return True
         except JSONDecodeError:

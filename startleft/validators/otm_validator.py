@@ -16,14 +16,15 @@ class OtmValidator:
     def validate(self, otm):
         self.__validate_otm_schema(otm)
         self.__check_otm_files(otm)
+        logger.info("OTM file validated successfully")
 
     def __validate_otm_schema(self, otm: {}):
-        logger.debug("Validating OTM schema")
+        logger.debug("Validating OTM file schema")
         self.schema.validate(otm)
         if self.schema.valid:
-            logger.info('OTM file is valid')
+            logger.info('OTM file schema is valid')
         if not self.schema.valid:
-            logger.error('OTM file is not valid')
+            logger.error('OTM file schema is not valid')
             logger.error(f"--- Schema errors---\n{self.schema.errors}\n--- End of schema errors ---")
             sys.exit(OtmValidator.EXIT_VALIDATION_FAILED)
 

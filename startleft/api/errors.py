@@ -18,7 +18,7 @@ class IriusUnauthorizedError(CommonError):
     system_exit_status = OTM_TO_IR_EXIT_UNEXPECTED
 
 
-class IriusTokenNotSettedError(CommonError):
+class IriusTokenNotSetError(CommonError):
     message = messages.UNAUTHORIZED_EXCEPTION
     http_status_code = 401
     system_exit_status = OTM_TO_IR_EXIT_UNEXPECTED
@@ -36,8 +36,14 @@ class IriusProjectNotFoundError(CommonError):
     system_exit_status = OTM_TO_IR_EXIT_UNEXPECTED
 
 
-class IriusServerNotSettedError(CommonError):
-    message = messages.IRIUS_SERVER_NOT_SETTED
+class IriusServerNotSetError(CommonError):
+    message = messages.IRIUS_SERVER_NOT_SET
+    http_status_code = 500
+    system_exit_status = OTM_TO_IR_EXIT_UNEXPECTED
+
+
+class IriusServerUnreachableError(CommonError):
+    message = messages.IRIUS_SERVER_UNREACHABLE
     http_status_code = 500
     system_exit_status = OTM_TO_IR_EXIT_UNEXPECTED
 
@@ -50,6 +56,12 @@ class IriusCommonApiError(CommonError):
     def __init__(self, http_status_code: int, message: str):
         self.http_status_code = http_status_code
         self.message = message
+
+
+class IriusInvalidResponseError(CommonError):
+    message = messages.IRIUS_INVALID_RESPONSE
+    http_status_code = 500
+    system_exit_status = OTM_TO_IR_EXIT_VALIDATION_FAILED
 
 
 class OTMInconsistentIdsError(CommonError):

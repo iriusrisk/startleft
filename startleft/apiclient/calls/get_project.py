@@ -7,9 +7,8 @@ from startleft.apiclient.base_api_client import BaseApiClient
 logger = logging.getLogger(__name__)
 
 
-class DeleteProject(BaseApiClient):
-
+class GetProject(BaseApiClient):
     def do_call(self, project_id: str):
-        logger.debug("Deleting project in IriusRisk")
+        logger.info(f"Getting project with id '{project_id}'")
 
-        self.delete(f"/products/{project_id}", self._build_token_header(),)
+        return self.get(f"/products/{project_id}", self._build_token_header())

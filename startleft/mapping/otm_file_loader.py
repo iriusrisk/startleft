@@ -20,13 +20,15 @@ class OtmFileLoader:
             filenames = [filenames]
 
         for filename in filenames:
-            logger.debug(f"Loading OTM file {filename}")
+            logger.debug(f"Loading OTM file '{filename}'")
             try:
                 with open(filename, 'r') as f:
                     self.__load_otm_file(otm, yaml.load(f, Loader=yaml.SafeLoader))
             except FileNotFoundError:
-                logger.error(f"Cannot find OTM file '{filename}'")
+                logger.error("Cannot find OTM file")
                 raise OTMFileNotFoundError()
+
+            logger.debug("OTM file loaded successfully")
         return otm
 
     def __load_otm_file(self, otm, data):

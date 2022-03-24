@@ -4,13 +4,10 @@ import sys
 import click
 
 from startleft.api.errors import CommonError
-from startleft.config import paths
 from startleft.iac_to_otm import IacToOtm
-from startleft.mapping.mapping_file_loader import MappingFileLoader
-from startleft.mapping.otm_file_loader import OtmFileLoader
-from startleft.otm_to_ir import OtmToIr
-from startleft.validators.mapping_validator import MappingValidator
-from startleft.validators.otm_validator import OtmValidator
+from startleft.project.iriusrisk_project_repository import IriusriskProjectRepository
+from startleft.project.otm_project import OtmProject
+from startleft.project.otm_project_service import OtmProjectService
 
 logger = logging.getLogger(__name__)
 
@@ -64,11 +61,11 @@ def cli(log_level, verbose):
 
 
 @cli.command()
-@click.option('--type', '-t', 
+@click.option('--type', '-t',
               type=click.Choice(['JSON', 'YAML', 'CloudFormation', 'HCL2', 'Terraform', 'XML'], case_sensitive=False),
               default="JSON",
               help='Specify the source file type.')
-@click.option('--map', '-m', multiple=True, help='Map file to use when parsing source files')
+@click.option('--map', '-m', help='Map file to use when parsing source files')
 @click.option('--otm', '-o', default='threatmodel.otm', help='OTM output file name')
 @click.option('--name', '-n', help='Project name')
 @click.option('--id', help='Project ID')
@@ -81,21 +78,11 @@ def run(type, map, otm, name, id, recreate, irius_server, api_token, filename):
     """
     Parses IaC source files into Open Threat Model and immediately uploads threat model to IriusRisk
     """
-
-    inner_run(type, map, otm, name, id, recreate, irius_server, api_token, filename)
-
-
-def inner_run(type, map, otm, name, id, recreate, irius_server, api_token, filename):
-
-    cf_mapping_files = get_default_mappings(map)
-
-    iac_to_otm = IacToOtm(name, id)
-    otm_to_ir = OtmToIr(irius_server, api_token)
-
     logger.info("Parsing IaC source files into OTM")
-    iac_to_otm.run(type, cf_mapping_files, otm, filename)
-    logger.info("Uploading OTM files and generating the IriusRisk threat model")
-    otm_to_ir.run(recreate, otm)
+    otm_project = OtmProject.from_iac_file(id, name, type, filename, map, otm)
+    otm_service = OtmProjectService(IriusriskProjectRepository(api_token, irius_server))
+
+    __create_or_recreate_otm_project(recreate, otm_service, otm_project)
 
 
 @cli.command()
@@ -103,7 +90,7 @@ def inner_run(type, map, otm, name, id, recreate, irius_server, api_token, filen
               type=click.Choice(['JSON', 'YAML', 'CloudFormation', 'HCL2', 'Terraform', 'XML'], case_sensitive=False),
               default="JSON",
               help='Specify the source file type.')
-@click.option('--map', '-m', multiple=True, help='Map file to use when parsing source files')
+@click.option('--map', '-m', help='Map file to use when parsing source files')
 @click.option('--otm', '-o', default='threatmodel.otm', help='OTM output file name')
 @click.option('--name', '-n', help='Project name')
 @click.option('--id', help='Project ID')
@@ -112,11 +99,8 @@ def parse(type, map, otm, name, id, filename):
     """
     Parses IaC source files into Open Threat Model
     """
-
-    cf_mapping_files = get_default_mappings(map)
-
-    iac_to_otm = IacToOtm(name, id)
-    iac_to_otm.run(type, cf_mapping_files, otm, filename)
+    logger.info("Parsing IaC source files into OTM")
+    OtmProject.from_iac_file(id, name, type, filename, map, otm)
 
 
 @cli.command()
@@ -129,9 +113,10 @@ def threatmodel(recreate, irius_server, api_token, filename):
     """
     Uploads an OTM file to IriusRisk
     """
-    otm_to_ir = OtmToIr(irius_server, api_token)
-    logger.info("Uploading OTM files and generating the IriusRisk threat model")
-    otm_to_ir.run(recreate, filename)
+    otm_project = OtmProject.from_otm_file(filename)
+    otm_service = OtmProjectService(IriusriskProjectRepository(api_token, irius_server))
+
+    __create_or_recreate_otm_project(recreate, otm_service, otm_project)
 
 
 @cli.command()
@@ -141,20 +126,17 @@ def validate(map, otm):
     """
     Validates a mapping or OTM file
     """
+    if map:
+        logger.info("Validating IaC mapping files")
+        OtmProject.validate_iac_mappings_file(map)
 
-    iac_mapping_files = get_default_mappings(map)
-
-    if iac_mapping_files:
-        iac_mapping = MappingFileLoader().load(iac_mapping_files)
-        MappingValidator().validate(iac_mapping)
-        
     if otm:
-        otm = OtmFileLoader().load(otm)
-        OtmValidator().validate(otm)
+        logger.info("Validating OTM file")
+        OtmProject.load_and_validate_otm_file(otm)
 
 
 @cli.command()
-@click.option('--type', '-t', 
+@click.option('--type', '-t',
               type=click.Choice(['JSON', 'YAML', 'CloudFormation', 'HCL2', 'Terraform', 'XML'], case_sensitive=False),
               default="JSON",
               help='Specify the source file type.')
@@ -170,27 +152,24 @@ def search(type, query, filename):
     iac_to_otm.search(type, query, filename)
 
 
-@click.option('--irius-server', default='', envvar='IRIUS_SERVER',
-              help='IriusRisk server to connect to (proto://server[:port])')
 @click.option('--port', default=5000, envvar='application port',
               help='The port to deploy this application to')
 @cli.command()
-def server(irius_server: str, port: int):
+def server(port: int):
     """
-    Launches the REST server in development mode to test the API
+    Launches the REST server to generate OTMs from requests
     """
     from startleft.api import fastapi_server
-    fastapi_server.initialize_webapp(irius_server)
     fastapi_server.run_webapp(port)
 
 
-def get_default_mappings(mapping_file: []):
-    # If map is empty then we load the default map file
-    cf_mapping_files = paths.default_cf_mapping_files
-    if mapping_file and len(mapping_file) != 0:
-        cf_mapping_files = mapping_file
-
-    return cf_mapping_files
+def __create_or_recreate_otm_project(recreate: bool, otm_service: OtmProjectService, otm_project: OtmProject):
+    if recreate:
+        logger.info("Uploading OTM files and recreating the IriusRisk threat model")
+        otm_service.recreate_project(otm_project)
+    else:
+        logger.info("Uploading OTM files and generating the IriusRisk threat model")
+        otm_service.update_or_create_project(otm_project)
 
 
 if __name__ == '__main__':
