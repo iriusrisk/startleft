@@ -3,6 +3,7 @@ import sys
 
 import click
 
+from startleft.api.controllers.iac.iac_type import IacType
 from startleft.api.errors import CommonError
 from startleft.iac_to_otm import IacToOtm
 from startleft.project.iriusrisk_project_repository import IriusriskProjectRepository
@@ -61,9 +62,7 @@ def cli(log_level, verbose):
 
 
 @cli.command()
-@click.option('--type', '-t',
-              type=click.Choice(['JSON', 'YAML', 'CloudFormation', 'HCL2', 'Terraform', 'XML'], case_sensitive=False),
-              default="JSON",
+@click.option('--type', '-t', type=click.Choice(['CLOUDFORMATION', 'TERRAFORM'], case_sensitive=False), required=True,
               help='Specify the source file type.')
 @click.option('--map', '-m', help='Map file to use when parsing source files')
 @click.option('--otm', '-o', default='threatmodel.otm', help='OTM output file name')
@@ -79,7 +78,7 @@ def run(type, map, otm, name, id, recreate, irius_server, api_token, filename):
     Parses IaC source files into Open Threat Model and immediately uploads threat model to IriusRisk
     """
     logger.info("Parsing IaC source files into OTM")
-    otm_project = OtmProject.from_iac_file(id, name, type, filename, map, otm)
+    otm_project = OtmProject.from_iac_file(id, name, IacType(type.upper()), filename, map, otm)
     otm_service = OtmProjectService(IriusriskProjectRepository(api_token, irius_server))
 
     __create_or_recreate_otm_project(recreate, otm_service, otm_project)
@@ -87,8 +86,7 @@ def run(type, map, otm, name, id, recreate, irius_server, api_token, filename):
 
 @cli.command()
 @click.option('--type', '-t',
-              type=click.Choice(['JSON', 'YAML', 'CloudFormation', 'HCL2', 'Terraform', 'XML'], case_sensitive=False),
-              default="JSON",
+              type=click.Choice(['CLOUDFORMATION', 'TERRAFORM'], case_sensitive=False), required=True,
               help='Specify the source file type.')
 @click.option('--map', '-m', help='Map file to use when parsing source files')
 @click.option('--otm', '-o', default='threatmodel.otm', help='OTM output file name')
@@ -100,7 +98,7 @@ def parse(type, map, otm, name, id, filename):
     Parses IaC source files into Open Threat Model
     """
     logger.info("Parsing IaC source files into OTM")
-    OtmProject.from_iac_file(id, name, type, filename, map, otm)
+    OtmProject.from_iac_file(id, name, IacType(type.upper()), filename, map, otm)
 
 
 @cli.command()
@@ -137,8 +135,7 @@ def validate(map, otm):
 
 @cli.command()
 @click.option('--type', '-t',
-              type=click.Choice(['JSON', 'YAML', 'CloudFormation', 'HCL2', 'Terraform', 'XML'], case_sensitive=False),
-              default="JSON",
+              type=click.Choice(['CLOUDFORMATION', 'TERRAFORM'], case_sensitive=False), required=True,
               help='Specify the source file type.')
 @click.option('--query', help='JMESPath query to run against source files')
 @click.argument('filename', nargs=-1)
@@ -149,7 +146,7 @@ def search(type, query, filename):
 
     iac_to_otm = IacToOtm(None, None)
     logger.info("Running JMESPath search query against source files")
-    iac_to_otm.search(type, query, filename)
+    iac_to_otm.search(IacType(type.upper()), query, filename)
 
 
 @click.option('--port', default=5000, envvar='application port',
