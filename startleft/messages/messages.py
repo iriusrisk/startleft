@@ -18,3 +18,42 @@ OTM_SUCCESSFULLY_CREATED = 'Provided IaC file has been successfully processed an
 MAPPING_FILE_NOT_FOUND = 'Cannot find mapping file'
 MAPPING_FILE_SCHEMA_NOT_VALID = 'Mapping files are not valid'
 ERROR_WRITING_THREAT_MODEL = 'Unable to create the threat model'
+
+# CLI
+IAC_FILE_NAME = 'iac-file'
+
+IAC_TYPE_NAME = '--iac-type'
+IAC_TYPE_SHORTNAME = '-t'
+IAC_TYPE_DESC = 'The IaC file type'
+IAC_TYPE_SUPPORTED = ['CLOUDFORMATION', 'TERRAFORM']
+
+MAPPING_FILE_NAME = '--mapping-file'
+MAPPING_FILE_SHORTNAME = '-m'
+MAPPING_FILE_DESC = 'Mapping file to parse the IaC file'
+
+OUTPUT_FILE_NAME = '--output-file'
+OUTPUT_FILE_SHORTNAME = '-o'
+OUTPUT_FILE_DESC = 'OTM output file'
+OUTPUT_FILE = 'threatmodel.otm'
+
+PROJECT_NAME_NAME = '--project-name'
+PROJECT_NAME_SHORTNAME = '-n'
+PROJECT_NAME_DESC = 'Project name'
+
+PROJECT_ID_NAME = '--project-id'
+PROJECT_ID_SHORTNAME = '-i'
+PROJECT_ID_DESC = 'Project id'
+
+RECREATE_NAME = '--recreate/--no-recreate'
+RECREATE_SHORTNAME = '-r/-nr'
+RECREATE_DESC = 'Delete and create a new project/Update the project on IriusRisk'
+
+IRIUS_SERVER_NAME = '--irius-server'
+IRIUS_SERVER_SHORTNAME = '-s'
+IRIUS_SERVER_DESC = 'IriusRisk server'
+IRIUS_SERVER_ENVAR = 'IRIUS_SERVER'
+
+API_TOKEN_NAME = '--api-token'
+API_TOKEN_SHORTNAME = '-a'
+API_TOKEN_DESC = 'IriusRisk API token'
+API_TOKEN_ENVAR = 'IRIUS_API_TOKEN'
