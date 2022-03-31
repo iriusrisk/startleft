@@ -10,7 +10,7 @@ class TestApp:
 
         filename = test_resource_paths.cloudformation_for_security_group_tests_json
         mapping_filename = test_resource_paths.cloudformation_for_security_groups_mapping
-        iac_to_otm = IacToOtm('name', 'id')
+        iac_to_otm = IacToOtm('name', 'id', IacType.CLOUDFORMATION)
         iac_to_otm.run(IacType.CLOUDFORMATION, mapping_filename, 'threatmodel-security-groups.otm', filename)
 
         assert iac_to_otm.source_model.otm
@@ -42,7 +42,7 @@ class TestApp:
 
         filename = test_resource_paths.cloudformation_for_security_group_tests_2_json
         mapping_filename = test_resource_paths.cloudformation_for_security_groups_mapping
-        iac_to_otm = IacToOtm('name', 'id')
+        iac_to_otm = IacToOtm('name', 'id', IacType.CLOUDFORMATION)
         iac_to_otm.run(IacType.CLOUDFORMATION, mapping_filename, 'threatmodel-security-groups.otm', filename)
 
         assert iac_to_otm.source_model.otm
@@ -93,7 +93,7 @@ class TestApp:
         """ Use case B: components with their SGs with associated connection rules """
         filename = test_resource_paths.cloudformation_for_security_group_tests_json
         mapping_filename = test_resource_paths.cloudformation_for_security_groups_mapping
-        iac_to_otm = IacToOtm('name', 'id')
+        iac_to_otm = IacToOtm('name', 'id', IacType.CLOUDFORMATION)
         iac_to_otm.run(IacType.CLOUDFORMATION, mapping_filename, 'threatmodel-security-groups.otm', filename)
 
         assert iac_to_otm.source_model.otm

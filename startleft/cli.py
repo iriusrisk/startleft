@@ -152,7 +152,7 @@ def search(iac_type, query, iac_file):
     Searches source files for the given query
     """
 
-    iac_to_otm = IacToOtm(None, None)
+    iac_to_otm = IacToOtm(None, None, IacType(iac_type.upper()))
     logger.info("Running JMESPath search query against the IaC file")
     iac_to_otm.search(IacType(iac_type.upper()), query, iac_file)
 
