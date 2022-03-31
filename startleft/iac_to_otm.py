@@ -21,8 +21,8 @@ class IacToOtm:
     EXIT_UNEXPECTED = 1
     EXIT_VALIDATION_FAILED = 2
 
-    def __init__(self, name, id):
-        self.otm = otm.OTM(name, id)
+    def __init__(self, project_name, project_id, iac_type: IacType):
+        self.otm = otm.OTM(project_name, project_id, iac_type)
         self.source_model = sourcemodel.SourceModel()
         self.source_model.otm = self.otm
         self.transformer = transformer.Transformer(source_model=self.source_model, threat_model=self.otm)

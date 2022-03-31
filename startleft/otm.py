@@ -1,13 +1,15 @@
 import logging
 
+from startleft.api.controllers.iac.iac_type import IacType
+
 logger = logging.getLogger(__name__)
 
 
 class OTM:
-    def __init__(self, name, id):
-        self.name = name
-        self.id = id
-        self.representation = "CloudFormation"
+    def __init__(self, project_name, project_id, iac_type: IacType):
+        self.name = project_name
+        self.id = project_id
+        self.representation = iac_type.description
 
         self.trustzones = []
         self.components = []
@@ -33,9 +35,6 @@ class OTM:
                     "name": self.representation,
                     "id": self.representation,
                     "type": "code",
-                    "repository": {
-                        "url": "http://mockedurl"
-                    }
                 }
             ],
             "trustZones": [],

@@ -5,7 +5,6 @@ from typing import Optional
 from typing.io import IO
 
 from startleft.api.controllers.iac.iac_type import IacType
-from startleft.config import paths
 from startleft.iac_to_otm import IacToOtm
 from startleft.mapping.mapping_file_loader import MappingFileLoader
 from startleft.mapping.otm_file_loader import OtmFileLoader
@@ -51,7 +50,7 @@ class OtmProject:
                       custom_iac_mapping_files: [Optional[IO]] = None, otm_filename: str = DEFAULT_OTM_FILENAME):
         mapping_iac_files = custom_iac_mapping_files or get_default_iac_mapping_files(iac_type)
         logger.info("Parsing IaC file to OTM")
-        iac_to_otm = IacToOtm(project_name, project_id)
+        iac_to_otm = IacToOtm(project_name, project_id, iac_type)
         iac_to_otm.run(iac_type, mapping_iac_files, otm_filename, iac_file)
 
         return OtmProject.from_otm_file(otm_filename, project_id, project_name)
@@ -61,7 +60,7 @@ class OtmProject:
                                     custom_iac_mapping_files: [Optional[IO]] = None):
         mapping_iac_files = custom_iac_mapping_files or get_default_iac_mapping_files(iac_type)
         logger.info("Parsing IaC file to OTM")
-        iac_to_otm = IacToOtm(project_name, project_id)
+        iac_to_otm = IacToOtm(project_name, project_id, iac_type)
         iac_to_otm.run(iac_type, mapping_iac_files, None, iac_file)
 
         return OtmProject.from_otm_stream(iac_to_otm.get_otm_stream(), project_id, project_name)
