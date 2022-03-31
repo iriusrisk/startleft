@@ -41,7 +41,7 @@ def configure_logger(level, verbose):
 
 
 def validate_server(ctx, param, value):
-    regex = "((http|https)://)(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}(\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*))?:[0-9]+"
+    regex = "((http|https)://)(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}(\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*))?(:[0-9]+)?"
     p = re.compile(regex)
 
     if value is None or not re.search(p, value):
@@ -64,8 +64,8 @@ class CatchAllExceptions(click.Group):
 @click.group(cls=CatchAllExceptions)
 @click.option('--log-level', '-l',
               type=click.Choice(['CRIT', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'NONE'], case_sensitive=False),
-              callback=get_log_level, default='info', help='Set the log level')
-@click.option('--verbose/--no-verbose', '-v/-nv', default=False, help='Makes logging more verbose')
+              callback=get_log_level, default='info', help='Set the log level.')
+@click.option('--verbose/--no-verbose', '-v/-nv', default=False, help='Makes logging more verbose.')
 @click.version_option(__version__)
 def cli(log_level, verbose):
     """
@@ -145,7 +145,7 @@ def validate(mapping_file, output_file):
 
 @cli.command()
 @click.option(messages.IAC_TYPE_NAME, messages.IAC_TYPE_SHORTNAME, type=click.Choice(messages.IAC_TYPE_SUPPORTED, case_sensitive=False), required=True, help=messages.IAC_TYPE_DESC)
-@click.option('--query', '-q', help='JMESPath query to run against the IaC file')
+@click.option('--query', '-q', help='JMESPath query to run against the IaC file.')
 @click.argument(messages.IAC_FILE_NAME, required=True, nargs=-1)
 def search(iac_type, query, iac_file):
     """
@@ -158,7 +158,7 @@ def search(iac_type, query, iac_file):
 
 
 @cli.command()
-@click.option('--port', '-p', default=5000, envvar='STARTLEFT_PORT', help='Startleft deployment port')
+@click.option('--port', '-p', default=5000, envvar='STARTLEFT_PORT', help='Startleft deployment port.')
 def server(port: int):
     """
     Launches the REST server to generate OTMs from requests

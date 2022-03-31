@@ -21,20 +21,20 @@ This is a rich example when you can see in action some the capabilities of start
 The following command will parse the CloudFormation source file `multinetwork_security_groups_with_lb.json` creating a OTM file `multinetwork_security_groups_with_lb.otm` in the process.
 ```shell
 startleft parse \
-	--type cloudformation \
-	--otm multinetwork_security_groups_with_lb.otm \
-	--name "CFT MN Security Groups with LB" \
-	--id "cft-mn-sg-lb" \
+	--iac-type cloudformation \
+	--output-file multinetwork_security_groups_with_lb.otm \
+	--project-name "CFT MN Security Groups with LB" \
+	--project-id "cft-mn-sg-lb" \
 	multinetwork_security_groups_with_lb.json
 ```
 It is also possible to include your own mapping file, thus overriding the default internal CloudFormation mapping file:
 ```shell
 startleft parse \
-	--type cloudformation \
-	--map my_cloudformation_mapping_file.yaml \
-	--otm multinetwork_security_groups_with_lb.otm \
-	--name "CFT MN Security Groups with LB" \
-	--id "cft-mn-sg-lb" \
+	--iac-type cloudformation \
+	--mapping-file my_cloudformation_mapping_file.yaml \
+	--output-file multinetwork_security_groups_with_lb.otm \
+	--project-name "CFT MN Security Groups with LB" \
+	--project-id "cft-mn-sg-lb" \
 	multinetwork_security_groups_with_lb.json
 ```
 The next command takes the OTM file and generates an IriusRisk threat model which is uploaded to the server.
@@ -45,21 +45,21 @@ startleft threatmodel --recreate multinetwork_security_groups_with_lb.otm
 For convenience, `parse` and `threatmodel` can be `run` in one go:
 ```shell
 startleft run \
-	--type cloudformation \
-	--otm multinetwork_security_groups_with_lb.otm \
-	--name "CFT MN Security Groups with LB" \
-	--id "cft-mn-sg-lb" \
+	--iac-type cloudformation \
+	--output-file multinetwork_security_groups_with_lb.otm \
+	--project-name "CFT MN Security Groups with LB" \
+	--project-id "cft-mn-sg-lb" \
 	--recreate \
 	multinetwork_security_groups_with_lb.json
 ```
 Of course, it is also possible to parse by using a custom mapping file with `run`:
 ```shell
 startleft run \
-	--type cloudformation \
-	--map my_cloudformation_mapping_file.yaml \
-	--otm multinetwork_security_groups_with_lb.otm \
-	--name "CFT MN Security Groups with LB" \
-	--id "cft-mn-sg-lb" \
+	--iac-type cloudformation \
+	--mapping-file my_cloudformation_mapping_file.yaml \
+	--output-file multinetwork_security_groups_with_lb.otm \
+	--project-name "CFT MN Security Groups with LB" \
+	--project-id "cft-mn-sg-lb" \
 	--recreate \
 	multinetwork_security_groups_with_lb.json
 ```
@@ -81,10 +81,10 @@ StartLeft supports parsing Terraform source files. An example is provided in the
 
 ```shell
 startleft run \
-	--type hcl2 \
-	--otm elb.otm \
-	--name "Terraform ELB" \
-	--id "terraform-elb" \
+	--iac-type hcl2 \
+	--output-file elb.otm \
+	--project-name "Terraform ELB" \
+	--project-id "terraform-elb" \
 	--recreate \
 	elb.tf
 ```
