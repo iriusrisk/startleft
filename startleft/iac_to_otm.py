@@ -1,5 +1,6 @@
 import json
 import logging
+from io import StringIO
 
 import hcl2
 import xmltodict
@@ -52,7 +53,7 @@ class IacToOtm:
             with open(filename, 'r') as f:
                 self.source_model.load(hcl2.load(f))
         else:
-            self.source_model.load(hcl2.load(filename))
+            self.source_model.load(hcl2.load(StringIO(str(filename.read(), 'utf-8'))))
 
     def load_source_files(self, loader, filenames):
         if isinstance(filenames, str):

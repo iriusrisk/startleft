@@ -109,3 +109,27 @@ class TestApp:
         assert iac_to_otm.otm.components[3].name == 'foo'
         assert iac_to_otm.otm.components[3].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
 
+    def test_run_terraform_upload_file(self):
+        filename = [open(test_resource_paths.terraform_for_mappings_tests_json, "rb")]
+        mapping_filename = test_resource_paths.default_terraform_aws_mapping
+        iac_to_otm = IacToOtm('name', 'id')
+        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, 'threatmodel-from-terraform.otm', filename)
+
+        assert iac_to_otm.source_model.otm
+        assert len(iac_to_otm.otm.trustzones) == 1
+        assert len(iac_to_otm.otm.components) == 4
+        assert len(iac_to_otm.otm.dataflows) == 0
+        assert iac_to_otm.otm.trustzones[0].id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+        assert iac_to_otm.otm.trustzones[0].name == 'Public Cloud'
+        assert iac_to_otm.otm.components[0].type == 'ec2'
+        assert iac_to_otm.otm.components[0].name == 'foo'
+        assert iac_to_otm.otm.components[0].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+        assert iac_to_otm.otm.components[1].type == 'empty_component'
+        assert iac_to_otm.otm.components[1].name == 'foo'
+        assert iac_to_otm.otm.components[1].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+        assert iac_to_otm.otm.components[2].type == 'empty_component'
+        assert iac_to_otm.otm.components[2].name == 'bar'
+        assert iac_to_otm.otm.components[2].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+        assert iac_to_otm.otm.components[3].type == 'vpc'
+        assert iac_to_otm.otm.components[3].name == 'foo'
+        assert iac_to_otm.otm.components[3].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
