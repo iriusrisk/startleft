@@ -50,4 +50,106 @@ components:
     $source:     {$root: "resource[].aws_vpc"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
 
+  - id:       {$format: "{type}.{name}.id"}
+    type:     cloudtrail
+    name:     {$path: "keys(@)[0]"}
+    $source:  {$root: "resource[].aws_cloudtrail"}
+    parent:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:       {$format: "{type}.{name}.id"}
+    type:     cognito
+    name:     {$path: "keys(@)[0]"}
+    $source:  {$root: "resource[].aws_cognito_identity_pool"}
+    parent:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:       {$format: "{type}.{name}.id"}
+    type:     cognito
+    name:     {$path: "keys(@)[0]"}
+    $source:  {$root: "resource[].aws_cognito_user_pool"}
+    parent:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id: { $format: "{type}.{name}.id" }
+    type: docker-container
+    name: { $path: "keys(@)[0]" }
+    $source: { $root: "resource[].aws_ecs_task_definition" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id: { $format: "{type}.{name}.id" }
+    type: elastic-container-service
+    name: { $path: "keys(@)[0]" }
+    $source: { $root: "resource[].aws_ecs_service" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id: { $format: "{type}.{name}.id" }
+    type: elastic-container-kubernetes
+    name: { $path: "keys(@)[0]" }
+    $source: { $root: "resource[].aws_eks_cluster" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id: { $format: "{type}.{name}.id" }
+    type: load-balancer
+    name: { $path: "keys(@)[0]" }
+    $source: { $root: "resource[].aws_elb" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        aws-lambda-function
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource[].aws_lambda_function"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        CD-AWS-NETWORK-FIREWALL
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource[].aws_networkfirewall_firewall"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        rds
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource[].aws_rds_cluster"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        redshift
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource[].aws_redshift_cluster"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        route-53
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource[].aws_route53_zone"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        s3
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource[].aws_s3_bucket"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        sqs-simple-queue-service
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource[].aws_sqs_queue"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        empty-component
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource[].aws_synthetics_canary"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        step-functions
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource[].aws_sfn_state_machine"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        step-functions
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource[].aws_sfn_activity"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
 dataflows: []
