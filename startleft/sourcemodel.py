@@ -22,7 +22,18 @@ class CustomFunctions(jmespath.functions.Functions):
             if isinstance(v, dict):
                 v["_key"] = k
             temp.append(v)
-        return temp 
+        return temp
+
+    @jmespath.functions.signature({'types': ['array']}, {'types': ['string']})
+    def _func_filter(self, obj_arr, match):
+        temp = []
+
+        for obj in obj_arr:
+            for key in obj.keys():
+                if key.startswith(match):
+                    temp.append(obj)
+
+        return temp
 
 
 class SourceModel:
