@@ -152,4 +152,136 @@ components:
     $source:     {$root: "resource[].aws_sfn_activity"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
 
+  - id:          {$format: "{type}.{name}.id"}
+    type:        CD-ACM
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-ACM (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[].aws_acm_certificate"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        cloudwatch
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "cloudwatch (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[].aws_cloudwatch_metric_alarm"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        kms
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "kms (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[].aws_kms_key"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        cloudwatch
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "cloudwatch (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[].aws_cloudwatch_log_group"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        CD-SECRETS-MANAGER
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-SECRETS-MANAGER (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[].aws_secretsmanager_secret"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        CD-SYSTEMS-MANAGER
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-SYSTEMS-MANAGER (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_ssm_')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        api-gateway
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "api-gateway (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_api_gateway_')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        athena
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "athena (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_athena_')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        CD-MQ
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-MQ (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_mq_')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        cf-cloudfront
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "cf-cloudfront (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_cloudfront_')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        CD-CONFIG
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-CONFIG (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_config_')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        elastic-container-registry
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "elastic-container-registry (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_ecr_')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        elasticache
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "elasticache (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_elasticache_')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        CD-GUARDDUTY
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-GUARDDUTY (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_guardduty_')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        CD-INSPECTOR
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-INSPECTOR (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_inspector_')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        CD-MACIE
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-MACIE (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_macie2_')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        CD-SES
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-SES (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_ses_')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        sns
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "sns (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_sns_')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        CD-WAF
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-WAF (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_waf_')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        kinesis-data-analytics
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "kinesis-data-analytics (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_kinesis_analytics_')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        kinesis-data-analytics
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "kinesis-data-analytics (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_kinesis_stream')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        kinesis-data-firehose
+    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "kinesis-data-firehose (grouped)" }}}
+    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_kinesis_firehose_')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+
 dataflows: []

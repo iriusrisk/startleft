@@ -40,3 +40,15 @@ class TestTerraformAWSComponents:
         assert_otm(otm, 15, 'empty-component', 'some-canary', public_cloud_id)
         assert_otm(otm, 16, 'step-functions', 'my_sfn_state_machine', public_cloud_id)
         assert_otm(otm, 17, 'step-functions', 'my_sfn_activity', public_cloud_id)
+
+    def test_aws_singleton_components(self):
+        filename = test_resource_paths.terraform_aws_singleton_components
+        mapping_filename = test_resource_paths.default_terraform_aws_mapping
+        iac_to_otm = IacToOtm('Test case AWS singleton components', 'aws_singleton_components', IacType.TERRAFORM)
+        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, 'threatmodel-from-singleton-terraform.otm', filename)
+
+        assert iac_to_otm.source_model.otm
+        otm = iac_to_otm.otm
+        assert len(otm.trustzones) == 1
+        assert len(otm.components) == 20
+        assert len(otm.dataflows) == 0
