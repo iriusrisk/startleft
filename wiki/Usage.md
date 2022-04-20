@@ -5,18 +5,20 @@ For help, just run `startleft` without arguments:
 $ startleft
 Usage: startleft [OPTIONS] COMMAND [ARGS]...
 
-  Parse IaC files to the Open Threat Model format and upload them to IriusRisk
+  Parse IaC and other files to the Open Threat Model format and upload them to
+  IriusRisk
 
 Options:
-  -l, --log-level TEXT      Set the log level. Must be one of: crit, error,
-                            warn, info, debug, none.
-  --verbose / --no-verbose  Makes logging more verbose.
-  --version                 Show the version and exit.
-  --help                    Show this message and exit.
+  -l, --log-level [CRIT|ERROR|WARN|INFO|DEBUG|NONE]
+                                  Set the log level.
+  -v, --verbose / -nv, --no-verbose
+                                  Makes logging more verbose.
+  --version                       Show the version and exit.
+  --help                          Show this message and exit.
 
 Commands:
-  parse        Parses IaC files to the Open Threat Model format
-  run          Parses IaC files to the Open Threat Model format and...
+  parse        Parses IaC source files into Open Threat Model
+  run          Parses an IaC file into an Open Threat Model (OTM) and...
   search       Searches source files for the given query
   server       Launches the REST server to generate OTMs from requests
   threatmodel  Uploads an OTM file to IriusRisk
@@ -27,22 +29,23 @@ You can also get help for the specific commands.
 
 ```
 $ startleft run --help
-Usage: startleft run [OPTIONS] [FILENAME]...
+Usage: startleft run [OPTIONS] IAC_FILE...
 
-  Parses IaC files to the Open Threat Model and upload them to 
+  Parses an IaC file into an Open Threat Model (OTM) and uploads it to
   IriusRisk
 
 Options:
-  -t, --type  [JSON|YAML|CloudFormation|HCL2|Terraform]
-                                  Specify the source file type.
-  -m, --map TEXT                  Map file to use when parsing source files
-  -o, --otm TEXT                  OTM output file name
-  -n, --name TEXT                 Project name
-  --id TEXT                       Project ID
-  --recreate / --no-recreate      Delete and recreate the product each time
-  --irius-server TEXT             IriusRisk server to connect to
-                                  (proto://server[:port])'
-  --api-token  TEXT               IriusRisk API token
+  -t, --iac-type [CLOUDFORMATION|TERRAFORM]
+                                  The IaC file type.  [required]
+  -m, --mapping-file TEXT         Mapping file to parse the IaC file.
+  -o, --output-file TEXT          OTM output file.
+  -n, --project-name TEXT         Project name.  [required]
+  -i, --project-id TEXT           Project id.  [required]
+  -r, --recreate / -nr, --no-recreate
+                                  Delete and create a new project/Update the
+                                  project on IriusRisk.
+  -s, --irius-server TEXT         IriusRisk server.
+  -a, --api-token TEXT            IriusRisk API token.
   --help                          Show this message and exit.
 ```
 
@@ -59,9 +62,8 @@ Usage: startleft server [OPTIONS]...
   Launches the REST server to generate OTMs from requests
 
 Options:
-  --port INTEGER                  The port to deploy this application to
-  --help                          Show this message and exit.
-
+  -p, --port INTEGER  Startleft deployment port.
+  --help              Show this message and exit.
 ```
 
 By executing `startleft server` it is possible to see the command-line messages finishing with the following:
