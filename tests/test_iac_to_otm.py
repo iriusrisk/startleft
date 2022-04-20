@@ -112,7 +112,7 @@ class TestApp:
     def test_run_terraform_upload_file(self):
         filename = [open(test_resource_paths.terraform_for_mappings_tests_json, "rb")]
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
-        iac_to_otm = IacToOtm('name', 'id')
+        iac_to_otm = IacToOtm('name', 'id', IacType.TERRAFORM)
         iac_to_otm.run(IacType.TERRAFORM, mapping_filename, 'threatmodel-from-terraform.otm', filename)
 
         assert iac_to_otm.source_model.otm
