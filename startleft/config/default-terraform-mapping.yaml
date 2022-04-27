@@ -89,7 +89,7 @@ components:
     type:        elastic-container-service
     name:        {$path: "keys(@)[0]"}
     $source:     {
-                    $children: {$path: "values(@)[0].task_definition"},
+                    $children: {$path: "values(@)[0].task_definition|split(@, '.')[1]"},
                     $root: "resource|get(@, 'aws_ecs_service')"
                  }
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
