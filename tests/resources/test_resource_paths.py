@@ -13,6 +13,7 @@ example_yaml = os.path.dirname(__file__) + '/example.yaml'
 terraform_for_mappings_tests_json = os.path.dirname(__file__) + '/terraform_for_mappings_tests.tf'
 terraform_aws_simple_components = os.path.dirname(__file__) + '/terraform/aws_simple_components.tf'
 terraform_aws_singleton_components = os.path.dirname(__file__) + '/terraform/aws_singleton_components.tf'
+terraform_aws_parent_children_components = os.path.dirname(__file__) + '/terraform/aws_parent_children_components.tf'
 invalid_yaml = os.path.dirname(__file__) + '/invalid-yaml.yaml'
 
 otm_file_example = os.path.dirname(__file__) + '/otm_file_example.otm'
