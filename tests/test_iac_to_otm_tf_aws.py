@@ -1,4 +1,4 @@
-from startleft.api.controllers.iac.iac_type import IacType
+from startleft.provider import Provider
 from startleft.iac_to_otm import IacToOtm
 from tests.resources import test_resource_paths
 
@@ -17,8 +17,8 @@ class TestTerraformAWSComponents:
     def test_aws_simple_components(self):
         filename = test_resource_paths.terraform_aws_simple_components
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
-        iac_to_otm = IacToOtm('Test case AWS simple components', 'aws_simple_components', IacType.TERRAFORM)
-        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, 'threatmodel-from-simple-terraform.otm', filename)
+        iac_to_otm = IacToOtm('Test case AWS simple components', 'aws_simple_components', Provider.TERRAFORM)
+        iac_to_otm.run(Provider.TERRAFORM, mapping_filename, 'threatmodel-from-simple-terraform.otm', filename)
 
         assert iac_to_otm.source_model.otm
         otm = iac_to_otm.otm
@@ -47,8 +47,8 @@ class TestTerraformAWSComponents:
     def test_aws_singleton_components(self):
         filename = test_resource_paths.terraform_aws_singleton_components
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
-        iac_to_otm = IacToOtm('Test case AWS singleton components', 'aws_singleton_components', IacType.TERRAFORM)
-        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, 'threatmodel-from-singleton-terraform.otm', filename)
+        iac_to_otm = IacToOtm('Test case AWS singleton components', 'aws_singleton_components', Provider.TERRAFORM)
+        iac_to_otm.run(Provider.TERRAFORM, mapping_filename, 'threatmodel-from-singleton-terraform.otm', filename)
 
         assert iac_to_otm.source_model.otm
         otm = iac_to_otm.otm
