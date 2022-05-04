@@ -1,5 +1,7 @@
 import os
 
+from tests.diagram.test_visio_diagram_to_otm import AWS_WITH_TRUSTZONES_AND_VPC_FILENAME
+
 cloudformation_for_mappings_tests_json = os.path.dirname(__file__) + '/cloudformation_for_mappings_tests.json'
 cloudformation_for_security_group_tests_json = os.path.dirname(__file__)+'/cloudformation_for_security_group_tests.json'
 cloudformation_for_security_group_tests_2_json =\
@@ -17,3 +19,4 @@ invalid_yaml = os.path.dirname(__file__) + '/invalid-yaml.yaml'
 
 otm_file_example = os.path.dirname(__file__) + '/otm_file_example.otm'
 
+aws_with_trustzones_and_vpc_input_path = os.path.dirname(__file__) + '/visio/' + AWS_WITH_TRUSTZONES_AND_VPC_FILENAME + '.vsdx'
