@@ -1,3 +1,5 @@
+import json
+
 import pytest
 import responses
 from fastapi.testclient import TestClient
@@ -19,20 +21,34 @@ def get_url():
 
 class TestCloudFormationCreateProjectController:
 
-    @pytest.mark.parametrize('project_id,project_name,cft_file',
-                             [(None, 'name', open(test_resource_paths.example_json, 'r')),
-                              ('id', None, open(test_resource_paths.example_json, 'r')),
-                              ('id', 'name', None)])
-    def test_create_project_validation_error(self, project_id: str, project_name: str, cft_file):
+    @pytest.mark.parametrize('project_id,project_name,cft_file,mapping_file,error_type',
+                             [(None, 'project_A_name', open(test_resource_paths.example_json, 'r'),
+                               open(test_resource_paths.default_mapping, 'r'), 'IacToOtmValidationError'),
+                              ('project_B_id', None, open(test_resource_paths.example_json, 'r'),
+                               open(test_resource_paths.default_mapping, 'r'), 'IacToOtmValidationError'),
+                              ('project_C_id', 'project_C_name', None,
+                               open(test_resource_paths.default_mapping, 'r'), 'IacToOtmValidationError'),
+                              ('project_D_id', 'project_D_name', open(test_resource_paths.example_json, 'r'),
+                               None, 'IacToOtmValidationError'),
+                              ('project_E_id', 'project_E_name', open(test_resource_paths.example_json, 'r'),
+                               open(test_resource_paths.cloudformation_malformed_mapping_wrong_id, 'r'),
+                               'MalformedMappingFile'),
+                              ('project_F_id', 'project_F_name', None, None, 'IacToOtmValidationError')])
+    def test_create_project_validation_error(self, project_id: str, project_name: str, cft_file, mapping_file,
+                                             error_type):
         # Given a body
-        body = {'id': project_id, 'name': project_name}
+        body = {'iac_type': 'CLOUDFORMATION', 'id': project_id, 'name': project_name}
 
         # When I do post on cloudformation endpoint
-        files = {'cft_file': cft_file}
+        files = {'iac_file': cft_file, 'mapping_file': mapping_file}
         response = client.post(get_url(), files=files, data=body)
 
         # Then
         assert response.status_code == 400
+        assert response.headers["content-type"] == "application/json"
+        res_body = json.loads(response.content.decode('utf-8'))
+        assert res_body['status'] == '400'
+        assert res_body['error_type'] == error_type
 
     @responses.activate
     def test_create_otm_ok(self):

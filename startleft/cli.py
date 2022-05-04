@@ -56,7 +56,7 @@ class CatchAllExceptions(click.Group):
             return self.main(*args, **kwargs)
         except CommonError as e:
             logger.exception(e.message)
-            sys.exit(e.system_exit_status)
+            sys.exit(e.error_code.system_exit_status)
         except Exception as exc:
             logger.exception(exc)
 
