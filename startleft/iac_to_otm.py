@@ -7,7 +7,7 @@ import xmltodict
 import yaml
 
 from startleft import otm, sourcemodel, transformer
-from startleft.api.controllers.iac.iac_type import IacType
+from startleft.provider import Provider
 from startleft.api.errors import WriteThreatModelError
 from startleft.mapping.mapping_file_loader import MappingFileLoader
 from startleft.validators.mapping_validator import MappingValidator
@@ -22,16 +22,16 @@ class IacToOtm:
     EXIT_UNEXPECTED = 1
     EXIT_VALIDATION_FAILED = 2
 
-    def __init__(self, project_name, project_id, iac_type: IacType):
-        self.otm = otm.OTM(project_name, project_id, iac_type)
+    def __init__(self, project_name, project_id, provider: Provider):
+        self.otm = otm.OTM(project_name, project_id, provider)
         self.source_model = sourcemodel.SourceModel()
         self.source_model.otm = self.otm
         self.transformer = transformer.Transformer(source_model=self.source_model, threat_model=self.otm)
         self.mapping_file_loader = MappingFileLoader()
         self.mapping_validator = MappingValidator()
         self.source_loader_map = {
-            IacType.CLOUDFORMATION: self.load_yaml_source,
-            IacType.TERRAFORM: self.load_hcl2_source
+            Provider.CLOUDFORMATION: self.load_yaml_source,
+            Provider.TERRAFORM: self.load_hcl2_source
         }
 
     def load_xml_source(self, filename):

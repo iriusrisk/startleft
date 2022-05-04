@@ -1,15 +1,15 @@
 import logging
 
-from startleft.api.controllers.iac.iac_type import IacType
+from startleft.provider import Provider
 
 logger = logging.getLogger(__name__)
 
 
 class OTM:
-    def __init__(self, project_name, project_id, iac_type: IacType):
+    def __init__(self, project_name, project_id, provider: Provider):
         self.name = project_name
         self.id = project_id
-        self.representation = iac_type.description
+        self.representation = provider.provider_name
 
         self.trustzones = []
         self.components = []
