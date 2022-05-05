@@ -16,3 +16,12 @@ class Provider(str, Enum):
         obj.provider_type = provider_type
 
         return obj
+
+    @classmethod
+    def allowed_providers(cls) -> [str]:
+        allowed = []
+
+        for provider in Provider:
+            allowed.append(provider.name)
+
+        return allowed

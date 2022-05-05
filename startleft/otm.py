@@ -7,9 +7,11 @@ logger = logging.getLogger(__name__)
 
 class OTM:
     def __init__(self, project_name, project_id, provider: Provider):
-        self.name = project_name
-        self.id = project_id
-        self.representation = provider.provider_name
+        self.project_name = project_name
+        self.project_id = project_id
+        self.representations_id = provider.provider_name
+        self.representations_name = provider.provider_name
+        self.representations_type = provider.provider_type
 
         self.trustzones = []
         self.components = []
@@ -27,14 +29,14 @@ class OTM:
         data = {
             "otmVersion": "0.1.0",
             "project": {
-                "name": self.name,
-                "id": self.id
+                "name": self.project_name,
+                "id": self.project_id
             },
             "representations": [
                 {
-                    "name": self.representation,
-                    "id": self.representation,
-                    "type": "code",
+                    "name": self.representations_name,
+                    "id": self.representations_id,
+                    "type": self.representations_type,
                 }
             ],
             "trustZones": [],
