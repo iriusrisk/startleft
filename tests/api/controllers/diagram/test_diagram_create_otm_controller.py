@@ -67,7 +67,7 @@ class TestCloudFormationCreateProjectController:
         assert len(otm['representations']) == 1
         assert otm['representations'][0]['name'] == 'Visio'
         assert otm['representations'][0]['id'] == 'Visio'
-        assert otm['representations'][0]['type'] == 'code'
+        assert otm['representations'][0]['type'] == 'diagram'
         assert len(otm['trustZones']) == 2
         assert otm['trustZones'][0]['id'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
         assert otm['trustZones'][0]['name'] == 'Public Cloud'
