@@ -24,58 +24,6 @@ class CommonError(Exception):
     error_code: ErrorCode
 
 
-class IriusUnauthorizedError(CommonError):
-    message = messages.UNAUTHORIZED_EXCEPTION
-    http_status_code = 401
-    error_code = ErrorCode.OTM_TO_IR_EXIT_UNEXPECTED
-
-
-class IriusTokenNotSetError(CommonError):
-    message = messages.UNAUTHORIZED_EXCEPTION
-    http_status_code = 401
-    error_code = ErrorCode.OTM_TO_IR_EXIT_UNEXPECTED
-
-
-class IriusForbiddenError(CommonError):
-    message = messages.FORBIDDEN_OPERATION
-    http_status_code = 403
-    error_code = ErrorCode.OTM_TO_IR_EXIT_UNEXPECTED
-
-
-class IriusProjectNotFoundError(CommonError):
-    message = messages.PROJECT_NOT_FOUND
-    http_status_code = 404
-    error_code = ErrorCode.OTM_TO_IR_EXIT_UNEXPECTED
-
-
-class IriusServerNotSetError(CommonError):
-    message = messages.IRIUS_SERVER_NOT_SET
-    http_status_code = 500
-    error_code = ErrorCode.OTM_TO_IR_EXIT_UNEXPECTED
-
-
-class IriusServerUnreachableError(CommonError):
-    message = messages.IRIUS_SERVER_UNREACHABLE
-    http_status_code = 500
-    error_code = ErrorCode.OTM_TO_IR_EXIT_UNEXPECTED
-
-
-class IriusCommonApiError(CommonError):
-    message = messages.UNEXPECTED_API_ERROR
-    http_status_code = 500
-    error_code = ErrorCode.OTM_TO_IR_EXIT_UNEXPECTED
-
-    def __init__(self, http_status_code: int, message: str):
-        self.http_status_code = http_status_code
-        self.message = message
-
-
-class IriusInvalidResponseError(CommonError):
-    message = messages.IRIUS_INVALID_RESPONSE
-    http_status_code = 500
-    error_code = ErrorCode.OTM_TO_IR_EXIT_VALIDATION_FAILED
-
-
 class OTMInconsistentIdsError(CommonError):
     message = messages.INCONSISTENT_IDS
     http_status_code = 500

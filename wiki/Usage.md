@@ -18,10 +18,8 @@ Options:
 
 Commands:
   parse        Parses IaC source files into Open Threat Model
-  run          Parses an IaC file into an Open Threat Model (OTM) and...
   search       Searches source files for the given query
   server       Launches the REST server to generate OTMs from requests
-  threatmodel  Uploads an OTM file to IriusRisk
   validate     Validates a mapping or OTM file
 ```
 

@@ -8,9 +8,7 @@ from startleft.api import fastapi_server
 from startleft.api.controllers.iac import iac_create_otm_controller
 from tests.resources import test_resource_paths
 
-IRIUSRISK_URL = ''
-
-webapp = fastapi_server.initialize_webapp(IRIUSRISK_URL)
+webapp = fastapi_server.initialize_webapp()
 
 client = TestClient(webapp)
 
