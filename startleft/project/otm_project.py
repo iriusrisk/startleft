@@ -4,21 +4,24 @@ from typing import Optional
 
 from typing.io import IO
 
+from startleft.diagram.visio_to_otm import VisioToOtm
 from startleft.provider import Provider
 from startleft.iac_to_otm import IacToOtm
 from startleft.mapping.mapping_file_loader import MappingFileLoader
 from startleft.mapping.otm_file_loader import OtmFileLoader
 from startleft.otm import OTM
+from startleft.utils.file_utils import FileUtils
 from startleft.validators.mapping_validator import MappingValidator
 from startleft.validators.otm_validator import OtmValidator
 
 logger = logging.getLogger(__name__)
 
 DEFAULT_OTM_FILENAME = 'threatmodel.otm'
+VSDX_EXT = '.vsdx'
 
 
-def get_default_iac_mapping_files(iac_type: Provider) -> [str]:
-    return Provider(iac_type).def_map_file
+def get_default_iac_mapping_files(provider: Provider) -> [str]:
+    return Provider(provider).def_map_file
 
 
 class OtmProject:
@@ -64,6 +67,17 @@ class OtmProject:
         iac_to_otm.run(iac_type, mapping_iac_files, None, iac_file)
 
         return OtmProject.from_otm_stream(iac_to_otm.get_otm_stream(), project_id, project_name)
+
+    @staticmethod
+    def from_diag_file_to_otm_stream(project_id: str, project_name: str, diag_type: Provider, diag_file: [Optional[IO]],
+                                     custom_mapping_files: [Optional[IO]] = None):
+        mapping_iac_files = custom_mapping_files or diag_type.def_map_file
+        logger.info("Parsing Diagram file to OTM")
+        temp_diag_file = FileUtils.copy_to_disk(diag_file[0], VSDX_EXT)
+        diag_to_otm = VisioToOtm(temp_diag_file.name)
+        otm = diag_to_otm.run()
+        FileUtils.delete(temp_diag_file.name)
+        return OtmProject.from_otm_stream(otm.json(), project_id, project_name)
 
     @staticmethod
     def validate_iac_mappings_file(mapping_files: [Optional[IO]]):

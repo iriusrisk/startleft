@@ -2,12 +2,10 @@ from startleft.diagram.visio_to_otm import VisioToOtm
 from tests.resources import test_resource_paths
 from tests.test_utils import TestUtils
 
-AWS_WITH_TRUSTZONES_AND_VPC_FILENAME = 'aws-with-tz-and-vpc'
-
 
 class TestVisioDiagramToOtm:
     def test_diagram_to_otm(self):
-        otm = VisioToOtm(test_resource_paths.aws_with_trustzones_and_vpc_input_path).run()
+        otm = VisioToOtm(test_resource_paths.visio_aws_with_tz_and_vpc).run()
 
         assert len(otm.trustzones) == 2
         assert len(otm.components) == 6

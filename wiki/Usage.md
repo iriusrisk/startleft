@@ -80,8 +80,17 @@ GET /health
 POST /api/v1/startleft/iac
 Request Body:
     iac_file:                   Required. File that contains the IaC definition
-    iac_type:                   Required. Type of the IaC File: CLOUDFORMATION
+    iac_type:                   Required. Type of the IaC File: [CLOUDFORMATION, TERRAFORM]
     id                          Required. ID of the new project
     name                        Required. Name of the new project
     mapping_file                Required. File that contains the mapping between IaC resources and threat model resources.
+```
+```
+POST /api/v1/startleft/diagrams
+Request Body:
+    diag_file:                  Required. File that contains the diagram
+    diag_type:                  Required. Type of the diagram File: VISIO
+    id                          Required. ID of the new project
+    name                        Required. Name of the new project
+    mapping_file                Required. File that contains the mapping between the diagram resources and threat model resources.
 ```
