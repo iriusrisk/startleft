@@ -17,11 +17,10 @@ def is_component(shape) -> bool:
 
 
 class PageToDiagram:
-    __visio_components: [VisioComponent] = []
-    __visio_connectors: [VisioConnector] = []
-
     def __init__(self, page: Page):
         self.page = page
+        self.__visio_components = []
+        self.__visio_connectors = []
 
     def run(self):
         self.__load_page_elements()
