@@ -8,9 +8,7 @@ from startleft.api.controllers.iac.iac_type import IacType
 from startleft.api.errors import CommonError
 from startleft.iac_to_otm import IacToOtm
 from startleft.messages import messages
-from startleft.project.iriusrisk_project_repository import IriusriskProjectRepository
 from startleft.project.otm_project import OtmProject
-from startleft.project.otm_project_service import OtmProjectService
 
 logger = logging.getLogger(__name__)
 
@@ -69,36 +67,15 @@ class CatchAllExceptions(click.Group):
 @click.version_option(__version__)
 def cli(log_level, verbose):
     """
-    Parse IaC and other files to the Open Threat Model format and upload them to IriusRisk
+    Parse IaC and other files to the Open Threat Model format
     """
     configure_logger(log_level, verbose)
 
 
 @cli.command()
-@click.option(messages.IAC_TYPE_NAME, messages.IAC_TYPE_SHORTNAME, type=click.Choice(messages.IAC_TYPE_SUPPORTED, case_sensitive=False), required=True, help=messages.IAC_TYPE_DESC)
-@click.option(messages.MAPPING_FILE_NAME, messages.MAPPING_FILE_SHORTNAME, help=messages.MAPPING_FILE_DESC)
-@click.option(messages.OUTPUT_FILE_NAME, messages.OUTPUT_FILE_SHORTNAME, default=messages.OUTPUT_FILE, help=messages.OUTPUT_FILE_DESC)
-@click.option(messages.PROJECT_NAME_NAME, messages.PROJECT_NAME_SHORTNAME, required=True, help=messages.PROJECT_NAME_DESC)
-@click.option(messages.PROJECT_ID_NAME, messages.PROJECT_ID_SHORTNAME, required=True, help=messages.PROJECT_ID_DESC)
-@click.option(messages.RECREATE_NAME, messages.RECREATE_SHORTNAME, default=False, help=messages.RECREATE_DESC)
-@click.option(messages.IRIUS_SERVER_NAME, messages.IRIUS_SERVER_SHORTNAME, default='', envvar=messages.IRIUS_SERVER_ENVAR, callback=validate_server, help=messages.IRIUS_SERVER_DESC)
-@click.option(messages.API_TOKEN_NAME, messages.API_TOKEN_SHORTNAME, default='', envvar=messages.API_TOKEN_ENVAR, help=messages.API_TOKEN_DESC)
-@click.argument(messages.IAC_FILE_NAME, required=True, nargs=-1)
-def run(iac_type, mapping_file, output_file, project_name, project_id, recreate, irius_server, api_token,
-        iac_file):
-    """
-    Parses an IaC file into an Open Threat Model (OTM) and uploads it to IriusRisk
-    """
-    logger.info("Parsing IaC source files into OTM")
-    otm_project = OtmProject.from_iac_file(project_id, project_name, IacType(iac_type.upper()), iac_file,
-                                           mapping_file, output_file)
-    otm_service = OtmProjectService(IriusriskProjectRepository(api_token, irius_server))
-
-    __create_or_recreate_otm_project(recreate, otm_service, otm_project)
-
-
-@cli.command()
-@click.option(messages.IAC_TYPE_NAME, messages.IAC_TYPE_SHORTNAME, type=click.Choice(messages.IAC_TYPE_SUPPORTED, case_sensitive=False), required=True, help=messages.IAC_TYPE_DESC)
+@click.option(messages.IAC_TYPE_NAME, messages.IAC_TYPE_SHORTNAME,
+              type=click.Choice(messages.IAC_TYPE_SUPPORTED, case_sensitive=False), required=True,
+              help=messages.IAC_TYPE_DESC)
 @click.option(messages.MAPPING_FILE_NAME, messages.MAPPING_FILE_SHORTNAME, help=messages.MAPPING_FILE_DESC)
 @click.option(messages.OUTPUT_FILE_NAME, messages.OUTPUT_FILE_SHORTNAME, default=messages.OUTPUT_FILE, help=messages.OUTPUT_FILE_DESC)
 @click.option(messages.PROJECT_NAME_NAME, messages.PROJECT_NAME_SHORTNAME, required=True, help=messages.PROJECT_NAME_DESC)
@@ -110,21 +87,6 @@ def parse(iac_type, mapping_file, output_file, project_name, project_id, iac_fil
     """
     logger.info("Parsing IaC source files into OTM")
     OtmProject.from_iac_file(project_id, project_name, IacType(iac_type.upper()), iac_file, mapping_file, output_file)
-
-
-@cli.command()
-@click.option(messages.RECREATE_NAME, messages.RECREATE_SHORTNAME, default=False, help=messages.RECREATE_DESC)
-@click.option(messages.IRIUS_SERVER_NAME, messages.IRIUS_SERVER_SHORTNAME, default='', envvar=messages.IRIUS_SERVER_ENVAR, callback=validate_server, help=messages.IRIUS_SERVER_DESC)
-@click.option(messages.API_TOKEN_NAME, messages.API_TOKEN_SHORTNAME, default='', envvar=messages.API_TOKEN_ENVAR, help=messages.API_TOKEN_DESC)
-@click.argument(messages.IAC_FILE_NAME, required=True, nargs=-1)
-def threatmodel(recreate, irius_server, api_token, iac_file):
-    """
-    Uploads an OTM file to IriusRisk
-    """
-    otm_project = OtmProject.from_otm_file(iac_file)
-    otm_service = OtmProjectService(IriusriskProjectRepository(api_token, irius_server))
-
-    __create_or_recreate_otm_project(recreate, otm_service, otm_project)
 
 
 @cli.command()
@@ -165,15 +127,6 @@ def server(port: int):
     """
     from startleft.api import fastapi_server
     fastapi_server.run_webapp(port)
-
-
-def __create_or_recreate_otm_project(recreate: bool, otm_service: OtmProjectService, otm_project: OtmProject):
-    if recreate:
-        logger.info("Uploading OTM files and recreating the IriusRisk threat model")
-        otm_service.recreate_project(otm_project)
-    else:
-        logger.info("Uploading OTM files and generating the IriusRisk threat model")
-        otm_service.update_or_create_project(otm_project)
 
 
 if __name__ == '__main__':

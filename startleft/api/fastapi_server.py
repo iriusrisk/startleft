@@ -7,7 +7,6 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from startleft.api.api_config import ApiConfig
 from startleft.api.controllers.iac import iac_create_otm_controller
 from startleft.api.controllers.health import health_controller
 from startleft.api.error_response import ErrorResponse
@@ -20,9 +19,7 @@ webapp.include_router(health_controller.router)
 webapp.include_router(iac_create_otm_controller.router)
 
 
-def initialize_webapp(iriusrisk_server: str):
-    ApiConfig.set_iriusrisk_server(iriusrisk_server)
-
+def initialize_webapp():
     webapp.exception_handler(handle_common_error)
     webapp.exception_handler(handle_unexpected_exceptions)
 

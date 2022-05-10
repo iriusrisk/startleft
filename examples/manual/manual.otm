@@ -1,3 +1,5 @@
+otmVersion: 0.1.0
+
 project:
   name: Manual ThreatModel
   id:   manual-threatmodel
