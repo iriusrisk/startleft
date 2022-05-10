@@ -67,7 +67,7 @@ class CatchAllExceptions(click.Group):
 @click.version_option(__version__)
 def cli(log_level, verbose):
     """
-    Parse IaC and other files to the Open Threat Model format and upload them to IriusRisk
+    Parse IaC and other files to the Open Threat Model format
     """
     configure_logger(log_level, verbose)
 

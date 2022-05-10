@@ -8,7 +8,7 @@ You can find some example source files inside the `examples` directory:
 ## CloudFormation
 CloudFormation is the AWS tool which lets you model, provision, and manage AWS and third-party resources by treating 
 infrastructure as code. Startleft's repository contains a default CloudFormation mapping file that enables you to 
-generate threat models based on the OTM standard from a CloudFormation template file and update them to IriusRisk using 
+generate threat models based on the OTM standard from a CloudFormation template file using 
 a single command.
 
 The following examples, which are located in the `examples/cloudformation` directory, show you how to carry out the 
@@ -69,7 +69,8 @@ startleft run \
 
 ## Hand crafted OTM
 
-You can also write an OTM file without parsing any IaC source files. This is useful if you want to create a threat model in your IDE and have the diagram etc. generated for you. For example, the following short OTM file:
+You can also write an OTM file without parsing any IaC source files. This is useful if you want to create a threat model 
+in your IDE and validate it before uploading it to a Threat Modeling platform like IriusRisk. For example, the following short OTM file:
 
 ```yaml
 otmVersion: 0.1.0
