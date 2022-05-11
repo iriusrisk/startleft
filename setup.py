@@ -1,9 +1,11 @@
 from setuptools import setup, find_packages
+from startleft.version import version
 
 setup(
     name='IriusRisk StartLeft',
     description='Parse Infrastructure as Code files to the Open Threat Model format and upload them to IriusRisk',
     license='Apache2',
+    version=version,
     author='Fraser Scott',
     author_email='fscott@iriusrisk.com',
     url='https://github.com/iriusrisk/startleft',
@@ -20,13 +22,11 @@ setup(
         'python-hcl2',
         'requests',
         'xmltodict',
-        'setuptools_scm',
         'fastapi',
         'python-multipart',
         'click',
         'uvicorn'
     ],
-    use_scm_version=True,
     extras_require={
         "setup": [
             "pytest-runner",

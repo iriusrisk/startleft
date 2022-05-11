@@ -9,10 +9,9 @@ from startleft.api.errors import CommonError
 from startleft.iac_to_otm import IacToOtm
 from startleft.messages import messages
 from startleft.project.otm_project import OtmProject
+from startleft.version import version
 
 logger = logging.getLogger(__name__)
-
-__version__ = "0.1.0"
 
 
 def get_log_level(ctx, param, value):
@@ -64,7 +63,7 @@ class CatchAllExceptions(click.Group):
               type=click.Choice(['CRIT', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'NONE'], case_sensitive=False),
               callback=get_log_level, default='info', help='Set the log level.')
 @click.option('--verbose/--no-verbose', '-v/-nv', default=False, help='Makes logging more verbose.')
-@click.version_option(__version__)
+@click.version_option(version)
 def cli(log_level, verbose):
     """
     Parse IaC and other files to the Open Threat Model format
