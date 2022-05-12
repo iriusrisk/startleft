@@ -1,7 +1,7 @@
 import logging
 import sys
 
-from startleft.validators.schema import Schema, OtmSchema
+from startleft.validators.schema import Schema
 
 logger = logging.getLogger(__name__)
 
@@ -11,7 +11,7 @@ class OtmValidator:
     EXIT_VALIDATION_FAILED = 4
 
     def __init__(self):
-        self.schema: Schema = OtmSchema()
+        self.schema: Schema = Schema('otm_schema.json')
 
     def validate(self, otm):
         self.__validate_otm_schema(otm)

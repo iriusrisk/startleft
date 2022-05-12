@@ -72,10 +72,13 @@ class OtmProject:
     def from_diag_file_to_otm_stream(project_id: str, project_name: str, diag_type: Provider, diag_file: [Optional[IO]],
                                      custom_mapping_files: [Optional[IO]] = None):
         mapping_iac_files = custom_mapping_files or diag_type.def_map_file
+        iac_mapping = MappingFileLoader().load(mapping_iac_files)
+        MappingValidator('diagram_mapping_schema.json').validate(iac_mapping)
+
         logger.info("Parsing Diagram file to OTM")
         temp_diag_file = FileUtils.copy_to_disk(diag_file[0], VSDX_EXT)
         diag_to_otm = VisioToOtm(temp_diag_file.name)
-        otm = diag_to_otm.run()
+        otm = diag_to_otm.run(iac_mapping, project_name, project_id)
         FileUtils.delete(temp_diag_file.name)
         return OtmProject.from_otm_stream(otm.json(), project_id, project_name)
 
@@ -83,7 +86,7 @@ class OtmProject:
     def validate_iac_mappings_file(mapping_files: [Optional[IO]]):
         logger.info("Validating IaC mapping files")
         iac_mapping = MappingFileLoader().load(mapping_files)
-        MappingValidator().validate(iac_mapping)
+        MappingValidator('iac_mapping_schema.json').validate(iac_mapping)
 
     @staticmethod
     def validate_otm_stream(otm_stream: str) -> {}:

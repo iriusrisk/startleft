@@ -1,12 +1,12 @@
 from enum import Enum
 
-from startleft.config import paths
+from startleft import paths
 
 
 class Provider(str, Enum):
     CLOUDFORMATION = ("CLOUDFORMATION", "CloudFormation", paths.default_cf_mapping_file, "code")
-    TERRAFORM = ("TERRAFORM", "Terraform", paths.default_tf_aws_mapping_file, "code")
-    VISIO = ("VISIO", "Visio", None, "diagram")
+    TERRAFORM = ("TERRAFORM", "Terraform", paths.default_tf_mapping_file, "code")
+    VISIO = ("VISIO", "Visio", paths.default_visio_mapping_file, "diagram")
 
     def __new__(cls, value, provider_name: str = None, def_map_file: str = None, provider_type: str = None):
         obj = str.__new__(cls, [value])

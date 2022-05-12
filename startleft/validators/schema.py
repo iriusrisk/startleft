@@ -35,13 +35,3 @@ class Schema:
         logger.info(f"Loading schema file '{schema_path}'")
         with open(schema_path, "r") as f:
             return yaml.load(f, Loader=yaml.BaseLoader)
-
-
-class OtmSchema(Schema):
-    def __init__(self):
-        Schema.__init__(self, 'otm_schema.json')
-
-
-class MappingSchema(Schema):
-    def __init__(self):
-        Schema.__init__(self, 'mapping_schema.json')

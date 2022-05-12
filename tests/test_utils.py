@@ -25,3 +25,9 @@ class TestUtils:
     def check_otm_dataflow(otm, position, source_node, destination_node):
         assert otm.dataflows[position].source_node == source_node
         assert otm.dataflows[position].destination_node == destination_node
+
+    @staticmethod
+    def check_otm_representations_size(otm):
+        assert "size" in otm.json()["representations"][0].keys()
+        assert "width" in otm.json()["representations"][0]["size"].keys()
+        assert "height" in otm.json()["representations"][0]["size"].keys()
