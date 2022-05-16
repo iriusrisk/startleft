@@ -12,6 +12,10 @@ class OTM:
         self.representations_id = provider.provider_name
         self.representations_name = provider.provider_name
         self.representations_type = provider.provider_type
+        self.representations_size = {
+            "width": 1000,
+            "height": 1000
+        }
 
         self.trustzones = []
         self.components = []
@@ -43,6 +47,9 @@ class OTM:
             "components": [],
             "dataflows": []
         }
+
+        if self.representations_type == Provider.VISIO.provider_type:
+            data["representations"][0]["size"] = self.representations_size
 
         for trustzone in self.trustzones:
             data["trustZones"].append(trustzone.json())
