@@ -20,7 +20,7 @@ class TestVisioDiagramToOtm:
         TestUtils.check_otm_trustzone(otm, 0, TestUtils.public_cloud_id, TestUtils.public_cloud_name)
         TestUtils.check_otm_trustzone(otm, 1, TestUtils.private_secured_id, TestUtils.private_secured_name)
 
-        TestUtils.check_otm_component(otm, 0, 'empty_component', 'Custom VPC')
+        TestUtils.check_otm_component(otm, 0, 'empty-component', 'Custom VPC')
         TestUtils.check_otm_component(otm, 1, 'ec2', 'Amazon EC2')
         TestUtils.check_otm_component(otm, 2, 'ec2', 'Custom machine')
         TestUtils.check_otm_component(otm, 3, 'rds', 'Private Database')

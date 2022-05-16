@@ -61,7 +61,6 @@ class TestDiagramCreateOtmController:
         otm = json.loads(response.text)
 
         assert otm['otmVersion'] == '0.1.0'
-        # FIXME OPT-175 project_id && project_name
         assert otm['project']['id'] == project_id
         assert otm['project']['name'] == 'project_A_name'
         assert len(otm['representations']) == 1
@@ -80,7 +79,7 @@ class TestDiagramCreateOtmController:
         assert len(otm['components']) == 6
         assert otm['components'][0]['id'] == '49'
         assert otm['components'][0]['name'] == 'Custom VPC'
-        assert otm['components'][0]['type'] == 'empty_component'
+        assert otm['components'][0]['type'] == 'empty-component'
         assert len(otm['components'][0]['parent']) == 1
         assert otm['components'][0]['parent']['trustZone'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
         assert otm['components'][1]['id'] == '1'

@@ -1,4 +1,5 @@
 import uuid
+from typing import Optional
 
 import jmespath
 import yaml
@@ -11,20 +12,6 @@ from startleft.provider import Provider
 
 def is_trustzone(component: VisioComponent) -> bool:
     return component.get_component_category() == 'trustZone'
-
-
-def map_to_dataflows(visio_connectors: [VisioConnector]) -> [Component]:
-    dataflows = []
-    for visio_connector in visio_connectors:
-        dataflows.append(Dataflow(
-            id=visio_connector.id,
-            name=str(uuid.uuid4()),
-            source_node=visio_connector.from_id,
-            destination_node=visio_connector.to_id
-        ))
-
-    return dataflows
-
 
 class OtmBuilder:
     def __init__(self, visio_diagram: VisioDiagram, mapping_file):
@@ -45,11 +32,8 @@ class OtmBuilder:
     def build(self, project_name: str, project_id: str):
         otm = self.init_otm(project_name, project_id)
 
-        trustzones, components = self.map_to_trustzones_and_components(self.visio_diagram.components)
-
-        otm.trustzones = trustzones
-        otm.components = components
-        otm.dataflows = map_to_dataflows(self.visio_diagram.connectors)
+        otm.trustzones, otm.components = self.map_to_trustzones_and_components(self.visio_diagram.components)
+        otm.dataflows = self.map_to_dataflows()
 
         return otm
 
@@ -86,22 +70,40 @@ class OtmBuilder:
         return Component(
             id=visio_component.id,
             name=visio_component.name,
-            type=self.get_component_type(visio_component.type),
+            type=self.calculate_otm_type(visio_component.name, visio_component.type),
             parent=self.calculate_parent_id(visio_component),
             parent_type=visio_component.parent.get_component_category()
         )
 
-    def get_component_type(self, label: str):
+    def calculate_otm_type(self, component_name: str, component_type: str):
+        otm_type = self.find_mapped_component_by_label(component_name)
+
+        if not otm_type:
+            otm_type = self.find_mapped_component_by_label(component_type)
+
+        return otm_type or 'empty-component'
+
+    def find_mapped_component_by_label(self, label: str) -> str:
         components = jmespath.search("components[?(@.label=='" + label + "')]", self.mapping_file)
 
-        if not components:
-            return "empty_component"
-
-        return components[0]['type']
+        if components:
+            return components[0]['type']
 
     def calculate_parent_id(self, component: VisioComponent) -> str:
-        return self.get_trustzone(component.parent.name)['id'] if is_trustzone(
-            component.parent) else component.parent.id
+        return self.get_trustzone(component.parent.name)['id'] \
+            if is_trustzone(component.parent) else component.parent.id
 
     def get_default_trustzone(self):
         return jmespath.search("trustzones[?(@.label=='Public Cloud')]", self.mapping_file)[0]
+
+    def map_to_dataflows(self) -> [Component]:
+        dataflows = []
+        for visio_connector in self.visio_diagram.connectors:
+            dataflows.append(Dataflow(
+                id=visio_connector.id,
+                name=str(uuid.uuid4()),
+                source_node=visio_connector.from_id,
+                destination_node=visio_connector.to_id
+            ))
+
+        return dataflows
