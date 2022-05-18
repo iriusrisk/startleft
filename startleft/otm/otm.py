@@ -1,12 +1,10 @@
 import logging
 
-from startleft.provider import Provider
-
 logger = logging.getLogger(__name__)
 
 
 class OTM:
-    def __init__(self, project_name, project_id, provider: Provider):
+    def __init__(self, project_name, project_id, provider):
         self.project_name = project_name
         self.project_id = project_id
         self.representations_id = provider.provider_name
@@ -48,7 +46,7 @@ class OTM:
             "dataflows": []
         }
 
-        if self.representations_type == Provider.VISIO.provider_type:
+        if self.representations_type == "diagram":
             data["representations"][0]["size"] = self.representations_size
 
         for trustzone in self.trustzones:

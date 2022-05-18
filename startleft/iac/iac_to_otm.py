@@ -6,10 +6,12 @@ import hcl2
 import xmltodict
 import yaml
 
-from startleft import otm, sourcemodel, transformer
-from startleft.provider import Provider
 from startleft.api.errors import WriteThreatModelError
+from startleft.iac.iac_type import IacType
+from startleft.iac.mapping import transformer, sourcemodel
 from startleft.mapping.mapping_file_loader import MappingFileLoader
+from startleft.otm import otm
+from startleft.provider import Provider
 from startleft.validators.mapping_validator import MappingValidator
 
 logger = logging.getLogger(__name__)
@@ -30,8 +32,8 @@ class IacToOtm:
         self.mapping_file_loader = MappingFileLoader()
         self.mapping_validator = MappingValidator('iac_mapping_schema.json')
         self.source_loader_map = {
-            Provider.CLOUDFORMATION: self.load_yaml_source,
-            Provider.TERRAFORM: self.load_hcl2_source
+            IacType.CLOUDFORMATION: self.load_yaml_source,
+            IacType.TERRAFORM: self.load_hcl2_source
         }
 
     def load_xml_source(self, filename):

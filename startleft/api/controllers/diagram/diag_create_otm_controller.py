@@ -3,8 +3,8 @@ import logging
 from fastapi import APIRouter, File, UploadFile, Form, Response
 
 from startleft.api.controllers.otm_controller import RESPONSE_STATUS_CODE, PREFIX, controller_responses
-from startleft.project.otm_project import OtmProject
-from startleft.provider import Provider
+from startleft.diagram.diagram_type import DiagramType
+from startleft.otm.otm_project import OtmProject
 
 URL = '/diagram'
 
@@ -19,7 +19,7 @@ router = APIRouter(
 @router.post(URL, status_code=RESPONSE_STATUS_CODE, description="Generates an OTM threat model from an Diagram file",
              tags=['Diagram'])
 def diagram(diag_file: UploadFile = File(..., description="File that contains the Iac definition"),
-            diag_type: Provider = Form(..., description="Type of Diagram File: VISIO"),
+            diag_type: DiagramType = Form(..., description="Type of Diagram File: VISIO"),
             id: str = Form(..., description="ID of the new project"),
             name: str = Form(..., description="Name of the new project"),
             default_mapping_file: UploadFile = File(..., description="File that contains the default mapping file"),

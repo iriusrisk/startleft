@@ -1,8 +1,7 @@
 import logging
-from os.path import exists
 
+from startleft.otm.otm_project import OtmProject
 from startleft.project.iriusrisk_project_repository import IriusriskProjectRepository
-from startleft.project.otm_project import OtmProject
 
 logger = logging.getLogger(__name__)
 

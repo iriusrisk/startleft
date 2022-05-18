@@ -16,8 +16,6 @@ def is_contained(parent_candidate: DiagramComponent, child_candidate: DiagramCom
 
 
 class ParentCalculator:
-    child_candidate: DiagramComponent
-
     def __init__(self, component: DiagramComponent):
         self.child_candidate = component
 

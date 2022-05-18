@@ -1,5 +1,6 @@
-from shapely.geometry import Point, Polygon
-from vsdx import Shape
+from shapely.geometry import Polygon
+
+from startleft.diagram.diagram_type import DiagramType
 
 
 class DiagramComponent:
@@ -35,9 +36,7 @@ class DiagramConnector:
 
 
 class Diagram:
-    components: [DiagramComponent]
-    connectors: [DiagramConnector]
-
-    def __init__(self, components: [DiagramComponent], connectors: [DiagramConnector]):
+    def __init__(self, diagram_type: DiagramType, components: [DiagramComponent], connectors: [DiagramConnector]):
+        self.diagram_type = diagram_type
         self.components = components
         self.connectors = connectors

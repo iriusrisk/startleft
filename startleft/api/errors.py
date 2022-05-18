@@ -1,4 +1,4 @@
-from startleft.messages import messages
+from startleft import messages
 
 IAC_TO_OTM_EXIT_UNEXPECTED = 1
 IAC_TO_OTM_EXIT_VALIDATION_FAILED = 2
@@ -103,7 +103,7 @@ class WriteThreatModelError(CommonError):
     system_exit_status = IAC_TO_OTM_EXIT_UNEXPECTED
 
 
-class UnknownProvider(CommonError):
-    message = messages.CANNOT_RECOGNIZE_GIVEN_PROVIDER
+class UnknownDiagramType(CommonError):
+    message = messages.CANNOT_RECOGNIZE_GIVEN_DIAGRAM_TYPE
     http_status_code = 400
     system_exit_status = IAC_TO_OTM_EXIT_UNEXPECTED

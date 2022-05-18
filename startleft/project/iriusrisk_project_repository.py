@@ -6,8 +6,6 @@ from startleft.apiclient.calls.create_project import CreateProject
 from startleft.apiclient.calls.delete_project import DeleteProject
 from startleft.apiclient.calls.get_project import GetProject
 from startleft.apiclient.calls.update_project import UpdateProject
-from startleft.mapping.otm_file_loader import OtmFileLoader
-from startleft.validators.otm_validator import OtmValidator
 
 logger = logging.getLogger(__name__)
 

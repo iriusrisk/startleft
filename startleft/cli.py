@@ -4,12 +4,12 @@ import sys
 
 import click
 
-from startleft.provider import Provider
+from startleft import messages
 from startleft.api.errors import CommonError
-from startleft.iac_to_otm import IacToOtm
-from startleft.messages import messages
+from startleft.iac.iac_to_otm import IacToOtm
+from startleft.iac.iac_type import IacType
+from startleft.otm.otm_project import OtmProject
 from startleft.project.iriusrisk_project_repository import IriusriskProjectRepository
-from startleft.project.otm_project import OtmProject
 from startleft.project.otm_project_service import OtmProjectService
 
 logger = logging.getLogger(__name__)
@@ -90,7 +90,7 @@ def run(iac_type, mapping_file, output_file, project_name, project_id, recreate,
     Parses an IaC file into an Open Threat Model (OTM) and uploads it to IriusRisk
     """
     logger.info("Parsing IaC source files into OTM")
-    otm_project = OtmProject.from_iac_file(project_id, project_name, Provider(iac_type.upper()), iac_file,
+    otm_project = OtmProject.from_iac_file(project_id, project_name, IacType(iac_type.upper()), iac_file,
                                            mapping_file, output_file)
     otm_service = OtmProjectService(IriusriskProjectRepository(api_token, irius_server))
 
@@ -109,7 +109,7 @@ def parse(iac_type, mapping_file, output_file, project_name, project_id, iac_fil
     Parses IaC source files into Open Threat Model
     """
     logger.info("Parsing IaC source files into OTM")
-    OtmProject.from_iac_file(project_id, project_name, Provider(iac_type.upper()), iac_file, mapping_file, output_file)
+    OtmProject.from_iac_file(project_id, project_name, IacType(iac_type.upper()), iac_file, mapping_file, output_file)
 
 
 @cli.command()
@@ -152,9 +152,9 @@ def search(iac_type, query, iac_file):
     Searches source files for the given query
     """
 
-    iac_to_otm = IacToOtm(None, None, Provider(iac_type.upper()))
+    iac_to_otm = IacToOtm(None, None, IacType(iac_type.upper()))
     logger.info("Running JMESPath search query against the IaC file")
-    iac_to_otm.search(Provider(iac_type.upper()), query, iac_file)
+    iac_to_otm.search(IacType(iac_type.upper()), query, iac_file)
 
 
 @cli.command()

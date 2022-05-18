@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock
 
-from startleft.project.otm_project import OtmProject
+from startleft.otm.otm_project import OtmProject
 from startleft.project.otm_project_service import OtmProjectService
 from tests.resources import test_resource_paths
 

@@ -1,10 +1,10 @@
-from vsdx import Page, Shape, VisioFile
+from vsdx import Shape, VisioFile
 
-from startleft.diagram.converters.diagram_converter import DiagramConverter
+from startleft.diagram.diagram_type import DiagramType
 from startleft.diagram.objects.diagram_objects import Diagram
-from startleft.diagram.util.parent_calculator import ParentCalculator
-
 from startleft.diagram.objects.visio.visio_diagram_factories import VisioComponentFactory, VisioConnectorFactory
+from startleft.diagram.parsers.diagram_parser import DiagramParser
+from startleft.diagram.parsers.parent_calculator import ParentCalculator
 
 
 def load_visio_page_from_file(visio_filename: str):
@@ -24,7 +24,7 @@ def is_component(shape) -> bool:
     return shape.text and not is_connector(shape)
 
 
-class VisioDiagramConverter(DiagramConverter):
+class VisioDiagramParser(DiagramParser):
 
     def __init__(self, component_factory: VisioComponentFactory, connector_factory: VisioConnectorFactory):
         self.component_factory = component_factory
@@ -34,13 +34,13 @@ class VisioDiagramConverter(DiagramConverter):
         self.__visio_components = []
         self.__visio_connectors = []
 
-    def convert_to_diagram(self, visio_diagram_filename) -> Diagram:
+    def parse(self, visio_diagram_filename) -> Diagram:
         self.page = load_visio_page_from_file(visio_diagram_filename)
 
         self.__load_page_elements()
         self.__calculate_parents()
 
-        return Diagram(self.__visio_components, self.__visio_connectors)
+        return Diagram(DiagramType.VISIO, self.__visio_components, self.__visio_connectors)
 
     def __load_page_elements(self):
         page_shapes = []

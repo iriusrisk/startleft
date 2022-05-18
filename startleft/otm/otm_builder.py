@@ -1,13 +1,13 @@
-from startleft.otm import OTM, Component, Dataflow, Trustzone
-from startleft.provider import Provider
+from startleft.iac.iac_type import IacType
+from startleft.otm.otm import OTM, Component, Dataflow, Trustzone
 
 
 class OtmBuilder:
 
-    def __init__(self, project_id: str, project_name: str, default_trustzone: dict):
+    def __init__(self, project_id: str, project_name: str, provider: IacType):
         self.project_id = project_id
         self.project_name = project_name
-        self.default_trustzone = default_trustzone
+        self.provider = provider
 
         self.__init_otm()
 
@@ -15,7 +15,7 @@ class OtmBuilder:
         return self.otm
 
     def add_default_trustzone(self, default_trustzone: dict):
-        self.default_trustzone = default_trustzone
+        self.otm.add_trustzone(default_trustzone['id'], default_trustzone['type'])
         return self
 
     def add_trustzones(self, trustzones: [Trustzone]):
@@ -31,8 +31,5 @@ class OtmBuilder:
         return self
 
     def __init_otm(self):
-        self.otm = OTM(self.project_name, self.project_id, Provider.VISIO)
-        self.__add_default_trustzone()
+        self.otm = OTM(self.project_name, self.project_id, self.provider)
 
-    def __add_default_trustzone(self):
-        self.otm.add_trustzone(self.default_trustzone['id'], self.default_trustzone['type'])

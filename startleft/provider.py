@@ -1,14 +1,9 @@
 from enum import Enum
 
-from startleft import paths
 
+class Provider(Enum):
 
-class Provider(str, Enum):
-    CLOUDFORMATION = ("CLOUDFORMATION", "CloudFormation", paths.default_cf_mapping_file, "code")
-    TERRAFORM = ("TERRAFORM", "Terraform", paths.default_tf_mapping_file, "code")
-    VISIO = ("VISIO", "Visio", paths.default_visio_mapping_file, "diagram")
-
-    def __new__(cls, value, provider_name: str = None, def_map_file: str = None, provider_type: str = None):
+    def __new__(cls, value, provider_name: str, def_map_file: str, provider_type: str):
         obj = str.__new__(cls, [value])
         obj._value_ = value
         obj.provider_name = provider_name
@@ -16,12 +11,3 @@ class Provider(str, Enum):
         obj.provider_type = provider_type
 
         return obj
-
-    @classmethod
-    def allowed_providers(cls) -> [str]:
-        allowed = []
-
-        for provider in Provider:
-            allowed.append(provider.name)
-
-        return allowed

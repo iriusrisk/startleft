@@ -1,12 +1,12 @@
+from startleft.diagram.diagram_type import DiagramType
 from startleft.diagram.external_diagram_to_otm import ExternalDiagramToOtm
-from startleft.provider import Provider
 from tests.resources import test_resource_paths
 from tests.test_utils import TestUtils
 
 
 class TestVisioDiagramToOtm:
     def test_diagram_to_otm(self):
-        otm = ExternalDiagramToOtm(Provider.VISIO).run(
+        otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
             test_resource_paths.visio_aws_with_tz_and_vpc,
             open(test_resource_paths.default_visio_mapping, 'rb'),
             "project-name",

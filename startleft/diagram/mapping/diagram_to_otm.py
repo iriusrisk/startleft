@@ -4,10 +4,10 @@ import jmespath
 import yaml
 from deepmerge import always_merger
 
+from startleft.diagram.mapping.diagram_pruner import DiagramPruner
 from startleft.diagram.objects.diagram_objects import Diagram, DiagramComponent
-from startleft.otm_builder import OtmBuilder
-from startleft.otm import Component, Dataflow, Trustzone
-from startleft.diagram.util.diagram_pruner import DiagramPruner
+from startleft.otm.otm import Component, Dataflow, Trustzone
+from startleft.otm.otm_builder import OtmBuilder
 
 
 def is_trustzone(component: DiagramComponent) -> bool:
@@ -40,16 +40,18 @@ class DiagramToOtm:
 
     def run(self):
         self.__prune_diagram()
-        return self.__build_otm()
+
+        trustzones, components = self.map_to_trustzones_and_components()
+        dataflows = self.map_to_dataflows()
+
+        return self.__build_otm(trustzones, components, dataflows)
 
     def __prune_diagram(self):
         DiagramPruner(self.diagram, get_mapping_labels(self.mappings)).run()
 
-    def __build_otm(self):
-        trustzones, components = self.map_to_trustzones_and_components()
-        dataflows = self.map_to_dataflows()
-
-        return OtmBuilder(self.project_id, self.project_name, self.get_default_trustzone()) \
+    def __build_otm(self, trustzones: [Trustzone], components: [Component], dataflows: [Dataflow]):
+        return OtmBuilder(self.project_id, self.project_name, self.diagram.diagram_type) \
+            .add_default_trustzone(self.get_default_trustzone()) \
             .add_trustzones(trustzones) \
             .add_components(components) \
             .add_dataflows(dataflows) \

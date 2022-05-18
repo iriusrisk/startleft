@@ -3,8 +3,8 @@ from abc import abstractmethod
 from startleft.diagram.objects.diagram_objects import Diagram
 
 
-class DiagramConverter:
+class DiagramParser:
 
     @abstractmethod
-    def convert_to_diagram(self, diagram_source) -> Diagram:
+    def parse(self, diagram_source) -> Diagram:
         pass
