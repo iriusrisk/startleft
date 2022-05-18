@@ -63,11 +63,15 @@ class TestDiagramCreateOtmController:
         assert otm['otmVersion'] == '0.1.0'
         assert otm['project']['id'] == project_id
         assert otm['project']['name'] == 'project_A_name'
+
         assert len(otm['representations']) == 1
+
         assert otm['representations'][0]['name'] == 'Visio'
         assert otm['representations'][0]['id'] == 'Visio'
         assert otm['representations'][0]['type'] == 'diagram'
+
         assert len(otm['trustZones']) == 2
+
         assert otm['trustZones'][0]['id'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
         assert otm['trustZones'][0]['name'] == 'Public Cloud'
         assert len(otm['trustZones'][0]['risk']) == 1
@@ -76,38 +80,41 @@ class TestDiagramCreateOtmController:
         assert otm['trustZones'][1]['name'] == 'Private Secured'
         assert len(otm['trustZones'][1]['risk']) == 1
         assert otm['trustZones'][1]['risk']['trustRating'] == 10
-        assert len(otm['components']) == 6
-        assert otm['components'][0]['id'] == '49'
-        assert otm['components'][0]['name'] == 'Custom VPC'
-        assert otm['components'][0]['type'] == 'empty-component'
+
+        assert len(otm['components']) == 5
+
+        assert otm['components'][0]['id'] == '1'
+        assert otm['components'][0]['name'] == 'Amazon EC2'
+        assert otm['components'][0]['type'] == 'ec2'
         assert len(otm['components'][0]['parent']) == 1
         assert otm['components'][0]['parent']['trustZone'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-        assert otm['components'][1]['id'] == '1'
-        assert otm['components'][1]['name'] == 'Amazon EC2'
+
+        assert otm['components'][1]['id'] == '12'
+        assert otm['components'][1]['name'] == 'Custom machine'
         assert otm['components'][1]['type'] == 'ec2'
         assert len(otm['components'][1]['parent']) == 1
-        assert otm['components'][1]['parent']['component'] == '49'
-        assert otm['components'][2]['id'] == '12'
-        assert otm['components'][2]['name'] == 'Custom machine'
-        assert otm['components'][2]['type'] == 'ec2'
+        assert otm['components'][1]['parent']['trustZone'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+
+        assert otm['components'][2]['id'] == '30'
+        assert otm['components'][2]['name'] == 'Private Database'
+        assert otm['components'][2]['type'] == 'rds'
         assert len(otm['components'][2]['parent']) == 1
-        assert otm['components'][2]['parent']['component'] == '49'
-        assert otm['components'][3]['id'] == '30'
-        assert otm['components'][3]['name'] == 'Private Database'
-        assert otm['components'][3]['type'] == 'rds'
+        assert otm['components'][2]['parent']['trustZone'] == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
+
+        assert otm['components'][3]['id'] == '35'
+        assert otm['components'][3]['name'] == 'Amazon CloudWatch'
+        assert otm['components'][3]['type'] == 'cloudwatch'
         assert len(otm['components'][3]['parent']) == 1
-        assert otm['components'][3]['parent']['trustZone'] == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
-        assert otm['components'][4]['id'] == '35'
-        assert otm['components'][4]['name'] == 'Amazon CloudWatch'
+        assert otm['components'][3]['parent']['trustZone'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+
+        assert otm['components'][4]['id'] == '41'
+        assert otm['components'][4]['name'] == 'Custom log system'
         assert otm['components'][4]['type'] == 'cloudwatch'
         assert len(otm['components'][4]['parent']) == 1
         assert otm['components'][4]['parent']['trustZone'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-        assert otm['components'][5]['id'] == '41'
-        assert otm['components'][5]['name'] == 'Custom log system'
-        assert otm['components'][5]['type'] == 'cloudwatch'
-        assert len(otm['components'][5]['parent']) == 1
-        assert otm['components'][5]['parent']['trustZone'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+
         assert len(otm['dataflows']) == 4
+
         assert otm['dataflows'][0]['id'] == '17'
         assert len(otm['dataflows'][0]['name']) == 36
         assert otm['dataflows'][0]['source'] == '1'

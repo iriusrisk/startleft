@@ -2,10 +2,9 @@ import logging
 
 from fastapi import APIRouter, File, UploadFile, Form, Response
 
-from startleft.provider import Provider
 from startleft.api.controllers.otm_controller import RESPONSE_STATUS_CODE, PREFIX, controller_responses
-
 from startleft.project.otm_project import OtmProject
+from startleft.provider import Provider
 
 URL = '/diagram'
 

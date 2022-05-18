@@ -101,3 +101,9 @@ class WriteThreatModelError(CommonError):
     message = messages.ERROR_WRITING_THREAT_MODEL
     http_status_code = 500
     system_exit_status = IAC_TO_OTM_EXIT_UNEXPECTED
+
+
+class UnknownProvider(CommonError):
+    message = messages.CANNOT_RECOGNIZE_GIVEN_PROVIDER
+    http_status_code = 400
+    system_exit_status = IAC_TO_OTM_EXIT_UNEXPECTED

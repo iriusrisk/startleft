@@ -4,7 +4,7 @@ from typing import Optional
 
 from typing.io import IO
 
-from startleft.diagram.visio_to_otm import VisioToOtm
+from startleft.diagram.external_diagram_to_otm import ExternalDiagramToOtm
 from startleft.provider import Provider
 from startleft.iac_to_otm import IacToOtm
 from startleft.mapping.mapping_file_loader import MappingFileLoader
@@ -77,8 +77,8 @@ class OtmProject:
 
         logger.info("Parsing Diagram file to OTM")
         temp_diag_file = FileUtils.copy_to_disk(diag_file[0], VSDX_EXT)
-        diag_to_otm = VisioToOtm(temp_diag_file.name)
-        otm = diag_to_otm.run(iac_mapping, project_name, project_id)
+        diag_to_otm = ExternalDiagramToOtm(diag_type)
+        otm = diag_to_otm.run(temp_diag_file.name, iac_mapping, project_name, project_id)
         FileUtils.delete(temp_diag_file.name)
         return OtmProject.from_otm_stream(otm.json(), project_id, project_name)
 
