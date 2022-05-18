@@ -9,6 +9,7 @@ cloudformation_for_security_groups_mapping = path + '/cloudformation_for_securit
 default_mapping = path + '/../../startleft/config/default-cloudformation-mapping.yaml'
 default_terraform_aws_mapping = path + '/../../startleft/config/default-terraform-mapping.yaml'
 default_visio_mapping = path + '/../../startleft/config/default-visio-mapping.yaml'
+custom_visio_mapping = path + '/visio/custom-visio-mapping.yaml'
 example_json = path + '/example.json'
 example_yaml = path + '/example.yaml'
 terraform_for_mappings_tests_json = path + '/terraform_for_mappings_tests.tf'
