@@ -8,7 +8,7 @@ from tests.resources import test_resource_paths
 
 SAMPLE_OTM_FILENAME = test_resource_paths.otm_file_example
 SAMPLE_YAML_IAC_FILENAME = test_resource_paths.cloudformation_for_mappings_tests_json
-IAC_VALID_MAPPING_FILENAME = test_resource_paths.default_mapping
+IAC_VALID_MAPPING_FILENAME = test_resource_paths.default_cloudformation_mapping
 INVALID_YAML_FILENAME = test_resource_paths.invalid_yaml
 
 

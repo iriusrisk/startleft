@@ -9,7 +9,7 @@ PLOT_TYPE = 1  #Square
 
 
 def get_component_type_from_master(shape: Shape):
-    return shape.master_shape.text.replace('\n', '')
+    return shape.master_shape.text.replace('\n', '') if shape.master_shape else ''
 
 
 def calculate_shape_representation(shape: Shape):

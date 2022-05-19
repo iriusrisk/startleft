@@ -146,7 +146,7 @@ class TestDiagramCreateOtmController:
         # When I do post on cloudformation endpoint
         files = {'diag_file': open(test_resource_paths.visio_aws_with_tz_and_vpc, 'rb'),
                  'default_mapping_file': open(test_resource_paths.default_visio_mapping, 'rb'),
-                 'custom_mapping_file': open(test_resource_paths.custom_visio_mapping, 'rb')}
+                 'custom_mapping_file': open(test_resource_paths.custom_vpc_mapping, 'rb')}
         body = {'diag_type': 'VISIO', 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 

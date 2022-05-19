@@ -31,14 +31,14 @@ class TestApp:
 
     def test_run(self):
         filename = test_resource_paths.example_json
-        mapping_filename = test_resource_paths.default_mapping
+        mapping_filename = test_resource_paths.default_cloudformation_mapping
         iac_to_otm = IacToOtm('name', 'id', IacType.CLOUDFORMATION)
         iac_to_otm.run(IacType.CLOUDFORMATION, mapping_filename, 'threatmodel.otm', filename)
         assert iac_to_otm.source_model.data
 
     def test_run_cloudformation_mappings(self):
         filename = test_resource_paths.cloudformation_for_mappings_tests_json
-        mapping_filename = test_resource_paths.default_mapping
+        mapping_filename = test_resource_paths.default_cloudformation_mapping
         iac_to_otm = IacToOtm('name', 'id', IacType.CLOUDFORMATION)
         iac_to_otm.run(IacType.CLOUDFORMATION, mapping_filename, 'threatmodel.otm', filename)
 
