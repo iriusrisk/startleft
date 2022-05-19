@@ -50,6 +50,11 @@ class CustomFunctions(jmespath.functions.Functions):
 
         return source_objects
 
+    @jmespath.functions.signature({'types': ['string']}, {'types': ['string']})
+    def _func_split(self, string, separator):
+        return string.split(separator)
+
+
     def add_type_and_name(self, obj, component_type, component_name):
         new_obj = obj.copy()
 

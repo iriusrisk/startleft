@@ -17,5 +17,6 @@ terraform_aws_simple_components = path + '/terraform/aws_simple_components.tf'
 terraform_aws_singleton_components = path + '/terraform/aws_singleton_components.tf'
 invalid_yaml = path + '/invalid-yaml.yaml'
 visio_aws_with_tz_and_vpc = path + '/visio/aws-with-tz-and-vpc.vsdx'
-
+terraform_aws_parent_children_components = path + '/terraform/aws_parent_children_components.tf'
+cloudformation_malformed_mapping_wrong_id = path + '/cloudformation/cloudformation_malformed_mapping_wrong_id.yaml'
 otm_file_example = path + '/otm_file_example.otm'
