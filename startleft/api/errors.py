@@ -1,6 +1,6 @@
 from enum import Enum
 
-from startleft.messages import messages
+from startleft import messages
 
 
 class ErrorCode(Enum):
