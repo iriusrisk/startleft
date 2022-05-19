@@ -18,21 +18,18 @@ Options:
 
 Commands:
   parse        Parses IaC source files into Open Threat Model
-  run          Parses an IaC file into an Open Threat Model (OTM) and...
   search       Searches source files for the given query
   server       Launches the REST server to generate OTMs from requests
-  threatmodel  Uploads an OTM file to IriusRisk
   validate     Validates a mapping or OTM file
 ```
 
 You can also get help for the specific commands.
 
 ```
-$ startleft run --help
-Usage: startleft run [OPTIONS] IAC_FILE...
+$ startleft parse --help
+Usage: startleft parse [OPTIONS] IAC_FILE...
 
-  Parses an IaC file into an Open Threat Model (OTM) and uploads it to
-  IriusRisk
+  Parses IaC source files into Open Threat Model
 
 Options:
   -t, --iac-type [CLOUDFORMATION|TERRAFORM]
@@ -41,11 +38,6 @@ Options:
   -o, --output-file TEXT          OTM output file.
   -n, --project-name TEXT         Project name.  [required]
   -i, --project-id TEXT           Project id.  [required]
-  -r, --recreate / -nr, --no-recreate
-                                  Delete and create a new project/Update the
-                                  project on IriusRisk.
-  -s, --irius-server TEXT         IriusRisk server.
-  -a, --api-token TEXT            IriusRisk API token.
   --help                          Show this message and exit.
 ```
 

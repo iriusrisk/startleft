@@ -10,7 +10,7 @@ from tests.resources import test_resource_paths
 
 IRIUSRISK_URL = ''
 
-webapp = fastapi_server.initialize_webapp(IRIUSRISK_URL)
+webapp = fastapi_server.initialize_webapp()
 
 client = TestClient(webapp)
 
@@ -39,7 +39,7 @@ class TestDiagramCreateOtmController:
         # Then
         assert response.status_code == 400
         error = json.loads(response.text)
-        assert error['status'] == 'error'
+        assert error['status'] == '400'
         assert len(error['errors']) == errors_expected
         for e in error['errors']:
             assert len(e['errorMessage']) > 0

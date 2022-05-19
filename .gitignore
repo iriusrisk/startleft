@@ -118,3 +118,4 @@ caret
 **/threatmodel.otm
 startleft/*.otm
 customerexamples
+/.run/

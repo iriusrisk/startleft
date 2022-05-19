@@ -1,5 +1,5 @@
-from startleft.provider import Provider
 from startleft.iac_to_otm import IacToOtm
+from startleft.provider import Provider
 from tests.resources import test_resource_paths
 
 
@@ -28,9 +28,9 @@ class TestTerraformAWSComponents:
         assert_otm(otm, 0, 'cloudtrail', 'foobar', self.public_cloud_id, ['aws_cloudtrail'])
         assert_otm(otm, 1, 'cognito', 'main', self.public_cloud_id, ['aws_cognito_identity_pool'])
         assert_otm(otm, 2, 'cognito', 'pool', self.public_cloud_id, ['aws_cognito_user_pool'])
-        assert_otm(otm, 3, 'docker-container', 'service', self.public_cloud_id, ['aws_ecs_task_definition'])
-        assert_otm(otm, 4, 'docker-container', 'service_task', self.public_cloud_id, ['aws_ecs_task_definition'])
-        assert_otm(otm, 5, 'elastic-container-service', 'mongo', self.public_cloud_id, ['aws_ecs_service'])
+        assert_otm(otm, 3, 'elastic-container-service', 'mongo', self.public_cloud_id, ['aws_ecs_service'])
+        assert_otm(otm, 4, 'docker-container', 'service', self.public_cloud_id, ['aws_ecs_task_definition'])
+        assert_otm(otm, 5, 'docker-container', 'service_task', self.public_cloud_id, ['aws_ecs_task_definition'])
         assert_otm(otm, 6, 'elastic-container-kubernetes', 'example', self.public_cloud_id, ['aws_eks_cluster'])
         assert_otm(otm, 7, 'load-balancer', 'wu-tang', self.public_cloud_id, ['aws_elb'])
         assert_otm(otm, 8, 'aws-lambda-function', 'test_lambda', self.public_cloud_id, ['aws_lambda_function'])
@@ -43,6 +43,24 @@ class TestTerraformAWSComponents:
         assert_otm(otm, 15, 'empty-component', 'some-canary', self.public_cloud_id, ['aws_synthetics_canary'])
         assert_otm(otm, 16, 'step-functions', 'my_sfn_state_machine', self.public_cloud_id, ['aws_sfn_state_machine'])
         assert_otm(otm, 17, 'step-functions', 'my_sfn_activity', self.public_cloud_id, ['aws_sfn_activity'])
+
+    def test_aws_parent_children_components(self):
+        filename = test_resource_paths.terraform_aws_parent_children_components
+        mapping_filename = test_resource_paths.default_terraform_aws_mapping
+        iac_to_otm = IacToOtm(
+            'Test case AWS with $parent and $children components',
+            'aws_parent_children_components',
+            Provider.TERRAFORM)
+        iac_to_otm.run(Provider.TERRAFORM, mapping_filename, 'threatmodel-from-parent-children-terraform.otm', filename)
+
+        assert iac_to_otm.source_model.otm
+        otm = iac_to_otm.otm
+        assert len(otm.trustzones) == 1
+        assert len(otm.dataflows) == 0
+        assert len(otm.components) == 2
+        assert_otm(otm, 0, 'elastic-container-service', 'mongo', self.public_cloud_id, ['aws_ecs_service'])
+        assert_otm(otm, 1, 'docker-container', 'service', otm.components[0].id, ['aws_ecs_task_definition'])
+
 
     def test_aws_singleton_components(self):
         filename = test_resource_paths.terraform_aws_singleton_components
