@@ -17,11 +17,15 @@ class DiagramComponentMapper:
         self.trustzone_mappings = trustzone_mappings
         self.default_trustzone = default_trustzone
 
-    def to_otm(self):
-        component_candidates = list(filter(
+    def to_otm(self) -> [Component]:
+        return self.__map_to_otm(self.__filter_components())
+
+    def __filter_components(self) -> [DiagramComponent]:
+        return list(filter(
             lambda c: c.name in self.component_mappings or c.type in self.component_mappings,
             self.components))
 
+    def __map_to_otm(self, component_candidates: [DiagramComponent]) -> [Component]:
         return list(map(self.__build_otm_component, component_candidates))
 
     def __build_otm_component(self, diagram_component: DiagramComponent) -> Component:
@@ -33,7 +37,7 @@ class DiagramComponentMapper:
             parent_type=calculate_parent_category(diagram_component)
         )
 
-    def __calculate_otm_type(self, component_name: str, component_type: str):
+    def __calculate_otm_type(self, component_name: str, component_type: str) -> str:
         otm_type = self.__find_mapped_component_by_label(component_name)
 
         if not otm_type:

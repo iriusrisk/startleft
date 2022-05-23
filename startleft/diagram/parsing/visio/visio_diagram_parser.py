@@ -3,8 +3,8 @@ from vsdx import Shape, VisioFile
 from startleft.diagram.diagram_type import DiagramType
 from startleft.diagram.objects.diagram_objects import Diagram
 from startleft.diagram.objects.visio.visio_diagram_factories import VisioComponentFactory, VisioConnectorFactory
-from startleft.diagram.parsers.diagram_parser import DiagramParser
-from startleft.diagram.parsers.parent_calculator import ParentCalculator
+from startleft.diagram.parsing.diagram_parser import DiagramParser
+from startleft.diagram.parsing.parent_calculator import ParentCalculator
 
 
 def load_visio_page_from_file(visio_filename: str):

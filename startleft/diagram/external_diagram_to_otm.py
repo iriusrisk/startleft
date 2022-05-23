@@ -2,7 +2,7 @@ from startleft.api.errors import UnknownDiagramType
 from startleft.diagram.diagram_type import DiagramType
 from startleft.diagram.mapping.diagram_to_otm import DiagramToOtm
 from startleft.diagram.objects.visio.visio_diagram_factories import VisioComponentFactory, VisioConnectorFactory
-from startleft.diagram.parsers.visio.visio_diagram_parser import VisioDiagramParser
+from startleft.diagram.parsing.visio.visio_diagram_parser import VisioDiagramParser
 from startleft.otm.otm import OTM
 
 
