@@ -43,15 +43,11 @@ class VisioDiagramParser(DiagramParser):
         return Diagram(DiagramType.VISIO, self.__visio_components, self.__visio_connectors)
 
     def __load_page_elements(self):
-        page_shapes = []
-
         for shape in self.page.sub_shapes():
             if is_connector(shape):
                 self.__add_connector(shape)
             elif is_component(shape):
                 self.__add_component(shape)
-
-        return page_shapes
 
     def __add_component(self, component_shape: Shape):
         self.__visio_components.append(self.component_factory.create_component(component_shape))
