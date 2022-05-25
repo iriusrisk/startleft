@@ -293,7 +293,7 @@ resource "aws_ecs_task_definition" "service_task_definition" {
 resource "aws_ecs_service" "service" {
   name = "service"
 
-  task_definition = aws_ecs_task_definition.service_task_definition
+  task_definition = aws_ecs_task_definition.service_task_definition.arn
   network_configuration {
     assign_public_ip = "DISABLED"
     security_groups = [aws_security_group.outbound_security_group.id]
