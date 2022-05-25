@@ -1,6 +1,6 @@
 from enum import Enum
 
-from startleft.messages import messages
+from startleft import messages
 
 
 class ErrorCode(Enum):
@@ -61,3 +61,9 @@ class WriteThreatModelError(CommonError):
     message = messages.ERROR_WRITING_THREAT_MODEL
     http_status_code = 500
     error_code = ErrorCode.IAC_TO_OTM_EXIT_UNEXPECTED
+
+
+class UnknownDiagramType(CommonError):
+    message = messages.CANNOT_RECOGNIZE_GIVEN_DIAGRAM_TYPE
+    http_status_code = 400
+    system_exit_status = ErrorCode.IAC_TO_OTM_EXIT_UNEXPECTED

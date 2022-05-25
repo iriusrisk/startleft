@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
+from startleft import messages
 from startleft.api.error_response import ErrorResponse
-from startleft.messages import messages
 
 controller_responses = {
     201: {"description": messages.OTM_SUCCESSFULLY_CREATED},

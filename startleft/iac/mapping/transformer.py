@@ -1,6 +1,7 @@
-import logging, uuid
+import logging
+import uuid
 
-from startleft.mapper import TrustzoneMapper, ComponentMapper, DataflowMapper, create_core_dataflow
+from startleft.iac.mapping.mapper import TrustzoneMapper, ComponentMapper, DataflowMapper, create_core_dataflow
 
 logger = logging.getLogger(__name__)
 

@@ -1,5 +1,5 @@
-from startleft.provider import Provider
-from startleft.iac_to_otm import IacToOtm
+from startleft.iac.iac_to_otm import IacToOtm
+from startleft.iac.iac_type import IacType
 from tests.resources import test_resource_paths
 
 
@@ -10,8 +10,8 @@ class TestApp:
 
         filename = test_resource_paths.cloudformation_for_security_group_tests_json
         mapping_filename = test_resource_paths.cloudformation_for_security_groups_mapping
-        iac_to_otm = IacToOtm('name', 'id', Provider.CLOUDFORMATION)
-        iac_to_otm.run(Provider.CLOUDFORMATION, mapping_filename, 'threatmodel-security-groups.otm', filename)
+        iac_to_otm = IacToOtm('name', 'id', IacType.CLOUDFORMATION)
+        iac_to_otm.run(IacType.CLOUDFORMATION, mapping_filename, 'threatmodel-security-groups.otm', filename)
 
         assert iac_to_otm.source_model.otm
         assert len(iac_to_otm.otm.trustzones) == 2
@@ -42,8 +42,8 @@ class TestApp:
 
         filename = test_resource_paths.cloudformation_for_security_group_tests_2_json
         mapping_filename = test_resource_paths.cloudformation_for_security_groups_mapping
-        iac_to_otm = IacToOtm('name', 'id', Provider.CLOUDFORMATION)
-        iac_to_otm.run(Provider.CLOUDFORMATION, mapping_filename, 'threatmodel-security-groups.otm', filename)
+        iac_to_otm = IacToOtm('name', 'id', IacType.CLOUDFORMATION)
+        iac_to_otm.run(IacType.CLOUDFORMATION, mapping_filename, 'threatmodel-security-groups.otm', filename)
 
         assert iac_to_otm.source_model.otm
         assert len(iac_to_otm.otm.trustzones) == 2
@@ -93,8 +93,8 @@ class TestApp:
         """ Use case B: components with their SGs with associated connection rules """
         filename = test_resource_paths.cloudformation_for_security_group_tests_json
         mapping_filename = test_resource_paths.cloudformation_for_security_groups_mapping
-        iac_to_otm = IacToOtm('name', 'id', Provider.CLOUDFORMATION)
-        iac_to_otm.run(Provider.CLOUDFORMATION, mapping_filename, 'threatmodel-security-groups.otm', filename)
+        iac_to_otm = IacToOtm('name', 'id', IacType.CLOUDFORMATION)
+        iac_to_otm.run(IacType.CLOUDFORMATION, mapping_filename, 'threatmodel-security-groups.otm', filename)
 
         assert iac_to_otm.source_model.otm
         assert len(iac_to_otm.otm.trustzones) == 2
