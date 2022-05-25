@@ -2,286 +2,378 @@ trustzones:
   - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
     name: Public Cloud
 
- # - id:          {$format: "{type}.{name}.id"}
- #   type:        aws_vpc
- #   $source:     {$root: "resource[].aws_vpc"}
- #   name:        {$path: "keys(@)[0]"}
-
 components:
   - id:          {$format: "{type}.{name}.id"}
     type:        ec2
-    $source:     {$root: "resource[].aws_instance"}
+    $source:     {$root: "resource|get(@, 'aws_instance')"}
     name:        {$path: "keys(@)[0]"}
     parent:      {$path: "*.subnet_id[0] | [0] | re_sub('[\\$\\{\\}]', '', @)"}
+    tags:
+      - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        empty_component
-    $source:     {$root: "resource[].aws_subnet"}
+    $source:     {$root: "resource|get(@, 'aws_subnet')"}
     name:        {$path: "keys(@)[0]"}
     parent:      {$path: "*.vpc_id[0] | [0] | re_sub('[\\$\\{\\}]', '', @)"}
+    tags:
+      - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        aws_route_table
     name:        {$path: "keys(@)[0]"}
     $source:
-      $skip:     {$root: "resource[].aws_route_table"}
+      $skip:     {$root: "resource|get(@, 'aws_route_table')"}
+    tags:
+      - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        aws_route_table_association
     name:        {$path: "keys(@)[0]"}
     $source:
-      $skip:     {$root: "resource[].aws_route_table_association"}
+      $skip:     {$root: "resource|get(@, 'aws_route_table_association')"}
+    tags:
+      - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        aws_security_group
     name:        {$path: "keys(@)[0]"}
     $source:
-      $skip:     {$root: "resource[].aws_security_group"}
+      $skip:     {$root: "resource|get(@, 'aws_security_group')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        aws_security_group_rule
     name:        {$path: "keys(@)[0]"}
     $source:
-      $skip:     {$root: "resource[].aws_security_group_rule"}
+      $skip:     {$root: "resource|get(@, 'aws_security_group_rule')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        vpc
     name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource[].aws_vpc"}
+    $source:     {$root: "resource|get(@, 'aws_vpc')"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
-  - id:       {$format: "{type}.{name}.id"}
-    type:     cloudtrail
-    name:     {$path: "keys(@)[0]"}
-    $source:  {$root: "resource[].aws_cloudtrail"}
-    parent:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - id:          {$format: "{type}.{name}.id"}
+    type:        cloudtrail
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_cloudtrail')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
-  - id:       {$format: "{type}.{name}.id"}
-    type:     cognito
-    name:     {$path: "keys(@)[0]"}
-    $source:  {$root: "resource[].aws_cognito_identity_pool"}
-    parent:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - id:          {$format: "{type}.{name}.id"}
+    type:        cognito
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_cognito_identity_pool')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
 
-  - id:       {$format: "{type}.{name}.id"}
-    type:     cognito
-    name:     {$path: "keys(@)[0]"}
-    $source:  {$root: "resource[].aws_cognito_user_pool"}
-    parent:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - id:          {$format: "{type}.{name}.id"}
+    type:        cognito
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_cognito_user_pool')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
-  - id: { $format: "{type}.{name}.id" }
-    type: docker-container
-    name: { $path: "keys(@)[0]" }
-    $source: { $root: "resource[].aws_ecs_task_definition" }
-    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - id:          {$format: "{type}.{name}.id"}
+    type:        elastic-container-service
+    name:        {$path: "keys(@)[0]"}
+    $source:     {
+                    $children: {$path: "values(@)[0].task_definition|split(@, '.')[1]"},
+                    $root: "resource|get(@, 'aws_ecs_service')"
+                 }
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
-  - id: { $format: "{type}.{name}.id" }
-    type: elastic-container-service
-    name: { $path: "keys(@)[0]" }
-    $source: { $root: "resource[].aws_ecs_service" }
-    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - id:          {$format: "{type}.{name}.id"}
+    type:        docker-container
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_ecs_task_definition')"}
+    parent:      {$parent: b61d6911-338d-46a8-9f39-8dcd24abfe91}
+    tags:
+      - { $path: "Type" }
 
-  - id: { $format: "{type}.{name}.id" }
-    type: elastic-container-kubernetes
-    name: { $path: "keys(@)[0]" }
-    $source: { $root: "resource[].aws_eks_cluster" }
-    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - id:          {$format: "{type}.{name}.id"}
+    type:        elastic-container-kubernetes
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_eks_cluster')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
-  - id: { $format: "{type}.{name}.id" }
-    type: load-balancer
-    name: { $path: "keys(@)[0]" }
-    $source: { $root: "resource[].aws_elb" }
-    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - id:          {$format: "{type}.{name}.id"}
+    type:        load-balancer
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_elb')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        aws-lambda-function
     name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource[].aws_lambda_function"}
+    $source:     {$root: "resource|get(@, 'aws_lambda_function')"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        CD-AWS-NETWORK-FIREWALL
     name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource[].aws_networkfirewall_firewall"}
+    $source:     {$root: "resource|get(@, 'aws_networkfirewall_firewall')"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        rds
     name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource[].aws_rds_cluster"}
+    $source:     {$root: "resource|get(@, 'aws_rds_cluster')"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        redshift
     name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource[].aws_redshift_cluster"}
+    $source:     {$root: "resource|get(@, 'aws_redshift_cluster')"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        route-53
     name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource[].aws_route53_zone"}
+    $source:     {$root: "resource|get(@, 'aws_route53_zone')"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
 
   - id:          {$format: "{type}.{name}.id"}
     type:        s3
     name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource[].aws_s3_bucket"}
+    $source:     {$root: "resource|get(@, 'aws_s3_bucket')"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        sqs-simple-queue-service
     name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource[].aws_sqs_queue"}
+    $source:     {$root: "resource|get(@, 'aws_sqs_queue')"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
 
   - id:          {$format: "{type}.{name}.id"}
     type:        empty-component
     name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource[].aws_synthetics_canary"}
+    $source:     {$root: "resource|get(@, 'aws_synthetics_canary')"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        step-functions
     name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource[].aws_sfn_state_machine"}
+    $source:     {$root: "resource|get(@, 'aws_sfn_state_machine')"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        step-functions
     name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource[].aws_sfn_activity"}
+    $source:     {$root: "resource|get(@, 'aws_sfn_activity')"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        CD-ACM
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-ACM (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[].aws_acm_certificate"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-ACM (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get(@, 'aws_acm_certificate')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        cloudwatch
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "cloudwatch (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[].aws_cloudwatch_metric_alarm"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "cloudwatch (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get(@, 'aws_cloudwatch_metric_alarm')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        kms
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "kms (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[].aws_kms_key"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "kms (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get(@, 'aws_kms_key')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        cloudwatch
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "cloudwatch (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[].aws_cloudwatch_log_group"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "cloudwatch (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get(@, 'aws_cloudwatch_log_group')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        CD-SECRETS-MANAGER
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-SECRETS-MANAGER (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[].aws_secretsmanager_secret"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-SECRETS-MANAGER (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get(@, 'aws_secretsmanager_secret')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        CD-SYSTEMS-MANAGER
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-SYSTEMS-MANAGER (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_ssm_')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-SYSTEMS-MANAGER (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_ssm_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        api-gateway
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "api-gateway (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_api_gateway_')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "api-gateway (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_api_gateway_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        athena
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "athena (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_athena_')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "athena (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_athena_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        CD-MQ
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-MQ (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_mq_')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-MQ (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_mq_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        cf-cloudfront
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "cf-cloudfront (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_cloudfront_')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "cf-cloudfront (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_cloudfront_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        CD-CONFIG
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-CONFIG (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_config_')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-CONFIG (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_config_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        elastic-container-registry
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "elastic-container-registry (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_ecr_')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "elastic-container-registry (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_ecr_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        elasticache
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "elasticache (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_elasticache_')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "elasticache (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_elasticache_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        CD-GUARDDUTY
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-GUARDDUTY (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_guardduty_')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-GUARDDUTY (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_guardduty_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        CD-INSPECTOR
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-INSPECTOR (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_inspector_')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-INSPECTOR (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_inspector_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        CD-MACIE
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-MACIE (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_macie2_')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-MACIE (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_macie2_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        CD-SES
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-SES (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_ses_')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-SES (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_ses_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        sns
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "sns (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_sns_')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "sns (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_sns_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        CD-WAF
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "CD-WAF (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_waf_')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-WAF (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_waf_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        kinesis-data-analytics
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "kinesis-data-analytics (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_kinesis_analytics_')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "kinesis-data-analytics (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_kinesis_analytics_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        kinesis-data-analytics
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "kinesis-data-analytics (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_kinesis_stream')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "kinesis-data-analytics (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_kinesis_stream')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        kinesis-data-firehose
-    name:        {$numberOfSources: {oneSource:{$path: "keys(@)[0]"}, multipleSource:{ $format: "kinesis-data-firehose (grouped)" }}}
-    $source:     {$singleton: {$root: "resource[]|filter(@, 'aws_kinesis_firehose_')"}}
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "kinesis-data-firehose (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_kinesis_firehose_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
 dataflows: []

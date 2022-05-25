@@ -1,6 +1,5 @@
 data "aws_caller_identity" "current" {}
 
-
 resource "aws_ecs_task_definition" "service" {
   family = "service"
   container_definitions = jsonencode([
