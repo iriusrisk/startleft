@@ -4,9 +4,8 @@ from fastapi.testclient import TestClient
 import startleft.api.controllers.health.health_controller
 from startleft.api import fastapi_server
 
-IRIUSRISK_URL = ''
 
-webapp = fastapi_server.initialize_webapp(IRIUSRISK_URL)
+webapp = fastapi_server.initialize_webapp()
 
 
 client = TestClient(webapp)
