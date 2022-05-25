@@ -1,3 +1,5 @@
+import pytest
+
 from startleft.api.controllers.iac.iac_type import IacType
 from startleft.iac_to_otm import IacToOtm
 from tests.resources import test_resource_paths
@@ -41,8 +43,15 @@ class TestTerraformAWSComponents:
         assert_otm(otm, 16, 'step-functions', 'my_sfn_state_machine', public_cloud_id)
         assert_otm(otm, 17, 'step-functions', 'my_sfn_activity', public_cloud_id)
 
-    def test_aws_singleton_components(self):
-        filename = test_resource_paths.terraform_aws_singleton_components
+    @pytest.mark.parametrize('filename', [
+        test_resource_paths.terraform_aws_singleton_components_unix_line_breaks,
+        [open(test_resource_paths.terraform_aws_singleton_components_unix_line_breaks, 'rb')],
+        test_resource_paths.terraform_aws_singleton_components_dos_line_breaks,
+        [open(test_resource_paths.terraform_aws_singleton_components_dos_line_breaks, 'rb')],
+        test_resource_paths.terraform_aws_singleton_components_classic_macos_line_breaks,
+        [open(test_resource_paths.terraform_aws_singleton_components_classic_macos_line_breaks, 'rb')]
+    ])
+    def test_aws_singleton_components(self, filename: str):
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
         iac_to_otm = IacToOtm('Test case AWS singleton components', 'aws_singleton_components', IacType.TERRAFORM)
         iac_to_otm.run(IacType.TERRAFORM, mapping_filename, 'threatmodel-from-singleton-terraform.otm', filename)
