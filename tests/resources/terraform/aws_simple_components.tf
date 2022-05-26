@@ -1,5 +1,13 @@
 data "aws_caller_identity" "current" {}
 
+output "endpoint" {
+  value = aws_eks_cluster.example.endpoint
+}
+
+output "kubeconfig-certificate-authority-data" {
+  value = aws_eks_cluster.example.certificate_authority[0].data
+}
+
 resource "aws_ecs_task_definition" "service" {
   family = "service"
   container_definitions = jsonencode([
@@ -167,14 +175,6 @@ resource "aws_eks_cluster" "example" {
   ]
 }
 
-output "endpoint" {
-  value = aws_eks_cluster.example.endpoint
-}
-
-output "kubeconfig-certificate-authority-data" {
-  value = aws_eks_cluster.example.certificate_authority[0].data
-}
-
 resource "aws_elb" "wu-tang" {
   name               = "wu-tang"
   availability_zones = ["us-east-1a"]
@@ -288,6 +288,18 @@ resource "aws_rds_cluster" "aurora-cluster-demo" {
   preferred_backup_window = "07:00-09:00"
 }
 
+resource "aws_db_instance" "mysql" {
+  allocated_storage    = 10
+  engine               = "mysql"
+  engine_version       = "5.7"
+  instance_class       = "db.t3.micro"
+  name                 = "mydb"
+  username             = "foo"
+  password             = "foobarbaz"
+  parameter_group_name = "default.mysql5.7"
+  skip_final_snapshot  = true
+}
+
 resource "aws_redshift_cluster" "tf-redshift-cluster" {
   cluster_identifier = "tf-redshift-cluster"
   database_name      = "mydb"
@@ -360,4 +372,32 @@ resource "aws_sfn_state_machine" "my_sfn_state_machine" {
   }
 }
 EOF
+}
+
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name = "main"
+  }
+}
+
+resource "aws_lb" "lb" {
+  name               = "test-lb-tf"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.lb_sg.id]
+  subnets            = [for subnet in aws_subnet.public : subnet.id]
+
+  enable_deletion_protection = true
+
+  access_logs {
+    bucket  = aws_s3_bucket.lb_logs.bucket
+    prefix  = "test-lb"
+    enabled = true
+  }
+
+  tags = {
+    Environment = "production"
+  }
 }

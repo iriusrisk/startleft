@@ -48,6 +48,7 @@ class TestApp:
         assert len(iac_to_otm.otm.dataflows) == 1
 
         assert list(filter(lambda obj: obj.name == 'DummyCertificate', iac_to_otm.otm.components))
+        assert list(filter(lambda obj: obj.name == 'RDSCluster', iac_to_otm.otm.components))
         assert list(filter(lambda obj: obj.name == 'kms (grouped)', iac_to_otm.otm.components))
         assert list(filter(lambda obj: obj.name == 'sns (grouped)', iac_to_otm.otm.components))
         assert list(filter(lambda obj: obj.name == 'cloudwatch (grouped)', iac_to_otm.otm.components))
@@ -99,10 +100,10 @@ class TestApp:
         assert iac_to_otm.otm.components[0].type == 'ec2'
         assert iac_to_otm.otm.components[0].name == 'foo'
         assert iac_to_otm.otm.components[0].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-        assert iac_to_otm.otm.components[1].type == 'empty_component'
+        assert iac_to_otm.otm.components[1].type == 'empty-component'
         assert iac_to_otm.otm.components[1].name == 'foo'
         assert iac_to_otm.otm.components[1].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-        assert iac_to_otm.otm.components[2].type == 'empty_component'
+        assert iac_to_otm.otm.components[2].type == 'empty-component'
         assert iac_to_otm.otm.components[2].name == 'bar'
         assert iac_to_otm.otm.components[2].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
         assert iac_to_otm.otm.components[3].type == 'vpc'
@@ -124,10 +125,10 @@ class TestApp:
         assert iac_to_otm.otm.components[0].type == 'ec2'
         assert iac_to_otm.otm.components[0].name == 'foo'
         assert iac_to_otm.otm.components[0].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-        assert iac_to_otm.otm.components[1].type == 'empty_component'
+        assert iac_to_otm.otm.components[1].type == 'empty-component'
         assert iac_to_otm.otm.components[1].name == 'foo'
         assert iac_to_otm.otm.components[1].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-        assert iac_to_otm.otm.components[2].type == 'empty_component'
+        assert iac_to_otm.otm.components[2].type == 'empty-component'
         assert iac_to_otm.otm.components[2].name == 'bar'
         assert iac_to_otm.otm.components[2].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
         assert iac_to_otm.otm.components[3].type == 'vpc'
