@@ -1,9 +1,13 @@
-You can find some example source files inside the `examples` directory:
+You can find some sample source files inside the `examples` directory:
 
 * `examples/cloudformation` contains CloudFormation Template example files to convert into OTM format.
 * `examples/terraform` contains Terraform example files to convert into OTM format.
 * `examples/manual` contains the OTM example file detailed in [Hand Crafted OTM](#hand-crafted-OTM).
 
+To process this examples, you may also use the mapping files located in `startleft/config`. They provide some examples
+for mappings between IaC components and IriusRisk ones:
+* `default-cloudformation-mapping.yaml` contains mappings for Cloudformation files.
+* `startleft/config/default-terraform-mapping.yaml` contains mappings for Terraform files.
 
 ## CloudFormation
 CloudFormation is the AWS tool which lets you model, provision, and manage AWS and third-party resources by treating 
@@ -53,17 +57,16 @@ Balancer as a single component.
 * `elb-with-waf`. Slight evolution of `elb-no-waf` by including another component, a Web Application Firewall, within 
 the same `TrustZone` public cloud.  
 
-## Terraform HCL2
+## Terraform
 
 StartLeft supports parsing Terraform source files. An example is provided in the `examples/terraform` directory.
 
 ```shell
-startleft run \
-	--iac-type hcl2 \
+startleft parse \
+	--iac-type terraform \
 	--output-file elb.otm \
 	--project-name "Terraform ELB" \
 	--project-id "terraform-elb" \
-	--recreate \
 	elb.tf
 ```
 

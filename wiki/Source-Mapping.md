@@ -11,7 +11,7 @@ Source mapping files are made up of three main sections corresponding the main s
 
 Each contains a list of 0 or more objects that describe how to find the respective object in the source file, and each object has a number of required and optional fields. 
 
-Take a look at the JSONSchema file for more details: https://github.com/iriusrisk/startleft/blob/main/startleft/data/mapping_schema.json
+Take a look at the [JSONSchema](https://github.com/iriusrisk/startleft/blob/main/startleft/data/mapping_schema.json) file for more details.
 
 ## JMESPath Queries
 
@@ -73,16 +73,17 @@ To give a final value of `amuchlongernameA`.
 
 ## Additional JMESPath functions
 
-This tool extends the standard JMESPath functions with a couple of extra ones that are particularly useful when parsing Cloudformation due to how cloudformation files are structured.
+Parsing of IaC files may be sometimes complex, so that the built-in JMESPath described above are not enough. For that cases,
+a set of custom functions has been created to simplify and make more powerful the creation of mapping files.
 
 ### re_sub
 The `re_sub` function replaces the occurrences of `pattern` with `replace` in the given `string`. 
 
 ```
-def _func_re_sub(self, pattern, replace, s):
+def _func_re_sub(self, pattern, replace, origin_string):
 ```
 
-For example, we may want to replace colon characters with hyphens such as in `lookup: {path: "Properties.Subnets[]|map(&values(@), @)[]|map(&re_sub('[:]', '-', @), @)"}`.
+For example, we may want to replace colon characters with hyphens such as in `re_sub('[:]', '-', 'stack:subnet')`.
 
 ### squash
 The `squash` function takes a nested object of objects, and squashes them into a list of objects, injecting the parent "key" to the child object as "_key".
@@ -91,7 +92,9 @@ The `squash` function takes a nested object of objects, and squashes them into a
 def _func_squash(self, obj):
 ```
 
-In cloudformation, Resources is an object where to top level keys are the resource names which have the resource objects as values. This structure is hard to iterate over without losing the important name key. So you can use squash and refer to the name through the `_key` field.
+This function is specially useful for Cloudformation mapping files. These have a root `Resources` object whose 
+top level keys are the resource names which have the resource objects as values. This structure is hard to iterate over 
+without losing the important name key. So you can use squash it and refer to the name through the `_key` field. 
 
 ```
 name:    {$path: "_key"}
