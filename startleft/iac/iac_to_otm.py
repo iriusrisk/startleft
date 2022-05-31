@@ -55,7 +55,7 @@ class IacToOtm:
             with open(filename, 'r') as f:
                 self.source_model.load(hcl2.load(f))
         else:
-            self.source_model.load(hcl2.load(StringIO(str(filename.read(), 'utf-8'))))
+            self.source_model.load(hcl2.load(StringIO(initial_value=str(filename.read(), 'utf-8'), newline=None)))
 
     def load_source_files(self, loader, filenames):
         if isinstance(filenames, str):

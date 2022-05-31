@@ -1,3 +1,5 @@
+import pytest
+
 from startleft.iac.iac_to_otm import IacToOtm
 from startleft.iac.iac_type import IacType
 from tests.resources import test_resource_paths
@@ -34,7 +36,8 @@ class TestTerraformAWSComponents:
         assert_otm(otm, 6, 'elastic-container-kubernetes', 'example', self.public_cloud_id, ['aws_eks_cluster'])
         assert_otm(otm, 7, 'load-balancer', 'wu-tang', self.public_cloud_id, ['aws_elb'])
         assert_otm(otm, 8, 'aws-lambda-function', 'test_lambda', self.public_cloud_id, ['aws_lambda_function'])
-        assert_otm(otm, 9, 'CD-AWS-NETWORK-FIREWALL', 'firewall_example', self.public_cloud_id, ['aws_networkfirewall_firewall'])
+        assert_otm(otm, 9, 'CD-AWS-NETWORK-FIREWALL', 'firewall_example', self.public_cloud_id,
+                   ['aws_networkfirewall_firewall'])
         assert_otm(otm, 10, 'rds', 'aurora-cluster-demo', self.public_cloud_id, ['aws_rds_cluster'])
         assert_otm(otm, 11, 'redshift', 'tf-redshift-cluster', self.public_cloud_id, ['aws_redshift_cluster'])
         assert_otm(otm, 12, 'route-53', 'route-53-zone-example', self.public_cloud_id, ['aws_route53_zone'])
@@ -61,9 +64,15 @@ class TestTerraformAWSComponents:
         assert_otm(otm, 0, 'elastic-container-service', 'mongo', self.public_cloud_id, ['aws_ecs_service'])
         assert_otm(otm, 1, 'docker-container', 'service', otm.components[0].id, ['aws_ecs_task_definition'])
 
-
-    def test_aws_singleton_components(self):
-        filename = test_resource_paths.terraform_aws_singleton_components
+    @pytest.mark.parametrize('filename', [
+        test_resource_paths.terraform_aws_singleton_components_unix_line_breaks,
+        [open(test_resource_paths.terraform_aws_singleton_components_unix_line_breaks, 'rb')],
+        test_resource_paths.terraform_aws_singleton_components_dos_line_breaks,
+        [open(test_resource_paths.terraform_aws_singleton_components_dos_line_breaks, 'rb')],
+        test_resource_paths.terraform_aws_singleton_components_classic_macos_line_breaks,
+        [open(test_resource_paths.terraform_aws_singleton_components_classic_macos_line_breaks, 'rb')]
+    ])
+    def test_aws_singleton_components(self, filename: str):
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
         iac_to_otm = IacToOtm('Test case AWS singleton components', 'aws_singleton_components', IacType.TERRAFORM)
         iac_to_otm.run(IacType.TERRAFORM, mapping_filename, 'threatmodel-from-singleton-terraform.otm', filename)
@@ -109,10 +118,11 @@ class TestTerraformAWSComponents:
             'config_config_rule (aws_config_config_rule)',
             'config_configuration_recorder (aws_config_configuration_recorder)'
         ])
-        assert_otm(otm, 10, 'elastic-container-registry', 'elastic-container-registry (grouped)', self.public_cloud_id, [
-            'ecr_repository (aws_ecr_repository)',
-            'ecr_lifecycle_policy (aws_ecr_lifecycle_policy)'
-        ])
+        assert_otm(otm, 10, 'elastic-container-registry', 'elastic-container-registry (grouped)', self.public_cloud_id,
+                   [
+                       'ecr_repository (aws_ecr_repository)',
+                       'ecr_lifecycle_policy (aws_ecr_lifecycle_policy)'
+                   ])
         assert_otm(otm, 11, 'elasticache', 'elasticache (grouped)', self.public_cloud_id, [
             'elasticache_user (aws_elasticache_user)',
             'elasticache_user_group (aws_elasticache_user_group)'
