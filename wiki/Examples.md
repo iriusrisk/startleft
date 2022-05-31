@@ -7,7 +7,7 @@ You can find some sample source files inside the `examples` directory:
 To process this examples, you may also use the mapping files located in `startleft/config`. They provide some examples
 for mappings between IaC components and IriusRisk ones:
 * `default-cloudformation-mapping.yaml` contains mappings for Cloudformation files.
-* `startleft/config/default-terraform-mapping.yaml` contains mappings for Terraform files.
+* `default-terraform-mapping.yaml` contains mappings for Terraform files.
 
 ## CloudFormation
 CloudFormation is the AWS tool which lets you model, provision, and manage AWS and third-party resources by treating 
