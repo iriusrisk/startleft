@@ -24,25 +24,29 @@ class TestTerraformAWSComponents:
         otm = iac_to_otm.otm
         assert len(otm.trustzones) == 1
         assert len(otm.dataflows) == 0
-        assert len(otm.components) == 18
-        assert_otm(otm, 0, 'cloudtrail', 'foobar', self.public_cloud_id, ['aws_cloudtrail'])
-        assert_otm(otm, 1, 'cognito', 'main', self.public_cloud_id, ['aws_cognito_identity_pool'])
-        assert_otm(otm, 2, 'cognito', 'pool', self.public_cloud_id, ['aws_cognito_user_pool'])
-        assert_otm(otm, 3, 'elastic-container-service', 'mongo', self.public_cloud_id, ['aws_ecs_service'])
-        assert_otm(otm, 4, 'docker-container', 'service', self.public_cloud_id, ['aws_ecs_task_definition'])
-        assert_otm(otm, 5, 'docker-container', 'service_task', self.public_cloud_id, ['aws_ecs_task_definition'])
-        assert_otm(otm, 6, 'elastic-container-kubernetes', 'example', self.public_cloud_id, ['aws_eks_cluster'])
-        assert_otm(otm, 7, 'load-balancer', 'wu-tang', self.public_cloud_id, ['aws_elb'])
-        assert_otm(otm, 8, 'aws-lambda-function', 'test_lambda', self.public_cloud_id, ['aws_lambda_function'])
-        assert_otm(otm, 9, 'CD-AWS-NETWORK-FIREWALL', 'firewall_example', self.public_cloud_id, ['aws_networkfirewall_firewall'])
-        assert_otm(otm, 10, 'rds', 'aurora-cluster-demo', self.public_cloud_id, ['aws_rds_cluster'])
-        assert_otm(otm, 11, 'redshift', 'tf-redshift-cluster', self.public_cloud_id, ['aws_redshift_cluster'])
-        assert_otm(otm, 12, 'route-53', 'route-53-zone-example', self.public_cloud_id, ['aws_route53_zone'])
-        assert_otm(otm, 13, 's3', 'foo_s3_bucket', self.public_cloud_id, ['aws_s3_bucket'])
-        assert_otm(otm, 14, 'sqs-simple-queue-service', 'terraform_queue', self.public_cloud_id, ['aws_sqs_queue'])
-        assert_otm(otm, 15, 'empty-component', 'some-canary', self.public_cloud_id, ['aws_synthetics_canary'])
-        assert_otm(otm, 16, 'step-functions', 'my_sfn_state_machine', self.public_cloud_id, ['aws_sfn_state_machine'])
-        assert_otm(otm, 17, 'step-functions', 'my_sfn_activity', self.public_cloud_id, ['aws_sfn_activity'])
+        assert len(otm.components) == 21
+        assert_otm(otm, 0, 'empty-component', 'gw', self.public_cloud_id, ['aws_internet_gateway'])
+        assert_otm(otm, 1, 'cloudtrail', 'foobar', self.public_cloud_id, ['aws_cloudtrail'])
+        assert_otm(otm, 2, 'cognito', 'main', self.public_cloud_id, ['aws_cognito_identity_pool'])
+        assert_otm(otm, 3, 'cognito', 'pool', self.public_cloud_id, ['aws_cognito_user_pool'])
+        assert_otm(otm, 4, 'elastic-container-service', 'mongo', self.public_cloud_id, ['aws_ecs_service'])
+        assert_otm(otm, 5, 'docker-container', 'service', self.public_cloud_id, ['aws_ecs_task_definition'])
+        assert_otm(otm, 6, 'docker-container', 'service_task', self.public_cloud_id, ['aws_ecs_task_definition'])
+        assert_otm(otm, 7, 'elastic-container-kubernetes', 'example', self.public_cloud_id, ['aws_eks_cluster'])
+        assert_otm(otm, 8, 'load-balancer', 'wu-tang', self.public_cloud_id, ['aws_elb'])
+        assert_otm(otm, 9, 'load-balancer', 'lb', self.public_cloud_id, ['aws_lb'])
+        assert_otm(otm, 10, 'aws-lambda-function', 'test_lambda', self.public_cloud_id, ['aws_lambda_function'])
+        assert_otm(otm, 11, 'CD-AWS-NETWORK-FIREWALL', 'firewall_example', self.public_cloud_id,
+                   ['aws_networkfirewall_firewall'])
+        assert_otm(otm, 12, 'rds', 'mysql', self.public_cloud_id, ['aws_db_instance'])
+        assert_otm(otm, 13, 'rds', 'aurora-cluster-demo', self.public_cloud_id, ['aws_rds_cluster'])
+        assert_otm(otm, 14, 'redshift', 'tf-redshift-cluster', self.public_cloud_id, ['aws_redshift_cluster'])
+        assert_otm(otm, 15, 'route-53', 'route-53-zone-example', self.public_cloud_id, ['aws_route53_zone'])
+        assert_otm(otm, 16, 's3', 'foo_s3_bucket', self.public_cloud_id, ['aws_s3_bucket'])
+        assert_otm(otm, 17, 'sqs-simple-queue-service', 'terraform_queue', self.public_cloud_id, ['aws_sqs_queue'])
+        assert_otm(otm, 18, 'empty-component', 'some-canary', self.public_cloud_id, ['aws_synthetics_canary'])
+        assert_otm(otm, 19, 'step-functions', 'my_sfn_activity', self.public_cloud_id, ['aws_sfn_activity'])
+        assert_otm(otm, 20, 'step-functions', 'my_sfn_state_machine', self.public_cloud_id, ['aws_sfn_state_machine'])
 
     def test_aws_parent_children_components(self):
         filename = test_resource_paths.terraform_aws_parent_children_components
@@ -60,7 +64,6 @@ class TestTerraformAWSComponents:
         assert len(otm.components) == 2
         assert_otm(otm, 0, 'elastic-container-service', 'mongo', self.public_cloud_id, ['aws_ecs_service'])
         assert_otm(otm, 1, 'docker-container', 'service', otm.components[0].id, ['aws_ecs_task_definition'])
-
 
     def test_aws_singleton_components(self):
         filename = test_resource_paths.terraform_aws_singleton_components
@@ -109,10 +112,11 @@ class TestTerraformAWSComponents:
             'config_config_rule (aws_config_config_rule)',
             'config_configuration_recorder (aws_config_configuration_recorder)'
         ])
-        assert_otm(otm, 10, 'elastic-container-registry', 'elastic-container-registry (grouped)', self.public_cloud_id, [
-            'ecr_repository (aws_ecr_repository)',
-            'ecr_lifecycle_policy (aws_ecr_lifecycle_policy)'
-        ])
+        assert_otm(otm, 10, 'elastic-container-registry', 'elastic-container-registry (grouped)', self.public_cloud_id,
+                   [
+                       'ecr_repository (aws_ecr_repository)',
+                       'ecr_lifecycle_policy (aws_ecr_lifecycle_policy)'
+                   ])
         assert_otm(otm, 11, 'elasticache', 'elasticache (grouped)', self.public_cloud_id, [
             'elasticache_user (aws_elasticache_user)',
             'elasticache_user_group (aws_elasticache_user_group)'
@@ -151,3 +155,33 @@ class TestTerraformAWSComponents:
             'kinesis_firehose_delivery_stream_1 (aws_kinesis_firehose_delivery_stream)',
             'kinesis_firehose_delivery_stream_1 (aws_kinesis_firehose_delivery_stream)'
         ])
+
+    def test_aws_altsource_components(self):
+        filename = test_resource_paths.terraform_aws_altsource_components
+        mapping_filename = test_resource_paths.default_terraform_aws_mapping
+        iac_to_otm = IacToOtm('Test case AWS altsource components', 'aws_altsource_components', IacType.TERRAFORM)
+        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, 'threatmodel-from-altsource-terraform.otm', filename)
+
+        assert iac_to_otm.otm
+        otm = iac_to_otm.otm
+        assert len(otm.trustzones) == 1
+        assert len(otm.components) == 12
+        assert len(otm.dataflows) == 0
+        assert_otm(otm, 0, 'empty-component', 'subnets', self.public_cloud_id, ['aws_subnet'])
+        assert_otm(otm, 1, 'empty-component', 'ec2', self.public_cloud_id, ['aws_vpc_endpoint'])
+        assert_otm(otm, 2, 'empty-component', 'ec2_messages', self.public_cloud_id, ['aws_vpc_endpoint'])
+        assert_otm(otm, 3, 'empty-component', 'ssm', self.public_cloud_id, ['aws_vpc_endpoint'])
+        assert_otm(otm, 4, 'empty-component', 'ssm_messages', self.public_cloud_id, ['aws_vpc_endpoint'])
+        assert_otm(otm, 5, 'empty-component', 'ecr', self.public_cloud_id, ['aws_vpc_endpoint'])
+        assert_otm(otm, 6, 'empty-component', 'dynamodb', self.public_cloud_id, ['aws_vpc_endpoint'])
+        assert_otm(otm, 7, 'empty-component', 's3', self.public_cloud_id, ['aws_vpc_endpoint'])
+        assert_otm(otm, 8, 's3', 'S3 from VPCEndpoint', self.public_cloud_id, ['s3 (aws_vpc_endpoint)'])
+        assert_otm(otm, 9, 'dynamodb', 'DynamoDB from VPCEndpoint', self.public_cloud_id,
+                   ['dynamodb (aws_vpc_endpoint)'])
+        assert_otm(otm, 10, 'CD-SYSTEMS-MANAGER', 'Systems Manager from VPCEndpoint (grouped)', self.public_cloud_id,
+                   [
+                       'ssm (aws_vpc_endpoint)',
+                       'ssm_messages (aws_vpc_endpoint)'
+                   ])
+        assert_otm(otm, 11, 'elastic-container-registry', 'ECR from VPCEndpoint', self.public_cloud_id,
+                   ['ecr (aws_vpc_endpoint)'])
