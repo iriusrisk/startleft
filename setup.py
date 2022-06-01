@@ -25,7 +25,8 @@ setup(
         'python-multipart',
         'click',
         'uvicorn',
-        'shapely'
+        'shapely',
+        'vsdx'
     ],
     use_scm_version=True,
     extras_require={
