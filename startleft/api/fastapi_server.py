@@ -7,10 +7,11 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from startleft.api.controllers.iac import iac_create_otm_controller
 from startleft.api.controllers.health import health_controller
+from startleft.api.controllers.iac import iac_create_otm_controller
 from startleft.api.error_response import ErrorResponse
 from startleft.api.errors import CommonError, ErrorCode, MappingFileSchemaNotValidError
+from startleft.log import VERBOSE_MESSAGE_FORMAT
 
 webapp = FastAPI()
 logger = logging.getLogger(__name__)
@@ -26,8 +27,17 @@ def initialize_webapp():
     return webapp
 
 
+def get_log_config():
+    log_config = uvicorn.config.LOGGING_CONFIG
+    log_config["loggers"]["uvicorn"]["propagate"] = False
+    log_config["formatters"]["access"]["fmt"] = VERBOSE_MESSAGE_FORMAT
+    log_config["formatters"]["default"]["fmt"] = VERBOSE_MESSAGE_FORMAT
+
+    return log_config
+
+
 def run_webapp(port: int):
-    uvicorn.run(webapp, host="127.0.0.1", port=port, log_level="info")
+    uvicorn.run(webapp, host="127.0.0.1", port=port, log_config=get_log_config())
 
 
 @webapp.exception_handler(CommonError)
@@ -82,5 +92,3 @@ def common_response_handler(status_code: int, type_: str, title: str, detail: st
 
     return JSONResponse(status_code=status_code,
                         content=jsonable_encoder(error_response))
-
-

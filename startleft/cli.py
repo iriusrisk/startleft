@@ -7,33 +7,12 @@ import click
 from startleft.api.controllers.iac.iac_type import IacType
 from startleft.api.errors import CommonError
 from startleft.iac_to_otm import IacToOtm
+from startleft.log import get_log_level, configure_logging
 from startleft.messages import messages
 from startleft.project.otm_project import OtmProject
 from startleft.version import version
 
 logger = logging.getLogger(__name__)
-
-def get_log_level(ctx, param, value):
-    levels = {
-        'NONE': 100,
-        'CRIT': logging.CRITICAL,
-        'ERROR': logging.ERROR,
-        'WARN': logging.WARNING,
-        'INFO': logging.INFO,
-        'DEBUG': logging.DEBUG
-    }
-
-    if value.upper() in levels:
-        return levels[value.upper()]
-    raise click.BadParameter(f"Log level must be one of: {', '.join(levels.keys())}")
-
-
-def configure_logger(level, verbose):
-    if verbose:
-        logging.basicConfig(format='%(levelname) -10s %(asctime)s %(module)s:%(lineno)s %(funcName)s %(message)s',
-                            level=level)
-    else:
-        logging.basicConfig(format='%(message)s', level=level)
 
 
 def validate_server(ctx, param, value):
@@ -67,7 +46,7 @@ def cli(log_level, verbose):
     """
     Parse IaC and other files to the Open Threat Model format
     """
-    configure_logger(log_level, verbose)
+    configure_logging(verbose, log_level)
 
 
 @cli.command()
@@ -75,8 +54,10 @@ def cli(log_level, verbose):
               type=click.Choice(messages.IAC_TYPE_SUPPORTED, case_sensitive=False), required=True,
               help=messages.IAC_TYPE_DESC)
 @click.option(messages.MAPPING_FILE_NAME, messages.MAPPING_FILE_SHORTNAME, help=messages.MAPPING_FILE_DESC)
-@click.option(messages.OUTPUT_FILE_NAME, messages.OUTPUT_FILE_SHORTNAME, default=messages.OUTPUT_FILE, help=messages.OUTPUT_FILE_DESC)
-@click.option(messages.PROJECT_NAME_NAME, messages.PROJECT_NAME_SHORTNAME, required=True, help=messages.PROJECT_NAME_DESC)
+@click.option(messages.OUTPUT_FILE_NAME, messages.OUTPUT_FILE_SHORTNAME, default=messages.OUTPUT_FILE,
+              help=messages.OUTPUT_FILE_DESC)
+@click.option(messages.PROJECT_NAME_NAME, messages.PROJECT_NAME_SHORTNAME, required=True,
+              help=messages.PROJECT_NAME_DESC)
 @click.option(messages.PROJECT_ID_NAME, messages.PROJECT_ID_SHORTNAME, required=True, help=messages.PROJECT_ID_DESC)
 @click.argument(messages.IAC_FILE_NAME, required=True, nargs=-1)
 def parse(iac_type, mapping_file, output_file, project_name, project_id, iac_file):
@@ -89,7 +70,8 @@ def parse(iac_type, mapping_file, output_file, project_name, project_id, iac_fil
 
 @cli.command()
 @click.option(messages.MAPPING_FILE_NAME, messages.MAPPING_FILE_SHORTNAME, help=messages.MAPPING_FILE_DESC)
-@click.option(messages.OUTPUT_FILE_NAME, messages.OUTPUT_FILE_SHORTNAME, default=messages.OUTPUT_FILE, help=messages.OUTPUT_FILE_DESC)
+@click.option(messages.OUTPUT_FILE_NAME, messages.OUTPUT_FILE_SHORTNAME, default=messages.OUTPUT_FILE,
+              help=messages.OUTPUT_FILE_DESC)
 def validate(mapping_file, output_file):
     """
     Validates a mapping or OTM file
@@ -104,7 +86,9 @@ def validate(mapping_file, output_file):
 
 
 @cli.command()
-@click.option(messages.IAC_TYPE_NAME, messages.IAC_TYPE_SHORTNAME, type=click.Choice(messages.IAC_TYPE_SUPPORTED, case_sensitive=False), required=True, help=messages.IAC_TYPE_DESC)
+@click.option(messages.IAC_TYPE_NAME, messages.IAC_TYPE_SHORTNAME,
+              type=click.Choice(messages.IAC_TYPE_SUPPORTED, case_sensitive=False), required=True,
+              help=messages.IAC_TYPE_DESC)
 @click.option('--query', '-q', help='JMESPath query to run against the IaC file.')
 @click.argument(messages.IAC_FILE_NAME, required=True, nargs=-1)
 def search(iac_type, query, iac_file):
@@ -123,6 +107,9 @@ def server(port: int):
     """
     Launches the REST server to generate OTMs from requests
     """
+    configure_logging(verbose=True)
+    logger.info(f'Startleft version: {version}')
+
     from startleft.api import fastapi_server
     fastapi_server.run_webapp(port)
 
