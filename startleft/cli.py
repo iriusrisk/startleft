@@ -93,8 +93,8 @@ def parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, outpu
     logger.info("Parsing diagram source files into OTM")
     type_ = DiagramType(diagram_type.upper())
     file = open(iac_file[0], "r")
-    otm_proj = OtmProject.from_diag_file(project_id, project_name, type_, file,
-                                         [default_mapping_file, custom_mapping_file])
+    mappings = [default_mapping_file, custom_mapping_file] if custom_mapping_file else [default_mapping_file]
+    otm_proj = OtmProject.from_diag_file(project_id, project_name, type_, file, mappings)
     file.close()
     otm_proj.otm_to_file(output_file)
 

@@ -71,9 +71,8 @@ class OtmProject:
 
     @staticmethod
     def from_diag_file(project_id: str, project_name: str, diag_type: DiagramType,
-                       temp_diag_file: Optional[IO], custom_mapping_files: [Optional[IO]] = None):
+                       temp_diag_file: Optional[IO], mapping_diag_files: [Optional[IO]] = None):
         logger.info("Parsing Diagram file to OTM")
-        mapping_diag_files = custom_mapping_files or get_default_iac_mapping_files(diag_type)
         iac_mapping = MappingFileLoader().load(mapping_diag_files)
         MappingValidator('diagram_mapping_schema.json').validate(iac_mapping)
         diag_to_otm = ExternalDiagramToOtm(diag_type)
