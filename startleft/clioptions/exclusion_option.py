@@ -9,9 +9,10 @@ class Exclusion(Option):
         if self.mutually_exclusion:
             ex_str = ', '.join(self.mutually_exclusion)
             kwargs['help'] = help + (
-                    ' NOTE: This argument is mutually exclusive with '
-                    ' arguments: [' + ex_str + '].'
-            )
+                ' NOTE: This argument is mutually exclusive with '
+                ' arguments: [' + ex_str + '].'
+                + ' [required] ' if self.mandatory else '')
+
         super(Exclusion, self).__init__(*args, **kwargs)
 
     def handle_parse_result(self, ctx, opts, args):

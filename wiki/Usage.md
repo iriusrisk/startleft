@@ -34,28 +34,28 @@ Options:
   -t, --iac-type [CLOUDFORMATION|TERRAFORM]
                                   The IaC file type. NOTE: This argument is
                                   mutually exclusive with  arguments:
-                                  [diagram_type, default_mapping_file,
-                                  custom_mapping_file].
+                                  [diagram_type, custom_mapping_file,
+                                  default_mapping_file]. [required]
   -g, --diagram-type [VISIO]      The diagram file type. NOTE: This argument
                                   is mutually exclusive with  arguments:
-                                  [iac_type, mapping_file].
+                                  [mapping_file, iac_type]. [required]
   -m, --mapping-file TEXT         Mapping file to parse the IaC file. NOTE:
                                   This argument is mutually exclusive with
-                                  arguments: [custom_mapping_file,
-                                  default_mapping_file, diagram_type].
+                                  arguments: [diagram_type,
+                                  custom_mapping_file, default_mapping_file].
+                                  [required]
   -d, --default-mapping-file TEXT
                                   Default mapping file to parse the diagram
                                   file. NOTE: This argument is mutually
-                                  exclusive with  arguments: [iac_type,
-                                  mapping_file].
+                                  exclusive with  arguments: [mapping_file,
+                                  iac_type]. [required]
   -c, --custom-mapping-file TEXT  Custom mapping file to parse the diagram
-                                  file. NOTE: This argument is mutually
-                                  exclusive with  arguments: [iac_type,
-                                  mapping_file].
+                                  file.
   -o, --output-file TEXT          OTM output file.
   -n, --project-name TEXT         Project name.  [required]
   -i, --project-id TEXT           Project id.  [required]
   --help                          Show this message and exit.
+
 ```
 
 ## API server
