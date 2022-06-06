@@ -21,11 +21,11 @@ class TestCloudFormationCreateProjectController:
 
     @pytest.mark.parametrize('project_id,project_name,cft_file,mapping_file,error_type',
                              [(None, 'project_A_name', open(test_resource_paths.example_json, 'r'),
-                               open(test_resource_paths.default_mapping, 'r'), 'IacToOtmValidationError'),
+                               open(test_resource_paths.default_cloudformation_mapping, 'r'), 'IacToOtmValidationError'),
                               ('project_B_id', None, open(test_resource_paths.example_json, 'r'),
-                               open(test_resource_paths.default_mapping, 'r'), 'IacToOtmValidationError'),
+                               open(test_resource_paths.default_cloudformation_mapping, 'r'), 'IacToOtmValidationError'),
                               ('project_C_id', 'project_C_name', None,
-                               open(test_resource_paths.default_mapping, 'r'), 'IacToOtmValidationError'),
+                               open(test_resource_paths.default_cloudformation_mapping, 'r'), 'IacToOtmValidationError'),
                               ('project_D_id', 'project_D_name', open(test_resource_paths.example_json, 'r'),
                                None, 'IacToOtmValidationError'),
                               ('project_E_id', 'project_E_name', open(test_resource_paths.example_json, 'r'),
@@ -55,7 +55,7 @@ class TestCloudFormationCreateProjectController:
 
         # When I do post on cloudformation endpoint
         files = {'iac_file': open(test_resource_paths.example_json, 'r'),
-                 'mapping_file': open(test_resource_paths.default_mapping)}
+                 'mapping_file': open(test_resource_paths.default_cloudformation_mapping)}
         body = {'iac_type': 'CLOUDFORMATION', 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 

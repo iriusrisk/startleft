@@ -4,11 +4,11 @@ import sys
 
 import click
 
-from startleft.api.controllers.iac.iac_type import IacType
+from startleft import messages
 from startleft.api.errors import CommonError
-from startleft.iac_to_otm import IacToOtm
-from startleft.messages import messages
-from startleft.project.otm_project import OtmProject
+from startleft.iac.iac_to_otm import IacToOtm
+from startleft.iac.iac_type import IacType
+from startleft.otm.otm_project import OtmProject
 
 logger = logging.getLogger(__name__)
 

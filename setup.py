@@ -24,7 +24,9 @@ setup(
         'fastapi',
         'python-multipart',
         'click',
-        'uvicorn'
+        'uvicorn',
+        'shapely',
+        'vsdx'
     ],
     use_scm_version=True,
     extras_require={

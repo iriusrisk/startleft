@@ -1,14 +1,14 @@
 from _pytest.python_api import raises
 from jmespath.exceptions import JMESPathTypeError
 
-from startleft.api.controllers.iac.iac_type import IacType
 from startleft.api.errors import MappingFileSchemaNotValidError
-from startleft.project.otm_project import OtmProject
+from startleft.iac.iac_type import IacType
+from startleft.otm.otm_project import OtmProject
 from tests.resources import test_resource_paths
 
 SAMPLE_OTM_FILENAME = test_resource_paths.otm_file_example
 SAMPLE_YAML_IAC_FILENAME = test_resource_paths.cloudformation_for_mappings_tests_json
-IAC_VALID_MAPPING_FILENAME = test_resource_paths.default_mapping
+IAC_VALID_MAPPING_FILENAME = test_resource_paths.default_cloudformation_mapping
 INVALID_YAML_FILENAME = test_resource_paths.invalid_yaml
 
 

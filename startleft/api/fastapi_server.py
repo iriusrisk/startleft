@@ -7,8 +7,9 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from startleft.api.controllers.iac import iac_create_otm_controller
+from startleft.api.controllers.diagram import diag_create_otm_controller
 from startleft.api.controllers.health import health_controller
+from startleft.api.controllers.iac import iac_create_otm_controller
 from startleft.api.error_response import ErrorResponse
 from startleft.api.errors import CommonError, ErrorCode, MappingFileSchemaNotValidError
 
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 webapp.include_router(health_controller.router)
 webapp.include_router(iac_create_otm_controller.router)
+webapp.include_router(diag_create_otm_controller.router)
 
 
 def initialize_webapp():
@@ -59,7 +61,7 @@ async def validation_exception_handler(request: Request, exc):
 @webapp.exception_handler(MappingFileSchemaNotValidError)
 async def mapping_file_validation_exception_handler(request: Request, exc):
     message = exc.message
-    from startleft.messages import messages
+    from startleft import messages
     detail = messages.MAPPING_FILE_SCHEMA_NOT_VALID
     error_type = ErrorCode.MAPPING_FILE_EXIT_VALIDATION_FAILED.error_type
     return common_response_handler(400, error_type, 'MappingFileSchemaNotValidError', detail, [message])
