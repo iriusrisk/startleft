@@ -6,7 +6,6 @@ import hcl2
 import xmltodict
 import yaml
 
-from startleft.api.errors import WriteThreatModelError
 from startleft.iac.iac_type import IacType
 from startleft.iac.mapping import transformer, sourcemodel
 from startleft.mapping.mapping_file_loader import MappingFileLoader
@@ -68,38 +67,27 @@ class IacToOtm:
                 logger.warning(f"Cannot find source file '{filename}', skipping")
         logger.debug("Source files loaded successfully")
 
-    def write_otm(self, out_file):
-        logger.info(f"Writing OTM file to '{out_file}'")
-        try:
-            with open(out_file, "w") as f:
-                json.dump(self.otm.json(), f, indent=2)
-        except Exception as e:
-            logger.error(f"Unable to create the threat model: {e}")
-            raise WriteThreatModelError()
-
     def get_otm_stream(self):
         logger.info(f"Getting OTM stream")
         return self.otm.json()
 
-    def run(self, type, map_filenames, out_file, filenames):
+    def run(self, type_, map_filenames, filenames):
         """
         Parses selected source files and maps them to the Open Threat Model format
         """
-        loader = self.source_loader_map[type]
+        loader = self.source_loader_map[type_]
         self.load_source_files(loader, filenames)
 
         iac_mapping = self.mapping_file_loader.load(map_filenames)
         self.mapping_validator.validate(iac_mapping)
 
         self.transformer.run(iac_mapping)
-        if out_file is not None:
-            self.write_otm(out_file)
 
-    def search(self, type, query, filenames):
+    def search(self, type_, query, filenames):
         """
         Runs a JMESPath search query against the provided source files and outputs the matching results
         """        
-        loader = self.source_loader_map[type]
+        loader = self.source_loader_map[type_]
         self.load_source_files(loader, filenames)
         
         logger.info(f"Searching for '{query}' in source:")
