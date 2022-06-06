@@ -4,6 +4,7 @@ from typing import Optional
 
 from typing.io import IO
 
+from startleft.api.errors import WriteThreatModelError
 from startleft.diagram.diagram_type import DiagramType
 from startleft.diagram.external_diagram_to_otm import ExternalDiagramToOtm
 from startleft.iac.iac_to_otm import IacToOtm
@@ -50,37 +51,32 @@ class OtmProject:
         return OtmProject(project_id, project_name, None, otm)
 
     @staticmethod
-    def from_iac_file(project_id: str, project_name: str, iac_type: IacType, iac_file: [Optional[IO]],
-                      custom_iac_mapping_files: [Optional[IO]] = None, otm_filename: str = DEFAULT_OTM_FILENAME):
-        mapping_iac_files = custom_iac_mapping_files or get_default_iac_mapping_files(iac_type)
-        logger.info("Parsing IaC file to OTM")
-        iac_to_otm = IacToOtm(project_name, project_id, iac_type)
-        iac_to_otm.run(iac_type, mapping_iac_files, otm_filename, iac_file)
-
-        return OtmProject.from_otm_file(otm_filename, project_id, project_name)
-
-    @staticmethod
     def from_iac_file_to_otm_stream(project_id: str, project_name: str, iac_type: IacType, iac_file: [Optional[IO]],
                                     custom_iac_mapping_files: [Optional[IO]] = None):
         mapping_iac_files = custom_iac_mapping_files or get_default_iac_mapping_files(iac_type)
         logger.info("Parsing IaC file to OTM")
         iac_to_otm = IacToOtm(project_name, project_id, iac_type)
-        iac_to_otm.run(iac_type, mapping_iac_files, None, iac_file)
+        iac_to_otm.run(iac_type, mapping_iac_files, iac_file)
 
         return OtmProject.from_otm_stream(iac_to_otm.get_otm_stream(), project_id, project_name)
 
     @staticmethod
-    def from_diag_file_to_otm_stream(project_id: str, project_name: str, diag_type: DiagramType, diag_file: [Optional[IO]],
-                                     custom_mapping_files: [Optional[IO]] = None):
-        mapping_iac_files = custom_mapping_files or diag_type.def_map_file
-        iac_mapping = MappingFileLoader().load(mapping_iac_files)
-        MappingValidator('diagram_mapping_schema.json').validate(iac_mapping)
-
-        logger.info("Parsing Diagram file to OTM")
+    def from_diag_file_to_otm_stream(project_id: str, project_name: str, diag_type: DiagramType,
+                                     diag_file: [Optional[IO]], custom_mapping_files: [Optional[IO]] = None):
+        logger.info("Parsing Diagram stream to OTM")
         temp_diag_file = FileUtils.copy_to_disk(diag_file[0], VSDX_EXT)
+        otm = OtmProject.from_diag_file(project_id, project_name, diag_type, temp_diag_file, custom_mapping_files)
+        FileUtils.delete(temp_diag_file.name)
+        return otm
+
+    @staticmethod
+    def from_diag_file(project_id: str, project_name: str, diag_type: DiagramType,
+                       temp_diag_file: Optional[IO], mapping_diag_files: [Optional[IO]] = None):
+        logger.info("Parsing Diagram file to OTM")
+        iac_mapping = MappingFileLoader().load(mapping_diag_files)
+        MappingValidator('diagram_mapping_schema.json').validate(iac_mapping)
         diag_to_otm = ExternalDiagramToOtm(diag_type)
         otm = diag_to_otm.run(temp_diag_file.name, iac_mapping, project_name, project_id)
-        FileUtils.delete(temp_diag_file.name)
         return OtmProject.from_otm_stream(otm.json(), project_id, project_name)
 
     @staticmethod
@@ -105,3 +101,12 @@ class OtmProject:
     def get_otm_as_json(self):
         logger.info("getting OTM contents as JSON")
         return json.dumps(self.otm, indent=2)
+
+    def otm_to_file(self, out_file: str):
+        logger.info(f"Writing OTM file to '{out_file}'")
+        try:
+            with open(out_file, "w") as f:
+                json.dump(self.otm, f, indent=2)
+        except Exception as e:
+            logger.error(f"Unable to create the threat model: {e}")
+            raise WriteThreatModelError()

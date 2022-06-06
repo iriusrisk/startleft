@@ -33,14 +33,14 @@ class TestApp:
         filename = test_resource_paths.example_json
         mapping_filename = test_resource_paths.default_cloudformation_mapping
         iac_to_otm = IacToOtm('name', 'id', IacType.CLOUDFORMATION)
-        iac_to_otm.run(IacType.CLOUDFORMATION, mapping_filename, 'threatmodel.otm', filename)
+        iac_to_otm.run(IacType.CLOUDFORMATION, mapping_filename, filename)
         assert iac_to_otm.source_model.data
 
     def test_run_cloudformation_mappings(self):
         filename = test_resource_paths.cloudformation_for_mappings_tests_json
         mapping_filename = test_resource_paths.default_cloudformation_mapping
         iac_to_otm = IacToOtm('name', 'id', IacType.CLOUDFORMATION)
-        iac_to_otm.run(IacType.CLOUDFORMATION, mapping_filename, 'threatmodel.otm', filename)
+        iac_to_otm.run(IacType.CLOUDFORMATION, mapping_filename, filename)
 
         assert iac_to_otm.source_model.otm
         assert len(iac_to_otm.otm.trustzones) == 1
@@ -88,7 +88,7 @@ class TestApp:
         filename = test_resource_paths.terraform_for_mappings_tests_json
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
         iac_to_otm = IacToOtm('name', 'id', IacType.TERRAFORM)
-        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, 'threatmodel-from-terraform.otm', filename)
+        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, filename)
 
         assert iac_to_otm.source_model.otm
         assert len(iac_to_otm.otm.trustzones) == 1
@@ -113,7 +113,7 @@ class TestApp:
         filename = [open(test_resource_paths.terraform_for_mappings_tests_json, "rb")]
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
         iac_to_otm = IacToOtm('name', 'id', IacType.TERRAFORM)
-        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, 'threatmodel-from-terraform.otm', filename)
+        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, filename)
 
         assert iac_to_otm.source_model.otm
         assert len(iac_to_otm.otm.trustzones) == 1

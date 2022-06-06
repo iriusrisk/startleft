@@ -19,16 +19,29 @@ ERROR_WRITING_THREAT_MODEL = 'Unable to create the threat model'
 CANNOT_RECOGNIZE_GIVEN_DIAGRAM_TYPE = 'Cannot recognize given diagram type'
 
 # CLI
-IAC_FILE_NAME = 'iac-file'
+SOURCE_FILE_NAME = 'source-file'
 
 IAC_TYPE_NAME = '--iac-type'
 IAC_TYPE_SHORTNAME = '-t'
 IAC_TYPE_DESC = 'The IaC file type.'
 IAC_TYPE_SUPPORTED = ['CLOUDFORMATION', 'TERRAFORM']
 
+DIAGRAM_TYPE_NAME = '--diagram-type'
+DIAGRAM_TYPE_SHORTNAME = '-g'
+DIAGRAM_TYPE_DESC = 'The diagram file type.'
+DIAGRAM_TYPE_SUPPORTED = ['VISIO']
+
 MAPPING_FILE_NAME = '--mapping-file'
 MAPPING_FILE_SHORTNAME = '-m'
 MAPPING_FILE_DESC = 'Mapping file to parse the IaC file.'
+
+DEFAULT_MAPPING_FILE_NAME = '--default-mapping-file'
+DEFAULT_MAPPING_FILE_SHORTNAME = '-d'
+DEFAULT_MAPPING_FILE_DESC = 'Default mapping file to parse the diagram file.'
+
+CUSTOM_MAPPING_FILE_NAME = '--custom-mapping-file'
+CUSTOM_MAPPING_FILE_SHORTNAME = '-c'
+CUSTOM_MAPPING_FILE_DESC = 'Custom mapping file to parse the diagram file.'
 
 OUTPUT_FILE_NAME = '--output-file'
 OUTPUT_FILE_SHORTNAME = '-o'

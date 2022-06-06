@@ -118,4 +118,7 @@ caret
 **/threatmodel.otm
 startleft/*.otm
 customerexamples
+/tmp/
 /.run/
+/bin/
+/startleft/bin/

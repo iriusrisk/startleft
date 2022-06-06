@@ -70,6 +70,21 @@ startleft parse \
 	elb.tf
 ```
 
+## Visio
+
+StartLeft supports parsing Visio source files. An example is provided in the `examples/visio` directory.
+
+```shell
+startleft parse \
+	--diagram-type visio \
+	--output-file aws-with-tz-and-vpc.otm \
+	--project-name "Visio AWS" \
+	--project-id "visio-aws" \
+    --default-mapping-file default-visio-mapping-file.yaml \
+	aws-with-tz-and-vpc.vsdx
+```
+> You can add the optional parameter ```--custom-mapping-file``` to add custom mappings  
+
 ## Hand crafted OTM
 
 You can also write an OTM file without parsing any IaC source files. This is useful if you want to create a threat model 
