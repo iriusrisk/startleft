@@ -25,16 +25,43 @@ class CustomFunctions(jmespath.functions.Functions):
         return temp
 
     @jmespath.functions.signature({'types': ['array']}, {'types': ['string']})
-    def _func_filter(self, obj_arr, match):
-        temp = []
+    def _func_get_starts_with(self, obj_arr, component_type):
+        source_objects = []
 
         for obj in obj_arr:
-            for key in obj.keys():
-                if key.startswith(match):
-                    temp.append(obj)
+            for c_type in obj:
+                if c_type.startswith(component_type):
+                    for c_name in obj[c_type]:
+                        new_obj = self.add_type_and_name(obj[c_type], c_type, c_name)
+                        source_objects.append(new_obj)
 
-        return temp
+        return source_objects
 
+    @jmespath.functions.signature({'types': ['array']}, {'types': ['string']})
+    def _func_get(self, obj_arr, component_type):
+        source_objects = []
+
+        for obj in obj_arr:
+            for c_type in obj:
+                if c_type == component_type:
+                    for c_name in obj[c_type]:
+                        new_obj = self.add_type_and_name(obj[c_type], c_type, c_name)
+                        source_objects.append(new_obj)
+
+        return source_objects
+
+    @jmespath.functions.signature({'types': ['string']}, {'types': ['string']})
+    def _func_split(self, string, separator):
+        return string.split(separator)
+
+
+    def add_type_and_name(self, obj, component_type, component_name):
+        new_obj = obj.copy()
+
+        new_obj['Type'] = component_type
+        new_obj['_key'] = component_name
+
+        return new_obj
 
 class SourceModel:
     def __init__(self):
@@ -64,7 +91,7 @@ class SourceModel:
                     results = results + mapping_path_value
                 else:
                     results = results + [str(mapping_path_value)]
-            return results           
+            return results
 
         if isinstance(obj, dict):
             if "$lookup" in obj:
@@ -75,9 +102,9 @@ class SourceModel:
                 elif isinstance(keys, list):
                     results = []
                     for key in keys:
-                        results.append(self.lookup[key])                      
+                        results.append(self.lookup[key])
                     return results
-                
+
             if "$skip" in obj:
                 return self.search(obj["$skip"], source)
 
@@ -116,7 +143,7 @@ class SourceModel:
                             results.append(refobj.id)
                     else:
                         if ref_value == search_values:
-                            results.append(refobj.id) 
+                            results.append(refobj.id)
                 return results
 
             if "$findFirst" in obj:
