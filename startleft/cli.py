@@ -105,27 +105,27 @@ def parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, outpu
               help=messages.IAC_TYPE_DESC,
               cls=Exclusion,
               mandatory=True,
-              mutually_exclusion=['diagram_type'])
+              mutually_exclusion=['diagram_type', 'default_mapping_file', 'custom_mapping_file'])
 @click.option(DIAGRAM_TYPE_NAME, DIAGRAM_TYPE_SHORTNAME,
               type=click.Choice(messages.DIAGRAM_TYPE_SUPPORTED, case_sensitive=False),
               help=DIAGRAM_TYPE_DESC,
               cls=Exclusion,
               mandatory=True,
-              mutually_exclusion=['iac_type'])
+              mutually_exclusion=['iac_type', 'mapping_file'])
 @click.option(MAPPING_FILE_NAME, MAPPING_FILE_SHORTNAME,
               help=MAPPING_FILE_DESC,
               cls=Exclusion,
               mandatory=True,
-              mutually_exclusion=['default_mapping_file', 'custom_mapping_file'])
+              mutually_exclusion=['default_mapping_file', 'custom_mapping_file', 'diagram_type'])
 @click.option(DEFAULT_MAPPING_FILE_NAME, DEFAULT_MAPPING_FILE_SHORTNAME,
               help=DEFAULT_MAPPING_FILE_DESC,
               cls=Exclusion,
               mandatory=True,
-              mutually_exclusion=['mapping_file'])
+              mutually_exclusion=['mapping_file', 'iac_type'])
 @click.option(CUSTOM_MAPPING_FILE_NAME, CUSTOM_MAPPING_FILE_SHORTNAME,
               help=CUSTOM_MAPPING_FILE_DESC,
               cls=Exclusion,
-              mutually_exclusion=['mapping_file'])
+              mutually_exclusion=['mapping_file', 'iac_type'])
 @click.option(OUTPUT_FILE_NAME, OUTPUT_FILE_SHORTNAME, default=OUTPUT_FILE, help=OUTPUT_FILE_DESC)
 @click.option(PROJECT_NAME_NAME, PROJECT_NAME_SHORTNAME, required=True, help=PROJECT_NAME_DESC)
 @click.option(PROJECT_ID_NAME, PROJECT_ID_SHORTNAME, required=True, help=PROJECT_ID_DESC)

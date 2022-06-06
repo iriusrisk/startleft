@@ -26,7 +26,6 @@ Commands:
 You can also get help for the specific commands.
 
 ```
-$ startleft parse --help
 Usage: startleft parse [OPTIONS] SOURCE_FILE...
 
   Parses source files into Open Threat Model
@@ -35,21 +34,24 @@ Options:
   -t, --iac-type [CLOUDFORMATION|TERRAFORM]
                                   The IaC file type. NOTE: This argument is
                                   mutually exclusive with  arguments:
-                                  [diagram_type].
+                                  [diagram_type, default_mapping_file,
+                                  custom_mapping_file].
   -g, --diagram-type [VISIO]      The diagram file type. NOTE: This argument
                                   is mutually exclusive with  arguments:
-                                  [iac_type].
+                                  [iac_type, mapping_file].
   -m, --mapping-file TEXT         Mapping file to parse the IaC file. NOTE:
                                   This argument is mutually exclusive with
-                                  arguments: [default_mapping_file,
-                                  custom_mapping_file].
+                                  arguments: [custom_mapping_file,
+                                  default_mapping_file, diagram_type].
   -d, --default-mapping-file TEXT
                                   Default mapping file to parse the diagram
                                   file. NOTE: This argument is mutually
-                                  exclusive with  arguments: [mapping_file].
+                                  exclusive with  arguments: [iac_type,
+                                  mapping_file].
   -c, --custom-mapping-file TEXT  Custom mapping file to parse the diagram
                                   file. NOTE: This argument is mutually
-                                  exclusive with  arguments: [mapping_file].
+                                  exclusive with  arguments: [iac_type,
+                                  mapping_file].
   -o, --output-file TEXT          OTM output file.
   -n, --project-name TEXT         Project name.  [required]
   -i, --project-id TEXT           Project id.  [required]
