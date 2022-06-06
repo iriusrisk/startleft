@@ -27,14 +27,29 @@ You can also get help for the specific commands.
 
 ```
 $ startleft parse --help
-Usage: startleft parse [OPTIONS] IAC_FILE...
+Usage: startleft parse [OPTIONS] SOURCE_FILE...
 
-  Parses IaC source files into Open Threat Model
+  Parses source files into Open Threat Model
 
 Options:
   -t, --iac-type [CLOUDFORMATION|TERRAFORM]
-                                  The IaC file type.  [required]
-  -m, --mapping-file TEXT         Mapping file to parse the IaC file.
+                                  The IaC file type. NOTE: This argument is
+                                  mutually exclusive with  arguments:
+                                  [diagram_type].
+  -g, --diagram-type [VISIO]      The diagram file type. NOTE: This argument
+                                  is mutually exclusive with  arguments:
+                                  [iac_type].
+  -m, --mapping-file TEXT         Mapping file to parse the IaC file. NOTE:
+                                  This argument is mutually exclusive with
+                                  arguments: [default_mapping_file,
+                                  custom_mapping_file].
+  -d, --default-mapping-file TEXT
+                                  Default mapping file to parse the diagram
+                                  file. NOTE: This argument is mutually
+                                  exclusive with  arguments: [mapping_file].
+  -c, --custom-mapping-file TEXT  Custom mapping file to parse the diagram
+                                  file. NOTE: This argument is mutually
+                                  exclusive with  arguments: [mapping_file].
   -o, --output-file TEXT          OTM output file.
   -n, --project-name TEXT         Project name.  [required]
   -i, --project-id TEXT           Project id.  [required]
