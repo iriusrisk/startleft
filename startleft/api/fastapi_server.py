@@ -7,6 +7,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
+from startleft.api.controllers.diagram import diag_create_otm_controller
 from startleft.api.controllers.health import health_controller
 from startleft.api.controllers.iac import iac_create_otm_controller
 from startleft.api.error_response import ErrorResponse
