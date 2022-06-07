@@ -4,12 +4,15 @@ import sys
 
 import click
 
-from startleft.api.controllers.iac.iac_type import IacType
+from startleft import messages
 from startleft.api.errors import CommonError
-from startleft.iac_to_otm import IacToOtm
+from startleft.clioptions.exclusion_option import Exclusion
+from startleft.diagram.diagram_type import DiagramType
+from startleft.iac.iac_to_otm import IacToOtm
 from startleft.log import get_log_level, configure_logging
-from startleft.messages import messages
-from startleft.project.otm_project import OtmProject
+from startleft.iac.iac_type import IacType
+from startleft.messages import *
+from startleft.otm.otm_project import OtmProject
 from startleft.version import version
 
 logger = logging.getLogger(__name__)
@@ -49,29 +52,79 @@ def cli(log_level, verbose):
     configure_logging(verbose, log_level)
 
 
-@cli.command()
-@click.option(messages.IAC_TYPE_NAME, messages.IAC_TYPE_SHORTNAME,
-              type=click.Choice(messages.IAC_TYPE_SUPPORTED, case_sensitive=False), required=True,
-              help=messages.IAC_TYPE_DESC)
-@click.option(messages.MAPPING_FILE_NAME, messages.MAPPING_FILE_SHORTNAME, help=messages.MAPPING_FILE_DESC)
-@click.option(messages.OUTPUT_FILE_NAME, messages.OUTPUT_FILE_SHORTNAME, default=messages.OUTPUT_FILE,
-              help=messages.OUTPUT_FILE_DESC)
-@click.option(messages.PROJECT_NAME_NAME, messages.PROJECT_NAME_SHORTNAME, required=True,
-              help=messages.PROJECT_NAME_DESC)
-@click.option(messages.PROJECT_ID_NAME, messages.PROJECT_ID_SHORTNAME, required=True, help=messages.PROJECT_ID_DESC)
-@click.argument(messages.IAC_FILE_NAME, required=True, nargs=-1)
-def parse(iac_type, mapping_file, output_file, project_name, project_id, iac_file):
+def parse_iac(iac_type, mapping_file, output_file, project_name, project_id, iac_file):
     """
     Parses IaC source files into Open Threat Model
     """
     logger.info("Parsing IaC source files into OTM")
-    OtmProject.from_iac_file(project_id, project_name, IacType(iac_type.upper()), iac_file, mapping_file, output_file)
+    otm = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType(iac_type.upper()), iac_file,
+                                                 mapping_file)
+    otm.otm_to_file(output_file)
+
+
+def parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, output_file, project_name,
+                  project_id, iac_file):
+    """
+    Parses diagram source files into Open Threat Model
+    """
+    logger.info("Parsing diagram source files into OTM")
+    type_ = DiagramType(diagram_type.upper())
+    file = open(iac_file[0], "r")
+    mappings = [default_mapping_file, custom_mapping_file] if custom_mapping_file else [default_mapping_file]
+    otm_proj = OtmProject.from_diag_file(project_id, project_name, type_, file, mappings)
+    file.close()
+    otm_proj.otm_to_file(output_file)
+
+
+@cli.command(name='parse')
+@click.option(messages.IAC_TYPE_NAME, messages.IAC_TYPE_SHORTNAME,
+              type=click.Choice(messages.IAC_TYPE_SUPPORTED, case_sensitive=False),
+              help=messages.IAC_TYPE_DESC,
+              cls=Exclusion,
+              mandatory=True,
+              mutually_exclusion=['diagram_type', 'default_mapping_file', 'custom_mapping_file'])
+@click.option(DIAGRAM_TYPE_NAME, DIAGRAM_TYPE_SHORTNAME,
+              type=click.Choice(messages.DIAGRAM_TYPE_SUPPORTED, case_sensitive=False),
+              help=DIAGRAM_TYPE_DESC,
+              cls=Exclusion,
+              mandatory=True,
+              mutually_exclusion=['iac_type', 'mapping_file'])
+@click.option(MAPPING_FILE_NAME, MAPPING_FILE_SHORTNAME,
+              help=MAPPING_FILE_DESC,
+              cls=Exclusion,
+              mandatory=True,
+              mutually_exclusion=['default_mapping_file', 'custom_mapping_file', 'diagram_type'])
+@click.option(DEFAULT_MAPPING_FILE_NAME, DEFAULT_MAPPING_FILE_SHORTNAME,
+              help=DEFAULT_MAPPING_FILE_DESC,
+              cls=Exclusion,
+              mandatory=True,
+              mutually_exclusion=['mapping_file', 'iac_type'])
+@click.option(CUSTOM_MAPPING_FILE_NAME, CUSTOM_MAPPING_FILE_SHORTNAME,
+              help=CUSTOM_MAPPING_FILE_DESC,
+              cls=Exclusion,
+              mutually_exclusion=['mapping_file', 'iac_type'])
+@click.option(OUTPUT_FILE_NAME, OUTPUT_FILE_SHORTNAME, default=OUTPUT_FILE, help=OUTPUT_FILE_DESC)
+@click.option(PROJECT_NAME_NAME, PROJECT_NAME_SHORTNAME, required=True, help=PROJECT_NAME_DESC)
+@click.option(PROJECT_ID_NAME, PROJECT_ID_SHORTNAME, required=True, help=PROJECT_ID_DESC)
+@click.argument(SOURCE_FILE_NAME, required=True, nargs=-1)
+def parse_any(iac_type, diagram_type, mapping_file, default_mapping_file, custom_mapping_file,
+              output_file, project_name, project_id, source_file):
+    """
+    Parses source files into Open Threat Model
+    """
+    logger.info("Parsing source files into OTM")
+    if iac_type is not None:
+        parse_iac(iac_type, mapping_file, output_file, project_name, project_id, source_file)
+    elif diagram_type is not None:
+        parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, output_file, project_name,
+                      project_id, source_file)
+    else:
+        logger.warning('Unable to determine the parser type. Not diagram either iaC.')
 
 
 @cli.command()
-@click.option(messages.MAPPING_FILE_NAME, messages.MAPPING_FILE_SHORTNAME, help=messages.MAPPING_FILE_DESC)
-@click.option(messages.OUTPUT_FILE_NAME, messages.OUTPUT_FILE_SHORTNAME, default=messages.OUTPUT_FILE,
-              help=messages.OUTPUT_FILE_DESC)
+@click.option(MAPPING_FILE_NAME, MAPPING_FILE_SHORTNAME, help=MAPPING_FILE_DESC)
+@click.option(OUTPUT_FILE_NAME, OUTPUT_FILE_SHORTNAME, default=OUTPUT_FILE, help=OUTPUT_FILE_DESC)
 def validate(mapping_file, output_file):
     """
     Validates a mapping or OTM file
@@ -86,11 +139,11 @@ def validate(mapping_file, output_file):
 
 
 @cli.command()
-@click.option(messages.IAC_TYPE_NAME, messages.IAC_TYPE_SHORTNAME,
-              type=click.Choice(messages.IAC_TYPE_SUPPORTED, case_sensitive=False), required=True,
-              help=messages.IAC_TYPE_DESC)
+@click.option(messages.IAC_TYPE_NAME, messages.IAC_TYPE_SHORTNAME, help=IAC_TYPE_DESC,
+              type=click.Choice(messages.IAC_TYPE_SUPPORTED, case_sensitive=False), required=True
+              )
 @click.option('--query', '-q', help='JMESPath query to run against the IaC file.')
-@click.argument(messages.IAC_FILE_NAME, required=True, nargs=-1)
+@click.argument(messages.SOURCE_FILE_NAME, required=True, nargs=-1)
 def search(iac_type, query, iac_file):
     """
     Searches source files for the given query
