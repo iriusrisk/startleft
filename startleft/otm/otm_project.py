@@ -22,10 +22,6 @@ DEFAULT_OTM_FILENAME = 'threatmodel.otm'
 VSDX_EXT = '.vsdx'
 
 
-def get_default_iac_mapping_files(provider: IacType) -> [str]:
-    return IacType(provider).def_map_file
-
-
 class OtmProject:
     def __init__(self, project_id: str, project_name: str, otm_filename: str, otm: OTM):
         self.otm = otm
@@ -52,8 +48,7 @@ class OtmProject:
 
     @staticmethod
     def from_iac_file_to_otm_stream(project_id: str, project_name: str, iac_type: IacType, iac_file: [Optional[IO]],
-                                    custom_iac_mapping_files: [Optional[IO]] = None):
-        mapping_iac_files = custom_iac_mapping_files or get_default_iac_mapping_files(iac_type)
+                                    mapping_iac_files):
         logger.info("Parsing IaC file to OTM")
         iac_to_otm = IacToOtm(project_name, project_id, iac_type)
         iac_to_otm.run(iac_type, mapping_iac_files, iac_file)

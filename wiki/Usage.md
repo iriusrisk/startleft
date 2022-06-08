@@ -102,6 +102,6 @@ Request Body:
     id                          Required. ID of the new project
     name                        Required. Name of the new project
     default_mapping_file        Required. File that contains the default mapping file between the diagram resources and threat model resources
-    custom_mapping_file         Required. File that contains the custom user mapping file between the diagram resources and threat model resources
+    custom_mapping_file         Optional. File that contains the custom user mapping file between the diagram resources and threat model resources
 ```
 > See Visio usage on [diagrams/visio/Visio.md](diagrams/visio/Visio.md) 

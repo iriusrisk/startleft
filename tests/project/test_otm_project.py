@@ -84,27 +84,10 @@ class TestOtmProjectService:
         assert otm_project.project_id == project_id
         assert otm_project.project_name == project_name
 
-    def test_from_iac_valid_yaml_mapping_files_not_provided_ok(self):
-        # Given a sample valid IaC file
-        iac_file = [open(SAMPLE_YAML_IAC_FILENAME, 'r')]
-
-        # And a project id
-        project_id = 'id'
-
-        # And a project name
-        project_name = 'name'
-
-        # When creating OTM project from IaC file
-        otm_project = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType.CLOUDFORMATION, iac_file)
-
-        # Then
-        assert otm_project.otm is not None
-        assert otm_project.project_id == project_id
-        assert otm_project.project_name == project_name
-
     def test_from_iac_invalid_yaml_iac_file_error_jmes_error(self):
         # Given a sample valid IaC file
         iac_file = [open(INVALID_YAML_FILENAME, 'r')]
+        mapping_file = [open(IAC_VALID_MAPPING_FILENAME, 'r')]
 
         # And a project id
         project_id = 'id'
@@ -115,7 +98,8 @@ class TestOtmProjectService:
         # When creating OTM project from IaC file
         # Then raises MappingFileSchemaNotValidError
         with raises(JMESPathTypeError):
-            OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType.CLOUDFORMATION, iac_file)
+            OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType.CLOUDFORMATION, iac_file,
+                                                   mapping_file)
 
     def test_from_iac_invalid_mapping_files_error_invalid_schema(self):
         # Given a sample valid IaC file
@@ -139,6 +123,7 @@ class TestOtmProjectService:
     def test_from_iac_file_to_otm_stream_ok(self):
         # Given a sample valid IaC file
         iac_file = [open(SAMPLE_YAML_IAC_FILENAME, 'r')]
+        mapping_file = [open(IAC_VALID_MAPPING_FILENAME, 'r')]
 
         # And a project id
         project_id = 'id'
@@ -148,7 +133,7 @@ class TestOtmProjectService:
 
         # When creating OTM project from IaC file having result as stream instead of file
         otm_project = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType.CLOUDFORMATION, iac_file,
-                                                             None)
+                                                             mapping_file)
 
         # Then
         assert otm_project.otm is not None
@@ -159,6 +144,7 @@ class TestOtmProjectService:
     def test_from_iac_file_otm_stream_invalid_file_ok(self):
         # Given a sample valid IaC file
         iac_file = [open(INVALID_YAML_FILENAME, 'r')]
+        mapping_file = [open(IAC_VALID_MAPPING_FILENAME, 'r')]
 
         # And a project id
         project_id = 'id'
@@ -169,4 +155,5 @@ class TestOtmProjectService:
         # When creating OTM project from IaC file having result as stream instead of file
         # Then raises JMESPathTypeError
         with raises(JMESPathTypeError):
-            OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType.CLOUDFORMATION, iac_file, None)
+            OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType.CLOUDFORMATION, iac_file,
+                                                   mapping_file)
