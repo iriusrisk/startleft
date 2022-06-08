@@ -15,6 +15,9 @@ OTM_SUCCESSFULLY_CREATED = 'Provided IaC file has been successfully processed an
 MAPPING_FILE_NOT_FOUND = 'Cannot find mapping file'
 MAPPING_FILE_SCHEMA_NOT_VALID = 'Mapping files are not valid'
 ERROR_WRITING_THREAT_MODEL = 'Unable to create the threat model'
+IAC_FILE_IS_NOT_VALID = 'Provided IaC file is not valid'
+DIAGRAM_FILE_IS_NOT_VALID = 'Provided diagram file is not valid'
+NOT_PARSEABLE_SOURCE_FILES = 'The source files are not parseable'
 
 CANNOT_RECOGNIZE_GIVEN_DIAGRAM_TYPE = 'Cannot recognize given diagram type'
 
