@@ -18,4 +18,4 @@ class MappingValidator:
             logger.error('Mapping files are not valid')
             logger.error(f"--- Schema errors---\n{schema.errors}\n--- End of schema errors ---")
             raise MappingFileSchemaNotValidError(schema.errors)
-        logger.debug("Mapping files are valid")
+        logger.info("Mapping files are valid")

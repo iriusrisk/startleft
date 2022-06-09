@@ -59,3 +59,6 @@ PROJECT_ID_NAME = '--project-id'
 PROJECT_ID_SHORTNAME = '-i'
 PROJECT_ID_DESC = 'Project id.'
 
+OTM_INPUT_FILE_NAME = '--otm-file'
+OTM_INPUT_FILE_SHORTNAME = '-o'
+OTM_INPUT_FILE_DESC = 'OTM input file.'
