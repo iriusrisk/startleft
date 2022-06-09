@@ -73,21 +73,25 @@ class OtmProject:
     def from_diag_file(project_id: str, project_name: str, diag_type: DiagramType,
                        temp_diag_file: Optional[IO], mapping_diag_files: [Optional[IO]] = None):
         logger.info("Parsing Diagram file to OTM")
-        iac_mapping = MappingFileLoader().load(mapping_diag_files)
-        MappingValidator('diagram_mapping_schema.json').validate(iac_mapping)
         diag_to_otm = ExternalDiagramToOtm(diag_type)
-        otm = diag_to_otm.run(temp_diag_file.name, iac_mapping, project_name, project_id)
+        otm = diag_to_otm.run(temp_diag_file.name, mapping_diag_files, project_name, project_id)
         return OtmProject.from_otm_stream(otm.json(), project_id, project_name)
 
     @staticmethod
     def validate_iac_mappings_file(mapping_files: [Optional[IO]]):
-        logger.info("Validating IaC mapping files")
+        logger.debug("Validating IaC mapping files")
         iac_mapping = MappingFileLoader().load(mapping_files)
         MappingValidator('iac_mapping_schema.json').validate(iac_mapping)
 
     @staticmethod
+    def validate_diagram_mappings_file(mapping_files: [Optional[IO]]):
+        logger.debug("Validating Diagram mapping files")
+        diagram_mapping = MappingFileLoader().load(mapping_files)
+        MappingValidator('diagram_mapping_schema.json').validate(diagram_mapping)
+
+    @staticmethod
     def validate_otm_stream(otm_stream: str) -> {}:
-        logger.info("Validating OTM stream")
+        logger.debug("Validating OTM stream")
         OtmValidator().validate(otm_stream)
         return otm_stream
 
