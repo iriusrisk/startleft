@@ -96,11 +96,11 @@ class OtmProject:
     def from_diag_file(project_id: str, project_name: str, diag_type: DiagramType,
                        temp_diag_file: Optional[IO], mapping_diag_files: [Optional[IO]] = None):
         logger.info("Parsing Diagram file to OTM")
-        iac_mapping = MappingFileLoader().load(mapping_diag_files)
-        MappingValidator('diagram_mapping_schema.json').validate(iac_mapping)
+        diag_mapping = MappingFileLoader().load(mapping_diag_files)
+        MappingValidator('diagram_mapping_schema.json').validate(diag_mapping)
         try:
             diag_to_otm = ExternalDiagramToOtm(diag_type)
-            otm = diag_to_otm.run(temp_diag_file.name, iac_mapping, project_name, project_id)
+            otm = diag_to_otm.run(temp_diag_file.name, diag_mapping, project_name, project_id)
         except JMESPathTypeError as e:
             logger.error(f"{e}")
             raise ParsingError(e, ErrorCode.DIAGRAM_TO_OTM_EXIT_VALIDATION_FAILED)
