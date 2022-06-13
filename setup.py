@@ -26,7 +26,8 @@ setup(
         'click',
         'uvicorn',
         'shapely',
-        'vsdx'
+        'vsdx',
+        'python-magic'
     ],
     use_scm_version=True,
     extras_require={

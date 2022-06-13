@@ -6,6 +6,7 @@ path = os.path.dirname(__file__)
 example_json = path + '/example.json'
 example_yaml = path + '/example.yaml'
 invalid_yaml = path + '/invalid-yaml.yaml'
+example_gzip = path + '/example.gz'
 
 # OTM
 otm_file_example = path + '/otm/otm_file_example.otm'
