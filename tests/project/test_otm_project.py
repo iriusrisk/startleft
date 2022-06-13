@@ -10,6 +10,7 @@ SAMPLE_OTM_FILENAME = test_resource_paths.otm_file_example
 SAMPLE_YAML_IAC_FILENAME = test_resource_paths.cloudformation_for_mappings_tests_json
 IAC_VALID_MAPPING_FILENAME = test_resource_paths.default_cloudformation_mapping
 INVALID_YAML_FILENAME = test_resource_paths.invalid_yaml
+CUSTOM_YAML_VISIO_MAPPING_FILENAME = test_resource_paths.custom_vpc_mapping
 
 
 class TestOtmProjectService:
@@ -175,3 +176,11 @@ class TestOtmProjectService:
         # Then raises ParsingError
         with raises(ParsingError):
             OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType.CLOUDFORMATION, iac_file, mapping_file)
+
+    def test_validate_diagram_mappings_file_ok(self):
+        # Given a sample valid Mapping Visio file
+        mapping_file = CUSTOM_YAML_VISIO_MAPPING_FILENAME
+
+        # When validating
+        # Then validator returns OK
+        OtmProject.validate_diagram_mappings_file(mapping_file)
