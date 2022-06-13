@@ -65,8 +65,8 @@ OTM_INPUT_FILE_DESC = 'OTM input file.'
 
 IAC_MAPPING_FILE_NAME = '--iac-mapping-file'
 IAC_MAPPING_FILE_SHORTNAME = '-i'
-IAC_MAPPING_FILE_DESC = 'Mapping file to validate.'
+IAC_MAPPING_FILE_DESC = 'IaC mapping file to validate.'
 
 DIAGRAM_MAPPING_FILE_NAME = '--diagram-mapping-file'
 DIAGRAM_MAPPING_FILE_SHORTNAME = '-d'
-DIAGRAM_MAPPING_FILE_DESC = 'Diagram file to validate.'
+DIAGRAM_MAPPING_FILE_DESC = 'Diagram mapping file to validate.'
