@@ -2,6 +2,7 @@ import pytest
 
 from startleft.iac.iac_to_otm import IacToOtm
 from startleft.iac.iac_type import IacType
+from startleft.utils.file_utils import FileUtils
 from tests.resources import test_resource_paths
 
 
@@ -20,7 +21,7 @@ class TestTerraformAWSComponents:
         filename = test_resource_paths.terraform_aws_simple_components
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
         iac_to_otm = IacToOtm('Test case AWS simple components', 'aws_simple_components', IacType.TERRAFORM)
-        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, filename)
+        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, [FileUtils.get_data(filename)])
 
         assert iac_to_otm.source_model.otm
         otm = iac_to_otm.otm
@@ -54,7 +55,7 @@ class TestTerraformAWSComponents:
             'Test case AWS with $parent and $children components',
             'aws_parent_children_components',
             IacType.TERRAFORM)
-        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, filename)
+        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, [FileUtils.get_data(filename)])
 
         assert iac_to_otm.source_model.otm
         otm = iac_to_otm.otm
@@ -66,16 +67,13 @@ class TestTerraformAWSComponents:
 
     @pytest.mark.parametrize('filename', [
         test_resource_paths.terraform_aws_singleton_components_unix_line_breaks,
-        [open(test_resource_paths.terraform_aws_singleton_components_unix_line_breaks, 'rb')],
         test_resource_paths.terraform_aws_singleton_components_dos_line_breaks,
-        [open(test_resource_paths.terraform_aws_singleton_components_dos_line_breaks, 'rb')],
-        test_resource_paths.terraform_aws_singleton_components_classic_macos_line_breaks,
-        [open(test_resource_paths.terraform_aws_singleton_components_classic_macos_line_breaks, 'rb')]
+        test_resource_paths.terraform_aws_singleton_components_classic_macos_line_breaks
     ])
     def test_aws_singleton_components(self, filename: str):
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
         iac_to_otm = IacToOtm('Test case AWS singleton components', 'aws_singleton_components', IacType.TERRAFORM)
-        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, filename)
+        iac_to_otm.run(IacType.TERRAFORM, mapping_filename,  [FileUtils.get_data(filename)])
 
         assert iac_to_otm.source_model.otm
         otm = iac_to_otm.otm

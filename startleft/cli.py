@@ -52,12 +52,16 @@ def cli(log_level, verbose):
     configure_logging(verbose, log_level)
 
 
-def parse_iac(iac_type, mapping_file, output_file, project_name, project_id, iac_file):
+def parse_iac(iac_type, mapping_file, output_file, project_name, project_id, iac_files):
     """
     Parses IaC source files into Open Threat Model
     """
     logger.info("Parsing IaC source files into OTM")
-    otm = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType(iac_type.upper()), iac_file,
+    iac_data = []
+    for iac_file in iac_files:
+        with open(iac_file, 'r') as f:
+            iac_data.append(f.read())
+    otm = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType(iac_type.upper()), iac_data,
                                                  mapping_file)
     otm.otm_to_file(output_file)
 

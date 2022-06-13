@@ -13,3 +13,9 @@ class FileUtils:
     @classmethod
     def delete(cls, filename: str):
         os.unlink(filename)
+
+    @staticmethod
+    def get_data(filename):
+        with open(filename, 'r') as f:
+            iac_data = f.read()
+        return iac_data

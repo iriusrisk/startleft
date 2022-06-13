@@ -3,21 +3,22 @@ You can find some sample source files inside the `examples` directory:
 * `examples/cloudformation` contains CloudFormation Template example files to convert into OTM format.
 * `examples/terraform` contains Terraform example files to convert into OTM format.
 * `examples/manual` contains the OTM example file detailed in [Hand Crafted OTM](#hand-crafted-OTM).
+* `examples/visio` contains Visio example files to convert into OTM format.
 
-To process this examples, you may also use the mapping files located in `startleft/config`. They provide some examples
-for mappings between IaC components and IriusRisk ones:
-* `default-cloudformation-mapping.yaml` contains mappings for Cloudformation files.
-* `default-terraform-mapping.yaml` contains mappings for Terraform files.
+To process this examples, it is mandatory to use the mapping files according to the file data type. 
+You can find some sample mapping files inside the `examples` directory:
+* `examples/cloudformation` contains mappings for Cloudformation files.
+* `examples/terraform` contains mappings for Terraform files.
+* `examples/visio` contains mappings for Visio files.
 
 ## CloudFormation
 CloudFormation is the AWS tool which lets you model, provision, and manage AWS and third-party resources by treating 
-infrastructure as code. Startleft's repository contains a default CloudFormation mapping file that enables you to 
+infrastructure as code. Startleft's repository contains an example CloudFormation mapping file that enables you to 
 generate threat models based on the OTM standard from a CloudFormation template file using 
 a single command.
 
 The following examples, which are located in the `examples/cloudformation` directory, show you how to carry out the 
-different stages of the process separately or in a single step. They also demonstrate how to use a custom mapping file 
-in order to generate OTM resources that fulfill exactly your needs.
+different stages of the process separately or in a single step.
 
 ### Security Groups on multinetwork with Load Balancer
 This is a rich example when you can see in action some the capabilities of startleft. It represents the threat model for
@@ -33,16 +34,7 @@ OTM file `multinetwork_security_groups_with_lb.otm` in the process.
 ```shell
 startleft parse \
 	--iac-type cloudformation \
-	--output-file multinetwork_security_groups_with_lb.otm \
-	--project-name "CFT MN Security Groups with LB" \
-	--project-id "cft-mn-sg-lb" \
-	multinetwork_security_groups_with_lb.json
-```
-It is also possible to include your own mapping file, thus overriding the default internal CloudFormation mapping file:
-```shell
-startleft parse \
-	--iac-type cloudformation \
-	--mapping-file my_cloudformation_mapping_file.yaml \
+	--mapping-file iriusrisk-cft-mapping.yaml \
 	--output-file multinetwork_security_groups_with_lb.otm \
 	--project-name "CFT MN Security Groups with LB" \
 	--project-id "cft-mn-sg-lb" \
@@ -64,6 +56,7 @@ StartLeft supports parsing Terraform source files. An example is provided in the
 ```shell
 startleft parse \
 	--iac-type terraform \
+	--mapping-file iriusrisk-tf-aws-mapping.yaml \
 	--output-file elb.otm \
 	--project-name "Terraform ELB" \
 	--project-id "terraform-elb" \
@@ -80,7 +73,7 @@ startleft parse \
 	--output-file aws-with-tz-and-vpc.otm \
 	--project-name "Visio AWS" \
 	--project-id "visio-aws" \
-    --default-mapping-file default-visio-mapping-file.yaml \
+    --default-mapping-file aws-visio-mapping.yaml \
 	aws-with-tz-and-vpc.vsdx
 ```
 > You can add the optional parameter ```--custom-mapping-file``` to add custom mappings  
