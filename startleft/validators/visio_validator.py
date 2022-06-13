@@ -8,7 +8,7 @@ from startleft.validators.diagram_validator import DiagramValidator
 
 logger = logging.getLogger(__name__)
 
-VALID_MIME = 'application/vnd.ms-visio.drawing.main+xml'
+VALID_MIME = ['application/vnd.ms-visio.drawing.main+xml', 'application/octet-stream']
 
 MAX_SIZE = 10 * 1024 * 1024
 MIN_SIZE = 10
@@ -32,5 +32,5 @@ class VisioValidator(DiagramValidator):
     def __validate_content_type(self):
         magic = magik.Magic(mime=True)
         mime = magic.from_file(self.file.name)
-        if mime != VALID_MIME:
+        if mime not in VALID_MIME:
             raise DiagramFileNotValidError('Invalid mime type')
