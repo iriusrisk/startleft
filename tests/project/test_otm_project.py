@@ -179,7 +179,7 @@ class TestOtmProjectService:
 
     def test_validate_diagram_mappings_file_ok(self):
         # Given a sample valid Mapping Visio file
-        mapping_file = CUSTOM_YAML_VISIO_MAPPING_FILENAME
+        mapping_file = [FileUtils.get_data(CUSTOM_YAML_VISIO_MAPPING_FILENAME)]
 
         # When validating
         # Then validator returns OK

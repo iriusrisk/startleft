@@ -1,5 +1,6 @@
 from startleft.diagram.diagram_type import DiagramType
 from startleft.diagram.external_diagram_to_otm import ExternalDiagramToOtm
+from startleft.utils.file_utils import FileUtils
 from tests.resources import test_resource_paths
 from tests.test_utils import TestUtils
 
@@ -8,7 +9,7 @@ class TestVisioDiagramToOtm:
     def test_aws_shapes(self):
         otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
             test_resource_paths.visio_aws_shapes,
-            test_resource_paths.default_visio_mapping,
+            [FileUtils.get_data(test_resource_paths.default_visio_mapping)],
             "project-name",
             "project-id"
         )
@@ -35,7 +36,7 @@ class TestVisioDiagramToOtm:
     def test_generic_elements(self):
         otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
             test_resource_paths.visio_generic_shapes,
-            test_resource_paths.custom_vpc_mapping,
+            [FileUtils.get_data(test_resource_paths.custom_vpc_mapping)],
             "project-name",
             "project-id"
         )
@@ -54,7 +55,7 @@ class TestVisioDiagramToOtm:
     def test_self_pointing_connectors(self):
         otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
             test_resource_paths.visio_self_pointing_connectors,
-            test_resource_paths.custom_vpc_mapping,
+            [FileUtils.get_data(test_resource_paths.custom_vpc_mapping)],
             "project-name",
             "project-id"
         )
@@ -73,7 +74,7 @@ class TestVisioDiagramToOtm:
     def test_extraneous_elements(self):
         otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
             test_resource_paths.visio_extraneous_elements,
-            test_resource_paths.default_visio_mapping,
+            [FileUtils.get_data(test_resource_paths.default_visio_mapping)],
             "project-name",
             "project-id"
         )
@@ -101,7 +102,8 @@ class TestVisioDiagramToOtm:
     def test_complex_diagram(self):
         otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
             test_resource_paths.visio_aws_with_tz_and_vpc,
-            test_resource_paths.default_visio_mapping,
+            [FileUtils.get_data(test_resource_paths.default_visio_mapping)],
+
             "project-name",
             "project-id"
         )
