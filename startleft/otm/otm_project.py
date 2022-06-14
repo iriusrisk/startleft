@@ -25,10 +25,6 @@ logger = logging.getLogger(__name__)
 DEFAULT_OTM_FILENAME = 'threatmodel.otm'
 
 
-def get_default_iac_mapping_files(provider: IacType) -> [str]:
-    return IacType(provider).def_map_file
-
-
 def get_diagram_ext(diag_type):
     if diag_type == DiagramType.VISIO:
         return '.vsdx'
@@ -69,13 +65,12 @@ class OtmProject:
 
     @staticmethod
     def from_iac_file_to_otm_stream(project_id: str, project_name: str, iac_type: IacType, iac_data: [bytes],
-                                    custom_iac_mapping_files: [Optional[IO]] = None):
+                                    mapping_data_list: [bytes]):
         IacValidator(iac_data, iac_type).validate()
-        mapping_iac_files = custom_iac_mapping_files or get_default_iac_mapping_files(iac_type)
         logger.info("Parsing IaC file to OTM")
         try:
             iac_to_otm = IacToOtm(project_name, project_id, iac_type)
-            iac_to_otm.run(iac_type, mapping_iac_files, iac_data)
+            iac_to_otm.run(iac_type, mapping_data_list, iac_data)
         except JMESPathTypeError as e:
             logger.error(f"{e}")
             raise ParsingError(e, ErrorCode.IAC_TO_OTM_EXIT_VALIDATION_FAILED)
@@ -83,18 +78,18 @@ class OtmProject:
 
     @staticmethod
     def from_diag_file_to_otm_stream(project_id: str, project_name: str, diag_type: DiagramType,
-                                     diag_file: [Optional[IO]], custom_mapping_files: [Optional[IO]] = None):
+                                     diag_file: [Optional[IO]], mapping_data_list: [bytes]):
         logger.info("Parsing Diagram stream to OTM")
         temp_diag_file = FileUtils.copy_to_disk(diag_file[0], get_diagram_ext(diag_type))
         diag_validator: DiagramValidator = get_diagram_validator(diag_type, temp_diag_file)
         diag_validator.validate()
-        otm = OtmProject.from_diag_file(project_id, project_name, diag_type, temp_diag_file, custom_mapping_files)
+        otm = OtmProject.from_diag_file(project_id, project_name, diag_type, temp_diag_file, mapping_data_list)
         FileUtils.delete(temp_diag_file.name)
         return otm
 
     @staticmethod
     def from_diag_file(project_id: str, project_name: str, diag_type: DiagramType,
-                       temp_diag_file: Optional[IO], mapping_diag_files: [Optional[IO]] = None):
+                       temp_diag_file: Optional[IO], mapping_diag_files: [bytes]):
         logger.info("Parsing Diagram file to OTM")
         diag_mapping = MappingFileLoader().load(mapping_diag_files)
         MappingValidator('diagram_mapping_schema.json').validate(diag_mapping)

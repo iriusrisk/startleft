@@ -21,7 +21,7 @@ class TestTerraformAWSComponents:
         filename = test_resource_paths.terraform_aws_simple_components
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
         iac_to_otm = IacToOtm('Test case AWS simple components', 'aws_simple_components', IacType.TERRAFORM)
-        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, [FileUtils.get_data(filename)])
+        iac_to_otm.run(IacType.TERRAFORM, [FileUtils.get_data(mapping_filename)], [FileUtils.get_data(filename)])
 
         assert iac_to_otm.source_model.otm
         otm = iac_to_otm.otm
@@ -55,7 +55,7 @@ class TestTerraformAWSComponents:
             'Test case AWS with $parent and $children components',
             'aws_parent_children_components',
             IacType.TERRAFORM)
-        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, [FileUtils.get_data(filename)])
+        iac_to_otm.run(IacType.TERRAFORM, [FileUtils.get_data(mapping_filename)], [FileUtils.get_data(filename)])
 
         assert iac_to_otm.source_model.otm
         otm = iac_to_otm.otm
@@ -73,7 +73,7 @@ class TestTerraformAWSComponents:
     def test_aws_singleton_components(self, filename: str):
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
         iac_to_otm = IacToOtm('Test case AWS singleton components', 'aws_singleton_components', IacType.TERRAFORM)
-        iac_to_otm.run(IacType.TERRAFORM, mapping_filename,  [FileUtils.get_data(filename)])
+        iac_to_otm.run(IacType.TERRAFORM, [FileUtils.get_data(mapping_filename)], [FileUtils.get_data(filename)])
 
         assert iac_to_otm.source_model.otm
         otm = iac_to_otm.otm

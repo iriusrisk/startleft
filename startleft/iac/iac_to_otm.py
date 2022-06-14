@@ -55,14 +55,14 @@ class IacToOtm:
         logger.info(f"Getting OTM stream")
         return self.otm.json()
 
-    def run(self, type_, map_filenames, iac_data_list):
+    def run(self, type_,  mapping_data, iac_data_list):
         """
         Parses selected source files and maps them to the Open Threat Model format
         """
         loader = self.source_loader_map[type_]
         self.load_source_data(loader, iac_data_list)
 
-        iac_mapping = self.mapping_file_loader.load(map_filenames)
+        iac_mapping = self.mapping_file_loader.load(mapping_data)
         self.mapping_validator.validate(iac_mapping)
 
         self.transformer.run(iac_mapping)
