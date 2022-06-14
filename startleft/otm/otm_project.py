@@ -103,13 +103,19 @@ class OtmProject:
 
     @staticmethod
     def validate_iac_mappings_file(mapping_files: [Optional[IO]]):
-        logger.info("Validating IaC mapping files")
+        logger.debug("Validating IaC mapping files")
         iac_mapping = MappingFileLoader().load(mapping_files)
         MappingValidator('iac_mapping_schema.json').validate(iac_mapping)
 
     @staticmethod
+    def validate_diagram_mappings_file(mapping_files: [Optional[IO]]):
+        logger.debug("Validating Diagram mapping files")
+        diagram_mapping = MappingFileLoader().load(mapping_files)
+        MappingValidator('diagram_mapping_schema.json').validate(diagram_mapping)
+
+    @staticmethod
     def validate_otm_stream(otm_stream: str) -> {}:
-        logger.info("Validating OTM stream")
+        logger.debug("Validating OTM stream")
         OtmValidator().validate(otm_stream)
         return otm_stream
 

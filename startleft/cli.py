@@ -129,15 +129,20 @@ def parse_any(iac_type, diagram_type, mapping_file, default_mapping_file, custom
 
 
 @cli.command()
-@click.option(MAPPING_FILE_NAME, MAPPING_FILE_SHORTNAME, help=MAPPING_FILE_DESC)
+@click.option(IAC_MAPPING_FILE_NAME, IAC_MAPPING_FILE_SHORTNAME, help=IAC_MAPPING_FILE_DESC)
+@click.option(DIAGRAM_MAPPING_FILE_NAME, DIAGRAM_MAPPING_FILE_SHORTNAME, help=DIAGRAM_MAPPING_FILE_DESC)
 @click.option(OTM_INPUT_FILE_NAME, OTM_INPUT_FILE_SHORTNAME, help=OTM_INPUT_FILE_DESC)
-def validate(mapping_file, otm_file):
+def validate(iac_mapping_file, diagram_mapping_file, otm_file):
     """
     Validates a mapping or OTM file
     """
-    if mapping_file:
+    if iac_mapping_file:
         logger.info("Validating IaC mapping files")
-        OtmProject.validate_iac_mappings_file(mapping_file)
+        OtmProject.validate_iac_mappings_file(iac_mapping_file)
+
+    if diagram_mapping_file:
+        logger.info("Validating Diagram mapping files")
+        OtmProject.validate_diagram_mappings_file(diagram_mapping_file)
 
     if otm_file:
         logger.info("Validating OTM file")
