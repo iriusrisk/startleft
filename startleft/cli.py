@@ -62,7 +62,7 @@ def parse_iac(iac_type, mapping_file, output_file, project_name, project_id, iac
     for iac_file in iac_files:
         iac_data.append(FileUtils.get_data(iac_file))
 
-    mapping_data = FileUtils.get_data(mapping_file)
+    mapping_data = [FileUtils.get_data(mapping_file)]
     otm = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType(iac_type.upper()), iac_data,
                                                  mapping_data)
     otm.otm_to_file(output_file)
