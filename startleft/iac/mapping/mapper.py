@@ -1,6 +1,6 @@
 import logging
-import uuid
 import re
+import uuid
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +51,7 @@ def get_tags(source_model, source_object, mapping):
 def set_optional_parameters_to_resource(resource, mapping_tags, resource_tags, singleton_multiple_name=None,
                                         singleton_multiple_tags=None):
     if mapping_tags is not None and resource_tags is not None and len(
-            list(filter(lambda tag: tag is not None and tag is not '', resource_tags))) > 0:
+            list(filter(lambda tag: tag is not None and tag != '', resource_tags))) > 0:
         resource["tags"] = resource_tags
     if singleton_multiple_name is not None:
         resource["singleton_multiple_name"] = singleton_multiple_name

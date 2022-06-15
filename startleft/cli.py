@@ -9,10 +9,11 @@ from startleft.api.errors import CommonError
 from startleft.clioptions.exclusion_option import Exclusion
 from startleft.diagram.diagram_type import DiagramType
 from startleft.iac.iac_to_otm import IacToOtm
-from startleft.log import get_log_level, configure_logging
 from startleft.iac.iac_type import IacType
+from startleft.log import get_log_level, configure_logging
 from startleft.messages import *
 from startleft.otm.otm_project import OtmProject
+from startleft.utils.file_utils import FileUtils
 from startleft.version import version
 
 logger = logging.getLogger(__name__)
@@ -59,10 +60,11 @@ def parse_iac(iac_type, mapping_file, output_file, project_name, project_id, iac
     logger.info("Parsing IaC source files into OTM")
     iac_data = []
     for iac_file in iac_files:
-        with open(iac_file, 'r') as f:
-            iac_data.append(f.read())
+        iac_data.append(FileUtils.get_data(iac_file))
+
+    mapping_data = [FileUtils.get_data(mapping_file)]
     otm = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType(iac_type.upper()), iac_data,
-                                                 mapping_file)
+                                                 mapping_data)
     otm.otm_to_file(output_file)
 
 
