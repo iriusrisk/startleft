@@ -88,10 +88,6 @@ components:
   - label:  Lambda Function
     type:   aws-lambda-function
 
-    # Stencil: AWS Containers
-  - label:  AWS Step Functions workflow
-    type:   step-functions
-
     # Stencil: AWS Customer Engagement
   - label:  Amazon Pinpoint
     type:   CD-PINPOINT
