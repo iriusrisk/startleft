@@ -1,4 +1,5 @@
 from startleft.diagram.objects.diagram_objects import Diagram, DiagramComponent
+from startleft.utils.iterations_utils import IterationUtils
 
 
 class DiagramPruner:
@@ -17,22 +18,18 @@ class DiagramPruner:
         self.__remove_self_pointing_connectors()
 
     def __remove_unmapped_components(self):
-        # This weird while needs to be done because:
-        # - The foreach does not work if you remove an element from the list
-        # - The remove has to be invoked on the list to affect the object passed as a class attribute
-        i = 0
-        while i < len(self.components):
-            if not self.__is_component_mapped(self.components[i]):
-                self.__remove_component(self.components[i])
-            else:
-                i = i + 1
+        IterationUtils.remove_from_list(
+            self.components,
+            lambda component: not self.__is_component_mapped(component),
+            self.__remove_component
+        )
 
     def __prune_orphan_connectors(self):
         removed_components_ids = [removed_component.id for removed_component in self.__removed_components]
-        for diagram_connector in self.connectors:
-            if diagram_connector.from_id in removed_components_ids \
-                    or diagram_connector.to_id in removed_components_ids:
-                self.connectors.remove(diagram_connector)
+        IterationUtils.remove_from_list(
+            self.connectors,
+            lambda connector: connector.from_id in removed_components_ids or connector.to_id in removed_components_ids
+        )
 
     def __restore_parents(self):
         self.__squash_removed_components()
@@ -45,16 +42,10 @@ class DiagramPruner:
                 diagram_component.parent = removed_parents[diagram_component.parent.id]
 
     def __remove_self_pointing_connectors(self):
-        # This weird while needs to be done because:
-        # - The foreach does not work if you remove an element from the list
-        # - The remove has to be invoked on the list to affect the object passed as a class attribute
-        i = 0
-        while i < len(self.connectors):
-            connector = self.connectors[i]
-            if connector.from_id == connector.to_id:
-                self.connectors.remove(connector)
-            else:
-                i = i + 1
+        IterationUtils.remove_from_list(
+            self.connectors,
+            lambda connector: connector.from_id == connector.to_id
+        )
 
     def __is_component_mapped(self, component: DiagramComponent):
         return component.name in self.mapped_labels or component.type in self.mapped_labels
