@@ -20,6 +20,8 @@ def format_source_objects(source_objects):
         source_objects = format_aws_fns(source_objects)
     if isinstance(source_objects, str):
         source_objects = [source_objects]
+    if source_objects is None:
+        source_objects = []
 
     return source_objects
 
