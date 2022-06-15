@@ -1,11 +1,10 @@
 import json
 import logging
-from io import StringIO
 
 import hcl2
-import xmltodict
 import yaml
 
+from startleft.api.errors import IacFileNotValidError
 from startleft.iac.iac_type import IacType
 from startleft.iac.mapping import transformer, sourcemodel
 from startleft.mapping.mapping_file_loader import MappingFileLoader
@@ -35,60 +34,45 @@ class IacToOtm:
             IacType.TERRAFORM: self.load_hcl2_source
         }
 
-    def load_xml_source(self, filename):
-        if isinstance(filename, str):
-            with open(filename, 'rb') as f:
-                self.source_model.load(xmltodict.parse(f.read(), xml_attribs=True))
-        else:
-            self.source_model.load(xmltodict.parse(filename.read(), xml_attribs=True))
+    def load_yaml_source(self, iac_data):
+        self.source_model.load(yaml.load(iac_data, Loader=yaml.BaseLoader))
 
-    def load_yaml_source(self, filename):
-        if isinstance(filename, str):
-            with open(filename, 'r') as f:
-                self.source_model.load(yaml.load(f, Loader=yaml.BaseLoader))
-        else:
-            self.source_model.load(yaml.load(filename, Loader=yaml.BaseLoader))
+    def load_hcl2_source(self, data):
+        self.source_model.load(hcl2.loads(data))
 
-    def load_hcl2_source(self, filename):
-        if isinstance(filename, str):
-            with open(filename, 'r') as f:
-                self.source_model.load(hcl2.load(f))
-        else:
-            self.source_model.load(hcl2.load(StringIO(initial_value=str(filename.read(), 'utf-8'), newline=None)))
-
-    def load_source_files(self, loader, filenames):
-        if isinstance(filenames, str):
-            filenames = [filenames]        
-        for filename in filenames:
-            logger.info(f"Loading source file '{filename}'")
-            try:
-                loader(filename)
-            except FileNotFoundError:
-                logger.warning(f"Cannot find source file '{filename}', skipping")
-        logger.debug("Source files loaded successfully")
+    @staticmethod
+    def load_source_data(loader, iac_data_list):
+        try:
+            for iac_data in iac_data_list:
+                logger.debug(f"Loading iac data and reading as string")
+                data = iac_data if isinstance(iac_data, str) else iac_data.decode()
+                loader(data)
+            logger.debug("Source data loaded successfully")
+        except (UnicodeDecodeError, AttributeError):
+            raise IacFileNotValidError("Invalid content type for iac_file")
 
     def get_otm_stream(self):
         logger.info(f"Getting OTM stream")
         return self.otm.json()
 
-    def run(self, type_, map_filenames, filenames):
+    def run(self, type_, map_filenames, iac_data_list):
         """
         Parses selected source files and maps them to the Open Threat Model format
         """
         loader = self.source_loader_map[type_]
-        self.load_source_files(loader, filenames)
+        self.load_source_data(loader, iac_data_list)
 
         iac_mapping = self.mapping_file_loader.load(map_filenames)
         self.mapping_validator.validate(iac_mapping)
 
         self.transformer.run(iac_mapping)
 
-    def search(self, type_, query, filenames):
+    def search(self, type_, query, iac_data_list):
         """
         Runs a JMESPath search query against the provided source files and outputs the matching results
         """        
         loader = self.source_loader_map[type_]
-        self.load_source_files(loader, filenames)
+        self.load_source_data(loader, iac_data_list)
         
         logger.info(f"Searching for '{query}' in source:")
         logger.info(json.dumps(self.source_model.data, indent=2))

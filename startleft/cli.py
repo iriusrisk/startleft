@@ -9,36 +9,13 @@ from startleft.api.errors import CommonError
 from startleft.clioptions.exclusion_option import Exclusion
 from startleft.diagram.diagram_type import DiagramType
 from startleft.iac.iac_to_otm import IacToOtm
+from startleft.log import get_log_level, configure_logging
 from startleft.iac.iac_type import IacType
 from startleft.messages import *
 from startleft.otm.otm_project import OtmProject
+from startleft.version import version
 
 logger = logging.getLogger(__name__)
-
-__version__ = "0.1.0"
-
-
-def get_log_level(ctx, param, value):
-    levels = {
-        'NONE': 100,
-        'CRIT': logging.CRITICAL,
-        'ERROR': logging.ERROR,
-        'WARN': logging.WARNING,
-        'INFO': logging.INFO,
-        'DEBUG': logging.DEBUG
-    }
-
-    if value.upper() in levels:
-        return levels[value.upper()]
-    raise click.BadParameter(f"Log level must be one of: {', '.join(levels.keys())}")
-
-
-def configure_logger(level, verbose):
-    if verbose:
-        logging.basicConfig(format='%(levelname) -10s %(asctime)s %(module)s:%(lineno)s %(funcName)s %(message)s',
-                            level=level)
-    else:
-        logging.basicConfig(format='%(message)s', level=level)
 
 
 def validate_server(ctx, param, value):
@@ -67,20 +44,24 @@ class CatchAllExceptions(click.Group):
               type=click.Choice(['CRIT', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'NONE'], case_sensitive=False),
               callback=get_log_level, default='info', help='Set the log level.')
 @click.option('--verbose/--no-verbose', '-v/-nv', default=False, help='Makes logging more verbose.')
-@click.version_option(__version__)
+@click.version_option(version)
 def cli(log_level, verbose):
     """
     Parse IaC and other files to the Open Threat Model format
     """
-    configure_logger(log_level, verbose)
+    configure_logging(verbose, log_level)
 
 
-def parse_iac(iac_type, mapping_file, output_file, project_name, project_id, iac_file):
+def parse_iac(iac_type, mapping_file, output_file, project_name, project_id, iac_files):
     """
     Parses IaC source files into Open Threat Model
     """
     logger.info("Parsing IaC source files into OTM")
-    otm = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType(iac_type.upper()), iac_file,
+    iac_data = []
+    for iac_file in iac_files:
+        with open(iac_file, 'r') as f:
+            iac_data.append(f.read())
+    otm = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType(iac_type.upper()), iac_data,
                                                  mapping_file)
     otm.otm_to_file(output_file)
 
@@ -146,19 +127,24 @@ def parse_any(iac_type, diagram_type, mapping_file, default_mapping_file, custom
 
 
 @cli.command()
-@click.option(MAPPING_FILE_NAME, MAPPING_FILE_SHORTNAME, help=MAPPING_FILE_DESC)
-@click.option(OUTPUT_FILE_NAME, OUTPUT_FILE_SHORTNAME, default=OUTPUT_FILE, help=OUTPUT_FILE_DESC)
-def validate(mapping_file, output_file):
+@click.option(IAC_MAPPING_FILE_NAME, IAC_MAPPING_FILE_SHORTNAME, help=IAC_MAPPING_FILE_DESC)
+@click.option(DIAGRAM_MAPPING_FILE_NAME, DIAGRAM_MAPPING_FILE_SHORTNAME, help=DIAGRAM_MAPPING_FILE_DESC)
+@click.option(OTM_INPUT_FILE_NAME, OTM_INPUT_FILE_SHORTNAME, help=OTM_INPUT_FILE_DESC)
+def validate(iac_mapping_file, diagram_mapping_file, otm_file):
     """
     Validates a mapping or OTM file
     """
-    if mapping_file:
+    if iac_mapping_file:
         logger.info("Validating IaC mapping files")
-        OtmProject.validate_iac_mappings_file(mapping_file)
+        OtmProject.validate_iac_mappings_file(iac_mapping_file)
 
-    if output_file:
+    if diagram_mapping_file:
+        logger.info("Validating Diagram mapping files")
+        OtmProject.validate_diagram_mappings_file(diagram_mapping_file)
+
+    if otm_file:
         logger.info("Validating OTM file")
-        OtmProject.load_and_validate_otm_file(output_file)
+        OtmProject.load_and_validate_otm_file(otm_file)
 
 
 @cli.command()
@@ -183,6 +169,9 @@ def server(port: int):
     """
     Launches the REST server to generate OTMs from requests
     """
+    configure_logging(verbose=True)
+    logger.info(f'Startleft version: {version}')
+
     from startleft.api import fastapi_server
     fastapi_server.run_webapp(port)
 

@@ -11,7 +11,9 @@ from startleft.api.controllers.diagram import diag_create_otm_controller
 from startleft.api.controllers.health import health_controller
 from startleft.api.controllers.iac import iac_create_otm_controller
 from startleft.api.error_response import ErrorResponse
-from startleft.api.errors import CommonError, ErrorCode, MappingFileSchemaNotValidError
+from startleft.api.errors import CommonError, ErrorCode, MappingFileSchemaNotValidError, IacFileNotValidError, \
+    DiagramFileNotValidError, ParsingError
+from startleft.log import VERBOSE_MESSAGE_FORMAT
 
 webapp = FastAPI()
 logger = logging.getLogger(__name__)
@@ -28,8 +30,17 @@ def initialize_webapp():
     return webapp
 
 
+def get_log_config():
+    log_config = uvicorn.config.LOGGING_CONFIG
+    log_config["loggers"]["uvicorn"]["propagate"] = False
+    log_config["formatters"]["access"]["fmt"] = VERBOSE_MESSAGE_FORMAT
+    log_config["formatters"]["default"]["fmt"] = VERBOSE_MESSAGE_FORMAT
+
+    return log_config
+
+
 def run_webapp(port: int):
-    uvicorn.run(webapp, host="127.0.0.1", port=port, log_level="info")
+    uvicorn.run(webapp, host="127.0.0.1", port=port, log_config=get_log_config())
 
 
 @webapp.exception_handler(CommonError)
@@ -67,6 +78,28 @@ async def mapping_file_validation_exception_handler(request: Request, exc):
     return common_response_handler(400, error_type, 'MappingFileSchemaNotValidError', detail, [message])
 
 
+@webapp.exception_handler(IacFileNotValidError)
+async def iac_file_validation_exception_handler(request: Request, exc):
+    return source_file_validation_exception_handler(request, exc)
+
+
+@webapp.exception_handler(DiagramFileNotValidError)
+async def diagram_file_validation_exception_handler(request: Request, exc):
+    return source_file_validation_exception_handler(request, exc)
+
+
+@webapp.exception_handler(ParsingError)
+async def diagram_file_validation_exception_handler(request: Request, exc):
+    return source_file_validation_exception_handler(request, exc)
+
+
+def source_file_validation_exception_handler(request: Request, exc: CommonError):
+    message = exc.message
+    detail = exc.message
+    error_type = exc.error_code.error_type
+    return common_response_handler(400, error_type, exc.__class__.__name__, detail, [message])
+
+
 def get_error(error: Dict[str, Any]) -> str:
     message = ''
     loc = error['loc']
@@ -79,10 +112,8 @@ def get_error(error: Dict[str, Any]) -> str:
     return message
 
 
-def common_response_handler(status_code: int, type_: str, title: str, detail: str, messages: List[str]):
+def common_response_handler(status_code: int, type_: str, title: str, detail: str, messages: List[str] = []):
     error_response = ErrorResponse(error_type=type_, status=status_code, title=title, detail=detail, messages=messages)
 
     return JSONResponse(status_code=status_code,
                         content=jsonable_encoder(error_response))
-
-

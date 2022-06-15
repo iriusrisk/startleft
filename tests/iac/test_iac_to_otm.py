@@ -1,5 +1,6 @@
 from startleft.iac.iac_to_otm import IacToOtm
 from startleft.iac.iac_type import IacType
+from startleft.utils.file_utils import FileUtils
 from tests.resources import test_resource_paths
 
 
@@ -8,13 +9,13 @@ class TestApp:
     def test_load_yaml_file(self):
         filename = test_resource_paths.example_yaml
         iac_to_otm = IacToOtm('name', 'id', IacType.CLOUDFORMATION)
-        iac_to_otm.load_yaml_source(filename)
+        iac_to_otm.load_yaml_source(FileUtils.get_data(filename))
         assert iac_to_otm.source_model.data
 
     def test_load_json_file(self):
         filename = test_resource_paths.example_json
         iac_to_otm = IacToOtm('name', 'id', IacType.CLOUDFORMATION)
-        iac_to_otm.load_yaml_source(filename)
+        iac_to_otm.load_yaml_source(FileUtils.get_data(filename))
         assert iac_to_otm.source_model.data
 
     def test_load_yaml_uploaded_file(self):
@@ -33,14 +34,14 @@ class TestApp:
         filename = test_resource_paths.example_json
         mapping_filename = test_resource_paths.default_cloudformation_mapping
         iac_to_otm = IacToOtm('name', 'id', IacType.CLOUDFORMATION)
-        iac_to_otm.run(IacType.CLOUDFORMATION, mapping_filename, filename)
+        iac_to_otm.run(IacType.CLOUDFORMATION, mapping_filename, [FileUtils.get_data(filename)])
         assert iac_to_otm.source_model.data
 
     def test_run_cloudformation_mappings(self):
         filename = test_resource_paths.cloudformation_for_mappings_tests_json
         mapping_filename = test_resource_paths.default_cloudformation_mapping
         iac_to_otm = IacToOtm('name', 'id', IacType.CLOUDFORMATION)
-        iac_to_otm.run(IacType.CLOUDFORMATION, mapping_filename, filename)
+        iac_to_otm.run(IacType.CLOUDFORMATION, mapping_filename, [FileUtils.get_data(filename)])
 
         assert iac_to_otm.source_model.otm
         assert len(iac_to_otm.otm.trustzones) == 1
@@ -88,7 +89,7 @@ class TestApp:
         filename = test_resource_paths.terraform_for_mappings_tests_json
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
         iac_to_otm = IacToOtm('name', 'id', IacType.TERRAFORM)
-        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, filename)
+        iac_to_otm.run(IacType.TERRAFORM, mapping_filename,[FileUtils.get_data(filename)])
 
         assert iac_to_otm.source_model.otm
         assert len(iac_to_otm.otm.trustzones) == 1
@@ -110,10 +111,10 @@ class TestApp:
         assert iac_to_otm.otm.components[3].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
 
     def test_run_terraform_upload_file(self):
-        filename = [open(test_resource_paths.terraform_for_mappings_tests_json, "rb")]
+        filename = test_resource_paths.terraform_for_mappings_tests_json
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
         iac_to_otm = IacToOtm('name', 'id', IacType.TERRAFORM)
-        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, filename)
+        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, [FileUtils.get_data(filename)])
 
         assert iac_to_otm.source_model.otm
         assert len(iac_to_otm.otm.trustzones) == 1

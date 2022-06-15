@@ -8,7 +8,7 @@ class TestVisioDiagramToOtm:
     def test_aws_shapes(self):
         otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
             test_resource_paths.visio_aws_shapes,
-            open(test_resource_paths.default_visio_mapping, 'rb'),
+            test_resource_paths.default_visio_mapping,
             "project-name",
             "project-id"
         )
@@ -35,7 +35,7 @@ class TestVisioDiagramToOtm:
     def test_generic_elements(self):
         otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
             test_resource_paths.visio_generic_shapes,
-            open(test_resource_paths.custom_vpc_mapping, 'rb'),
+            test_resource_paths.custom_vpc_mapping,
             "project-name",
             "project-id"
         )
@@ -54,7 +54,7 @@ class TestVisioDiagramToOtm:
     def test_self_pointing_connectors(self):
         otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
             test_resource_paths.visio_self_pointing_connectors,
-            open(test_resource_paths.custom_vpc_mapping, 'rb'),
+            test_resource_paths.custom_vpc_mapping,
             "project-name",
             "project-id"
         )
@@ -73,7 +73,7 @@ class TestVisioDiagramToOtm:
     def test_extraneous_elements(self):
         otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
             test_resource_paths.visio_extraneous_elements,
-            open(test_resource_paths.default_visio_mapping, 'rb'),
+            test_resource_paths.default_visio_mapping,
             "project-name",
             "project-id"
         )
@@ -101,7 +101,7 @@ class TestVisioDiagramToOtm:
     def test_complex_diagram(self):
         otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
             test_resource_paths.visio_aws_with_tz_and_vpc,
-            open(test_resource_paths.default_visio_mapping, 'rb'),
+            test_resource_paths.default_visio_mapping,
             "project-name",
             "project-id"
         )
