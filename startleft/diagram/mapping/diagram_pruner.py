@@ -28,8 +28,7 @@ class DiagramPruner:
         removed_components_ids = [removed_component.id for removed_component in self.__removed_components]
         IterationUtils.remove_from_list(
             self.connectors,
-            lambda connector: connector.from_id in removed_components_ids \
-                              or connector.to_id in removed_components_ids
+            lambda connector: connector.from_id in removed_components_ids or connector.to_id in removed_components_ids
         )
 
     def __restore_parents(self):

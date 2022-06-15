@@ -9,7 +9,7 @@ def remove_function(element, original_array, removed_array):
 class TestIterationUtils:
 
     def test_with_none_colection(self):
-        # Given a None collection
+        # Given a None list
         # when passed to function
         IterationUtils.remove_from_list(
             None,
@@ -18,7 +18,7 @@ class TestIterationUtils:
         assert True
 
     def test_with_empty_colection(self):
-        # Given an empty collection
+        # Given an empty list
         # when passed to function
         IterationUtils.remove_from_list(
             [],
@@ -27,7 +27,7 @@ class TestIterationUtils:
         assert True
 
     def test_basic_remove_elements(self):
-        # Given an array of integers {1-4}
+        # Given a list of integers {1-4}
         original_array = [1, 2, 3, 4]
 
         # When removing even numbers
@@ -42,8 +42,10 @@ class TestIterationUtils:
         assert 3 in original_array
 
     def test_basic_remove_with_custom_remove_function(self):
-        # Given an array of integers {1-4}
+        # Given a list of integers {1-4}
         original_array = [1, 2, 3, 4]
+
+        # And an empty list for storing removed elements
         removed_array = []
 
         # When removing even numbers
