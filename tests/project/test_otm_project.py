@@ -74,11 +74,11 @@ class TestOtmProjectService:
         project_name = 'name'
 
         # And a valid iac mappings file
-        custom_iac_mapping_files = [IAC_VALID_MAPPING_FILENAME]
+        custom_iac_mapping_data = [FileUtils.get_data(IAC_VALID_MAPPING_FILENAME)]
 
         # When creating OTM project from IaC file
         otm_project = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType.CLOUDFORMATION, iac_file,
-                                                             custom_iac_mapping_files)
+                                                             custom_iac_mapping_data)
 
         # Then
         assert otm_project.otm is not None
@@ -88,7 +88,7 @@ class TestOtmProjectService:
     def test_from_iac_valid_yaml_mapping_files_not_provided_ok(self):
         # Given a sample valid IaC file
         iac_file = [FileUtils.get_data(SAMPLE_YAML_IAC_FILENAME)]
-        mapping_file = [open(IAC_VALID_MAPPING_FILENAME, 'r')]
+        mapping_file = [FileUtils.get_data(IAC_VALID_MAPPING_FILENAME)]
         # And a project id
         project_id = 'id'
 
@@ -107,7 +107,7 @@ class TestOtmProjectService:
     def test_from_iac_invalid_yaml_iac_file_error_jmes_error(self):
         # Given a sample valid IaC file
         iac_file = [FileUtils.get_data(INVALID_YAML_FILENAME)]
-        mapping_file = [open(IAC_VALID_MAPPING_FILENAME, 'r')]
+        mapping_file = [FileUtils.get_data(IAC_VALID_MAPPING_FILENAME)]
 
         # And a project id
         project_id = 'id'
@@ -143,7 +143,7 @@ class TestOtmProjectService:
     def test_from_iac_file_to_otm_stream_ok(self):
         # Given a sample valid IaC file
         iac_file = [FileUtils.get_data(SAMPLE_YAML_IAC_FILENAME)]
-        mapping_file = [open(IAC_VALID_MAPPING_FILENAME, 'r')]
+        mapping_file = [FileUtils.get_data(IAC_VALID_MAPPING_FILENAME)]
 
         # And a project id
         project_id = 'id'
@@ -164,7 +164,7 @@ class TestOtmProjectService:
     def test_from_iac_file_otm_stream_invalid_file_ok(self):
         # Given a sample valid IaC file
         iac_file = [FileUtils.get_data(INVALID_YAML_FILENAME)]
-        mapping_file = [open(IAC_VALID_MAPPING_FILENAME, 'r')]
+        mapping_file = [FileUtils.get_data(IAC_VALID_MAPPING_FILENAME)]
 
         # And a project id
         project_id = 'id'
@@ -179,7 +179,7 @@ class TestOtmProjectService:
 
     def test_validate_diagram_mappings_file_ok(self):
         # Given a sample valid Mapping Visio file
-        mapping_file = CUSTOM_YAML_VISIO_MAPPING_FILENAME
+        mapping_file = [FileUtils.get_data(CUSTOM_YAML_VISIO_MAPPING_FILENAME)]
 
         # When validating
         # Then validator returns OK

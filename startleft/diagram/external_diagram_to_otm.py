@@ -21,8 +21,8 @@ class ExternalDiagramToOtm:
         self.mapping_file_loader = MappingFileLoader()
         self.mapping_validator = MappingValidator('diagram_mapping_schema.json')
 
-    def run(self, diagram_source: str, mapping_file, project_name: str, project_id: str) -> OTM:
-        diagram_mapping = self.mapping_file_loader.load(mapping_file)
+    def run(self, diagram_source: str, mapping_data_list, project_name: str, project_id: str) -> OTM:
+        diagram_mapping = self.mapping_file_loader.load(mapping_data_list)
         self.mapping_validator.validate(diagram_mapping)
         diagram = get_parser_for_diagram_type(self.diagram_type).parse(diagram_source)
 

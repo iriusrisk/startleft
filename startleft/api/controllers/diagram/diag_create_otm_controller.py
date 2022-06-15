@@ -28,10 +28,16 @@ def diagram(diag_file: UploadFile = File(..., description="File that contains th
         f"POST request received for creating new project with id {id} and name {name} from Diagram {diag_type} file")
 
     logger.info("Parsing Diagram file to OTM")
-    otm_project = OtmProject.from_diag_file_to_otm_stream(
-        id, name, diag_type,
-        [diag_file.file],
-        [default_mapping_file.file, custom_mapping_file.file] if custom_mapping_file else [default_mapping_file.file]
-    )
+
+    mapping_data_list = []
+
+    with default_mapping_file.file as f:
+        mapping_data_list.append(f.read())
+
+    if custom_mapping_file:
+        with custom_mapping_file.file as f:
+            mapping_data_list.append(f.read())
+
+    otm_project = OtmProject.from_diag_file_to_otm_stream(id, name, diag_type, [diag_file.file], mapping_data_list)
 
     return Response(status_code=201, media_type="application/json", content=otm_project.get_otm_as_json())

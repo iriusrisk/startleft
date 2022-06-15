@@ -30,7 +30,10 @@ def iac(iac_file: UploadFile = File(..., description="File that contains the Iac
     with iac_file.file as f:
         iac_data = f.read()
 
+    with mapping_file.file as f:
+        mapping_data = f.read()
+
     otm_project = OtmProject.from_iac_file_to_otm_stream(id, name, iac_type, [iac_data],
-                                                         [mapping_file.file] if mapping_file else [])
+                                                         [mapping_data] if mapping_file else [])
 
     return Response(status_code=201, media_type="application/json", content=otm_project.get_otm_as_json())
