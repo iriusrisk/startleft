@@ -77,7 +77,7 @@ def parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, outpu
     type_ = DiagramType(diagram_type.upper())
     file = open(iac_file[0], "r")
 
-    mapping_data_list = [default_mapping_file]
+    mapping_data_list = [FileUtils.get_data(default_mapping_file)]
 
     if custom_mapping_file:
         mapping_data_list.append(FileUtils.get_data(custom_mapping_file))
