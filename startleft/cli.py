@@ -76,8 +76,13 @@ def parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, outpu
     logger.info("Parsing diagram source files into OTM")
     type_ = DiagramType(diagram_type.upper())
     file = open(iac_file[0], "r")
-    mappings = [default_mapping_file, custom_mapping_file] if custom_mapping_file else [default_mapping_file]
-    otm_proj = OtmProject.from_diag_file(project_id, project_name, type_, file, mappings)
+
+    mapping_data_list = [default_mapping_file]
+
+    if custom_mapping_file:
+        mapping_data_list.append(FileUtils.get_data(custom_mapping_file))
+
+    otm_proj = OtmProject.from_diag_file(project_id, project_name, type_, file, mapping_data_list)
     file.close()
     otm_proj.otm_to_file(output_file)
 
@@ -138,11 +143,11 @@ def validate(iac_mapping_file, diagram_mapping_file, otm_file):
     """
     if iac_mapping_file:
         logger.info("Validating IaC mapping files")
-        OtmProject.validate_iac_mappings_file(iac_mapping_file)
+        OtmProject.validate_iac_mappings_file([FileUtils.get_data(iac_mapping_file)])
 
     if diagram_mapping_file:
         logger.info("Validating Diagram mapping files")
-        OtmProject.validate_diagram_mappings_file(diagram_mapping_file)
+        OtmProject.validate_diagram_mappings_file([FileUtils.get_data(diagram_mapping_file)])
 
     if otm_file:
         logger.info("Validating OTM file")
