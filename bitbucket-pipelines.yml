@@ -15,5 +15,5 @@ pipelines:
             - pip install .
             - pip install responses
             - pip install pytest
-            - cd startleft
+            - ls -l
             - pytest --junitxml=test-reports/report.xml
