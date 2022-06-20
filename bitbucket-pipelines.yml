@@ -1,0 +1,24 @@
+#  Template python-build
+
+#  This template allows you to validate your python code.
+#  The workflow allows running tests and code linting on the default branch.
+
+image: python:3.8
+
+pipelines:
+  default:
+      - step:
+          name: Test
+          caches:
+            - pip
+          script:
+            - if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+            - pip install pytest
+            - pytest --junitxml=test-reports/report.xml
+      - step:
+          name: Notify
+          script:
+            - pipe: atlassian/slack-notify:2.0.0
+              variables:
+                WEBHOOK_URL: $WEBHOOK_URL
+                MESSAGE: '"Pipeline finished"'
