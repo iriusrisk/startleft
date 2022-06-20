@@ -28,16 +28,22 @@ terraform_aws_parent_children_components = path + '/terraform/aws_parent_childre
 terraform_aws_singleton_components_unix_line_breaks = path + '/terraform/aws_singleton_components_unix_line_breaks.tf'
 terraform_aws_singleton_components_dos_line_breaks = path + '/terraform/aws_singleton_components_dos_line_breaks.tf'
 terraform_aws_singleton_components_classic_macos_line_breaks = path + '/terraform/aws_singleton_components_classic_macos_line_breaks.tf'
-
 # mapping
 default_terraform_aws_mapping = path + '/terraform/aws_terraform_mapping.yaml'
+# expected otm results
+terraform_aws_simple_components_otm_expected = path + '/terraform/aws_simple_components.otm'
+
 
 # VISIO
 visio_aws_with_tz_and_vpc = path + '/visio/aws-with-tz-and-vpc.vsdx'
 visio_aws_shapes = path + '/visio/aws-shapes.vsdx'
+visio_aws_stencils = path + '/visio/aws-stencils.vsdx'
 visio_generic_shapes = path + '/visio/generic-shapes.vsdx'
 visio_self_pointing_connectors = path + '/visio/self-pointing-connectors.vsdx'
 visio_extraneous_elements = path + '/visio/extraneous-elements.vsdx'
 # mapping
 default_visio_mapping = path + '/visio/aws-visio-mapping.yaml'
 custom_vpc_mapping = path + '/visio/custom-vpc-mapping.yaml'
+# expected otm results
+visio_aws_shapes_otm_expected = path + '/visio/aws-shapes.otm'
+visio_aws_with_tz_and_vpc_otm_expected = path + '/visio/aws-with-tz-and-vpc.otm'
