@@ -13,6 +13,6 @@ pipelines:
             - pip
           script:
             - pip install .
-            - pip install response
+            - pip install responses
             - pip install pytest
             - pytest --junitxml=test-reports/report.xml
