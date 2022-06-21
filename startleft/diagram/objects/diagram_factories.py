@@ -6,7 +6,7 @@ from startleft.diagram.objects.diagram_objects import DiagramComponent, DiagramC
 class DiagramComponentFactory:
 
     @abstractmethod
-    def create_component(self, shape) -> DiagramComponent:
+    def create_component(self, shape, origin) -> DiagramComponent:
         pass
 
 

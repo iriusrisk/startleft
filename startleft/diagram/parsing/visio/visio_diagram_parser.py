@@ -1,7 +1,7 @@
 from vsdx import Shape, VisioFile
 
 from startleft.diagram.diagram_type import DiagramType
-from startleft.diagram.objects.diagram_objects import Diagram
+from startleft.diagram.objects.diagram_objects import Diagram, DiagramComponentOrigin
 from startleft.diagram.objects.visio.visio_diagram_factories import VisioComponentFactory, VisioConnectorFactory
 from startleft.diagram.parsing.diagram_parser import DiagramParser
 from startleft.diagram.parsing.parent_calculator import ParentCalculator
@@ -22,6 +22,11 @@ def is_connector(shape) -> bool:
 
 def is_component(shape) -> bool:
     return shape.text and not is_connector(shape)
+
+
+def is_boundary(shape) -> bool:
+    # TODO: Implement this
+    return False
 
 
 class VisioDiagramParser(DiagramParser):
@@ -47,10 +52,17 @@ class VisioDiagramParser(DiagramParser):
             if is_connector(shape):
                 self.__add_connector(shape)
             elif is_component(shape):
-                self.__add_component(shape)
+                self.__add_simple_component(shape)
+            elif is_boundary(shape):
+                self.__add_boundary_component(shape)
 
-    def __add_component(self, component_shape: Shape):
-        self.__visio_components.append(self.component_factory.create_component(component_shape))
+    def __add_simple_component(self, component_shape: Shape):
+        self.__visio_components.append(
+            self.component_factory.create_component(component_shape, DiagramComponentOrigin.SIMPLE_COMPONENT))
+
+    def __add_boundary_component(self, component_shape: Shape):
+        self.__visio_components.append(
+            self.component_factory.create_component(component_shape, DiagramComponentOrigin.BOUNDARY))
 
     def __add_connector(self, connector_shape: Shape):
         self.__visio_connectors.append(self.connector_factory.create_connector(connector_shape))

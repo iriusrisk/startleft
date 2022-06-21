@@ -1,13 +1,27 @@
+from enum import Enum
+
 from shapely.geometry import Polygon
 
 from startleft.diagram.diagram_type import DiagramType
 
 
+class DiagramComponentOrigin(Enum):
+    SIMPLE_COMPONENT = 1
+    BOUNDARY = 2
+
+
 class DiagramComponent:
-    def __init__(self, id: str = None, name: str = None, type: str = None, parent=None, representation: Polygon = None):
+    def __init__(self,
+                 id: str = None,
+                 name: str = None,
+                 type: str = None,
+                 origin: DiagramComponentOrigin = None,
+                 parent=None,
+                 representation: Polygon = None):
         self.id = id
         self.name = name
         self.type = type
+        self.origin = origin
         self.parent = parent
         self.representation = representation
 
