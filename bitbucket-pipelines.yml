@@ -13,6 +13,7 @@ pipelines:
             - pip
           script:
             - pip install .
+            - pip install deepdiff
             - pip install responses
             - pip install pytest
             - pytest --junitxml=test-reports/report.xml
