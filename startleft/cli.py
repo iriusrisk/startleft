@@ -160,14 +160,14 @@ def validate(iac_mapping_file, diagram_mapping_file, otm_file):
               )
 @click.option('--query', '-q', help='JMESPath query to run against the IaC file.')
 @click.argument(messages.SOURCE_FILE_NAME, required=True, nargs=-1)
-def search(iac_type, query, iac_file):
+def search(iac_type, query, source_file):
     """
     Searches source files for the given query
     """
 
     iac_to_otm = IacToOtm(None, None, IacType(iac_type.upper()))
     logger.info("Running JMESPath search query against the IaC file")
-    iac_to_otm.search(IacType(iac_type.upper()), query, iac_file)
+    iac_to_otm.search(IacType(iac_type.upper()), query, [FileUtils.get_data(source_file[0])])
 
 
 @cli.command()
