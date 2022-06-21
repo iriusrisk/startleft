@@ -13,4 +13,5 @@ pipelines:
             - pip
           script:
             - pip install -e .
+            - pip install pytest
             - pytest --junitxml=test-reports/report.xml
