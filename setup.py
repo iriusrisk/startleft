@@ -27,7 +27,8 @@ setup(
         'uvicorn',
         'shapely',
         'vsdx',
-        'python-magic'
+        'python-magic',
+        'deepdiff'
     ],
     use_scm_version=True,
     extras_require={
