@@ -12,7 +12,5 @@ pipelines:
           caches:
             - pip
           script:
-            - pip install .
-            - pip install responses
-            - pip install pytest
+            - pip install -e .
             - pytest --junitxml=test-reports/report.xml
