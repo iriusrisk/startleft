@@ -3,8 +3,9 @@ import logging
 
 import hcl2
 import yaml
+from jmespath.exceptions import JMESPathTypeError
 
-from startleft.api.errors import IacFileNotValidError
+from startleft.api.errors import LoadingIacFileError, IacFileNotValidError
 from startleft.iac.iac_type import IacType
 from startleft.iac.mapping import transformer, sourcemodel
 from startleft.mapping.mapping_file_loader import MappingFileLoader
@@ -48,8 +49,10 @@ class IacToOtm:
                 data = iac_data if isinstance(iac_data, str) else iac_data.decode()
                 loader(data)
             logger.debug("Source data loaded successfully")
-        except (UnicodeDecodeError, AttributeError):
-            raise IacFileNotValidError("Invalid content type for iac_file")
+        except Exception as e:
+            detail = e.__class__.__name__
+            message = e.__str__()
+            raise IacFileNotValidError("IaC file is not valid", detail, message)
 
     def get_otm_stream(self):
         logger.info(f"Getting OTM stream")
@@ -65,7 +68,13 @@ class IacToOtm:
         iac_mapping = self.mapping_file_loader.load(mapping_data)
         self.mapping_validator.validate(iac_mapping)
 
-        self.transformer.run(iac_mapping)
+        try:
+            self.transformer.run(iac_mapping)
+        except JMESPathTypeError as e:
+            logger.error(f"{e}")
+            detail = e.__class__.__name__
+            message = e.__str__()
+            raise LoadingIacFileError('Error parsing the sources files', detail, message)
 
     def search(self, type_, query, iac_data_list):
         """

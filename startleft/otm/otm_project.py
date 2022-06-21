@@ -2,10 +2,8 @@ import json
 import logging
 from typing import Optional
 
-from jmespath.exceptions import JMESPathTypeError
 from typing.io import IO
 
-from startleft.api.errors import WriteThreatModelError, ParsingError, ErrorCode
 from startleft.diagram.diagram_type import DiagramType
 from startleft.diagram.external_diagram_to_otm import ExternalDiagramToOtm
 from startleft.iac.iac_to_otm import IacToOtm
@@ -68,12 +66,8 @@ class OtmProject:
                                     mapping_data_list: [bytes]):
         IacValidator(iac_data, iac_type).validate()
         logger.info("Parsing IaC file to OTM")
-        try:
-            iac_to_otm = IacToOtm(project_name, project_id, iac_type)
-            iac_to_otm.run(iac_type, mapping_data_list, iac_data)
-        except JMESPathTypeError as e:
-            logger.error(f"{e}")
-            raise ParsingError(e, ErrorCode.IAC_TO_OTM_EXIT_VALIDATION_FAILED)
+        iac_to_otm = IacToOtm(project_name, project_id, iac_type)
+        iac_to_otm.run(iac_type, mapping_data_list, iac_data)
         return OtmProject.from_otm_stream(iac_to_otm.get_otm_stream(), project_id, project_name)
 
     @staticmethod
@@ -91,12 +85,8 @@ class OtmProject:
     def from_diag_file(project_id: str, project_name: str, diag_type: DiagramType,
                        temp_diag_file: Optional[IO], mapping_data_list: [bytes]):
         logger.info("Parsing Diagram file to OTM")
-        try:
-            diag_to_otm = ExternalDiagramToOtm(diag_type)
-            otm = diag_to_otm.run(temp_diag_file.name, mapping_data_list, project_name, project_id)
-        except JMESPathTypeError as e:
-            logger.error(f"{e}")
-            raise ParsingError(e, ErrorCode.DIAGRAM_TO_OTM_EXIT_VALIDATION_FAILED)
+        diag_to_otm = ExternalDiagramToOtm(diag_type)
+        otm = diag_to_otm.run(temp_diag_file.name, mapping_data_list, project_name, project_id)
         return OtmProject.from_otm_stream(otm.json(), project_id, project_name)
 
     @staticmethod

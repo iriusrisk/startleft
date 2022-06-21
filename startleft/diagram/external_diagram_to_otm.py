@@ -1,4 +1,6 @@
-from startleft.api.errors import UnknownDiagramType
+from startleft import messages
+
+from startleft.api.errors import DiagramFileNotValidError
 from startleft.diagram.diagram_type import DiagramType
 from startleft.diagram.mapping.diagram_to_otm import DiagramToOtm
 from startleft.diagram.objects.visio.visio_diagram_factories import VisioComponentFactory, VisioConnectorFactory
@@ -11,8 +13,8 @@ from startleft.validators.mapping_validator import MappingValidator
 def get_parser_for_diagram_type(provider):
     if provider == DiagramType.VISIO:
         return VisioDiagramParser(VisioComponentFactory(), VisioConnectorFactory())
-
-    raise UnknownDiagramType
+    msg = messages.CANNOT_RECOGNIZE_GIVEN_DIAGRAM_TYPE
+    raise DiagramFileNotValidError("UnknownDiagramType", msg, msg)
 
 
 class ExternalDiagramToOtm:

@@ -3,7 +3,7 @@ import logging
 import yaml
 from deepmerge import always_merger
 
-from startleft.api.errors import OTMFileNotFoundError
+from startleft.api.errors import OtmBuildingError
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +26,7 @@ class OtmFileLoader:
                     self.__load_otm_file(otm, yaml.load(f, Loader=yaml.SafeLoader))
             except FileNotFoundError:
                 logger.error("Cannot find OTM file")
-                raise OTMFileNotFoundError()
+                raise OtmBuildingError("OTM file not exists", "Unable to find the OTM file")
 
             logger.debug("OTM file loaded successfully")
         return otm
