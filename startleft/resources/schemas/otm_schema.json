@@ -61,7 +61,7 @@
                 "attributes": {"type": "object"}
             }
         },
-        "trustzones": {
+        "trustZones": {
             "type": "array",
             "items": {
                 "type": "object",
@@ -74,7 +74,7 @@
                         "type": "object",
                         "required": ["trustRating"],
                         "properties": {
-                            "trustRating": {"type": "string"}
+                            "trustRating": {"type": "number"}
                         }
                     },
                     "parent": {"$ref": "#/definitions/parent"},
@@ -232,7 +232,7 @@
         "parent": {
             "type": "object",
             "properties": {
-                "trustzone": {"type": "string"},
+                "trustZone": {"type": "string"},
                 "component": {"type": "string"}
             }
         },
