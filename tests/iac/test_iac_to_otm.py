@@ -1,3 +1,5 @@
+import pytest
+
 from startleft.iac.iac_to_otm import IacToOtm
 from startleft.iac.iac_type import IacType
 from startleft.utils.file_utils import FileUtils
@@ -134,3 +136,42 @@ class TestApp:
         assert iac_to_otm.otm.components[3].type == 'vpc'
         assert iac_to_otm.otm.components[3].name == 'foo'
         assert iac_to_otm.otm.components[3].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+
+    @pytest.mark.parametrize('iac_type,filename,mapping_filename',
+                             [
+                                 (IacType.TERRAFORM,
+                                  test_resource_paths.terraform_component_without_parent,
+                                  test_resource_paths.terraform_mapping_aws_component_without_parent),
+                                 (IacType.CLOUDFORMATION,
+                                  test_resource_paths.cloudformation_component_without_parent,
+                                  test_resource_paths.cloudformation_mapping_component_without_parent),
+                             ])
+    def test_mapping_component_without_parent(self, iac_type: IacType, filename: str, mapping_filename: str):
+        iac_to_otm = IacToOtm('name', 'id', iac_type)
+        with pytest.raises(KeyError) as e_info:
+            iac_to_otm.run(iac_type, [FileUtils.get_data(mapping_filename)], [FileUtils.get_data(filename)])
+        assert 'parent' in str(e_info.value)
+
+    @pytest.mark.parametrize('iac_type,filename,mapping_filename',
+                             [
+                                 (IacType.TERRAFORM,
+                                  test_resource_paths.terraform_skipped_component_without_parent,
+                                  test_resource_paths.terraform_mapping_aws_component_without_parent),
+                                 (IacType.CLOUDFORMATION,
+                                  test_resource_paths.cloudformation_skipped_component_without_parent,
+                                  test_resource_paths.cloudformation_mapping_component_without_parent),
+                             ])
+    def test_mapping_skipped_component_without_parent(self, iac_type: IacType, filename: str, mapping_filename: str):
+        iac_to_otm = IacToOtm('name', 'id', iac_type)
+        iac_to_otm.run(iac_type, [FileUtils.get_data(mapping_filename)], [FileUtils.get_data(filename)])
+
+        assert iac_to_otm.source_model.otm
+        assert len(iac_to_otm.otm.trustzones) == 1
+        assert len(iac_to_otm.otm.components) == 1
+        assert len(iac_to_otm.otm.dataflows) == 0
+        assert iac_to_otm.otm.trustzones[0].id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+        assert iac_to_otm.otm.trustzones[0].name == 'Public Cloud'
+        assert iac_to_otm.otm.components[0].type == 'aws_control'
+        assert iac_to_otm.otm.components[0].name == 'Control_component'
+        assert iac_to_otm.otm.components[0].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+
