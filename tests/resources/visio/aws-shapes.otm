@@ -1,0 +1,95 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "test_parse_diagram_file_ok",
+    "id": "test_parse_diagram_file_ok"
+  },
+  "representations": [
+    {
+      "name": "Visio",
+      "id": "Visio",
+      "type": "diagram",
+      "size": {
+        "width": 1000,
+        "height": 1000
+      }
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "1",
+      "name": "Amazon EC2",
+      "type": "ec2",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "12",
+      "name": "Custom machine",
+      "type": "ec2",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "30",
+      "name": "Private Database",
+      "type": "rds",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "35",
+      "name": "Amazon CloudWatch",
+      "type": "cloudwatch",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "41",
+      "name": "Custom log system",
+      "type": "cloudwatch",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    }
+  ],
+  "dataflows": [
+    {
+      "id": "17",
+      "name": "67f78c2e-c73c-4e67-bf36-22c2a39410ce",
+      "source": "1",
+      "destination": "12"
+    },
+    {
+      "id": "34",
+      "name": "91789f03-2daf-4958-8bc5-384e3dc20139",
+      "source": "12",
+      "destination": "30"
+    },
+    {
+      "id": "40",
+      "name": "bcc40afc-be11-4cd0-8172-530068b44a5b",
+      "source": "1",
+      "destination": "35"
+    },
+    {
+      "id": "46",
+      "name": "b20c3bdb-a776-4b43-9488-9bbed604c848",
+      "source": "12",
+      "destination": "41"
+    }
+  ]
+}
