@@ -4,6 +4,7 @@ from typing import Optional
 
 from typing.io import IO
 
+from startleft.api.errors import OtmGenerationError
 from startleft.diagram.diagram_type import DiagramType
 from startleft.diagram.external_diagram_to_otm import ExternalDiagramToOtm
 from startleft.iac.iac_to_otm import IacToOtm
@@ -125,4 +126,4 @@ class OtmProject:
                 json.dump(self.otm, f, indent=2)
         except Exception as e:
             logger.error(f"Unable to create the threat model: {e}")
-            raise WriteThreatModelError()
+            raise OtmGenerationError("Unable to create the OTM", e.__class__.__name__, str(e.__cause__))

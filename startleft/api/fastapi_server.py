@@ -45,13 +45,13 @@ def run_webapp(port: int):
 
 @webapp.exception_handler(CommonError)
 async def handle_common_error(request: Request, e: CommonError):
-    return common_response_handler(e.http_status_code, e.__class__.__name__, None, None, e.message)
+    return common_error_exception_handler(request, e)
 
 
 @webapp.exception_handler(Exception)
 async def handle_unexpected_exceptions(request: Request, e: Exception):
     message = e.message if hasattr(e, 'message') else str(e)
-    return common_response_handler(500, e.__class__.__name__, None, None, message)
+    return common_response_handler(500, e.__class__.__name__, 'Unexpected exception', '', message)
 
 
 @webapp.exception_handler(RequestValidationError)

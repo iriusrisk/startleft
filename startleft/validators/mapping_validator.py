@@ -14,7 +14,7 @@ class MappingValidator:
         self.mapping_schema = mapping_schema
 
     def validate(self, mapping_file):
-        logger.debug("Validating mapping files")
+        logger.debug('Validating mapping files')
         self.__validate_schema(mapping_file)
 
     def __validate_schema(self, mapping_file):
@@ -22,9 +22,10 @@ class MappingValidator:
         schema.validate(mapping_file)
         if not schema.valid:
             logger.error('Mapping files are not valid')
-            logger.error(f"--- Schema errors---\n{schema.errors}\n--- End of schema errors ---")
-            raise MappingFileNotValidError("The mapping file is not valid", "Schema error", str(schema.errors))
-        logger.info("Mapping files are valid")
+            logger.error(f'--- Schema errors---\n{schema.errors}\n--- End of schema errors ---')
+            raise MappingFileNotValidError('Mapping file does not comply with the schema', 'Schema error',
+                                           str(schema.errors))
+        logger.info('Mapping files are valid')
 
     @staticmethod
     def check_data_size(mapping_data: bytes):

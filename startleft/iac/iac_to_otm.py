@@ -5,7 +5,7 @@ import hcl2
 import yaml
 from jmespath.exceptions import JMESPathTypeError
 
-from startleft.api.errors import LoadingIacFileError, IacFileNotValidError
+from startleft.api.errors import LoadingIacFileError, OtmBuildingError
 from startleft.iac.iac_type import IacType
 from startleft.iac.mapping import transformer, sourcemodel
 from startleft.mapping.mapping_file_loader import MappingFileLoader
@@ -52,7 +52,7 @@ class IacToOtm:
         except Exception as e:
             detail = e.__class__.__name__
             message = e.__str__()
-            raise IacFileNotValidError("IaC file is not valid", detail, message)
+            raise LoadingIacFileError("IaC file is not valid", detail, message)
 
     def get_otm_stream(self):
         logger.info(f"Getting OTM stream")
@@ -74,7 +74,7 @@ class IacToOtm:
             logger.error(f"{e}")
             detail = e.__class__.__name__
             message = e.__str__()
-            raise LoadingIacFileError('Error parsing the sources files', detail, message)
+            raise OtmBuildingError('Error building the threat model with the given files', detail, message)
 
     def search(self, type_, query, iac_data_list):
         """

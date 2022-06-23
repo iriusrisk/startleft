@@ -1,16 +1,21 @@
+from unittest.mock import patch
+
 from _pytest.python_api import raises
 
-from startleft.api.errors import MappingFileSchemaNotValidError, ParsingError
+from startleft.api.errors import MappingFileNotValidError, OtmBuildingError, OtmResultError
 from startleft.iac.iac_type import IacType
 from startleft.otm.otm_project import OtmProject
 from startleft.utils.file_utils import FileUtils
 from tests.resources import test_resource_paths
+
+CLOUDFORMATION = IacType.CLOUDFORMATION
 
 SAMPLE_OTM_FILENAME = test_resource_paths.otm_file_example
 SAMPLE_YAML_IAC_FILENAME = test_resource_paths.cloudformation_for_mappings_tests_json
 IAC_VALID_MAPPING_FILENAME = test_resource_paths.default_cloudformation_mapping
 INVALID_YAML_FILENAME = test_resource_paths.invalid_yaml
 CUSTOM_YAML_VISIO_MAPPING_FILENAME = test_resource_paths.custom_vpc_mapping
+OTM_FILE_EXAMPLE = test_resource_paths.otm_file_example
 
 
 class TestOtmProjectService:
@@ -77,7 +82,7 @@ class TestOtmProjectService:
         custom_iac_mapping_data = [FileUtils.get_data(IAC_VALID_MAPPING_FILENAME)]
 
         # When creating OTM project from IaC file
-        otm_project = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType.CLOUDFORMATION, iac_file,
+        otm_project = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, CLOUDFORMATION, iac_file,
                                                              custom_iac_mapping_data)
 
         # Then
@@ -96,7 +101,7 @@ class TestOtmProjectService:
         project_name = 'name'
 
         # When creating OTM project from IaC file
-        otm_project = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType.CLOUDFORMATION, iac_file,
+        otm_project = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, CLOUDFORMATION, iac_file,
                                                              mapping_file)
 
         # Then
@@ -116,9 +121,9 @@ class TestOtmProjectService:
         project_name = 'name'
 
         # When creating OTM project from IaC file
-        # Then raises ParsingError
-        with raises(ParsingError):
-            OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType.CLOUDFORMATION, iac_file,
+        # Then raises OtmBuildingError
+        with raises(OtmBuildingError):
+            OtmProject.from_iac_file_to_otm_stream(project_id, project_name, CLOUDFORMATION, iac_file,
                                                    mapping_file)
 
     def test_from_iac_invalid_mapping_files_error_invalid_schema(self):
@@ -135,9 +140,9 @@ class TestOtmProjectService:
         custom_iac_mapping_files = [INVALID_YAML_FILENAME]
 
         # When creating OTM project from IaC file
-        # Then raises MappingFileSchemaNotValidError
-        with raises(MappingFileSchemaNotValidError):
-            OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType.CLOUDFORMATION, iac_file,
+        # Then raises MappingFileNotValidError
+        with raises(MappingFileNotValidError):
+            OtmProject.from_iac_file_to_otm_stream(project_id, project_name, CLOUDFORMATION, iac_file,
                                                    custom_iac_mapping_files)
 
     def test_from_iac_file_to_otm_stream_ok(self):
@@ -152,7 +157,7 @@ class TestOtmProjectService:
         project_name = 'name'
 
         # When creating OTM project from IaC file having result as stream instead of file
-        otm_project = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType.CLOUDFORMATION, iac_file,
+        otm_project = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, CLOUDFORMATION, iac_file,
                                                              mapping_file)
 
         # Then
@@ -173,9 +178,9 @@ class TestOtmProjectService:
         project_name = 'name'
 
         # When creating OTM project from IaC file having result as stream instead of file
-        # Then raises ParsingError
-        with raises(ParsingError):
-            OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType.CLOUDFORMATION, iac_file, mapping_file)
+        # Then raises OtmBuildingError
+        with raises(OtmBuildingError):
+            OtmProject.from_iac_file_to_otm_stream(project_id, project_name, CLOUDFORMATION, iac_file, mapping_file)
 
     def test_validate_diagram_mappings_file_ok(self):
         # Given a sample valid Mapping Visio file
@@ -184,3 +189,26 @@ class TestOtmProjectService:
         # When validating
         # Then validator returns OK
         OtmProject.validate_diagram_mappings_file(mapping_file)
+
+    def test_response_on_otm_nonexistent_file(self):
+        # Given a sample valid IaC file
+        otm_file = '/tmp/nonexistent.otm'
+
+        # When creating OTM project from IaC file
+        # Then raises OtmResultError
+        with raises(OtmResultError):
+            OtmProject.load_and_validate_otm_file(otm_file)
+
+    @patch('startleft.otm.otm_file_loader.OtmFileLoader.load')
+    def test_response_on_otm_loading_error(self, mock_load_source_data):
+        # Given a sample valid IaC file
+        otm_file = OTM_FILE_EXAMPLE
+
+        # And the mocked method throwing a LoadingIacFileError
+        error = OtmBuildingError("OTM file not exists", 'mocked error detail', 'mocked error msg')
+        mock_load_source_data.side_effect = error
+
+        # When creating OTM project from IaC file
+        # Then raises OtmBuildingError
+        with raises(OtmBuildingError):
+            OtmProject.load_and_validate_otm_file(otm_file)

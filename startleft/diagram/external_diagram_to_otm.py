@@ -14,7 +14,7 @@ def get_parser_for_diagram_type(provider):
     if provider == DiagramType.VISIO:
         return VisioDiagramParser(VisioComponentFactory(), VisioConnectorFactory())
     msg = messages.CANNOT_RECOGNIZE_GIVEN_DIAGRAM_TYPE
-    raise DiagramFileNotValidError("UnknownDiagramType", msg, msg)
+    raise DiagramFileNotValidError('UnknownDiagramType', msg, f'{msg} {provider}')
 
 
 class ExternalDiagramToOtm:

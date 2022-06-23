@@ -16,6 +16,7 @@ cloudformation_for_mappings_tests_json = path + '/cloudformation/cloudformation_
 cloudformation_for_security_group_tests_json = path + '/cloudformation/cloudformation_for_security_group_tests.json'
 cloudformation_for_security_group_tests_2_json = path + '/cloudformation/cloudformation_for_security_group_tests_2.json'
 cloudformation_for_security_groups_mapping = path + '/cloudformation/cloudformation_for_security_group_tests_mapping_definitions.yaml'
+cloudformation_gz = path + '/cloudformation/cloudformation.gz'
 cloudformation_malformed_mapping_wrong_id = path + '/cloudformation/cloudformation_malformed_mapping_wrong_id.yaml'
 # mapping
 default_cloudformation_mapping = path + '/cloudformation/cloudformation_mapping.yaml'
