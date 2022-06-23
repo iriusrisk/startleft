@@ -231,6 +231,10 @@
         },
         "parent": {
             "type": "object",
+            "oneOf": [
+                {"required": ["trustZone"]},
+                {"required":["component"]}
+            ],
             "properties": {
                 "trustZone": {"type": "string"},
                 "component": {"type": "string"}
