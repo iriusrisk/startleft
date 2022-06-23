@@ -211,12 +211,12 @@ components:
         $mappingPath: {$path: "Properties.ServiceName"}
         $mappingLookups:
           - regex: ^(.*)ssm$
-            name: {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "Systems Manager from VPCEndpoint (grouped)" }}}
+            name: {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "Systems Manager from VPCEndpoint (grouped)" }}}
             type: CD-SYSTEMS-MANAGER
             tags:
               - {$numberOfSources: {oneSource:{$format: "AWS::EC2::VPCEndpoint"}, multipleSource:{ $format: "{_key} ({Type})"}}}
           - regex: ^(.*)ssmmessages$
-            name: {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "Systems Manager from VPCEndpoint (grouped)" }}}
+            name: {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "Systems Manager from VPCEndpoint (grouped)" }}}
             type: CD-SYSTEMS-MANAGER
             tags:
               - {$numberOfSources: {oneSource:{$format: "AWS::EC2::VPCEndpoint"}, multipleSource:{ $format: "{_key} ({Type})"}}}
