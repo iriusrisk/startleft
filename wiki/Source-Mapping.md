@@ -5,7 +5,7 @@ Also, some exclusive Startleft actions based upon JMESPath may be used in mappin
 
 Source mapping files are made up of three main sections corresponding the main sections in an OTM file, plus an optional lookup section described below:
 
-* trustZones
+* trustzones
 * components
 * dataflows
 
