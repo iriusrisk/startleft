@@ -1,5 +1,6 @@
 from startleft.otm.otm import OTM, Component, Dataflow, Trustzone
 from startleft.provider import Provider
+from startleft.utils.iterations_utils import IterationUtils
 
 
 class OtmBuilder:
@@ -15,11 +16,11 @@ class OtmBuilder:
         return self.otm
 
     def add_default_trustzone(self, default_trustzone: Trustzone):
-        self.otm.add_trustzone(default_trustzone)
+        self.add_trustzones([default_trustzone])
         return self
 
     def add_trustzones(self, trustzones: [Trustzone]):
-        self.otm.trustzones = trustzones
+        self.otm.trustzones = IterationUtils.remove_duplicates(self.otm.trustzones + trustzones)
         return self
 
     def add_components(self, components: [Component]):
