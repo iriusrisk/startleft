@@ -23,8 +23,8 @@ class MappingValidator:
         if not schema.valid:
             logger.error('Mapping files are not valid')
             logger.error(f'--- Schema errors---\n{schema.errors}\n--- End of schema errors ---')
-            raise MappingFileNotValidError('Mapping file does not comply with the schema', 'Schema error',
-                                           str(schema.errors))
+            raise MappingFileNotValidError('Mapping files are not valid',
+                                           'Mapping file does not comply with the schema', str(schema.errors))
         logger.info('Mapping files are valid')
 
     @staticmethod
@@ -35,4 +35,4 @@ class MappingValidator:
         size = len(mapping_data)
         if type(mapping_data) == 'bytes' and size is None or size > MAX_SIZE or size < MIN_SIZE:
             msg = 'Mapping files are not valid. Invalid size'
-            raise MappingFileNotValidError('Invalid size', msg, msg)
+            raise MappingFileNotValidError('Mapping files are not valid', msg, msg)

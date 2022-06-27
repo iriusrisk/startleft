@@ -29,8 +29,8 @@ class IacValidator:
             magic = magik.Magic(mime=True)
             mime = magic.from_buffer(iac_data)
             if mime not in valid:
-                msg = 'Provided IaC file is not valid. Invalid content type for iac_file'
-                raise IacFileNotValidError("Invalid content type for iac_file", msg, msg)
+                msg = 'IaC file is not valid. Invalid content type for iac_file'
+                raise IacFileNotValidError("IaC file is not valid.", msg, msg)
 
     def __validate_cloudformation(self):
         self.__validate_content_type(cft_valid_mime)
@@ -42,8 +42,8 @@ class IacValidator:
         for iac_data in self.iac_data_list:
             size = len(iac_data)
             if size is None or size > MAX_SIZE or size < MIN_SIZE:
-                msg = 'Provided IaC file is not valid. Invalid size'
-                raise IacFileNotValidError('Invalid size', msg, msg)
+                msg = 'IaC file is not valid. Invalid size'
+                raise IacFileNotValidError('IaC file is not valid', msg, msg)
 
     def validate(self):
         logger.debug("Validating iac files")
