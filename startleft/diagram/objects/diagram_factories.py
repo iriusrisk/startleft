@@ -6,11 +6,7 @@ from startleft.diagram.objects.diagram_objects import DiagramComponent, DiagramC
 class DiagramComponentFactory:
 
     @abstractmethod
-    def create_component(self, shape, origin) -> DiagramComponent:
-        pass
-
-    @abstractmethod
-    def set_diagram_limits(self, limit_coordinates: tuple):
+    def create_component(self, shape, origin, representer) -> DiagramComponent:
         pass
 
 

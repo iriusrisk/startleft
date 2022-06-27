@@ -7,7 +7,7 @@ from startleft.diagram.representation.visio.visio_shape_representer import Visio
 from startleft.diagram.representation.visio.zone.polygon_zone_creator import PolygonZoneCreator
 from startleft.diagram.representation.visio.zone.quadrant_zone_creator import QuadrantZoneCreator
 
-DEFAULT_DIAGRAM_LIMITS = (10, 10)
+DEFAULT_DIAGRAM_LIMITS = ((0, 0), (10, 10))
 ANGLE_CLEARANCE = radians(5)
 
 
@@ -27,12 +27,12 @@ def normalize_angle(angle: float) -> float:
     return angle + 2 * pi if angle < 0 else angle
 
 
-class BoundaryComponentRepresenter(VisioShapeRepresenter):
+class ZoneComponentRepresenter(VisioShapeRepresenter):
 
     def __init__(self, diagram_limits: tuple = None):
         self.diagram_limits = diagram_limits or DEFAULT_DIAGRAM_LIMITS
-        self.quadrant_creator = QuadrantZoneCreator(ANGLE_CLEARANCE, DEFAULT_DIAGRAM_LIMITS)
-        self.polygon_creator = PolygonZoneCreator(DEFAULT_DIAGRAM_LIMITS)
+        self.quadrant_creator = QuadrantZoneCreator(ANGLE_CLEARANCE, self.diagram_limits)
+        self.polygon_creator = PolygonZoneCreator(self.diagram_limits)
 
     def build_representation(self, shape: Shape) -> Polygon:
         shape_angle = normalize_angle(get_shape_angle(shape))

@@ -1,9 +1,7 @@
 from vsdx import Shape
 
 from startleft.diagram.objects.diagram_factories import DiagramComponentFactory, DiagramConnectorFactory
-from startleft.diagram.objects.diagram_objects import DiagramComponent, DiagramConnector, DiagramComponentOrigin
-from startleft.diagram.representation.visio.boundary_component_representer import BoundaryComponentRepresenter
-from startleft.diagram.representation.visio.simple_component_representer import SimpleComponentRepresenter
+from startleft.diagram.objects.diagram_objects import DiagramComponent, DiagramConnector
 
 
 def get_component_type_from_master(shape: Shape):
@@ -12,22 +10,13 @@ def get_component_type_from_master(shape: Shape):
 
 class VisioComponentFactory(DiagramComponentFactory):
 
-    def __init__(self):
-        self.representers = {
-            DiagramComponentOrigin.SIMPLE_COMPONENT: SimpleComponentRepresenter(),
-            DiagramComponentOrigin.BOUNDARY: BoundaryComponentRepresenter()
-        }
-
-    def create_component(self, shape, origin) -> DiagramComponent:
+    def create_component(self, shape, origin, representer) -> DiagramComponent:
         return DiagramComponent(
             id=shape.ID,
             name=shape.text.replace('\n', ''),
             type=get_component_type_from_master(shape),
             origin=origin,
-            representation=self.representers[origin].build_representation(shape))
-
-    def set_diagram_limits(self, limit_coordinates: tuple):
-        self.representers[DiagramComponentOrigin.BOUNDARY].diagram_limits = limit_coordinates
+            representation=representer.build_representation(shape))
 
 
 class VisioConnectorFactory(DiagramConnectorFactory):

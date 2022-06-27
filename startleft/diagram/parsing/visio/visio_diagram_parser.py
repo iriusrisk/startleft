@@ -5,16 +5,16 @@ from startleft.diagram.objects.diagram_objects import Diagram, DiagramComponentO
 from startleft.diagram.objects.visio.visio_diagram_factories import VisioComponentFactory, VisioConnectorFactory
 from startleft.diagram.parsing.diagram_parser import DiagramParser
 from startleft.diagram.parsing.parent_calculator import ParentCalculator
+from startleft.diagram.representation.visio.simple_component_representer import SimpleComponentRepresenter
+from startleft.diagram.representation.visio.zone_component_representer import ZoneComponentRepresenter
+from startleft.diagram.util.visio import get_limits
+
+DIAGRAM_LIMITS_PADDING = 2
 
 
 def load_visio_page_from_file(visio_filename: str):
     with VisioFile(visio_filename) as vis:
         return vis.pages[0].shapes[0]
-
-
-def get_shape_coordinates(shape: Shape) -> tuple:
-    return float(shape.cells['PinX'].value), float(shape.cells['PinY'].value)
-
 
 def is_connector(shape: Shape) -> bool:
     for connect in shape.connects:
@@ -38,6 +38,9 @@ class VisioDiagramParser(DiagramParser):
         self.component_factory = component_factory
         self.connector_factory = connector_factory
 
+        self.__zone_representer = None
+        self.__component_representer = None
+
         self.page = None
         self.__visio_components = []
         self.__visio_connectors = []
@@ -45,7 +48,8 @@ class VisioDiagramParser(DiagramParser):
     def parse(self, visio_diagram_filename) -> Diagram:
         self.page = load_visio_page_from_file(visio_diagram_filename)
 
-        self.component_factory.set_diagram_limits(self.__calculate_diagram_limits())
+        self.__component_representer = SimpleComponentRepresenter()
+        self.__zone_representer = ZoneComponentRepresenter(self.__calculate_diagram_limits())
 
         self.__load_page_elements()
         self.__calculate_parents()
@@ -53,16 +57,23 @@ class VisioDiagramParser(DiagramParser):
         return Diagram(DiagramType.VISIO, self.__visio_components, self.__visio_connectors)
 
     def __calculate_diagram_limits(self) -> tuple:
-        limit_coordinates = [0, 0]
+        floor_coordinates = [None, None]
+        top_coordinates = [0, 0]
 
-        for shape_coordinates in map(get_shape_coordinates, self.page.sub_shapes()):
-            if shape_coordinates[0] > limit_coordinates[0]:
-                limit_coordinates[0] = shape_coordinates[0]
+        for shape_limits in map(get_limits, self.page.sub_shapes()):
+            if not floor_coordinates[0] or shape_limits[0][0] < floor_coordinates[0]:
+                floor_coordinates[0] = shape_limits[0][0] - DIAGRAM_LIMITS_PADDING
 
-            if shape_coordinates[1] > limit_coordinates[1]:
-                limit_coordinates[1] = shape_coordinates[1]
+            if not floor_coordinates[1] or shape_limits[0][1] < floor_coordinates[1]:
+                floor_coordinates[1] = shape_limits[0][1] - DIAGRAM_LIMITS_PADDING
 
-        return tuple(limit_coordinates)
+            if shape_limits[1][0] > top_coordinates[0]:
+                top_coordinates[0] = shape_limits[1][0] + DIAGRAM_LIMITS_PADDING
+
+            if shape_limits[1][1] > top_coordinates[1]:
+                top_coordinates[1] = shape_limits[1][1] + DIAGRAM_LIMITS_PADDING
+
+        return tuple(floor_coordinates), tuple(top_coordinates)
 
     def __load_page_elements(self):
         for shape in self.page.sub_shapes():
@@ -75,11 +86,13 @@ class VisioDiagramParser(DiagramParser):
 
     def __add_simple_component(self, component_shape: Shape):
         self.__visio_components.append(
-            self.component_factory.create_component(component_shape, DiagramComponentOrigin.SIMPLE_COMPONENT))
+            self.component_factory.create_component(
+                component_shape, DiagramComponentOrigin.SIMPLE_COMPONENT, self.__component_representer))
 
     def __add_boundary_component(self, component_shape: Shape):
         self.__visio_components.append(
-            self.component_factory.create_component(component_shape, DiagramComponentOrigin.BOUNDARY))
+            self.component_factory.create_component(
+                component_shape, DiagramComponentOrigin.BOUNDARY, self.__zone_representer))
 
     def __add_connector(self, connector_shape: Shape):
         self.__visio_connectors.append(self.connector_factory.create_connector(connector_shape))
@@ -87,4 +100,3 @@ class VisioDiagramParser(DiagramParser):
     def __calculate_parents(self):
         for component in self.__visio_components:
             component.parent = ParentCalculator(component).calculate_parent(self.__visio_components)
-
