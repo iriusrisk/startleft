@@ -5,11 +5,6 @@ from startleft.diagram.objects.diagram_objects import DiagramComponent, DiagramC
 from startleft.diagram.representation.visio.boundary_component_representer import BoundaryComponentRepresenter
 from startleft.diagram.representation.visio.simple_component_representer import SimpleComponentRepresenter
 
-REPRESENTERS = {
-    DiagramComponentOrigin.SIMPLE_COMPONENT: SimpleComponentRepresenter(),
-    DiagramComponentOrigin.BOUNDARY: BoundaryComponentRepresenter()
-}
-
 
 def get_component_type_from_master(shape: Shape):
     return shape.master_shape.text.replace('\n', '') if shape.master_shape else ''
@@ -17,12 +12,22 @@ def get_component_type_from_master(shape: Shape):
 
 class VisioComponentFactory(DiagramComponentFactory):
 
+    def __init__(self):
+        self.representers = {
+            DiagramComponentOrigin.SIMPLE_COMPONENT: SimpleComponentRepresenter(),
+            DiagramComponentOrigin.BOUNDARY: BoundaryComponentRepresenter()
+        }
+
     def create_component(self, shape, origin) -> DiagramComponent:
         return DiagramComponent(
             id=shape.ID,
             name=shape.text.replace('\n', ''),
             type=get_component_type_from_master(shape),
-            representation=REPRESENTERS[origin].build_representation(shape))
+            origin=origin,
+            representation=self.representers[origin].build_representation(shape))
+
+    def set_diagram_limits(self, limit_coordinates: tuple):
+        self.representers[DiagramComponentOrigin.BOUNDARY].diagram_limits = limit_coordinates
 
 
 class VisioConnectorFactory(DiagramConnectorFactory):

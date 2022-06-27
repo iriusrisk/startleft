@@ -41,6 +41,7 @@ visio_aws_stencils = path + '/visio/aws-stencils.vsdx'
 visio_generic_shapes = path + '/visio/generic-shapes.vsdx'
 visio_self_pointing_connectors = path + '/visio/self-pointing-connectors.vsdx'
 visio_extraneous_elements = path + '/visio/extraneous-elements.vsdx'
+visio_boundaries = path + '/visio/boundaries.vsdx'
 # mapping
 default_visio_mapping = path + '/visio/aws-visio-mapping.yaml'
 custom_vpc_mapping = path + '/visio/custom-vpc-mapping.yaml'

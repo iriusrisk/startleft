@@ -3,8 +3,8 @@ from vsdx import Shape
 
 from startleft.diagram.representation.visio.visio_shape_representer import VisioShapeRepresenter
 
-# PLOT_TYPE = 0 #Circle
-PLOT_TYPE = 1  # Square
+PLOT_TYPE = 0 #Circle
+# PLOT_TYPE = 1  # Square
 
 
 def calculate_shape_dimension(shape: Shape):

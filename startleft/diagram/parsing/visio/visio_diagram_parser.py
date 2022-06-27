@@ -12,7 +12,11 @@ def load_visio_page_from_file(visio_filename: str):
         return vis.pages[0].shapes[0]
 
 
-def is_connector(shape) -> bool:
+def get_shape_coordinates(shape: Shape) -> tuple:
+    return float(shape.cells['PinX'].value), float(shape.cells['PinY'].value)
+
+
+def is_connector(shape: Shape) -> bool:
     for connect in shape.connects:
         if shape.ID == connect.connector_shape_id:
             return True
@@ -20,13 +24,12 @@ def is_connector(shape) -> bool:
     return False
 
 
-def is_component(shape) -> bool:
+def is_component(shape: Shape) -> bool:
     return shape.text and not is_connector(shape)
 
 
-def is_boundary(shape) -> bool:
-    # TODO: Implement this
-    return False
+def is_boundary(shape: Shape) -> bool:
+    return shape.shape_name is not None and 'Curved panel' in shape.shape_name
 
 
 class VisioDiagramParser(DiagramParser):
@@ -42,19 +45,33 @@ class VisioDiagramParser(DiagramParser):
     def parse(self, visio_diagram_filename) -> Diagram:
         self.page = load_visio_page_from_file(visio_diagram_filename)
 
+        self.component_factory.set_diagram_limits(self.__calculate_diagram_limits())
+
         self.__load_page_elements()
         self.__calculate_parents()
 
         return Diagram(DiagramType.VISIO, self.__visio_components, self.__visio_connectors)
 
+    def __calculate_diagram_limits(self) -> tuple:
+        limit_coordinates = [0, 0]
+
+        for shape_coordinates in map(get_shape_coordinates, self.page.sub_shapes()):
+            if shape_coordinates[0] > limit_coordinates[0]:
+                limit_coordinates[0] = shape_coordinates[0]
+
+            if shape_coordinates[1] > limit_coordinates[1]:
+                limit_coordinates[1] = shape_coordinates[1]
+
+        return tuple(limit_coordinates)
+
     def __load_page_elements(self):
         for shape in self.page.sub_shapes():
             if is_connector(shape):
                 self.__add_connector(shape)
-            elif is_component(shape):
-                self.__add_simple_component(shape)
             elif is_boundary(shape):
                 self.__add_boundary_component(shape)
+            elif is_component(shape):
+                self.__add_simple_component(shape)
 
     def __add_simple_component(self, component_shape: Shape):
         self.__visio_components.append(

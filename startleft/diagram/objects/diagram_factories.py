@@ -9,6 +9,10 @@ class DiagramComponentFactory:
     def create_component(self, shape, origin) -> DiagramComponent:
         pass
 
+    @abstractmethod
+    def set_diagram_limits(self, limit_coordinates: tuple):
+        pass
+
 
 class DiagramConnectorFactory:
 
