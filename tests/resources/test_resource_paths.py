@@ -26,10 +26,9 @@ terraform_aws_simple_components = path + '/terraform/aws_simple_components.tf'
 terraform_aws_singleton_components = path + '/terraform/aws_singleton_components.tf'
 terraform_aws_parent_children_components = path + '/terraform/aws_parent_children_components.tf'
 terraform_aws_singleton_components_unix_line_breaks = path + '/terraform/aws_singleton_components_unix_line_breaks.tf'
-terraform_aws_singleton_components_dos_line_breaks = path + '/terraform/aws_singleton_components_dos_line_breaks.tf'
-terraform_aws_singleton_components_classic_macos_line_breaks = path + '/terraform/aws_singleton_components_classic_macos_line_breaks.tf'
 
 # mapping
+default_terraform_mapping = path + '/terraform/default-terraform-mapping.yaml'
 default_terraform_aws_mapping = path + '/terraform/aws_terraform_mapping.yaml'
 
 # VISIO
