@@ -100,11 +100,94 @@ class TestVisioDiagramToOtm:
         check_otm_dataflow(otm, 2, '1', '35')
         check_otm_dataflow(otm, 3, '12', '41')
 
+    def test_simple_boundary_tzs(self):
+        otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
+            test_resource_paths.visio_simple_boundary_tzs,
+            [FileUtils.get_data(test_resource_paths.default_visio_mapping)],
+            "project-name",
+            "project-id"
+        )
+
+        assert len(otm.trustzones) == 2
+        assert len(otm.components) == 2
+        assert len(otm.dataflows) == 1
+
+        check_otm_representations_size(otm)
+
+        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
+        check_otm_trustzone(otm, 1, private_secured_id, private_secured_name)
+
+        check_otm_component(otm, 0, 'ec2', 'Custom machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 1, 'rds', 'Private Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
+
+        check_otm_dataflow(otm, 0, '12', '30')
+
+    def test_boundary_tz_and_default_tz(self):
+        otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
+            test_resource_paths.boundary_tz_and_default_tz,
+            [FileUtils.get_data(test_resource_paths.default_visio_mapping)],
+            "project-name",
+            "project-id"
+        )
+
+        assert len(otm.trustzones) == 2
+        assert len(otm.components) == 2
+        assert len(otm.dataflows) == 1
+
+        check_otm_representations_size(otm)
+
+        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
+        check_otm_trustzone(otm, 1, private_secured_id, private_secured_name)
+
+        check_otm_component(otm, 0, 'ec2', 'Custom machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 1, 'rds', 'Private Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
+
+        check_otm_dataflow(otm, 0, '12', '30')
+
+    def test_overlapped_boundary_tzs(self):
+        otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
+            test_resource_paths.overlapped_boundary_tzs,
+            [FileUtils.get_data(test_resource_paths.default_visio_mapping)],
+            "project-name",
+            "project-id"
+        )
+
+        assert len(otm.trustzones) == 2
+        assert len(otm.components) == 2
+        assert len(otm.dataflows) == 1
+
+        check_otm_representations_size(otm)
+
+        check_otm_component(otm, 0, 'ec2', 'Custom machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 1, 'rds', 'Private Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
+
+        check_otm_dataflow(otm, 0, '12', '30')
+
+    def test_multiple_pages_diagram(self):
+        otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
+            test_resource_paths.multiple_pages_diagram,
+            [FileUtils.get_data(test_resource_paths.default_visio_mapping)],
+            "project-name",
+            "project-id"
+        )
+
+        assert len(otm.trustzones) == 3
+        assert len(otm.components) == 3
+        assert len(otm.dataflows) == 2
+
+        check_otm_representations_size(otm)
+
+        check_otm_component(otm, 0, 'ec2', 'Custom machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 1, 'rds', 'Private Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
+        check_otm_component(otm, 2, 'ec2', 'Internet Machine', 'f0ba7722-39b6-4c81-8290-a30a248bb8d9')
+
+        check_otm_dataflow(otm, 0, '12', '30')
+        check_otm_dataflow(otm, 1, '65', '30')
+
     def test_complex_diagram(self):
         otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
             test_resource_paths.visio_aws_with_tz_and_vpc,
             [FileUtils.get_data(test_resource_paths.default_visio_mapping)],
-
             "project-name",
             "project-id"
         )
