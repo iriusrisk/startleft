@@ -225,7 +225,7 @@ class ComponentMapper:
                             if child_id not in id_parents:
                                 id_parents[child_id] = list()
                             id_parents[child_id].append(component_id)
-                        elif "$parent" in self.mapping["parent"]:
+                        elif "$skip" not in self.mapping["$source"] and "$parent" in self.mapping["parent"]:
                             # $parent and $children are related mappings
                             # In this case, component_id may be a list with a different treatment
                             if parent_number != component_number:
