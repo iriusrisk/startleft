@@ -1,6 +1,7 @@
 import pytest
 from shapely.geometry import Polygon
 
+from startleft.diagram.objects.diagram_objects import DiagramLimits
 from startleft.diagram.representation.visio.zone_component_representer import ZoneComponentRepresenter
 from tests.resources.test_resource_paths import visio_boundaries
 from tests.util.visio import read_shape_by_name
@@ -9,7 +10,7 @@ X_FLOOR = 0
 X_TOP = 10
 Y_FLOOR = 0
 Y_TOP = 10
-DIAGRAM_LIMITS = ((X_FLOOR, Y_FLOOR), (X_TOP, Y_TOP))
+DIAGRAM_LIMITS = DiagramLimits([(X_FLOOR, Y_FLOOR), (X_TOP, Y_TOP)])
 
 BOUNDARY_TEST_FILE = visio_boundaries
 

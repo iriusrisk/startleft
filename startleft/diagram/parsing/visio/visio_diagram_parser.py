@@ -1,7 +1,7 @@
 from vsdx import Shape, VisioFile
 
 from startleft.diagram.diagram_type import DiagramType
-from startleft.diagram.objects.diagram_objects import Diagram, DiagramComponentOrigin
+from startleft.diagram.objects.diagram_objects import Diagram, DiagramComponentOrigin, DiagramLimits
 from startleft.diagram.objects.visio.visio_diagram_factories import VisioComponentFactory, VisioConnectorFactory
 from startleft.diagram.parsing.diagram_parser import DiagramParser
 from startleft.diagram.parsing.parent_calculator import ParentCalculator
@@ -48,15 +48,16 @@ class VisioDiagramParser(DiagramParser):
     def parse(self, visio_diagram_filename) -> Diagram:
         self.page = load_visio_page_from_file(visio_diagram_filename)
 
+        diagram_limits = self.__calculate_diagram_limits()
         self.__component_representer = SimpleComponentRepresenter()
-        self.__zone_representer = ZoneComponentRepresenter(self.__calculate_diagram_limits())
+        self.__zone_representer = ZoneComponentRepresenter(diagram_limits)
 
         self.__load_page_elements()
         self.__calculate_parents()
 
-        return Diagram(DiagramType.VISIO, self.__visio_components, self.__visio_connectors)
+        return Diagram(DiagramType.VISIO, self.__visio_components, self.__visio_connectors, diagram_limits)
 
-    def __calculate_diagram_limits(self) -> tuple:
+    def __calculate_diagram_limits(self) -> DiagramLimits:
         floor_coordinates = [None, None]
         top_coordinates = [0, 0]
 
@@ -73,7 +74,7 @@ class VisioDiagramParser(DiagramParser):
             if shape_limits[1][1] > top_coordinates[1]:
                 top_coordinates[1] = shape_limits[1][1] + DIAGRAM_LIMITS_PADDING
 
-        return tuple(floor_coordinates), tuple(top_coordinates)
+        return DiagramLimits([floor_coordinates, top_coordinates])
 
     def __load_page_elements(self):
         for shape in self.page.sub_shapes():

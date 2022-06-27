@@ -1,43 +1,62 @@
-from math import radians, pi
+from math import pi, tan
 
 from shapely.geometry import Polygon
 from vsdx import Shape
 
+from startleft.diagram.objects.diagram_objects import DiagramLimits
 from startleft.diagram.representation.visio.visio_shape_representer import VisioShapeRepresenter
-from startleft.diagram.representation.visio.zone.polygon_zone_creator import PolygonZoneCreator
-from startleft.diagram.representation.visio.zone.quadrant_zone_creator import QuadrantZoneCreator
-
-DEFAULT_DIAGRAM_LIMITS = ((0, 0), (10, 10))
-ANGLE_CLEARANCE = radians(5)
+from startleft.diagram.representation.visio.zone.irregular_zones import irregular_zones
+from startleft.diagram.representation.visio.zone.regular_zones import regular_zones
+from startleft.diagram.util.visio import get_normalized_angle, get_y_center, get_x_center
 
 
-def get_shape_x(shape: Shape) -> float:
-    return float(shape.cells['PinX'].value)
+def calc_slope_angle(angle):
+    slot_angle = angle - pi / 4
+
+    if slot_angle < 0:
+        slot_angle = slot_angle + 2 * pi
+    if slot_angle > pi:
+        slot_angle = slot_angle - pi
+
+    return slot_angle
 
 
-def get_shape_y(shape: Shape) -> float:
-    return float(shape.cells['PinY'].value)
+def calc_slope(angle):
+    return tan(calc_slope_angle(angle))
 
 
-def get_shape_angle(shape: Shape) -> float:
-    return float(shape.cells['Angle'].value)
+def calc_y_formula(slope: float, any_line_point: tuple):
+    return lambda x: x * slope - any_line_point[0] * slope + any_line_point[1]
 
 
-def normalize_angle(angle: float) -> float:
-    return angle + 2 * pi if angle < 0 else angle
+def calc_x_formula(slope: float, any_line_point: tuple):
+    return lambda y: y / slope + any_line_point[0] - (any_line_point[1] / slope)
+
+
+def represent_quadrant(angle: float, some_point: tuple, limits: DiagramLimits):
+    for zone in regular_zones:
+        if zone.condition(angle):
+            return zone.representation(some_point[0], some_point[1], limits)
+
+
+def represent_irregular_zone(angle: float, some_point: tuple, limits: DiagramLimits):
+    slope = calc_slope(angle)
+    x_formula = calc_x_formula(slope, some_point)
+    y_formula = calc_y_formula(slope, some_point)
+
+    for zone in irregular_zones:
+        if zone.condition(angle):
+            return zone.representation(x_formula, y_formula, limits)
 
 
 class ZoneComponentRepresenter(VisioShapeRepresenter):
 
-    def __init__(self, diagram_limits: tuple = None):
-        self.diagram_limits = diagram_limits or DEFAULT_DIAGRAM_LIMITS
-        self.quadrant_creator = QuadrantZoneCreator(ANGLE_CLEARANCE, self.diagram_limits)
-        self.polygon_creator = PolygonZoneCreator(self.diagram_limits)
+    def __init__(self, diagram_limits: DiagramLimits = None):
+        self.diagram_limits = diagram_limits
 
     def build_representation(self, shape: Shape) -> Polygon:
-        shape_angle = normalize_angle(get_shape_angle(shape))
-        x_value = get_shape_x(shape)
-        y_value = get_shape_y(shape)
+        angle = get_normalized_angle(shape)
+        shape_center = (get_x_center(shape), get_y_center(shape))
 
-        return self.quadrant_creator.create_quadrant(x_value, y_value, shape_angle) or \
-               self.polygon_creator.create_polygon((x_value, y_value), shape_angle)
+        return represent_quadrant(angle, shape_center, self.diagram_limits) or \
+            represent_irregular_zone(angle, shape_center, self.diagram_limits)
