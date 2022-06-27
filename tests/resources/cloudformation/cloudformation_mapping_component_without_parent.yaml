@@ -1,0 +1,42 @@
+trustzones:
+  - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+
+components:
+  - id: { $format: "{name}" }
+    type: aws_skipped_with_parent
+    name: { $path: "_key" }
+    $source: { $skip: { $root: "Resources|squash(@)[?Type=='aws_skipped_with_parent']" } }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: aws_component_without_parent
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='aws_component_without_parent']" }
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: aws_skipped_no_parent
+    name: { $path: "_key" }
+    $source: { $skip: { $root: "Resources|squash(@)[?Type=='aws_skipped_no_parent']" } }
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: aws_control
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='aws_control']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+dataflows:
+  - id: { $format: "{name}" }
+    name: { $format: "{_key}" }
+    $source: { $root: "Resources|squash(@)[?Properties.SecurityGroupIds]" }
+    source: { $path: "_key" }
+    destination: { $hub: { $path: "Properties.SecurityGroupIds|map(&values(@), @)[0][0][0]" } }
+    tags:
