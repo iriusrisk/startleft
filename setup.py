@@ -37,7 +37,8 @@ setup(
         "test": [
             'tox',
             'pytest',
-            'responses'
+            'responses',
+            'deepdiff'
         ]
     },
     entry_points='''
