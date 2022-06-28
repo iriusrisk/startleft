@@ -65,16 +65,19 @@ class TestTerraformAWSComponents:
         assert_otm(otm, 0, 'elastic-container-service', 'mongo', self.public_cloud_id, ['aws_ecs_service'])
         assert_otm(otm, 1, 'docker-container', 'service', otm.components[0].id, ['aws_ecs_task_definition'])
 
-    @pytest.mark.parametrize('filename', [
-        test_resource_paths.terraform_aws_singleton_components_unix_line_breaks,
-        test_resource_paths.terraform_aws_singleton_components_dos_line_breaks,
-        test_resource_paths.terraform_aws_singleton_components_classic_macos_line_breaks
+    @pytest.mark.parametrize('filename, break_line', [
+        (test_resource_paths.terraform_aws_singleton_components_unix_line_breaks, '\n'),
+        (test_resource_paths.terraform_aws_singleton_components_unix_line_breaks, '\r\n'),
+        (test_resource_paths.terraform_aws_singleton_components_unix_line_breaks, '\r')
     ])
-    def test_aws_singleton_components(self, filename: str):
+    def test_aws_singleton_components(self, filename: str, break_line: str):
+        iac_data = FileUtils.get_byte_data(filename).decode().replace('\n', break_line)
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
         iac_to_otm = IacToOtm('Test case AWS singleton components', 'aws_singleton_components', IacType.TERRAFORM)
-        iac_to_otm.run(IacType.TERRAFORM, [FileUtils.get_data(mapping_filename)], [FileUtils.get_data(filename)])
 
+        iac_to_otm.run(IacType.TERRAFORM, [FileUtils.get_data(mapping_filename)], [iac_data])
+
+        assert break_line in iac_data
         assert iac_to_otm.source_model.otm
         otm = iac_to_otm.otm
         assert len(otm.trustzones) == 1

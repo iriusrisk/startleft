@@ -6,8 +6,10 @@ from fastapi.testclient import TestClient
 
 from startleft.api import fastapi_server
 from startleft.api.controllers.iac import iac_create_otm_controller
-from tests.resources.test_resource_paths import default_cloudformation_mapping, example_json, \
-    cloudformation_malformed_mapping_wrong_id, invalid_yaml
+from startleft.utils.file_utils import FileUtils
+from tests.resources.test_resource_paths import default_cloudformation_mapping, default_terraform_mapping, \
+    example_json, cloudformation_malformed_mapping_wrong_id, invalid_yaml, \
+    terraform_aws_singleton_components_unix_line_breaks
 
 webapp = fastapi_server.initialize_webapp()
 
@@ -76,6 +78,40 @@ class TestCloudFormationCreateProjectController:
         response = client.post(get_url(), files=files, data=body)
 
         # Then the OTM is returned inside the response as JSON
+        assert response.status_code == iac_create_otm_controller.RESPONSE_STATUS_CODE
+        assert response.headers.get('content-type') == 'application/json'
+        assert '"otmVersion": "0.1.0"' in response.text
+        assert '"project": ' in response.text
+        assert '"name": "project_A_name"' in response.text
+        assert '"trustZones": ' in response.text
+        assert '"components": ' in response.text
+
+    @responses.activate
+    @pytest.mark.parametrize('filename,break_line', [
+        (terraform_aws_singleton_components_unix_line_breaks, '\n'),
+        (terraform_aws_singleton_components_unix_line_breaks, '\r\n'),
+        (terraform_aws_singleton_components_unix_line_breaks, '\r')
+    ])
+    def test_create_otm_ok_all_like_breaks(self, filename: str, break_line: str):
+        # Given a project_id
+        project_id: str = 'project_A_id'
+
+        # And the request files
+        iac_file = (filename, open(filename, 'rb'), 'application/json')
+        mapping_file = (default_terraform_mapping, open(default_terraform_mapping, 'r'), 'text/yaml')
+
+        # And the iac_data with custom line breaks
+        iac_data = FileUtils.get_byte_data(filename).decode().replace('\n', break_line)
+
+        # When I do post on cloudformation endpoint
+        files = {'iac_file': iac_file, 'mapping_file': mapping_file}
+        body = {'iac_type': 'TERRAFORM', 'id': f'{project_id}', 'name': 'project_A_name'}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then the iac file has the expected line break
+        assert f'{break_line} ' in iac_data
+
+        # And the OTM is returned inside the response as JSON
         assert response.status_code == iac_create_otm_controller.RESPONSE_STATUS_CODE
         assert response.headers.get('content-type') == 'application/json'
         assert '"otmVersion": "0.1.0"' in response.text
