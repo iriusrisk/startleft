@@ -40,4 +40,10 @@ def get_normalized_angle(shape: Shape) -> float:
 
 
 def get_limits(shape: Shape) -> tuple:
-    return shape.bounds[0:2], shape.bounds[2:4]
+    center_x = float(shape.cells['PinX'].value)
+    center_y = float(shape.cells['PinY'].value)
+    width = get_width(shape)
+    height = get_height(shape)
+
+    return (center_x - (width / 2), center_y - (height / 2)), \
+           (center_x + (width / 2), center_y + (height / 2)) 

@@ -53,6 +53,7 @@ visio_overlapped_boundary_tzs = path + '/visio/overlapped-boundary-tzs.vsdx'
 visio_multiple_pages_diagram = path + '/visio/multiple-pages-diagram.vsdx'
 visio_boundary_and_component_tzs = path + '/visio/boundary-and-component-tzs.vsdx'
 visio_nested_tzs = path + '/visio/nested-tzs.vsdx'
+visio_simple_components = path + '/visio/simple-components.vsdx'
 # mapping
 default_visio_mapping = path + '/visio/aws-visio-mapping.yaml'
 custom_vpc_mapping = path + '/visio/custom-vpc-mapping.yaml'
