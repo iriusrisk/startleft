@@ -9,6 +9,9 @@ public_cloud_name = 'Public Cloud'
 private_secured_id = '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
 private_secured_name = 'Private Secured'
 
+internet_id = 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
+internet_name = 'Internet'
+
 
 def __compare_otm_files(expected_filename: str,
                         actual_filename: str,
@@ -44,7 +47,7 @@ def check_otm_trustzone(otm, position, trustzone_id, name):
     assert otm.trustzones[position].name == name
 
 
-def check_otm_component(otm, position, component_type, name, parent_id=None, tags=[]):
+def check_otm_component(otm, position, component_type, name, parent_id=None, tags=()):
     assert otm.components[position].type == component_type
     assert otm.components[position].name == name
 
