@@ -16,6 +16,7 @@ def load_visio_page_from_file(visio_filename: str):
     with VisioFile(visio_filename) as vis:
         return vis.pages[0].shapes[0]
 
+
 def is_connector(shape: Shape) -> bool:
     for connect in shape.connects:
         if shape.ID == connect.connector_shape_id:

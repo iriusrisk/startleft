@@ -51,7 +51,7 @@ def represent_irregular_zone(angle: float, some_point: tuple, limits: DiagramLim
 
 class ZoneComponentRepresenter(VisioShapeRepresenter):
 
-    def __init__(self, diagram_limits: DiagramLimits = None):
+    def __init__(self, diagram_limits: DiagramLimits):
         self.diagram_limits = diagram_limits
 
     def build_representation(self, shape: Shape) -> Polygon:
