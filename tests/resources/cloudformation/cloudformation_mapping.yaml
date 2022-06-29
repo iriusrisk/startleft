@@ -151,6 +151,13 @@ components:
     tags:
       - { $path: "Type" }
 
+  - id:     {$format: "{name}"}
+    type:   rds
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::RDS::DBCluster']"}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
 
   - id:     {$format: "{name}"}
     type:   route-53

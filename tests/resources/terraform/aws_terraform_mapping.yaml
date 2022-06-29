@@ -12,10 +12,26 @@ components:
       - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
-    type:        empty_component
+    type:        empty-component
     $source:     {$root: "resource|get(@, 'aws_subnet')"}
     name:        {$path: "keys(@)[0]"}
     parent:      {$path: "*.vpc_id[0] | [0] | re_sub('[\\$\\{\\}]', '', @)"}
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        empty-component
+    $source:     {$root: "resource|get(@, 'aws_vpc_endpoint')"}
+    name:        {$path: "keys(@)[0]"}
+    parent:      # TODO
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        empty-component
+    $source:     {$root: "resource|get(@, 'aws_internet_gateway')"}
+    name:        {$path: "keys(@)[0]"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - {$path: "Type"}
 
@@ -89,9 +105,9 @@ components:
     type:        elastic-container-service
     name:        {$path: "keys(@)[0]"}
     $source:     {
-                    $children: {$path: "values(@)[0].task_definition|split(@, '.')[1]"},
-                    $root: "resource|get(@, 'aws_ecs_service')"
-                 }
+      $children: {$path: "values(@)[0].task_definition|split(@, '.')[1]"},
+      $root: "resource|get(@, 'aws_ecs_service')"
+    }
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - {$path: "Type"}
@@ -121,6 +137,14 @@ components:
       - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
+    type:        load-balancer
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_lb')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{type}.{name}.id"}
     type:        aws-lambda-function
     name:        {$path: "keys(@)[0]"}
     $source:     {$root: "resource|get(@, 'aws_lambda_function')"}
@@ -132,6 +156,14 @@ components:
     type:        CD-AWS-NETWORK-FIREWALL
     name:        {$path: "keys(@)[0]"}
     $source:     {$root: "resource|get(@, 'aws_networkfirewall_firewall')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        rds
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_db_instance')"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - {$path: "Type"}
@@ -164,6 +196,15 @@ components:
     type:        s3
     name:        {$path: "keys(@)[0]"}
     $source:     {$root: "resource|get(@, 'aws_s3_bucket')"}
+    $altsource:
+      - $mappingType: {$root: "resource|get(@, 'aws_vpc_endpoint')"}
+        $mappingPath: {$path: "*.service_name | [0]"}
+        $mappingLookups:
+          - regex: ^(.*)s3$
+            name: S3 from VPCEndpoint
+            type: s3
+            tags:
+              - {$format: "{_key} ({Type})"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - {$path: "Type"}
@@ -187,15 +228,7 @@ components:
   - id:          {$format: "{type}.{name}.id"}
     type:        step-functions
     name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_sfn_state_machine')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        step-functions
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_sfn_activity')"}
+    $source:     {$root: "resource|get_starts_with(@, 'aws_sfn_')"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - {$path: "Type"}
@@ -215,6 +248,23 @@ components:
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
+
+  - id:          {$format: "{type}.{name}.id"}
+    type:        dynamodb
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_dynamodb_table')"}
+    $altsource:
+      - $mappingType: {$root: "resource|get(@, 'aws_vpc_endpoint')"}
+        $mappingPath: {$path: "*.service_name | [0]"}
+        $mappingLookups:
+          - regex: ^(.*)dynamodb$
+            name:  DynamoDB from VPCEndpoint
+            type:  dynamodb
+            tags:
+              - {$format: "{_key} ({Type})"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
 
   - id:          {$format: "{type}.{name}.id"}
     type:        kms
@@ -245,6 +295,20 @@ components:
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-SYSTEMS-MANAGER (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_ssm_')"}}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    $altsource:
+      - $mappingType: {$root: "resource|get(@, 'aws_vpc_endpoint')"}
+        $mappingPath: {$path: "*.service_name | [0]"}
+        $mappingLookups:
+          - regex: ^(.*)ssm$
+            name: {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "Systems Manager from VPCEndpoint (grouped)"}}}
+            type:  CD-SYSTEMS-MANAGER
+            tags:
+              - {$numberOfSources: {oneSource: {$format: "aws_vpc_endpoint"}, multipleSource: {$format: "{_key} ({Type})"}}}
+          - regex: ^(.*)ssmmessages$
+            name: {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "Systems Manager from VPCEndpoint (grouped)"}}}
+            type:  CD-SYSTEMS-MANAGER
+            tags:
+              - {$numberOfSources: {oneSource: {$format: "aws_vpc_endpoint"}, multipleSource: {$format: "{_key} ({Type})"}}}
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
@@ -292,6 +356,15 @@ components:
     type:        elastic-container-registry
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "elastic-container-registry (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_ecr_')"}}
+    $altsource:
+      - $mappingType: {$root: "resource|get(@, 'aws_vpc_endpoint')"}
+        $mappingPath: {$path: "*.service_name | [0]"}
+        $mappingLookups:
+          - regex: ^(.*)ecr.dkr$
+            name:  ECR from VPCEndpoint
+            type:  elastic-container-registry
+            tags:
+              - {$format: "{_key} ({Type})"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}

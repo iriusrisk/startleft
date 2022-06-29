@@ -168,9 +168,10 @@ class TestTerraformAWSComponents:
 
     def test_aws_altsource_components(self):
         filename = test_resource_paths.terraform_aws_altsource_components
+        iac_data = FileUtils.get_byte_data(filename).decode()
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
         iac_to_otm = IacToOtm('Test case AWS altsource components', 'aws_altsource_components', IacType.TERRAFORM)
-        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, 'threatmodel-from-altsource-terraform.otm', filename)
+        iac_to_otm.run(IacType.TERRAFORM, [FileUtils.get_data(mapping_filename)], [iac_data])
 
         assert iac_to_otm.otm
         otm = iac_to_otm.otm
