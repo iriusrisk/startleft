@@ -32,8 +32,8 @@ class TestTerraformAWSComponents:
     public_cloud_id = 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
     internet_id = 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
 
-    def test_aws_simple_components(self):
-        filename = test_resource_paths.terraform_aws_simple_components
+    def test_aws_multiple_components(self):
+        filename = test_resource_paths.terraform_aws_multiple_components
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
         iac_to_otm = IacToOtm('Test case AWS simple components', 'aws_simple_components', IacType.TERRAFORM)
         iac_to_otm.run(IacType.TERRAFORM, [FileUtils.get_data(mapping_filename)], [FileUtils.get_data(filename)])
@@ -215,9 +215,10 @@ class TestTerraformAWSComponents:
 
     def test_aws_security_groups_components(self):
         filename = test_resource_paths.terraform_aws_security_groups_components
+        iac_data = FileUtils.get_byte_data(filename).decode()
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
         iac_to_otm = IacToOtm('Test case AWS security groups components', 'aws_security_groups_components', IacType.TERRAFORM)
-        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, 'threatmodel-from-securitygroups-terraform.otm', filename)
+        iac_to_otm.run(IacType.TERRAFORM, [FileUtils.get_data(mapping_filename)], [iac_data])
 
         otm = iac_to_otm.otm
 
@@ -278,9 +279,10 @@ class TestTerraformAWSComponents:
 
     def test_aws_dataflows(self):
         filename = test_resource_paths.terraform_aws_dataflows
+        iac_data = FileUtils.get_byte_data(filename).decode()
         mapping_filename = test_resource_paths.default_terraform_aws_mapping
         iac_to_otm = IacToOtm('Test case AWS dataflows', 'aws_dataflows', IacType.TERRAFORM)
-        iac_to_otm.run(IacType.TERRAFORM, mapping_filename, 'threatmodel-from-dataflows-terraform.otm', filename)
+        iac_to_otm.run(IacType.TERRAFORM, [FileUtils.get_data(mapping_filename)], [iac_data])
 
         otm = iac_to_otm.otm
 

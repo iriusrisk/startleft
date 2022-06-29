@@ -26,6 +26,7 @@ cloudformation_mapping_component_without_parent = path + '/cloudformation/cloudf
 # TERRAFORM
 terraform_for_mappings_tests_json = path + '/terraform/terraform_for_mappings_tests.tf'
 terraform_aws_simple_components = path + '/terraform/aws_simple_components.tf'
+terraform_aws_multiple_components = path + '/terraform/aws_multiple_components.tf'
 terraform_aws_singleton_components = path + '/terraform/aws_singleton_components.tf'
 terraform_aws_altsource_components = path + '/terraform/aws_altsource_components.tf'
 terraform_aws_security_groups_components = path + '/terraform/aws_security_groups_components.tf'

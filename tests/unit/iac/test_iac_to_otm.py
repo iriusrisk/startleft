@@ -88,7 +88,7 @@ class TestApp:
                                        and "DummyVPCdynamodb (AWS::EC2::VPCEndpoint)" in obj.tags
                                        and len(obj.tags) == 1, iac_to_otm.otm.components))
 
-    def test_run_terraform_mappings(self, filename):
+    def test_run_terraform_mappings(self):
         filename = test_resource_paths.terraform_for_mappings_tests_json
 
         mapping_filename = test_resource_paths.default_terraform_aws_mapping

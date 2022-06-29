@@ -21,204 +21,40 @@
     }
   ],
   "components": [
-    {
-      "id": "c4b9c67d-697a-4123-ac03-53c8bf79ceca",
-      "name": "foobar",
-      "type": "cloudtrail",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      {
+        "id": "c4b9c67d-697a-4123-ac03-53c8bf79ceca",
+        "name": "foobar",
+        "type": "cloudtrail",
+        "parent": {
+          "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        },
+        "tags": [
+          "aws_cloudtrail"
+        ]
       },
-      "tags": [
-        "aws_cloudtrail"
-      ]
-    },
-    {
-      "id": "6dc59507-2ae4-440e-a7c7-4135bd2cde31",
-      "name": "main",
-      "type": "cognito",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      {
+        "id": "3ceb32ee-dbee-4814-b355-89f70a5f1adc",
+        "name": "foo_s3_bucket",
+        "type": "s3",
+        "parent": {
+          "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        },
+        "tags": [
+          "aws_s3_bucket"
+        ]
       },
-      "tags": [
-        "aws_cognito_identity_pool"
-      ]
-    },
-    {
-      "id": "4b82c366-975a-4c05-8559-e78562eb7dfc",
-      "name": "pool",
-      "type": "cognito",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_cognito_user_pool"
-      ]
-    },
-    {
-      "id": "7ee9f71d-929c-40d5-a513-f99113753243",
-      "name": "mongo",
-      "type": "elastic-container-service",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_ecs_service"
-      ]
-    },
-    {
-      "id": "8ddaf94e-d756-4e6c-9e05-e0d4e04e693c",
-      "name": "service",
-      "type": "docker-container",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_ecs_task_definition"
-      ]
-    },
-    {
-      "id": "8a4c3958-cfae-4915-9d57-8b0e04680425",
-      "name": "service_task",
-      "type": "docker-container",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_ecs_task_definition"
-      ]
-    },
-    {
-      "id": "36f7e0c1-a4a8-4354-8520-fa9ccb1094a6",
-      "name": "example",
-      "type": "elastic-container-kubernetes",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_eks_cluster"
-      ]
-    },
-    {
-      "id": "a1494ca5-f0ab-4ab2-9ae9-30b0689e673b",
-      "name": "wu-tang",
-      "type": "load-balancer",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_elb"
-      ]
-    },
-    {
-      "id": "08333768-1510-45ed-834f-cd4dd57c9875",
-      "name": "test_lambda",
-      "type": "aws-lambda-function",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_lambda_function"
-      ]
-    },
-    {
-      "id": "97325fcf-4a4b-4fde-885f-3f380e8b8408",
-      "name": "firewall_example",
-      "type": "CD-AWS-NETWORK-FIREWALL",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_networkfirewall_firewall"
-      ]
-    },
-    {
-      "id": "89e2077e-be73-4b46-b383-b88da578febf",
-      "name": "aurora-cluster-demo",
-      "type": "rds",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_rds_cluster"
-      ]
-    },
-    {
-      "id": "8c0e78c7-953b-44c1-bec5-e2f3d50077a0",
-      "name": "tf-redshift-cluster",
-      "type": "redshift",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_redshift_cluster"
-      ]
-    },
-    {
-      "id": "211b2443-3108-4789-aac8-6c6ea5ff6428",
-      "name": "route-53-zone-example",
-      "type": "route-53",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_route53_zone"
-      ]
-    },
-    {
-      "id": "3ceb32ee-dbee-4814-b355-89f70a5f1adc",
-      "name": "foo_s3_bucket",
-      "type": "s3",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_s3_bucket"
-      ]
-    },
-    {
-      "id": "da6956e7-0523-443a-91fe-de8bb8f8cadb",
-      "name": "terraform_queue",
-      "type": "sqs-simple-queue-service",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_sqs_queue"
-      ]
-    },
-    {
-      "id": "ce7a5302-e54a-4643-bc4e-1a4aabc52623",
-      "name": "some-canary",
-      "type": "empty-component",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_synthetics_canary"
-      ]
-    },
-    {
-      "id": "620e3b14-92fa-4ded-988e-3942e14194f3",
-      "name": "my_sfn_state_machine",
-      "type": "step-functions",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_sfn_state_machine"
-      ]
-    },
-    {
-      "id": "3fb8f50c-0a92-44f5-98f5-bbc5ac53b533",
-      "name": "my_sfn_activity",
-      "type": "step-functions",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_sfn_activity"
-      ]
-    }
-  ],
+      {
+        "id": "da6956e7-0523-443a-91fe-de8bb8f8cadb",
+        "name": "terraform_queue",
+        "type": "sqs-simple-queue-service",
+        "parent": {
+          "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        },
+        "tags": [
+          "aws_sqs_queue"
+        ]
+      }
+    ],
+
   "dataflows": []
 }
