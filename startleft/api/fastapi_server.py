@@ -12,7 +12,8 @@ from startleft.api.controllers.health import health_controller
 from startleft.api.controllers.iac import iac_create_otm_controller
 from startleft.api.error_response import ErrorResponse
 from startleft.api.errors import CommonError, IacFileNotValidError, \
-    DiagramFileNotValidError, MappingFileNotValidError, LoadingIacFileError, LoadingDiagramFileError
+    DiagramFileNotValidError, MappingFileNotValidError, LoadingIacFileError, LoadingDiagramFileError, OtmBuildingError, \
+    OtmResultError
 from startleft.log import VERBOSE_MESSAGE_FORMAT
 
 webapp = FastAPI()
@@ -89,6 +90,16 @@ async def iac_file_validation_exception_handler(request: Request, exc):
 
 
 @webapp.exception_handler(LoadingDiagramFileError)
+async def diagram_file_validation_exception_handler(request: Request, exc):
+    return common_error_exception_handler(request, exc)
+
+
+@webapp.exception_handler(OtmBuildingError)
+async def diagram_file_validation_exception_handler(request: Request, exc):
+    return common_error_exception_handler(request, exc)
+
+
+@webapp.exception_handler(OtmResultError)
 async def diagram_file_validation_exception_handler(request: Request, exc):
     return common_error_exception_handler(request, exc)
 

@@ -25,7 +25,7 @@ class MappingFileLoader:
                 self.__load(yaml.load(data, Loader=yaml.BaseLoader))
                 logger.debug('Mapping files loaded successfully')
         except Exception as e:
-            raise LoadingMappingFileError('Error loading the mapping file. The mapping file is not valid.',
+            raise LoadingMappingFileError('Error loading the mapping file. The mapping files are not valid.',
                                           e.__class__.__name__, str(e))
         return self.map
 

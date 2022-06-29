@@ -71,7 +71,7 @@ class IacToOtm:
         try:
             self.transformer.run(iac_mapping)
         except JMESPathTypeError as e:
-            logger.error(f"{e}")
+            logger.error(f'{e}')
             detail = e.__class__.__name__
             message = e.__str__()
             raise OtmBuildingError('Error building the threat model with the given files', detail, message)

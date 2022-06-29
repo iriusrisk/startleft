@@ -8,7 +8,7 @@ from pytest import mark
 from startleft.api import fastapi_server
 from startleft.api.controllers.iac import iac_create_otm_controller
 from startleft.api.errors import LoadingIacFileError, IacFileNotValidError, MappingFileNotValidError, \
-    LoadingMappingFileError, OtmResultError
+    LoadingMappingFileError, OtmResultError, OtmBuildingError
 from tests.resources.test_resource_paths import default_cloudformation_mapping, example_json, \
     cloudformation_malformed_mapping_wrong_id, invalid_yaml, cloudformation_gz, visio_aws_shapes
 
@@ -208,7 +208,7 @@ class TestCloudFormationCreateProjectController:
 
     @responses.activate
     @patch('startleft.otm.otm_validator.OtmValidator.validate')
-    def test_response_on_otm_invalid_error(self, mock_load_source_data):
+    def test_response_on_otm_result_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
 
@@ -236,3 +236,93 @@ class TestCloudFormationCreateProjectController:
         assert len(body_response['errors']) == 1
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
+    @responses.activate
+    @patch('startleft.iac.iac_to_otm.IacToOtm.run')
+    def test_response_on_otm_building_error(self, mock_load_source_data):
+        # Given a project_id
+        project_id: str = 'project_A_id'
+
+        # And the request files
+        iac_file = (example_json, open(example_json, 'r'), 'application/json')
+        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'r'), 'text/yaml')
+
+        # And the mocked method throwing a LoadingIacFileError
+        error = OtmBuildingError('OTM building error', 'Schema error', 'mocked error msg')
+        mock_load_source_data.side_effect = error
+
+        # When I do post on cloudformation endpoint
+        files = {'iac_file': iac_file, 'mapping_file': mapping_file}
+        body = {'iac_type': 'CLOUDFORMATION', 'id': f'{project_id}', 'name': 'project_A_name'}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then the error is returned inside the response as JSON
+        assert response.status_code == 400
+        assert response.headers.get('content-type') == 'application/json'
+        body_response = json.loads(response.text)
+        assert body_response['status'] == '400'
+        assert body_response['error_type'] == 'OtmBuildingError'
+        assert body_response['title'] == 'OTM building error'
+        assert body_response['detail'] == 'Schema error'
+        assert len(body_response['errors']) == 1
+        assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
+
+    @mark.parametrize('iac_source,detail', [
+        (b'', 'IaC file is not valid. Invalid size'),
+        (bytearray(4), 'IaC file is not valid. Invalid size'),
+        (bytearray(1024 * 1024 * 5 + 1), 'IaC file is not valid. Invalid size'),
+        (bytearray(1024 * 5 + 1), 'IaC file is not valid. Invalid content type for iac_file')
+    ])
+    @responses.activate
+    def test_response_on_invalid_iac_file(self, iac_source, detail):
+        # Given a project_id
+        project_id: str = 'project_A_id'
+
+        # And the request files
+        iac_file = (example_json, iac_source, 'application/json')
+        mapping_file = ('mapping_file', open(default_cloudformation_mapping, 'r'), 'text/yaml')
+
+        # When I do post on cloudformation endpoint
+        files = {'iac_file': iac_file, 'mapping_file': mapping_file}
+        body = {'iac_type': 'CLOUDFORMATION', 'id': f'{project_id}', 'name': 'project_A_name'}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then the error is returned inside the response as JSON
+        assert response.status_code == 400
+        assert response.headers.get('content-type') == 'application/json'
+        body_response = json.loads(response.text)
+        assert body_response['status'] == '400'
+        assert body_response['error_type'] == 'IacFileNotValidError'
+        assert body_response['title'] == 'IaC file is not valid'
+        assert body_response['detail'] == detail
+        assert len(body_response['errors']) == 1
+        assert body_response['errors'][0]['errorMessage'] == detail
+
+    @mark.parametrize('mapping_source,msg', [
+        (f'small', 'Mapping file does not comply with the schema'),
+        (b'', 'Mapping files are not valid. Invalid size'),
+        (bytearray(4), 'Mapping files are not valid. Invalid size'),
+        (bytearray(1024 * 1024 * 5 + 1), 'Mapping files are not valid. Invalid size')
+    ])
+    @responses.activate
+    def test_response_on_invalid_mapping_file(self, mapping_source, msg):
+        # Given a project_id
+        project_id: str = 'project_A_id'
+
+        # And the request files
+        iac_file = (example_json, example_json, 'application/json')
+        mapping_file = ('mapping_file', mapping_source, 'text/yaml')
+
+        # When I do post on cloudformation endpoint
+        files = {'iac_file': iac_file, 'mapping_file': mapping_file}
+        body = {'iac_type': 'CLOUDFORMATION', 'id': f'{project_id}', 'name': 'project_A_name'}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then the error is returned inside the response as JSON
+        assert response.status_code == 400
+        assert response.headers.get('content-type') == 'application/json'
+        body_response = json.loads(response.text)
+        assert body_response['status'] == '400'
+        assert body_response['error_type'] == 'MappingFileNotValidError'
+        assert body_response['title'] == 'Mapping files are not valid'
+        assert body_response['detail'] == msg
+        assert len(body_response['errors']) == 1

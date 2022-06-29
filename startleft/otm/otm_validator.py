@@ -32,9 +32,9 @@ class OtmValidator:
         if self.__check_otm_ids(otm):
             logger.info('OTM file has consistent IDs')
         else:
-            logger.error('OTM file has inconsistent IDs')
-            raise OtmResultError('OTM file has inconsistent IDs', 'Schema error',
-                                 str(self.schema.errors))
+            msg = 'OTM file has inconsistent IDs'
+            logger.error(msg)
+            raise OtmResultError('Schema error', 'Parsing provided files result in an invalid OTM file', msg)
 
     def __check_otm_ids(self, otm):
         all_valid_ids = set()

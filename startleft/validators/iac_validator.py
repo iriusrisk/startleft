@@ -30,7 +30,7 @@ class IacValidator:
             mime = magic.from_buffer(iac_data)
             if mime not in valid:
                 msg = 'IaC file is not valid. Invalid content type for iac_file'
-                raise IacFileNotValidError("IaC file is not valid.", msg, msg)
+                raise IacFileNotValidError("IaC file is not valid", msg, msg)
 
     def __validate_cloudformation(self):
         self.__validate_content_type(cft_valid_mime)
