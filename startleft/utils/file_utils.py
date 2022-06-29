@@ -19,3 +19,9 @@ class FileUtils:
         with open(filename, 'r') as f:
             iac_data = f.read()
         return iac_data
+
+    @staticmethod
+    def get_byte_data(filename):
+        with open(filename, 'rb') as f:
+            iac_data = f.read()
+        return iac_data
