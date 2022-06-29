@@ -28,7 +28,7 @@ def select_parent(child: DiagramComponent, potential_parents: [DiagramComponent]
     if len(potential_parents) == 1:
         return potential_parents[0]
 
-    component_parents = list(filter(lambda p: p.origin != DiagramComponentOrigin.SIMPLE_COMPONENT,  potential_parents))
+    component_parents = list(filter(lambda p: p.origin == DiagramComponentOrigin.SIMPLE_COMPONENT,  potential_parents))
     if component_parents:
         return select_parent_by_area(component_parents)
     else:
