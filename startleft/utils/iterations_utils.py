@@ -16,3 +16,14 @@ class IterationUtils:
                 remove_function(element) if remove_function is not None else collection.remove(element)
             else:
                 i += 1
+
+    @staticmethod
+    def remove_duplicates(duplicated_list: []):
+        unique_list = []
+
+        for element in duplicated_list:
+            if element not in unique_list:
+                unique_list.append(element)
+
+        return unique_list
+
