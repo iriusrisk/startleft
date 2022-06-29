@@ -1,5 +1,6 @@
 import json
 import logging
+from io import StringIO
 
 import hcl2
 import yaml
@@ -39,7 +40,7 @@ class IacToOtm:
         self.source_model.load(yaml.load(iac_data, Loader=yaml.BaseLoader))
 
     def load_hcl2_source(self, data):
-        self.source_model.load(hcl2.loads(data))
+        self.source_model.load(hcl2.load(StringIO(initial_value=data, newline=None)))
 
     @staticmethod
     def load_source_data(loader, iac_data_list):
