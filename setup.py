@@ -24,7 +24,10 @@ setup(
         'fastapi',
         'python-multipart',
         'click',
-        'uvicorn'
+        'uvicorn',
+        'shapely',
+        'vsdx',
+        'python-magic'
     ],
     use_scm_version=True,
     extras_require={
@@ -34,7 +37,8 @@ setup(
         "test": [
             'tox',
             'pytest',
-            'responses'
+            'responses',
+            'deepdiff'
         ]
     },
     entry_points='''

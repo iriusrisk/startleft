@@ -26,19 +26,36 @@ Commands:
 You can also get help for the specific commands.
 
 ```
-$ startleft parse --help
-Usage: startleft parse [OPTIONS] IAC_FILE...
+Usage: startleft parse [OPTIONS] SOURCE_FILE...
 
-  Parses IaC source files into Open Threat Model
+  Parses source files into Open Threat Model
 
 Options:
   -t, --iac-type [CLOUDFORMATION|TERRAFORM]
-                                  The IaC file type.  [required]
-  -m, --mapping-file TEXT         Mapping file to parse the IaC file.
+                                  The IaC file type. NOTE: This argument is
+                                  mutually exclusive with  arguments:
+                                  [diagram_type, custom_mapping_file,
+                                  default_mapping_file]. [required]
+  -g, --diagram-type [VISIO]      The diagram file type. NOTE: This argument
+                                  is mutually exclusive with  arguments:
+                                  [mapping_file, iac_type]. [required]
+  -m, --mapping-file TEXT         Mapping file to parse the IaC file. NOTE:
+                                  This argument is mutually exclusive with
+                                  arguments: [diagram_type,
+                                  custom_mapping_file, default_mapping_file].
+                                  [required]
+  -d, --default-mapping-file TEXT
+                                  Default mapping file to parse the diagram
+                                  file. NOTE: This argument is mutually
+                                  exclusive with  arguments: [mapping_file,
+                                  iac_type]. [required]
+  -c, --custom-mapping-file TEXT  Custom mapping file to parse the diagram
+                                  file.
   -o, --output-file TEXT          OTM output file.
   -n, --project-name TEXT         Project name.  [required]
   -i, --project-id TEXT           Project id.  [required]
   --help                          Show this message and exit.
+
 ```
 
 ## API server
@@ -72,8 +89,19 @@ GET /health
 POST /api/v1/startleft/iac
 Request Body:
     iac_file:                   Required. File that contains the IaC definition
-    iac_type:                   Required. Type of the IaC File: CLOUDFORMATION
+    iac_type:                   Required. Type of the IaC File: [CLOUDFORMATION, TERRAFORM]
     id                          Required. ID of the new project
     name                        Required. Name of the new project
     mapping_file                Required. File that contains the mapping between IaC resources and threat model resources.
 ```
+```
+POST /api/v1/startleft/diagram
+Request Body:
+    diag_file:                  Required. File that contains the diagram
+    diag_type:                  Required. Type of the diagram File: VISIO
+    id                          Required. ID of the new project
+    name                        Required. Name of the new project
+    default_mapping_file        Required. File that contains the default mapping file between the diagram resources and threat model resources
+    custom_mapping_file         Optional. File that contains the custom user mapping file between the diagram resources and threat model resources
+```
+> See Visio usage on [diagrams/visio/Visio.md](diagrams/visio/Visio.md) 
