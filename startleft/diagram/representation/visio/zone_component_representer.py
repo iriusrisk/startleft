@@ -11,14 +11,14 @@ from startleft.diagram.util.visio import get_normalized_angle, get_y_center, get
 
 
 def calc_slope_angle(angle):
-    slot_angle = angle - pi / 4
+    slope_angle = angle - pi / 4
 
-    if slot_angle < 0:
-        slot_angle = slot_angle + 2 * pi
-    if slot_angle > pi:
-        slot_angle = slot_angle - pi
+    if slope_angle < 0:
+        slope_angle = slope_angle + 2 * pi
+    if slope_angle > pi:
+        slope_angle = slope_angle - pi
 
-    return slot_angle
+    return slope_angle
 
 
 def calc_slope(angle):
