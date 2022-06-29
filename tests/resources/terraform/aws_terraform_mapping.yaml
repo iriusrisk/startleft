@@ -2,238 +2,15 @@ trustzones:
   - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
     name: Public Cloud
 
+# SG MAPPING (AUXILIARY SG)
+# type 4
+  - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    name: Internet
+    $source: {$singleton: {$root: "resource|squash_terraform(@)[?Type=='aws_security_group' && Properties.egress[0].cidr_blocks]"}}
+
+# The order of the components is important because parent components must be defined before child components
 components:
-  - id:          {$format: "{type}.{name}.id"}
-    type:        ec2
-    $source:     {$root: "resource|get(@, 'aws_instance')"}
-    name:        {$path: "keys(@)[0]"}
-    parent:      {$path: "*.subnet_id[0] | [0] | re_sub('[\\$\\{\\}]', '', @)"}
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        empty-component
-    $source:     {$root: "resource|get(@, 'aws_subnet')"}
-    name:        {$path: "keys(@)[0]"}
-    parent:      {$path: "*.vpc_id[0] | [0] | re_sub('[\\$\\{\\}]', '', @)"}
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        empty-component
-    $source:     {$root: "resource|get(@, 'aws_vpc_endpoint')"}
-    name:        {$path: "keys(@)[0]"}
-    parent:      # TODO
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        empty-component
-    $source:     {$root: "resource|get(@, 'aws_internet_gateway')"}
-    name:        {$path: "keys(@)[0]"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        aws_route_table
-    name:        {$path: "keys(@)[0]"}
-    $source:
-      $skip:     {$root: "resource|get(@, 'aws_route_table')"}
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        aws_route_table_association
-    name:        {$path: "keys(@)[0]"}
-    $source:
-      $skip:     {$root: "resource|get(@, 'aws_route_table_association')"}
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        aws_security_group
-    name:        {$path: "keys(@)[0]"}
-    $source:
-      $skip:     {$root: "resource|get(@, 'aws_security_group')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        aws_security_group_rule
-    name:        {$path: "keys(@)[0]"}
-    $source:
-      $skip:     {$root: "resource|get(@, 'aws_security_group_rule')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        vpc
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_vpc')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        cloudtrail
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_cloudtrail')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        cognito
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_cognito_identity_pool')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - { $path: "Type" }
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        cognito
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_cognito_user_pool')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        elastic-container-service
-    name:        {$path: "keys(@)[0]"}
-    $source:     {
-      $children: {$path: "values(@)[0].task_definition|split(@, '.')[1]"},
-      $root: "resource|get(@, 'aws_ecs_service')"
-    }
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        docker-container
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_ecs_task_definition')"}
-    parent:      {$parent: b61d6911-338d-46a8-9f39-8dcd24abfe91}
-    tags:
-      - { $path: "Type" }
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        elastic-container-kubernetes
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_eks_cluster')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        load-balancer
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_elb')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        load-balancer
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_lb')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        aws-lambda-function
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_lambda_function')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        CD-AWS-NETWORK-FIREWALL
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_networkfirewall_firewall')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        rds
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_db_instance')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        rds
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_rds_cluster')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        redshift
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_redshift_cluster')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        route-53
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_route53_zone')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - { $path: "Type" }
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        s3
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_s3_bucket')"}
-    $altsource:
-      - $mappingType: {$root: "resource|get(@, 'aws_vpc_endpoint')"}
-        $mappingPath: {$path: "*.service_name | [0]"}
-        $mappingLookups:
-          - regex: ^(.*)s3$
-            name: S3 from VPCEndpoint
-            type: s3
-            tags:
-              - {$format: "{_key} ({Type})"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        sqs-simple-queue-service
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_sqs_queue')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - { $path: "Type" }
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        empty-component
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get(@, 'aws_synthetics_canary')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
-    type:        step-functions
-    name:        {$path: "keys(@)[0]"}
-    $source:     {$root: "resource|get_starts_with(@, 'aws_sfn_')"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
-
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
     type:        CD-ACM
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-ACM (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get(@, 'aws_acm_certificate')"}}
@@ -241,7 +18,7 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
     type:        cloudwatch
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "cloudwatch (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get(@, 'aws_cloudwatch_metric_alarm')"}}
@@ -249,7 +26,7 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
     type:        dynamodb
     name:        {$path: "keys(@)[0]"}
     $source:     {$root: "resource|get(@, 'aws_dynamodb_table')"}
@@ -266,7 +43,82 @@ components:
     tags:
       - {$path: "Type"}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
+    type:        vpc
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_vpc')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
+    type:        ec2
+    $source:     {$root: "resource|get(@, 'aws_instance')"}
+    name:        {$path: "keys(@)[0]"}
+    parent:      {$path: "*.subnet_id[0] | [0] | re_sub('[\\$\\{\\}]', '', @)"} # TODO Check this expression
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
+    type:        empty-component
+    $source:     {$root: "resource|get(@, 'aws_subnet')"}
+    name:        {$path: "keys(@)[0]"}
+    parent:      {$path: "*.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('aws_[\\w-]+\\.', '', @) | re_sub('\\.id', '', @)"}
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
+    type:        empty-component
+    $source:     {$root: "resource|get(@, 'aws_vpc_endpoint')"}
+    name:        {$path: "keys(@)[0]"}
+    parent:      {$findFirst: ["*.subnet_ids[]", "*.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('aws_[\\w-]+\\.', '', @) | re_sub('\\.id', '', @)"]}
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
+    type:        empty-component
+    $source:     {$root: "resource|get(@, 'aws_internet_gateway')"}
+    name:        {$path: "keys(@)[0]"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
+    type:        elastic-container-service
+    name:        {$path: "_key"}
+    $source:     {
+      $children: {$path: "Properties.task_definition|split(@, '.')[1]"},
+      $root:     "resource|squash_terraform(@)[?Type=='aws_ecs_service']"
+    }
+    parent:      {$path: "Properties.network_configuration[0].subnets"}
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
+    type:        docker-container
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_ecs_task_definition')"}
+    parent:      {$parent: b61d6911-338d-46a8-9f39-8dcd24abfe91}
+    tags:
+      - { $path: "Type" }
+
+  - id:          {$format: "{name}"}
+    type:        load-balancer
+    name:        {$path: "_key"}
+    $source:     {$root: "resource|squash_terraform(@)[?Type=='aws_lb']"}
+    parent:      {$path: "Properties.subnets"}
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
+    type:        load-balancer
+    name:        {$path: "_key"}
+    $source:     {$root: "resource|squash_terraform(@)[?Type=='aws_elb']"}
+    parent:      {$path: "Properties.subnets"}
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
     type:        kms
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "kms (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get(@, 'aws_kms_key')"}}
@@ -274,7 +126,15 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
+    type:        aws-lambda-function
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_lambda_function')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
     type:        cloudwatch
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "cloudwatch (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get(@, 'aws_cloudwatch_log_group')"}}
@@ -282,7 +142,48 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
+    type:        rds
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_db_instance')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
+    type:        rds
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_rds_cluster')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
+    type:        route-53
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_route53_zone')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id:          {$format: "{name}"}
+    type:        s3
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_s3_bucket')"}
+    $altsource:
+      - $mappingType: {$root: "resource|get(@, 'aws_vpc_endpoint')"}
+        $mappingPath: {$path: "*.service_name | [0]"}
+        $mappingLookups:
+          - regex: ^(.*)s3$
+            name: S3 from VPCEndpoint
+            type: s3
+            tags:
+              - {$format: "{_key} ({Type})"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
     type:        CD-SECRETS-MANAGER
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-SECRETS-MANAGER (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get(@, 'aws_secretsmanager_secret')"}}
@@ -290,7 +191,15 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
+    type:        sqs-simple-queue-service
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_sqs_queue')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id:          {$format: "{name}"}
     type:        CD-SYSTEMS-MANAGER
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-SYSTEMS-MANAGER (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_ssm_')"}}
@@ -312,7 +221,15 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
+    type:        empty-component
+    name:        {$path: "_key"}
+    $source:     {$root: "resource|squash_terraform(@)[?Type=='aws_synthetics_canary']"}
+    parent:      {$path: "Properties.vpc_config[0].subnet_ids"}
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
     type:        api-gateway
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "api-gateway (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_api_gateway_')"}}
@@ -320,7 +237,7 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
     type:        athena
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "athena (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_athena_')"}}
@@ -328,7 +245,7 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
     type:        CD-MQ
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-MQ (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_mq_')"}}
@@ -336,7 +253,7 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
     type:        cf-cloudfront
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "cf-cloudfront (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_cloudfront_')"}}
@@ -344,7 +261,31 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
+    type:        cloudtrail
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_cloudtrail')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
+    type:        cognito
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_cognito_user_pool')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
+    type:        cognito
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_cognito_identity_pool')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id:          {$format: "{name}"}
     type:        CD-CONFIG
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-CONFIG (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_config_')"}}
@@ -352,7 +293,7 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
     type:        elastic-container-registry
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "elastic-container-registry (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_ecr_')"}}
@@ -369,7 +310,15 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
+    type:        elastic-container-kubernetes
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_eks_cluster')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
     type:        elasticache
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "elasticache (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_elasticache_')"}}
@@ -377,7 +326,7 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
     type:        CD-GUARDDUTY
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-GUARDDUTY (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_guardduty_')"}}
@@ -385,7 +334,7 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
     type:        CD-INSPECTOR
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-INSPECTOR (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_inspector_')"}}
@@ -393,7 +342,7 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
     type:        CD-MACIE
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-MACIE (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_macie2_')"}}
@@ -401,7 +350,23 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
+    type:        CD-AWS-NETWORK-FIREWALL
+    name:        {$path: "_key"}
+    $source:     {$root: "resource|squash_terraform(@)[?Type=='aws_networkfirewall_firewall']"}
+    parent:      {$path: "Properties.vpc_id"}
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
+    type:        redshift
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get(@, 'aws_redshift_cluster')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
     type:        CD-SES
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-SES (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_ses_')"}}
@@ -409,7 +374,7 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
     type:        sns
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "sns (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_sns_')"}}
@@ -417,7 +382,15 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
+    type:        step-functions
+    name:        {$path: "keys(@)[0]"}
+    $source:     {$root: "resource|get_starts_with(@, 'aws_sfn_')"}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$path: "Type"}
+
+  - id:          {$format: "{name}"}
     type:        CD-WAF
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-WAF (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_waf_')"}}
@@ -425,7 +398,7 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
     type:        kinesis-data-analytics
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "kinesis-data-analytics (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_kinesis_analytics_')"}}
@@ -433,7 +406,7 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
     type:        kinesis-data-analytics
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "kinesis-data-analytics (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_kinesis_stream')"}}
@@ -441,7 +414,7 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-  - id:          {$format: "{type}.{name}.id"}
+  - id:          {$format: "{name}"}
     type:        kinesis-data-firehose
     name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "kinesis-data-firehose (grouped)"}}}
     $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_kinesis_firehose_')"}}
@@ -449,4 +422,126 @@ components:
     tags:
       - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
-dataflows: []
+  - id:          {$format: "{name}"}
+    type:        generic-client
+    name:        {$ip: {$path: "Properties.egress[0].cidr_blocks"}}
+    $source:     {$root: "resource|squash_terraform(@)[?Type=='aws_security_group' && Properties.egress[0].cidr_blocks]"}
+    parent:      f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    tags:
+      - Outbound connection destination IP
+
+  - id:          {$format: "{name}"}
+    type:        generic-client
+    name:        {$ip: {$path: "Properties.ingress[0].cidr_blocks"}}
+    $source:     {$root: "resource|squash_terraform(@)[?Type=='aws_security_group' && Properties.ingress[0].cidr_blocks]"}
+    parent:      f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    tags:
+      - Inbound connection source IP
+
+dataflows:
+#### Security Groups ####
+  #### Type 1 #### - Resource to Security Group
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'security_group_ids')]"}
+    source:       {$path: "_key"}
+    destination:  {$hub: {$path: "Properties.security_group_ids"}}
+    tags:
+
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'security_groups')]"}
+    source:       {$path: "_key"}
+    destination:  {$hub: {$path: "Properties.security_groups"}}
+    tags:
+
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'network_configuration') && contains(keys(Properties.network_configuration[0]), 'security_groups')]"}
+    source:       {$path: "_key"}
+    destination:  {$hub: {$path: "Properties.network_configuration[0].security_groups"}}
+    tags:
+
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'vpc_config')]"}
+    source:       {$path: "_key"}
+    destination:  {$hub: {$path: "Properties.vpc_config[0].security_group_ids"}}
+    tags:
+  #### Type 2 #### Security Group to Security Group
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_security_group_rule' && Properties.type=='ingress']"}
+    source:       {$hub: {$path: "Properties.source_security_group_id"}}
+    destination:  {$hub: {$path: "Properties.security_group_id"}}
+    tags:
+      - $path: "Properties.description"
+      - $path: "Properties.protocol"
+      - $path: "Properties.from_port|to_string(@)"
+      - $path: "Properties.to_port|to_string(@)"
+
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_security_group_rule' && Properties.type=='egress']"}
+    source:       {$hub: {$path: "Properties.security_group_id"}}
+    destination:  {$hub: {$path: "Properties.source_security_group_id"}}
+    tags:
+      - $path: "Properties.description"
+      - $path: "Properties.protocol"
+      - $path: "Properties.from_port|to_string(@)"
+      - $path: "Properties.to_port|to_string(@)"
+  #### Type 3 #### - Security Group to Resource
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_security_group']"}
+    source:       {$path: "Properties.ingress[0].cidr_blocks"}
+    destination:  {$hub: {$path: "_key"}}
+    tags:
+      - $path: "Properties.ingress[0].description"
+      - $path: "Properties.ingress[0].protocol"
+      - $path: "Properties.ingress[0].from_port|to_string(@)"
+      - $path: "Properties.ingress[0].to_port|to_string(@)"
+
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_security_group']"}
+    source:       {$hub: {$path: "_key"}}
+    destination:  {$path: "Properties.egress[0].cidr_blocks"}
+    tags:
+      - $path: "Properties.egress[0].description"
+      - $path: "Properties.egress[0].protocol"
+      - $path: "Properties.egress[0].cidr_blocks|join(',', @)"
+#### Security Groups ####
+  - id:           {$format: "{name}"}
+    name:         {$format: "dataflow to Lambda function in {_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_lambda_event_source_mapping']"}
+    source:       {$path: "Properties.event_source_arn"}
+    destination:  {$path: "Properties.function_name"}
+
+  - id:           {$format: "{name}"}
+    name:         {$format: "dataflow from Lambda function on Failure {_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_lambda_event_source_mapping']"}
+    source:       {$path: "Properties.function_name"}
+    destination:  {$path: "Properties.destination_config[0].on_failure[0].destination_arn"}
+
+  # The parameter "logging" is deprecated. Use the resource "aws_s3_bucket_logging" instead
+  - id:           {$format: "{name}"}
+    name:         {$format: "S3 dataflow from {_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_s3_bucket']"}
+    source:       {$path: "_key"}
+    destination:  {$path: "Properties.logging[0].target_bucket"}
+
+  - id:           {$format: "{name}"}
+    name:         {$format: "S3 dataflow from {Type}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_s3_bucket_logging']"}
+    source:       {$path: "Properties.bucket" }
+    destination:  {$path: "Properties.target_bucket"}
+  # The parameter "logging" is deprecated. Use the resource "aws_s3_bucket_logging" instead
+
+  - id:           {$format: "{name}"}
+    name:         {$format: "API gateway data flow from {Type}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_api_gateway_authorizer']"}
+    source:       {$numberOfSources: {oneSource: {$path: "_key"}, multipleSource: {$format: "api-gateway (grouped)"}}}
+    destination:  {$path: "Properties.provider_arns[0]"}
+    tags:
+      - API gateway dataflow

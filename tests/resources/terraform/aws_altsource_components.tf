@@ -24,6 +24,7 @@ variable "region" {
 }
 variable "vpc_id" {
   description = "AWS VPC ID"
+  default = ["0.0.0.0/0"]
 }
 variable "subnet_cidrs" {
   description = "AWS Subnet CIDR ranges"
@@ -49,7 +50,7 @@ resource "aws_security_group" "vpc_endpoint" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.selected.cidr_block]
+    cidr_blocks = [var.vpc_id]
   }
 }
 resource "aws_vpc_endpoint" "ec2" {

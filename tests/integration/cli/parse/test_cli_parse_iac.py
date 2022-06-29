@@ -1,12 +1,13 @@
 from click.testing import CliRunner
-from tests.resources import test_resource_paths
+
 from startleft.cli import parse_any
+from tests.resources import test_resource_paths
 from tests.util.otm import validate_and_diff as validate_and_diff_otm
 
 # mappings
 TERRAFORM_VALID_MAPPING_FILENAME = test_resource_paths.default_terraform_aws_mapping
 # diagrams
-TERRAFORM_AWS_SIMPLE_COMPONENTS = test_resource_paths.terraform_aws_simple_components
+TERRAFORM_AWS_SIMPLE_COMPONENTS = test_resource_paths.terraform_aws_security_groups_components
 # otm
 OTM_AWS_SIMPLE_COMPONENTS_EXPECTED = test_resource_paths.terraform_aws_simple_components_otm_expected
 

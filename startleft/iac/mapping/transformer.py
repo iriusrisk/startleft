@@ -119,6 +119,7 @@ class Transformer:
                         if result["type"] == component["type"]:
                             if "singleton_multiple_name" in component:
                                 result["name"] = component["singleton_multiple_name"]
+                                self.id_map[component["name"]] = result["id"]
 
                             # update "result" component with its multiple tags before adding tags from "component"
                             if "singleton_multiple_tags" in result:
