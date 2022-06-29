@@ -4,46 +4,48 @@ project:
   name: Manual ThreatModel
   id:   manual-threatmodel
 
-trustzones:
-  - id:   internet
+trustZones:
+  - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
     name: Internet
-    type: internet
+    risk:
+      trustRating: 1
 
-  - id:   web
-    name: Web
-    type: private
+  - id:   6376d53e-6461-412b-8e04-7b3fe2b397de
+    name: Public
+    risk:
+      trustRating: 1
 
-  - id:   data
-    name: Data
-    type: private
+  - id:   2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+    name: Private Secured
+    risk:
+      trustRating: 100
 
 components:
   - id:     user
     name:   User
-    type:   user
-    parent: internet
+    type:   generic-client
+    parent:
+      trustZone: f0ba7722-39b6-4c81-8290-a30a248bb8d9
 
   - id:     web-server
     name:   Web server
-    type:   webapp
-    parent: web
+    type:   web-application-server-side
+    parent:
+      trustZone: 6376d53e-6461-412b-8e04-7b3fe2b397de
 
   - id:     database
     name:   Database
-    type:   postgres
-    parent: data
+    type:   postgresql
+    parent:
+      trustZone: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
 
 dataflows:
   - id:     client-connection
     name:   Client connection
-    type:   network
-    from:   user
-    to:     web-server
+    source:   user
+    destination:   web-server
 
   - id:     database-connection
     name:   Database connection
-    type:   network
-    from:   web-server
-    to:     database
-
-
+    source:   web-server
+    destination:     database

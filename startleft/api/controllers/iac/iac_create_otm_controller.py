@@ -1,34 +1,19 @@
 import logging
 
-from http import HTTPStatus
-
 from fastapi import APIRouter, File, UploadFile, Form, Response
 
-from startleft.api.controllers.iac.iac_type import IacType
-from startleft.api.error_response import ErrorResponse
-from startleft.messages import messages
-from startleft.project.otm_project import OtmProject
+from startleft.api.controllers.otm_controller import RESPONSE_STATUS_CODE, PREFIX, controller_responses
+from startleft.iac.iac_type import IacType
+from startleft.otm.otm_project import OtmProject
 
-PREFIX = '/api/v1/startleft/iac'
-URL = ''
-RESPONSE_STATUS_CODE = HTTPStatus.CREATED
+URL = '/iac'
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix=PREFIX,
     tags=["IaC"],
-    responses={
-        201: {"description": messages.OTM_SUCCESSFULLY_CREATED},
-        400: {"description": messages.BAD_REQUEST,
-              "model": ErrorResponse},
-        401: {"description": messages.UNAUTHORIZED_EXCEPTION,
-              "model": ErrorResponse},
-        403: {"description": messages.FORBIDDEN_OPERATION,
-              "model": ErrorResponse},
-        'default': {"description": messages.UNEXPECTED_API_ERROR,
-                    "model": ErrorResponse}
-    }
+    responses=controller_responses
 )
 
 
@@ -42,8 +27,13 @@ def iac(iac_file: UploadFile = File(..., description="File that contains the Iac
     logger.info(f"POST request received for creating new project with id {id} and name {name} from IaC {iac_type} file")
 
     logger.info("Parsing IaC file to OTM")
-    otm_project = OtmProject.from_iac_file_to_otm_stream(id, name, iac_type, [iac_file.file]
-                                                         , [mapping_file.file] if mapping_file else [])
+    with iac_file.file as f:
+        iac_data = f.read()
+
+    with mapping_file.file as f:
+        mapping_data = f.read()
+
+    otm_project = OtmProject.from_iac_file_to_otm_stream(id, name, iac_type, [iac_data],
+                                                         [mapping_data] if mapping_file else [])
 
     return Response(status_code=201, media_type="application/json", content=otm_project.get_otm_as_json())
-
