@@ -10,6 +10,8 @@ example_gzip = path + '/example.gz'
 
 # OTM
 otm_file_example = path + '/otm/otm_file_example.otm'
+otm_yaml_file_example = path + '/otm/otm_file_example_yaml.otm'
+otm_empty_file_example = path + '/otm/otm_empty_file_example.otm'
 
 # CLOUDFORMATION
 cloudformation_for_mappings_tests_json = path + '/cloudformation/cloudformation_for_mappings_tests.json'
@@ -17,8 +19,11 @@ cloudformation_for_security_group_tests_json = path + '/cloudformation/cloudform
 cloudformation_for_security_group_tests_2_json = path + '/cloudformation/cloudformation_for_security_group_tests_2.json'
 cloudformation_for_security_groups_mapping = path + '/cloudformation/cloudformation_for_security_group_tests_mapping_definitions.yaml'
 cloudformation_malformed_mapping_wrong_id = path + '/cloudformation/cloudformation_malformed_mapping_wrong_id.yaml'
+cloudformation_unknown_resource = path + '/cloudformation/cloudformation_unknown_resource.json'
 # mapping
 default_cloudformation_mapping = path + '/cloudformation/cloudformation_mapping.yaml'
+# expected otm results
+cloudformation_for_mappings_tests_json_otm_expected = path + '/cloudformation/cloudformation_for_mappings_tests.otm'
 
 # TERRAFORM
 terraform_for_mappings_tests_json = path + '/terraform/terraform_for_mappings_tests.tf'
@@ -28,11 +33,12 @@ terraform_aws_parent_children_components = path + '/terraform/aws_parent_childre
 terraform_aws_singleton_components_unix_line_breaks = path + '/terraform/aws_singleton_components_unix_line_breaks.tf'
 terraform_aws_singleton_components_dos_line_breaks = path + '/terraform/aws_singleton_components_dos_line_breaks.tf'
 terraform_aws_singleton_components_classic_macos_line_breaks = path + '/terraform/aws_singleton_components_classic_macos_line_breaks.tf'
+terraform_unknown_resource = path + '/terraform/terraform_unknown_resource.tf'
+terraform_unknown_module = path + '/terraform/terraform_unknown_module.tf'
 # mapping
 default_terraform_aws_mapping = path + '/terraform/aws_terraform_mapping.yaml'
 # expected otm results
 terraform_aws_simple_components_otm_expected = path + '/terraform/aws_simple_components.otm'
-
 
 # VISIO
 visio_aws_with_tz_and_vpc = path + '/visio/aws-with-tz-and-vpc.vsdx'
@@ -41,9 +47,11 @@ visio_aws_stencils = path + '/visio/aws-stencils.vsdx'
 visio_generic_shapes = path + '/visio/generic-shapes.vsdx'
 visio_self_pointing_connectors = path + '/visio/self-pointing-connectors.vsdx'
 visio_extraneous_elements = path + '/visio/extraneous-elements.vsdx'
+visio_orphan_dataflows = path + '/visio/visio-orphan-dataflows.vsdx'
 # mapping
 default_visio_mapping = path + '/visio/aws-visio-mapping.yaml'
 custom_vpc_mapping = path + '/visio/custom-vpc-mapping.yaml'
 # expected otm results
 visio_aws_shapes_otm_expected = path + '/visio/aws-shapes.otm'
 visio_aws_with_tz_and_vpc_otm_expected = path + '/visio/aws-with-tz-and-vpc.otm'
+visio_orphan_dataflows_otm_expected = path + '/visio/visio-orphan-dataflows.otm'

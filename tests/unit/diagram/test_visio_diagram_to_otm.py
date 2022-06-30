@@ -129,3 +129,32 @@ class TestVisioDiagramToOtm:
         check_otm_dataflow(otm, 2, '1', '35')
         check_otm_dataflow(otm, 3, '12', '41')
 
+    def test_prune_orphan_connectors(self):
+        otm = ExternalDiagramToOtm(DiagramType.VISIO).run(
+            test_resource_paths.visio_orphan_dataflows,
+            [FileUtils.get_data(test_resource_paths.default_visio_mapping)],
+            "project-name",
+            "project-id"
+        )
+
+        assert len(otm.trustzones) == 1
+        assert len(otm.components) == 6
+        assert len(otm.dataflows) == 5
+
+        check_otm_representations_size(otm)
+
+        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
+
+        check_otm_component(otm, 0, 's3', 'Bucket')
+        check_otm_component(otm, 1, 's3', 'Bucket')
+        check_otm_component(otm, 2, 'CD-MQ', 'Amazon MQ')
+        check_otm_component(otm, 3, 'CD-MQ', 'Amazon MQ')
+        check_otm_component(otm, 4, 'rds', 'Database')
+        check_otm_component(otm, 5, 'CD-MQ', 'Amazon MQ')
+
+        check_otm_dataflow(otm, 0, '31', '19')
+        check_otm_dataflow(otm, 1, '46', '19')
+        check_otm_dataflow(otm, 2, '99', '19')
+        check_otm_dataflow(otm, 3, '99', '86')
+        check_otm_dataflow(otm, 4, '46', '13')
+
