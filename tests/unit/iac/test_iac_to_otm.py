@@ -56,8 +56,10 @@ class TestApp:
         assert list(filter(lambda obj: obj.name == 'cloudwatch (grouped)', iac_to_otm.otm.components))
         assert list(filter(lambda obj: obj.name == 'api-gateway (grouped)', iac_to_otm.otm.components))
         assert list(filter(lambda obj: obj.name == 'DynamoDB from VPCEndpoint', iac_to_otm.otm.components))
-        assert list(filter(lambda obj: obj.name == 'Systems Manager from VPCEndpoint (grouped)', iac_to_otm.otm.components))
-        assert list(filter(lambda obj: obj.name == 'API gateway data flow from DummyApiAuthorizer', iac_to_otm.otm.dataflows))
+        assert list(
+            filter(lambda obj: obj.name == 'Systems Manager from VPCEndpoint (grouped)', iac_to_otm.otm.components))
+        assert list(
+            filter(lambda obj: obj.name == 'API gateway data flow from DummyApiAuthorizer', iac_to_otm.otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'DummyCertificate'
                                        and "AWS::CertificateManager::Certificate" in obj.tags
@@ -175,3 +177,15 @@ class TestApp:
         assert iac_to_otm.otm.components[0].name == 'Control_component'
         assert iac_to_otm.otm.components[0].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
 
+    def test_terraform_no_resources(self):
+        filename = test_resource_paths.terraform_no_resources
+        mapping_filename = test_resource_paths.default_terraform_aws_mapping
+        iac_to_otm = IacToOtm('name', 'id', IacType.TERRAFORM)
+        iac_to_otm.run(IacType.TERRAFORM, [FileUtils.get_data(mapping_filename)], [FileUtils.get_data(filename)])
+
+        assert iac_to_otm.source_model.otm
+        assert len(iac_to_otm.otm.trustzones) == 1
+        assert len(iac_to_otm.otm.components) == 0
+        assert len(iac_to_otm.otm.dataflows) == 0
+        assert iac_to_otm.otm.trustzones[0].id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+        assert iac_to_otm.otm.trustzones[0].name == 'Public Cloud'

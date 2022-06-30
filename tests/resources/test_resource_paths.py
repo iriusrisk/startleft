@@ -31,6 +31,7 @@ terraform_aws_parent_children_components = path + '/terraform/aws_parent_childre
 terraform_aws_singleton_components_unix_line_breaks = path + '/terraform/aws_singleton_components_unix_line_breaks.tf'
 terraform_component_without_parent = path + '/terraform/aws_component_without_parent.tf'
 terraform_skipped_component_without_parent = path + '/terraform/aws_component_without_parent_skipped.tf'
+terraform_no_resources = path + '/terraform/no_resources.tf'
 
 # mapping
 default_terraform_mapping = path + '/terraform/default-terraform-mapping.yaml'
