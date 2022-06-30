@@ -1,12 +1,16 @@
 from deepdiff import DeepDiff
-from startleft.validators.schema import Schema
+
 from startleft.otm.otm_file_loader import OtmFileLoader
+from startleft.validators.schema import Schema
 
 public_cloud_id = 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
 public_cloud_name = 'Public Cloud'
 
 private_secured_id = '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
 private_secured_name = 'Private Secured'
+
+internet_id = 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
+internet_name = 'Internet'
 
 
 def __compare_otm_files(expected_filename: str,
@@ -43,12 +47,12 @@ def check_otm_trustzone(otm, position, trustzone_id, name):
     assert otm.trustzones[position].name == name
 
 
-def check_otm_component(otm, position, component_type, name, parent=None, tags=[]):
+def check_otm_component(otm, position, component_type, name, parent_id=None, tags=()):
     assert otm.components[position].type == component_type
     assert otm.components[position].name == name
 
-    if parent:
-        assert otm.components[position].parent == parent
+    if parent_id:
+        assert otm.components[position].parent == parent_id
 
     for c_tag in tags:
         assert c_tag in otm.components[position].tags
