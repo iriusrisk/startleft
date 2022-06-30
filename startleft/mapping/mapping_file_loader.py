@@ -3,7 +3,7 @@ import logging
 import yaml
 from deepmerge import always_merger
 
-from startleft.api.errors import MappingFileNotFoundError
+from startleft.validators.mapping_validator import MappingValidator
 
 logger = logging.getLogger(__name__)
 
@@ -13,20 +13,14 @@ class MappingFileLoader:
     def __init__(self):
         self.map = {}
 
-    def load(self, filenames) -> {}:
-        if isinstance(filenames, str):
-            filenames = [filenames]
-        for filename in filenames:
-            logger.info(f"Loading mapping file '{filename}'")
-            try:
-                if isinstance(filename, str):
-                    with open(filename, 'r') as f:
-                        self.__load(yaml.load(f, Loader=yaml.BaseLoader))
-                else:
-                    self.__load(yaml.load(filename, Loader=yaml.BaseLoader))
-            except FileNotFoundError:
-                logger.warning(f"Cannot find mapping file '{filename}'")
-                raise MappingFileNotFoundError()
+    def load(self, mapping_data_list: [bytes]) -> {}:
+
+        MappingValidator.check_data_size(mapping_data_list[0])
+
+        for mapping_data in mapping_data_list:
+            logger.info("Loading mapping data")
+            data = mapping_data if isinstance(mapping_data, str) else mapping_data.decode()
+            self.__load(yaml.load(data, Loader=yaml.BaseLoader))
             logger.debug("Mapping files loaded successfully")
 
         return self.map

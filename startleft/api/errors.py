@@ -1,6 +1,6 @@
 from enum import Enum
 
-from startleft.messages import messages
+from startleft import messages
 
 
 class ErrorCode(Enum):
@@ -9,6 +9,7 @@ class ErrorCode(Enum):
     OTM_TO_IR_EXIT_UNEXPECTED = (3, "OtmToIrUnexpectedError")
     OTM_TO_IR_EXIT_VALIDATION_FAILED = (4, "OtmToIrValidationError")
     MAPPING_FILE_EXIT_VALIDATION_FAILED = (5, "MalformedMappingFile")
+    DIAGRAM_TO_OTM_EXIT_VALIDATION_FAILED = (6, "DiagramToOtmValidationError")
 
     def __init__(self, system_exit_status, error_type):
         self.system_exit_status = system_exit_status
@@ -61,3 +62,36 @@ class WriteThreatModelError(CommonError):
     message = messages.ERROR_WRITING_THREAT_MODEL
     http_status_code = 500
     error_code = ErrorCode.IAC_TO_OTM_EXIT_UNEXPECTED
+
+
+class UnknownDiagramType(CommonError):
+    message = messages.CANNOT_RECOGNIZE_GIVEN_DIAGRAM_TYPE
+    http_status_code = 400
+    system_exit_status = ErrorCode.IAC_TO_OTM_EXIT_UNEXPECTED
+
+
+class IacFileNotValidError(CommonError):
+    message = messages.IAC_FILE_IS_NOT_VALID
+    http_status_code = 400
+    error_code = ErrorCode.IAC_TO_OTM_EXIT_VALIDATION_FAILED
+
+    def __init__(self, message: str):
+        self.message = f"{self.message}. {message}"
+
+
+class DiagramFileNotValidError(CommonError):
+    message = messages.DIAGRAM_FILE_IS_NOT_VALID
+    http_status_code = 400
+    error_code = ErrorCode.DIAGRAM_TO_OTM_EXIT_VALIDATION_FAILED
+
+    def __init__(self, message: str):
+        self.message = f"{self.message}. {message}"
+
+
+class ParsingError(CommonError):
+    message = messages.NOT_PARSEABLE_SOURCE_FILES
+    http_status_code = 400
+
+    def __init__(self, message: str, error_code: ErrorCode):
+        self.message = f"{self.message}. {message}"
+        self.error_code = error_code
