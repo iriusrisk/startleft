@@ -2,10 +2,6 @@ from startleft.diagram.objects.diagram_objects import DiagramComponent
 from startleft.otm.otm import Trustzone, Component
 
 
-def calculate_parent_category(component: DiagramComponent) -> str:
-    return component.parent.get_component_category() if component.parent else 'trustZone'
-
-
 class DiagramComponentMapper:
     def __init__(self,
                  components: [DiagramComponent],
@@ -34,7 +30,7 @@ class DiagramComponentMapper:
             name=diagram_component.name,
             type=self.__calculate_otm_type(diagram_component.name, diagram_component.type),
             parent=self.__calculate_parent_id(diagram_component),
-            parent_type=calculate_parent_category(diagram_component)
+            parent_type=self.__calculate_parent_type(diagram_component)
         )
 
     def __calculate_otm_type(self, component_name: str, component_type: str) -> str:
@@ -55,3 +51,9 @@ class DiagramComponentMapper:
         return self.trustzone_mappings[component.parent.name]['id'] \
             if component.parent.name in self.trustzone_mappings \
             else component.parent.id
+
+    def __calculate_parent_type(self, component: DiagramComponent) -> str:
+        if not component.parent or component.parent.name in self.trustzone_mappings.keys():
+            return 'trustZone'
+        else:
+            return 'component'
