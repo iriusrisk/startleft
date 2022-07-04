@@ -5,6 +5,7 @@ from startleft.cli import validate
 from tests.resources import test_resource_paths
 
 SAMPLE_OTM_FILENAME = test_resource_paths.otm_file_example
+SAMPLE_OTM_YAML_FILENAME = test_resource_paths.otm_yaml_file_example
 IAC_VALID_MAPPING_FILENAME = test_resource_paths.default_cloudformation_mapping
 INVALID_YAML_FILENAME = test_resource_paths.invalid_yaml
 CUSTOM_YAML_VISIO_MAPPING_FILENAME = test_resource_paths.custom_vpc_mapping
@@ -21,6 +22,21 @@ class TestCliValidate:
 
         # When validating a valid OTM file
         result = runner.invoke(validate, ['--otm-file', SAMPLE_OTM_FILENAME])
+
+        # Then validator returns OK
+        assert result.exit_code == 0
+        #   and validating OTM is performed
+        assert 'Validating OTM file' in caplog.text
+        #   and validation OTM finish successfully
+        assert 'OTM file validated successfully' in caplog.text
+
+    def test_validate_otm_yaml_file(self, caplog):
+        # Given a info level of logging
+        caplog.set_level(logging.INFO)
+        runner = CliRunner()
+
+        # When validating a valid OTM file in YAML format
+        result = runner.invoke(validate, ['--otm-file', SAMPLE_OTM_YAML_FILENAME])
 
         # Then validator returns OK
         assert result.exit_code == 0
