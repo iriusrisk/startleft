@@ -11,9 +11,7 @@ from startleft.api.controllers.diagram import diag_create_otm_controller
 from startleft.api.controllers.health import health_controller
 from startleft.api.controllers.iac import iac_create_otm_controller
 from startleft.api.error_response import ErrorResponse
-from startleft.api.errors import CommonError, IacFileNotValidError, \
-    DiagramFileNotValidError, MappingFileNotValidError, LoadingIacFileError, LoadingDiagramFileError, OtmBuildingError, \
-    OtmResultError
+from startleft.api.errors import CommonError
 from startleft.log import VERBOSE_MESSAGE_FORMAT
 
 webapp = FastAPI()
@@ -67,41 +65,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
     error_type = exc.__class__.__name__
     return common_response_handler(400, error_type, "The request is not valid", "InvalidRequest", messages)
-
-
-@webapp.exception_handler(IacFileNotValidError)
-async def iac_file_validation_exception_handler(request: Request, exc):
-    return common_error_exception_handler(request, exc)
-
-
-@webapp.exception_handler(DiagramFileNotValidError)
-async def diagram_file_validation_exception_handler(request: Request, exc):
-    return common_error_exception_handler(request, exc)
-
-
-@webapp.exception_handler(MappingFileNotValidError)
-async def mapping_file_validation_exception_handler(request: Request, exc):
-    return common_error_exception_handler(request, exc)
-
-
-@webapp.exception_handler(LoadingIacFileError)
-async def iac_file_validation_exception_handler(request: Request, exc):
-    return common_error_exception_handler(request, exc)
-
-
-@webapp.exception_handler(LoadingDiagramFileError)
-async def diagram_file_validation_exception_handler(request: Request, exc):
-    return common_error_exception_handler(request, exc)
-
-
-@webapp.exception_handler(OtmBuildingError)
-async def diagram_file_validation_exception_handler(request: Request, exc):
-    return common_error_exception_handler(request, exc)
-
-
-@webapp.exception_handler(OtmResultError)
-async def diagram_file_validation_exception_handler(request: Request, exc):
-    return common_error_exception_handler(request, exc)
 
 
 def common_error_exception_handler(request: Request, exc: CommonError):
