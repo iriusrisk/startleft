@@ -128,18 +128,21 @@ class TestDiagramPruner:
         grandchild = DiagramComponent(id='GC1', name='Grandchild 1', parent=parent)
 
         child = DiagramComponent(id='C1', name='Child 1', parent=trustzone)
+        child2 = DiagramComponent(id='C2', name='Child 2', parent=trustzone)
 
         components = [
             trustzone,
             grandparent,
             parent,
             grandchild,
-            child
+            child,
+            child2
         ]
 
         # AND connectors between mapped and non mapped elements
         connectors = [
             DiagramConnector('P1C1', 'P1', 'C1'),
+            DiagramConnector('P1C2', 'P1', 'C2'),
             DiagramConnector('C1GC1', 'C1', 'GC1'),
         ]
 
