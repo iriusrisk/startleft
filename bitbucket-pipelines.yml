@@ -17,3 +17,11 @@ pipelines:
             - pip install responses
             - pip install pytest
             - pytest --junitxml=test-reports/report.xml
+      - step:
+          name: Sonar
+          script:
+            - sonar-scanner \
+              -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+              -Dsonar.sources=. \
+              -Dsonar.host.url=SONAR_HOST_URL \
+              -Dsonar.login=$SONAR_TOKEN
