@@ -20,9 +20,6 @@ class ErrorCode(Enum):
         self.http_status = http_status
         self.system_exit_status = system_exit_status
 
-    def __str__(self):
-        return f'{self.exit_value}'
-
 
 class CommonError(Exception):
     error_code: ErrorCode
@@ -33,7 +30,7 @@ class CommonError(Exception):
         self.message = message
 
     def __str__(self):
-        self.__class__.__name__
+        return self.__class__.__name__
 
 
 class IacFileNotValidError(CommonError):
