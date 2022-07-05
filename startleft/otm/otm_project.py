@@ -1,9 +1,8 @@
 import json
 import logging
-from typing import Optional
+from typing import Optional, IO
 
 from jmespath.exceptions import JMESPathTypeError
-from typing.io import IO
 
 from startleft.api.errors import WriteThreatModelError, ParsingError, ErrorCode
 from startleft.diagram.diagram_type import DiagramType
