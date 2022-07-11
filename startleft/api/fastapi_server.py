@@ -11,8 +11,7 @@ from startleft.api.controllers.diagram import diag_create_otm_controller
 from startleft.api.controllers.health import health_controller
 from startleft.api.controllers.iac import iac_create_otm_controller
 from startleft.api.error_response import ErrorResponse
-from startleft.api.errors import CommonError, ErrorCode, MappingFileSchemaNotValidError, IacFileNotValidError, \
-    DiagramFileNotValidError, ParsingError
+from startleft.api.errors import CommonError
 from startleft.log import VERBOSE_MESSAGE_FORMAT
 
 webapp = FastAPI()
@@ -45,18 +44,17 @@ def run_webapp(port: int):
 
 @webapp.exception_handler(CommonError)
 async def handle_common_error(request: Request, e: CommonError):
-    return common_response_handler(e.http_status_code, e.error_code, None, e.message)
+    return common_error_exception_handler(request, e)
 
 
 @webapp.exception_handler(Exception)
 async def handle_unexpected_exceptions(request: Request, e: Exception):
     message = e.message if hasattr(e, 'message') else str(e)
-    error_code = ErrorCode.IAC_TO_OTM_EXIT_UNEXPECTED
-    return common_response_handler(500, error_code.error_type, error_code.name, None, message)
+    return common_response_handler(500, e.__class__.__name__, 'Unexpected exception', '', message)
 
 
 @webapp.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc):
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
     messages = []
     try:
         for error in exc.errors():
@@ -65,39 +63,16 @@ async def validation_exception_handler(request: Request, exc):
         logger.exception(e)
         messages = [str(exc.errors())]
 
-    error_type = ErrorCode.IAC_TO_OTM_EXIT_VALIDATION_FAILED.error_type
-    return common_response_handler(400, error_type, "ValidationError", "RequestValidationError", messages)
+    error_type = exc.__class__.__name__
+    return common_response_handler(400, error_type, "The request is not valid", "InvalidRequest", messages)
 
 
-@webapp.exception_handler(MappingFileSchemaNotValidError)
-async def mapping_file_validation_exception_handler(request: Request, exc):
+def common_error_exception_handler(request: Request, exc: CommonError):
     message = exc.message
-    from startleft import messages
-    detail = messages.MAPPING_FILE_SCHEMA_NOT_VALID
-    error_type = ErrorCode.MAPPING_FILE_EXIT_VALIDATION_FAILED.error_type
-    return common_response_handler(400, error_type, 'MappingFileSchemaNotValidError', detail, [message])
-
-
-@webapp.exception_handler(IacFileNotValidError)
-async def iac_file_validation_exception_handler(request: Request, exc):
-    return source_file_validation_exception_handler(request, exc)
-
-
-@webapp.exception_handler(DiagramFileNotValidError)
-async def diagram_file_validation_exception_handler(request: Request, exc):
-    return source_file_validation_exception_handler(request, exc)
-
-
-@webapp.exception_handler(ParsingError)
-async def diagram_file_validation_exception_handler(request: Request, exc):
-    return source_file_validation_exception_handler(request, exc)
-
-
-def source_file_validation_exception_handler(request: Request, exc: CommonError):
-    message = exc.message
-    detail = exc.message
-    error_type = exc.error_code.error_type
-    return common_response_handler(400, error_type, exc.__class__.__name__, detail, [message])
+    detail = exc.detail
+    title = exc.title
+    http_status = exc.error_code.http_status
+    return common_response_handler(http_status, exc.__class__.__name__, title, detail, [message])
 
 
 def get_error(error: Dict[str, Any]) -> str:
@@ -115,5 +90,4 @@ def get_error(error: Dict[str, Any]) -> str:
 def common_response_handler(status_code: int, type_: str, title: str, detail: str, messages: List[str] = []):
     error_response = ErrorResponse(error_type=type_, status=status_code, title=title, detail=detail, messages=messages)
 
-    return JSONResponse(status_code=status_code,
-                        content=jsonable_encoder(error_response))
+    return JSONResponse(status_code=status_code, content=jsonable_encoder(error_response))

@@ -1,14 +1,12 @@
 import logging
-import sys
 
+from startleft.api.errors import OtmResultError
 from startleft.validators.schema import Schema
 
 logger = logging.getLogger(__name__)
 
 
 class OtmValidator:
-    EXIT_UNEXPECTED = 3
-    EXIT_VALIDATION_FAILED = 4
 
     def __init__(self):
         self.schema: Schema = Schema('otm_schema.json')
@@ -16,25 +14,27 @@ class OtmValidator:
     def validate(self, otm):
         self.__validate_otm_schema(otm)
         self.__check_otm_files(otm)
-        logger.info("OTM file validated successfully")
+        logger.info('OTM file validated successfully')
 
     def __validate_otm_schema(self, otm: {}):
-        logger.debug("Validating OTM file schema")
+        logger.debug('Validating OTM file schema')
         self.schema.validate(otm)
         if self.schema.valid:
             logger.info('OTM file schema is valid')
         if not self.schema.valid:
             logger.error('OTM file schema is not valid')
-            logger.error(f"--- Schema errors---\n{self.schema.errors}\n--- End of schema errors ---")
-            sys.exit(OtmValidator.EXIT_VALIDATION_FAILED)
+            logger.error(f'--- Schema errors---\n{self.schema.errors}\n--- End of schema errors ---')
+            raise OtmResultError('OTM file does not comply with the schema', 'Schema error',
+                                 str(self.schema.errors))
 
     def __check_otm_files(self, otm):
-        logger.debug("Checking IDs consistency on OTM file")
+        logger.debug('Checking IDs consistency on OTM file')
         if self.__check_otm_ids(otm):
             logger.info('OTM file has consistent IDs')
         else:
-            logger.error('OTM file has inconsistent IDs')
-            sys.exit(OtmValidator.EXIT_VALIDATION_FAILED)
+            msg = 'OTM file has inconsistent IDs'
+            logger.error(msg)
+            raise OtmResultError('Schema error', 'Parsing provided files result in an invalid OTM file', msg)
 
     def __check_otm_ids(self, otm):
         all_valid_ids = set()
