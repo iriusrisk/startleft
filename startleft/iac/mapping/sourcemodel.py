@@ -24,6 +24,23 @@ class CustomFunctions(jmespath.functions.Functions):
             temp.append(v)
         return temp
 
+    @jmespath.functions.signature({'types': ['array', 'null']})
+    def _func_squash_terraform(self, component_types_arr):
+        source_objects = []
+
+        if component_types_arr is not None:
+            for component_type_obj in component_types_arr:
+                for component_type, component_name_obj in component_type_obj.items():
+                    source_object = {}
+                    if isinstance(component_name_obj, dict):
+                        source_object["Type"] = component_type
+                        for component_name, properties in component_name_obj.items():
+                            source_object["_key"] = component_name
+                            source_object["Properties"] = properties
+                    source_objects.append(source_object)
+
+        return source_objects
+
     @jmespath.functions.signature({'types': ['array', 'null']}, {'types': ['string']})
     def _func_get_starts_with(self, obj_arr, component_type):
         source_objects = []
@@ -64,6 +81,7 @@ class CustomFunctions(jmespath.functions.Functions):
         new_obj['_key'] = component_name
 
         return new_obj
+
 
 class SourceModel:
     def __init__(self):
@@ -139,7 +157,8 @@ class SourceModel:
                 search_type = obj["$search"]["$type"]
                 ref_value = jmespath.search(obj["$search"]["$ref"], source, options=self.jmespath_options)
                 for refobj in self.otm.objects_by_type(search_type):
-                    search_values = jmespath.search(obj["$search"]["$path"], refobj.source, options=self.jmespath_options)
+                    search_values = jmespath.search(obj["$search"]["$path"], refobj.source,
+                                                    options=self.jmespath_options)
                     if isinstance(search_values, list):
                         if ref_value in search_values:
                             results.append(refobj.id)
@@ -194,7 +213,9 @@ class SourceModel:
 
     def __jmespath_search(self, search_path, source):
         try:
-            return jmespath.search(search_path, source, options=self.jmespath_options)
+            search = jmespath.search(search_path, source, options=self.jmespath_options)
+
+            return search if search is not None else []
         except:
             return []
 
