@@ -8,26 +8,273 @@ trustzones:
     id:     2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
 
 components:
-  - label:  Amazon EC2
-    type:   ec2
-
-  - label:  Amazon CloudWatch
-    type:   cloudwatch
-
-  - label:  Database
-    type:   rds
-
+    # Stencil: AWS Analytics
   - label:  Amazon Athena
     type:   athena
+
+  - label:  Amazon Elasticsearch Service
+    type:   elasticsearch
+
+  - label:  Amazon Kinesis Data Analytics
+    type:   kinesis-data-analytics
+
+  - label:  Amazon Kinesis Data Firehose
+    type:   kinesis-data-firehose
+
+  - label:  Amazon Kinesis Data Streams
+    type:   kinesis-data-streams
+
+  - label:  Amazon Managed Streaming for Kafka
+    type:   CD-MSK
+
+  - label:  Amazon Quicksight
+    type:   CD-QUICKSIGHT
+
+  - label:  Amazon Redshift
+    type:   redshift
+
+  - label:  AWS Glue
+    type:   CD-GLUE
+
+    # Stencil: AWS Application Integration
+  - label:  Amazon EventBridge
+    type:   eventbridge
 
   - label:  Amazon MQ
     type:   CD-MQ
 
+  - label:  Amazon Simple Notification Service
+    type:   sns
+
+  - label:  Amazon Simple Queue Service
+    type:   sqs-simple-queue-service
+
+  - label:  AWS Step Functions
+    type:   step-functions
+
+    # Stencil: AWS Blockchain
+  - label:  Amazon Managed Blockchain
+    type:   CD-MANAGEDBLOCKCHAIN
+
+  - label:  Amazon Quantum Ledger Database
+    type:   CD-QLDB
+
+    # Stencil: AWS Business Application
+  - label:  Alexa For Business
+    type:   CD-ALEXA-FOR-BUSINESS
+
+    # Stencil: AWS Compute
+  - label:  Amazon EC2 Container Registry
+    type:   elastic-container-registry
+
+  - label:  Amazon EC2
+    type:   ec2
+
+  - label:  Amazon Elastic Container Service
+    type:   elastic-container-service
+
+  - label:  Amazon Elastic Kubernetes Service
+    type:   elastic-container-kubernetes
+
+  - label:  AWS Lambda
+    type:   aws-lambda-function
+
+  - label:  Container Registry Image
+    type:   elastic-container-registry
+
+  - label:  EC2 Image Builder
+    type:   CD-EC2-IMAGE-BUILDER
+
+  - label:  Lambda Function
+    type:   aws-lambda-function
+
+    # Stencil: AWS Customer Engagement
+  - label:  Amazon Pinpoint
+    type:   CD-PINPOINT
+
+  - label:  Amazon Simple Email Service SES Email
+    type:   CD-SES
+
+  - label:  Amazon Simple Email Service SES
+    type:   CD-SES
+
+    # Stencil: AWS Database
+  - label:  Amazon DynamoDB Accelerator (DAX)
+    type:   dynamodb
+
+  - label:  Amazon DynamoDB
+    type:   dynamodb
+
+  - label:  Amazon ElastiCache
+    type:   elasticache
+
+  - label:  Amazon Neptune
+    type:   CD-NEPTUNE
+
+  - label:  Amazon RDS
+    type:   rds
+
+  - label:  Amazon Redshift
+    type:   redshift
+
+  - label:  Database
+    type:   rds
+
+  - label:  ElastiCache For Memcached
+    type:   elasticache
+
+  - label:  ElastiCache For Redis
+    type:   elasticache
+
+    # Stencil: AWS Developer Tools
+  - label:  AWS Cloud9
+    type:   CD-CLOUD9
+
+  - label:  AWS X Ray
+    type:   CD-XRAY
+
+    # Stencil: AWS End User Computing
+  - label:  Amazon Workspaces
+    type:   CD-WORKSPACES
+
+    # Stencil: AWS General
+  - label:  Generic Firewall
+    type:   CD-AWS-NETWORK-FIREWALL
+
+  - label:  SDK
+    type:   CD-SDK
+
+    # Stencil: AWS Internet of Things
+  - label:  AWS IoT 1 Click
+    type:   CD-IOT-1-CLICK
+
+  - label:  AWS IoT Analytics
+    type:   CD-IOT-ANALYTICS
+
+  - label:  AWS IoT Core
+    type:   CD-IOT-CORE
+
+  - label:  AWS IoT Device Defender
+    type:   CD-IOT-DEV-DEF
+
+  - label:  AWS IoT Events
+    type:   CD-IOT-EVENTS
+
+  - label:  AWS IoT Greengrass
+    type:   CD-IOT-GREENGRASS
+
+  - label:  AWS IoT SiteWise
+    type:   CD-IOT-SITEWISE
+
+  - label:  AWS IoT Things Graph
+    type:   CD-IOT-THINGS-GRAPH
+
+    # Stencil: AWS Management Governance
+  - label:  Amazon CloudWatch
+    type:   cloudwatch
+
+  - label:  AWS App Config
+    type:   CD-SYSTEMS-MANAGER
+
+  - label:  AWS CloudFormation
+    type:   CD-CLOUDFORMATION
+
+  - label:  AWS CloudTrail
+    type:   cloudtrail
+
+  - label:  AWS Config
+    type:   CD-CONFIG
+
+  - label:  AWS Management Console
+    type:   CD-AWS-MANAGEMENT-CONSOLE
+
+  - label:  AWS OpsWorks
+    type:   CD-OPSWORKS
+
+  - label:  AWS Organizations
+    type:   CD-AWS-ORGANIZATIONS
+
+  - label:  AWS Service Catalog
+    type:   CD-SERVICE-CATALOG
+
+  - label:  AWS Systems Manager
+    type:   CD-SYSTEMS-MANAGER
+
+    # Stencil: AWS Mobile
   - label:  Amazon API Gateway Endpoint
+    type:   api-gateway
+
+  - label:  Amazon API Gateway
+    type:   api-gateway
+
+  - label:  Amazon Pinpoint
+    type:   CD-PINPOINT
+
+    # Stencil: AWS Networking Content Delivery
+  - label:  Amazon API Gateway Endpoint
+    type:   api-gateway
+
+  - label:  Amazon API Gateway
     type:   api-gateway
 
   - label:  Amazon CloudFront
     type:   cf-cloudfront
+
+  - label:  Amazon Route 53
+    type:   route-53
+
+  - label:  Amazon VPC
+    type:   vpc
+
+  - label:  AWS Cloud Map
+    type:   CD-CLOUD-MAP
+
+  - label:  Elastic Load Balancing
+    type:   load-balancer
+
+    # Stencil: AWS Security Identity Compliance
+  - label:  Amazon Cognito
+    type:   cognito
+
+  - label:  Amazon GuardDuty
+    type:   CD-GUARDDUTY
+
+  - label:  Amazon Inspector Agent
+    type:   CD-INSPECTOR
+
+  - label:  Amazon Inspector
+    type:   CD-INSPECTOR
+
+  - label:  Amazon Macie
+    type:   CD-MACIE
+
+  - label:  AWS Certificate Manager
+    type:   CD-ACM
+
+  - label:  AWS Firewall Manager
+    type:   firewall-manager
+
+  - label:  AWS Key Management Service
+    type:   kms
+
+  - label:  AWS Secrets Manager
+    type:   CD-SECRETS-MANAGER
+
+  - label:  AWS Security Hub
+    type:   CD-SECURITY-HUB
+
+  - label:  AWS WAF
+    type:   CD-WAF
+
+    # Stencil: AWS Storage
+  - label:  Amazon Elastic File System EFS
+    type:   elastic-file-system
+
+  - label:  Amazon FSx for Windows File Server
+    type:   fsx-windows-file-server
+
+  - label:  Bucket with Objects
+    type:   s3
 
   - label:  Bucket
     type:   s3

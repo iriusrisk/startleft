@@ -1,11 +1,7 @@
 import uuid
 
-from startleft.diagram.objects.diagram_objects import DiagramComponent, DiagramConnector
+from startleft.diagram.objects.diagram_objects import DiagramConnector
 from startleft.otm.otm import Dataflow
-
-
-def calculate_parent_category(component: DiagramComponent) -> str:
-    return component.parent.get_component_category() if component.parent else 'trustZone'
 
 
 def build_otm_dataflow(diagram_connector: DiagramConnector) -> Dataflow:

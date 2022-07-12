@@ -1,13 +1,27 @@
+from enum import Enum
+
 from shapely.geometry import Polygon
 
 from startleft.diagram.diagram_type import DiagramType
 
 
+class DiagramComponentOrigin(Enum):
+    SIMPLE_COMPONENT = 1
+    BOUNDARY = 2
+
+
 class DiagramComponent:
-    def __init__(self, id: str = None, name: str = None, type: str = None, parent=None, representation: Polygon = None):
+    def __init__(self,
+                 id: str = None,
+                 name: str = None,
+                 type: str = None,
+                 origin: DiagramComponentOrigin = None,
+                 parent=None,
+                 representation: Polygon = None):
         self.id = id
         self.name = name
         self.type = type
+        self.origin = origin
         self.parent = parent
         self.representation = representation
 
@@ -35,8 +49,25 @@ class DiagramConnector:
         return super().__str__()
 
 
+class DiagramLimits:
+
+    def __init__(self, limits):
+        self.x_floor = limits[0][0]
+        self.y_floor = limits[0][1]
+        self.x_top = limits[1][0]
+        self.y_top = limits[1][1]
+
+    def __str__(self) -> str:
+        return f'({self.x_floor}, {self.y_floor}), ({self.x_top}, {self.y_top})'
+
+
 class Diagram:
-    def __init__(self, diagram_type: DiagramType, components: [DiagramComponent], connectors: [DiagramConnector]):
+    def __init__(self,
+                 diagram_type: DiagramType,
+                 components: [DiagramComponent],
+                 connectors: [DiagramConnector],
+                 limits: DiagramLimits = None):
         self.diagram_type = diagram_type
         self.components = components
         self.connectors = connectors
+        self.limits = limits

@@ -81,6 +81,15 @@ class Trustzone:
         self.source = source
         self.properties = properties
 
+    def __eq__(self, other):
+        return type(other) == Trustzone and self.id == other.id
+
+    def __repr__(self) -> str:
+        return f'Trustzone(id="{self.id}", name="{self.name}", source="{self.source}", properties="{self.properties}")'
+
+    def __hash__(self):
+        return hash(self.__repr__())
+
     def json(self):
         result = {
             "id": self.id,
