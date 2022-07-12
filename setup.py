@@ -12,33 +12,32 @@ setup(
     include_package_data=True,
     python_requires='>=3.6',
     install_requires=[
-        'pyyaml',
-        'jsonschema',
-        'deepmerge',
-        'jmespath',
-        'lxml',
-        'python-hcl2',
-        'requests',
-        'xmltodict',
-        'setuptools_scm',
-        'fastapi',
-        'python-multipart',
-        'click',
-        'uvicorn',
-        'shapely',
-        'vsdx',
-        'python-magic'
+        'pyyaml==6.0',
+        'jsonschema==3.2.0',
+        'deepmerge==1.0.1',
+        'jmespath==1.0.0',
+        'lxml==4.8.0',
+        'python-hcl2==3.0.5',
+        'requests==2.25.1',
+        'xmltodict==0.13.0',
+        'fastapi==0.78.0',
+        'python-multipart==0.0.5',
+        'click==8.0.3',
+        'uvicorn==0.17.6',
+        'shapely==1.8.2',
+        'vsdx==0.5.6',
+        'python-magic==0.4.27'
     ],
     use_scm_version=True,
     extras_require={
         "setup": [
-            "pytest-runner",
+            "pytest-runner==6.0.0",
         ],
         "test": [
-            'tox',
-            'pytest',
-            'responses',
-            'deepdiff'
+            'tox==3.25.1',
+            'pytest==7.1.2',
+            'responses==0.21.0',
+            'deepdiff==5.8.1'
         ]
     },
     entry_points='''

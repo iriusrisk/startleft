@@ -3,6 +3,7 @@ import logging
 import yaml
 from deepmerge import always_merger
 
+from startleft.api.errors import LoadingMappingFileError
 from startleft.validators.mapping_validator import MappingValidator
 
 logger = logging.getLogger(__name__)
@@ -17,12 +18,15 @@ class MappingFileLoader:
 
         MappingValidator.check_data_size(mapping_data_list[0])
 
-        for mapping_data in mapping_data_list:
-            logger.info("Loading mapping data")
-            data = mapping_data if isinstance(mapping_data, str) else mapping_data.decode()
-            self.__load(yaml.load(data, Loader=yaml.BaseLoader))
-            logger.debug("Mapping files loaded successfully")
-
+        try:
+            for mapping_data in mapping_data_list:
+                logger.info('Loading mapping data')
+                data = mapping_data if isinstance(mapping_data, str) else mapping_data.decode()
+                self.__load(yaml.load(data, Loader=yaml.BaseLoader))
+                logger.debug('Mapping files loaded successfully')
+        except Exception as e:
+            raise LoadingMappingFileError('Error loading the mapping file. The mapping files are not valid.',
+                                          e.__class__.__name__, str(e))
         return self.map
 
     def __load(self, mapping):
