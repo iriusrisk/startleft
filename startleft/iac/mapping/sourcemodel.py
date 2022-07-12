@@ -24,19 +24,20 @@ class CustomFunctions(jmespath.functions.Functions):
             temp.append(v)
         return temp
 
-    @jmespath.functions.signature({'types': ['array']})
+    @jmespath.functions.signature({'types': ['array', 'null']})
     def _func_squash_terraform(self, component_types_arr):
         source_objects = []
 
-        for component_type_obj in component_types_arr:
-            for component_type, component_name_obj in component_type_obj.items():
-                source_object = {}
-                if isinstance(component_name_obj, dict):
-                    source_object["Type"] = component_type
-                    for component_name, properties in component_name_obj.items():
-                        source_object["_key"] = component_name
-                        source_object["Properties"] = properties
-                source_objects.append(source_object)
+        if component_types_arr is not None:
+            for component_type_obj in component_types_arr:
+                for component_type, component_name_obj in component_type_obj.items():
+                    source_object = {}
+                    if isinstance(component_name_obj, dict):
+                        source_object["Type"] = component_type
+                        for component_name, properties in component_name_obj.items():
+                            source_object["_key"] = component_name
+                            source_object["Properties"] = properties
+                    source_objects.append(source_object)
 
         return source_objects
 
