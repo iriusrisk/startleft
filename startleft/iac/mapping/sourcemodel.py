@@ -24,29 +24,31 @@ class CustomFunctions(jmespath.functions.Functions):
             temp.append(v)
         return temp
 
-    @jmespath.functions.signature({'types': ['array']}, {'types': ['string']})
+    @jmespath.functions.signature({'types': ['array', 'null']}, {'types': ['string']})
     def _func_get_starts_with(self, obj_arr, component_type):
         source_objects = []
 
-        for obj in obj_arr:
-            for c_type in obj:
-                if c_type.startswith(component_type):
-                    for c_name in obj[c_type]:
-                        new_obj = self.add_type_and_name(obj[c_type], c_type, c_name)
-                        source_objects.append(new_obj)
+        if obj_arr is not None:
+            for obj in obj_arr:
+                for c_type in obj:
+                    if c_type.startswith(component_type):
+                        for c_name in obj[c_type]:
+                            new_obj = self.add_type_and_name(obj[c_type], c_type, c_name)
+                            source_objects.append(new_obj)
 
         return source_objects
 
-    @jmespath.functions.signature({'types': ['array']}, {'types': ['string']})
+    @jmespath.functions.signature({'types': ['array', 'null']}, {'types': ['string']})
     def _func_get(self, obj_arr, component_type):
         source_objects = []
 
-        for obj in obj_arr:
-            for c_type in obj:
-                if c_type == component_type:
-                    for c_name in obj[c_type]:
-                        new_obj = self.add_type_and_name(obj[c_type], c_type, c_name)
-                        source_objects.append(new_obj)
+        if obj_arr is not None:
+            for obj in obj_arr:
+                for c_type in obj:
+                    if c_type == component_type:
+                        for c_name in obj[c_type]:
+                            new_obj = self.add_type_and_name(obj[c_type], c_type, c_name)
+                            source_objects.append(new_obj)
 
         return source_objects
 
