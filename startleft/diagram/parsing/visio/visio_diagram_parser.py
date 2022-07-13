@@ -97,7 +97,9 @@ class VisioDiagramParser(DiagramParser):
                 component_shape, DiagramComponentOrigin.BOUNDARY, self.__zone_representer))
 
     def __add_connector(self, connector_shape: Shape):
-        self.__visio_connectors.append(self.connector_factory.create_connector(connector_shape))
+        visio_connector = self.connector_factory.create_connector(connector_shape)
+        if visio_connector:
+            self.__visio_connectors.append(visio_connector)
 
     def __calculate_parents(self):
         for component in self.__visio_components:
