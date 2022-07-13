@@ -22,7 +22,7 @@ class TestCliSearch:
             # a valid TERRAFORM type
             '--iac-type', "TERRAFORM",
             # and a valid QUERY
-            '--query', "resource[].aws_lambda_function",
+            '--query', "resource[].aws_sqs_queue",
             # and a valid input file
             TF_AWS_SIMPLE_COMPONENTS_FILENAME]
 
@@ -34,7 +34,7 @@ class TestCliSearch:
         #   and searching is performed
         assert 'Running JMESPath search query against the IaC file' in caplog.text
         #   and results are found
-        assert 'test_lambda' in caplog.text
+        assert 'terraform_queue' in caplog.text
 
     def test_search_ctf_find_results(self, caplog):
         # Given a info level of logging
