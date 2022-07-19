@@ -1,5 +1,6 @@
 import pytest
 
+from startleft.api.errors import OtmBuildingError
 from startleft.iac.iac_to_otm import IacToOtm
 from startleft.iac.iac_type import IacType
 from startleft.utils.file_utils import FileUtils
@@ -123,9 +124,10 @@ class TestApp:
                              ])
     def test_mapping_component_without_parent(self, iac_type: IacType, filename: str, mapping_filename: str):
         iac_to_otm = IacToOtm('name', 'id', iac_type)
-        with pytest.raises(KeyError) as e_info:
+        with pytest.raises(OtmBuildingError) as e_info:
             iac_to_otm.run(iac_type, [FileUtils.get_data(mapping_filename)], [FileUtils.get_data(filename)])
-        assert 'parent' in str(e_info.value)
+        assert 'KeyError' == e_info.value.detail
+        assert "'parent'" == e_info.value.message
 
     @pytest.mark.parametrize('iac_type,filename,mapping_filename',
                              [
