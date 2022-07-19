@@ -4,7 +4,6 @@ from io import StringIO
 
 import hcl2
 import yaml
-from jmespath.exceptions import JMESPathTypeError
 
 from startleft.api.errors import LoadingIacFileError, OtmBuildingError
 from startleft.iac.iac_type import IacType
@@ -71,7 +70,7 @@ class IacToOtm:
 
         try:
             self.transformer.run(iac_mapping)
-        except JMESPathTypeError as e:
+        except Exception as e:
             logger.error(f'{e}')
             detail = e.__class__.__name__
             message = e.__str__()
