@@ -14,5 +14,5 @@ class MappingLoader(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def load(self):
-        """Load source provider data"""
+        """Load mapping data"""
         raise NotImplementedError

@@ -1,11 +1,11 @@
 import abc
 
+from startleft.common.mapping_loader import MappingLoader
+from startleft.common.mapping_validator import MappingValidator
+from startleft.common.provider_loader import ProviderLoader
+from startleft.common.provider_parser import ProviderParser
+from startleft.common.provider_validator import ProviderValidator
 from startleft.otm.otm import OTM
-from startleft.provider.mapping_loader import MappingLoader
-from startleft.provider.mapping_validator import MappingValidator
-from startleft.provider.provider_loader import ProviderLoader
-from startleft.provider.provider_parser import ProviderParser
-from startleft.provider.provider_validator import ProviderValidator
 
 
 class OtmProcessor(metaclass=abc.ABCMeta):
