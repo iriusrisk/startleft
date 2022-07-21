@@ -4,11 +4,11 @@ from vsdx import Shape
 
 
 def get_x_center(shape: Shape) -> float:
-    return float(shape.cells['PinX'].value)
+    return float(shape.center_x_y[0])
 
 
 def get_y_center(shape: Shape) -> float:
-    return float(shape.cells['PinY'].value)
+    return float(shape.center_x_y[1])
 
 
 def get_width(shape: Shape) -> float:
@@ -40,8 +40,8 @@ def get_normalized_angle(shape: Shape) -> float:
 
 
 def get_limits(shape: Shape) -> tuple:
-    center_x = float(shape.cells['PinX'].value)
-    center_y = float(shape.cells['PinY'].value)
+    center_x = get_x_center(shape)
+    center_y = get_y_center(shape)
     width = get_width(shape)
     height = get_height(shape)
 
