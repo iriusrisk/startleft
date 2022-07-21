@@ -18,7 +18,7 @@ router = APIRouter(
 
 @router.post(URL, status_code=RESPONSE_STATUS_CODE, description="Generates an OTM threat model from an Diagram file",
              tags=['Diagram'])
-def diagram(diag_file: UploadFile = File(..., description="File that contains the Iac definition"),
+def diagram(diag_file: UploadFile = File(..., description="File that contains the diagram definition"),
             diag_type: DiagramType = Form(..., description="Type of Diagram File: VISIO"),
             id: str = Form(..., description="ID of the new project"),
             name: str = Form(..., description="Name of the new project"),
