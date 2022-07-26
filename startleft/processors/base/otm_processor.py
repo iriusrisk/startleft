@@ -24,7 +24,7 @@ class OtmProcessor(metaclass=abc.ABCMeta):
                 and hasattr(subclass, 'get_provider_parser') and callable(subclass.get_provider_parser)
                 or NotImplemented)
 
-    @abc.abstractmethod
+    # Do not override this method.
     def process(self) -> OTM:
         """Process all the flow from the input data to the OTM output"""
         self.get_provider_validator().validate()
