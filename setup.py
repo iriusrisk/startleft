@@ -16,7 +16,7 @@ setup(
         'jsonschema==3.2.0',
         'deepmerge==1.0.1',
         'jmespath==1.0.0',
-        'lxml==4.8.0',
+        'lxml==4.9.1',
         'python-hcl2==3.0.5',
         'requests==2.25.1',
         'xmltodict==0.13.0',
