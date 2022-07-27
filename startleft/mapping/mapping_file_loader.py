@@ -4,7 +4,7 @@ import yaml
 from deepmerge import always_merger
 
 from startleft.api.errors import LoadingMappingFileError
-from startleft.validators.mapping_validator import MappingValidator
+from startleft.validators.generic_mapping_validator import GenericMappingValidator
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ class MappingFileLoader:
 
     def load(self, mapping_data_list: [bytes]) -> {}:
 
-        MappingValidator.check_data_size(mapping_data_list[0])
+        GenericMappingValidator.check_data_size(mapping_data_list[0])
 
         try:
             for mapping_data in mapping_data_list:
