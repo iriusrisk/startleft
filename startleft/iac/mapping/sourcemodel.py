@@ -7,7 +7,7 @@ from deepmerge import always_merger
 class CustomFunctions(jmespath.functions.Functions):
     @jmespath.functions.signature({'types': ['string']}, {'types': ['number']})
     def _func_tail(self, string, count):
-        return string[count:]
+        return string[-count:]
 
     @jmespath.functions.signature({'types': ['string']}, {'types': ['string']}, {'types': ['string']})
     def _func_re_sub(self, pattern, replace, s):
