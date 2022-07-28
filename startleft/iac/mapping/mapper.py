@@ -7,12 +7,67 @@ logger = logging.getLogger(__name__)
 DEFAULT_TRUSTZONE = "b61d6911-338d-46a8-9f39-8dcd24abfe91"
 
 
+def get_first_element_from_list(values):
+    return values[0] if isinstance(values, list) else values
+
+
+def is_terraform_variable_reference(value: str):
+    return value is not None and isinstance(value, str) and re.match(r"\$\{var\.[\w-]+\}", value)
+
+
+def is_terraform_resource_reference(value: str):
+    return value is not None and isinstance(value, str) and re.match(r"\$\{aws_[\w-]+\.[\w-]+\.(id|arn|stream_arn)\}", value)
+
+
+def get_resource_name_from_resource_reference(resource_id_reference: str):
+    return re.match(r"\$\{aws_[\w-]+\.([\w-]+)\.(id|arn|stream_arn)\}", resource_id_reference).group(1)
+
+
+def get_variable_name_from_variable_reference(variable_reference: str):
+    return variable_reference[variable_reference.find(".") + 1:variable_reference.find("}")]
+
+
+def get_terraform_variable_default_value(source_model, variable_reference):
+    name = get_variable_name_from_variable_reference(variable_reference)
+
+    for variable in source_model.data["variable"]:
+        for variable_name, variable_properties in variable.items():
+            if variable_name == name:
+                return variable_properties["default"][0]
+
+
 def format_aws_fns(source_objects):
     if 'Fn::ImportValue' in source_objects:
         source_objects = get_import_value_resource_name(source_objects['Fn::ImportValue'])
     elif 'Fn::GetAtt' in source_objects:
         source_objects = source_objects['Fn::GetAtt'][0]
     return source_objects
+
+
+def format_terraform_variable(source_model, source_object, value):
+    vpc_resource_name = get_vpc_resource_name_from_variable_reference(source_model, value)
+
+    if vpc_resource_name is not None:
+        source_component_name = vpc_resource_name
+    else:
+        source_component_name = get_terraform_variable_default_value(source_model, value)
+
+    set_cidr_blocks(source_object, source_component_name, value)
+
+    return source_component_name
+
+
+def get_vpc_resource_name_from_variable_reference(source_model, value):
+    for resource in source_model.query("resource|squash_terraform(@)[?Type=='aws_vpc']"):
+        if 'cidr_block' in resource['Properties'] and resource['Properties']['cidr_block'] == value:
+            return resource['_key']
+
+
+def set_cidr_blocks(source_object, source_component_name, value):
+    if "ingress" in source_object['Properties'] and source_object['Properties']['ingress'][0]['cidr_blocks'] == value:
+        source_object['Properties']['ingress'][0]['cidr_blocks'] = [source_component_name]
+    elif "egress" in source_object['Properties'] and source_object['Properties']['egress'][0]['cidr_blocks'] == value:
+        source_object['Properties']['egress'][0]['cidr_blocks'] = [source_component_name]
 
 
 def format_source_objects(source_objects):
@@ -89,7 +144,7 @@ def get_altsource_mapping_path_value(source_model, alt_source_object, mapping_pa
 def get_import_value_resource_name(import_value_string):
     # gets resource name from an AWS Fn::ImportValue field in format:
     # "Fn::ImportValue": "ECSFargateGoServiceStack:ExportsOutputFnGetAttResourceNameGroupIdNNNNNNNN"
-    lower_limit = import_value_string.index("FnGetAtt")+len("FnGetAtt")
+    lower_limit = import_value_string.index("FnGetAtt") + len("FnGetAtt")
     upper_limit = import_value_string.index("GroupId")
     if isinstance(lower_limit, int) and isinstance(upper_limit, int):
         result = import_value_string[lower_limit:upper_limit]
@@ -177,7 +232,7 @@ class ComponentMapper:
                     parent_ids = [parent_ids]
                 for parent_number, parent_id in enumerate(parent_ids):
                     base_component = {"name": component_name, "type": component_type, "source": source_object,
-                                 "parent": parent_id}
+                                      "parent": parent_id}
 
                     if "properties" in self.mapping:
                         base_component["properties"] = self.mapping["properties"]
@@ -290,7 +345,13 @@ class ComponentMapper:
 
     def __get_component_individual_name(self, source_model, source_object, mapping):
         if "name" in self.mapping:
-            source_component_name = format_aws_fns(source_model.search(mapping, source=source_object))
+            value = get_first_element_from_list(source_model.search(mapping, source=source_object))
+            if is_terraform_variable_reference(value):
+                source_component_name = format_terraform_variable(source_model, source_object, value)
+            elif is_terraform_resource_reference(value):
+                source_component_name = get_resource_name_from_resource_reference(value)
+            else:
+                source_component_name = format_aws_fns(value)
             logger.debug(f"Found source object with name {source_component_name}")
         else:
             source_component_name = None
@@ -301,7 +362,13 @@ class ComponentMapper:
         source_component_multiple_name = None
         if "name" in self.mapping:
             source_component_name, source_component_multiple_name = source_model.search(mapping, source=source_object)
-            source_component_name = format_aws_fns(source_component_name)
+            if is_terraform_variable_reference(source_component_name):
+                source_component_name = format_terraform_variable(source_model, source_object, source_component_name)
+            elif is_terraform_resource_reference(source_component_name):
+                source_component_name = get_resource_name_from_resource_reference(source_component_name)
+            else:
+                source_component_name = format_aws_fns(source_component_name)
+
             logger.debug(f"Found singleton source object with multiple name {source_component_name}")
         else:
             source_component_name = None
@@ -395,11 +462,14 @@ class ComponentMapper:
         if isinstance(parent, list):
             if len(parent) == 0:
                 parent = [DEFAULT_TRUSTZONE]
+            for index, resource_id in enumerate(parent):
+                if is_terraform_resource_reference(resource_id):
+                    parent[index] = get_resource_name_from_resource_reference(resource_id)
         if isinstance(parent, str):
             if parent == "":
                 parent = [DEFAULT_TRUSTZONE]
             else:
-                parent = [parent]
+                parent = [get_resource_name_from_resource_reference(parent) if is_terraform_resource_reference(parent) else parent]
 
         return parent, parents_from_component
 
@@ -467,6 +537,12 @@ class DataflowNodeMapper:
     def run(self, source_model, source):
         source_resource_names = format_source_objects(source_model.search(self.mapping, source=source))
 
+        if source_resource_names is not None:
+            for index, resource_id in enumerate(source_resource_names):
+                if is_terraform_resource_reference(resource_id):
+                    source_resource_names[index] = get_resource_name_from_resource_reference(resource_id)
+                elif is_terraform_variable_reference(resource_id):
+                    source_resource_names[index] = get_terraform_variable_default_value(source_model, resource_id)
         return source_resource_names
 
 
@@ -508,7 +584,7 @@ class DataflowMapper:
                         # if a component is not on list, it may be a Security Group
                         if "$hub" in destination_mapper.mapping:
                             if destination_resource_ids is None:
-                                destination_resource_id_for_hub_mapping = ["hub-"+destination_resource_name]
+                                destination_resource_id_for_hub_mapping = ["hub-" + destination_resource_name]
                                 self.id_map[destination_resource_name] = destination_resource_id_for_hub_mapping
                             if hub_type is not None:
                                 destination_resource_ids = [hub_type + destination_resource_name]
@@ -518,8 +594,8 @@ class DataflowMapper:
 
                         for destination_resource_id in destination_resource_ids:
                             # skip self referencing dataflows unless they are temporary (action $hub)
-                            if "$hub" not in source_mapper.mapping\
-                                    and "$hub" not in destination_mapper.mapping\
+                            if "$hub" not in source_mapper.mapping \
+                                    and "$hub" not in destination_mapper.mapping \
                                     and source_resource_id == destination_resource_id:
                                 continue
 
@@ -562,7 +638,7 @@ class DataflowMapper:
             return "type2-hub-"
 
         # SG mappings: type 1
-        elif "$hub" not in source_mapper.mapping and "$hub" in destination_mapper.mapping\
+        elif "$hub" not in source_mapper.mapping and "$hub" in destination_mapper.mapping \
                 and "$path" in source_mapper.mapping and "_key" in source_mapper.mapping["$path"]:
             return "type1-hub-"
 
@@ -579,4 +655,3 @@ class DataflowMapper:
 
         else:
             return None
-

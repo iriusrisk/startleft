@@ -1,6 +1,6 @@
 import logging
 
-from startleft.api.errors import MappingFileSchemaNotValidError
+from startleft.api.errors import MappingFileNotValidError
 from startleft.validators.schema import Schema
 
 logger = logging.getLogger(__name__)
@@ -14,7 +14,7 @@ class MappingValidator:
         self.mapping_schema = mapping_schema
 
     def validate(self, mapping_file):
-        logger.debug("Validating mapping files")
+        logger.debug('Validating mapping files')
         self.__validate_schema(mapping_file)
 
     def __validate_schema(self, mapping_file):
@@ -22,9 +22,10 @@ class MappingValidator:
         schema.validate(mapping_file)
         if not schema.valid:
             logger.error('Mapping files are not valid')
-            logger.error(f"--- Schema errors---\n{schema.errors}\n--- End of schema errors ---")
-            raise MappingFileSchemaNotValidError(schema.errors)
-        logger.info("Mapping files are valid")
+            logger.error(f'--- Schema errors---\n{schema.errors}\n--- End of schema errors ---')
+            raise MappingFileNotValidError('Mapping files are not valid',
+                                           'Mapping file does not comply with the schema', str(schema.errors))
+        logger.info('Mapping files are valid')
 
     @staticmethod
     def check_data_size(mapping_data: bytes):
@@ -33,4 +34,5 @@ class MappingValidator:
         """
         size = len(mapping_data)
         if type(mapping_data) == 'bytes' and size is None or size > MAX_SIZE or size < MIN_SIZE:
-            raise MappingFileSchemaNotValidError('Invalid size')
+            msg = 'Mapping files are not valid. Invalid size'
+            raise MappingFileNotValidError('Mapping files are not valid', msg, msg)

@@ -1,5 +1,5 @@
 ## Open Threat Model standard
-Defined in https://github.com/iriusrisk/OpenThreatModel/wiki
+Defined in https://github.com/iriusrisk/OpenThreatModel#readme
 
 ## OTM Tutorials
 

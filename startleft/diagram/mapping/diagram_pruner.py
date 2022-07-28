@@ -15,7 +15,6 @@ class DiagramPruner:
         self.__remove_unmapped_components()
         self.__prune_orphan_connectors()
         self.__restore_parents()
-        self.__remove_self_pointing_connectors()
 
     def __remove_unmapped_components(self):
         IterationUtils.remove_from_list(
@@ -40,12 +39,6 @@ class DiagramPruner:
         for diagram_component in self.components:
             if diagram_component.parent and diagram_component.parent.id in removed_parents:
                 diagram_component.parent = removed_parents[diagram_component.parent.id]
-
-    def __remove_self_pointing_connectors(self):
-        IterationUtils.remove_from_list(
-            self.connectors,
-            lambda connector: connector.from_id == connector.to_id
-        )
 
     def __is_component_mapped(self, component: DiagramComponent):
         return component.name in self.mapped_labels or component.type in self.mapped_labels

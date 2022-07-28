@@ -27,10 +27,12 @@ class VisioValidator(DiagramValidator):
     def __validate_size(self):
         size = os.path.getsize(self.file.name)
         if size > MAX_SIZE or size < MIN_SIZE:
-            raise DiagramFileNotValidError('Invalid size')
+            msg = 'Provided visio file is not valid. Invalid size'
+            raise DiagramFileNotValidError('Diagram file is not valid', msg, msg)
 
     def __validate_content_type(self):
         magic = magik.Magic(mime=True)
         mime = magic.from_file(self.file.name)
         if mime not in VALID_MIME:
-            raise DiagramFileNotValidError('Invalid mime type')
+            msg = 'Invalid content type for diag_file'
+            raise DiagramFileNotValidError('Diagram file is not valid', msg, msg)

@@ -151,6 +151,13 @@ components:
     tags:
       - { $path: "Type" }
 
+  - id:     {$format: "{name}"}
+    type:   rds
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::RDS::DBCluster']"}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
 
   - id:     {$format: "{name}"}
     type:   route-53
@@ -204,12 +211,12 @@ components:
         $mappingPath: {$path: "Properties.ServiceName"}
         $mappingLookups:
           - regex: ^(.*)ssm$
-            name: {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "Systems Manager from VPCEndpoint (grouped)" }}}
+            name: {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "Systems Manager from VPCEndpoint (grouped)" }}}
             type: CD-SYSTEMS-MANAGER
             tags:
               - {$numberOfSources: {oneSource:{$format: "AWS::EC2::VPCEndpoint"}, multipleSource:{ $format: "{_key} ({Type})"}}}
           - regex: ^(.*)ssmmessages$
-            name: {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "Systems Manager from VPCEndpoint (grouped)" }}}
+            name: {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "Systems Manager from VPCEndpoint (grouped)" }}}
             type: CD-SYSTEMS-MANAGER
             tags:
               - {$numberOfSources: {oneSource:{$format: "AWS::EC2::VPCEndpoint"}, multipleSource:{ $format: "{_key} ({Type})"}}}
