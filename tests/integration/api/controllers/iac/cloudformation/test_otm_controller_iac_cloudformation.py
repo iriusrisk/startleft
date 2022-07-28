@@ -1,6 +1,7 @@
 import json
 from unittest.mock import patch
 
+import pytest
 import responses
 from fastapi.testclient import TestClient
 from pytest import mark
@@ -9,9 +10,12 @@ from startleft.api import fastapi_server
 from startleft.api.controllers.iac import iac_create_otm_controller
 from startleft.api.errors import LoadingIacFileError, IacFileNotValidError, MappingFileNotValidError, \
     LoadingMappingFileError, OtmResultError, OtmBuildingError
-from tests.resources.test_resource_paths import cloudformation_gz, visio_aws_shapes
-from tests.resources.test_resource_paths import default_cloudformation_mapping, \
-    example_json, cloudformation_malformed_mapping_wrong_id, invalid_yaml
+from startleft.utils.file_utils import FileUtils
+from tests.resources.test_resource_paths import default_cloudformation_mapping, default_terraform_mapping, \
+    example_json, cloudformation_malformed_mapping_wrong_id, invalid_yaml, \
+    terraform_aws_singleton_components_unix_line_breaks, cloudformation_all_functions, \
+    cloudformation_mapping_all_functions, terraform_specific_functions, terraform_mapping_specific_functions, \
+    cloudformation_gz, visio_aws_shapes
 
 webapp = fastapi_server.initialize_webapp()
 
@@ -77,6 +81,40 @@ class TestOtmControllerIaCCloudformation:
         response = client.post(get_url(), files=files, data=body)
 
         # Then the OTM is returned inside the response as JSON
+        assert response.status_code == iac_create_otm_controller.RESPONSE_STATUS_CODE
+        assert response.headers.get('content-type') == 'application/json'
+        assert '"otmVersion": "0.1.0"' in response.text
+        assert '"project": ' in response.text
+        assert '"name": "project_A_name"' in response.text
+        assert '"trustZones": ' in response.text
+        assert '"components": ' in response.text
+
+    @responses.activate
+    @pytest.mark.parametrize('filename,break_line', [
+        (terraform_aws_singleton_components_unix_line_breaks, '\n'),
+        (terraform_aws_singleton_components_unix_line_breaks, '\r\n'),
+        (terraform_aws_singleton_components_unix_line_breaks, '\r')
+    ])
+    def test_create_otm_ok_all_like_breaks(self, filename: str, break_line: str):
+        # Given a project_id
+        project_id: str = 'project_A_id'
+
+        # And the request files
+        iac_file = (filename, open(filename, 'rb'), 'application/json')
+        mapping_file = (default_terraform_mapping, open(default_terraform_mapping, 'r'), 'text/yaml')
+
+        # And the iac_data with custom line breaks
+        iac_data = FileUtils.get_byte_data(filename).decode().replace('\n', break_line)
+
+        # When I do post on cloudformation endpoint
+        files = {'iac_file': iac_file, 'mapping_file': mapping_file}
+        body = {'iac_type': 'TERRAFORM', 'id': f'{project_id}', 'name': 'project_A_name'}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then the iac file has the expected line break
+        assert f'{break_line} ' in iac_data
+
+        # And the OTM is returned inside the response as JSON
         assert response.status_code == iac_create_otm_controller.RESPONSE_STATUS_CODE
         assert response.headers.get('content-type') == 'application/json'
         assert '"otmVersion": "0.1.0"' in response.text
@@ -327,3 +365,57 @@ class TestOtmControllerIaCCloudformation:
         assert body_response['title'] == 'Mapping files are not valid'
         assert body_response['detail'] == msg
         assert len(body_response['errors']) == 1
+
+    @responses.activate
+    def test_mapping_file_cloudformation_all_functions(self):
+        # Given a project_id
+        project_id: str = 'project_A_id'
+
+        # And the request files, containing a mapping file with all cloudformation functions
+        iac_file = (cloudformation_all_functions, open(cloudformation_all_functions, 'r'), 'application/json')
+        mapping_file = (
+            cloudformation_mapping_all_functions, open(cloudformation_mapping_all_functions, 'r'), 'text/yaml')
+
+        # When I do post on cloudformation endpoint
+        files = {'iac_file': iac_file, 'mapping_file': mapping_file}
+        body = {'iac_type': 'CLOUDFORMATION', 'id': f'{project_id}', 'name': 'project_A_name'}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then the OTM is returned without errors inside the response as JSON
+        assert response.status_code == iac_create_otm_controller.RESPONSE_STATUS_CODE
+        assert response.headers.get('content-type') == 'application/json'
+        assert '"otmVersion": "0.1.0"' in response.text
+        assert '"project": ' in response.text
+        assert '"name": "project_A_name"' in response.text
+        assert '"trustZones": ' in response.text
+        assert '"components": ' in response.text
+
+        # And all the expected components are mapped
+        assert len(json.loads(response.text)["components"]) == 5
+
+    @responses.activate
+    def test_mapping_file_terraform_specific_functions(self):
+        # Given a project_id
+        project_id: str = 'project_A_id'
+
+        # And the request files, containing a mapping file with all terraform specific functions
+        iac_file = (terraform_specific_functions, open(terraform_specific_functions, 'r'), 'application/json')
+        mapping_file = (
+            terraform_mapping_specific_functions, open(terraform_mapping_specific_functions, 'r'), 'text/yaml')
+
+        # When I do post on terraform endpoint
+        files = {'iac_file': iac_file, 'mapping_file': mapping_file}
+        body = {'iac_type': 'TERRAFORM', 'id': f'{project_id}', 'name': 'project_A_name'}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then the OTM is returned without errors inside the response as JSON
+        assert response.status_code == iac_create_otm_controller.RESPONSE_STATUS_CODE
+        assert response.headers.get('content-type') == 'application/json'
+        assert '"otmVersion": "0.1.0"' in response.text
+        assert '"project": ' in response.text
+        assert '"name": "project_A_name"' in response.text
+        assert '"trustZones": ' in response.text
+        assert '"components": ' in response.text
+
+        # And all the expected components are mapped
+        assert len(json.loads(response.text)["components"]) == 3
