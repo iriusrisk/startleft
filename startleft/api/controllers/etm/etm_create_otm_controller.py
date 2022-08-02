@@ -4,7 +4,7 @@ from fastapi import APIRouter, File, UploadFile, Form, Response
 
 from startleft.api.controllers.otm_controller import RESPONSE_STATUS_CODE, PREFIX, controller_responses
 from startleft.api.errors import LoadingSourceFileError
-from startleft.processors.base.etm_type import EtmType
+from startleft.processors.base.provider_type import EtmType
 from startleft.processors.mtmt.mtmt_processor import MTMTProcessor
 
 URL = '/etm'

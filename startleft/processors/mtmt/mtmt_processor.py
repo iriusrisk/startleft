@@ -1,6 +1,5 @@
-from startleft.processors.base.mapping_file_validator import MappingFileValidator
-from startleft.processors.base.mapping_loader import MappingLoader
-from startleft.processors.base.mapping_validator import MappingValidator
+from startleft.processors.mtmt.mtmt_mapping_file_validator import MtmtMappingFileValidator
+from startleft.processors.base.mapping import MappingLoader, MappingValidator
 from startleft.processors.base.otm_processor import OtmProcessor
 from startleft.processors.base.provider_loader import ProviderLoader
 from startleft.processors.base.provider_parser import ProviderParser
@@ -30,7 +29,7 @@ class MTMTProcessor(OtmProcessor):
         self.mtmt = loader.get_mtmt
 
     def get_mapping_validator(self) -> MappingValidator:
-        return MappingFileValidator(None, self.mappings)
+        return MtmtMappingFileValidator(self.mappings)
 
     def get_mapping_loader(self) -> MappingLoader:
         raise NotImplementedError

@@ -1,8 +1,7 @@
 import abc
 
 from startleft.otm.otm import OTM
-from startleft.processors.base.mapping_loader import MappingLoader
-from startleft.processors.base.mapping_validator import MappingValidator
+from startleft.processors.base.mapping import MappingLoader, MappingValidator
 from startleft.processors.base.provider_loader import ProviderLoader
 from startleft.processors.base.provider_parser import ProviderParser
 from startleft.processors.base.provider_validator import ProviderValidator
