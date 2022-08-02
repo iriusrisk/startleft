@@ -2,19 +2,14 @@ import os
 from unittest import TestCase
 
 from startleft.processors.mtmt.tm7_to_json import Tm7ToJson
-
-resources = f'{os.path.dirname(__file__)}/../resources/'
-
-
-test_model_mtmt = resources + 'test_model.tm7'
-test_model_mtmt_mapping = resources + 'test_mapping.yaml'
+from tests.resources import test_resource_paths
 
 
 class TestTm7ToJson(TestCase):
 
     def test_to_json(self):
         # GIVEN the source MTMT data
-        with open(test_model_mtmt, 'r') as f:
+        with open(test_resource_paths.model_mtmt_source_file, 'r') as f:
             xml = f.read()
 
         # AND the parser
