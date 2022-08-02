@@ -71,7 +71,7 @@ class TestOtmControllerIaCTerraform:
         (terraform_aws_singleton_components_unix_line_breaks, '\r\n'),
         (terraform_aws_singleton_components_unix_line_breaks, '\r')
     ])
-    def test_create_otm_ok_all_like_breaks(self, filename: str, break_line: str):
+    def test_create_otm_ok_all_line_breaks(self, filename: str, break_line: str):
         # Given a project_id
         project_id: str = 'project_A_id'
 
