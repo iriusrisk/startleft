@@ -38,7 +38,6 @@ def etm(source_file: UploadFile = File(..., description="File that contains the 
 
     logger.info("Parsing Threat Model file to OTM")
 
-    logger.info("Parsing IaC file to OTM")
     with source_file.file as f:
         etm_data = f.read()
 
