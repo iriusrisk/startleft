@@ -54,12 +54,8 @@ class TestApiIac:
 
         # AND the error_type in the response body matched the name of the exception raised
 
-        assert e_info.value.error_code == ErrorCode.IAC_LOADING_ERROR
         assert e_info.value.error_code.http_status == 400
         assert e_info.value.error_code.name == 'IAC_LOADING_ERROR'
-        assert e_info.value.title == 'mocked error IAC_LOADING_ERROR'
-        assert e_info.value.detail == 'mocked error detail'
-        assert e_info.value.message == 'mocked error msg 1'
 
     def test_api_iac_controller_on_iac_file_not_valid_error(self):
         # GIVEN a mocked invalid file of any provider
@@ -82,12 +78,8 @@ class TestApiIac:
                                'iac_controller_on_iac_file_not_valid_error_name', valid_mapping_file)
 
         # AND the error_type in the response body matched the name of the exception raised
-        assert e_info.value.error_code == ErrorCode.IAC_NOT_VALID
         assert e_info.value.error_code.http_status == 400
         assert e_info.value.error_code.name == 'IAC_NOT_VALID'
-        assert e_info.value.title == 'mocked error IAC_NOT_VALID'
-        assert e_info.value.detail == 'mocked error detail'
-        assert e_info.value.message == 'mocked error msg 2'
 
     def test_api_iac_controller_on_loading_mapping_file_error(self):
         # GIVEN a mocked invalid file of any provider
@@ -110,12 +102,8 @@ class TestApiIac:
                                'iac_controller_on_loading_mapping_file_error_name', valid_mapping_file)
 
         # AND the error_type in the response body matched the name of the exception raised
-        assert e_info.value.error_code == ErrorCode.MAPPING_LOADING_ERROR
         assert e_info.value.error_code.http_status == 400
         assert e_info.value.error_code.name == 'MAPPING_LOADING_ERROR'
-        assert e_info.value.title == 'mocked error MAPPING_LOADING_ERROR'
-        assert e_info.value.detail == 'mocked error detail'
-        assert e_info.value.message == 'mocked error msg 3'
 
     def test_api_iac_controller_on_otm_building_error(self):
         # GIVEN a mocked invalid file of any provider
@@ -138,12 +126,8 @@ class TestApiIac:
                                'iac_controller_on_otm_building_error_name', valid_mapping_file)
 
         # AND the error_type in the response body matched the name of the exception raised
-        assert e_info.value.error_code == ErrorCode.OTM_BUILDING_ERROR
         assert e_info.value.error_code.http_status == 400
         assert e_info.value.error_code.name == 'OTM_BUILDING_ERROR'
-        assert e_info.value.title == 'mocked error OTM_BUILDING_ERROR'
-        assert e_info.value.detail == 'mocked error detail'
-        assert e_info.value.message == 'mocked error msg 4'
 
     def test_api_iac_controller_on_otm_generation_error(self):
         # GIVEN a mocked invalid file of any provider
@@ -166,9 +150,5 @@ class TestApiIac:
                                'iac_controller_on_otm_generation_error_name', valid_mapping_file)
 
         # AND the error_type in the response body matched the name of the exception raised
-        assert e_info.value.error_code == ErrorCode.OTM_GENERATION_ERROR
         assert e_info.value.error_code.http_status == 500
         assert e_info.value.error_code.name == 'OTM_GENERATION_ERROR'
-        assert e_info.value.title == 'mocked error OTM_GENERATION_ERROR'
-        assert e_info.value.detail == 'mocked error detail'
-        assert e_info.value.message == 'mocked error msg 5'
