@@ -152,3 +152,21 @@ class TestApp:
         assert len(iac_to_otm.otm.dataflows) == 0
         assert iac_to_otm.otm.trustzones[0].id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
         assert iac_to_otm.otm.trustzones[0].name == 'Public Cloud'
+
+    def test_terraform_mapping_modules(self):
+        filename = test_resource_paths.terraform_modules_sample
+        mapping_filename = test_resource_paths.terraform_mapping_modules
+        iac_to_otm = IacToOtm('name', 'id', IacType.TERRAFORM)
+        iac_to_otm.run(IacType.TERRAFORM, [FileUtils.get_data(mapping_filename)], [FileUtils.get_data(filename)])
+
+        _otm = iac_to_otm.otm
+        assert iac_to_otm.source_model.otm
+        assert len(_otm.trustzones) == 1
+        assert len(_otm.components) == 3
+        assert len(_otm.dataflows) == 0
+
+        aws_rds_modules = list(filter(
+            lambda component: component.tags[0] == 'terraform-aws-modules/rds/aws', _otm.components))
+        assert aws_rds_modules[0].name == 'db23test'
+        assert aws_rds_modules[0].parent_type == 'trustZone'
+        assert aws_rds_modules[0].source['source'] == 'terraform-aws-modules/rds/aws'
