@@ -7,6 +7,7 @@ example_json = path + '/example.json'
 example_yaml = path + '/example.yaml'
 invalid_yaml = path + '/invalid-yaml.yaml'
 example_gzip = path + '/example.gz'
+empty_mapping_file = path + "/empty_mapping_file.yaml"
 
 # OTM
 otm_file_example = path + '/otm/otm_file_example.otm'
@@ -78,3 +79,4 @@ visio_orphan_dataflows_otm_expected = path + '/visio/visio-orphan-dataflows.otm'
 
 # MTMT
 model_mtmt_source_file = path + '/mtmt/test_model.tm7'
+mtmt_mapping_file = path + '/mtmt/mtmt-mapping.yaml'

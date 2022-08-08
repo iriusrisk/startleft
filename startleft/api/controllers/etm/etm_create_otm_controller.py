@@ -30,17 +30,25 @@ def get_processor(source_type, id, name, etm_data, mapping_data_list):
 def etm(source_file: UploadFile = File(..., description="File that contains the original Threat model"),
         source_type: EtmType = Form(..., description="Type of Diagram File: MTMT"),
         id: str = Form(..., description="ID of the new project"),
-        name: str = Form(..., description="Name of the new project")):
+        name: str = Form(..., description="Name of the new project"),
+        default_mapping_file: UploadFile = File(..., description="File that contains the default mapping file"),
+        custom_mapping_file: UploadFile = File(None, description="File that contains the user custom mapping file")):
     logger.info(
         f"POST request received for creating new project with id {id} and name {name} from Diagram {source_type} file")
 
     logger.info("Parsing Threat Model file to OTM")
 
-    logger.info("Parsing IaC file to OTM")
     with source_file.file as f:
         etm_data = f.read()
 
     mapping_data_list = []
+
+    with default_mapping_file.file as f:
+        mapping_data_list.append(f.read())
+
+    if custom_mapping_file:
+        with custom_mapping_file.file as f:
+            mapping_data_list.append(f.read())
 
     processor = get_processor(source_type, id, name, etm_data, mapping_data_list)
     otm_project = processor.process()

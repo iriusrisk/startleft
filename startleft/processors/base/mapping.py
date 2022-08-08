@@ -1,6 +1,8 @@
 import abc
 import logging
 
+import yaml
+
 from startleft.api.errors import MappingFileNotValidError
 from startleft.validators.schema import Schema
 
@@ -45,7 +47,7 @@ class MappingValidator(metaclass=abc.ABCMeta):
 
 
 class MappingFileValidator(MappingValidator):
-    def __init__(self, schema, mapping_file: bytes):
+    def __init__(self, schema: str, mapping_file: bytes):
         self.schema = schema
         self.mapping_file = mapping_file
 
@@ -55,7 +57,7 @@ class MappingFileValidator(MappingValidator):
 
 
 class MultipleMappingFileValidator(MappingValidator):
-    def __init__(self, schema, mapping_files: [bytes]):
+    def __init__(self, schema: str, mapping_files: [bytes]):
         self.schema = schema
         self.mapping_files = mapping_files
 
@@ -69,6 +71,7 @@ def validate_size(mapping_file_data: bytes):
     size = len(mapping_file_data)
 
     if size is None or size > MAX_SIZE or size < MIN_SIZE:
+        logger.error('Mapping file is not valid')
         msg = 'Invalid size'
         raise MappingFileNotValidError('Mapping file is not valid', msg, msg)
 
@@ -77,7 +80,7 @@ def validate_size(mapping_file_data: bytes):
 
 def validate_schema(schema: str, mapping_file: bytes):
     schema: Schema = Schema(schema)
-    schema.validate(mapping_file)
+    schema.validate(yaml.load(mapping_file, Loader=yaml.SafeLoader))
     if not schema.valid:
         logger.error('Mapping file is not valid')
         logger.error(f'--- Schema errors ---\n{schema.errors}\n--- End of schema errors ---')
