@@ -430,13 +430,21 @@ components:
     tags:
       - Outbound connection destination IP
 
-  - id:          {$format: "{name}"}
-    type:        generic-client
-    name:        {$ip: {$path: "Properties.ingress[0].cidr_blocks"}}
-    $source:     {$root: "resource|squash_terraform(@)[?Type=='aws_security_group' && Properties.ingress[0].cidr_blocks]"}
-    parent:      f0ba7722-39b6-4c81-8290-a30a248bb8d9
+  - id: { $format: "{name}" }
+    type: generic-client
+    name: { $ip: { $path: "Properties.ingress[0].cidr_blocks" } }
+    $source: { $root: "resource|squash_terraform(@)[?Type=='aws_security_group' && Properties.ingress[0].cidr_blocks]" }
+    parent: f0ba7722-39b6-4c81-8290-a30a248bb8d9
     tags:
       - Inbound connection source IP
+
+  - id: { $format: "{name}" }
+    type: rds
+    name: { $path: "_key" }
+    $source: { $root: "module|get_module_terraform(@, 'terraform-aws-modules/rds/aws')" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
 
 dataflows:
   #### Security Groups ####
@@ -545,11 +553,3 @@ dataflows:
     destination: { $path: "Properties.provider_arns[0]" }
     tags:
       - API gateway dataflow
-
-  - id: { $format: "{name}" }
-    type: rds
-    name: { $path: "_key" }
-    $source: { $root: "module|get_module_terraform(@, 'terraform-aws-modules/rds/aws')" }
-    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - { $path: "Type" }
