@@ -69,5 +69,5 @@ def check_otm_representations_size(otm):
     assert "height" in otm.json()["representations"][0]["size"].keys()
 
 
-def filter_modules_by_type(modules, aws_module_type):
-    return list(filter(lambda component: component.tags[0] == aws_module_type, modules))
+def filter_modules_by_type(modules, module_type):
+    return list(filter(lambda component: component.tags[0] == module_type, modules))
