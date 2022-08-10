@@ -26,7 +26,8 @@ class MTMTProcessor(OtmProcessor):
 
     def get_provider_loader(self) -> ProviderLoader:
         loader = MTMTLoader(self.source)
-        self.mtmt = loader.get_mtmt
+        self.mtmt = loader.get_mtmt()
+        return loader
 
     def get_mapping_validator(self) -> MappingValidator:
         return MtmtMappingFileValidator(self.mappings)

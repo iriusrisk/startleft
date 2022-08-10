@@ -24,13 +24,13 @@ class OtmProcessor(metaclass=abc.ABCMeta):
                 or NotImplemented)
 
     # Do not override this method.
-    def process(self) -> OTM:
+    def process(self, project_id: str, project_name: str) -> OTM:
         """Process all the flow from the input data to the OTM output"""
         self.get_provider_validator().validate()
         self.get_provider_loader().load()
         self.get_mapping_validator().validate()
-        self.get_mapping_loader().load()
-        return self.get_provider_parser().build_otm()
+        #self.get_mapping_loader().load()
+        return self.get_provider_parser().build_otm(project_id, project_name)
 
     @abc.abstractmethod
     def get_provider_validator(self) -> ProviderValidator:

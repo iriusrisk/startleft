@@ -1,11 +1,12 @@
 import logging
-
 from fastapi import APIRouter, File, UploadFile, Form, Response
 
 from startleft.api.controllers.otm_controller import RESPONSE_STATUS_CODE, PREFIX, controller_responses
 from startleft.api.errors import LoadingSourceFileError
 from startleft.processors.base.provider_type import EtmType
 from startleft.processors.mtmt.mtmt_processor import MTMTProcessor
+import startleft.utils.json_utils as jsonUtils
+
 
 URL = '/etm'
 
@@ -51,6 +52,6 @@ def etm(source_file: UploadFile = File(..., description="File that contains the 
             mapping_data_list.append(f.read())
 
     processor = get_processor(source_type, id, name, etm_data, mapping_data_list)
-    otm_project = processor.process()
+    otm = processor.process(id,name)
 
-    return Response(status_code=201, media_type="application/json", content=otm_project.get_otm_as_json())
+    return Response(status_code=201, media_type="application/json", content=jsonUtils.get_otm_as_json(otm))

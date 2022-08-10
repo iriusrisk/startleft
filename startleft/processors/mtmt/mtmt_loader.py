@@ -21,7 +21,7 @@ class MTMTLoader(ProviderLoader):
         self.mtmt = None
 
     def __read(self):
-        json_ = Tm7ToJson.to_json(self.source)
+        json_ = Tm7ToJson(self.source).to_json()
         model_ = json_['ThreatModel']
         list_ = model_['DrawingSurfaceList']
         surface_model_ = list_['DrawingSurfaceModel']

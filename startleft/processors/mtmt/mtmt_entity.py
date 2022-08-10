@@ -1,33 +1,33 @@
 class MTMBorder:
     def __init__(self, source: dict):
-        raise NotImplementedError
+        pass
 
     def get_components(self):
-        raise NotImplementedError
+        pass
 
     def get_trustzones(self):
-        raise NotImplementedError
+        pass
 
 
 class MTMLine:
     def __init__(self, source: dict):
-        raise NotImplementedError
+        pass
 
     def get_dataflows(self):
-        raise NotImplementedError
+        pass
 
     def get_trustzones(self):
-        raise NotImplementedError
+        pass
 
 
 class MTMThreat:
     def __init__(self, source: dict):
-        raise NotImplementedError
+        pass
 
 
 class MTMKnowledge:
     def __init__(self, source: dict):
-        raise NotImplementedError
+        pass
 
 
 class MTMT:
