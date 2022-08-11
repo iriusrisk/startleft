@@ -61,30 +61,7 @@ class ComponentMapper(BaseMapper):
 
                         # If the component is defining child components the ID must be saved in a parent dict
                         if "$children" in self.mapping["$source"]:
-                            self.logger.debug("Component is defining child components...")
-                            child_name = source_model.search(self.mapping["$source"]["$children"], source=source_object)
-
-                            if child_name not in self.id_map:
-                                # This child has not been mapped yet but its ID must be created
-                                # Because the own child mapping definition has no information about its own parent
-                                child_id = str(uuid.uuid4())
-                                self.id_map[child_name] = child_id
-                            else:
-                                # Every generated child is unique
-                                # And has 1:1 correspondence with its parent
-                                # But self.id_map is a dict that groups by name
-                                # And the same parent and children may be in different subnets
-                                # So for this $children case:
-                                #  self.id_map[parent_name] = [parent_1_id, parent_2_id...parent_N_id]
-                                #  self.id_map[child_name] = [child_parent_1_id, child_parent_2_id...child_parent_N_id]
-                                child_id = str(uuid.uuid4())
-                                if isinstance(self.id_map[child_name], str):
-                                    self.id_map[child_name] = [self.id_map[child_name], child_id]
-                                elif isinstance(self.id_map[child_name], list):
-                                    self.id_map[child_name].append(child_id)
-                            if child_id not in id_parents:
-                                id_parents[child_id] = list()
-                            id_parents[child_id].append(component_id)
+                            self.__add_child_to_parent_list(source_model, source_object, component_id, id_parents)
                         elif "$skip" not in self.mapping["$source"] and "$parent" in self.mapping["parent"]:
                             # $parent and $children are related mappings
                             # In this case, component_id may be a list with a different treatment
@@ -105,6 +82,34 @@ class ComponentMapper(BaseMapper):
             components.extend(self.__get_alt_source_components(source_model))
 
         return components
+
+    def __add_child_to_parent_list(self, source_model, source_object, parent_id, id_parents):
+        self.logger.debug("Component is defining child components...")
+        child_id = str(uuid.uuid4())
+        child_name = source_model.search(self.mapping["$source"]["$children"], source=source_object)
+
+        self.__add_child_to_childs_map(child_id, child_name)
+
+        if child_id not in id_parents:
+            id_parents[child_id] = list()
+        id_parents[child_id].append(parent_id)
+
+    def __add_child_to_childs_map(self, child_id, child_name):
+        if child_name not in self.id_map:
+            # This child has not been mapped yet but its ID must be created
+            # Because the own child mapping definition has no information about its own parent
+            self.id_map[child_name] = child_id
+        elif isinstance(self.id_map[child_name], str):
+            # Every generated child is unique
+            # And has 1:1 correspondence with its parent
+            # But self.id_map is a dict that groups by name
+            # And the same parent and children may be in different subnets
+            # So for this $children case:
+            #  self.id_map[parent_name] = [parent_1_id, parent_2_id...parent_N_id]
+            #  self.id_map[child_name] = [child_parent_1_id, child_parent_2_id...child_parent_N_id]
+            self.id_map[child_name] = [self.id_map[child_name], child_id]
+        elif isinstance(self.id_map[child_name], list):
+            self.id_map[child_name].append(child_id)
 
     def __get_alt_source_components(self, source_model) -> []:
         self.logger.debug("No components found. Trying to find components from alternative source")
