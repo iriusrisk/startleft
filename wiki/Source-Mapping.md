@@ -125,8 +125,8 @@ is: `resource|get(@, 'aws_subnet')`.
 
 ### get_starts_with
 
-This function is equivalent to `get`, but instead of using the `component_type` argument to perform an exact filter, the target
-component type must starts with it.
+This function is equivalent to `get`, but instead of using the `component_type` argument to perform an exact filter, the
+target component type must starts with it.
 
 ```python
 def _func_get_starts_with(self, obj_arr, component_type)
@@ -134,12 +134,24 @@ def _func_get_starts_with(self, obj_arr, component_type)
 
 ### split
 
-The `split` function is the equivalent to the python's one. It breaks a given string based on a given separator and returns
-the resulting array of strings. It is equivalent to python's `split` function. 
+The `split` function is the equivalent to the python's one. It breaks a given string based on a given separator and
+returns the resulting array of strings. It is equivalent to python's `split` function.
 
 ```python
 def _func_split(self, string, separator)
 ```
 
 For instance, this function is used in Terraform mappings to retrieve the name of a referenced component, whose naming
-structure is `component-type.component-name.some-field`. In this case, the name is retrieved as: `split(component, '.')[1]`.
+structure is `component-type.component-name.some-field`. In this case, the name is retrieved
+as: `split(component, '.')[1]`.
+
+### get_module_terraform
+
+The `get_module_terraform` function takes a dict array of AWS modules (not resources) and a component type,
+which is the key to filter the array comparing against 'source' module property. Returns an OTM component dict
+whose root key is the name of the component that also includes a Type and a _key keys with the module type (AWS type)
+and the module name (custom name) respectively.
+
+```python
+def _func_get_module_terraform(self, obj_arr, component_type)
+```
