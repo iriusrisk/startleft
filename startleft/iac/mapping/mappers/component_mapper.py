@@ -102,43 +102,49 @@ class ComponentMapper(BaseMapper):
         # Here we should already have all the components
 
         if "$altsource" in self.mapping and components == []:
-            self.logger.debug("No components found. Trying to find components from alternative source")
-            alt_source = self.mapping["$altsource"]
-
-            for alt in alt_source:
-                mapping_type = alt["$mappingType"]
-                mapping_path = alt["$mappingPath"]
-                mapping_lookups = alt["$mappingLookups"]
-                alt_source_objects = self.format_source_objects(source_model.search(mapping_type, source=None))
-
-                for alt_source_object in alt_source_objects:
-                    value = self.get_altsource_mapping_path_value(source_model, alt_source_object, mapping_path)
-
-                    for mapping_lookup in mapping_lookups:
-                        result = re.match(mapping_lookup["regex"], value)
-
-                        if result is not None:
-                            if self.DEFAULT_TRUSTZONE not in self.id_map:
-                                self.id_map[self.DEFAULT_TRUSTZONE] = str(uuid.uuid4())
-
-                            mapping_name, mapping_tags = self.get_mappings_for_name_and_tags(mapping_lookup)
-                            component_name, singleton_multiple_name = self.__get_component_names(source_model,
-                                                                                                 alt_source_object,
-                                                                                                 mapping_name)
-                            component_tags, singleton_multiple_tags = self.__get_component_tags(source_model,
-                                                                                                alt_source_object,
-                                                                                                mapping_tags)
-                            component = {"id": str(uuid.uuid4()), "name": component_name,
-                                         "type": mapping_lookup["type"], "parent": self.id_map[self.DEFAULT_TRUSTZONE]}
-
-                            component = self.set_optional_parameters_to_resource(component, mapping_tags,
-                                                                                 component_tags,
-                                                                                 singleton_multiple_name,
-                                                                                 singleton_multiple_tags)
-
-                            components.append(component)
+            components.extend(self.__get_alt_source_components(source_model))
 
         return components
+
+    def __get_alt_source_components(self, source_model) -> []:
+        self.logger.debug("No components found. Trying to find components from alternative source")
+        alt_source = self.mapping["$altsource"]
+
+        alt_source_components = []
+        for alt in alt_source:
+            mapping_type = alt["$mappingType"]
+            mapping_path = alt["$mappingPath"]
+            mapping_lookups = alt["$mappingLookups"]
+            alt_source_objects = self.format_source_objects(source_model.search(mapping_type, source=None))
+
+            for alt_source_object in alt_source_objects:
+                value = self.get_altsource_mapping_path_value(source_model, alt_source_object, mapping_path)
+
+                for mapping_lookup in mapping_lookups:
+                    result = re.match(mapping_lookup["regex"], value)
+
+                    if result is not None:
+                        if self.DEFAULT_TRUSTZONE not in self.id_map:
+                            self.id_map[self.DEFAULT_TRUSTZONE] = str(uuid.uuid4())
+
+                        mapping_name, mapping_tags = self.get_mappings_for_name_and_tags(mapping_lookup)
+                        component_name, singleton_multiple_name = self.__get_component_names(source_model,
+                                                                                             alt_source_object,
+                                                                                             mapping_name)
+                        component_tags, singleton_multiple_tags = self.__get_component_tags(source_model,
+                                                                                            alt_source_object,
+                                                                                            mapping_tags)
+                        component = {"id": str(uuid.uuid4()), "name": component_name,
+                                     "type": mapping_lookup["type"], "parent": self.id_map[self.DEFAULT_TRUSTZONE]}
+
+                        component = self.set_optional_parameters_to_resource(component, mapping_tags,
+                                                                             component_tags,
+                                                                             singleton_multiple_name,
+                                                                             singleton_multiple_tags)
+
+                        alt_source_components.append(component)
+
+            return alt_source_components
 
     def __get_component_names(self, source_model, source_object, mapping):
         singleton_multiple_name = None
