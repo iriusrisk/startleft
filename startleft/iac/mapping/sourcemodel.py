@@ -7,7 +7,7 @@ from deepmerge import always_merger
 class CustomFunctions(jmespath.functions.Functions):
     @jmespath.functions.signature({'types': ['string']}, {'types': ['number']})
     def _func_tail(self, string, count):
-        return string[count:]
+        return string[-count:]
 
     @jmespath.functions.signature({'types': ['string']}, {'types': ['string']}, {'types': ['string']})
     def _func_re_sub(self, pattern, replace, s):
@@ -69,10 +69,23 @@ class CustomFunctions(jmespath.functions.Functions):
 
         return source_objects
 
+    @jmespath.functions.signature({'types': ['array', 'null']}, {'types': ['string']})
+    def _func_get_module_terraform(self, obj_arr, component_type):
+        source_objects = []
+
+        if obj_arr is not None:
+            for obj in obj_arr:
+                for c_type in obj:
+                    module_source = obj[c_type]['source']
+                    if module_source == component_type:
+                        new_obj = self.add_type_and_name(obj[c_type], module_source, c_type)
+                        source_objects.append(new_obj)
+
+        return source_objects
+
     @jmespath.functions.signature({'types': ['string']}, {'types': ['string']})
     def _func_split(self, string, separator):
         return string.split(separator)
-
 
     def add_type_and_name(self, obj, component_type, component_name):
         new_obj = obj.copy()

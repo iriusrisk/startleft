@@ -1,0 +1,44 @@
+trustzones:
+  - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+
+components:
+  - id: { $format: "{name}" }
+    type: test_tail
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?tail(Type, `9`)=='test_tail']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: test_re_sub
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?re_sub('-', '_', Type)=='test_re_sub']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: test_squash
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='test_squash']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: test_split
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?split(Type, '.')[0]=='test_split']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+dataflows:
+  - id: { $format: "{name}" }
+    name: { $format: "{_key}" }
+    $source: { $root: "Resources|squash(@)[?Properties.SecurityGroupIds]" }
+    source: { $path: "_key" }
+    destination: { $hub: { $path: "Properties.SecurityGroupIds|map(&values(@), @)[0][0][0]" } }
+    tags:
