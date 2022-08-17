@@ -460,8 +460,6 @@ class ComponentMapper:
             parent = ""
 
         if isinstance(parent, list):
-            if len(parent) == 0:
-                parent = [DEFAULT_TRUSTZONE]
             for index, resource_id in enumerate(parent):
                 if is_terraform_resource_reference(resource_id):
                     parent[index] = get_resource_name_from_resource_reference(resource_id)
@@ -470,6 +468,9 @@ class ComponentMapper:
                 parent = [DEFAULT_TRUSTZONE]
             else:
                 parent = [get_resource_name_from_resource_reference(parent) if is_terraform_resource_reference(parent) else parent]
+
+        if parent is None:
+            parent = [DEFAULT_TRUSTZONE]
 
         return parent, parents_from_component
 
