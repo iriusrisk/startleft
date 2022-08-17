@@ -67,3 +67,7 @@ def check_otm_representations_size(otm):
     assert "size" in otm.json()["representations"][0].keys()
     assert "width" in otm.json()["representations"][0]["size"].keys()
     assert "height" in otm.json()["representations"][0]["size"].keys()
+
+
+def filter_modules_by_type(modules, module_type):
+    return list(filter(lambda component: component.tags[0] == module_type, modules))
