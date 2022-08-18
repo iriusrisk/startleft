@@ -7,11 +7,12 @@ from click.testing import CliRunner
 from startleft.cli import parse_any
 from tests.resources import test_resource_paths
 
-VISIO_DEFAULT_VALID_MAPPING_FILENAME = test_resource_paths.default_visio_mapping
-VISIO_CUSTOM_VALID_MAPPING_FILENAME = test_resource_paths.custom_vpc_mapping
+TESTING_DEFAULT_VALID_MAPPING_FILENAME = test_resource_paths.default_visio_mapping
+TESTING_CUSTOM_VALID_MAPPING_FILENAME = test_resource_paths.custom_vpc_mapping
 # diagrams
-VISIO_DIAGRAM_AWS_WITH_TZ_AND_VPC = test_resource_paths.visio_aws_with_tz_and_vpc
+TESTING_VALID_DIAGRAM_FILE = test_resource_paths.visio_aws_with_tz_and_vpc
 
+TESTING_DIAGRAM_TYPE = 'VISIO'
 
 class TestCliParseDiagram:
 
@@ -28,9 +29,9 @@ class TestCliParseDiagram:
             # Given a list of arguments with
             args = [
                 # a valid Diagram type
-                '--diagram-type', "VISIO",
+                '--diagram-type', TESTING_DIAGRAM_TYPE,
                 #   and a valid mapping file
-                '--default-mapping-file', VISIO_DEFAULT_VALID_MAPPING_FILENAME,
+                '--default-mapping-file', TESTING_DEFAULT_VALID_MAPPING_FILENAME,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -38,7 +39,7 @@ class TestCliParseDiagram:
                 #   and a valid output file name
                 '--output-file', output_file_name,
                 #   and a valid input file
-                VISIO_DIAGRAM_AWS_WITH_TZ_AND_VPC]
+                TESTING_VALID_DIAGRAM_FILE]
 
             # When parsing
             result = runner.invoke(parse_any, args)
@@ -59,11 +60,11 @@ class TestCliParseDiagram:
             # Given a list of arguments with
             args = [
                 # a valid Diagram type
-                '--diagram-type', "VISIO",
+                '--diagram-type', TESTING_DIAGRAM_TYPE,
                 # a valid IaC type
                 '--iac-type', "CLOUDFORMATION",
                 #   and a valid mapping file
-                '--default-mapping-file', VISIO_DEFAULT_VALID_MAPPING_FILENAME,
+                '--default-mapping-file', TESTING_DEFAULT_VALID_MAPPING_FILENAME,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -71,7 +72,7 @@ class TestCliParseDiagram:
                 #   and a valid output file name
                 '--output-file', output_file_name,
                 #   and a valid input file
-                VISIO_DIAGRAM_AWS_WITH_TZ_AND_VPC]
+                TESTING_VALID_DIAGRAM_FILE]
 
             # When parsing
             result = runner.invoke(parse_any, args)

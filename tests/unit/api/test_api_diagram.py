@@ -1,13 +1,14 @@
-from unittest.mock import MagicMock
 import typing
-import pytest
-
+from unittest.mock import MagicMock
 from unittest.mock import patch
 
+import pytest
+
 import startleft.api.controllers.diagram.diag_create_otm_controller as diagram_controller
-from startleft.api.errors import ErrorCode, OtmGenerationError, LoadingDiagramFileError, DiagramFileNotValidError, \
+from startleft.api.errors import OtmGenerationError, LoadingDiagramFileError, DiagramFileNotValidError, \
     MappingFileNotValidError, OtmResultError
 
+TESTING_DIAGRAM_TYPE = 'DIAG_TYPE'
 
 class TestApiDiagram:
 
@@ -25,7 +26,7 @@ class TestApiDiagram:
         # WHEN the POST /diagram endpoint is called with diagram params AND no error is raised
 
         with patch('startleft.otm.otm_project.OtmProject.from_diag_file_to_otm_stream'):
-            response = diagram_controller.diagram(valid_diagram_file, 'VISIO', 'happy_path_id',
+            response = diagram_controller.diagram(valid_diagram_file, TESTING_DIAGRAM_TYPE, 'happy_path_id',
                                                   'happy_path_name', valid_default_mapping_file, False)
 
         # THEN a response with HTTP status 201 is returned
@@ -49,7 +50,7 @@ class TestApiDiagram:
                        side_effect=LoadingDiagramFileError('mocked error DIAGRAM_LOADING_ERROR', 'mocked error detail',
                                                            'mocked error msg 1')):
                 # THEN a response HTTP Status that matches the error is returned
-                diagram_controller.diagram(invalid_diagram_file, 'VISIO',
+                diagram_controller.diagram(invalid_diagram_file, TESTING_DIAGRAM_TYPE,
                                            'diagram_controller_on_loading_diagram_error_id',
                                            'diagram_controller_on_loading_diagram_error_name',
                                            valid_default_mapping_file, False)
@@ -76,7 +77,7 @@ class TestApiDiagram:
                        side_effect=DiagramFileNotValidError('mocked error DIAGRAM_NOT_VALID', 'mocked error detail',
                                                             'mocked error msg 2')):
                 # THEN a response HTTP Status that matches the error is returned
-                diagram_controller.diagram(invalid_diagram_file, 'VISIO',
+                diagram_controller.diagram(invalid_diagram_file, TESTING_DIAGRAM_TYPE,
                                            'diagram_controller_on_diagram_file_not_valid_error_id',
                                            'diagram_controller_on_diagram_file_not_valid_error_name',
                                            valid_default_mapping_file, False)
@@ -102,7 +103,7 @@ class TestApiDiagram:
                        side_effect=MappingFileNotValidError('mocked error MAPPING_FILE_NOT_VALID',
                                                             'mocked error detail', 'mocked error msg 3')):
                 # THEN a response HTTP Status that matches the error is returned
-                diagram_controller.diagram(invalid_diagram_file, 'VISIO',
+                diagram_controller.diagram(invalid_diagram_file, TESTING_DIAGRAM_TYPE,
                                            'diagram_controller_on_on_mapping_file_not_valid_error_id',
                                            'diagram_controller_on_on_mapping_file_not_valid_error_name',
                                            valid_default_mapping_file, False)
@@ -128,7 +129,7 @@ class TestApiDiagram:
                        side_effect=OtmResultError('mocked error OTM_RESULT_ERROR', 'mocked error detail',
                                                     'mocked error msg 4')):
                 # THEN a response HTTP Status that matches the error is returned
-                diagram_controller.diagram(invalid_diagram_file, 'VISIO', 'diagram_controller_on_otm_result_error_id',
+                diagram_controller.diagram(invalid_diagram_file, TESTING_DIAGRAM_TYPE, 'diagram_controller_on_otm_result_error_id',
                                'diagram_controller_on_otm_result_error_name', valid_default_mapping_file, False)
 
         # AND the error_type in the response body matched the name of the exception raised
@@ -152,7 +153,7 @@ class TestApiDiagram:
                        side_effect=OtmGenerationError('mocked error OTM_GENERATION_ERROR', 'mocked error detail',
                                                       'mocked error msg 5')):
                 # THEN a response HTTP Status that matches the error is returned
-                diagram_controller.diagram(invalid_diagram_file, 'VISIO', 'diagram_controller_on_otm_generation_error_id',
+                diagram_controller.diagram(invalid_diagram_file, TESTING_DIAGRAM_TYPE, 'diagram_controller_on_otm_generation_error_id',
                                'diagram_controller_on_otm_generation_error_name', valid_default_mapping_file, False)
 
         # AND the error_type in the response body matched the name of the exception raised

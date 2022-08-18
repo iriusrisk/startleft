@@ -7,6 +7,10 @@ from startleft.api.errors import LoadingMappingFileError, LoadingIacFileError, I
 from startleft.cli import parse_any
 from tests.unit.cli.parse.iac.test_unit_cli_parse_iac import CLOUDFORMATION_MAPPING, CLOUDFORMATION_FOR_MAPPING_TESTS
 
+TESTING_IAC_TYPE = 'CLOUDFORMATION'
+TESTING_IAC_FILE = CLOUDFORMATION_FOR_MAPPING_TESTS
+TESTING_MAPPING_FILE = CLOUDFORMATION_MAPPING
+
 
 class TestCliIacErrorCodes:
 
@@ -23,9 +27,9 @@ class TestCliIacErrorCodes:
             # Given a list of arguments with
             args = [
                 # a valid IaC type
-                '--iac-type', "CLOUDFORMATION",
+                '--iac-type', TESTING_IAC_TYPE,
                 #   and a valid mapping file
-                '--mapping-file', CLOUDFORMATION_MAPPING,
+                '--mapping-file', TESTING_IAC_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -33,7 +37,7 @@ class TestCliIacErrorCodes:
                 #   and a valid output file name
                 '--output-file', output_file_name,
                 #   and a valid input file
-                CLOUDFORMATION_FOR_MAPPING_TESTS]
+                TESTING_MAPPING_FILE]
 
             # When parsing
             result = runner.invoke(parse_any, args)
@@ -54,9 +58,9 @@ class TestCliIacErrorCodes:
             # Given a list of arguments with
             args = [
                 # a valid IaC type
-                '--iac-type', "CLOUDFORMATION",
+                '--iac-type', TESTING_IAC_TYPE,
                 #   and a valid mapping file
-                '--mapping-file', CLOUDFORMATION_MAPPING,
+                '--mapping-file', TESTING_IAC_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -64,7 +68,7 @@ class TestCliIacErrorCodes:
                 #   and a valid output file name
                 '--output-file', output_file_name,
                 #   and a valid input file
-                CLOUDFORMATION_FOR_MAPPING_TESTS]
+                TESTING_MAPPING_FILE]
 
             # When parsing
             result = runner.invoke(parse_any, args)
@@ -85,9 +89,9 @@ class TestCliIacErrorCodes:
             # Given a list of arguments with
             args = [
                 # a valid IaC type
-                '--iac-type', "CLOUDFORMATION",
+                '--iac-type', TESTING_IAC_TYPE,
                 #   and a valid mapping file
-                '--mapping-file', CLOUDFORMATION_MAPPING,
+                '--mapping-file', TESTING_IAC_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -95,7 +99,7 @@ class TestCliIacErrorCodes:
                 #   and a valid output file name
                 '--output-file', output_file_name,
                 #   and a valid input file
-                CLOUDFORMATION_FOR_MAPPING_TESTS]
+                TESTING_MAPPING_FILE]
 
             # When parsing
             result = runner.invoke(parse_any, args)
@@ -116,9 +120,9 @@ class TestCliIacErrorCodes:
             # Given a list of arguments with
             args = [
                 # a valid IaC type
-                '--iac-type', "CLOUDFORMATION",
+                '--iac-type', TESTING_IAC_TYPE,
                 #   and a valid mapping file
-                '--mapping-file', CLOUDFORMATION_MAPPING,
+                '--mapping-file', TESTING_IAC_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -126,7 +130,7 @@ class TestCliIacErrorCodes:
                 #   and a valid output file name
                 '--output-file', output_file_name,
                 #   and a valid input file
-                CLOUDFORMATION_FOR_MAPPING_TESTS]
+                TESTING_MAPPING_FILE]
 
             # When parsing
             result = runner.invoke(parse_any, args)
@@ -148,9 +152,9 @@ class TestCliIacErrorCodes:
             # Given a list of arguments with
             args = [
                 # a valid IaC type
-                '--iac-type', "CLOUDFORMATION",
+                '--iac-type', TESTING_IAC_TYPE,
                 #   and a valid mapping file
-                '--mapping-file', CLOUDFORMATION_MAPPING,
+                '--mapping-file', TESTING_IAC_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -158,11 +162,10 @@ class TestCliIacErrorCodes:
                 #   and a valid output file name
                 '--output-file', output_file_name,
                 #   and a valid input file
-                CLOUDFORMATION_FOR_MAPPING_TESTS]
+                TESTING_MAPPING_FILE]
 
             # When parsing
             result = runner.invoke(parse_any, args)
 
             assert result.exit_code == 1
             assert result.exception.error_code.system_exit_status == 45
-

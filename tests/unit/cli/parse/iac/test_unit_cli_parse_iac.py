@@ -7,6 +7,10 @@ from startleft.cli import parse_any
 from tests.integration.cli.parse.iac.cloudformation.test_cli_parse_iac_cloudformation import CLOUDFORMATION_MAPPING, \
     CLOUDFORMATION_FOR_MAPPING_TESTS
 
+TESTING_IAC_TYPE = 'CLOUDFORMATION'
+TESTING_IAC_FILE = CLOUDFORMATION_FOR_MAPPING_TESTS
+TESTING_MAPPING_FILE = CLOUDFORMATION_MAPPING
+
 
 class TestCliParseIaCCloudformation:
 
@@ -23,9 +27,9 @@ class TestCliParseIaCCloudformation:
             # Given a list of arguments with
             args = [
                 # a valid IaC type
-                '--iac-type', "CLOUDFORMATION",
+                '--iac-type', TESTING_IAC_TYPE,
                 #   and a valid mapping file
-                '--mapping-file', CLOUDFORMATION_MAPPING,
+                '--mapping-file', TESTING_MAPPING_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -33,7 +37,7 @@ class TestCliParseIaCCloudformation:
                 #   and a valid output file name
                 '--output-file', output_file_name,
                 #   and a valid input file
-                CLOUDFORMATION_FOR_MAPPING_TESTS]
+                TESTING_IAC_FILE]
 
             # When parsing
             result = runner.invoke(parse_any, args)
@@ -54,11 +58,11 @@ class TestCliParseIaCCloudformation:
             # Given a list of arguments with
             args = [
                 # a valid IaC type
-                '--iac-type', "CLOUDFORMATION",
+                '--iac-type', TESTING_IAC_TYPE,
                 # a valid Diagram type
                 '--diagram-type', "VISIO",
                 #   and a valid mapping file
-                '--mapping-file', CLOUDFORMATION_MAPPING,
+                '--mapping-file', TESTING_MAPPING_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -66,7 +70,7 @@ class TestCliParseIaCCloudformation:
                 #   and a valid output file name
                 '--output-file', output_file_name,
                 #   and a valid input file
-                CLOUDFORMATION_FOR_MAPPING_TESTS]
+                TESTING_IAC_FILE]
 
             # When parsing
             result = runner.invoke(parse_any, args)

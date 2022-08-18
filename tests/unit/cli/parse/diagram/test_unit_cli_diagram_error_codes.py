@@ -6,8 +6,12 @@ from startleft.api.errors import OtmGenerationError, LoadingDiagramFileError, Di
     MappingFileNotValidError, OtmResultError
 from startleft.cli import parse_any
 # mappings
-from tests.unit.cli.parse.diagram.test_unit_cli_parse_diagram import VISIO_DEFAULT_VALID_MAPPING_FILENAME, \
-    VISIO_DIAGRAM_AWS_WITH_TZ_AND_VPC
+from tests.unit.cli.parse.diagram.test_unit_cli_parse_diagram import TESTING_DEFAULT_VALID_MAPPING_FILENAME, \
+    TESTING_VALID_DIAGRAM_FILE
+
+TESTING_DIAGRAM_TYPE = 'VISIO'
+TESTING_DIAGRAM_FILE = TESTING_VALID_DIAGRAM_FILE
+TESTING_DEFAULT_MAPPING_FILE = TESTING_DEFAULT_VALID_MAPPING_FILENAME
 
 
 class TestCliDiagramErrorCodes:
@@ -25,9 +29,9 @@ class TestCliDiagramErrorCodes:
             # Given a list of arguments with
             args = [
                 # a valid Diagram type
-                '--diagram-type', "VISIO",
+                '--diagram-type', TESTING_DIAGRAM_TYPE,
                 #   and a valid mapping file
-                '--default-mapping-file', VISIO_DEFAULT_VALID_MAPPING_FILENAME,
+                '--default-mapping-file', TESTING_DEFAULT_MAPPING_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -35,7 +39,7 @@ class TestCliDiagramErrorCodes:
                 #   and a valid output file name
                 '--output-file', output_file_name,
                 #   and a valid input file
-                VISIO_DIAGRAM_AWS_WITH_TZ_AND_VPC]
+                TESTING_DEFAULT_MAPPING_FILE]
 
             # When parsing
             result = runner.invoke(parse_any, args)
@@ -56,9 +60,9 @@ class TestCliDiagramErrorCodes:
             # Given a list of arguments with
             args = [
                 # a valid Diagram type
-                '--diagram-type', "VISIO",
+                '--diagram-type', TESTING_DIAGRAM_TYPE,
                 #   and a valid mapping file
-                '--default-mapping-file', VISIO_DEFAULT_VALID_MAPPING_FILENAME,
+                '--default-mapping-file', TESTING_DEFAULT_MAPPING_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -66,7 +70,7 @@ class TestCliDiagramErrorCodes:
                 #   and a valid output file name
                 '--output-file', output_file_name,
                 #   and a valid input file
-                VISIO_DIAGRAM_AWS_WITH_TZ_AND_VPC]
+                TESTING_DEFAULT_MAPPING_FILE]
 
             # When parsing
             result = runner.invoke(parse_any, args)
@@ -87,9 +91,9 @@ class TestCliDiagramErrorCodes:
             # Given a list of arguments with
             args = [
                 # a valid Diagram type
-                '--diagram-type', "VISIO",
+                '--diagram-type', TESTING_DIAGRAM_TYPE,
                 #   and a valid mapping file
-                '--default-mapping-file', VISIO_DEFAULT_VALID_MAPPING_FILENAME,
+                '--default-mapping-file', TESTING_DEFAULT_MAPPING_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -97,7 +101,7 @@ class TestCliDiagramErrorCodes:
                 #   and a valid output file name
                 '--output-file', output_file_name,
                 #   and a valid input file
-                VISIO_DIAGRAM_AWS_WITH_TZ_AND_VPC]
+                TESTING_DEFAULT_MAPPING_FILE]
 
             # When parsing
             result = runner.invoke(parse_any, args)
@@ -107,7 +111,6 @@ class TestCliDiagramErrorCodes:
 
     @patch('startleft.otm.otm_project.OtmProject.from_diag_file')
     def test_otmresulterror_code(self, mock_load_source_data):
-
         runner = CliRunner()
         output_file_name = "output-file.otm"
 
@@ -120,9 +123,9 @@ class TestCliDiagramErrorCodes:
             # Given a list of arguments with
             args = [
                 # a valid Diagram type
-                '--diagram-type', "VISIO",
+                '--diagram-type', TESTING_DIAGRAM_TYPE,
                 #   and a valid mapping file
-                '--default-mapping-file', VISIO_DEFAULT_VALID_MAPPING_FILENAME,
+                '--default-mapping-file', TESTING_DEFAULT_MAPPING_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -130,7 +133,7 @@ class TestCliDiagramErrorCodes:
                 #   and a valid output file name
                 '--output-file', output_file_name,
                 #   and a valid input file
-                VISIO_DIAGRAM_AWS_WITH_TZ_AND_VPC]
+                TESTING_DEFAULT_MAPPING_FILE]
 
             # When parsing
             result = runner.invoke(parse_any, args)
@@ -152,9 +155,9 @@ class TestCliDiagramErrorCodes:
             # Given a list of arguments with
             args = [
                 # a valid Diagram type
-                '--diagram-type', "VISIO",
+                '--diagram-type', TESTING_DIAGRAM_TYPE,
                 #   and a valid mapping file
-                '--default-mapping-file', VISIO_DEFAULT_VALID_MAPPING_FILENAME,
+                '--default-mapping-file', TESTING_DEFAULT_MAPPING_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -162,11 +165,10 @@ class TestCliDiagramErrorCodes:
                 #   and a valid output file name
                 '--output-file', output_file_name,
                 #   and a valid input file
-                VISIO_DIAGRAM_AWS_WITH_TZ_AND_VPC]
+                TESTING_DEFAULT_MAPPING_FILE]
 
             # When parsing
             result = runner.invoke(parse_any, args)
 
             assert result.exit_code == 1
             assert result.exception.error_code.system_exit_status == 45
-

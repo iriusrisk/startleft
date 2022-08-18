@@ -1,12 +1,14 @@
-from unittest.mock import MagicMock
 import typing
-import pytest
-
+from unittest.mock import MagicMock
 from unittest.mock import patch
 
+import pytest
+
 import startleft.api.controllers.iac.iac_create_otm_controller as controller
-from startleft.api.errors import ErrorCode, LoadingIacFileError, IacFileNotValidError, LoadingMappingFileError, \
+from startleft.api.errors import LoadingIacFileError, IacFileNotValidError, LoadingMappingFileError, \
     OtmBuildingError, OtmGenerationError
+
+TESTING_IAC_TYPE = 'IAC_TYPE'
 
 
 class TestApiIac:
@@ -25,7 +27,7 @@ class TestApiIac:
         # WHEN the POST /iac endpoint is called with iac params AND no error is raised
 
         with patch('startleft.otm.otm_project.OtmProject.from_iac_file_to_otm_stream'):
-            response = controller.iac(valid_iac_file, 'CLOUDFORMATION', 'happy_path_id', 'happy_path_name',
+            response = controller.iac(valid_iac_file, TESTING_IAC_TYPE, 'happy_path_id', 'happy_path_name',
                                       valid_mapping_file)
 
         # THEN a response with HTTP status 201 is returned
@@ -49,7 +51,7 @@ class TestApiIac:
                        side_effect=LoadingIacFileError('mocked error IAC_LOADING_ERROR', 'mocked error detail',
                                                        'mocked error msg 1')):
                 # THEN a response HTTP Status that matches the error is returned
-                controller.iac(invalid_iac_file, 'CLOUDFORMATION', 'iac_controller_on_loading_iac_error_id',
+                controller.iac(invalid_iac_file, TESTING_IAC_TYPE, 'iac_controller_on_loading_iac_error_id',
                                'iac_controller_on_loading_iac_error_name', valid_mapping_file)
 
         # AND the error_type in the response body matched the name of the exception raised
@@ -74,7 +76,7 @@ class TestApiIac:
                        side_effect=IacFileNotValidError('mocked error IAC_NOT_VALID', 'mocked error detail',
                                                         'mocked error msg 2')):
                 # THEN a response HTTP Status that matches the error is returned
-                controller.iac(invalid_iac_file, 'CLOUDFORMATION', 'iac_controller_on_iac_file_not_valid_error_id',
+                controller.iac(invalid_iac_file, TESTING_IAC_TYPE, 'iac_controller_on_iac_file_not_valid_error_id',
                                'iac_controller_on_iac_file_not_valid_error_name', valid_mapping_file)
 
         # AND the error_type in the response body matched the name of the exception raised
@@ -96,9 +98,9 @@ class TestApiIac:
             # AND an error is raised
             with patch('startleft.otm.otm_project.OtmProject.from_iac_file_to_otm_stream',
                        side_effect=LoadingMappingFileError('mocked error MAPPING_LOADING_ERROR', 'mocked error detail',
-                                                        'mocked error msg 3')):
+                                                           'mocked error msg 3')):
                 # THEN a response HTTP Status that matches the error is returned
-                controller.iac(invalid_iac_file, 'CLOUDFORMATION', 'iac_controller_on_loading_mapping_file_error_id',
+                controller.iac(invalid_iac_file, TESTING_IAC_TYPE, 'iac_controller_on_loading_mapping_file_error_id',
                                'iac_controller_on_loading_mapping_file_error_name', valid_mapping_file)
 
         # AND the error_type in the response body matched the name of the exception raised
@@ -120,9 +122,9 @@ class TestApiIac:
             # AND an error is raised
             with patch('startleft.otm.otm_project.OtmProject.from_iac_file_to_otm_stream',
                        side_effect=OtmBuildingError('mocked error OTM_BUILDING_ERROR', 'mocked error detail',
-                                                        'mocked error msg 4')):
+                                                    'mocked error msg 4')):
                 # THEN a response HTTP Status that matches the error is returned
-                controller.iac(invalid_iac_file, 'CLOUDFORMATION', 'iac_controller_on_otm_building_error_id',
+                controller.iac(invalid_iac_file, TESTING_IAC_TYPE, 'iac_controller_on_otm_building_error_id',
                                'iac_controller_on_otm_building_error_name', valid_mapping_file)
 
         # AND the error_type in the response body matched the name of the exception raised
@@ -144,9 +146,9 @@ class TestApiIac:
             # AND an error is raised
             with patch('startleft.otm.otm_project.OtmProject.from_iac_file_to_otm_stream',
                        side_effect=OtmGenerationError('mocked error OTM_GENERATION_ERROR', 'mocked error detail',
-                                                        'mocked error msg 5')):
+                                                      'mocked error msg 5')):
                 # THEN a response HTTP Status that matches the error is returned
-                controller.iac(invalid_iac_file, 'CLOUDFORMATION', 'iac_controller_on_otm_generation_error_id',
+                controller.iac(invalid_iac_file, TESTING_IAC_TYPE, 'iac_controller_on_otm_generation_error_id',
                                'iac_controller_on_otm_generation_error_name', valid_mapping_file)
 
         # AND the error_type in the response body matched the name of the exception raised
