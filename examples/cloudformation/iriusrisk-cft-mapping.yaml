@@ -2,8 +2,8 @@ trustzones:
   - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
     name: Public Cloud
 
-#SG MAPPING (AUXILIARY SG)
-#type 4
+  #SG MAPPING (AUXILIARY SG)
+  #type 4
   - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
     name: Internet
     $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupEgress[0].CidrIp]"}}
@@ -60,7 +60,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   empty-component
+    type:   ec2
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::Subnet']"}
     parent:      {$findFirst: ["Properties.VpcId.Ref", "Properties.VpcId"]}
@@ -68,7 +68,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   empty-component
+    type:   vpc
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::VPCEndpoint']"}
     parent: {$findFirst:[ "Properties.SubnetIds[].Ref", "Properties.VpcId.Ref"]}
@@ -76,7 +76,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   empty-component
+    type:   ec2
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::InternetGateway']"}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
@@ -426,10 +426,10 @@ components:
     tags:
       - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
 
-#NEW SG MAPPINGS (AUXILIARY SG)
+  #NEW SG MAPPINGS (AUXILIARY SG)
 
-#type 4
-# internet custom component for a security group egress
+  #type 4
+  # internet custom component for a security group egress
   - id:   {$format: "{name}" }
     type: generic-client
     name: { $ip: { $path: "Properties.SecurityGroupEgress[0].CidrIp" } }
@@ -460,8 +460,8 @@ components:
 #      - { $path: "Type" }
 
 dataflows:
-#Begin: SG MAPPINGS
-#type 1
+  #Begin: SG MAPPINGS
+  #type 1
   - id:     {$format: "{name}"}
     name:   {$format: "{_key}"}
     $source: {$root: "Resources|squash(@)[?Properties.SecurityGroupIds]"}
@@ -490,7 +490,7 @@ dataflows:
     destination: {$hub: {$path: "Properties.VPCConfig.SecurityGroupIds|map(&values(@), @)[0][0][0]"}}
     tags:
 
-#type 2
+  #type 2
   - id:     {$format: "{name}"}
     name:   {$format: "{_key}"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroupIngress']"}
@@ -512,7 +512,7 @@ dataflows:
       - $path: "Properties.IpProtocol"
       - $path: "Properties.FromPort"
       - $path: "Properties.ToPort"
-#type 3
+  #type 3
   - id:     {$format: "{name}"}
     name:   {$format: "{_key}"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup']"}
@@ -534,7 +534,7 @@ dataflows:
       - $path: "Properties.SecurityGroupEgress[0].IpProtocol"
       - $path: "Properties.SecurityGroupEgress[0].CidrIp"
 
-#End: SG MAPPINGS
+  #End: SG MAPPINGS
 
   - id:     {$format: "{name}"}
     name:   {$format: "dataflow to Lambda function in {_key}"}
