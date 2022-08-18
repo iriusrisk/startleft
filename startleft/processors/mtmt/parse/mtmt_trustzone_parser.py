@@ -1,7 +1,7 @@
 from startleft.otm.otm import Trustzone
 
 
-class MtmtTrustzoneParser:
+class MTMTTrustzoneParser:
 
     def parse(self) -> list:
         # Not implemented yet

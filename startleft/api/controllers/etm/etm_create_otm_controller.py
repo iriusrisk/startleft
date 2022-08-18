@@ -52,6 +52,6 @@ def etm(source_file: UploadFile = File(..., description="File that contains the 
             mapping_data_list.append(f.read())
 
     processor = get_processor(source_type, id, name, etm_data, mapping_data_list)
-    otm = processor.process(id,name)
+    otm = processor.process()
 
     return Response(status_code=201, media_type="application/json", content=jsonUtils.get_otm_as_json(otm))
