@@ -1,0 +1,37 @@
+{
+  "Resources": {
+    "test_tail_ok": {
+      "Type": "should_be_mapped_test_tail"
+    },
+    "test_tail_ko": {
+      "Type": "should_not_be_mapped_test_tail_tail"
+    },
+    "test_re_sub_1": {
+      "Type": "test-re-sub",
+      "Properties": {
+        "Description": "Should be mapped"
+      }
+    },
+    "test_re_sub_2": {
+      "Type": "test_re_sub",
+      "Properties": {
+        "Description": "No substitution needed"
+      }
+    },
+    "test_squash": {
+      "Type": "test_squash"
+    },
+    "test_squash_terraform": {
+      "Type": "test_squash_terraform"
+    },
+    "test_get": {
+      "Type": "test_get"
+    },
+    "test_get_starts_with": {
+      "Type": "test_get_starts_with"
+    },
+    "test_split": {
+      "Type": "test_split.ignored_suffix"
+    }
+  }
+}

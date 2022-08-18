@@ -10,7 +10,7 @@ UNEXPECTED_API_ERROR = 'Unexpected API error'
 INCONSISTENT_IDS = 'Generated OTM file has inconsistent IDs'
 OTM_SCHEMA_IS_NOT_VALID = 'OTM schema is not valid'
 OTM_FILE_NOT_FOUND = 'Cannot find OTM file'
-OTM_SUCCESSFULLY_CREATED = 'Provided IaC file has been successfully processed and a new OTM file ' \
+OTM_SUCCESSFULLY_CREATED = 'Provided source file has been successfully processed and a new OTM file ' \
                                'has been created'
 MAPPING_FILE_NOT_FOUND = 'Cannot find mapping file'
 MAPPING_FILE_SCHEMA_NOT_VALID = 'Mapping files are not valid'
