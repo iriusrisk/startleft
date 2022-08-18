@@ -170,3 +170,27 @@ class TestApp:
         assert aws_rds_modules[0].name == 'db23test'
         assert aws_rds_modules[0].parent_type == 'trustZone'
         assert aws_rds_modules[0].source['source'] == 'terraform-aws-modules/rds/aws'
+
+    def test_terraform_mapping_extra_modules(self):
+        filename = test_resource_paths.terraform_extra_modules_sample
+        mapping_filename = test_resource_paths.terraform_mapping_extra_modules
+        iac_to_otm = IacToOtm('name', 'id', IacType.TERRAFORM)
+        iac_to_otm.run(IacType.TERRAFORM, [FileUtils.get_data(mapping_filename)], [FileUtils.get_data(filename)])
+
+        _otm = iac_to_otm.otm
+        assert iac_to_otm.source_model.otm
+        assert len(_otm.trustzones) == 1
+        assert len(_otm.components) == 4
+        assert len(_otm.dataflows) == 0
+
+        rds_modules = utils.filter_modules_by_type(_otm.components, 'terraform-aws-modules/rds/aws')
+        vpc_modules = utils.filter_modules_by_type(_otm.components, 'terraform-aws-modules/vpc/aws')
+        load_balancer_modules = utils.filter_modules_by_type(_otm.components, 'terraform-aws-modules/alb/aws')
+
+        assert len(rds_modules) == 1
+        assert len(vpc_modules) == 1
+        assert len(load_balancer_modules) == 1
+
+        assert rds_modules[0].source['source'] == 'terraform-aws-modules/rds/aws'
+        assert vpc_modules[0].source['source'] == 'terraform-aws-modules/vpc/aws'
+        assert load_balancer_modules[0].source['source'] == 'terraform-aws-modules/alb/aws'
