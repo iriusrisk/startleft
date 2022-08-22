@@ -160,7 +160,7 @@ class TestOtmControllerIaCTerraform:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg 1'
 
     @responses.activate
-    @patch('startleft.validators.mapping_validator.MappingValidator.validate')
+    @patch('startleft.validators.generic_mapping_validator.GenericMappingValidator.validate')
     def test_response_on_validating_mapping_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
