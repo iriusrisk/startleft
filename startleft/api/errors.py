@@ -9,6 +9,9 @@ class ErrorCode(Enum):
     DIAGRAM_LOADING_ERROR = (11, 400)
     DIAGRAM_NOT_VALID = (12, 400)
 
+    SOURCE_LOADING_ERROR = (51, 400)
+    SOURCE_NOT_VALID = (52, 400)
+
     MAPPING_LOADING_ERROR = (21, 400)
     MAPPING_FILE_NOT_VALID = (22, 400)
 
@@ -43,6 +46,11 @@ class DiagramFileNotValidError(CommonError):
     error_code = ErrorCode.DIAGRAM_NOT_VALID
 
 
+class SourceFileNotValidError(CommonError):
+    """ Source file (any type) is not valid """
+    error_code = ErrorCode.SOURCE_NOT_VALID
+
+
 class MappingFileNotValidError(CommonError):
     """ Mapping file is not valid """
     error_code = ErrorCode.MAPPING_FILE_NOT_VALID
@@ -56,6 +64,11 @@ class LoadingIacFileError(CommonError):
 class LoadingDiagramFileError(CommonError):
     """ Diagram file cannot be loaded """
     error_code = ErrorCode.DIAGRAM_LOADING_ERROR
+
+
+class LoadingSourceFileError(CommonError):
+    """ Source file (any type) cannot be loaded """
+    error_code = ErrorCode.SOURCE_LOADING_ERROR
 
 
 class LoadingMappingFileError(CommonError):

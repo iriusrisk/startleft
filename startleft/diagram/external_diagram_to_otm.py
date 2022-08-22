@@ -8,7 +8,7 @@ from startleft.diagram.objects.visio.visio_diagram_factories import VisioCompone
 from startleft.diagram.parsing.visio.visio_diagram_parser import VisioDiagramParser
 from startleft.mapping.mapping_file_loader import MappingFileLoader
 from startleft.otm.otm import OTM
-from startleft.validators.mapping_validator import MappingValidator
+from startleft.validators.generic_mapping_validator import GenericMappingValidator
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ class ExternalDiagramToOtm:
     def __init__(self, diagram_type: DiagramType):
         self.diagram_type = diagram_type
         self.mapping_file_loader = MappingFileLoader()
-        self.mapping_validator = MappingValidator('diagram_mapping_schema.json')
+        self.mapping_validator = GenericMappingValidator('diagram_mapping_schema.json')
 
     def run(self, diagram_source: str, mapping_data_list, project_name: str, project_id: str) -> OTM:
         diagram_mapping = self.mapping_file_loader.load(mapping_data_list)

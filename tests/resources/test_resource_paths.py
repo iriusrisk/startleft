@@ -8,6 +8,7 @@ example_yaml = path + '/example.yaml'
 invalid_yaml = path + '/invalid-yaml.yaml'
 invalid_tf = path + '/invalid-tf.tf'
 example_gzip = path + '/example.gz'
+empty_mapping_file = path + "/empty_mapping_file.yaml"
 
 # OTM
 otm_file_example = path + '/otm/otm_file_example.otm'
@@ -86,3 +87,7 @@ custom_vpc_mapping = path + '/visio/custom-vpc-mapping.yaml'
 visio_aws_shapes_otm_expected = path + '/visio/aws-shapes.otm'
 visio_aws_with_tz_and_vpc_otm_expected = path + '/visio/aws-with-tz-and-vpc.otm'
 visio_orphan_dataflows_otm_expected = path + '/visio/visio-orphan-dataflows.otm'
+
+# MTMT
+model_mtmt_source_file = path + '/mtmt/test_model.tm7'
+mtmt_mapping_file = path + '/mtmt/mtmt-mapping.yaml'

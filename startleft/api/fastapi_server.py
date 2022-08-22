@@ -8,6 +8,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from startleft.api.controllers.diagram import diag_create_otm_controller
+from startleft.api.controllers.etm import etm_create_otm_controller
 from startleft.api.controllers.health import health_controller
 from startleft.api.controllers.iac import iac_create_otm_controller
 from startleft.api.error_response import ErrorResponse
@@ -20,6 +21,7 @@ logger = logging.getLogger(__name__)
 webapp.include_router(health_controller.router)
 webapp.include_router(iac_create_otm_controller.router)
 webapp.include_router(diag_create_otm_controller.router)
+webapp.include_router(etm_create_otm_controller.router)
 
 
 def initialize_webapp():
