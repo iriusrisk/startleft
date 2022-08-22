@@ -15,8 +15,8 @@ from startleft.otm.otm_file_loader import OtmFileLoader
 from startleft.otm.otm_validator import OtmValidator
 from startleft.utils.file_utils import FileUtils
 from startleft.validators.diagram_validator import DiagramValidator
+from startleft.validators.generic_mapping_validator import GenericMappingValidator
 from startleft.validators.iac_validator import IacValidator
-from startleft.validators.mapping_validator import MappingValidator
 from startleft.validators.visio_validator import VisioValidator
 
 logger = logging.getLogger(__name__)
@@ -94,13 +94,13 @@ class OtmProject:
     def validate_iac_mappings_file(mapping_files: [Optional[IO]]):
         logger.debug("Validating IaC mapping files")
         iac_mapping = MappingFileLoader().load(mapping_files)
-        MappingValidator('iac_mapping_schema.json').validate(iac_mapping)
+        GenericMappingValidator('iac_mapping_schema.json').validate(iac_mapping)
 
     @staticmethod
     def validate_diagram_mappings_file(mapping_files: [Optional[IO]]):
         logger.debug("Validating Diagram mapping files")
         diagram_mapping = MappingFileLoader().load(mapping_files)
-        MappingValidator('diagram_mapping_schema.json').validate(diagram_mapping)
+        GenericMappingValidator('diagram_mapping_schema.json').validate(diagram_mapping)
 
     @staticmethod
     def validate_otm_stream(otm_stream: str) -> {}:
