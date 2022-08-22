@@ -226,11 +226,10 @@ class SourceModel:
 
     def __jmespath_search(self, search_path, source):
         try:
-            search = jmespath.search(search_path, source, options=self.jmespath_options)
+            return jmespath.search(search_path, source, options=self.jmespath_options)
 
-            return search if search is not None else []
         except:
-            return []
+            return None
 
     def __find_first_search(self, search_path_root, source):
         for search_path in search_path_root:

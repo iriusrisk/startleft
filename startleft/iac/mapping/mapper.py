@@ -477,6 +477,9 @@ class ComponentMapper:
             else:
                 parent = [get_resource_name_from_resource_reference(parent) if is_terraform_resource_reference(parent) else parent]
 
+        if parent is None:
+            parent = [DEFAULT_TRUSTZONE]
+
         return parent, parents_from_component
 
     def __get_parent_id(self, parent_element, parents_from_component, component_name):
