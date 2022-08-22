@@ -13,7 +13,7 @@ setup(
     python_requires='>=3.6',
     install_requires=[
         'pyyaml==6.0',
-        'jsonschema==3.2.0',
+        'jsonschema==4.9.1',
         'deepmerge==1.0.1',
         'jmespath==1.0.1',
         'lxml==4.9.1',
@@ -25,7 +25,7 @@ setup(
         'click==8.1.3',
         'uvicorn==0.18.2',
         'shapely==1.8.2',
-        'vsdx==0.5.8',
+        'vsdx==0.5.10',
         'python-magic==0.4.27'
     ],
     use_scm_version=True,
