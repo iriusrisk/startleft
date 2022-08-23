@@ -1,14 +1,14 @@
 import logging
+
 from fastapi import APIRouter, File, UploadFile, Form, Response
 
+import startleft.utils.json_utils as jsonUtils
 from startleft.api.controllers.otm_controller import RESPONSE_STATUS_CODE, PREFIX, controller_responses
 from startleft.api.errors import LoadingSourceFileError
 from startleft.processors.base.provider_type import EtmType
 from startleft.processors.mtmt.mtmt_processor import MTMTProcessor
-import startleft.utils.json_utils as jsonUtils
 
-
-URL = '/etm'
+URL = '/external-threat-model'
 
 logger = logging.getLogger(__name__)
 
