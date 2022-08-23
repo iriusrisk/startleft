@@ -54,6 +54,6 @@ class TestTerraformLoader(TestCase):
         with self.assertRaises(LoadingIacFileError) as loading_error:
             tf_loader.load()
 
-        # AND The error info is right
+        # AND an empty IaC file message is on the exception
         assert str(loading_error.exception.title) == 'IaC file is not valid'
         assert str(loading_error.exception.message) == 'IaC file is empty'

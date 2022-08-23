@@ -1,13 +1,13 @@
 import logging
 
-import magic as magik
+import magic
 
-from startleft.api.errors import DiagramFileNotValidError, IacFileNotValidError
+from startleft.api.errors import IacFileNotValidError
 from startleft.processors.base.provider_validator import ProviderValidator
 
 logger = logging.getLogger(__name__)
 
-VALID_MIME = ['application/xml', 'text/plain']
+VALID_MIME = ['text/plain']
 
 MAX_SIZE = 20 * 1024 * 1024
 MIN_SIZE = 20
@@ -15,9 +15,9 @@ MIN_SIZE = 20
 
 class TerraformValidator(ProviderValidator):
 
-    def __init__(self, mt_data):
+    def __init__(self, terraform_data):
         super(TerraformValidator, self).__init__()
-        self.mt_data = mt_data
+        self.terraform_data = terraform_data
 
     def validate(self):
         logger.info('Validating Terraform file')
@@ -25,14 +25,14 @@ class TerraformValidator(ProviderValidator):
         self.__validate_content_type()
 
     def __validate_size(self):
-        size = len(self.mt_data)
+        size = len(self.terraform_data)
         if size > MAX_SIZE or size < MIN_SIZE:
             msg = 'Provided Terraform file is not valid. Invalid size'
             raise IacFileNotValidError('Terraform file is not valid', msg, msg)
 
     def __validate_content_type(self):
-        magic = magik.Magic(mime=True)
-        mime = magic.from_buffer(self.mt_data)
+        magik = magic.Magic(mime=True)
+        mime = magik.from_buffer(self.terraform_data)
         if mime not in VALID_MIME:
             msg = 'Invalid content type for Terraform file'
-            raise DiagramFileNotValidError('Terraform file is not valid', msg, msg)
+            raise IacFileNotValidError('Terraform file is not valid', msg, msg)

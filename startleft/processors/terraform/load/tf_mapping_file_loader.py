@@ -16,11 +16,19 @@ class TerraformMappingFileLoader(MappingLoader):
         self.map = {}
 
     def load(self) -> {}:
+        if not self.mapping_files:
+            msg = "Mapping file is empty"
+            raise LoadingMappingFileError("Mapping file is not valid", msg, msg)
+
         try:
             for mapping_file_data in self.mapping_files:
+                if not mapping_file_data:
+                    continue
                 logger.info('Loading mapping data')
+
                 data = mapping_file_data if isinstance(mapping_file_data, str) else mapping_file_data.decode()
                 self.__load(yaml.load(data, Loader=yaml.BaseLoader))
+
                 logger.debug('Mapping files loaded successfully')
         except Exception as e:
             raise LoadingMappingFileError('Error loading the TF mapping file. The mapping files are not valid.',
