@@ -1,8 +1,8 @@
 import abc
 
 from startleft.otm.otm import OTM
-from startleft.processors.base.mapping_loader import MappingLoader
-from startleft.processors.base.mapping_validator import MappingValidator
+from startleft.otm.otm_validator import OtmValidator
+from startleft.processors.base.mapping import MappingLoader, MappingValidator
 from startleft.processors.base.provider_loader import ProviderLoader
 from startleft.processors.base.provider_parser import ProviderParser
 from startleft.processors.base.provider_validator import ProviderValidator
@@ -29,9 +29,14 @@ class OtmProcessor(metaclass=abc.ABCMeta):
         """Process all the flow from the input data to the OTM output"""
         self.get_provider_validator().validate()
         self.get_provider_loader().load()
+
         self.get_mapping_validator().validate()
         self.get_mapping_loader().load()
-        return self.get_provider_parser().build_otm()
+
+        otm = self.get_provider_parser().build_otm()
+        OtmValidator().validate(otm.json())
+
+        return otm
 
     @abc.abstractmethod
     def get_provider_validator(self) -> ProviderValidator:

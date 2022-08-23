@@ -15,8 +15,8 @@ from startleft.otm.otm_file_loader import OtmFileLoader
 from startleft.otm.otm_validator import OtmValidator
 from startleft.utils.file_utils import FileUtils
 from startleft.validators.diagram_validator import DiagramValidator
+from startleft.validators.generic_mapping_validator import GenericMappingValidator
 from startleft.validators.iac_validator import IacValidator
-from startleft.validators.mapping_validator import MappingValidator
 from startleft.validators.visio_validator import VisioValidator
 
 logger = logging.getLogger(__name__)
@@ -76,8 +76,6 @@ class OtmProject:
                                      diag_file: [Optional[IO]], mapping_data_list: [bytes]):
         logger.info("Parsing Diagram stream to OTM")
         temp_diag_file = FileUtils.copy_to_disk(diag_file[0], get_diagram_ext(diag_type))
-        diag_validator: DiagramValidator = get_diagram_validator(diag_type, temp_diag_file)
-        diag_validator.validate()
         otm = OtmProject.from_diag_file(project_id, project_name, diag_type, temp_diag_file, mapping_data_list)
         FileUtils.delete(temp_diag_file.name)
         return otm
@@ -86,6 +84,8 @@ class OtmProject:
     def from_diag_file(project_id: str, project_name: str, diag_type: DiagramType,
                        temp_diag_file: Optional[IO], mapping_data_list: [bytes]):
         logger.info("Parsing Diagram file to OTM")
+        diag_validator: DiagramValidator = get_diagram_validator(diag_type, temp_diag_file)
+        diag_validator.validate()
         diag_to_otm = ExternalDiagramToOtm(diag_type)
         otm = diag_to_otm.run(temp_diag_file.name, mapping_data_list, project_name, project_id)
         return OtmProject.from_otm_stream(otm.json(), project_id, project_name)
@@ -94,13 +94,13 @@ class OtmProject:
     def validate_iac_mappings_file(mapping_files: [Optional[IO]]):
         logger.debug("Validating IaC mapping files")
         iac_mapping = MappingFileLoader().load(mapping_files)
-        MappingValidator('iac_mapping_schema.json').validate(iac_mapping)
+        GenericMappingValidator('iac_mapping_schema.json').validate(iac_mapping)
 
     @staticmethod
     def validate_diagram_mappings_file(mapping_files: [Optional[IO]]):
         logger.debug("Validating Diagram mapping files")
         diagram_mapping = MappingFileLoader().load(mapping_files)
-        MappingValidator('diagram_mapping_schema.json').validate(diagram_mapping)
+        GenericMappingValidator('diagram_mapping_schema.json').validate(diagram_mapping)
 
     @staticmethod
     def validate_otm_stream(otm_stream: str) -> {}:

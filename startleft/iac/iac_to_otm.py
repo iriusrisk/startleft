@@ -11,7 +11,7 @@ from startleft.iac.mapping import transformer, sourcemodel
 from startleft.mapping.mapping_file_loader import MappingFileLoader
 from startleft.otm import otm
 from startleft.provider import Provider
-from startleft.validators.mapping_validator import MappingValidator
+from startleft.validators.generic_mapping_validator import GenericMappingValidator
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ class IacToOtm:
         self.source_model.otm = self.otm
         self.transformer = transformer.Transformer(source_model=self.source_model, threat_model=self.otm)
         self.mapping_file_loader = MappingFileLoader()
-        self.mapping_validator = MappingValidator('iac_mapping_schema.json')
+        self.mapping_validator = GenericMappingValidator('iac_mapping_schema.json')
         self.source_loader_map = {
             IacType.CLOUDFORMATION: self.load_yaml_source,
             IacType.TERRAFORM: self.load_hcl2_source

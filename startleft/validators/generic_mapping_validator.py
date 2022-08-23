@@ -9,7 +9,11 @@ MAX_SIZE = 5 * 1024 * 1024
 MIN_SIZE = 5
 
 
-class MappingValidator:
+class GenericMappingValidator:
+    """
+    deprecated: Use MappingFileValidator instead
+    """
+
     def __init__(self, mapping_schema):
         self.mapping_schema = mapping_schema
 
