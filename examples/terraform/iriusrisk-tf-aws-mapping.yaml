@@ -60,7 +60,7 @@ components:
       - {$path: "Type"}
 
   - id:          {$format: "{name}"}
-    type:        ec2
+    type:        empty-component
     $source:     {$root: "resource|get(@, 'aws_subnet')"}
     name:        {$path: "keys(@)[0]"}
     parent:      {$path: "*.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('aws_[\\w-]+\\.', '', @) | re_sub('\\.id', '', @)"}
@@ -68,7 +68,7 @@ components:
       - {$path: "Type"}
 
   - id:          {$format: "{name}"}
-    type:        vpc
+    type:        empty-component
     $source:     {$root: "resource|get(@, 'aws_vpc_endpoint')"}
     name:        {$path: "keys(@)[0]"}
     parent:      {$findFirst: ["*.subnet_ids[]", "*.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('aws_[\\w-]+\\.', '', @) | re_sub('\\.id', '', @)"]}
@@ -76,7 +76,7 @@ components:
       - {$path: "Type"}
 
   - id:          {$format: "{name}"}
-    type:        ec2
+    type:        empty-component
     $source:     {$root: "resource|get(@, 'aws_internet_gateway')"}
     name:        {$path: "keys(@)[0]"}
     parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
@@ -430,11 +430,11 @@ components:
     tags:
       - Outbound connection destination IP
 
-  - id: { $format: "{name}" }
-    type: generic-client
-    name: { $ip: { $path: "Properties.ingress[0].cidr_blocks" } }
-    $source: { $root: "resource|squash_terraform(@)[?Type=='aws_security_group' && Properties.ingress[0].cidr_blocks]" }
-    parent: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+  - id:          {$format: "{name}"}
+    type:        generic-client
+    name:        {$ip: {$path: "Properties.ingress[0].cidr_blocks"}}
+    $source:     {$root: "resource|squash_terraform(@)[?Type=='aws_security_group' && Properties.ingress[0].cidr_blocks]"}
+    parent:      f0ba7722-39b6-4c81-8290-a30a248bb8d9
     tags:
       - Inbound connection source IP
 
@@ -529,27 +529,27 @@ dataflows:
   - id:           {$format: "{name}"}
     name:         {$format: "dataflow from Lambda function on Failure {_key}"}
     $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_lambda_event_source_mapping']"}
-    source: { $path: "Properties.function_name" }
-    destination: { $path: "Properties.destination_config[0].on_failure[0].destination_arn" }
+    source:       {$path: "Properties.function_name"}
+    destination:  {$path: "Properties.destination_config[0].on_failure[0].destination_arn"}
 
   # The parameter "logging" is deprecated. Use the resource "aws_s3_bucket_logging" instead
-  - id: { $format: "{name}" }
-    name: { $format: "S3 dataflow from {_key}" }
-    $source: { $root: "resource|squash_terraform(@)[?Type=='aws_s3_bucket']" }
-    source: { $path: "_key" }
-    destination: { $path: "Properties.logging[0].target_bucket" }
+  - id:           {$format: "{name}"}
+    name:         {$format: "S3 dataflow from {_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_s3_bucket']"}
+    source:       {$path: "_key"}
+    destination:  {$path: "Properties.logging[0].target_bucket"}
 
-  - id: { $format: "{name}" }
-    name: { $format: "S3 dataflow from {Type}" }
-    $source: { $root: "resource|squash_terraform(@)[?Type=='aws_s3_bucket_logging']" }
-    source: { $path: "Properties.bucket" }
-    destination: { $path: "Properties.target_bucket" }
+  - id:           {$format: "{name}"}
+    name:         {$format: "S3 dataflow from {Type}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_s3_bucket_logging']"}
+    source:       {$path: "Properties.bucket" }
+    destination:  {$path: "Properties.target_bucket"}
   # The parameter "logging" is deprecated. Use the resource "aws_s3_bucket_logging" instead
 
-  - id: { $format: "{name}" }
-    name: { $format: "API gateway data flow from {Type}" }
-    $source: { $root: "resource|squash_terraform(@)[?Type=='aws_api_gateway_authorizer']" }
-    source: { $numberOfSources: { oneSource: { $path: "_key" }, multipleSource: { $format: "api-gateway (grouped)" } } }
-    destination: { $path: "Properties.provider_arns[0]" }
+  - id:           {$format: "{name}"}
+    name:         {$format: "API gateway data flow from {Type}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_api_gateway_authorizer']"}
+    source:       {$numberOfSources: {oneSource: {$path: "_key"}, multipleSource: {$format: "api-gateway (grouped)"}}}
+    destination:  {$path: "Properties.provider_arns[0]"}
     tags:
       - API gateway dataflow
