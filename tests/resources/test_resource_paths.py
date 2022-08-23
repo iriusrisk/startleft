@@ -51,7 +51,7 @@ terraform_unknown_module = path + '/terraform/terraform_unknown_module.tf'
 terraform_no_resources = path + '/terraform/no_resources.tf'
 terraform_gz = path + '/terraform/terraform.gz'
 terraform_specific_functions = path + '/terraform/terraform_specific_functions.tf'
-terraform_modules_sample = path + '/terraform/terraform_modules_sample.tf'
+terraform_modules = path + '/terraform/terraform_modules_sample.tf'
 # mapping
 default_terraform_mapping = path + '/terraform/default-terraform-mapping.yaml'
 default_terraform_aws_mapping = path + '/terraform/aws_terraform_mapping.yaml'

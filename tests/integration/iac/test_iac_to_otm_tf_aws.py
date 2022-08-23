@@ -2,7 +2,7 @@ import pytest
 
 from startleft.iac.iac_to_otm import IacToOtm
 from startleft.iac.iac_type import IacType
-from startleft.utils.file_utils import FileUtils
+from startleft.utils import file_utils as FileUtils
 from tests.resources import test_resource_paths
 
 

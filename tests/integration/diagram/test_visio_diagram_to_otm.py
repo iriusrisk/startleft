@@ -1,6 +1,6 @@
 from startleft.diagram.diagram_type import DiagramType
 from startleft.diagram.external_diagram_to_otm import ExternalDiagramToOtm
-from startleft.utils.file_utils import FileUtils
+from startleft.utils import file_utils as FileUtils
 from tests.resources import test_resource_paths
 from tests.util.otm import check_otm_representations_size, check_otm_trustzone, check_otm_component, \
     check_otm_dataflow, public_cloud_id, public_cloud_name, private_secured_id, private_secured_name, internet_name, \

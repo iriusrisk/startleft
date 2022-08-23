@@ -12,7 +12,7 @@ from startleft.iac.iac_type import IacType
 from startleft.log import get_log_level, configure_logging
 from startleft.messages import *
 from startleft.otm.otm_project import OtmProject
-from startleft.utils.file_utils import FileUtils
+from startleft.utils import file_utils as FileUtils
 from startleft.version import version
 
 logger = logging.getLogger(__name__)

@@ -7,7 +7,7 @@ resource "aws_wafregional_ipset" "ipset" {
   }
 }
 
-resource "aws_wafregional_rule" "foo" {
+resource "aws_wafregional_rule" "waf_rule" {
   name        = "tfWAFRule"
   metric_name = "tfWAFRule"
 
@@ -18,7 +18,7 @@ resource "aws_wafregional_rule" "foo" {
   }
 }
 
-resource "aws_wafregional_web_acl" "foo" {
+resource "aws_wafregional_web_acl" "waf_acl" {
   name        = "foo"
   metric_name = "foo"
 
@@ -32,35 +32,35 @@ resource "aws_wafregional_web_acl" "foo" {
     }
 
     priority = 1
-    rule_id  = aws_wafregional_rule.foo.id
+    rule_id  = aws_wafregional_rule.waf_rule.id
   }
 }
 
-resource "aws_vpc" "foo" {
+resource "aws_vpc" "vpc" {
   cidr_block = "10.1.0.0/16"
 }
 
 data "aws_availability_zones" "available" {}
 
-resource "aws_subnet" "foo" {
-  vpc_id            = aws_vpc.foo.id
+resource "aws_subnet" "subnet_1" {
+  vpc_id            = aws_vpc.vpc.id
   cidr_block        = "10.1.1.0/24"
   availability_zone = data.aws_availability_zones.available.names[0]
 }
 
-resource "aws_subnet" "bar" {
-  vpc_id            = aws_vpc.foo.id
+resource "aws_subnet" "subnet_2" {
+  vpc_id            = aws_vpc.vpc.id
   cidr_block        = "10.1.2.0/24"
   availability_zone = data.aws_availability_zones.available.names[1]
 }
 
-resource "aws_alb" "foo" {
+resource "aws_alb" "alb" {
   internal = true
-  subnets  = [aws_subnet.foo.id, aws_subnet.bar.id]
+  subnets  = [aws_subnet.subnet_1.id, aws_subnet.subnet_2.id]
 }
 
-resource "aws_network_interface" "foo" {
-  subnet_id   = aws_subnet.bar.id
+resource "aws_network_interface" "net_int" {
+  subnet_id   = aws_subnet.subnet_2.id
   private_ips = ["10.1.2.254"]
 
   tags = {
@@ -68,7 +68,7 @@ resource "aws_network_interface" "foo" {
   }
 }
 
-resource "aws_instance" "foo" {
+resource "aws_instance" "inst" {
   ami           = "ami-005e54dee72cc1d00" # us-west-2
   instance_type = "t2.micro"
 

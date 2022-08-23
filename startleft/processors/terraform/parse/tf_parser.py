@@ -1,10 +1,14 @@
-from startleft.iac.iac_type import IacType
+import logging
 
+from startleft.api.errors import OtmBuildingError
+from startleft.iac.iac_type import IacType
 from startleft.otm.otm import OTM
 from startleft.otm.otm_builder import OtmBuilder
 from startleft.processors.base.provider_parser import ProviderParser
 from startleft.processors.terraform.parse.mapping.tf_sourcemodel import TerraformSourceModel
 from startleft.processors.terraform.parse.mapping.tf_transformer import TerraformTransformer
+
+logger = logging.getLogger(__name__)
 
 
 class TerraformParser(ProviderParser):
@@ -25,7 +29,14 @@ class TerraformParser(ProviderParser):
         self.transformer = TerraformTransformer(source_model=self.source_model, threat_model=self.otm)
 
     def build_otm(self) -> OTM:
-        self.transformer.run(self.mapping)
+        try:
+            self.transformer.run(self.mapping)
+        except Exception as e:
+            logger.error(f'{e}')
+            detail = e.__class__.__name__
+            message = e.__str__()
+            raise OtmBuildingError('Error building the threat model with the given files', detail, message)
+
         return self.otm
 
     def __initialize_otm(self):

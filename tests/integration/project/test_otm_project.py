@@ -3,23 +3,20 @@ from unittest.mock import patch
 import pytest
 from _pytest.python_api import raises
 
-from startleft.api.errors import MappingFileNotValidError, OtmBuildingError, OtmResultError, LoadingIacFileError
+from startleft.api.errors import MappingFileNotValidError, OtmBuildingError, OtmResultError
 from startleft.iac.iac_type import IacType
 from startleft.otm.otm_project import OtmProject
-from startleft.utils.file_utils import FileUtils
+from startleft.utils import file_utils as FileUtils
 from tests.resources import test_resource_paths
 
 CLOUDFORMATION = IacType.CLOUDFORMATION
-TERRAFORM = IacType.TERRAFORM
 
 SAMPLE_OTM_FILENAME = test_resource_paths.otm_file_example
 CUSTOM_YAML_VISIO_MAPPING_FILENAME = test_resource_paths.custom_vpc_mapping
 OTM_FILE_EXAMPLE = test_resource_paths.otm_file_example
 
 SAMPLE_CFT_IAC_FILENAME = test_resource_paths.cloudformation_for_mappings_tests_json
-SAMPLE_TF_IAC_FILENAME = test_resource_paths.terraform_for_mappings_tests_json
 IAC_VALID_CFT_MAPPING_FILENAME = test_resource_paths.default_cloudformation_mapping
-IAC_VALID_TF_MAPPING_FILENAME = test_resource_paths.default_terraform_mapping
 INVALID_YAML_FILENAME = test_resource_paths.invalid_yaml
 INVALID_TF_FILENAME = test_resource_paths.invalid_tf
 
@@ -100,22 +97,6 @@ class TestOtmProjectService:
         assert otm_project.project_name == project_name
         assert otm_project.get_otm_as_json() is not None
 
-    def test_from_iac_valid_tf_mapping_files_provided_ok(self):
-        # Given a sample valid IaC file
-        iac_file = [FileUtils.get_data(SAMPLE_TF_IAC_FILENAME)]
-
-        # And a valid iac mappings file
-        custom_iac_mapping_data = [FileUtils.get_data(IAC_VALID_TF_MAPPING_FILENAME)]
-
-        # When creating OTM project from IaC file
-        otm_project = OtmProject.from_iac_file_to_otm_stream(MOCK_PROJECT_ID, MOCK_PROJECT_NAME, TERRAFORM, iac_file,
-                                                             custom_iac_mapping_data)
-
-        # Then
-        assert otm_project.otm is not None
-        assert otm_project.project_id == MOCK_PROJECT_ID
-        assert otm_project.project_name == MOCK_PROJECT_NAME
-
     @pytest.mark.parametrize('mapping_file', [None, [None]])
     def test_from_iac_valid_yaml_mapping_files_not_provided_ok(self, mapping_file):
         # Given a sample valid IaC file (and none mapping file)
@@ -132,16 +113,6 @@ class TestOtmProjectService:
         with raises(TypeError):
             OtmProject.from_iac_file_to_otm_stream(project_id, project_name, CLOUDFORMATION, iac_file, mapping_file)
 
-    @pytest.mark.parametrize('mapping_file', [None, [None]])
-    def test_from_iac_valid_tf_mapping_files_not_provided_ok(self, mapping_file):
-        # Given a sample valid IaC file (and none mapping file)
-        iac_file = [FileUtils.get_data(SAMPLE_TF_IAC_FILENAME)]
-
-        # When creating OTM project from IaC file
-        # Then raises TypeError
-        with raises(TypeError):
-            OtmProject.from_iac_file_to_otm_stream(MOCK_PROJECT_ID, MOCK_PROJECT_NAME, TERRAFORM, iac_file,
-                                                   mapping_file)
 
     def test_from_iac_invalid_yaml_iac_file_error_jmes_error(self):
         # Given a sample valid IaC file
@@ -158,19 +129,6 @@ class TestOtmProjectService:
         # Then raises OtmBuildingError
         with raises(OtmBuildingError):
             OtmProject.from_iac_file_to_otm_stream(project_id, project_name, CLOUDFORMATION, iac_file, mapping_file)
-
-    def test_from_iac_invalid_tf_iac_file_loading_error(self):
-        # Given a sample invalid IaC file
-        iac_file = [FileUtils.get_data(INVALID_TF_FILENAME)]
-
-        # And a valid iac mappings file
-        custom_iac_mapping_data = [FileUtils.get_data(IAC_VALID_TF_MAPPING_FILENAME)]
-
-        # When creating OTM project from IaC file
-        # Then raises OtmBuildingError
-        with raises(LoadingIacFileError):
-            OtmProject.from_iac_file_to_otm_stream(MOCK_PROJECT_ID, MOCK_PROJECT_NAME, TERRAFORM, iac_file,
-                                                   custom_iac_mapping_data)
 
     def test_from_iac_invalid_mapping_files_error_invalid_schema(self):
         # Given a sample valid IaC file
@@ -189,19 +147,6 @@ class TestOtmProjectService:
         # Then raises MappingFileNotValidError
         with raises(MappingFileNotValidError):
             OtmProject.from_iac_file_to_otm_stream(project_id, project_name, CLOUDFORMATION, iac_file,
-                                                   custom_iac_mapping_files)
-
-    def test_from_iac_invalid_tf_mapping_files_error(self):
-        # Given a sample valid IaC file
-        iac_file = [FileUtils.get_data(SAMPLE_TF_IAC_FILENAME)]
-
-        # And an invalid iac mappings file
-        custom_iac_mapping_files = [INVALID_YAML_FILENAME]
-
-        # When creating OTM project from IaC file
-        # Then raises MappingFileNotValidError
-        with raises(MappingFileNotValidError):
-            OtmProject.from_iac_file_to_otm_stream(MOCK_PROJECT_ID, MOCK_PROJECT_NAME, TERRAFORM, iac_file,
                                                    custom_iac_mapping_files)
 
     def test_validate_diagram_mappings_file_ok(self):

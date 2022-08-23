@@ -13,7 +13,7 @@ from startleft.mapping.mapping_file_loader import MappingFileLoader
 from startleft.otm.otm import OTM
 from startleft.otm.otm_file_loader import OtmFileLoader
 from startleft.otm.otm_validator import OtmValidator
-from startleft.utils.file_utils import FileUtils
+from startleft.utils import file_utils as FileUtils
 from startleft.validators.diagram_validator import DiagramValidator
 from startleft.validators.generic_mapping_validator import GenericMappingValidator
 from startleft.validators.iac_validator import IacValidator
