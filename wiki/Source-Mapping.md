@@ -147,11 +147,11 @@ as: `split(component, '.')[1]`.
 
 ### get_module_terraform
 
-The `get_module_terraform` function takes a dict array of AWS modules (not resources) and a component type,
+The `get_module_terraform` function takes a dict array of Terraform modules (not resources) and a component type,
 which is the key to filter the array comparing against 'source' module property. Returns an OTM component dict
 whose root key is the name of the component that also includes a Type and a _key keys with the module type (AWS type)
 and the module name (custom name) respectively.
 
 ```python
-def _func_get_module_terraform(self, obj_arr, component_type)
+def _func_get_module_terraform(self, modules, module_type)
 ```
