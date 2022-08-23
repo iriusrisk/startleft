@@ -75,10 +75,12 @@ class TestTerraformProcessor:
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, terraform_file, [mapping_file]).process()
 
+        # THEN the number of TZs, components and dataflows are right
         assert len(otm.trustzones) == 1
         assert len(otm.components) == 1
         assert len(otm.dataflows) == 0
 
+        # AND the info inside them is also right
         assert otm.trustzones[0].id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
         assert otm.trustzones[0].name == 'Public Cloud'
         assert otm.components[0].type == 'aws_control'
@@ -95,14 +97,17 @@ class TestTerraformProcessor:
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, terraform_file, [mapping_file]).process()
 
+        # THEN the number of TZs, components and dataflows are right
         assert len(otm.trustzones) == 1
         assert len(otm.components) == 0
         assert len(otm.dataflows) == 0
+
+        # AND the info inside them is also right
         assert otm.trustzones[0].id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
         assert otm.trustzones[0].name == 'Public Cloud'
 
     def test_mapping_modules(self):
-        # GIVEN a valid TF file with some resources
+        # GIVEN a valid TF file with some TF modules
         terraform_file = get_data(test_resource_paths.terraform_modules)
 
         # AND a valid TF mapping file
@@ -111,14 +116,44 @@ class TestTerraformProcessor:
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, terraform_file, [mapping_file]).process()
 
+        # THEN the number of TZs, components and dataflows are right
         assert len(otm.trustzones) == 1
         assert len(otm.components) == 3
         assert len(otm.dataflows) == 0
 
+        # AND the info inside them is also right
         aws_rds_modules = utils.filter_modules_by_type(otm.components, 'terraform-aws-modules/rds/aws')
         assert aws_rds_modules[0].name == 'db23test'
         assert aws_rds_modules[0].parent_type == 'trustZone'
         assert aws_rds_modules[0].source['source'] == 'terraform-aws-modules/rds/aws'
+
+    def test_extra_modules(self):
+        # GIVEN a valid TF file with some special TF modules
+        terraform_file = get_data(test_resource_paths.terraform_extra_modules_sample)
+
+        # AND a valid TF mapping file
+        mapping_file = get_data(test_resource_paths.terraform_mapping_extra_modules)
+
+        # WHEN the TF file is processed
+        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, terraform_file, [mapping_file]).process()
+
+        # THEN the number of TZs, components and dataflows are right
+        assert len(otm.trustzones) == 1
+        assert len(otm.components) == 4
+        assert len(otm.dataflows) == 0
+
+        # AND the info inside them is also right
+        rds_modules = utils.filter_modules_by_type(otm.components, 'terraform-aws-modules/rds/aws')
+        vpc_modules = utils.filter_modules_by_type(otm.components, 'terraform-aws-modules/vpc/aws')
+        load_balancer_modules = utils.filter_modules_by_type(otm.components, 'terraform-aws-modules/alb/aws')
+
+        assert len(rds_modules) == 1
+        assert len(vpc_modules) == 1
+        assert len(load_balancer_modules) == 1
+
+        assert rds_modules[0].source['source'] == 'terraform-aws-modules/rds/aws'
+        assert vpc_modules[0].source['source'] == 'terraform-aws-modules/vpc/aws'
+        assert load_balancer_modules[0].source['source'] == 'terraform-aws-modules/alb/aws'
 
     @pytest.mark.parametrize('mapping_file', [None, [None]])
     def test_mapping_files_not_provided(self, mapping_file):
@@ -143,7 +178,7 @@ class TestTerraformProcessor:
             TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, terraform_file, mapping_file).process()
 
     def test_invalid_terraform_file(self):
-        # Given a sample invalid IaC file
+        # Given a sample invalid TF file
         terraform_file = [get_data(test_resource_paths.invalid_tf)]
 
         # And a valid iac mappings file
