@@ -27,12 +27,12 @@ class CloudformationValidator(ProviderValidator):
     def __validate_size(self):
         size = len(self.cloudformation_data)
         if size > MAX_SIZE or size < MIN_SIZE:
-            msg = 'Provided CloudFormation file is not valid. Invalid size'
+            msg = 'CloudFormation file is not valid. Invalid size'
             raise IacFileNotValidError('CloudFormation file is not valid', msg, msg)
 
     def __validate_content_type(self):
         magik = magic.Magic(mime=True)
         mime = magik.from_buffer(self.cloudformation_data)
         if mime not in VALID_MIME:
-            msg = 'Invalid content type for CloudFormation file'
+            msg = 'CloudFormation file is not valid. Invalid content type for iac_file'
             raise IacFileNotValidError('CloudFormation file is not valid', msg, msg)

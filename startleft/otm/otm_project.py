@@ -7,8 +7,6 @@ from typing.io import IO
 from startleft.api.errors import OtmGenerationError
 from startleft.diagram.diagram_type import DiagramType
 from startleft.diagram.external_diagram_to_otm import ExternalDiagramToOtm
-from startleft.iac.iac_to_otm import IacToOtm
-from startleft.iac.iac_type import IacType
 from startleft.mapping.mapping_file_loader import MappingFileLoader
 from startleft.otm.otm import OTM
 from startleft.otm.otm_file_loader import OtmFileLoader
@@ -16,7 +14,6 @@ from startleft.otm.otm_validator import OtmValidator
 from startleft.utils import file_utils as FileUtils
 from startleft.validators.diagram_validator import DiagramValidator
 from startleft.validators.generic_mapping_validator import GenericMappingValidator
-from startleft.validators.iac_validator import IacValidator
 from startleft.validators.visio_validator import VisioValidator
 
 logger = logging.getLogger(__name__)
@@ -63,15 +60,6 @@ class OtmProject:
         return OtmProject(project_id, project_name, None, otm)
 
     @staticmethod
-    def from_iac_file_to_otm_stream(project_id: str, project_name: str, iac_type: IacType, iac_data: [bytes],
-                                    mapping_data_list: [bytes]):
-        IacValidator(iac_data, iac_type).validate()
-        logger.info("Parsing IaC file to OTM")
-        iac_to_otm = IacToOtm(project_name, project_id, iac_type)
-        iac_to_otm.run(iac_type, mapping_data_list, iac_data)
-        return OtmProject.from_otm_stream(iac_to_otm.get_otm_stream(), project_id, project_name)
-
-    @staticmethod
     def from_diag_file_to_otm_stream(project_id: str, project_name: str, diag_type: DiagramType,
                                      diag_file: [Optional[IO]], mapping_data_list: [bytes]):
         logger.info("Parsing Diagram stream to OTM")
@@ -90,6 +78,7 @@ class OtmProject:
         otm = diag_to_otm.run(temp_diag_file.name, mapping_data_list, project_name, project_id)
         return OtmProject.from_otm_stream(otm.json(), project_id, project_name)
 
+    # TODO Change this method to base it on processors
     @staticmethod
     def validate_iac_mappings_file(mapping_files: [Optional[IO]]):
         logger.debug("Validating IaC mapping files")

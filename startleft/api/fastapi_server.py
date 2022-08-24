@@ -11,7 +11,6 @@ from startleft.api.controllers.diagram import diag_create_otm_controller
 from startleft.api.controllers.etm import etm_create_otm_controller
 from startleft.api.controllers.health import health_controller
 from startleft.api.controllers.iac import iac_create_otm_controller
-from startleft.api.controllers.terraform import terraform_create_otm_controller
 from startleft.api.error_response import ErrorResponse
 from startleft.api.errors import CommonError
 from startleft.log import VERBOSE_MESSAGE_FORMAT
@@ -23,7 +22,6 @@ webapp.include_router(health_controller.router)
 webapp.include_router(iac_create_otm_controller.router)
 webapp.include_router(diag_create_otm_controller.router)
 webapp.include_router(etm_create_otm_controller.router)
-webapp.include_router(terraform_create_otm_controller.router)
 
 
 def initialize_webapp():

@@ -14,7 +14,7 @@ TESTING_MAPPING_FILE = CLOUDFORMATION_MAPPING
 
 class TestCliIacErrorCodes:
 
-    @patch('startleft.otm.otm_project.OtmProject.from_iac_file_to_otm_stream')
+    @patch('startleft.processors.base.otm_processor.OtmProcessor.process')
     def test_loadingiacfilerror_code(self, mock_load_source_data):
         runner = CliRunner()
         output_file_name = "output-file.otm"
@@ -45,7 +45,7 @@ class TestCliIacErrorCodes:
             assert result.exit_code == 1
             assert result.exception.error_code.system_exit_status == 1
 
-    @patch('startleft.otm.otm_project.OtmProject.from_iac_file_to_otm_stream')
+    @patch('startleft.processors.base.otm_processor.OtmProcessor.process')
     def test_iacfilenotvaliderror_code(self, mock_load_source_data):
         runner = CliRunner()
         output_file_name = "output-file.otm"
@@ -76,7 +76,7 @@ class TestCliIacErrorCodes:
             assert result.exit_code == 1
             assert result.exception.error_code.system_exit_status == 2
 
-    @patch('startleft.otm.otm_project.OtmProject.from_iac_file_to_otm_stream')
+    @patch('startleft.processors.base.otm_processor.OtmProcessor.process')
     def test_loadingmappingfileerror_code(self, mock_load_source_data):
         runner = CliRunner()
         output_file_name = "output-file.otm"
@@ -107,7 +107,7 @@ class TestCliIacErrorCodes:
             assert result.exit_code == 1
             assert result.exception.error_code.system_exit_status == 21
 
-    @patch('startleft.otm.otm_project.OtmProject.from_iac_file_to_otm_stream')
+    @patch('startleft.processors.base.otm_processor.OtmProcessor.process')
     def test_otmbuildingerror_code(self, mock_load_source_data):
         runner = CliRunner()
         output_file_name = "output-file.otm"
@@ -138,7 +138,7 @@ class TestCliIacErrorCodes:
             assert result.exit_code == 1
             assert result.exception.error_code.system_exit_status == 41
 
-    @patch('startleft.otm.otm_project.OtmProject.from_iac_file_to_otm_stream')
+    @patch('startleft.processors.base.otm_processor.OtmProcessor.process')
     def test_otmgenerationerror_code(self, mock_load_source_data):
         runner = CliRunner()
         output_file_name = "output-file.otm"

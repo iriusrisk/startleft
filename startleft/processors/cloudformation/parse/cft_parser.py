@@ -1,10 +1,10 @@
 import logging
 
 from startleft.api.errors import OtmBuildingError
-from startleft.iac.iac_type import IacType
 from startleft.otm.otm import OTM
 from startleft.otm.otm_builder import OtmBuilder
 from startleft.processors.base.provider_parser import ProviderParser
+from startleft.processors.base.provider_type import IacType
 from startleft.processors.cloudformation.parse.mapping.cft_sourcemodel import CloudformationSourceModel
 from startleft.processors.cloudformation.parse.mapping.cft_transformer import CloudformationTransformer
 

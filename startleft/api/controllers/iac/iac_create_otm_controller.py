@@ -3,8 +3,11 @@ import logging
 from fastapi import APIRouter, File, UploadFile, Form, Response
 
 from startleft.api.controllers.otm_controller import RESPONSE_STATUS_CODE, PREFIX, controller_responses
-from startleft.iac.iac_type import IacType
-from startleft.otm.otm_project import OtmProject
+from startleft.api.errors import LoadingSourceFileError
+from startleft.processors.base.provider_type import IacType
+from startleft.processors.cloudformation.cft_processor import CloudformationProcessor
+from startleft.processors.terraform.tf_processor import TerraformProcessor
+from startleft.utils.json_utils import get_otm_as_json
 
 URL = '/iac'
 
@@ -17,6 +20,15 @@ router = APIRouter(
 )
 
 
+def get_processor(source_type, id, name, iac_data, mapping_data_list):
+    if source_type == IacType.TERRAFORM:
+        return TerraformProcessor(id, name, iac_data, mapping_data_list)
+    if source_type == IacType.CLOUDFORMATION:
+        return CloudformationProcessor(id, name, iac_data, mapping_data_list)
+    else:
+        raise LoadingSourceFileError(f'{source_type} is not a supported type for source data')
+
+
 @router.post(URL, status_code=RESPONSE_STATUS_CODE, description="Generates an OTM threat model from an IaC file")
 def iac(iac_file: UploadFile = File(..., description="File that contains the Iac definition"),
         iac_type: IacType = Form(..., description="Type of IaC File: CLOUDFORMATION, TERRAFORM"),
@@ -26,14 +38,17 @@ def iac(iac_file: UploadFile = File(..., description="File that contains the Iac
                                                          "resources and threat model resources.")):
     logger.info(f"POST request received for creating new project with id {id} and name {name} from IaC {iac_type} file")
 
-    logger.info("Parsing IaC file to OTM")
+    logger.info("Parsing Threat Model file to OTM")
+
     with iac_file.file as f:
         iac_data = f.read()
 
+    mapping_data_list = []
+
     with mapping_file.file as f:
-        mapping_data = f.read()
+        mapping_data_list.append(f.read())
 
-    otm_project = OtmProject.from_iac_file_to_otm_stream(id, name, iac_type, [iac_data],
-                                                         [mapping_data] if mapping_file else [])
+    processor = get_processor(iac_type, id, name, iac_data, mapping_data_list)
+    otm = processor.process()
 
-    return Response(status_code=201, media_type="application/json", content=otm_project.get_otm_as_json())
+    return Response(status_code=201, media_type="application/json", content=get_otm_as_json(otm))

@@ -42,7 +42,7 @@ class TestTerraformValidator(TestCase):
 
         # AND the right info is in the exception
         assert validation_error.exception.title == 'Terraform file is not valid'
-        assert validation_error.exception.message == 'Provided Terraform file is not valid. Invalid size'
+        assert validation_error.exception.message == 'Terraform file is not valid. Invalid size'
 
     @patch('magic.Magic.from_buffer')
     def test_invalid_mime_type_file(self, mime_checker_mock):

@@ -4,18 +4,29 @@ import sys
 
 import click
 
-from startleft.api.errors import CommonError
+from startleft.api.errors import CommonError, LoadingSourceFileError
 from startleft.clioptions.exclusion_option import Exclusion
 from startleft.diagram.diagram_type import DiagramType
-from startleft.iac.iac_to_otm import IacToOtm
-from startleft.iac.iac_type import IacType
 from startleft.log import get_log_level, configure_logging
 from startleft.messages import *
 from startleft.otm.otm_project import OtmProject
-from startleft.utils import file_utils as FileUtils
+from startleft.processors.base.provider_type import IacType
+from startleft.processors.cloudformation.cft_processor import CloudformationProcessor
+from startleft.processors.terraform.tf_processor import TerraformProcessor
+from startleft.utils.file_utils import get_data
+from startleft.utils.json_utils import get_otm_as_file
 from startleft.version import version
 
 logger = logging.getLogger(__name__)
+
+
+def get_processor(source_type, id, name, iac_data, mapping_data_list):
+    if source_type == IacType.TERRAFORM:
+        return TerraformProcessor(id, name, iac_data, mapping_data_list)
+    if source_type == IacType.CLOUDFORMATION:
+        return CloudformationProcessor(id, name, iac_data, mapping_data_list)
+    else:
+        raise LoadingSourceFileError(f'{source_type} is not a supported type for source data')
 
 
 def validate_server(ctx, param, value):
@@ -52,19 +63,19 @@ def cli(log_level, verbose):
     configure_logging(verbose, log_level)
 
 
-def parse_iac(iac_type, mapping_file, output_file, project_name, project_id, iac_files):
+def parse_iac(iac_type, mapping_file, output_file, project_name, project_id, iac_file):
     """
     Parses IaC source files into Open Threat Model
     """
     logger.info("Parsing IaC source files into OTM")
-    iac_data = []
-    for iac_file in iac_files:
-        iac_data.append(FileUtils.get_data(iac_file))
+    iac_data = get_data(iac_file)
 
-    mapping_data = [FileUtils.get_data(mapping_file)]
-    otm = OtmProject.from_iac_file_to_otm_stream(project_id, project_name, IacType(iac_type.upper()), iac_data,
-                                                 mapping_data)
-    otm.otm_to_file(output_file)
+    mapping_data = [get_data(mapping_file)]
+
+    processor = get_processor(IacType(iac_type.upper()), project_id, project_name, iac_data, mapping_data)
+    otm = processor.process()
+
+    get_otm_as_file(otm, output_file)
 
 
 def parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, output_file, project_name,
@@ -74,12 +85,12 @@ def parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, outpu
     """
     logger.info("Parsing diagram source files into OTM")
     type_ = DiagramType(diagram_type.upper())
-    file = open(iac_file[0], "r")
+    file = open(iac_file, "r")
 
-    mapping_data_list = [FileUtils.get_data(default_mapping_file)]
+    mapping_data_list = [get_data(default_mapping_file)]
 
     if custom_mapping_file:
-        mapping_data_list.append(FileUtils.get_data(custom_mapping_file))
+        mapping_data_list.append(get_data(custom_mapping_file))
 
     otm_proj = OtmProject.from_diag_file(project_id, project_name, type_, file, mapping_data_list)
     file.close()
@@ -116,7 +127,7 @@ def parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, outpu
 @click.option(OUTPUT_FILE_NAME, OUTPUT_FILE_SHORTNAME, default=OUTPUT_FILE, help=OUTPUT_FILE_DESC)
 @click.option(PROJECT_NAME_NAME, PROJECT_NAME_SHORTNAME, required=True, help=PROJECT_NAME_DESC)
 @click.option(PROJECT_ID_NAME, PROJECT_ID_SHORTNAME, required=True, help=PROJECT_ID_DESC)
-@click.argument(SOURCE_FILE_NAME, required=True, nargs=-1)
+@click.argument(SOURCE_FILE_NAME, required=True, nargs=1)
 def parse_any(iac_type, diagram_type, mapping_file, default_mapping_file, custom_mapping_file,
               output_file, project_name, project_id, source_file):
     """
@@ -142,31 +153,15 @@ def validate(iac_mapping_file, diagram_mapping_file, otm_file):
     """
     if iac_mapping_file:
         logger.info("Validating IaC mapping files")
-        OtmProject.validate_iac_mappings_file([FileUtils.get_data(iac_mapping_file)])
+        OtmProject.validate_iac_mappings_file([get_data(iac_mapping_file)])
 
     if diagram_mapping_file:
         logger.info("Validating Diagram mapping files")
-        OtmProject.validate_diagram_mappings_file([FileUtils.get_data(diagram_mapping_file)])
+        OtmProject.validate_diagram_mappings_file([get_data(diagram_mapping_file)])
 
     if otm_file:
         logger.info("Validating OTM file")
         OtmProject.load_and_validate_otm_file(otm_file)
-
-
-@cli.command()
-@click.option(IAC_TYPE_NAME, IAC_TYPE_SHORTNAME, help=IAC_TYPE_DESC,
-              type=click.Choice(IAC_TYPE_SUPPORTED, case_sensitive=False), required=True
-              )
-@click.option('--query', '-q', help='JMESPath query to run against the IaC file.')
-@click.argument(SOURCE_FILE_NAME, required=True, nargs=-1)
-def search(iac_type, query, source_file):
-    """
-    Searches source files for the given query
-    """
-
-    iac_to_otm = IacToOtm(None, None, IacType(iac_type.upper()))
-    logger.info("Running JMESPath search query against the IaC file")
-    iac_to_otm.search(IacType(iac_type.upper()), query, [FileUtils.get_data(source_file[0])])
 
 
 @cli.command()

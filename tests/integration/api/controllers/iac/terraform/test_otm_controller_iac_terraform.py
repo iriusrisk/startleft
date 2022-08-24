@@ -100,7 +100,7 @@ class TestOtmControllerIaCTerraform:
         assert '"components": ' in response.text
 
     @responses.activate
-    @patch('startleft.validators.iac_validator.IacValidator.validate')
+    @patch('startleft.processors.terraform.validate.tf_validator.TerraformValidator.validate')
     def test_response_on_validating_iac_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -130,7 +130,7 @@ class TestOtmControllerIaCTerraform:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg 1'
 
     @responses.activate
-    @patch('startleft.iac.iac_to_otm.IacToOtm.load_source_data')
+    @patch('startleft.processors.terraform.tf_processor.TerraformProcessor.process')
     def test_response_on_loading_iac_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -160,7 +160,7 @@ class TestOtmControllerIaCTerraform:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg 1'
 
     @responses.activate
-    @patch('startleft.validators.generic_mapping_validator.GenericMappingValidator.validate')
+    @patch('startleft.processors.terraform.validate.tf_mapping_file_validator.TerraformMappingFileValidator.validate')
     def test_response_on_validating_mapping_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -191,7 +191,7 @@ class TestOtmControllerIaCTerraform:
         assert body_response['errors'][0]['errorMessage'] == 'schema errors messages'
 
     @responses.activate
-    @patch('startleft.mapping.mapping_file_loader.MappingFileLoader.load')
+    @patch('startleft.processors.terraform.load.tf_mapping_file_loader.TerraformMappingFileLoader.load')
     def test_response_on_loading_mapping_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -252,7 +252,7 @@ class TestOtmControllerIaCTerraform:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @responses.activate
-    @patch('startleft.iac.iac_to_otm.IacToOtm.run')
+    @patch('startleft.processors.terraform.tf_processor.TerraformProcessor.process')
     def test_response_on_otm_building_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'

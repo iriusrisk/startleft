@@ -27,7 +27,7 @@ class TerraformValidator(ProviderValidator):
     def __validate_size(self):
         size = len(self.terraform_data)
         if size > MAX_SIZE or size < MIN_SIZE:
-            msg = 'Provided Terraform file is not valid. Invalid size'
+            msg = 'Terraform file is not valid. Invalid size'
             raise IacFileNotValidError('Terraform file is not valid', msg, msg)
 
     def __validate_content_type(self):

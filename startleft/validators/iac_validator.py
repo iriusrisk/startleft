@@ -3,7 +3,7 @@ import logging
 import magic as magik
 
 from startleft.api.errors import IacFileNotValidError
-from startleft.iac.iac_type import IacType
+from startleft.processors.base.provider_type import IacType
 
 logger = logging.getLogger(__name__)
 

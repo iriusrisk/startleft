@@ -1,10 +1,10 @@
 import logging
 
 from startleft.api.errors import OtmBuildingError
-from startleft.iac.iac_type import IacType
 from startleft.otm.otm import OTM
 from startleft.otm.otm_builder import OtmBuilder
 from startleft.processors.base.provider_parser import ProviderParser
+from startleft.processors.base.provider_type import IacType
 from startleft.processors.terraform.parse.mapping.tf_sourcemodel import TerraformSourceModel
 from startleft.processors.terraform.parse.mapping.tf_transformer import TerraformTransformer
 
