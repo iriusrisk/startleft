@@ -2,4 +2,4 @@ from startleft.provider import Provider
 
 
 class EtmType(str, Provider):
-    MTMT = ("MTMT", "Microsoft Threat Model", "threat-model")
+    MTMT = ("MTMT", "Microsoft Threat Modeling Tool", "threat-model")
