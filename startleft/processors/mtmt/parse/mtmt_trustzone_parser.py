@@ -8,4 +8,4 @@ class MTMTTrustzoneParser:
         return []
 
     def parse_default_trustzone(self) -> Trustzone:
-        return Trustzone(None, None)
+        return Trustzone("b61d6911-338d-46a8-9f39-8dcd24abfe91", "Public Cloud")
