@@ -98,11 +98,17 @@ def get_tags(source_model, source_object, mapping):
     if mapping is not None:
         if isinstance(mapping, list):
             for tag in mapping:
-                c_tags.append(source_model.search(tag, source=source_object))
+                __search_and_add_tag(c_tags, tag, source_model, source_object)
         else:
-            c_tags.append(source_model.search(mapping, source=source_object))
+            __search_and_add_tag(c_tags, mapping, source_model, source_object)
 
     return c_tags
+
+
+def __search_and_add_tag(c_tags: [], query, source_model, source_object):
+    tag = source_model.search(query, source=source_object)
+    if isinstance(tag, str):
+        c_tags.append(tag)
 
 
 def set_optional_parameters_to_resource(resource, mapping_tags, resource_tags, singleton_multiple_name=None,
@@ -470,6 +476,9 @@ class ComponentMapper:
                 parent = [DEFAULT_TRUSTZONE]
             else:
                 parent = [get_resource_name_from_resource_reference(parent) if is_terraform_resource_reference(parent) else parent]
+
+        if parent is None:
+            parent = [DEFAULT_TRUSTZONE]
 
         return parent, parents_from_component
 
