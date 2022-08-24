@@ -1,7 +1,7 @@
 from click.testing import CliRunner
 from pytest import mark
 
-from startleft.api.errors import MappingFileNotValidError, LoadingDiagramFileError
+from startleft.api.errors import MappingFileNotValidError, DiagramFileNotValidError
 from startleft.cli import parse_any
 from tests.resources import test_resource_paths
 from tests.util.otm import validate_and_diff as validate_and_diff_otm
@@ -152,8 +152,8 @@ class TestCliParseDiagram:
             # When parsing
             result = runner.invoke(parse_any, args)
 
-            # Then a LoadingDiagramFileError is returned
-            assert isinstance(result.exception, LoadingDiagramFileError)
+            # Then a DiagramFileNotValidError is returned
+            assert isinstance(result.exception, DiagramFileNotValidError)
 
     def test_parse_diagram_with_invalid_default_mapping(self):
         """
