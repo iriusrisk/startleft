@@ -1,0 +1,240 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "project-name",
+    "id": "project-id"
+  },
+  "representations": [
+    {
+      "name": "CloudFormation",
+      "id": "CloudFormation",
+      "type": "code"
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "6a8f388f-f81b-40bc-abd5-8d6affc7e1ac",
+      "name": "DynamoDB from VPCEndpoint",
+      "type": "dynamodb",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "DummyVPCdynamodb (AWS::EC2::VPCEndpoint)"
+      ]
+    },
+    {
+      "id": "64687893-5570-4b49-91eb-b0713029c7c7",
+      "name": "CustomVPC",
+      "type": "vpc",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "AWS::EC2::VPC"
+      ]
+    },
+    {
+      "id": "b8246638-1f64-4f25-b186-f44882982dc9",
+      "name": "PrivateSubnet1",
+      "type": "empty-component",
+      "parent": {
+        "component": "64687893-5570-4b49-91eb-b0713029c7c7"
+      },
+      "tags": [
+        "AWS::EC2::Subnet"
+      ]
+    },
+    {
+      "id": "6912787f-3469-4484-853a-1eb9d92e8e69",
+      "name": "PrivateSubnet2",
+      "type": "empty-component",
+      "parent": {
+        "component": "64687893-5570-4b49-91eb-b0713029c7c7"
+      },
+      "tags": [
+        "AWS::EC2::Subnet"
+      ]
+    },
+    {
+      "id": "28d70ee8-46c7-42cb-b2b3-75d71e32efa9",
+      "name": "PublicSubnet1",
+      "type": "empty-component",
+      "parent": {
+        "component": "64687893-5570-4b49-91eb-b0713029c7c7"
+      },
+      "tags": [
+        "AWS::EC2::Subnet"
+      ]
+    },
+    {
+      "id": "b6082965-f91d-48be-a904-df6ada8bfe68",
+      "name": "PublicSubnet2",
+      "type": "empty-component",
+      "parent": {
+        "component": "64687893-5570-4b49-91eb-b0713029c7c7"
+      },
+      "tags": [
+        "AWS::EC2::Subnet"
+      ]
+    },
+    {
+      "id": "fa11b256-6e11-4f40-b130-8ac270664917",
+      "name": "DummyVPCssm",
+      "type": "empty-component",
+      "parent": {
+        "component": "b8246638-1f64-4f25-b186-f44882982dc9"
+      },
+      "tags": [
+        "AWS::EC2::VPCEndpoint"
+      ]
+    },
+    {
+      "id": "51923f19-0d91-49ba-a55a-ded9ce260b84",
+      "name": "DummyVPCssm",
+      "type": "empty-component",
+      "parent": {
+        "component": "6912787f-3469-4484-853a-1eb9d92e8e69"
+      },
+      "tags": [
+        "AWS::EC2::VPCEndpoint"
+      ]
+    },
+    {
+      "id": "3dc699f7-67aa-43e7-b4e3-3895afe767ba",
+      "name": "DummyVPCssmmessages",
+      "type": "empty-component",
+      "parent": {
+        "component": "b8246638-1f64-4f25-b186-f44882982dc9"
+      },
+      "tags": [
+        "AWS::EC2::VPCEndpoint"
+      ]
+    },
+    {
+      "id": "d2dce193-8d23-495d-b5b8-a161c63b7b50",
+      "name": "DummyVPCssmmessages",
+      "type": "empty-component",
+      "parent": {
+        "component": "6912787f-3469-4484-853a-1eb9d92e8e69"
+      },
+      "tags": [
+        "AWS::EC2::VPCEndpoint"
+      ]
+    },
+    {
+      "id": "d3adaeb0-4bfb-4b37-87b0-b14121402f47",
+      "name": "DummyVPCdynamodb",
+      "type": "empty-component",
+      "parent": {
+        "component": "64687893-5570-4b49-91eb-b0713029c7c7"
+      },
+      "tags": [
+        "AWS::EC2::VPCEndpoint"
+      ]
+    },
+    {
+      "id": "b93c5f93-7f15-4012-8fd6-126df1b83f52",
+      "name": "DummyApiUserPool",
+      "type": "cognito",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "AWS::Cognito::UserPool"
+      ]
+    },
+    {
+      "id": "9f562f64-fa96-4b1f-96e5-6a8215e3aa9b",
+      "name": "DummyCertificate",
+      "type": "CD-ACM",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "AWS::CertificateManager::Certificate"
+      ]
+    },
+    {
+      "id": "a0ddaae3-b50d-4d1f-bda8-2e683d41d6fc",
+      "name": "cloudwatch (grouped)",
+      "type": "cloudwatch",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "DummyCWAlarm (AWS::CloudWatch::Alarm)",
+        "DummyLogGroupA (AWS::Logs::LogGroup)",
+        "DummyLogGroupB (AWS::Logs::LogGroup)"
+      ]
+    },
+    {
+      "id": "b68afff9-daae-4ca7-b555-629a5dcc3810",
+      "name": "kms (grouped)",
+      "type": "kms",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "DummyTableKey (AWS::KMS::Key)",
+        "DummyCanaryBucketKey (AWS::KMS::Key)"
+      ]
+    },
+    {
+      "id": "711c8f0b-0c5e-4b1b-b47e-6691e58a0ab8",
+      "name": "Systems Manager from VPCEndpoint (grouped)",
+      "type": "CD-SYSTEMS-MANAGER",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "DummyVPCssm (AWS::EC2::VPCEndpoint)",
+        "DummyVPCssmmessages (AWS::EC2::VPCEndpoint)"
+      ]
+    },
+    {
+      "id": "adac6d67-5b23-46e4-9d6d-1278cadd6c07",
+      "name": "api-gateway (grouped)",
+      "type": "api-gateway",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "DummyApiAuthorizer (AWS::ApiGateway::Authorizer)",
+        "DummyApiGwKdsRestApi (AWS::ApiGateway::RestApi)"
+      ]
+    },
+    {
+      "id": "3a5fed98-87c3-444e-9bd4-25632dbabaf9",
+      "name": "sns (grouped)",
+      "type": "sns",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "DummyTopic (AWS::SNS::Topic)",
+        "DummySubscription (AWS::SNS::Subscription)"
+      ]
+    }
+  ],
+  "dataflows": [
+    {
+      "id": "2fbf31df-2a92-4822-a979-57086156a080",
+      "name": "API gateway data flow from DummyApiAuthorizer",
+      "source": "adac6d67-5b23-46e4-9d6d-1278cadd6c07",
+      "destination": "b93c5f93-7f15-4012-8fd6-126df1b83f52",
+      "tags": [
+        "API gateway dataflow"
+      ]
+    }
+  ]
+}

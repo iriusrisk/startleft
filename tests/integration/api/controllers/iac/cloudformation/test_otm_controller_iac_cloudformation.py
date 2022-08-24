@@ -6,12 +6,12 @@ import responses
 from fastapi.testclient import TestClient
 from pytest import mark
 
-from startleft.api import fastapi_server
-from startleft.api.controllers.iac import iac_create_otm_controller
-from startleft.api.errors import LoadingIacFileError, IacFileNotValidError, MappingFileNotValidError, \
+from sl_util.sl_util import file_utils as FileUtils
+from slp_base.slp_base.errors import LoadingIacFileError, IacFileNotValidError, MappingFileNotValidError, \
     LoadingMappingFileError, OtmResultError, OtmBuildingError
-from startleft.utils import file_utils as FileUtils
-from tests.resources.test_resource_paths import default_cloudformation_mapping, default_terraform_mapping, \
+from startleft.startleft.api import fastapi_server
+from startleft.startleft.api.controllers.iac import iac_create_otm_controller
+from startleft.tests.resources.test_resource_paths import default_cloudformation_mapping, default_terraform_mapping, \
     example_json, cloudformation_malformed_mapping_wrong_id, invalid_yaml, \
     terraform_aws_singleton_components_unix_line_breaks, cloudformation_all_functions, \
     cloudformation_mapping_all_functions, terraform_specific_functions, terraform_mapping_specific_functions, \
@@ -124,7 +124,7 @@ class TestOtmControllerIaCCloudformation:
         assert '"components": ' in response.text
 
     @responses.activate
-    @patch('startleft.processors.cloudformation.validate.cft_validator.CloudformationValidator.validate')
+    @patch('slp_cft.slp_cft.validate.cft_validator.CloudformationValidator.validate')
     def test_response_on_validating_iac_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -154,7 +154,7 @@ class TestOtmControllerIaCCloudformation:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg 1'
 
     @responses.activate
-    @patch('startleft.processors.cloudformation.load.cft_loader.CloudformationLoader.load')
+    @patch('slp_cft.slp_cft.load.cft_loader.CloudformationLoader.load')
     def test_response_on_loading_iac_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -184,7 +184,7 @@ class TestOtmControllerIaCCloudformation:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg 1'
 
     @responses.activate
-    @patch('startleft.processors.cloudformation.load.cft_mapping_file_loader.CloudformationMappingFileLoader.load')
+    @patch('slp_cft.slp_cft.load.cft_mapping_file_loader.CloudformationMappingFileLoader.load')
     def test_response_on_validating_mapping_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -215,7 +215,7 @@ class TestOtmControllerIaCCloudformation:
         assert body_response['errors'][0]['errorMessage'] == 'schema errors messages'
 
     @responses.activate
-    @patch('startleft.processors.cloudformation.load.cft_mapping_file_loader.CloudformationMappingFileLoader.load')
+    @patch('slp_cft.slp_cft.load.cft_mapping_file_loader.CloudformationMappingFileLoader.load')
     def test_response_on_loading_mapping_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -246,7 +246,7 @@ class TestOtmControllerIaCCloudformation:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @responses.activate
-    @patch('startleft.otm.otm_validator.OtmValidator.validate')
+    @patch('slp_base.slp_base.otm_validator.OtmValidator.validate')
     def test_response_on_otm_result_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -276,7 +276,7 @@ class TestOtmControllerIaCCloudformation:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @responses.activate
-    @patch('startleft.processors.cloudformation.cft_processor.CloudformationProcessor.process')
+    @patch('slp_cft.slp_cft.cft_processor.CloudformationProcessor.process')
     def test_response_on_otm_building_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'

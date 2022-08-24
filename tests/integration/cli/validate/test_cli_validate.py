@@ -1,8 +1,9 @@
 import logging
 
 from click.testing import CliRunner
-from startleft.cli import validate
-from tests.resources import test_resource_paths
+
+from startleft.startleft.cli import validate
+from startleft.tests.resources import test_resource_paths
 
 SAMPLE_OTM_FILENAME = test_resource_paths.otm_file_example
 SAMPLE_OTM_YAML_FILENAME = test_resource_paths.otm_yaml_file_example
