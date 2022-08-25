@@ -95,3 +95,9 @@ model_mtmt_source_file = path + '/mtmt/test_model.tm7'
 mtmt_mapping_file = path + '/mtmt/mtmt-mapping.yaml'
 custom_mtmt_single_mapping_file = path + '/mtmt/custom-single-mtmt-mapping.yaml'
 custom_mtmt_multiple_mapping_file = path + '/mtmt/custom-multiple-mtmt-mapping.yaml'
+no_components_mtmt_mapping_file = path + '/mtmt/no-components-mtmt-mapping.yaml'
+no_trustzones_mtmt_mapping_file = path + '/mtmt/no-trustzones-mtmt-mapping.yaml'
+trustzones_no_mandatory_label_mtmt_mapping_file = path + '/mtmt/trustzones-no-mandatory-label-mtmt-mapping.yaml'
+no_mandatory_label_mtmt_mapping_file = path + '/mtmt/no-mandatory-label-mtmt-mapping.yaml'
+
+

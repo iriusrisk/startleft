@@ -1,0 +1,10 @@
+trustzones:
+  - label: ""
+    type: ""
+    id: ""
+
+components:
+  - label:  Custom VPC
+    type:   empty-component
+
+dataflows: []
