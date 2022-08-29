@@ -42,7 +42,7 @@ resource "aws_vpc" "foo" {
 
 data "aws_availability_zones" "available" {}
 
-resource "aws_subnet" "foo" {
+resource "aws_subnet" "baz" {
   vpc_id            = aws_vpc.foo.id
   cidr_block        = "10.1.1.0/24"
   availability_zone = data.aws_availability_zones.available.names[0]
@@ -54,7 +54,7 @@ resource "aws_subnet" "bar" {
   availability_zone = data.aws_availability_zones.available.names[1]
 }
 
-resource "aws_alb" "foo" {
+resource "aws_alb" "qux" {
   internal = true
   subnets  = [aws_subnet.foo.id, aws_subnet.bar.id]
 }
