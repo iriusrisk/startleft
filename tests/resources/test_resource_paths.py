@@ -53,6 +53,7 @@ terraform_gz = path + '/terraform/terraform.gz'
 terraform_specific_functions = path + '/terraform/terraform_specific_functions.tf'
 terraform_modules_sample = path + '/terraform/terraform_modules_sample.tf'
 terraform_extra_modules_sample = path + '/terraform/terraform_extra_modules_sample.tf'
+terraform_elb = path + '/terraform/elb.tf'
 # mapping
 default_terraform_mapping = path + '/terraform/default-terraform-mapping.yaml'
 default_terraform_aws_mapping = path + '/terraform/aws_terraform_mapping.yaml'
@@ -63,6 +64,7 @@ terraform_mapping_modules = path + '/terraform/terraform_mapping_modules.yaml'
 terraform_mapping_extra_modules = path + '/terraform/terraform_mapping_extra_modules.yaml'
 # expected otm results
 terraform_aws_simple_components_otm_expected = path + '/terraform/aws_simple_components.otm'
+terraform_iriusrisk_tf_aws_mapping = path + '/terraform/iriusrisk-tf-aws-mapping.yaml'
 
 # VISIO
 visio_aws_with_tz_and_vpc = path + '/visio/aws-with-tz-and-vpc.vsdx'
