@@ -2,8 +2,8 @@ from unittest.mock import patch
 
 from shapely.geometry import Polygon, Point
 
-from startleft.diagram.objects.diagram_objects import DiagramComponent
-from startleft.diagram.parsing.parent_calculator import ParentCalculator
+from slp_visio.objects.diagram_objects import DiagramComponent
+from slp_visio.parsing.parent_calculator import ParentCalculator
 
 
 def create_representation_mock(dimension: float = None) -> Polygon:

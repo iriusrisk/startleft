@@ -5,32 +5,32 @@ from unittest.mock import patch
 import pytest
 
 import startleft.api.controllers.diagram.diag_create_otm_controller as diagram_controller
+from slp_visio.diagram_type import DiagramType
 from startleft.api.errors import OtmGenerationError, LoadingDiagramFileError, DiagramFileNotValidError, \
     MappingFileNotValidError, OtmResultError
+from startleft.otm.otm import OTM
 
-TESTING_DIAGRAM_TYPE = 'DIAG_TYPE'
+TESTING_DIAGRAM_TYPE = DiagramType.VISIO
+DUMMY_OTM = OTM("otm-mock", "otm mock", DiagramType.VISIO)
+
 
 class TestApiDiagram:
 
     def test_api_diagram_controller_happy_path(self):
         # GIVEN a mocked valid file of any provider
-
         valid_diagram_file = MagicMock(filename='valid_diagram_file', content_type='application/json',
                                        file=MagicMock(spec=typing.BinaryIO))
 
         # AND any mocked mapping file
-
         valid_default_mapping_file = MagicMock(filename='valid_default_mapping_file', content_type='application/json',
                                                file=MagicMock(spec=typing.BinaryIO))
 
         # WHEN the POST /diagram endpoint is called with diagram params AND no error is raised
-
-        with patch('startleft.otm.otm_project.OtmProject.from_diag_file_to_otm_stream'):
+        with patch('slp_visio.visio_processor.VisioProcessor.process', side_effect=[DUMMY_OTM]):
             response = diagram_controller.diagram(valid_diagram_file, TESTING_DIAGRAM_TYPE, 'happy_path_id',
                                                   'happy_path_name', valid_default_mapping_file, False)
 
         # THEN a response with HTTP status 201 is returned
-
         assert response.status_code == 201
 
     def test_api_diagram_controller_on_loading_diagram_file_error(self):
@@ -46,7 +46,7 @@ class TestApiDiagram:
         with pytest.raises(LoadingDiagramFileError) as e_info:
             # WHEN the POST /diagram endpoint is called with_diagram params
             # AND an error is raised
-            with patch('startleft.otm.otm_project.OtmProject.from_diag_file_to_otm_stream',
+            with patch('slp_visio.visio_processor.VisioProcessor.process',
                        side_effect=LoadingDiagramFileError('mocked error DIAGRAM_LOADING_ERROR', 'mocked error detail',
                                                            'mocked error msg 1')):
                 # THEN a response HTTP Status that matches the error is returned
@@ -73,7 +73,7 @@ class TestApiDiagram:
         with pytest.raises(DiagramFileNotValidError) as e_info:
             # WHEN the POST /diagram endpoint is called with_diagram params
             # AND an error is raised
-            with patch('startleft.otm.otm_project.OtmProject.from_diag_file_to_otm_stream',
+            with patch('slp_visio.visio_processor.VisioProcessor.process',
                        side_effect=DiagramFileNotValidError('mocked error DIAGRAM_NOT_VALID', 'mocked error detail',
                                                             'mocked error msg 2')):
                 # THEN a response HTTP Status that matches the error is returned
@@ -99,7 +99,7 @@ class TestApiDiagram:
         with pytest.raises(MappingFileNotValidError) as e_info:
             # WHEN the POST /diagram endpoint is called with_diagram params
             # AND an error is raised
-            with patch('startleft.otm.otm_project.OtmProject.from_diag_file_to_otm_stream',
+            with patch('slp_visio.visio_processor.VisioProcessor.process',
                        side_effect=MappingFileNotValidError('mocked error MAPPING_FILE_NOT_VALID',
                                                             'mocked error detail', 'mocked error msg 3')):
                 # THEN a response HTTP Status that matches the error is returned
@@ -125,7 +125,7 @@ class TestApiDiagram:
         with pytest.raises(OtmResultError) as e_info:
             # WHEN the POST /diagram endpoint is called with_diagram params
             # AND an error is raised
-            with patch('startleft.otm.otm_project.OtmProject.from_diag_file_to_otm_stream',
+            with patch('slp_visio.visio_processor.VisioProcessor.process',
                        side_effect=OtmResultError('mocked error OTM_RESULT_ERROR', 'mocked error detail',
                                                     'mocked error msg 4')):
                 # THEN a response HTTP Status that matches the error is returned
@@ -149,7 +149,7 @@ class TestApiDiagram:
         with pytest.raises(OtmGenerationError) as e_info:
             # WHEN the POST /diagram endpoint is called with_diagram params
             # AND an error is raised
-            with patch('startleft.otm.otm_project.OtmProject.from_diag_file_to_otm_stream',
+            with patch('slp_visio.visio_processor.VisioProcessor.process',
                        side_effect=OtmGenerationError('mocked error OTM_GENERATION_ERROR', 'mocked error detail',
                                                       'mocked error msg 5')):
                 # THEN a response HTTP Status that matches the error is returned

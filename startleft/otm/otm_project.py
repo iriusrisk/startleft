@@ -5,37 +5,18 @@ from typing import Optional
 from typing.io import IO
 
 from startleft.api.errors import OtmGenerationError
-from startleft.diagram.diagram_type import DiagramType
-from startleft.diagram.external_diagram_to_otm import ExternalDiagramToOtm
 from startleft.iac.iac_to_otm import IacToOtm
 from startleft.iac.iac_type import IacType
 from startleft.mapping.mapping_file_loader import MappingFileLoader
 from startleft.otm.otm import OTM
 from startleft.otm.otm_file_loader import OtmFileLoader
 from startleft.otm.otm_validator import OtmValidator
-from startleft.utils.file_utils import FileUtils
-from startleft.validators.diagram_validator import DiagramValidator
 from startleft.validators.generic_mapping_validator import GenericMappingValidator
 from startleft.validators.iac_validator import IacValidator
-from startleft.validators.visio_validator import VisioValidator
 
 logger = logging.getLogger(__name__)
 
 DEFAULT_OTM_FILENAME = 'threatmodel.otm'
-
-
-def get_diagram_ext(diag_type):
-    if diag_type == DiagramType.VISIO:
-        return '.vsdx'
-    logger.warning(f'Unknown file extension for diagrams {diag_type}')
-    return ''
-
-
-def get_diagram_validator(diag_type, file):
-    if diag_type == DiagramType.VISIO:
-        return VisioValidator(file)
-    logger.warning(f'There are not validator for diagrams {diag_type}')
-    return DiagramValidator()
 
 
 class OtmProject:
@@ -70,25 +51,6 @@ class OtmProject:
         iac_to_otm = IacToOtm(project_name, project_id, iac_type)
         iac_to_otm.run(iac_type, mapping_data_list, iac_data)
         return OtmProject.from_otm_stream(iac_to_otm.get_otm_stream(), project_id, project_name)
-
-    @staticmethod
-    def from_diag_file_to_otm_stream(project_id: str, project_name: str, diag_type: DiagramType,
-                                     diag_file: [Optional[IO]], mapping_data_list: [bytes]):
-        logger.info("Parsing Diagram stream to OTM")
-        temp_diag_file = FileUtils.copy_to_disk(diag_file[0], get_diagram_ext(diag_type))
-        otm = OtmProject.from_diag_file(project_id, project_name, diag_type, temp_diag_file, mapping_data_list)
-        FileUtils.delete(temp_diag_file.name)
-        return otm
-
-    @staticmethod
-    def from_diag_file(project_id: str, project_name: str, diag_type: DiagramType,
-                       temp_diag_file: Optional[IO], mapping_data_list: [bytes]):
-        logger.info("Parsing Diagram file to OTM")
-        diag_validator: DiagramValidator = get_diagram_validator(diag_type, temp_diag_file)
-        diag_validator.validate()
-        diag_to_otm = ExternalDiagramToOtm(diag_type)
-        otm = diag_to_otm.run(temp_diag_file.name, mapping_data_list, project_name, project_id)
-        return OtmProject.from_otm_stream(otm.json(), project_id, project_name)
 
     @staticmethod
     def validate_iac_mappings_file(mapping_files: [Optional[IO]]):
