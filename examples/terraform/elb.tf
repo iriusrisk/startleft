@@ -56,5 +56,5 @@ resource "aws_subnet" "bar" {
 
 resource "aws_alb" "qux" {
   internal = true
-  subnets  = [aws_subnet.foo.id, aws_subnet.bar.id]
+  subnets  = [aws_subnet.baz.id, aws_subnet.bar.id]
 }
