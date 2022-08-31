@@ -11,7 +11,7 @@ from slp_base.slp_base.errors import LoadingIacFileError, IacFileNotValidError, 
     LoadingMappingFileError, OtmResultError, OtmBuildingError
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.iac import iac_create_otm_controller
-from startleft.tests.resources.test_resource_paths import default_cloudformation_mapping, default_terraform_mapping, \
+from tests.resources.test_resource_paths import default_cloudformation_mapping, default_terraform_mapping, \
     example_json, cloudformation_malformed_mapping_wrong_id, invalid_yaml, \
     terraform_aws_singleton_components_unix_line_breaks, cloudformation_all_functions, \
     cloudformation_mapping_all_functions, terraform_specific_functions, terraform_mapping_specific_functions, \

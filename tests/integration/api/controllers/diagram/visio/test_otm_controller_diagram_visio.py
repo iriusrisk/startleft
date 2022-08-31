@@ -9,8 +9,8 @@ from slp_base.slp_base.errors import DiagramFileNotValidError, MappingFileNotVal
     OtmResultError, OtmBuildingError, LoadingDiagramFileError
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.diagram import diag_create_otm_controller
-from startleft.tests.resources import test_resource_paths
-from startleft.tests.resources.test_resource_paths import visio_aws_with_tz_and_vpc, default_visio_mapping, \
+from tests.resources import test_resource_paths
+from tests.resources.test_resource_paths import visio_aws_with_tz_and_vpc, default_visio_mapping, \
     custom_vpc_mapping
 
 IRIUSRISK_URL = ''

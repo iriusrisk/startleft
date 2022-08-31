@@ -4,7 +4,7 @@ from pytest import mark
 from slp_base.slp_base.errors import MappingFileNotValidError, DiagramFileNotValidError
 from slp_base.tests.util.otm import validate_and_diff as validate_and_diff_otm
 from startleft.startleft.cli import parse_any
-from startleft.tests.resources import test_resource_paths
+from tests.resources import test_resource_paths
 
 # mappings
 VISIO_DEFAULT_VALID_MAPPING_FILENAME = test_resource_paths.default_visio_mapping

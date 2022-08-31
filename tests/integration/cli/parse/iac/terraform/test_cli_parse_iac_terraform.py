@@ -4,9 +4,9 @@ from pytest import mark
 from slp_base import LoadingIacFileError, MappingFileNotValidError
 from slp_base.tests.util.otm import validate_and_diff as validate_and_diff_otm
 from startleft.startleft.cli import parse_any
-from startleft.tests.resources import test_resource_paths
-from startleft.tests.resources.test_resource_paths import invalid_tf
 from tests.integration.cli.parse.iac.test_cli_parse_iac import excluded_regex
+from tests.resources import test_resource_paths
+from tests.resources.test_resource_paths import invalid_tf
 
 # mappings
 TERRAFORM_VALID_MAPPING_FILENAME = test_resource_paths.default_terraform_aws_mapping

@@ -4,8 +4,8 @@ from pytest import mark
 from slp_base import IacFileNotValidError, MappingFileNotValidError
 from slp_base.tests.util.otm import validate_and_diff as validate_and_diff_otm
 from startleft.startleft.cli import parse_any
-from startleft.tests.resources import test_resource_paths
 from tests.integration.cli.parse.iac.test_cli_parse_iac import excluded_regex
+from tests.resources import test_resource_paths
 
 # mappings
 CLOUDFORMATION_MAPPING = test_resource_paths.default_cloudformation_mapping

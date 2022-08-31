@@ -11,7 +11,7 @@ from slp_base import IacFileNotValidError, LoadingIacFileError, MappingFileNotVa
     LoadingMappingFileError, OtmResultError, OtmBuildingError
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.iac import iac_create_otm_controller
-from startleft.tests.resources.test_resource_paths import default_terraform_mapping, \
+from tests.resources.test_resource_paths import default_terraform_mapping, \
     terraform_aws_singleton_components_unix_line_breaks, terraform_malformed_mapping_wrong_id, terraform_gz, \
     visio_aws_shapes, invalid_tf, terraform_aws_simple_components
 

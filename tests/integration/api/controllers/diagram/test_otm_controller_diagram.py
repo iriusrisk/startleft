@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.diagram import diag_create_otm_controller
-from startleft.tests.resources import test_resource_paths
+from tests.resources import test_resource_paths
 
 IRIUSRISK_URL = ''
 
