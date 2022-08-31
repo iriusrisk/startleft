@@ -5,10 +5,6 @@ from startleft.iac.mapping.mappers.base_mapper import BaseMapper
 
 
 class ComponentMapper(BaseMapper):
-    def __int__(self, mapping):
-        super.__init__(mapping)
-        self.source = None
-
     def run(self, source_model, id_parents):
         """
         Iterates through the source model and returns the parameters to create the components

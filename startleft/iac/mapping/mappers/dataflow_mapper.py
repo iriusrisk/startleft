@@ -30,7 +30,6 @@ class DataflowMapper(BaseMapper):
 
                 for source_resource_id in source_resource_ids or []:
                     for destination_resource_name in destination_resource_names or []:
-                        destination_hub_type = None
                         # components should be located
                         destination_resource_ids = self.__get_dataflows_component_ids(destination_resource_name)
 
