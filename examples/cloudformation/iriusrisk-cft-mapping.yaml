@@ -60,7 +60,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   ec2
+    type:   empty-component
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::Subnet']"}
     parent:      {$findFirst: ["Properties.VpcId.Ref", "Properties.VpcId"]}
@@ -68,7 +68,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   vpc
+    type:   empty-component
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::VPCEndpoint']"}
     parent: {$findFirst:[ "Properties.SubnetIds[].Ref", "Properties.VpcId.Ref"]}
@@ -76,7 +76,7 @@ components:
       - { $path: "Type" }
 
   - id:     {$format: "{name}"}
-    type:   ec2
+    type:   empty-component
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::InternetGateway']"}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
@@ -561,4 +561,3 @@ dataflows:
     destination: {$path: "Properties.ProviderARNs[0]|squash(@)[0]"}
     tags:
       - API gateway dataflow
-

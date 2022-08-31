@@ -1,0 +1,39 @@
+from collections import defaultdict
+from xml.etree import ElementTree as ET
+
+
+def get_tag(t):
+    if '}' in t.tag:
+        return t.tag.split('}')[1]
+    else:
+        return t.tag
+
+
+def xml2dict(t):
+    d = {get_tag(t): {} if t.attrib else None}
+    children = list(t)
+    if children:
+        dd = defaultdict(list)
+        for dc in map(xml2dict, children):
+            for k, v in dc.items():
+                dd[k].append(v)
+        d = {get_tag(t): {k: v[0] if len(v) == 1 else v
+                          for k, v in dd.items()}}
+    if t.text:
+        text = t.text.strip()
+        if children or t.attrib:
+            if text:
+                d[get_tag(t)]['text'] = text
+        else:
+            d[get_tag(t)] = text
+    return d
+
+
+class Tm7ToJson:
+
+    def __init__(self, xml: str):
+        self.xml = xml
+
+    def to_json(self):
+        xml_data = ET.XML(self.xml)
+        return xml2dict(xml_data)

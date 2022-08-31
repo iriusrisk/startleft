@@ -8,6 +8,7 @@ example_yaml = path + '/example.yaml'
 invalid_yaml = path + '/invalid-yaml.yaml'
 invalid_tf = path + '/invalid-tf.tf'
 example_gzip = path + '/example.gz'
+empty_mapping_file = path + "/empty_mapping_file.yaml"
 
 # OTM
 otm_file_example = path + '/otm/otm_file_example.otm'
@@ -51,6 +52,8 @@ terraform_no_resources = path + '/terraform/no_resources.tf'
 terraform_gz = path + '/terraform/terraform.gz'
 terraform_specific_functions = path + '/terraform/terraform_specific_functions.tf'
 terraform_modules_sample = path + '/terraform/terraform_modules_sample.tf'
+terraform_extra_modules_sample = path + '/terraform/terraform_extra_modules_sample.tf'
+terraform_elb = path + '/terraform/elb.tf'
 # mapping
 default_terraform_mapping = path + '/terraform/default-terraform-mapping.yaml'
 default_terraform_aws_mapping = path + '/terraform/aws_terraform_mapping.yaml'
@@ -58,8 +61,10 @@ terraform_mapping_aws_component_without_parent = path + '/terraform/terraform_ma
 terraform_malformed_mapping_wrong_id = path + '/terraform/terraform-malformed-mapping-wrong-id.yaml'
 terraform_mapping_specific_functions = path + '/terraform/terraform_mapping_specific_functions.yaml'
 terraform_mapping_modules = path + '/terraform/terraform_mapping_modules.yaml'
+terraform_mapping_extra_modules = path + '/terraform/terraform_mapping_extra_modules.yaml'
 # expected otm results
 terraform_aws_simple_components_otm_expected = path + '/terraform/aws_simple_components.otm'
+terraform_iriusrisk_tf_aws_mapping = path + '/terraform/iriusrisk-tf-aws-mapping.yaml'
 
 # VISIO
 visio_aws_with_tz_and_vpc = path + '/visio/aws-with-tz-and-vpc.vsdx'
@@ -86,3 +91,7 @@ custom_vpc_mapping = path + '/visio/custom-vpc-mapping.yaml'
 visio_aws_shapes_otm_expected = path + '/visio/aws-shapes.otm'
 visio_aws_with_tz_and_vpc_otm_expected = path + '/visio/aws-with-tz-and-vpc.otm'
 visio_orphan_dataflows_otm_expected = path + '/visio/visio-orphan-dataflows.otm'
+
+# MTMT
+model_mtmt_source_file = path + '/mtmt/test_model.tm7'
+mtmt_mapping_file = path + '/mtmt/mtmt-mapping.yaml'

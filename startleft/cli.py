@@ -4,7 +4,6 @@ import sys
 
 import click
 
-from startleft import messages
 from startleft.api.errors import CommonError
 from startleft.clioptions.exclusion_option import Exclusion
 from startleft.diagram.diagram_type import DiagramType
@@ -88,14 +87,14 @@ def parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, outpu
 
 
 @cli.command(name='parse')
-@click.option(messages.IAC_TYPE_NAME, messages.IAC_TYPE_SHORTNAME,
-              type=click.Choice(messages.IAC_TYPE_SUPPORTED, case_sensitive=False),
-              help=messages.IAC_TYPE_DESC,
+@click.option(IAC_TYPE_NAME, IAC_TYPE_SHORTNAME,
+              type=click.Choice(IAC_TYPE_SUPPORTED, case_sensitive=False),
+              help=IAC_TYPE_DESC,
               cls=Exclusion,
               mandatory=True,
               mutually_exclusion=['diagram_type', 'default_mapping_file', 'custom_mapping_file'])
 @click.option(DIAGRAM_TYPE_NAME, DIAGRAM_TYPE_SHORTNAME,
-              type=click.Choice(messages.DIAGRAM_TYPE_SUPPORTED, case_sensitive=False),
+              type=click.Choice(DIAGRAM_TYPE_SUPPORTED, case_sensitive=False),
               help=DIAGRAM_TYPE_DESC,
               cls=Exclusion,
               mandatory=True,
@@ -155,11 +154,11 @@ def validate(iac_mapping_file, diagram_mapping_file, otm_file):
 
 
 @cli.command()
-@click.option(messages.IAC_TYPE_NAME, messages.IAC_TYPE_SHORTNAME, help=IAC_TYPE_DESC,
-              type=click.Choice(messages.IAC_TYPE_SUPPORTED, case_sensitive=False), required=True
+@click.option(IAC_TYPE_NAME, IAC_TYPE_SHORTNAME, help=IAC_TYPE_DESC,
+              type=click.Choice(IAC_TYPE_SUPPORTED, case_sensitive=False), required=True
               )
 @click.option('--query', '-q', help='JMESPath query to run against the IaC file.')
-@click.argument(messages.SOURCE_FILE_NAME, required=True, nargs=-1)
+@click.argument(SOURCE_FILE_NAME, required=True, nargs=-1)
 def search(iac_type, query, source_file):
     """
     Searches source files for the given query

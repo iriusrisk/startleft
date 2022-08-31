@@ -70,15 +70,15 @@ class CustomFunctions(jmespath.functions.Functions):
         return source_objects
 
     @jmespath.functions.signature({'types': ['array', 'null']}, {'types': ['string']})
-    def _func_get_module_terraform(self, obj_arr, component_type):
+    def _func_get_module_terraform(self, modules, module_type):
         source_objects = []
 
-        if obj_arr is not None:
-            for obj in obj_arr:
-                for c_type in obj:
-                    module_source = obj[c_type]['source']
-                    if module_source == component_type:
-                        new_obj = self.add_type_and_name(obj[c_type], module_source, c_type)
+        if modules is not None:
+            for module in modules:
+                for c_type in module:
+                    module_source = module[c_type]['source']
+                    if module_source == module_type:
+                        new_obj = self.add_type_and_name(module[c_type], module_source, c_type)
                         source_objects.append(new_obj)
 
         return source_objects
@@ -226,11 +226,10 @@ class SourceModel:
 
     def __jmespath_search(self, search_path, source):
         try:
-            search = jmespath.search(search_path, source, options=self.jmespath_options)
+            return jmespath.search(search_path, source, options=self.jmespath_options)
 
-            return search if search is not None else []
         except:
-            return []
+            return None
 
     def __find_first_search(self, search_path_root, source):
         for search_path in search_path_root:
