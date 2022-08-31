@@ -10,6 +10,8 @@ from sl_util.sl_util.file_utils import get_data
 from slp_base import CommonError
 from slp_base import DiagramType, OtmGenerationError
 from slp_base import IacType
+from slp_base.slp_base.otm_file_loader import OtmFileLoader
+from slp_base.slp_base.otm_validator import OtmValidator
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.clioptions.exclusion_option import Exclusion
 from startleft.startleft.log import get_log_level, configure_logging
@@ -165,7 +167,7 @@ def validate(iac_mapping_file, diagram_mapping_file, otm_file):
 
     if otm_file:
         logger.info("Validating OTM file")
-        OtmProject.load_and_validate_otm_file(otm_file)
+        OtmValidator().validate(OtmFileLoader().load(otm_file))
 
 
 @cli.command()

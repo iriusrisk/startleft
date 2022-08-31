@@ -8,7 +8,6 @@ from otm.otm.otm import OTM
 from sl_util.sl_util import file_utils as FileUtils
 from slp_base import DiagramType
 from slp_base import OtmGenerationError
-from slp_base.slp_base.otm_file_loader import OtmFileLoader
 from slp_base.slp_base.otm_validator import OtmValidator
 from startleft.startleft.diagram.external_diagram_to_otm import ExternalDiagramToOtm
 from startleft.startleft.mapping.mapping_file_loader import MappingFileLoader
@@ -28,14 +27,6 @@ class OtmProject:
         self.project_id = project_id
         self.project_name = project_name
 
-    @staticmethod
-    def from_otm_file(otm_filename: str, project_id: str = None, project_name: str = None):
-        otm = OtmProject.load_and_validate_otm_file(otm_filename)
-
-        project_id = project_id or otm['project']['id']
-        project_name = project_name or otm['project']['name']
-
-        return OtmProject(project_id, project_name, otm_filename, otm)
 
     @staticmethod
     def from_otm_stream(otm_stream: str, project_id: str = None, project_name: str = None):
@@ -82,13 +73,6 @@ class OtmProject:
         logger.debug("Validating OTM stream")
         OtmValidator().validate(otm_stream)
         return otm_stream
-
-    @staticmethod
-    def load_and_validate_otm_file(otm_filename: str) -> {}:
-        logger.info("Loading and validating OTM file")
-        otm = OtmFileLoader().load(otm_filename)
-        OtmValidator().validate(otm)
-        return otm
 
     def get_otm_as_json(self):
         logger.info("getting OTM contents as JSON")
