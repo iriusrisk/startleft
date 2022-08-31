@@ -1,12 +1,11 @@
 import logging
 
 from fastapi import APIRouter, File, UploadFile, Form, Response
-from slp_base.slp_base.errors import LoadingSourceFileError
 
 import sl_util.sl_util.json_utils as jsonUtils
 from slp_base.slp_base.provider_type import EtmType
-from slp_mtmt.slp_mtmt.mtmt_processor import MTMTProcessor
 from startleft.startleft.api.controllers.otm_controller import RESPONSE_STATUS_CODE, PREFIX, controller_responses
+from startleft.startleft.processors.processors_resolver import get_processor
 
 URL = '/etm'
 
@@ -16,14 +15,6 @@ router = APIRouter(
     prefix=PREFIX,
     responses=controller_responses
 )
-
-
-def get_processor(source_type, id, name, etm_data, mapping_data_list):
-    if source_type == EtmType.MTMT:
-        return MTMTProcessor(id, name, etm_data, mapping_data_list)
-    else:
-        raise LoadingSourceFileError(f'{source_type} is not a supported type for source data')
-
 
 @router.post(URL, status_code=RESPONSE_STATUS_CODE,
              description="Generates an OTM threat model from a Threat Model file",

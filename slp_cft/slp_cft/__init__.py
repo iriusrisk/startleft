@@ -1,2 +1,3 @@
 from .cft_processor import CloudformationProcessor
+from .validate.cft_mapping_file_validator import CloudformationMappingFileValidator
 

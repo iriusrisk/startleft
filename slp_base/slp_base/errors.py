@@ -27,7 +27,7 @@ class ErrorCode(Enum):
 class CommonError(Exception):
     error_code: ErrorCode
 
-    def __init__(self, title, detail, message):
+    def __init__(self, title, detail=None, message=None):
         self.title = title
         self.detail = detail
         self.message = message

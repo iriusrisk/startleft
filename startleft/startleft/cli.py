@@ -7,28 +7,18 @@ import click
 
 from otm.otm.otm import OTM
 from sl_util.sl_util.file_utils import get_data
+from slp_base import CommonError
 from slp_base import DiagramType, OtmGenerationError
 from slp_base import IacType
-from slp_base import LoadingSourceFileError, CommonError
-from slp_cft import CloudformationProcessor
-from slp_tf import TerraformProcessor
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.clioptions.exclusion_option import Exclusion
 from startleft.startleft.log import get_log_level, configure_logging
 from startleft.startleft.messages import *
 from startleft.startleft.otm_project import OtmProject
+from startleft.startleft.processors.processors_resolver import get_processor
 from startleft.startleft.version import version
 
 logger = logging.getLogger(__name__)
-
-
-def get_processor(source_type, id, name, iac_data, mapping_data_list):
-    if source_type == IacType.TERRAFORM:
-        return TerraformProcessor(id, name, iac_data, mapping_data_list)
-    if source_type == IacType.CLOUDFORMATION:
-        return CloudformationProcessor(id, name, iac_data, mapping_data_list)
-    else:
-        raise LoadingSourceFileError(f'{source_type} is not a supported type for source data')
 
 
 def get_otm_as_file(otm: OTM, out_file: str):
@@ -39,6 +29,7 @@ def get_otm_as_file(otm: OTM, out_file: str):
     except Exception as e:
         logger.error(f"Unable to create the threat model: {e}")
         raise OtmGenerationError("Unable to create the OTM", e.__class__.__name__, str(e.__cause__))
+
 
 def validate_server(ctx, param, value):
     regex = "((http|https)://)(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}(\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*))?(:[0-9]+)?"
