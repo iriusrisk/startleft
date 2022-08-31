@@ -86,10 +86,10 @@ def validate_schema(schema: str, mapping_file: bytes):
         logger.error(f'--- Schema errors ---\n{schema.errors}\n--- End of schema errors ---')
         raise MappingFileNotValidError('Mapping files are not valid',
                                        'Mapping file does not comply with the schema', str(schema.errors))
-    logger.info('Mapping file schema is valid')
+    logger.info('Mapping files are valid')
 
 
 def validate_mapping_file(schema: str, mapping_file: bytes):
     validate_size(mapping_file)
     validate_schema(schema, mapping_file)
-    logger.info('Mapping file is valid')
+    logger.info('Mapping files are valid')

@@ -1,4 +1,3 @@
-import logging
 import os
 
 import pytest
@@ -10,17 +9,10 @@ ROOT_DIR = os.path.dirname(os.path.realpath(__file__))
 
 modules = ALL_MODULES
 
-logger = logging.getLogger(__name__)
-
 
 class StartleftTestsFailed(Exception):
     def __init__(self, *args, **kwargs):  # real signature unknown
         pass
-
-
-def run_pytest(test_dirs: []):
-    args = [f'--junitxml={ROOT_DIR}/test-reports/report.xml']
-    return pytest.main(args + test_dirs)
 
 
 def get_module_tests_dirs() -> []:
@@ -35,6 +27,10 @@ def get_module_tests_dirs() -> []:
 def get_main_tests_dirs() -> []:
     return [ROOT_DIR + '/tests/integration']
 
+
+def run_pytest(test_dirs: []):
+    args = [f'--junitxml={ROOT_DIR}/test-reports/report.xml']
+    return pytest.main(args + test_dirs)
 
 def run_all_tests():
     test_dirs = get_module_tests_dirs() + get_main_tests_dirs()

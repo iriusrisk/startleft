@@ -55,13 +55,6 @@ class OtmProject:
         otm = diag_to_otm.run(temp_diag_file.name, mapping_data_list, project_name, project_id)
         return OtmProject.from_otm_stream(otm.json(), project_id, project_name)
 
-    # TODO Change this method to base it on processors
-    @staticmethod
-    def validate_iac_mappings_file(mapping_files: [Optional[IO]]):
-        logger.debug("Validating IaC mapping files")
-        iac_mapping = MappingFileLoader().load(mapping_files)
-        GenericMappingValidator('iac_mapping_schema.json').validate(iac_mapping)
-
     @staticmethod
     def validate_diagram_mappings_file(mapping_files: [Optional[IO]]):
         logger.debug("Validating Diagram mapping files")

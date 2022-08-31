@@ -5,6 +5,7 @@ import sys
 
 import click
 
+from _sl_build.globals import PROCESSORS
 from otm.otm.otm import OTM
 from sl_util.sl_util.file_utils import get_data
 from slp_base import CommonError
@@ -12,16 +13,16 @@ from slp_base import DiagramType, OtmGenerationError
 from slp_base import IacType
 from slp_base.slp_base.otm_file_loader import OtmFileLoader
 from slp_base.slp_base.otm_validator import OtmValidator
+from slp_base.slp_base.provider_resolver import ProviderResolver
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.clioptions.exclusion_option import Exclusion
 from startleft.startleft.log import get_log_level, configure_logging
 from startleft.startleft.messages import *
 from startleft.startleft.otm_project import OtmProject
-from startleft.startleft.processors.processors_resolver import get_processor
 from startleft.startleft.version import version
 
 logger = logging.getLogger(__name__)
-
+provider_resolver = ProviderResolver(PROCESSORS)
 
 def get_otm_as_file(otm: OTM, out_file: str):
     logger.info(f"Writing OTM file to '{out_file}'")
@@ -78,7 +79,7 @@ def parse_iac(iac_type, mapping_file, output_file, project_name, project_id, iac
 
     mapping_data = [get_data(mapping_file)]
 
-    processor = get_processor(IacType(iac_type.upper()), project_id, project_name, iac_data, mapping_data)
+    processor = provider_resolver.get_processor(IacType(iac_type.upper()), project_id, project_name, iac_data, mapping_data)
     otm = processor.process()
 
     get_otm_as_file(otm, output_file)
@@ -157,9 +158,11 @@ def validate(iac_mapping_file, diagram_mapping_file, otm_file):
     """
     Validates a mapping or OTM file
     """
+
     if iac_mapping_file:
+        # TODO Cannot assume all diagram/iac mapping file will have the same validation type, so we need to request the type in the command
         logger.info("Validating IaC mapping files")
-        OtmProject.validate_iac_mappings_file([get_data(iac_mapping_file)])
+        provider_resolver.get_mapping_validator(IacType.CLOUDFORMATION, [get_data(iac_mapping_file)]).validate()
 
     if diagram_mapping_file:
         logger.info("Validating Diagram mapping files")

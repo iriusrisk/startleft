@@ -2,10 +2,11 @@ import logging
 
 from fastapi import APIRouter, File, UploadFile, Form, Response
 
+from _sl_build.globals import PROCESSORS
 from sl_util.sl_util.json_utils import get_otm_as_json
+from slp_base.slp_base.provider_resolver import ProviderResolver
 from slp_base.slp_base.provider_type import IacType
 from startleft.startleft.api.controllers.otm_controller import RESPONSE_STATUS_CODE, PREFIX, controller_responses
-from startleft.startleft.processors.processors_resolver import get_processor
 
 URL = '/iac'
 
@@ -37,7 +38,7 @@ def iac(iac_file: UploadFile = File(..., description="File that contains the Iac
     with mapping_file.file as f:
         mapping_data_list.append(f.read())
 
-    processor = get_processor(iac_type, id, name, [iac_data], mapping_data_list)
+    processor = ProviderResolver(PROCESSORS).get_processor(iac_type, id, name, [iac_data], mapping_data_list)
     otm = processor.process()
 
     return Response(status_code=201, media_type="application/json", content=get_otm_as_json(otm))

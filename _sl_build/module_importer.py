@@ -5,11 +5,8 @@ from _sl_build.globals import ALL_MODULES
 
 
 def _build_dependencies_map():
-    result = {}
-    for module in ALL_MODULES:
-        result.update({module['name']: module['forbidden_dependencies']})
-
-    return result
+    module_dependencies = [{module['name']: module['forbidden_dependencies']} for module in ALL_MODULES]
+    return {name: dependencies for module in module_dependencies for name, dependencies in module.items()}
 
 
 _module_names = [module['name'] for module in ALL_MODULES]
@@ -47,5 +44,3 @@ def _secure_importer(name, globals=None, locals=None, fromlist=(), level=0):
 
 def override_module_importer():
     builtins.__import__ = _secure_importer
-
-
