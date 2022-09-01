@@ -1,12 +1,4 @@
-class MTMBorder:
-    def __init__(self, source: dict):
-        pass
-
-    def get_components(self):
-        pass
-
-    def get_trustzones(self):
-        pass
+from startleft.processors.mtmt.entity.mtmt_entity_border import MTMBorder
 
 
 class MTMLine:
@@ -40,4 +32,3 @@ class MTMT:
         self.lines = lines
         self.threats = threats
         self.know_base = know_base
-
