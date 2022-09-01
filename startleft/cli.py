@@ -5,7 +5,7 @@ import sys
 
 import click
 
-from slp_visio.diagram_type import DiagramType
+from slp_visio.slp_visio.diagram_type import DiagramType
 from startleft.api.controllers.diagram.diag_create_otm_controller import get_processor
 from startleft.api.errors import CommonError, OtmGenerationError
 from startleft.clioptions.exclusion_option import Exclusion

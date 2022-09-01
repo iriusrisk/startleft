@@ -207,7 +207,7 @@ class TestOtmControllerDiagramVisio:
         assert otm['dataflows'][3]['destination'] == '41'
 
     @responses.activate
-    @patch('slp_visio.visio_validator.VisioValidator.validate')
+    @patch('slp_visio.slp_visio.visio_validator.VisioValidator.validate')
     def test_response_on_validating_diagram_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -237,7 +237,7 @@ class TestOtmControllerDiagramVisio:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg 1'
 
     @responses.activate
-    @patch('slp_visio.visio_parser.VisioParser.build_otm')
+    @patch('slp_visio.slp_visio.visio_parser.VisioParser.build_otm')
     def test_response_on_loading_diagram_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -267,7 +267,7 @@ class TestOtmControllerDiagramVisio:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg 1'
 
     @responses.activate
-    @patch('slp_visio.visio_mapping_file_validator.VisioMappingFileValidator.validate')
+    @patch('slp_visio.slp_visio.visio_mapping_file_validator.VisioMappingFileValidator.validate')
     def test_response_on_validating_mapping_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -359,7 +359,7 @@ class TestOtmControllerDiagramVisio:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @responses.activate
-    @patch('slp_visio.visio_parser.VisioParser.build_otm')
+    @patch('slp_visio.slp_visio.visio_parser.VisioParser.build_otm')
     def test_response_on_otm_building_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'

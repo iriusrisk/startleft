@@ -1,9 +1,9 @@
 import logging
 
-from slp_visio.diagram_type import DiagramType
-from slp_visio.visio_diagram_factories import VisioComponentFactory, VisioConnectorFactory
-from slp_visio.visio_parser import VisioParser
-from slp_visio.vsdx_parser import VsdxParser
+from slp_visio.slp_visio.diagram_type import DiagramType
+from slp_visio.slp_visio.visio_diagram_factories import VisioComponentFactory, VisioConnectorFactory
+from slp_visio.slp_visio.visio_parser import VisioParser
+from slp_visio.slp_visio.vsdx_parser import VsdxParser
 from startleft import messages
 from startleft.api.errors import DiagramFileNotValidError, OtmBuildingError, LoadingDiagramFileError
 from startleft.mapping.mapping_file_loader import MappingFileLoader
