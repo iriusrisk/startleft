@@ -25,6 +25,7 @@ terraform_gz = path + '/tf/terraform.gz'
 terraform_specific_functions = path + '/tf/terraform_specific_functions.tf'
 terraform_modules = path + '/tf/terraform_modules_sample.tf'
 terraform_extra_modules_sample = path + '/tf/terraform_extra_modules_sample.tf'
+terraform_elb = path + '/tf/elb.tf'
 
 # mapping
 default_terraform_mapping = path + '/mapping/default-terraform-mapping.yaml'
@@ -34,3 +35,4 @@ terraform_malformed_mapping_wrong_id = path + '/mapping/terraform-malformed-mapp
 terraform_mapping_specific_functions = path + '/mapping/terraform_mapping_specific_functions.yaml'
 terraform_mapping_modules = path + '/mapping/terraform_mapping_modules.yaml'
 terraform_mapping_extra_modules = path + '/mapping/terraform_mapping_extra_modules.yaml'
+terraform_iriusrisk_tf_aws_mapping = path + '/mapping/iriusrisk-tf-aws-mapping.yaml'
