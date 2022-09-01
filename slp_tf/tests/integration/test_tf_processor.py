@@ -479,3 +479,24 @@ class TestTerraformProcessor:
         # Then raises OtmBuildingError
         with pytest.raises(IacFileNotValidError):
             TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], mapping_file).process()
+
+    def test_elb_example(self):
+        # GIVEN a valid TF file with some special TF modules
+        terraform_file = get_data(test_resource_paths.terraform_elb)
+
+        # AND a valid TF mapping file
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+
+        # WHEN the TF file is processed
+        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
+
+        assert len(otm.trustzones) == 1
+        assert len(otm.components) == 3
+        assert len(otm.dataflows) == 0
+
+        assert_otm_component(otm, 0, 'vpc', 'foo', PUBLIC_CLOUD_TZ_ID, ['aws_vpc'])
+        assert_otm_component(otm, 1, 'empty-component', 'baz', otm.components[0].id, ['aws_subnet'])
+        assert_otm_component(otm, 2, 'empty-component', 'bar', otm.components[0].id, ['aws_subnet'])
+
+        assert otm.components[0].id != otm.components[1].id
+        assert otm.components[1].id != otm.components[2].id
