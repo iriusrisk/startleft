@@ -98,11 +98,11 @@ class TerraformCustomFunctions(jmespath.functions.Functions):
 
 
 class TerraformSourceModel:
-    def __init__(self):
-        self.data = {}
+    def __init__(self, data=None, otm=None):
+        self.data = data or {}
+        self.otm = otm
         self.lookup = {}
         self.jmespath_options = jmespath.Options(custom_functions=TerraformCustomFunctions())
-        self.otm = None
 
     def load(self, data):
         always_merger.merge(self.data, data)

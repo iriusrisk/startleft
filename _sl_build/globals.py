@@ -15,7 +15,8 @@ GENERAL_MODULES = [
         {'name': 'otm',     'type': 'general', 'forbidden_dependencies': _general_modules_forbidden_dependencies}
 ]
 
-_startleft_forbidden_dependencies = [p['name'] for p in PROCESSORS if 'provider_type' in p]
+# TODO Startleft needs to depend on TF and CFT processors until a decision is token about the search function
+_startleft_forbidden_dependencies = [p['name'] for p in PROCESSORS if 'provider_type' in p and p['name'] not in ['slp_cft', 'slp_tf']]
 STARTLEFT_MODULE = [{'name': 'startleft', 'type': 'general', 'forbidden_dependencies': _startleft_forbidden_dependencies}]
 
 ALL_MODULES = PROCESSORS + GENERAL_MODULES + STARTLEFT_MODULE

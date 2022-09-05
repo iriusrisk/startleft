@@ -14,6 +14,8 @@ from slp_base import IacType
 from slp_base.slp_base.otm_file_loader import OtmFileLoader
 from slp_base.slp_base.otm_validator import OtmValidator
 from slp_base.slp_base.provider_resolver import ProviderResolver
+from slp_cft.slp_cft.cft_searcher import CloudformationSearcher
+from slp_tf.slp_tf.tf_searcher import TerraformSearcher
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.clioptions.exclusion_option import Exclusion
 from startleft.startleft.log import get_log_level, configure_logging
@@ -23,6 +25,7 @@ from startleft.startleft.version import version
 
 logger = logging.getLogger(__name__)
 provider_resolver = ProviderResolver(PROCESSORS)
+
 
 def get_otm_as_file(otm: OTM, out_file: str):
     logger.info(f"Writing OTM file to '{out_file}'")
@@ -42,6 +45,13 @@ def validate_server(ctx, param, value):
         raise click.BadParameter("IriusRisk host must follow the convention 'proto://server[:port]'")
 
     return value
+
+
+def get_iac_searcher(iac_type, iac_data: [bytes]):
+    if iac_type.upper() == 'CLOUDFORMATION':
+        return CloudformationSearcher(iac_data)
+    elif iac_type.upper() == 'TERRAFORM':
+        return TerraformSearcher(iac_data)
 
 
 class CatchAllExceptions(click.Group):
@@ -79,7 +89,8 @@ def parse_iac(iac_type, mapping_file, output_file, project_name, project_id, iac
 
     mapping_data = [get_data(mapping_file)]
 
-    processor = provider_resolver.get_processor(IacType(iac_type.upper()), project_id, project_name, iac_data, mapping_data)
+    processor = provider_resolver.get_processor(IacType(iac_type.upper()), project_id, project_name, iac_data,
+                                                mapping_data)
     otm = processor.process()
 
     get_otm_as_file(otm, output_file)
@@ -171,6 +182,20 @@ def validate(iac_mapping_file, diagram_mapping_file, otm_file):
     if otm_file:
         logger.info("Validating OTM file")
         OtmValidator().validate(OtmFileLoader().load(otm_file))
+
+
+@cli.command()
+@click.option(IAC_TYPE_NAME, IAC_TYPE_SHORTNAME, help=IAC_TYPE_DESC,
+              type=click.Choice(IAC_TYPE_SUPPORTED, case_sensitive=False), required=True
+              )
+@click.option('--query', '-q', help='JMESPath query to run against the IaC file.')
+@click.argument(SOURCE_FILE_NAME, required=True, nargs=-1)
+def search(iac_type, query, source_file):
+    """
+    Searches source files for the given query
+    """
+    logger.info("Running JMESPath search query against the IaC file")
+    get_iac_searcher(iac_type, [get_data(sf) for sf in source_file]).search(query)
 
 
 @cli.command()

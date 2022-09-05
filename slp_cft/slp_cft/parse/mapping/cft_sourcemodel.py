@@ -67,11 +67,11 @@ class CloudformationCustomFunctions(jmespath.functions.Functions):
 
 
 class CloudformationSourceModel:
-    def __init__(self):
-        self.data = {}
+    def __init__(self, data=None, otm=None):
+        self.data = data or {}
+        self.otm = otm
         self.lookup = {}
         self.jmespath_options = jmespath.Options(custom_functions=CloudformationCustomFunctions())
-        self.otm = None
 
     def load(self, data):
         always_merger.merge(self.data, data)
