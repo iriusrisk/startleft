@@ -1,10 +1,10 @@
 from starlette.datastructures import UploadFile
 
-from slp_visio.slp_visio.visio_loader import VisioLoader
-from slp_visio.slp_visio.visio_mapping_file_validator import VisioMappingFileValidator
-from slp_visio.slp_visio.visio_mapping_loader import VisioMappingFileLoader
-from slp_visio.slp_visio.visio_parser import VisioParser
-from slp_visio.slp_visio.visio_validator import VisioValidator
+from slp_visio.slp_visio.load.visio_loader import VisioLoader
+from slp_visio.slp_visio.load.visio_mapping_loader import VisioMappingFileLoader
+from slp_visio.slp_visio.parse.visio_parser import VisioParser
+from slp_visio.slp_visio.validate.visio_mapping_file_validator import VisioMappingFileValidator
+from slp_visio.slp_visio.validate.visio_validator import VisioValidator
 from startleft.processors.base.mapping import MappingLoader, MappingValidator
 from startleft.processors.base.otm_processor import OtmProcessor
 from startleft.processors.base.provider_loader import ProviderLoader

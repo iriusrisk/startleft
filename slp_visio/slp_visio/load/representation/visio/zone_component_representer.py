@@ -3,10 +3,10 @@ from math import pi, tan
 from shapely.geometry import Polygon
 from vsdx import Shape
 
-from slp_visio.slp_visio.objects.diagram_objects import DiagramLimits
-from slp_visio.slp_visio.representation.visio.visio_shape_representer import VisioShapeRepresenter
-from slp_visio.slp_visio.representation.visio.zone.irregular_zones import irregular_zones
-from slp_visio.slp_visio.representation.visio.zone.regular_zones import regular_zones
+from slp_visio.slp_visio.load.objects.diagram_objects import DiagramLimits
+from slp_visio.slp_visio.load.representation.visio.visio_shape_representer import VisioShapeRepresenter
+from slp_visio.slp_visio.load.representation.visio.zone.irregular_zones import irregular_zones
+from slp_visio.slp_visio.load.representation.visio.zone.regular_zones import regular_zones
 from slp_visio.slp_visio.util.visio import get_normalized_angle, get_y_center, get_x_center
 
 

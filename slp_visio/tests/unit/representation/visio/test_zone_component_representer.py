@@ -1,8 +1,8 @@
 import pytest
 from shapely.geometry import Polygon
 
-from slp_visio.slp_visio.objects.diagram_objects import DiagramLimits
-from slp_visio.slp_visio.representation.visio.zone_component_representer import ZoneComponentRepresenter
+from slp_visio.slp_visio.load.objects.diagram_objects import DiagramLimits
+from slp_visio.slp_visio.load.representation.visio.zone_component_representer import ZoneComponentRepresenter
 from slp_visio.tests.util.visio import read_shape_by_name
 from tests.resources.test_resource_paths import visio_boundaries
 

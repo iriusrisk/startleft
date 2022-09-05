@@ -1,6 +1,6 @@
 import uuid
 
-from slp_visio.slp_visio.objects.diagram_objects import DiagramConnector
+from slp_visio.slp_visio.load.objects.diagram_objects import DiagramConnector
 from startleft.otm.otm import Dataflow
 
 

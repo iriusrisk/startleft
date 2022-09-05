@@ -1,7 +1,7 @@
 from shapely.geometry import Polygon
 from vsdx import Shape
 
-from slp_visio.slp_visio.representation.visio.visio_shape_representer import VisioShapeRepresenter
+from slp_visio.slp_visio.load.representation.visio.visio_shape_representer import VisioShapeRepresenter
 from slp_visio.slp_visio.util.visio import get_limits
 
 

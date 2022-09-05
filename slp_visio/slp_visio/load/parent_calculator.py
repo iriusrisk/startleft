@@ -1,4 +1,4 @@
-from slp_visio.slp_visio.objects.diagram_objects import DiagramComponent, DiagramComponentOrigin
+from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent, DiagramComponentOrigin
 
 
 def calculate_area(component: DiagramComponent) -> float:

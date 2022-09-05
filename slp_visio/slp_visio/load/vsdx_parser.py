@@ -1,13 +1,12 @@
 from vsdx import Shape, VisioFile
 
-from slp_visio.slp_visio.diagram_parser import DiagramParser
-from slp_visio.slp_visio.diagram_type import DiagramType
-from slp_visio.slp_visio.objects.diagram_objects import Diagram, DiagramComponentOrigin, DiagramLimits
-from slp_visio.slp_visio.parsing.parent_calculator import ParentCalculator
-from slp_visio.slp_visio.representation.visio.simple_component_representer import SimpleComponentRepresenter
-from slp_visio.slp_visio.representation.visio.zone_component_representer import ZoneComponentRepresenter
+from slp_visio.slp_visio.load.objects.diagram_objects import Diagram, DiagramComponentOrigin, DiagramLimits
+from slp_visio.slp_visio.load.objects.visio_diagram_factories import VisioComponentFactory, VisioConnectorFactory
+from slp_visio.slp_visio.load.parent_calculator import ParentCalculator
+from slp_visio.slp_visio.load.representation.visio.simple_component_representer import SimpleComponentRepresenter
+from slp_visio.slp_visio.load.representation.visio.zone_component_representer import ZoneComponentRepresenter
 from slp_visio.slp_visio.util.visio import get_limits
-from slp_visio.slp_visio.visio_diagram_factories import VisioComponentFactory, VisioConnectorFactory
+from startleft.processors.base.provider_type import DiagramType
 
 DIAGRAM_LIMITS_PADDING = 2
 
@@ -33,7 +32,7 @@ def is_boundary(shape: Shape) -> bool:
     return shape.shape_name is not None and 'Curved panel' in shape.shape_name
 
 
-class VsdxParser(DiagramParser):
+class VsdxParser:
 
     def __init__(self, component_factory: VisioComponentFactory, connector_factory: VisioConnectorFactory):
         self.component_factory = component_factory

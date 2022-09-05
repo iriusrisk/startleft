@@ -7,10 +7,10 @@ from typing.io import IO
 from startleft.api.errors import OtmGenerationError
 from startleft.iac.iac_to_otm import IacToOtm
 from startleft.iac.iac_type import IacType
-from startleft.mapping.mapping_file_loader import MappingFileLoader
 from startleft.otm.otm import OTM
 from startleft.otm.otm_file_loader import OtmFileLoader
 from startleft.otm.otm_validator import OtmValidator
+from startleft.processors.base.mapping_file_loader import MappingFileLoader
 from startleft.validators.generic_mapping_validator import GenericMappingValidator
 from startleft.validators.iac_validator import IacValidator
 

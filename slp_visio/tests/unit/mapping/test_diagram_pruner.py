@@ -1,6 +1,6 @@
-from slp_visio.slp_visio.diagram_pruner import DiagramPruner
-from slp_visio.slp_visio.diagram_type import DiagramType
-from slp_visio.slp_visio.objects.diagram_objects import Diagram, DiagramComponent, DiagramConnector
+from slp_visio.slp_visio.load.objects.diagram_objects import Diagram, DiagramComponent, DiagramConnector
+from slp_visio.slp_visio.parse.diagram_pruner import DiagramPruner
+from startleft.processors.base.provider_type import DiagramType
 
 
 class TestDiagramPruner:

@@ -8,8 +8,8 @@ import yaml
 from startleft.api.errors import LoadingIacFileError, OtmBuildingError
 from startleft.iac.iac_type import IacType
 from startleft.iac.mapping import transformer, sourcemodel
-from startleft.mapping.mapping_file_loader import MappingFileLoader
 from startleft.otm import otm
+from startleft.processors.base.mapping_file_loader import MappingFileLoader
 from startleft.provider import Provider
 from startleft.validators.generic_mapping_validator import GenericMappingValidator
 

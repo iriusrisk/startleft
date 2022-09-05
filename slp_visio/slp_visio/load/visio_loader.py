@@ -1,10 +1,10 @@
 import logging
 
-from slp_visio.slp_visio.diagram_type import DiagramType
-from slp_visio.slp_visio.visio_diagram_factories import VisioComponentFactory, VisioConnectorFactory
-from slp_visio.slp_visio.vsdx_parser import VsdxParser
+from slp_visio.slp_visio.load.objects.visio_diagram_factories import VisioComponentFactory, VisioConnectorFactory
+from slp_visio.slp_visio.load.vsdx_parser import VsdxParser
 from startleft.api.errors import DiagramFileNotValidError, LoadingDiagramFileError
 from startleft.processors.base.provider_loader import ProviderLoader
+from startleft.processors.base.provider_type import DiagramType
 
 logger = logging.getLogger(__name__)
 

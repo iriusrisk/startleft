@@ -1,4 +1,4 @@
-from slp_visio.slp_visio.objects.diagram_objects import Diagram, DiagramComponent
+from slp_visio.slp_visio.load.objects.diagram_objects import Diagram, DiagramComponent
 from startleft.utils.iterations_utils import IterationUtils
 
 

@@ -1,9 +1,9 @@
-from slp_visio.slp_visio.diagram_pruner import DiagramPruner
-from slp_visio.slp_visio.mapping.mappers.diagram_component_mapper import DiagramComponentMapper
-from slp_visio.slp_visio.mapping.mappers.diagram_connector_mapper import DiagramConnectorMapper
-from slp_visio.slp_visio.mapping.mappers.diagram_trustzone_mapper import DiagramTrustzoneMapper
-from slp_visio.slp_visio.objects.diagram_objects import Diagram
-from slp_visio.slp_visio.visio_mapping_loader import VisioMappingFileLoader
+from slp_visio.slp_visio.load.objects.diagram_objects import Diagram
+from slp_visio.slp_visio.load.visio_mapping_loader import VisioMappingFileLoader
+from slp_visio.slp_visio.parse.diagram_pruner import DiagramPruner
+from slp_visio.slp_visio.parse.mappers.diagram_component_mapper import DiagramComponentMapper
+from slp_visio.slp_visio.parse.mappers.diagram_connector_mapper import DiagramConnectorMapper
+from slp_visio.slp_visio.parse.mappers.diagram_trustzone_mapper import DiagramTrustzoneMapper
 from startleft.otm.otm import Component, Dataflow, Trustzone
 from startleft.otm.otm_builder import OtmBuilder
 from startleft.processors.base.provider_parser import ProviderParser

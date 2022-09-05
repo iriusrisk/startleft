@@ -5,7 +5,6 @@ import sys
 
 import click
 
-from slp_visio.slp_visio.diagram_type import DiagramType
 from startleft.api.controllers.diagram.diag_create_otm_controller import get_processor
 from startleft.api.errors import CommonError, OtmGenerationError
 from startleft.clioptions.exclusion_option import Exclusion
@@ -14,6 +13,7 @@ from startleft.iac.iac_type import IacType
 from startleft.log import get_log_level, configure_logging
 from startleft.messages import *
 from startleft.otm.otm_project import OtmProject
+from startleft.processors.base.provider_type import DiagramType
 from startleft.utils.file_utils import FileUtils
 from startleft.version import version
 

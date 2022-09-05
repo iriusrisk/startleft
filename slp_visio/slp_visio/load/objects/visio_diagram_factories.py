@@ -2,8 +2,7 @@ from typing import Optional
 
 from vsdx import Shape
 
-from slp_visio.slp_visio.objects.diagram_factories import DiagramComponentFactory, DiagramConnectorFactory
-from slp_visio.slp_visio.objects.diagram_objects import DiagramComponent, DiagramConnector
+from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent, DiagramConnector
 
 
 def get_component_type_from_master(shape: Shape):
@@ -19,7 +18,7 @@ def is_valid_connector(connected_shapes) -> bool:
     return True
 
 
-class VisioComponentFactory(DiagramComponentFactory):
+class VisioComponentFactory:
 
     def create_component(self, shape, origin, representer) -> DiagramComponent:
         return DiagramComponent(
@@ -30,7 +29,7 @@ class VisioComponentFactory(DiagramComponentFactory):
             representation=representer.build_representation(shape))
 
 
-class VisioConnectorFactory(DiagramConnectorFactory):
+class VisioConnectorFactory:
 
     def create_connector(self, shape) -> Optional[DiagramConnector]:
         connected_shapes = shape.connects

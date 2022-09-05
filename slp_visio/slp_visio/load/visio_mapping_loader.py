@@ -2,8 +2,8 @@ import jmespath
 import yaml
 from deepmerge import always_merger
 
-from startleft.mapping.mapping_file_loader import MappingFileLoader
 from startleft.processors.base.mapping import MappingLoader
+from startleft.processors.base.mapping_file_loader import MappingFileLoader
 
 
 def load_mappings(mapping_file):

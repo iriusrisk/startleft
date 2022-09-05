@@ -3,10 +3,10 @@ import logging
 from fastapi import APIRouter, File, UploadFile, Form, Response
 
 import startleft.utils.json_utils as json_utils
-from slp_visio.slp_visio.diagram_type import DiagramType
 from slp_visio.slp_visio.visio_processor import VisioProcessor
 from startleft.api.controllers.otm_controller import RESPONSE_STATUS_CODE, PREFIX, controller_responses
 from startleft.api.errors import LoadingSourceFileError
+from startleft.processors.base.provider_type import DiagramType
 
 URL = '/diagram'
 

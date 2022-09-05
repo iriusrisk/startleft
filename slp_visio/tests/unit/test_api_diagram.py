@@ -5,10 +5,10 @@ from unittest.mock import patch
 import pytest
 
 import startleft.api.controllers.diagram.diag_create_otm_controller as diagram_controller
-from slp_visio.slp_visio.diagram_type import DiagramType
 from startleft.api.errors import OtmGenerationError, LoadingDiagramFileError, DiagramFileNotValidError, \
     MappingFileNotValidError, OtmResultError
 from startleft.otm.otm import OTM
+from startleft.processors.base.provider_type import DiagramType
 
 TESTING_DIAGRAM_TYPE = DiagramType.VISIO
 DUMMY_OTM = OTM("otm-mock", "otm mock", DiagramType.VISIO)

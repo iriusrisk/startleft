@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock
 
-from slp_visio.slp_visio.visio_diagram_factories import VisioConnectorFactory
+from slp_visio.slp_visio.load.objects.visio_diagram_factories import VisioConnectorFactory
 
 
 class TestVisioConnectorFactory:
