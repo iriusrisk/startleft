@@ -150,15 +150,13 @@ class TestMTMTMappingLoader:
         assert mtmt_mapping.mapping_components.get('Custom enterprise GW Test').get('type') == 'empty-component'
 
     def test_mtmt_mapping_loader_validation_error(self):
-        # GIVEN a default mapping file with a trustzone
-        # AND two components
+        # GIVEN a valid default mapping file
         mapping_data_list = []
         default_mapping_file = default_mtmt_multiple_mapping_file
         with open(default_mapping_file) as f:
             mapping_data_list.append(f.read())
 
-        # AND a custom mapping file without trustzones
-        # AND 2 components
+        # AND a custom mapping file with invalid format
         custom_mapping_file = custom_bad_formed_file
         with open(custom_mapping_file) as f:
             mapping_data_list.append(f.read())
