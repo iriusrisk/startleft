@@ -1,0 +1,13 @@
+trustzones:
+  - label:  Private Secured Cloud
+    type:   Private Secured
+    id:     2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+
+components:
+  - label: Custom enterprise GW Test
+    type: empty-component
+
+  - label: Custom web server Test
+    type: empty-component
+
+dataflows: []
