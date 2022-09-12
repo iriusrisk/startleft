@@ -149,7 +149,10 @@ class TestMTMTMappingLoader:
         assert mtmt_mapping.mapping_components.get('Custom web server').get('type') == 'empty-component'
         assert mtmt_mapping.mapping_components.get('Custom enterprise GW Test').get('type') == 'empty-component'
 
-    def test_mtmt_mapping_loader_validation_error(self):
+    @pytest.mark.parametrize('default_mapping_file,custom_mapping_file',
+                             [(default_mtmt_multiple_mapping_file, custom_bad_formed_file),
+                              (custom_bad_formed_file, custom_mtmt_single_mapping_file)])
+    def test_mtmt_mapping_loader_validation_error(self, default_mapping_file: str, custom_mapping_file: str):
         # GIVEN a valid default mapping file
         mapping_data_list = []
         default_mapping_file = default_mtmt_multiple_mapping_file
