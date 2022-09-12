@@ -13,7 +13,7 @@ setup(
     python_requires='>=3.6',
     install_requires=[
         'pyyaml==6.0',
-        'jsonschema==4.9.1',
+        'jsonschema==4.15.0',
         'deepmerge==1.0.1',
         'jmespath==1.0.1',
         'lxml==4.9.1',
@@ -23,8 +23,8 @@ setup(
         'fastapi==0.78.0',
         'python-multipart==0.0.5',
         'click==8.1.3',
-        'uvicorn==0.18.2',
-        'shapely==1.8.2',
+        'uvicorn==0.18.3',
+        'shapely==1.8.4',
         'vsdx==0.5.10',
         'python-magic==0.4.27'
     ],
