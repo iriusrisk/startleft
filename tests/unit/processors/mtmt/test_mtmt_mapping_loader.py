@@ -155,12 +155,10 @@ class TestMTMTMappingLoader:
     def test_mtmt_mapping_loader_validation_error(self, default_mapping_file: str, custom_mapping_file: str):
         # GIVEN a valid default mapping file
         mapping_data_list = []
-        default_mapping_file = default_mtmt_multiple_mapping_file
         with open(default_mapping_file) as f:
             mapping_data_list.append(f.read())
 
         # AND a custom mapping file with invalid format
-        custom_mapping_file = custom_bad_formed_file
         with open(custom_mapping_file) as f:
             mapping_data_list.append(f.read())
 
