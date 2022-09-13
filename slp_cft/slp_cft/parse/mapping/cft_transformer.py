@@ -1,8 +1,9 @@
 import logging
 import uuid
 
-from slp_cft.slp_cft.parse.mapping.cft_mapper import CloudformationTrustzoneMapper, \
-    CloudformationComponentMapper, CloudformationDataflowMapper, create_core_dataflow
+from slp_cft.slp_cft.parse.mapping.mappers.cft_component_mapper import CloudformationComponentMapper
+from slp_cft.slp_cft.parse.mapping.mappers.cft_dataflow_mapper import CloudformationDataflowMapper
+from slp_cft.slp_cft.parse.mapping.mappers.cft_trustzone_mapper import CloudformationTrustzoneMapper
 
 logger = logging.getLogger(__name__)
 
@@ -16,63 +17,105 @@ TYPE2 = "type2"
 TYPE3 = "type3"
 
 
+class ComponentLists:
+    def __init__(self):
+        self.components = []
+        self.skip = []
+        self.catchall = []
+        self.singleton = []
+
+
 class CloudformationTransformer:
     def __init__(self, source_model=None, threat_model=None):
         self.source_model = source_model
         self.threat_model = threat_model
-        self.map = {}
+        self.iac_mapping = {}
         self.id_map = {}
-        self.id_parents = dict()
-        self.id_dataflows = dict()
-        self.tree = dict()
+        self.id_parents = {}
+        self.id_dataflows = {}
+        self.tree = {}
+
+    def run(self, iac_mapping):
+        self.iac_mapping = iac_mapping
+        self.build_lookup()
+        self.transform_trustzones()
+        self.transform_components()
+        self.transform_dataflows()
 
     def build_lookup(self):
-        if "lookup" in self.map:
-            self.source_model.lookup = self.map["lookup"]
+        if "lookup" in self.iac_mapping:
+            self.source_model.lookup = self.iac_mapping["lookup"]
 
     def transform_trustzones(self):
         logger.info("Adding trustzones")
 
-        numTrustzones = 0
-        for mapping in self.map["trustzones"]:
+        num_trustzones = 0
+        for mapping in self.iac_mapping["trustzones"]:
             mapper = CloudformationTrustzoneMapper(mapping)
             mapper.id_map = self.id_map
-            source_trustzones = mapper.run(self.source_model)
+            source_trustzones = mapper.run(self.source_model, None)
             for trustzone_number, trustzone_element in enumerate(source_trustzones):
                 if "$source" in mapping and isinstance(mapping["$source"], dict):
                     if "$singleton" in mapping["$source"] and trustzone_number > 0:
                         continue
                 self.threat_model.add_trustzone(**trustzone_element)
-                numTrustzones += 1
+                num_trustzones += 1
                 logger.debug(f"Added trustzone: [{trustzone_element['name']}][{trustzone_element['id']}]")
-        logger.info(f"Added {numTrustzones} trustzones successfully")
+        logger.info(f"Added {num_trustzones} trustzones successfully")
 
     def transform_components(self):
         logger.info("Adding components")
 
-        singleton = []
-        components = []
-        catchall = []
-        skip = []
+        components = self.__find_components()
 
+        results_without_singleton = self.__get_components(components.components, components.skip) + self.__get_catchall(
+            components.catchall, components.skip)
+
+        results = self.__get_singleton(components.singleton, components.skip, results_without_singleton)
+
+        # removal of auxiliary data before adding components
+        for component in results:
+            if "singleton_multiple_name" in component:
+                del component["singleton_multiple_name"]
+            if "singleton_multiple_tags" in component:
+                del component["singleton_multiple_tags"]
+
+        for final_component in results:
+            parent_component = next(filter(lambda x: x["id"] == final_component['parent'], results), None)
+            if parent_component:
+                final_component["parent_type"] = "component"
+            else:
+                final_component["parent_type"] = "trustZone"
+
+            self.threat_model.add_component(**final_component)
+            logger.debug(f"Added component: [{final_component['name']}][{final_component['id']}]"
+                         f"{final_component['tags']}" if 'tags' in final_component else "")
+        logger.info(f"Added {results.__len__()} components successfully")
+
+    def __find_components(self):
         logger.debug("Finding components")
-        for mapping in self.map["components"]:
+
+        found_components = ComponentLists()
+
+        for mapping in self.iac_mapping["components"]:
             mapper = CloudformationComponentMapper(mapping)
             mapper.id_map = self.id_map
             for component in mapper.run(self.source_model, self.id_parents):
                 if isinstance(mapping["$source"], dict):
                     if "$skip" in mapping["$source"]:
-                        skip.append(component)
+                        found_components.skip.append(component)
                         continue
                     elif "$catchall" in mapping["$source"]:
-                        catchall.append(component)
+                        found_components.catchall.append(component)
                         continue
                     elif "$singleton" in mapping["$source"]:
-                        singleton.append(component)
+                        found_components.singleton.append(component)
                         continue
 
-                components.append(component)
+                found_components.components.append(component)
+        return found_components
 
+    def __get_components(self, components, skip):
         results = []
         for component in components:
             skip_this = False
@@ -83,7 +126,10 @@ class CloudformationTransformer:
                     break
             if not skip_this:
                 results.append(component)
+        return results
 
+    def __get_catchall(self, catchall, skip):
+        results = []
         for component in catchall:
             skip_this = False
             for skip_component in skip:
@@ -98,7 +144,9 @@ class CloudformationTransformer:
                     break
             if not skip_this:
                 results.append(component)
+        return results
 
+    def __get_singleton(self, singleton, skip, results):
         singleton_types_added = []
         for component in singleton:
             skip_this = False
@@ -124,7 +172,7 @@ class CloudformationTransformer:
 
                             # update "result" component with its multiple tags before adding tags from "component"
                             if "singleton_multiple_tags" in result:
-                                if len(result["tags"]) <= len(result["singleton_multiple_tags"])\
+                                if len(result["tags"]) <= len(result["singleton_multiple_tags"]) \
                                         and result["tags"] is not result["singleton_multiple_tags"]:
                                     result["tags"] = result["singleton_multiple_tags"]
 
@@ -133,30 +181,12 @@ class CloudformationTransformer:
                                     if tag not in result["tags"]:
                                         result["tags"].append(tag)
                             continue
-
-        # removal of auxiliary data before adding components
-        for component in results:
-            if "singleton_multiple_name" in component:
-                del component["singleton_multiple_name"]
-            if "singleton_multiple_tags" in component:
-                del component["singleton_multiple_tags"]
-
-        for final_component in results:
-            parent_component = next(filter(lambda x: x["id"] == final_component['parent'], results), None)
-            if parent_component:
-                final_component["parent_type"] = "component"
-            else:
-                final_component["parent_type"] = "trustZone"
-
-            self.threat_model.add_component(**final_component)
-            logger.debug(f"Added component: [{final_component['name']}][{final_component['id']}]"
-                         f"{final_component['tags']}" if 'tags' in final_component else "")
-        logger.info(f"Added {results.__len__()} components successfully")
+        return results
 
     def transform_dataflows(self):
         logger.info("Adding dataflows")
         logger.debug("Finding dataflows")
-        for mapping in self.map["dataflows"]:
+        for mapping in self.iac_mapping["dataflows"]:
             mapper = CloudformationDataflowMapper(mapping)
             mapper.id_map = self.id_map
             for dataflow in mapper.run(self.source_model, self.id_dataflows):
@@ -165,48 +195,40 @@ class CloudformationTransformer:
         self.__generate_dataflows_from_hubs()
         self.__clean_hub_dataflows()
 
-    def run(self, iac_mapping):
-        self.map = iac_mapping
-        self.build_lookup()
-        self.transform_trustzones()
-        self.transform_components()
-        self.transform_dataflows()
-
     def __generate_dataflows_from_hubs(self):
         for dataflow in self.threat_model.dataflows:
             if "-hub" in dataflow.source_node or "-hub" in dataflow.destination_node:
                 for cursor_dataflow in self.threat_model.dataflows:
 
-                    if self.__same_dataflows(dataflow, cursor_dataflow):
+                    if self.__is_same_dataflow(dataflow, cursor_dataflow):
                         continue
 
-                    if self.__case_1_dataflow(dataflow, cursor_dataflow):
-                        if self.__case_1_outbound_dataflow(dataflow, cursor_dataflow):
+                    if self.__is_case_1_dataflow(dataflow, cursor_dataflow):
+                        if self.__is_outbound_dataflow(dataflow, cursor_dataflow):
                             self.__generate_dataflow_from_hub(dataflow, cursor_dataflow)
 
-                        elif self.__case_1_inbound_dataflow(dataflow, cursor_dataflow):
+                        elif self.__is_inbound_dataflow(dataflow, cursor_dataflow):
                             self.__generate_dataflow_from_hub(cursor_dataflow, dataflow)
 
-                    if self.__case_2_dataflow(dataflow, cursor_dataflow):
-                        if self.__case_2_outbound_dataflow(dataflow, cursor_dataflow):
+                    if self.__is_case_2_dataflow(dataflow, cursor_dataflow):
+                        if self.__is_outbound_dataflow(dataflow, cursor_dataflow):
                             self.__case_2_add_to_tree(dataflow, cursor_dataflow, OUTBOUND)
-                        elif self.__case_2_inbound_dataflow(dataflow, cursor_dataflow):
+                        elif self.__is_inbound_dataflow(dataflow, cursor_dataflow):
                             self.__case_2_add_to_tree(dataflow, cursor_dataflow, INBOUND)
 
         self.__case_2_generate_hub_dataflows()
 
-    def __separate_hub_type_and_hub_dataflow(self, node_id):
-        hub_type = None
-        if "type1-hub-" in node_id:
-            hub_type = TYPE1
-            node_id = node_id[10:]
-        if "type2-hub-" in node_id:
-            hub_type = TYPE2
-            node_id = node_id[10:]
-        if "type3-hub-" in node_id:
-            hub_type = TYPE3
-            node_id = node_id[10:]
-        return hub_type, node_id
+    def __is_same_dataflow(self, dataflow_1, dataflow_2):
+        dataflow_1_hub_info = self.__get_hub_dataflow_info(dataflow_1)
+        dataflow_2_hub_info = self.__get_hub_dataflow_info(dataflow_2)
+
+        if dataflow_1_hub_info[SOURCE_NODE_NAME] == dataflow_2_hub_info[SOURCE_NODE_NAME] \
+                and dataflow_1_hub_info[DESTINATION_NODE_NAME] == dataflow_2_hub_info[DESTINATION_NODE_NAME]:
+            return True
+        elif dataflow_1.name == dataflow_2.name and dataflow_1.source == dataflow_2.source:
+            return True
+        else:
+            return False
 
     def __generate_dataflow_from_hub(self, origin_dataflow, target_dataflow, additional_tags=None):
         df_name = origin_dataflow.name + " -> " + target_dataflow.name
@@ -231,7 +253,7 @@ class CloudformationTransformer:
 
         # cleansing of names of hub tagging
         source_hub_type, source_resource_id = self.__separate_hub_type_and_hub_dataflow(source_resource_id)
-        destination_hub_type, destination_resource_id =\
+        destination_hub_type, destination_resource_id = \
             self.__separate_hub_type_and_hub_dataflow(destination_resource_id)
         # getting IDs if type is REFERENCED
         if source_hub_type is not None:
@@ -240,7 +262,7 @@ class CloudformationTransformer:
             destination_resource_id = self.id_map[destination_resource_id]
 
         # creates a dataflow with common fields to both
-        dataflow = create_core_dataflow(df_name, source_obj, source_resource_id, destination_resource_id)
+        dataflow = CloudformationDataflowMapper.create_core_dataflow(df_name, source_obj, source_resource_id, destination_resource_id)
         # adds additional fields
         dataflow["id"] = str(uuid.uuid4())
 
@@ -254,7 +276,7 @@ class CloudformationTransformer:
         if additional_tags is not None:
             tags += additional_tags
             same_dataflow = list(filter(lambda x: x.source_node == source_resource_id
-                                        and x.destination_node == destination_resource_id
+                                                  and x.destination_node == destination_resource_id
                                         , self.threat_model.dataflows))
             if len(same_dataflow) > 0:
                 logger.debug("same dataflow, not generated")
@@ -264,88 +286,52 @@ class CloudformationTransformer:
         dataflow["tags"] = tags
         self.threat_model.add_dataflow(**dataflow)
 
-    def __same_dataflows(self, dataflow_1, dataflow_2):
-        dataflow_1_hub_info = self.__get_hub_dataflow_info(dataflow_1)
-        dataflow_2_hub_info = self.__get_hub_dataflow_info(dataflow_2)
+    def __separate_hub_type_and_hub_dataflow(self, node_id):
+        hub_type = None
+        if "type1-hub-" in node_id:
+            hub_type = TYPE1
+            node_id = node_id[10:]
+        if "type2-hub-" in node_id:
+            hub_type = TYPE2
+            node_id = node_id[10:]
+        if "type3-hub-" in node_id:
+            hub_type = TYPE3
+            node_id = node_id[10:]
+        return hub_type, node_id
 
-        if dataflow_1_hub_info[SOURCE_NODE_NAME] == dataflow_2_hub_info[SOURCE_NODE_NAME] \
-                and dataflow_1_hub_info[DESTINATION_NODE_NAME] == dataflow_2_hub_info[DESTINATION_NODE_NAME]:
-            return True
-        elif dataflow_1.name == dataflow_2.name and dataflow_1.source == dataflow_2.source:
-            return True
-        else:
-            return False
-
-    def __case_1_dataflow(self, dataflow, cursor_dataflow):
+    def __is_case_1_dataflow(self, dataflow, cursor_dataflow):
         """ Look for 1 to 1 dataflows like in VPCEndpoints - Security Group - IP
          Basic requirements for origin node: to be a real end component """
         dataflow_hub_info = self.__get_hub_dataflow_info(dataflow)
         cursor_dataflow_hub_info = self.__get_hub_dataflow_info(cursor_dataflow)
-        # 1st condition: dataflow begins with a real end component linked via "hub" to a Security Group
-        if dataflow_hub_info[HUB_TYPE] is TYPE1:
-            # 2nd condition: cursor dataflow links via "hub" to an inbound/outbound connection inside a Security Group
-            if cursor_dataflow_hub_info[HUB_TYPE] is TYPE3:
-                return True
-            else:
-                return False
-        else:
-            return False
 
-    def __case_1_outbound_dataflow(self, dataflow, cursor_dataflow):
+        # 1st condition: dataflow begins with a real end component linked via "hub" to a Security Group
+        # 2nd condition: cursor dataflow links via "hub" to an inbound/outbound connection inside a Security Group
+        return dataflow_hub_info[HUB_TYPE] is TYPE1 and cursor_dataflow_hub_info[HUB_TYPE] is TYPE3
+
+    def __is_outbound_dataflow(self, dataflow, cursor_dataflow):
         # additional requirements for outbound dataflows
         dataflow_hub_info = self.__get_hub_dataflow_info(dataflow)
         cursor_dataflow_hub_info = self.__get_hub_dataflow_info(cursor_dataflow)
 
-        if dataflow_hub_info[DESTINATION_NODE_NAME] == cursor_dataflow_hub_info[SOURCE_NODE_NAME]:
-            return True
-        else:
-            return False
+        return dataflow_hub_info[DESTINATION_NODE_NAME] == cursor_dataflow_hub_info[SOURCE_NODE_NAME]
 
-    def __case_1_inbound_dataflow(self, dataflow, cursor_dataflow):
+    def __is_inbound_dataflow(self, dataflow, cursor_dataflow):
         # additional requirements for inbound dataflows
         dataflow_hub_info = self.__get_hub_dataflow_info(dataflow)
         cursor_dataflow_hub_info = self.__get_hub_dataflow_info(cursor_dataflow)
 
-        if dataflow_hub_info[DESTINATION_NODE_NAME] == cursor_dataflow_hub_info[DESTINATION_NODE_NAME]:
-            return True
-        else:
-            return False
+        return dataflow_hub_info[DESTINATION_NODE_NAME] == cursor_dataflow_hub_info[DESTINATION_NODE_NAME]
 
-    def __case_2_dataflow(self, dataflow, cursor_dataflow):
+    def __is_case_2_dataflow(self, dataflow, cursor_dataflow):
         """ Look for dataflows amongst more than one Security Group: Component A - SG A - SG B - Component B
          Basic requirements for origin node: to be a real end component """
         dataflow_hub_info = self.__get_hub_dataflow_info(dataflow)
         cursor_dataflow_hub_info = self.__get_hub_dataflow_info(cursor_dataflow)
 
         # 1st condition: dataflow begins with a real end component linked via "hub" to a Security Group
-        if dataflow_hub_info[HUB_TYPE] is TYPE1:
-            # 2nd condition: cursor dataflow links via "hub" to another "hub" to another Security Group
-            if cursor_dataflow_hub_info[HUB_TYPE] is TYPE2:
-                return True
-            else:
-                return False
-        else:
-            return False
-
-    def __case_2_outbound_dataflow(self, dataflow, cursor_dataflow):
-        # additional requirements for outbound dataflows
-        dataflow_hub_info = self.__get_hub_dataflow_info(dataflow)
-        cursor_dataflow_hub_info = self.__get_hub_dataflow_info(cursor_dataflow)
-
-        if dataflow_hub_info[DESTINATION_NODE_NAME] == cursor_dataflow_hub_info[SOURCE_NODE_NAME]:
-            return True
-        else:
-            return False
-
-    def __case_2_inbound_dataflow(self, dataflow, cursor_dataflow):
-        # additional requirements for inbound dataflows
-        dataflow_hub_info = self.__get_hub_dataflow_info(dataflow)
-        cursor_dataflow_hub_info = self.__get_hub_dataflow_info(cursor_dataflow)
-
-        if dataflow_hub_info[DESTINATION_NODE_NAME] == cursor_dataflow_hub_info[DESTINATION_NODE_NAME]:
-            return True
-        else:
-            return False
+        # 2nd condition: cursor dataflow links via "hub" to another "hub" to another Security Group
+        return dataflow_hub_info[HUB_TYPE] is TYPE1 and cursor_dataflow_hub_info[HUB_TYPE] is TYPE2
 
     def __case_2_add_to_tree(self, dataflow_1, dataflow_2, bound):
         # dataflow node type 1 as parent node
@@ -389,14 +375,11 @@ class CloudformationTransformer:
             self.__case_2_add_child(self.tree[parent_node], child_node)
         if not self.__case_2_node_exists(self.tree[parent_node][child_node], grandchild_node):
             self.__case_2_add_child(self.tree[parent_node][child_node], grandchild_node)
-            #also add if the connection is inbound or outbound, as grandchild is always a type-2
+            # also add if the connection is inbound or outbound, as grandchild is always a type-2
             self.tree[parent_node][child_node][grandchild_node] = bound
 
     def __case_2_node_exists(self, parent_node, child_node):
-        if child_node in parent_node:
-            return True
-        else:
-            return False
+        return child_node in parent_node
 
     def __case_2_add_child(self, parent_node, child_node):
         if child_node not in parent_node:
@@ -406,10 +389,10 @@ class CloudformationTransformer:
         """"Traverse Transformer tree for final case 2 dataflows creation, looking for connections between
          type 2 nodes in both origin and destination branches in the tree"""
         for parent in self.tree:
-            logger.debug("PARENT: "+parent)
+            logger.debug("PARENT: " + parent)
             children = self.tree[parent]
             for child in children:
-                logger.debug("|-CHILDREN: "+child)
+                logger.debug("|-CHILDREN: " + child)
                 child_hub_type, child_hub_name = self.__separate_hub_type_and_hub_dataflow(child)
                 grandchildren = self.tree[parent][child]
                 for grandchild in grandchildren:
@@ -422,13 +405,13 @@ class CloudformationTransformer:
                     for end_component in end_components:
                         # assumed that all end components are TYPE1 components
                         source_dataflows = list(filter(lambda x: x.source_node == parent
-                                                       and "hub-" in x.destination_node
+                                                                 and "hub-" in x.destination_node
                                                        , self.threat_model.dataflows))
                         destination_dataflows = list(filter(lambda x: x.source_node == end_component
-                                                     and "hub-" in x.destination_node
-                                                     , self.threat_model.dataflows))
+                                                                      and "hub-" in x.destination_node
+                                                            , self.threat_model.dataflows))
                         for destination_dataflow in destination_dataflows:
-                            if not self.__same_dataflows(source_dataflows[0], destination_dataflow):
+                            if not self.__is_same_dataflow(source_dataflows[0], destination_dataflow):
                                 if bound is INBOUND:
                                     self.__generate_dataflow_from_hub(destination_dataflow, source_dataflows[0]
                                                                       , additional_tags)
@@ -440,19 +423,21 @@ class CloudformationTransformer:
         additional_tags = None
         type_2_child_name = TYPE2 + "-hub-" + child_hub_name
         grandchild_as_dataflow = list(filter(lambda x: x.source_node == type_2_child_name
-                                             and x.destination_node == grandchild
+                                                       and x.destination_node == grandchild
                                              , self.threat_model.dataflows))
 
         if len(grandchild_as_dataflow) == 0:
             grandchild_as_dataflow = list(filter(lambda x: x.source_node == grandchild
-                                                 and x.destination_node == type_2_child_name
+                                                           and x.destination_node == type_2_child_name
                                                  , self.threat_model.dataflows))
 
         if len(grandchild_as_dataflow) > 0:
             additional_tags = []
             for grandchild_element in grandchild_as_dataflow:
                 additional_tags += grandchild_element.tags
-        logger.debug("additional tags for type_2_child_name: "+type_2_child_name + " and grandchild: "+grandchild+" are: "+str(additional_tags))
+        logger.debug(
+            "additional tags for type_2_child_name: " + type_2_child_name + " and grandchild: " + grandchild + " are: " + str(
+                additional_tags))
         return additional_tags
 
     def __case_2_look_for_end_component(self, end_component, hub_node_as_child):
@@ -491,13 +476,14 @@ class CloudformationTransformer:
 
     def __clean_hub_dataflows(self):
         # code for cleaning temporary dataflows coming from $hub action
-        numDataflows = 0
+        num_dataflows = 0
         for dataflow in reversed(self.threat_model.dataflows):
             if "-hub" in dataflow.source_node or "-hub" in dataflow.destination_node:
                 self.threat_model.dataflows.remove(dataflow)
 
             else:
-                numDataflows += 1
-                logger.debug(f"Dataflow added: [{dataflow.name}][{dataflow.id}]{dataflow.tags} from [{dataflow.source_node}] to [{dataflow.destination_node}]")
+                num_dataflows += 1
+                logger.debug(
+                    f"Dataflow added: [{dataflow.name}][{dataflow.id}]{dataflow.tags} from [{dataflow.source_node}] to [{dataflow.destination_node}]")
 
-        logger.info(f"Added {numDataflows} dataflows successfully")
+        logger.info(f"Added {num_dataflows} dataflows successfully")

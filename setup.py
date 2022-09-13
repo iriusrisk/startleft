@@ -13,7 +13,7 @@ setup(
     python_requires='>=3.6',
     install_requires=[
         'pyyaml==6.0',
-        'jsonschema==4.14.0',
+        'jsonschema==4.15.0',
         'deepmerge==1.0.1',
         'jmespath==1.0.1',
         'lxml==4.9.1',
