@@ -110,14 +110,5 @@ class CloudformationDataflowMapper(CloudformationBaseMapper):
 
     class DataflowNodeMapper(CloudformationBaseMapper):
         def run(self, source_model, source):
-            source_resource_names = self.format_source_objects(source_model.search(self.mapping, source=source))
-
-            if source_resource_names is not None:
-                for index, resource_id in enumerate(source_resource_names):
-                    if self.is_terraform_resource_reference(resource_id):
-                        source_resource_names[index] = self.get_resource_name_from_resource_reference(resource_id)
-                    elif self.is_terraform_variable_reference(resource_id):
-                        source_resource_names[index] = self.get_terraform_variable_default_value(source_model,
-                                                                                                 resource_id)
-            return source_resource_names
+            return self.format_source_objects(source_model.search(self.mapping, source=source))
 

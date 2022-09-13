@@ -19,26 +19,12 @@ class CloudformationBaseMapper(ABC):
     def get_first_element_from_list(self, values):
         return values[0] if isinstance(values, list) else values
 
-    def is_terraform_variable_reference(self, value: str):
-        return value is not None and isinstance(value, str) and re.match(r"\$\{var\.[\w-]+\}", value)
-
-    def is_terraform_resource_reference(self, value: str):
-        return value is not None and isinstance(value, str) and re.match(
-            r"\$\{aws_[\w-]+\.[\w-]+\.(id|arn|stream_arn)\}", value)
-
     def get_resource_name_from_resource_reference(self, resource_id_reference: str):
         return re.match(r"\$\{aws_[\w-]+\.([\w-]+)\.(id|arn|stream_arn)\}", resource_id_reference).group(1)
 
     def get_variable_name_from_variable_reference(self, variable_reference: str):
         return variable_reference[variable_reference.find(".") + 1:variable_reference.find("}")]
 
-    def get_terraform_variable_default_value(self, source_model, variable_reference):
-        name = self.get_variable_name_from_variable_reference(variable_reference)
-
-        for variable in source_model.data["variable"]:
-            for variable_name, variable_properties in variable.items():
-                if variable_name == name:
-                    return variable_properties["default"][0]
 
     def format_aws_fns(self, source_objects):
         if 'Fn::ImportValue' in source_objects:
@@ -47,22 +33,6 @@ class CloudformationBaseMapper(ABC):
             source_objects = source_objects['Fn::GetAtt'][0]
         return source_objects
 
-    def format_terraform_variable(self, source_model, source_object, value):
-        vpc_resource_name = self.get_vpc_resource_name_from_variable_reference(source_model, value)
-
-        if vpc_resource_name is not None:
-            source_component_name = vpc_resource_name
-        else:
-            source_component_name = self.get_terraform_variable_default_value(source_model, value)
-
-        self.set_cidr_blocks(source_object, source_component_name, value)
-
-        return source_component_name
-
-    def get_vpc_resource_name_from_variable_reference(self, source_model, value):
-        for resource in source_model.query("resource|squash_terraform(@)[?Type=='aws_vpc']"):
-            if 'cidr_block' in resource['Properties'] and resource['Properties']['cidr_block'] == value:
-                return resource['_key']
 
     def set_cidr_blocks(self, source_object, source_component_name, value):
         if "ingress" in source_object['Properties'] \

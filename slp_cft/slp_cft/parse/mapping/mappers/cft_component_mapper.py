@@ -159,12 +159,8 @@ class CloudformationComponentMapper(CloudformationBaseMapper):
     def __get_component_individual_name(self, source_model, source_object, mapping):
         if "name" in self.mapping:
             value = self.get_first_element_from_list(source_model.search(mapping, source=source_object))
-            if self.is_terraform_variable_reference(value):
-                source_component_name = self.format_terraform_variable(source_model, source_object, value)
-            elif self.is_terraform_resource_reference(value):
-                source_component_name = self.get_resource_name_from_resource_reference(value)
-            else:
-                source_component_name = self.format_aws_fns(value)
+            source_component_name = self.format_aws_fns(value)
+
             self.logger.debug(f"Found source object with name {source_component_name}")
         else:
             source_component_name = None
@@ -178,13 +174,7 @@ class CloudformationComponentMapper(CloudformationBaseMapper):
         source_component_multiple_name = None
         if "name" in self.mapping:
             source_component_name, source_component_multiple_name = source_model.search(mapping, source=source_object)
-            if self.is_terraform_variable_reference(source_component_name):
-                source_component_name = self.format_terraform_variable(source_model, source_object,
-                                                                       source_component_name)
-            elif self.is_terraform_resource_reference(source_component_name):
-                source_component_name = self.get_resource_name_from_resource_reference(source_component_name)
-            else:
-                source_component_name = self.format_aws_fns(source_component_name)
+            source_component_name = self.format_aws_fns(source_component_name)
 
             self.logger.debug(f"Found singleton source object with multiple name {source_component_name}")
         else:
@@ -279,15 +269,12 @@ class CloudformationComponentMapper(CloudformationBaseMapper):
         if isinstance(parent, list):
             if len(parent) == 0:
                 parent = [self.DEFAULT_TRUSTZONE]
-            for index, resource_id in enumerate(parent):
-                if self.is_terraform_resource_reference(resource_id):
-                    parent[index] = self.get_resource_name_from_resource_reference(resource_id)
+
         if isinstance(parent, str):
             if parent == "":
                 parent = [self.DEFAULT_TRUSTZONE]
             else:
-                parent = [self.get_resource_name_from_resource_reference(parent)
-                          if self.is_terraform_resource_reference(parent) else parent]
+                parent = [parent]
 
         if parent is None:
             parent = [self.DEFAULT_TRUSTZONE]
