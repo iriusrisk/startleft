@@ -34,7 +34,7 @@ class MTMTProcessor(OtmProcessor):
         return MTMTMappingFileValidator(self.mappings)
 
     def get_mapping_loader(self) -> MappingLoader:
-        return MTMTMappingFileLoader()
+        return MTMTMappingFileLoader(self.mappings)
 
     def get_provider_parser(self) -> ProviderParser:
         return MTMTParser(self.project_id, self.project_name, self.mtmt, self.mappings)
