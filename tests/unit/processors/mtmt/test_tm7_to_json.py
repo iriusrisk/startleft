@@ -21,9 +21,9 @@ class TestTm7ToJson(TestCase):
         # THEN validate the threat model
         assert len(json_) == 1
         model_ = json_['ThreatModel']
-        assert len(model_) == 9
+        assert len(model_) == 10
         list_ = model_['DrawingSurfaceList']
-        assert len(list_) == 1
+        assert len(list_) == 2
         surface_model_ = list_['DrawingSurfaceModel']
         assert len(surface_model_) == 8
         borders_ = surface_model_['Borders']
