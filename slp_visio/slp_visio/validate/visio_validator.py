@@ -3,8 +3,7 @@ import os
 
 import magic as magik
 
-from startleft.api.errors import DiagramFileNotValidError
-from startleft.processors.base.provider_validator import ProviderValidator
+from slp_base import ProviderValidator, DiagramFileNotValidError
 
 logger = logging.getLogger(__name__)
 

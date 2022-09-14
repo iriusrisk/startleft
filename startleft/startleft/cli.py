@@ -16,23 +16,11 @@ from slp_base.slp_base.otm_validator import OtmValidator
 from slp_base.slp_base.provider_resolver import ProviderResolver
 from slp_cft.slp_cft.cft_searcher import CloudformationSearcher
 from slp_tf.slp_tf.tf_searcher import TerraformSearcher
-from startleft.startleft.api import fastapi_server
 from startleft.startleft.clioptions.exclusion_option import Exclusion
-from startleft.startleft.log import get_log_level, configure_logging
 from startleft.startleft.messages import *
-from startleft.startleft.otm_project import OtmProject
 from startleft.startleft.version import version
-from startleft.api.controllers.diagram.diag_create_otm_controller import get_processor
-from startleft.api.errors import CommonError, OtmGenerationError
-from startleft.clioptions.exclusion_option import Exclusion
-from startleft.iac.iac_to_otm import IacToOtm
-from startleft.iac.iac_type import IacType
-from startleft.log import get_log_level, configure_logging
-from startleft.messages import *
-from startleft.otm.otm_project import OtmProject
-from startleft.processors.base.provider_type import DiagramType
-from startleft.utils.file_utils import FileUtils
-from startleft.version import version
+from startleft.startleft.api import fastapi_server
+from startleft.startleft.log import get_log_level, configure_logging
 
 logger = logging.getLogger(__name__)
 provider_resolver = ProviderResolver(PROCESSORS)
@@ -121,9 +109,9 @@ def parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, outpu
     if custom_mapping_file:
         mapping_data_list.append(get_data(custom_mapping_file))
 
-    processor = get_processor(type_, project_id, project_name, file, mapping_data_list)
+    processor = provider_resolver.get_processor(type_, project_id, project_name, file, mapping_data_list)
     otm = processor.process()
-    otm_to_file(otm.json(), output_file)
+    get_otm_as_file(otm, output_file)
 
 
 @cli.command(name='parse')
@@ -187,8 +175,9 @@ def validate(iac_mapping_file, diagram_mapping_file, otm_file):
         provider_resolver.get_mapping_validator(IacType.CLOUDFORMATION, [get_data(iac_mapping_file)]).validate()
 
     if diagram_mapping_file:
+        # TODO Cannot assume all diagram/iac mapping file will have the same validation type, so we need to request the type in the command
         logger.info("Validating Diagram mapping files")
-        OtmProject.validate_diagram_mappings_file([get_data(diagram_mapping_file)])
+        provider_resolver.get_mapping_validator(DiagramType.VISIO, [get_data(diagram_mapping_file)]).validate()
 
     if otm_file:
         logger.info("Validating OTM file")

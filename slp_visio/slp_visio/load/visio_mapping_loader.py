@@ -2,8 +2,8 @@ import jmespath
 import yaml
 from deepmerge import always_merger
 
-from startleft.processors.base.mapping import MappingLoader
-from startleft.processors.base.mapping_file_loader import MappingFileLoader
+from slp_base import MappingLoader
+from slp_base.slp_base.mapping_file_loader import MappingFileLoader
 
 
 def load_mappings(mapping_file):
@@ -22,7 +22,7 @@ class VisioMappingFileLoader(MappingLoader):
     def __init__(self, mapping_file):
         self.component_mappings = None
         self.trustzone_mappings = None
-        mapping = MappingFileLoader().load(mapping_file)
+        mapping = MappingFileLoader(mapping_file).load()
         self.mappings = load_mappings(mapping)
 
     def load(self):

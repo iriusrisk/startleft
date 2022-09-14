@@ -2,7 +2,7 @@ from enum import Enum
 
 from shapely.geometry import Polygon
 
-from startleft.processors.base.provider_type import DiagramType
+from slp_base import DiagramType
 
 
 class DiagramComponentOrigin(Enum):

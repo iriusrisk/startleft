@@ -1,12 +1,12 @@
 from vsdx import Shape, VisioFile
 
+from slp_base import DiagramType
 from slp_visio.slp_visio.load.objects.diagram_objects import Diagram, DiagramComponentOrigin, DiagramLimits
 from slp_visio.slp_visio.load.objects.visio_diagram_factories import VisioComponentFactory, VisioConnectorFactory
 from slp_visio.slp_visio.load.parent_calculator import ParentCalculator
 from slp_visio.slp_visio.load.representation.visio.simple_component_representer import SimpleComponentRepresenter
 from slp_visio.slp_visio.load.representation.visio.zone_component_representer import ZoneComponentRepresenter
 from slp_visio.slp_visio.util.visio import get_limits
-from startleft.processors.base.provider_type import DiagramType
 
 DIAGRAM_LIMITS_PADDING = 2
 

@@ -299,7 +299,7 @@ class TestOtmControllerDiagramVisio:
         assert body_response['errors'][0]['errorMessage'] == 'schema errors messages'
 
     @responses.activate
-    @patch('startleft.processors.base.mapping_file_loader.MappingFileLoader.load')
+    @patch('slp_base.slp_base.mapping_file_loader.MappingFileLoader.load')
     def test_response_on_loading_mapping_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'

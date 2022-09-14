@@ -18,6 +18,7 @@ router = APIRouter(
     responses=controller_responses
 )
 
+provider_resolver = ProviderResolver(PROCESSORS)
 
 @router.post(URL, status_code=RESPONSE_STATUS_CODE, description="Generates an OTM threat model from an IaC file")
 def iac(iac_file: UploadFile = File(..., description="File that contains the Iac definition"),
@@ -38,7 +39,7 @@ def iac(iac_file: UploadFile = File(..., description="File that contains the Iac
     with mapping_file.file as f:
         mapping_data_list.append(f.read())
 
-    processor = ProviderResolver(PROCESSORS).get_processor(iac_type, id, name, [iac_data], mapping_data_list)
+    processor = provider_resolver.get_processor(iac_type, id, name, [iac_data], mapping_data_list)
     otm = processor.process()
 
     return Response(status_code=201, media_type="application/json", content=get_otm_as_json(otm))

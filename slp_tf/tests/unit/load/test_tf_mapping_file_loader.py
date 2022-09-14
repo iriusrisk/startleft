@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from deepmerge import always_merger
 
-from slp_base import LoadingMappingFileError
+from slp_base import LoadingMappingFileError, MappingFileNotValidError
 from slp_tf.slp_tf.load.tf_mapping_file_loader import TerraformMappingFileLoader
 
 
@@ -59,7 +59,7 @@ class TestTerraformMappingFileLoader(TestCase):
             TerraformMappingFileLoader(mapping_file_data).load()
 
         # AND The error info is right
-        assert str(loading_error.exception.title) == 'Error loading the TF mapping file. The mapping files are not valid.'
+        assert str(loading_error.exception.title) == 'Error loading the mapping file. The mapping files are not valid.'
         assert str(loading_error.exception.message) == yaml_load_error_msg
 
     def test_no_mapping_files(self):
@@ -80,10 +80,12 @@ class TestTerraformMappingFileLoader(TestCase):
         mapping_file_data = [bytes('', 'utf-8')]
 
         # WHEN the load method is called
-        mappings = TerraformMappingFileLoader(mapping_file_data).load()
+        # THEN a MappingFileNotValidError is raised
+        with self.assertRaises(MappingFileNotValidError) as loading_error:
+            TerraformMappingFileLoader(mapping_file_data).load()
 
-        # THEN no mappings are returned
-        assert mappings == {}
+        assert str(loading_error.exception.title) == 'Mapping files are not valid'
+        assert str(loading_error.exception.message) == 'Mapping files are not valid. Invalid size'
 
     @patch('yaml.load')
     def test_some_empty_mapping_file(self, yaml_load_mock):
