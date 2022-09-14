@@ -40,13 +40,6 @@ class TerraformBaseMapper(ABC):
                 if variable_name == name:
                     return variable_properties["default"][0]
 
-    def format_aws_fns(self, source_objects):
-        if 'Fn::ImportValue' in source_objects:
-            source_objects = self.get_import_value_resource_name(source_objects['Fn::ImportValue'])
-        elif 'Fn::GetAtt' in source_objects:
-            source_objects = source_objects['Fn::GetAtt'][0]
-        return source_objects
-
     def format_terraform_variable(self, source_model, source_object, value):
         vpc_resource_name = self.get_vpc_resource_name_from_variable_reference(source_model, value)
 
@@ -73,8 +66,6 @@ class TerraformBaseMapper(ABC):
             source_object['Properties']['egress'][0]['cidr_blocks'] = [source_component_name]
 
     def format_source_objects(self, source_objects):
-        if isinstance(source_objects, dict):
-            source_objects = self.format_aws_fns(source_objects)
         if isinstance(source_objects, str):
             source_objects = [source_objects]
         if source_objects is None:
@@ -130,32 +121,8 @@ class TerraformBaseMapper(ABC):
         mapping_path_value = source_model.search(mapping_path, source=alt_source_object)
         if isinstance(mapping_path_value, str):
             value = mapping_path_value
-        elif isinstance(mapping_path_value, dict):
-            if "Fn::Join" in mapping_path_value:
-                value = []
-                separator = mapping_path_value["Fn::Join"][0]
-                for e in mapping_path_value["Fn::Join"][1]:
-                    if isinstance(e, str):
-                        value.append(e)
-                    else:
-                        pass
-
-                value = separator.join(value)
-            elif "Fn::Sub" in mapping_path_value:
-                value = mapping_path_value["Fn::Sub"]
 
         return value
-
-    def get_import_value_resource_name(self, import_value_string):
-        # gets resource name from an AWS Fn::ImportValue field in format:
-        # "Fn::ImportValue": "ECSFargateGoServiceStack:ExportsOutputFnGetAttResourceNameGroupIdNNNNNNNN"
-        lower_limit = import_value_string.index("FnGetAtt") + len("FnGetAtt")
-        upper_limit = import_value_string.index("GroupId")
-        if isinstance(lower_limit, int) and isinstance(upper_limit, int):
-            result = import_value_string[lower_limit:upper_limit]
-            return result
-        else:
-            return None
 
     def repeated_type4_hub_definition_component(self, mapping, id_map, component_name):
         if "$ip" in str(mapping["name"]) or "$ip" in str(mapping["type"]):

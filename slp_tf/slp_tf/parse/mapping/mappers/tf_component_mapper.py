@@ -18,7 +18,7 @@ class TerraformComponentMapper(TerraformBaseMapper):
         mapping_name, mapping_tags = self.get_mappings_for_name_and_tags(self.mapping)
 
         for source_object in source_objects:
-            component_type = self.format_aws_fns(source_model.search(self.mapping["type"], source=source_object))
+            component_type = source_model.search(self.mapping["type"], source=source_object)
             component_name, singleton_multiple_name = self.__get_component_names(source_model, source_object,
                                                                                  mapping_name)
             parent_names, parents_from_component = self.__get_parent_names(source_model, source_object, id_parents,
@@ -157,24 +157,28 @@ class TerraformComponentMapper(TerraformBaseMapper):
         return component_name, singleton_multiple_name
 
     def __get_component_individual_name(self, source_model, source_object, mapping):
+        source_component_name = None
+
         if "name" in self.mapping:
-            value = self.get_first_element_from_list(source_model.search(mapping, source=source_object))
-            if self.is_terraform_variable_reference(value):
-                source_component_name = self.format_terraform_variable(source_model, source_object, value)
-            elif self.is_terraform_resource_reference(value):
-                source_component_name = self.get_resource_name_from_resource_reference(value)
-            else:
-                source_component_name = self.format_aws_fns(value)
+            source_component_name = self.get_first_element_from_list(source_model.search(mapping, source=source_object))
+            if self.is_terraform_variable_reference(source_component_name):
+                source_component_name = self.format_terraform_variable(source_model, source_object, source_component_name)
+            elif self.is_terraform_resource_reference(source_component_name):
+                source_component_name = self.get_resource_name_from_resource_reference(source_component_name)
+
+        if source_component_name:
             self.logger.debug(f"Found source object with name {source_component_name}")
         else:
-            source_component_name = None
             self.logger.error(f"Found source object with name None")
+
         return source_component_name
 
     def get_first_element_from_list(self, values):
         return values[0] if isinstance(values, list) else values
 
     def __get_component_singleton_names(self, source_model, source_object, mapping):
+        source_component_name = None
+
         source_component_multiple_name = None
         if "name" in self.mapping:
             source_component_name, source_component_multiple_name = source_model.search(mapping, source=source_object)
@@ -183,13 +187,12 @@ class TerraformComponentMapper(TerraformBaseMapper):
                                                                        source_component_name)
             elif self.is_terraform_resource_reference(source_component_name):
                 source_component_name = self.get_resource_name_from_resource_reference(source_component_name)
-            else:
-                source_component_name = self.format_aws_fns(source_component_name)
 
+        if source_component_name:
             self.logger.debug(f"Found singleton source object with multiple name {source_component_name}")
         else:
-            source_component_name = None
             self.logger.error(f"Found singleton source object with name None")
+
         return source_component_name, source_component_multiple_name
 
     def __get_component_tags(self, source_model, source_object, mapping):
