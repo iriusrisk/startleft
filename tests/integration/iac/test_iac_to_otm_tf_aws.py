@@ -330,3 +330,24 @@ class TestTerraformAWSComponents:
                             'S3 dataflow from aws_s3_bucket_logging')
         assert_otm_dataflow(otm, 4, otm.components[8].id, otm.components[7].id,
                             'API gateway data flow from aws_api_gateway_authorizer')
+
+    def test_elb_example(self):
+        filename = test_resource_paths.terraform_elb
+        iac_data = FileUtils.get_byte_data(filename).decode()
+        mapping_filename = test_resource_paths.terraform_iriusrisk_tf_aws_mapping
+        iac_to_otm = IacToOtm('Test case AWS duplicated component ids', 'aws_dataflows', IacType.TERRAFORM)
+        iac_to_otm.run(IacType.TERRAFORM, [FileUtils.get_data(mapping_filename)], [iac_data])
+
+        otm = iac_to_otm.otm
+
+        assert iac_to_otm.otm
+        assert len(otm.trustzones) == 1
+        assert len(otm.components) == 3
+        assert len(otm.dataflows) == 0
+
+        assert_otm_component(otm, 0, 'vpc', 'foo', self.public_cloud_id, ['aws_vpc'])
+        assert_otm_component(otm, 1, 'empty-component', 'baz', otm.components[0].id, ['aws_subnet'])
+        assert_otm_component(otm, 2, 'empty-component', 'bar', otm.components[0].id, ['aws_subnet'])
+
+        assert otm.components[0].id != otm.components[1].id
+        assert otm.components[1].id != otm.components[2].id

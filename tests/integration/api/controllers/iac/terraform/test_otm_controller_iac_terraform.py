@@ -191,7 +191,7 @@ class TestOtmControllerIaCTerraform:
         assert body_response['errors'][0]['errorMessage'] == 'schema errors messages'
 
     @responses.activate
-    @patch('startleft.mapping.mapping_file_loader.MappingFileLoader.load')
+    @patch('startleft.processors.base.mapping_file_loader.MappingFileLoader.load')
     def test_response_on_loading_mapping_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
