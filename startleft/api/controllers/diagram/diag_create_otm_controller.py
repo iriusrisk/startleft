@@ -2,9 +2,11 @@ import logging
 
 from fastapi import APIRouter, File, UploadFile, Form, Response
 
+import startleft.utils.json_utils as json_utils
+from slp_visio.slp_visio.visio_processor import VisioProcessor
 from startleft.api.controllers.otm_controller import RESPONSE_STATUS_CODE, PREFIX, controller_responses
-from startleft.diagram.diagram_type import DiagramType
-from startleft.otm.otm_project import OtmProject
+from startleft.api.errors import LoadingSourceFileError
+from startleft.processors.base.provider_type import DiagramType
 
 URL = '/diagram'
 
@@ -14,6 +16,13 @@ router = APIRouter(
     prefix=PREFIX,
     responses=controller_responses
 )
+
+
+def get_processor(source_type, id_, name, etm_data, mapping_data_list):
+    if source_type == DiagramType.VISIO:
+        return VisioProcessor(id_, name, etm_data, mapping_data_list)
+    else:
+        raise LoadingSourceFileError(f'{source_type} is not a supported type for source data')
 
 
 @router.post(URL, status_code=RESPONSE_STATUS_CODE, description="Generates an OTM threat model from an Diagram file",
@@ -38,6 +47,7 @@ def diagram(diag_file: UploadFile = File(..., description="File that contains th
         with custom_mapping_file.file as f:
             mapping_data_list.append(f.read())
 
-    otm_project = OtmProject.from_diag_file_to_otm_stream(id, name, diag_type, [diag_file.file], mapping_data_list)
+    processor = get_processor(diag_type, id, name, diag_file, mapping_data_list)
+    otm = processor.process()
 
-    return Response(status_code=201, media_type="application/json", content=otm_project.get_otm_as_json())
+    return Response(status_code=201, media_type="application/json", content=json_utils.get_otm_as_json(otm))
