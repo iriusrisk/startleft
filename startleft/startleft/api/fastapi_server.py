@@ -46,17 +46,20 @@ def run_webapp(port: int):
 
 @webapp.exception_handler(CommonError)
 async def handle_common_error(request: Request, e: CommonError):
+    logger.exception(e)
     return common_error_exception_handler(request, e)
 
 
 @webapp.exception_handler(Exception)
 async def handle_unexpected_exceptions(request: Request, e: Exception):
+    logger.exception(e)
     message = e.message if hasattr(e, 'message') else str(e)
     return common_response_handler(500, e.__class__.__name__, 'Unexpected exception', '', [message])
 
 
 @webapp.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    logger.exception(exc)
     messages = []
     try:
         for error in exc.errors():
