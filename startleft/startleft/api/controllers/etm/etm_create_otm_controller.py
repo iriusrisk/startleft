@@ -17,6 +17,8 @@ router = APIRouter(
     responses=controller_responses
 )
 
+provider_resolver = ProviderResolver(PROCESSORS)
+
 @router.post(URL, status_code=RESPONSE_STATUS_CODE,
              description="Generates an OTM threat model from a Threat Model file",
              tags=['Threat Model'])
@@ -43,7 +45,7 @@ def etm(source_file: UploadFile = File(..., description="File that contains the 
         with custom_mapping_file.file as f:
             mapping_data_list.append(f.read())
 
-    processor = ProviderResolver(PROCESSORS).get_processor(source_type, id, name, etm_data, mapping_data_list)
+    processor = provider_resolver.get_processor(source_type, id, name, etm_data, mapping_data_list)
     otm = processor.process()
 
     return Response(status_code=201, media_type="application/json", content=jsonUtils.get_otm_as_json(otm))

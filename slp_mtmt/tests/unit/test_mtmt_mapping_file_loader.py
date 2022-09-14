@@ -1,13 +1,14 @@
 import pytest
-from tests.resources.test_resource_paths import custom_mtmt_single_mapping_file, custom_mtmt_multiple_mapping_file, \
+
+from slp_base import LoadingMappingFileError
+from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMappingFileLoader
+from slp_mtmt.tests.resources.test_resource_paths import custom_mtmt_single_mapping_file, custom_mtmt_multiple_mapping_file, \
     no_mandatory_label_added_mtmt_mapping_file, trustzones_no_mandatory_label_added_mtmt_mapping_file, \
     default_mtmt_single_mapping_file, default_mtmt_multiple_mapping_file, custom_bad_formed_file, \
     default_mtmt_empty_elements
-from startleft.processors.mtmt.mtmt_mapping_file_loader import MTMTMappingFileLoader
-from startleft.api.errors import LoadingMappingFileError
 
 
-class TestMTMTMappingLoader:
+class TestMTMTMappingFileLoader:
 
     def test_mtmt_mapping_loader_load_single_elements_ok(self):
         # GIVEN a mapping file with a trustzone
