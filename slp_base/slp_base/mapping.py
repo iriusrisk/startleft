@@ -78,6 +78,15 @@ def validate_size(mapping_file_data: bytes):
     logger.info('Mapping file size is valid')
 
 
+def validate_type(mapping_file_data: bytes):
+    try:
+        if isinstance(mapping_file_data, bytes):
+            mapping_file_data.decode()
+    except Exception:
+        msg = 'The mapping file cannot read as plain text'
+        raise MappingFileNotValidError("The mapping file is unreadable", msg, msg)
+
+
 def validate_schema(schema: str, mapping_file: bytes):
     schema: Schema = Schema(schema)
     schema.validate(yaml.load(mapping_file, Loader=yaml.SafeLoader))
@@ -91,5 +100,6 @@ def validate_schema(schema: str, mapping_file: bytes):
 
 def validate_mapping_file(schema: str, mapping_file: bytes):
     validate_size(mapping_file)
+    validate_type(mapping_file)
     validate_schema(schema, mapping_file)
     logger.info('Mapping files are valid')

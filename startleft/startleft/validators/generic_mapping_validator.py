@@ -30,13 +30,3 @@ class GenericMappingValidator:
             raise MappingFileNotValidError('Mapping files are not valid',
                                            'Mapping file does not comply with the schema', str(schema.errors))
         logger.info('Mapping files are valid')
-
-    @staticmethod
-    def check_data_size(mapping_data: bytes):
-        """
-        Validate the size of mapping data [bytes]
-        """
-        size = len(mapping_data)
-        if type(mapping_data) == 'bytes' and size is None or size > MAX_SIZE or size < MIN_SIZE:
-            msg = 'Mapping files are not valid. Invalid size'
-            raise MappingFileNotValidError('Mapping files are not valid', msg, msg)

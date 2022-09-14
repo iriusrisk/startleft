@@ -82,7 +82,7 @@ class TestOtmControllerIaCTerraform:
         # And the iac_data with custom line breaks
         iac_data = FileUtils.get_byte_data(filename).decode().replace('\n', break_line)
 
-        # When I do post on teraform endpoint
+        # When I do post on terraform endpoint
         files = {'iac_file': iac_file, 'mapping_file': mapping_file}
         body = {'iac_type': 'TERRAFORM', 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)

@@ -22,6 +22,17 @@ from startleft.startleft.log import get_log_level, configure_logging
 from startleft.startleft.messages import *
 from startleft.startleft.otm_project import OtmProject
 from startleft.startleft.version import version
+from startleft.api.controllers.diagram.diag_create_otm_controller import get_processor
+from startleft.api.errors import CommonError, OtmGenerationError
+from startleft.clioptions.exclusion_option import Exclusion
+from startleft.iac.iac_to_otm import IacToOtm
+from startleft.iac.iac_type import IacType
+from startleft.log import get_log_level, configure_logging
+from startleft.messages import *
+from startleft.otm.otm_project import OtmProject
+from startleft.processors.base.provider_type import DiagramType
+from startleft.utils.file_utils import FileUtils
+from startleft.version import version
 
 logger = logging.getLogger(__name__)
 provider_resolver = ProviderResolver(PROCESSORS)
@@ -97,22 +108,22 @@ def parse_iac(iac_type, mapping_file, output_file, project_name, project_id, iac
 
 
 def parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, output_file, project_name,
-                  project_id, iac_file):
+                  project_id, diag_file):
     """
     Parses diagram source files into Open Threat Model
     """
     logger.info("Parsing diagram source files into OTM")
     type_ = DiagramType(diagram_type.upper())
-    file = open(iac_file[0], "r")
+    file = open(diag_file[0], "r")
 
     mapping_data_list = [get_data(default_mapping_file)]
 
     if custom_mapping_file:
         mapping_data_list.append(get_data(custom_mapping_file))
 
-    otm_proj = OtmProject.from_diag_file(project_id, project_name, type_, file, mapping_data_list)
-    file.close()
-    otm_proj.otm_to_file(output_file)
+    processor = get_processor(type_, project_id, project_name, file, mapping_data_list)
+    otm = processor.process()
+    otm_to_file(otm.json(), output_file)
 
 
 @cli.command(name='parse')
