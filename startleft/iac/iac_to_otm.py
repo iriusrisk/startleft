@@ -7,7 +7,7 @@ import yaml
 
 from startleft.api.errors import LoadingIacFileError, OtmBuildingError
 from startleft.iac.iac_type import IacType
-from startleft.iac.mapping import transformer, sourcemodel
+from startleft.iac.mapping import iac_to_otm_transformer, sourcemodel
 from startleft.otm import otm
 from startleft.processors.base.mapping_file_loader import MappingFileLoader
 from startleft.provider import Provider
@@ -27,7 +27,8 @@ class IacToOtm:
         self.otm = otm.OTM(project_name, project_id, provider)
         self.source_model = sourcemodel.SourceModel()
         self.source_model.otm = self.otm
-        self.transformer = transformer.Transformer(source_model=self.source_model, threat_model=self.otm)
+        self.transformer = iac_to_otm_transformer.IacToOtmTransformer(source_model=self.source_model,
+                                                                      threat_model=self.otm)
         self.mapping_file_loader = MappingFileLoader()
         self.mapping_validator = GenericMappingValidator('iac_mapping_schema.json')
         self.source_loader_map = {
