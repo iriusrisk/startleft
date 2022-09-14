@@ -4,7 +4,7 @@ from unittest.mock import patch
 from click.testing import CliRunner
 
 # mappings
-from startleft.startleft.cli import parse_any
+from startleft.startleft.cli.cli import parse_any
 from startleft.tests.resources import test_resource_paths
 
 TESTING_DEFAULT_VALID_MAPPING_FILENAME = test_resource_paths.default_visio_mapping
@@ -16,7 +16,7 @@ TESTING_DIAGRAM_TYPE = 'VISIO'
 
 class TestCliParseDiagram:
 
-    @patch('startleft.startleft.cli.parse_diagram')
+    @patch('startleft.startleft.cli.cli.parse_diagram')
     def test_parse_diagram_file_ok(self, mock, caplog):
         """
         Parsing Diagram file with a valid mapping file

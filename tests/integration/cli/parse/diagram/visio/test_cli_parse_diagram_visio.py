@@ -3,7 +3,7 @@ from pytest import mark
 
 from slp_base.slp_base.errors import MappingFileNotValidError, DiagramFileNotValidError
 from slp_base.tests.util.otm import validate_and_diff as validate_and_diff_otm
-from startleft.startleft.cli import parse_any
+from startleft.startleft.cli.cli import parse_any
 from tests.resources import test_resource_paths
 
 # mappings

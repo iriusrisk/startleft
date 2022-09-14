@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from click.testing import CliRunner
 
-from startleft.startleft.cli import parse_any
+from startleft.startleft.cli.cli import parse_any
 from tests.integration.cli.parse.iac.cloudformation.test_cli_parse_iac_cloudformation import \
     CLOUDFORMATION_MAPPING, \
     CLOUDFORMATION_FOR_MAPPING_TESTS
@@ -15,7 +15,7 @@ TESTING_MAPPING_FILE = CLOUDFORMATION_MAPPING
 
 class TestCliParseIaCCloudformation:
 
-    @patch('startleft.startleft.cli.parse_iac')
+    @patch('startleft.startleft.cli.cli.parse_iac')
     def test_parse_cloudformation_file_ok(self, mock, caplog):
         """
         Parsing Cloudformation file with a valid mapping file

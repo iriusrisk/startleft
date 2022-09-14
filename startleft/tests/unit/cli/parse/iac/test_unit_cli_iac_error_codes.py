@@ -5,7 +5,7 @@ from click.testing import CliRunner
 from slp_base import LoadingMappingFileError, LoadingIacFileError, IacFileNotValidError, \
     OtmBuildingError, \
     OtmGenerationError
-from startleft.startleft.cli import parse_any
+from startleft.startleft.cli.cli import parse_any
 from startleft.tests.unit.cli.parse.iac.test_unit_cli_parse_iac import CLOUDFORMATION_MAPPING, \
     CLOUDFORMATION_FOR_MAPPING_TESTS
 

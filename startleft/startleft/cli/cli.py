@@ -16,7 +16,7 @@ from slp_base.slp_base.otm_validator import OtmValidator
 from slp_base.slp_base.provider_resolver import ProviderResolver
 from slp_cft.slp_cft.cft_searcher import CloudformationSearcher
 from slp_tf.slp_tf.tf_searcher import TerraformSearcher
-from startleft.startleft.clioptions.exclusion_option import Exclusion
+from startleft.startleft.cli.clioptions.exclusion_option import Exclusion
 from startleft.startleft.messages import *
 from startleft.startleft.version import version
 from startleft.startleft.api import fastapi_server

@@ -1,7 +1,7 @@
 import pytest
 from shapely.geometry import Polygon
 
-from slp_visio.slp_visio.load.representation.visio.simple_component_representer import SimpleComponentRepresenter
+from slp_visio.slp_visio.load.representation.simple_component_representer import SimpleComponentRepresenter
 from slp_visio.tests.util.visio import read_shape_by_name
 from tests.resources.test_resource_paths import visio_simple_components
 

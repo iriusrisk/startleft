@@ -3,7 +3,7 @@ from pytest import mark
 
 from slp_base import LoadingIacFileError, MappingFileNotValidError
 from slp_base.tests.util.otm import validate_and_diff as validate_and_diff_otm
-from startleft.startleft.cli import parse_any
+from startleft.startleft.cli.cli import parse_any
 from tests.integration.cli.parse.iac.test_cli_parse_iac import excluded_regex
 from tests.resources import test_resource_paths
 from tests.resources.test_resource_paths import invalid_tf

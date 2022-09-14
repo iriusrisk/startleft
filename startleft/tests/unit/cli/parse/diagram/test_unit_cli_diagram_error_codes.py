@@ -4,7 +4,7 @@ from click.testing import CliRunner
 
 from slp_base import OtmGenerationError, LoadingDiagramFileError, DiagramFileNotValidError, \
     MappingFileNotValidError, OtmResultError
-from startleft.startleft.cli import parse_any
+from startleft.startleft.cli.cli import parse_any
 # mappings
 from startleft.tests.unit.cli.parse.diagram.test_unit_cli_parse_diagram import TESTING_DEFAULT_VALID_MAPPING_FILENAME, \
     TESTING_VALID_DIAGRAM_FILE

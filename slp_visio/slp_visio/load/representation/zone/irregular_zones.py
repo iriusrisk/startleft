@@ -3,7 +3,7 @@ from math import pi
 from shapely.geometry import Polygon
 
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramLimits
-from slp_visio.slp_visio.load.representation.visio.zone.zone import Zone
+from slp_visio.slp_visio.load.representation.zone.zone import Zone
 
 
 def upper_left_representation(x_formula, y_formula, limits: DiagramLimits) -> Polygon:
