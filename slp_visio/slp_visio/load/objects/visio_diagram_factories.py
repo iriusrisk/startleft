@@ -18,6 +18,11 @@ def is_valid_connector(connected_shapes) -> bool:
     return True
 
 
+def connector_has_begin_arrow_defined(shape) -> bool:
+    begin_arrow_value = shape.cell_value('BeginArrow')
+    return begin_arrow_value is not None and str(begin_arrow_value).isnumeric() and begin_arrow_value != '0'
+
+
 class VisioComponentFactory:
 
     def create_component(self, shape, origin, representer) -> DiagramComponent:
@@ -35,7 +40,11 @@ class VisioConnectorFactory:
         connected_shapes = shape.connects
         if not is_valid_connector(connected_shapes):
             return None
-        if connected_shapes[0].from_rel == 'BeginX':
+
+        has_begin_arrow = connector_has_begin_arrow_defined(shape)
+
+        if (connected_shapes[0].from_rel == 'BeginX' and not has_begin_arrow) \
+                or (connected_shapes[1].from_rel == 'BeginX' and has_begin_arrow):
             return DiagramConnector(shape.ID, connected_shapes[0].shape_id, connected_shapes[1].shape_id)
         else:
             return DiagramConnector(shape.ID, connected_shapes[1].shape_id, connected_shapes[0].shape_id)
