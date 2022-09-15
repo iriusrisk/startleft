@@ -16,7 +16,7 @@ TESTING_DEFAULT_MAPPING_FILE = TESTING_DEFAULT_VALID_MAPPING_FILENAME
 
 class TestCliDiagramErrorCodes:
 
-    @patch('startleft.otm.otm_project.OtmProject.from_diag_file')
+    @patch('slp_visio.slp_visio.visio_processor.VisioProcessor.process')
     def test_loadingdiagramfileerror_code(self, mock_load_source_data):
         runner = CliRunner()
         output_file_name = "output-file.otm"
@@ -47,7 +47,7 @@ class TestCliDiagramErrorCodes:
             assert result.exit_code == 1
             assert result.exception.error_code.system_exit_status == 11
 
-    @patch('startleft.otm.otm_project.OtmProject.from_diag_file')
+    @patch('slp_visio.slp_visio.visio_processor.VisioProcessor.process')
     def test_diagramfilenotvaliderror_code(self, mock_load_source_data):
         runner = CliRunner()
         output_file_name = "output-file.otm"
@@ -78,7 +78,7 @@ class TestCliDiagramErrorCodes:
             assert result.exit_code == 1
             assert result.exception.error_code.system_exit_status == 12
 
-    @patch('startleft.otm.otm_project.OtmProject.from_diag_file')
+    @patch('slp_visio.slp_visio.visio_processor.VisioProcessor.process')
     def test_mappingfilenotvaliderror_code(self, mock_load_source_data):
         runner = CliRunner()
         output_file_name = "output-file.otm"
@@ -109,7 +109,7 @@ class TestCliDiagramErrorCodes:
             assert result.exit_code == 1
             assert result.exception.error_code.system_exit_status == 22
 
-    @patch('startleft.otm.otm_project.OtmProject.from_diag_file')
+    @patch('slp_visio.slp_visio.visio_processor.VisioProcessor.process')
     def test_otmresulterror_code(self, mock_load_source_data):
         runner = CliRunner()
         output_file_name = "output-file.otm"
@@ -141,7 +141,7 @@ class TestCliDiagramErrorCodes:
             assert result.exit_code == 1
             assert result.exception.error_code.system_exit_status == 42
 
-    @patch('startleft.otm.otm_project.OtmProject.from_diag_file')
+    @patch('slp_visio.slp_visio.visio_processor.VisioProcessor.process')
     def test_otmgenerationerror_code(self, mock_load_source_data):
         runner = CliRunner()
         output_file_name = "output-file.otm"

@@ -72,10 +72,19 @@ def validate_size(mapping_file_data: bytes):
 
     if size is None or size > MAX_SIZE or size < MIN_SIZE:
         logger.error('Mapping file is not valid')
-        msg = 'Invalid size'
-        raise MappingFileNotValidError('Mapping file is not valid', msg, msg)
+        msg = 'Mapping files are not valid. Invalid size'
+        raise MappingFileNotValidError('Mapping files are not valid', msg, msg)
 
     logger.info('Mapping file size is valid')
+
+
+def validate_type(mapping_file_data: bytes):
+    try:
+        if isinstance(mapping_file_data, bytes):
+            mapping_file_data.decode()
+    except Exception:
+        msg = 'The mapping file cannot read as plain text'
+        raise MappingFileNotValidError("The mapping file is unreadable", msg, msg)
 
 
 def validate_schema(schema: str, mapping_file: bytes):
@@ -84,12 +93,13 @@ def validate_schema(schema: str, mapping_file: bytes):
     if not schema.valid:
         logger.error('Mapping file is not valid')
         logger.error(f'--- Schema errors ---\n{schema.errors}\n--- End of schema errors ---')
-        raise MappingFileNotValidError('Mapping file is not valid',
+        raise MappingFileNotValidError('Mapping files are not valid',
                                        'Mapping file does not comply with the schema', str(schema.errors))
     logger.info('Mapping file schema is valid')
 
 
 def validate_mapping_file(schema: str, mapping_file: bytes):
     validate_size(mapping_file)
+    validate_type(mapping_file)
     validate_schema(schema, mapping_file)
     logger.info('Mapping file is valid')
