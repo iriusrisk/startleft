@@ -86,25 +86,29 @@
       "id": "17",
       "name": "4638ef81-e68d-4e59-b4d8-6afbce58904e",
       "source": "1",
-      "destination": "12"
+      "destination": "12",
+      "bidirectional" : false
     },
     {
       "id": "34",
       "name": "80617f64-b8d3-4cf9-9bc1-6456c694e513",
       "source": "12",
-      "destination": "30"
+      "destination": "30",
+      "bidirectional" : false
     },
     {
       "id": "40",
       "name": "9e14d9d4-10c0-4207-a857-6915f4e56380",
       "source": "1",
-      "destination": "35"
+      "destination": "35",
+      "bidirectional" : false
     },
     {
       "id": "46",
       "name": "bb2f30ba-9624-46e3-80cd-b60456d7f944",
       "source": "12",
-      "destination": "41"
+      "destination": "41",
+      "bidirectional" : false
     }
   ]
 }

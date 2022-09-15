@@ -79,31 +79,36 @@
       "id": "94",
       "name": "d340c46b-dd38-4776-b710-0de876202d91",
       "source": "31",
-      "destination": "19"
+      "destination": "19",
+      "bidirectional" : false
     },
     {
       "id": "114",
       "name": "c88b71c5-8414-4d73-bcc9-93c2c93453e0",
       "source": "46",
-      "destination": "19"
+      "destination": "19",
+      "bidirectional" : false
     },
     {
       "id": "115",
       "name": "be73041c-99f8-4fd2-80de-a09d5525fbb9",
       "source": "99",
-      "destination": "19"
+      "destination": "19",
+      "bidirectional" : false
     },
     {
       "id": "116",
       "name": "49d40f6e-1cfc-4065-a72d-ed54d94ca214",
       "source": "99",
-      "destination": "86"
+      "destination": "86",
+      "bidirectional" : false
     },
     {
       "id": "117",
       "name": "2c8eb200-5cdf-4ab0-9c91-43240c52b0f9",
       "source": "46",
-      "destination": "13"
+      "destination": "13",
+      "bidirectional" : false
     }
   ]
 }
