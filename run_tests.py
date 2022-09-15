@@ -3,7 +3,7 @@ import os
 import pytest
 from _pytest.config import ExitCode
 
-from _sl_build.globals import ALL_MODULES
+from _sl_build.modules import ALL_MODULES
 
 ROOT_DIR = os.path.dirname(os.path.realpath(__file__))
 

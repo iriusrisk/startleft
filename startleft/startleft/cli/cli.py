@@ -5,7 +5,7 @@ import sys
 
 import click
 
-from _sl_build.globals import PROCESSORS
+from _sl_build.modules import PROCESSORS
 from otm.otm.otm import OTM
 from sl_util.sl_util.file_utils import get_data
 from slp_base import CommonError

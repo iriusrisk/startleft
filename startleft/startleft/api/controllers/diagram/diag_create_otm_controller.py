@@ -2,7 +2,7 @@ import logging
 
 from fastapi import APIRouter, File, UploadFile, Form, Response
 
-from _sl_build.globals import PROCESSORS
+from _sl_build.modules import PROCESSORS
 from sl_util.sl_util.json_utils import get_otm_as_json
 from slp_base.slp_base.provider_resolver import ProviderResolver
 from slp_base import DiagramType

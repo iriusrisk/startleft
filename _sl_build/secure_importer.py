@@ -1,7 +1,7 @@
 import builtins
 import importlib
 
-from _sl_build.globals import ALL_MODULES
+from _sl_build.modules import ALL_MODULES
 
 
 def _build_dependencies_map():

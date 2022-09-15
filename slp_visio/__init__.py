@@ -7,7 +7,7 @@
 ###################################################################
 
 # DON'T REMOVE: Module importer overwritten to prevent bidirectional dependencies
-from _sl_build.module_importer import override_module_importer
+from _sl_build.secure_importer import override_module_importer
 override_module_importer()
 
 from .slp_visio import *
