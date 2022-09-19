@@ -3,7 +3,7 @@ import logging
 
 import yaml
 
-from slp_base.slp_base.errors import MappingFileNotValidError
+from slp_base.slp_base.errors import MappingFileNotValidError, LoadingMappingFileError
 from slp_base.slp_base.schema import Schema
 
 logger = logging.getLogger(__name__)
@@ -89,13 +89,21 @@ def validate_type(mapping_file_data: bytes):
 
 def validate_schema(schema: str, mapping_file: bytes):
     schema: Schema = Schema(schema)
-    schema.validate(yaml.load(mapping_file, Loader=yaml.SafeLoader))
+    schema.validate(read_mapping_file(mapping_file))
     if not schema.valid:
         logger.error('Mapping file is not valid')
         logger.error(f'--- Schema errors ---\n{schema.errors}\n--- End of schema errors ---')
         raise MappingFileNotValidError('Mapping files are not valid',
                                        'Mapping file does not comply with the schema', str(schema.errors))
     logger.info('Mapping files are valid')
+
+
+def read_mapping_file(mapping_file: bytes):
+    try:
+        return yaml.load(mapping_file, Loader=yaml.SafeLoader)
+    except Exception as e:
+        raise LoadingMappingFileError('Error loading the mapping file. The mapping files are not valid.',
+                                      e.__class__.__name__, str(e))
 
 
 def validate_mapping_file(schema: str, mapping_file: bytes):
