@@ -27,6 +27,7 @@ class MTMTProcessor(OtmProcessor):
 
     def get_provider_loader(self) -> ProviderLoader:
         loader = MTMTLoader(self.source)
+        loader.load()
         self.mtmt = loader.get_mtmt()
         return loader
 

@@ -20,7 +20,7 @@ class MTMTParser(ProviderParser):
         self.project_name = project_name
 
     def __get_mtmt_components(self):
-        return MTMTComponentParser().parse()
+        return MTMTComponentParser(self.source, self.mapping).parse()
 
     def __get_mtmt_dataflows(self):
         return MTMTConnectorParser().parse()
