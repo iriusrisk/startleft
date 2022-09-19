@@ -85,16 +85,16 @@ class TestVisioConnectorFactory:
         pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=1), MagicMock(from_rel='EndX', shape_id=2)]), {'BeginArrow': '0', 'EndArrow': '0'}, None, 1, 2, False, id='invalid_begin_0_end_0'),
         # Created left to right, arrow changed to bidirectional
         pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=1), MagicMock(from_rel='EndX', shape_id=2)]), {'BeginArrow': '13', 'EndArrow': '13'}, None, 1, 2, True, id='left_to_right_arrow_changed_bidirectional'),
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='EndX', shape_id=2), MagicMock(from_rel='BeginX', shape_id=1)]), {'BeginArrow': '13', 'EndArrow': '13'}, None, 1, 2, True, id='left_to_right_arrow_changed_bidirectional_inverted'),
+        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='EndX', shape_id=2), MagicMock(from_rel='BeginX', shape_id=1)]), {'BeginArrow': '13', 'EndArrow': '13'}, None, 2, 1, True, id='left_to_right_arrow_changed_bidirectional_inverted'),
         # Created right to left, arrow changed to bidirectional
         pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=2), MagicMock(from_rel='EndX', shape_id=1)]), {'BeginArrow': '13', 'EndArrow': '13'}, None, 2, 1, True, id='right_to_left_arrow_changed_bidirectional'),
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='EndX', shape_id=1), MagicMock(from_rel='BeginX', shape_id=2)]), {'BeginArrow': '13', 'EndArrow': '13'}, None, 2, 1, True, id='right_to_left_arrow_changed_bidirectional_inverted'),
+        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='EndX', shape_id=1), MagicMock(from_rel='BeginX', shape_id=2)]), {'BeginArrow': '13', 'EndArrow': '13'}, None, 1, 2, True, id='right_to_left_arrow_changed_bidirectional_inverted'),
         # Created left to right, shape changed to bidirectional
         pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=1), MagicMock(from_rel='EndX', shape_id=2)]), {'BeginArrow': None, 'EndArrow': None}, 'Simple Double Arrow', 1, 2, True, id='left_to_right_shape_changed_bidirectional'),
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='EndX', shape_id=2), MagicMock(from_rel='BeginX', shape_id=1)]), {'BeginArrow': None, 'EndArrow': None}, 'Line Double Arrow', 1, 2, True, id='left_to_right_shape_changed_bidirectional_inverted'),
+        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='EndX', shape_id=2), MagicMock(from_rel='BeginX', shape_id=1)]), {'BeginArrow': None, 'EndArrow': None}, 'Line Double Arrow', 2, 1, True, id='left_to_right_shape_changed_bidirectional_inverted'),
         # Created right to left, shape changed to bidirectional
         pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=2), MagicMock(from_rel='EndX', shape_id=1)]), {'BeginArrow': None, 'EndArrow': None}, 'Arced Line Double Arrow', 2, 1, True, id='right_to_left_shape_changed_bidirectional'),
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='EndX', shape_id=1), MagicMock(from_rel='BeginX', shape_id=2)]), {'BeginArrow': None, 'EndArrow': None}, 'Block Double Arrow', 2, 1, True, id='right_to_left_shape_changed_bidirectional_inverted')
+        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='EndX', shape_id=1), MagicMock(from_rel='BeginX', shape_id=2)]), {'BeginArrow': None, 'EndArrow': None}, 'Block Double Arrow', 1, 2, True, id='right_to_left_shape_changed_bidirectional_inverted')
     ])
     def test_create_connector_modified_manually(self, shape, cell_values, master_name, from_shape, to_shape, bidirectional):
         # GIVEN a mocked visio connector

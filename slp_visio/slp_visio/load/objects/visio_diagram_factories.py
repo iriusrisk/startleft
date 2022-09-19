@@ -28,7 +28,11 @@ def is_bidirectional_connector(shape) -> bool:
     return True
 
 
-def connector_has_begin_arrow_defined(shape) -> bool:
+def is_created_from(connector) -> bool:
+    return connector.from_rel == 'BeginX'
+
+
+def connector_has_arrow_in_origin(shape) -> bool:
     begin_arrow_value = shape.cell_value('BeginArrow')
     return begin_arrow_value is not None and str(begin_arrow_value).isnumeric() and begin_arrow_value != '0'
 
@@ -51,11 +55,13 @@ class VisioConnectorFactory:
         if not is_valid_connector(connected_shapes):
             return None
 
-        bidirectional = is_bidirectional_connector(shape)
-        has_begin_arrow = connector_has_begin_arrow_defined(shape)
+        if is_bidirectional_connector(shape):
+            return DiagramConnector(shape.ID, connected_shapes[0].shape_id, connected_shapes[1].shape_id, True)
 
-        if (connected_shapes[0].from_rel == 'BeginX' and (bidirectional or not has_begin_arrow)) \
-                or (connected_shapes[1].from_rel == 'BeginX' and not bidirectional and has_begin_arrow):
-            return DiagramConnector(shape.ID, connected_shapes[0].shape_id, connected_shapes[1].shape_id, bidirectional)
+        has_arrow_in_origin = connector_has_arrow_in_origin(shape)
+
+        if (not has_arrow_in_origin and is_created_from(connected_shapes[0])) \
+                or (has_arrow_in_origin and is_created_from(connected_shapes[1])):
+            return DiagramConnector(shape.ID, connected_shapes[0].shape_id, connected_shapes[1].shape_id)
         else:
-            return DiagramConnector(shape.ID, connected_shapes[1].shape_id, connected_shapes[0].shape_id, bidirectional)
+            return DiagramConnector(shape.ID, connected_shapes[1].shape_id, connected_shapes[0].shape_id)

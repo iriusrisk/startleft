@@ -62,7 +62,7 @@ def check_otm_dataflow(otm, position, source_node, destination_node, bidirection
     assert otm.dataflows[position].source_node == source_node
     assert otm.dataflows[position].destination_node == destination_node
     if bidirectional is not None:
-        assert otm.dataflows[position].bidirectional == bidirectional
+        assert otm.dataflows[position].bidirectional is bidirectional
 
 
 def check_otm_representations_size(otm):

@@ -306,9 +306,9 @@ class TestVisioProcessor:
         check_otm_component(otm, 4, 'vpc', 'Amazon VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
         check_otm_component(otm, 5, 'vpc', 'Amazon VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
 
-        check_otm_dataflow(otm, 0, '1', '23', True)
-        check_otm_dataflow(otm, 1, '6', '28', True)
-        check_otm_dataflow(otm, 2, '17', '33', True)
+        check_otm_dataflow(otm, 0, '23', '1', True)
+        check_otm_dataflow(otm, 1, '28', '6', True)
+        check_otm_dataflow(otm, 2, '33', '17', True)
 
     def test_manually_modified_connectors(self):
         visio_file = open(test_resource_paths.visio_modified_single_connectors, "r")
