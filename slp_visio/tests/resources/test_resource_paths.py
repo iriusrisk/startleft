@@ -10,7 +10,6 @@ default_visio_mapping = path + '/mapping/aws-visio-mapping.yaml'
 custom_vpc_mapping = path + '/mapping/custom-vpc-mapping.yaml'
 
 # visio
-# VISIO
 visio_aws_with_tz_and_vpc = path + '/visio/aws-with-tz-and-vpc.vsdx'
 visio_aws_shapes = path + '/visio/aws-shapes.vsdx'
 visio_aws_stencils = path + '/visio/aws-stencils.vsdx'
