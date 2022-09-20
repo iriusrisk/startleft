@@ -58,9 +58,11 @@ def check_otm_component(otm, position, component_type, name, parent_id=None, tag
         assert c_tag in otm.components[position].tags
 
 
-def check_otm_dataflow(otm, position, source_node, destination_node):
+def check_otm_dataflow(otm, position, source_node, destination_node, bidirectional=None):
     assert otm.dataflows[position].source_node == source_node
     assert otm.dataflows[position].destination_node == destination_node
+    if bidirectional is not None:
+        assert otm.dataflows[position].bidirectional is bidirectional
 
 
 def check_otm_representations_size(otm):
