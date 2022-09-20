@@ -3,7 +3,7 @@ from slp_base.tests.util.otm import check_otm_representations_size, check_otm_tr
     public_cloud_name, check_otm_component, check_otm_dataflow, private_secured_id, private_secured_name, internet_id, \
     internet_name
 from slp_visio.slp_visio.visio_processor import VisioProcessor
-from tests.resources import test_resource_paths
+from slp_visio.tests.resources import test_resource_paths
 
 
 class TestVisioProcessor:
@@ -288,7 +288,7 @@ class TestVisioProcessor:
             "project-id",
             "project-name",
             visio_file,
-            [FileUtils.get_data(test_resource_paths.default_visio_mapping)],
+            [get_data(test_resource_paths.default_visio_mapping)],
         ).process()
 
         assert len(otm.trustzones) == 1
@@ -316,7 +316,7 @@ class TestVisioProcessor:
             "project-id",
             "project-name",
             visio_file,
-            [FileUtils.get_data(test_resource_paths.default_visio_mapping)],
+            [get_data(test_resource_paths.default_visio_mapping)],
         ).process()
 
         assert len(otm.trustzones) == 1
