@@ -84,6 +84,8 @@ visio_simple_components = path + '/visio/simple-components.vsdx'
 visio_orphan_dataflows = path + '/visio/visio-orphan-dataflows.vsdx'
 visio_invalid_file_size = path + '/visio/invalid-file-size.vsdx'
 visio_invalid_file_type = path + '/visio/invalid-file-type.pdf'
+visio_modified_single_connectors = path + '/visio/modified-single-connectors.vsdx'
+visio_bidirectional_connectors = path + '/visio/bidirectional-connectors.vsdx'
 # mapping
 default_visio_mapping = path + '/visio/aws-visio-mapping.yaml'
 custom_vpc_mapping = path + '/visio/custom-vpc-mapping.yaml'

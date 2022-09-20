@@ -40,10 +40,11 @@ class DiagramComponent:
 
 
 class DiagramConnector:
-    def __init__(self, id, from_id, to_id):
+    def __init__(self, id, from_id, to_id, bidirectional=False):
         self.id = id
         self.from_id = from_id
         self.to_id = to_id
+        self.bidirectional = bidirectional
 
     def __str__(self) -> str:
         return super().__str__()

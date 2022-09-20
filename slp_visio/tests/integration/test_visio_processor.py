@@ -281,3 +281,63 @@ class TestVisioProcessor:
         check_otm_dataflow(otm, 2, '99', '19')
         check_otm_dataflow(otm, 3, '99', '86')
         check_otm_dataflow(otm, 4, '46', '13')
+
+    def test_bidirectional_connectors(self):
+        visio_file = open(test_resource_paths.visio_bidirectional_connectors, "r")
+        otm = VisioProcessor(
+            "project-id",
+            "project-name",
+            visio_file,
+            [FileUtils.get_data(test_resource_paths.default_visio_mapping)],
+        ).process()
+
+        assert len(otm.trustzones) == 1
+        assert len(otm.components) == 6
+        assert len(otm.dataflows) == 3
+
+        check_otm_representations_size(otm)
+
+        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
+
+        check_otm_component(otm, 0, 'ec2', 'Amazon EC2', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 1, 'ec2', 'Amazon EC2', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 2, 'ec2', 'Amazon EC2', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 3, 'vpc', 'Amazon VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 4, 'vpc', 'Amazon VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 5, 'vpc', 'Amazon VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+
+        check_otm_dataflow(otm, 0, '23', '1', True)
+        check_otm_dataflow(otm, 1, '28', '6', True)
+        check_otm_dataflow(otm, 2, '33', '17', True)
+
+    def test_manually_modified_connectors(self):
+        visio_file = open(test_resource_paths.visio_modified_single_connectors, "r")
+        otm = VisioProcessor(
+            "project-id",
+            "project-name",
+            visio_file,
+            [FileUtils.get_data(test_resource_paths.default_visio_mapping)],
+        ).process()
+
+        assert len(otm.trustzones) == 1
+        assert len(otm.components) == 22
+        assert len(otm.dataflows) == 11
+
+        check_otm_representations_size(otm)
+
+        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
+
+        check_otm_component(otm, 0, 'ec2', 'Amazon EC2', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 9, 'vpc', 'Amazon VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+
+        check_otm_dataflow(otm, 0, '1', '41')
+        check_otm_dataflow(otm, 1, '6', '46')
+        check_otm_dataflow(otm, 2, '11', '51')
+        check_otm_dataflow(otm, 3, '16', '56')
+        check_otm_dataflow(otm, 4, '21', '61')
+        check_otm_dataflow(otm, 5, '26', '66')
+        check_otm_dataflow(otm, 6, '31', '71')
+        check_otm_dataflow(otm, 7, '36', '76')
+        check_otm_dataflow(otm, 8, '97', '107')
+        check_otm_dataflow(otm, 9, '102', '112')
+        check_otm_dataflow(otm, 10, '120', '125')
