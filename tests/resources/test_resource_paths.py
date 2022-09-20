@@ -51,9 +51,8 @@ terraform_unknown_module = path + '/terraform/terraform_unknown_module.tf'
 terraform_no_resources = path + '/terraform/no_resources.tf'
 terraform_gz = path + '/terraform/terraform.gz'
 terraform_specific_functions = path + '/terraform/terraform_specific_functions.tf'
-terraform_modules_sample = path + '/terraform/terraform_modules_sample.tf'
+terraform_modules = path + '/terraform/terraform_modules_sample.tf'
 terraform_extra_modules_sample = path + '/terraform/terraform_extra_modules_sample.tf'
-terraform_elb = path + '/terraform/elb.tf'
 # mapping
 default_terraform_mapping = path + '/terraform/default-terraform-mapping.yaml'
 default_terraform_aws_mapping = path + '/terraform/aws_terraform_mapping.yaml'
@@ -64,7 +63,7 @@ terraform_mapping_modules = path + '/terraform/terraform_mapping_modules.yaml'
 terraform_mapping_extra_modules = path + '/terraform/terraform_mapping_extra_modules.yaml'
 # expected otm results
 terraform_aws_simple_components_otm_expected = path + '/terraform/aws_simple_components.otm'
-terraform_iriusrisk_tf_aws_mapping = path + '/terraform/iriusrisk-tf-aws-mapping.yaml'
+
 
 # VISIO
 visio_aws_with_tz_and_vpc = path + '/visio/aws-with-tz-and-vpc.vsdx'
@@ -94,19 +93,7 @@ visio_aws_shapes_otm_expected = path + '/visio/aws-shapes.otm'
 visio_aws_with_tz_and_vpc_otm_expected = path + '/visio/aws-with-tz-and-vpc.otm'
 visio_orphan_dataflows_otm_expected = path + '/visio/visio-orphan-dataflows.otm'
 
-# MTMT
-model_mtmt_source_file = path + '/mtmt/test_model.tm7'
-mtmt_mapping_file = path + '/mtmt/mtmt-mapping.yaml'
-default_mtmt_single_mapping_file = path + '/mtmt/mtmt-default-mapping-single-element.yaml'
-default_mtmt_multiple_mapping_file = path + '/mtmt/mtmt-default-mapping-multiple-elements.yaml'
-trustzones_no_mandatory_label_added_mtmt_mapping_file = path + \
-                                                        '/mtmt/mtmt-default-mapping-trustzones-no-mandatory-label-added.yaml'
-no_mandatory_label_added_mtmt_mapping_file = path + '/mtmt/mtmt-default-mapping-no-mandatory-label-added.yaml'
-custom_mtmt_single_mapping_file = path + '/mtmt/mtmt-custom-mapping-single-element.yaml'
-custom_mtmt_multiple_mapping_file = path + '/mtmt/mtmt-custom-mapping-multiple-elements.yaml'
-custom_bad_formed_file = path + '/mtmt/mtmt-custom-bad-formed-file.yaml'
 
-default_mtmt_empty_elements = path + '/mtmt/mtmt-default-mapping-empty-elements.yaml'
 
 
 

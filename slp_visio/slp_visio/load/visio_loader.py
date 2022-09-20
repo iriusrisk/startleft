@@ -1,10 +1,8 @@
 import logging
 
+from slp_base import DiagramType, DiagramFileNotValidError, ProviderLoader, LoadingDiagramFileError
 from slp_visio.slp_visio.load.objects.visio_diagram_factories import VisioComponentFactory, VisioConnectorFactory
 from slp_visio.slp_visio.load.vsdx_parser import VsdxParser
-from startleft.api.errors import DiagramFileNotValidError, LoadingDiagramFileError
-from startleft.processors.base.provider_loader import ProviderLoader
-from startleft.processors.base.provider_type import DiagramType
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +10,7 @@ logger = logging.getLogger(__name__)
 def get_parser_for_diagram_type(provider):
     if provider == DiagramType.VISIO:
         return VsdxParser(VisioComponentFactory(), VisioConnectorFactory())
-    msg = messages.CANNOT_RECOGNIZE_GIVEN_DIAGRAM_TYPE
+    msg = 'Cannot recognize given diagram type'
     raise DiagramFileNotValidError('UnknownDiagramType', msg, f'{msg} {provider}')
 
 

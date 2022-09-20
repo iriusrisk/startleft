@@ -1,12 +1,12 @@
 from click.testing import CliRunner
 from pytest import mark
 
-from startleft.api.errors import LoadingIacFileError, MappingFileNotValidError
-from startleft.cli import parse_any
+from slp_base import LoadingIacFileError, MappingFileNotValidError
+from slp_base.tests.util.otm import validate_and_diff as validate_and_diff_otm
+from startleft.startleft.cli.cli import parse_any
 from tests.integration.cli.parse.iac.test_cli_parse_iac import excluded_regex
 from tests.resources import test_resource_paths
 from tests.resources.test_resource_paths import invalid_tf
-from tests.util.otm import validate_and_diff as validate_and_diff_otm
 
 # mappings
 TERRAFORM_VALID_MAPPING_FILENAME = test_resource_paths.default_terraform_aws_mapping

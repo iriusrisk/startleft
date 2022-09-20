@@ -33,7 +33,7 @@ The following command will parse the CloudFormation source file `multinetwork_se
 OTM file `multinetwork_security_groups_with_lb.otm` in the process.
 ```shell
 startleft parse \
-	--iac-type cloudformation \
+	--iac-type CLOUDFORMATION \
 	--mapping-file iriusrisk-cft-mapping.yaml \
 	--output-file multinetwork_security_groups_with_lb.otm \
 	--project-name "CFT MN Security Groups with LB" \
@@ -55,8 +55,8 @@ StartLeft supports parsing Terraform source files. An example is provided in the
 
 ```shell
 startleft parse \
-	--iac-type terraform \
-	--mapping-file iriusrisk-tf-aws-mapping.yaml \
+	--iac-type slp_tf \
+	--mapping-file default-slp_tf-mapping.yaml \
 	--output-file elb.otm \
 	--project-name "Terraform ELB" \
 	--project-id "terraform-elb" \

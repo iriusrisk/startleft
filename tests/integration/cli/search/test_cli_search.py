@@ -1,7 +1,8 @@
 import logging
 
 from click.testing import CliRunner
-from startleft.cli import search
+
+from startleft.startleft.cli.cli import search
 from tests.resources import test_resource_paths
 
 TF_AWS_SIMPLE_COMPONENTS_FILENAME = test_resource_paths.terraform_aws_simple_components

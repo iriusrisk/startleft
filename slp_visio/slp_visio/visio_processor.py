@@ -1,16 +1,12 @@
 from starlette.datastructures import UploadFile
 
+from sl_util.sl_util.file_utils import copy_to_disk
+from slp_base import OtmProcessor, ProviderValidator, ProviderLoader, MappingValidator, MappingLoader, ProviderParser
 from slp_visio.slp_visio.load.visio_loader import VisioLoader
 from slp_visio.slp_visio.load.visio_mapping_loader import VisioMappingFileLoader
 from slp_visio.slp_visio.parse.visio_parser import VisioParser
 from slp_visio.slp_visio.validate.visio_mapping_file_validator import VisioMappingFileValidator
 from slp_visio.slp_visio.validate.visio_validator import VisioValidator
-from startleft.processors.base.mapping import MappingLoader, MappingValidator
-from startleft.processors.base.otm_processor import OtmProcessor
-from startleft.processors.base.provider_loader import ProviderLoader
-from startleft.processors.base.provider_parser import ProviderParser
-from startleft.processors.base.provider_validator import ProviderValidator
-from startleft.utils.file_utils import FileUtils
 
 
 class VisioProcessor(OtmProcessor):
@@ -23,7 +19,7 @@ class VisioProcessor(OtmProcessor):
         self.project_name = project_name
         self.mappings = mappings
         if type(source) is UploadFile:
-            self.source = FileUtils.copy_to_disk(source.file, '.vsdx')
+            self.source = copy_to_disk(source.file, '.vsdx')
         else:
             self.source = source
         self.loader = None

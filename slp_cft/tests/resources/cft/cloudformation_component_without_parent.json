@@ -1,0 +1,22 @@
+{
+  "Resources": {
+    "Skipped_with_parent": {
+      "Type": "aws_skipped_with_parent",
+      "Properties": {
+        "Name": "aws-skipped-with-parent"
+      }
+    },
+    "Component_without_parent": {
+      "Type": "aws_component_without_parent",
+      "Properties": {
+        "Name": "aws-component-without-parent"
+      }
+    },
+    "Control_component": {
+      "Type": "aws_control",
+      "Properties": {
+        "Name": "aws-control"
+      }
+    }
+  }
+}
