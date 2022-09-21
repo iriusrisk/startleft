@@ -42,7 +42,7 @@ setup(
     },
     entry_points='''
         [console_scripts]
-        startleft=startleft.startleft.cli:cli
+        startleft=startleft.startleft.cli.cli:cli
     ''',
     classifiers=[
         'Development Status :: 3 - Alpha',
