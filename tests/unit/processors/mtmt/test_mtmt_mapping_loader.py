@@ -3,7 +3,7 @@ from tests.resources.test_resource_paths import custom_mtmt_single_mapping_file,
     no_mandatory_label_added_mtmt_mapping_file, trustzones_no_mandatory_label_added_mtmt_mapping_file, \
     default_mtmt_single_mapping_file, default_mtmt_multiple_mapping_file, custom_bad_formed_file, \
     default_mtmt_empty_elements
-from startleft.processors.mtmt.mtmt_mapping_file_loader import MtmtMappingFileLoader
+from startleft.processors.mtmt.mtmt_mapping_file_loader import MTMTMappingFileLoader
 from startleft.api.errors import LoadingMappingFileError
 
 
@@ -18,7 +18,7 @@ class TestMTMTMappingLoader:
             mapping_file_data = file.read()
 
         # WHEN the load method of the MtmtMappingFileLoader is called
-        mtmt_mapping_file_loader = MtmtMappingFileLoader([mapping_file_data])
+        mtmt_mapping_file_loader = MTMTMappingFileLoader([mapping_file_data])
         mtmt_mapping_file_loader.load()
 
         # THEN a MtmtMapping is returned with a trustzone, a component and without dataflows
@@ -37,7 +37,7 @@ class TestMTMTMappingLoader:
             mapping_file_data = file.read()
 
         # WHEN the load method of the MtmtMappingFileLoader is called
-        mtmt_mapping_file_loader = MtmtMappingFileLoader([mapping_file_data])
+        mtmt_mapping_file_loader = MTMTMappingFileLoader([mapping_file_data])
         mtmt_mapping_file_loader.load()
 
         # THEN a MtmtMapping is returned without trustzones, components or dataflows
@@ -55,7 +55,7 @@ class TestMTMTMappingLoader:
             mapping_file_data = file.read()
 
         # WHEN the load method of the MtmtMappingFileLoader is called
-        mtmt_mapping_file_loader = MtmtMappingFileLoader([mapping_file_data])
+        mtmt_mapping_file_loader = MTMTMappingFileLoader([mapping_file_data])
         mtmt_mapping_file_loader.load()
 
         # THEN a MtmtMapping is returned with many trustzones, many components and without dataflows
@@ -77,7 +77,7 @@ class TestMTMTMappingLoader:
             mapping_file_data = file.read()
 
         # WHEN the load method of the MtmtMappingFileLoader is called
-        mtmt_mapping_file_loader = MtmtMappingFileLoader([mapping_file_data])
+        mtmt_mapping_file_loader = MTMTMappingFileLoader([mapping_file_data])
         mtmt_mapping_file_loader.load()
 
         # THEN a MtmtMapping is returned with a trustzone, a component and without dataflows
@@ -104,7 +104,7 @@ class TestMTMTMappingLoader:
             mapping_data_list.append(f.read())
 
         # WHEN the load method of the MtmtMappingFileLoader is called
-        mtmt_mapping_file_loader = MtmtMappingFileLoader(mapping_data_list)
+        mtmt_mapping_file_loader = MTMTMappingFileLoader(mapping_data_list)
         mtmt_mapping_file_loader.load()
 
         # THEN a MtmtMapping is returned with a trustzone, a component and without dataflows
@@ -134,7 +134,7 @@ class TestMTMTMappingLoader:
             mapping_data_list.append(f.read())
 
         # WHEN the load method of the MtmtMappingFileLoader is called
-        mtmt_mapping_file_loader = MtmtMappingFileLoader(mapping_data_list)
+        mtmt_mapping_file_loader = MTMTMappingFileLoader(mapping_data_list)
         mtmt_mapping_file_loader.load()
 
         # THEN a MtmtMapping is returned with 3 trustzones, 5 components and without dataflows
@@ -163,7 +163,7 @@ class TestMTMTMappingLoader:
             mapping_data_list.append(f.read())
 
         # WHEN the load method of the MtmtMappingFileLoader is called
-        mtmt_mapping_file_loader = MtmtMappingFileLoader(mapping_data_list)
+        mtmt_mapping_file_loader = MTMTMappingFileLoader(mapping_data_list)
 
         # THEN an error LoadingMappingFileError is raised
         with pytest.raises(LoadingMappingFileError) as e_info:
