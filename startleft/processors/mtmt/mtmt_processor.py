@@ -3,14 +3,14 @@ from startleft.processors.base.otm_processor import OtmProcessor
 from startleft.processors.base.provider_loader import ProviderLoader
 from startleft.processors.base.provider_parser import ProviderParser
 from startleft.processors.base.provider_validator import ProviderValidator
-from startleft.processors.mtmt.mtmt_loader import MtmtLoader
-from startleft.processors.mtmt.mtmt_mapping_file_loader import MtmtMappingFileLoader, MtmtMapping
-from startleft.processors.mtmt.mtmt_mapping_file_validator import MtmtMappingFileValidator
-from startleft.processors.mtmt.mtmt_parser import MtmtParser
-from startleft.processors.mtmt.mtmt_validator import MtmtValidator
+from startleft.processors.mtmt.mtmt_loader import MTMTLoader
+from startleft.processors.mtmt.mtmt_mapping_file_loader import MTMTMappingFileLoader
+from startleft.processors.mtmt.mtmt_mapping_file_validator import MTMTMappingFileValidator
+from startleft.processors.mtmt.mtmt_parser import MTMTParser
+from startleft.processors.mtmt.mtmt_validator import MTMTValidator
 
 
-class MtmtProcessor(OtmProcessor):
+class MTMTProcessor(OtmProcessor):
     """
     Mtmt implementation of OtmProcessor
     """
@@ -24,20 +24,20 @@ class MtmtProcessor(OtmProcessor):
         self.mapping_loader = None
 
     def get_provider_validator(self) -> ProviderValidator:
-        return MtmtValidator(self.source)
+        return MTMTValidator(self.source)
 
     def get_provider_loader(self) -> ProviderLoader:
-        self.loader = MtmtLoader(self.source)
+        self.loader = MTMTLoader(self.source)
         return self.loader
 
     def get_mapping_validator(self) -> MappingValidator:
-        return MtmtMappingFileValidator(self.mappings)
+        return MTMTMappingFileValidator(self.mappings)
 
     def get_mapping_loader(self) -> MappingLoader:
-        self.mapping_loader = MtmtMappingFileLoader(self.mappings)
+        self.mapping_loader = MTMTMappingFileLoader(self.mappings)
         return self.mapping_loader
 
     def get_provider_parser(self) -> ProviderParser:
         mtmt = self.loader.get_mtmt()
         mtmt_mapping = self.mapping_loader.get_mtmt_mapping()
-        return MtmtParser(self.project_id, self.project_name, mtmt, mtmt_mapping)
+        return MTMTParser(self.project_id, self.project_name, mtmt, mtmt_mapping)

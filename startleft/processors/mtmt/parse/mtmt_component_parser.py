@@ -1,12 +1,12 @@
 from startleft.otm.otm import Component, Trustzone
-from startleft.processors.mtmt.entity.mtmt_entity_border import MtmtBorder
-from startleft.processors.mtmt.mtmt_entity import Mtmt
-from startleft.processors.mtmt.mtmt_mapping_file_loader import MtmtMapping
+from startleft.processors.mtmt.entity.mtmt_entity_border import MTMBorder
+from startleft.processors.mtmt.mtmt_entity import MTMT
+from startleft.processors.mtmt.mtmt_mapping_file_loader import MTMTMapping
 
 
-class MtmtComponentParser:
+class MTMTComponentParser:
 
-    def __init__(self, source: Mtmt, mapping: MtmtMapping):
+    def __init__(self, source: MTMT, mapping: MTMTMapping):
         self.source = source
         self.mapping = mapping
 
@@ -17,7 +17,7 @@ class MtmtComponentParser:
                 components.append(self.create_component(mtmt_border))
         return components
 
-    def create_component(self, mtmt: MtmtBorder) -> Component:
+    def create_component(self, mtmt: MTMBorder) -> Component:
         trustzone = self.get_default_trustzone()
         return Component(id=mtmt.id,
                          name=mtmt.name,
