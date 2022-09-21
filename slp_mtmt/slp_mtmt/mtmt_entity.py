@@ -1,4 +1,4 @@
-from startleft.processors.mtmt.entity.mtmt_entity_line import MTMLine
+from slp_mtmt.slp_mtmt.entity.mtmt_entity_line import MTMLine
 
 
 class MTMBorder:

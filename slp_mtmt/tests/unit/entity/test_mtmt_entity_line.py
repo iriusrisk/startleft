@@ -1,6 +1,6 @@
-from startleft.processors.mtmt.tm7_to_json import Tm7ToJson
-from startleft.processors.mtmt.entity.mtmt_entity_line import MTMLine
-from tests.resources import test_resource_paths
+from slp_mtmt.slp_mtmt.entity.mtmt_entity_line import MTMLine
+from slp_mtmt.slp_mtmt.tm7_to_json import Tm7ToJson
+from slp_mtmt.tests.resources import test_resource_paths
 
 
 class TestMTMTLine:
