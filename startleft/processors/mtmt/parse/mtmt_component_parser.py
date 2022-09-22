@@ -14,25 +14,28 @@ class MTMTComponentParser:
         components = []
         for mtmt_border in self.source.borders:
             if mtmt_border.is_component:
-                components.append(self.create_component(mtmt_border))
+                mtmt_type = self.__calculate_otm_type(mtmt_border.type)
+                if mtmt_type is not None:
+                    components.append(self.__create_component(mtmt_border))
         return components
 
-    def create_component(self, mtmt: MTMBorder) -> Component:
+    def __create_component(self, mtmt: MTMBorder) -> Component:
         trustzone = self.get_default_trustzone()
-        return Component(id=mtmt.id,
-                         name=mtmt.name,
-                         type=self.__calculate_otm_type(mtmt.type),
-                         # TODO implements parents field in OPT-315
-                         parent_type="trustZone",
-                         parent=trustzone.id,
-                         properties=mtmt.properties)
+        mtmt_type = self.__calculate_otm_type(mtmt.type)
+        if mtmt_type is not None:
+            return Component(id=mtmt.id,
+                             name=mtmt.name,
+                             type=mtmt_type,
+                             # TODO implements parents field in OPT-315
+                             parent_type="trustZone",
+                             parent=trustzone.id,
+                             properties=mtmt.properties)
 
     def __calculate_otm_type(self, component_type: str) -> str:
-        otm_type = self.__find_mapped_component_by_label(component_type)
-        return otm_type or 'empty-component'
+        return self.__find_mapped_component_by_label(component_type)
 
     def __find_mapped_component_by_label(self, label: str) -> str:
-        return self.mapping.mapping_components[label]['type'] if label in self.mapping.mapping_components\
+        return self.mapping.mapping_components[label]['type'] if label in self.mapping.mapping_components \
             else None
 
     @staticmethod

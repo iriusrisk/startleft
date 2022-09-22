@@ -6,5 +6,7 @@ trustzones:
 components:
   - label:  "StencilRectangle"
     type:   "ec2"
+  - label:  "StencilEllipse"
+    type:   "empty-component"
 
 dataflows: []
