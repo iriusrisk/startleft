@@ -51,7 +51,7 @@ terraform_unknown_module = path + '/terraform/terraform_unknown_module.tf'
 terraform_no_resources = path + '/terraform/no_resources.tf'
 terraform_gz = path + '/terraform/terraform.gz'
 terraform_specific_functions = path + '/terraform/terraform_specific_functions.tf'
-terraform_modules_sample = path + '/terraform/terraform_modules_sample.tf'
+terraform_modules = path + '/terraform/terraform_modules_sample.tf'
 terraform_extra_modules_sample = path + '/terraform/terraform_extra_modules_sample.tf'
 # mapping
 default_terraform_mapping = path + '/terraform/default-terraform-mapping.yaml'
@@ -63,6 +63,7 @@ terraform_mapping_modules = path + '/terraform/terraform_mapping_modules.yaml'
 terraform_mapping_extra_modules = path + '/terraform/terraform_mapping_extra_modules.yaml'
 # expected otm results
 terraform_aws_simple_components_otm_expected = path + '/terraform/aws_simple_components.otm'
+
 
 # VISIO
 visio_aws_with_tz_and_vpc = path + '/visio/aws-with-tz-and-vpc.vsdx'
@@ -82,6 +83,8 @@ visio_simple_components = path + '/visio/simple-components.vsdx'
 visio_orphan_dataflows = path + '/visio/visio-orphan-dataflows.vsdx'
 visio_invalid_file_size = path + '/visio/invalid-file-size.vsdx'
 visio_invalid_file_type = path + '/visio/invalid-file-type.pdf'
+visio_modified_single_connectors = path + '/visio/modified-single-connectors.vsdx'
+visio_bidirectional_connectors = path + '/visio/bidirectional-connectors.vsdx'
 # mapping
 default_visio_mapping = path + '/visio/aws-visio-mapping.yaml'
 custom_vpc_mapping = path + '/visio/custom-vpc-mapping.yaml'
@@ -90,6 +93,7 @@ visio_aws_shapes_otm_expected = path + '/visio/aws-shapes.otm'
 visio_aws_with_tz_and_vpc_otm_expected = path + '/visio/aws-with-tz-and-vpc.otm'
 visio_orphan_dataflows_otm_expected = path + '/visio/visio-orphan-dataflows.otm'
 
-# MTMT
-model_mtmt_source_file = path + '/mtmt/test_model.tm7'
-mtmt_mapping_file = path + '/mtmt/mtmt-mapping.yaml'
+
+
+
+
