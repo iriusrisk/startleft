@@ -13,7 +13,7 @@ setup(
     python_requires='>=3.6',
     install_requires=[
         'pyyaml==6.0',
-        'jsonschema==4.15.0',
+        'jsonschema==4.16.0',
         'deepmerge==1.0.1',
         'jmespath==1.0.1',
         'lxml==4.9.1',
@@ -42,7 +42,7 @@ setup(
     },
     entry_points='''
         [console_scripts]
-        startleft=startleft.startleft.cli:cli
+        startleft=startleft.startleft.cli.cli:cli
     ''',
     classifiers=[
         'Development Status :: 3 - Alpha',

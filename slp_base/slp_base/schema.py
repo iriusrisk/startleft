@@ -21,10 +21,10 @@ class Schema:
             jsonschema.validate(document, self.schema)
             self.valid = True
         except jsonschema.SchemaError as e:
-            self.errors = e
+            self.errors = e.message
             self.valid = False
         except jsonschema.ValidationError as e:
-            self.errors = e
+            self.errors = e.message
             self.valid = False
 
     def json(self):
