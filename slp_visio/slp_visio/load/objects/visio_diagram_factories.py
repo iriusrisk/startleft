@@ -1,12 +1,7 @@
 from typing import Optional
 
-from vsdx import Shape
-
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent, DiagramConnector
-
-
-def get_component_type_from_master(shape: Shape):
-    return shape.master_shape.text.replace('\n', '') if shape.master_shape else ''
+from slp_visio.slp_visio.util.visio import get_shape_text, get_master_shape_text
 
 
 # if it has two shapes connected and is not pointing itself
@@ -42,8 +37,8 @@ class VisioComponentFactory:
     def create_component(self, shape, origin, representer) -> DiagramComponent:
         return DiagramComponent(
             id=shape.ID,
-            name=shape.text.replace('\n', ''),
-            type=get_component_type_from_master(shape),
+            name=get_shape_text(shape),
+            type=get_master_shape_text(shape),
             origin=origin,
             representation=representer.build_representation(shape))
 
