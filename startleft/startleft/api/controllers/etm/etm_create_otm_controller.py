@@ -1,8 +1,9 @@
 import logging
+
 from fastapi import APIRouter, File, UploadFile, Form, Response
 
-import sl_util.sl_util.json_utils as jsonUtils
 from _sl_build.modules import PROCESSORS
+from sl_util.sl_util import json_utils
 from slp_base.slp_base.provider_resolver import ProviderResolver
 from slp_base.slp_base.provider_type import EtmType
 from startleft.startleft.api.controllers.otm_controller import RESPONSE_STATUS_CODE, PREFIX, controller_responses
@@ -17,6 +18,7 @@ router = APIRouter(
 )
 
 provider_resolver = ProviderResolver(PROCESSORS)
+
 
 @router.post(URL, status_code=RESPONSE_STATUS_CODE,
              description="Generates an OTM threat model from a Threat Model file",
