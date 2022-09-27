@@ -6,11 +6,11 @@ import responses
 from fastapi.testclient import TestClient
 from pytest import mark
 
-from startleft.api import fastapi_server
-from startleft.api.controllers.iac import iac_create_otm_controller
-from startleft.api.errors import LoadingIacFileError, IacFileNotValidError, MappingFileNotValidError, \
+from sl_util.sl_util import file_utils as FileUtils
+from slp_base.slp_base.errors import LoadingIacFileError, IacFileNotValidError, MappingFileNotValidError, \
     LoadingMappingFileError, OtmResultError, OtmBuildingError
-from startleft.utils.file_utils import FileUtils
+from startleft.startleft.api import fastapi_server
+from startleft.startleft.api.controllers.iac import iac_create_otm_controller
 from tests.resources.test_resource_paths import default_cloudformation_mapping, default_terraform_mapping, \
     example_json, cloudformation_malformed_mapping_wrong_id, invalid_yaml, \
     terraform_aws_singleton_components_unix_line_breaks, cloudformation_all_functions, \
@@ -124,7 +124,7 @@ class TestOtmControllerIaCCloudformation:
         assert '"components": ' in response.text
 
     @responses.activate
-    @patch('startleft.validators.iac_validator.IacValidator.validate')
+    @patch('slp_cft.slp_cft.validate.cft_validator.CloudformationValidator.validate')
     def test_response_on_validating_iac_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -154,7 +154,7 @@ class TestOtmControllerIaCCloudformation:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg 1'
 
     @responses.activate
-    @patch('startleft.iac.iac_to_otm.IacToOtm.load_source_data')
+    @patch('slp_cft.slp_cft.load.cft_loader.CloudformationLoader.load')
     def test_response_on_loading_iac_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -184,7 +184,7 @@ class TestOtmControllerIaCCloudformation:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg 1'
 
     @responses.activate
-    @patch('startleft.validators.generic_mapping_validator.GenericMappingValidator.validate')
+    @patch('slp_cft.slp_cft.load.cft_mapping_file_loader.CloudformationMappingFileLoader.load')
     def test_response_on_validating_mapping_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -215,7 +215,7 @@ class TestOtmControllerIaCCloudformation:
         assert body_response['errors'][0]['errorMessage'] == 'schema errors messages'
 
     @responses.activate
-    @patch('startleft.processors.base.mapping_file_loader.MappingFileLoader.load')
+    @patch('slp_cft.slp_cft.load.cft_mapping_file_loader.CloudformationMappingFileLoader.load')
     def test_response_on_loading_mapping_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -246,7 +246,7 @@ class TestOtmControllerIaCCloudformation:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @responses.activate
-    @patch('startleft.otm.otm_validator.OtmValidator.validate')
+    @patch('slp_base.slp_base.otm_validator.OtmValidator.validate')
     def test_response_on_otm_result_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -276,7 +276,7 @@ class TestOtmControllerIaCCloudformation:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @responses.activate
-    @patch('startleft.iac.iac_to_otm.IacToOtm.run')
+    @patch('slp_cft.slp_cft.cft_processor.CloudformationProcessor.process')
     def test_response_on_otm_building_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -306,10 +306,10 @@ class TestOtmControllerIaCCloudformation:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @mark.parametrize('iac_source,detail', [
-        (b'', 'IaC file is not valid. Invalid size'),
-        (bytearray(4), 'IaC file is not valid. Invalid size'),
-        (bytearray(1024 * 1024 * 5 + 1), 'IaC file is not valid. Invalid size'),
-        (bytearray(1024 * 5 + 1), 'IaC file is not valid. Invalid content type for iac_file')
+        (b'', 'CloudFormation file is not valid. Invalid size'),
+        (bytearray(4), 'CloudFormation file is not valid. Invalid size'),
+        (bytearray(1024 * 1024 * 20 + 1), 'CloudFormation file is not valid. Invalid size'),
+        (bytearray(1024 * 5 + 1), 'CloudFormation file is not valid. Invalid content type for iac_file')
     ])
     @responses.activate
     def test_response_on_invalid_iac_file(self, iac_source, detail):
@@ -331,7 +331,7 @@ class TestOtmControllerIaCCloudformation:
         body_response = json.loads(response.text)
         assert body_response['status'] == '400'
         assert body_response['error_type'] == 'IacFileNotValidError'
-        assert body_response['title'] == 'IaC file is not valid'
+        assert body_response['title'] == 'CloudFormation file is not valid'
         assert body_response['detail'] == detail
         assert len(body_response['errors']) == 1
         assert body_response['errors'][0]['errorMessage'] == detail

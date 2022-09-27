@@ -1,5 +1,5 @@
+from sl_util.sl_util.iterations_utils import IterationUtils
 from slp_visio.slp_visio.load.objects.diagram_objects import Diagram, DiagramComponent
-from startleft.utils.iterations_utils import IterationUtils
 
 
 class DiagramPruner:

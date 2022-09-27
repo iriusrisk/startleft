@@ -1,7 +1,7 @@
 import uuid
 
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramConnector
-from startleft.otm.otm import Dataflow
+from otm.otm.otm import Dataflow
 
 
 def build_otm_dataflow(diagram_connector: DiagramConnector) -> Dataflow:
@@ -9,7 +9,8 @@ def build_otm_dataflow(diagram_connector: DiagramConnector) -> Dataflow:
         id=diagram_connector.id,
         name=str(uuid.uuid4()),
         source_node=diagram_connector.from_id,
-        destination_node=diagram_connector.to_id
+        destination_node=diagram_connector.to_id,
+        bidirectional=diagram_connector.bidirectional if diagram_connector.bidirectional else None
     )
 
 

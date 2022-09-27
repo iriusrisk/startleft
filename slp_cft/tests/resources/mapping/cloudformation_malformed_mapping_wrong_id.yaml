@@ -1,0 +1,557 @@
+trustzones:
+  - idd:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+
+#SG MAPPING (AUXILIARY SG)
+#type 4
+  - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    name: Internet
+    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupEgress[0].CidrIp]"}}
+
+# The order of the components is important because parent components must be defined before child components
+components:
+  - id:     {$format: "{name}"}
+    type:   CD-ACM
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-ACM (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::CertificateManager::Certificate']"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   cloudwatch
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "cloudwatch (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::CloudWatch::Alarm']"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   dynamodb
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::DynamoDB::Table']"}
+    $altsource:
+      - $mappingType: {$root: "Resources|squash(@)[?Type=='AWS::EC2::VPCEndpoint']"}
+        $mappingPath: {$path: "Properties.ServiceName"}
+        $mappingLookups:
+          - regex: ^(.*)dynamodb$
+            name: DynamoDB from VPCEndpoint
+            type: dynamodb
+            tags:
+              - {$format: "{_key} ({Type})"}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   vpc
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::VPC']"}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   ec2
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::Instance']"}
+    parent:  {$findFirst: {$searchParams:{ searchPath: ["Properties.SubnetId.Ref","Properties.SubnetId"], defaultValue: "b61d6911-338d-46a8-9f39-8dcd24abfe91"}}}
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   empty-component
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::Subnet']"}
+    parent:      {$findFirst: ["Properties.VpcId.Ref", "Properties.VpcId"]}
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   empty-component
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::VPCEndpoint']"}
+    parent: {$findFirst:[ "Properties.SubnetIds[].Ref", "Properties.VpcId.Ref"]}
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   empty-component
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::InternetGateway']"}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   elastic-container-service
+    name:   {$path: "_key"}
+    $source: {
+      $children: {$path: "Properties.TaskDefinition.Ref"},
+      $root: "Resources|squash(@)[?Type=='AWS::ECS::Service']"
+    }
+    parent:  {$path: "Properties.NetworkConfiguration.AwsvpcConfiguration.Subnets[]|map(&values(@), @)[]"}
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   docker-container
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::ECS::TaskDefinition']"}
+    parent:  {$parent: b61d6911-338d-46a8-9f39-8dcd24abfe91}
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   load-balancer
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::ElasticLoadBalancingV2::LoadBalancer']"}
+    parent:  {$path: "Properties.Subnets[]|map(&values(@), @)[]|map(&re_sub('[:]', '-', @), @)"}
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   load-balancer
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::ElasticLoadBalancing::LoadBalancer']"}
+    parent:  {$path: "Properties.Subnets[]|map(&values(@), @)[]|map(&re_sub('[:]', '-', @), @)"}
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   kms
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "kms (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::KMS::Key']"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   aws-lambda-function
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::Lambda::Function']"}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   cloudwatch
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "cloudwatch (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::Logs::LogGroup']"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+
+  - id:     {$format: "{name}"}
+    type:   rds
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::RDS::DBInstance']"}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+
+  - id:     {$format: "{name}"}
+    type:   route-53
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::Route53::HostedZone']"}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+
+  - id:     {$format: "{name}"}
+    type:   s3
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::S3::Bucket']"}
+    $altsource:
+      - $mappingType: {$root: "Resources|squash(@)[?Type=='AWS::EC2::VPCEndpoint']"}
+        $mappingPath: {$path: "Properties.ServiceName"}
+        $mappingLookups:
+          - regex: ^(.*)s3$
+            name: S3 from VPCEndpoint
+            type: s3
+            tags:
+              - { $format: "{_key} ({Type})" }
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+
+  - id:     {$format: "{name}"}
+    type:   CD-SECRETS-MANAGER
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-SECRETS-MANAGER (grouped)" }}}
+    $source: {$singleton: { $root: "Resources|squash(@)[?Type=='AWS::SecretsManager::Secret']"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   sqs-simple-queue-service
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::SQS::Queue']"}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   CD-SYSTEMS-MANAGER
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-SYSTEMS-MANAGER (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::SSM')]"}}
+    $altsource:
+      - $mappingType: {$root: "Resources|squash(@)[?Type=='AWS::EC2::VPCEndpoint']"}
+        $mappingPath: {$path: "Properties.ServiceName"}
+        $mappingLookups:
+          - regex: ^(.*)ssm$
+            name: {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "Systems Manager from VPCEndpoint (grouped)" }}}
+            type: CD-SYSTEMS-MANAGER
+            tags:
+              - {$numberOfSources: {oneSource:{$format: "AWS::EC2::VPCEndpoint"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+          - regex: ^(.*)ssmmessages$
+            name: {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "Systems Manager from VPCEndpoint (grouped)" }}}
+            type: CD-SYSTEMS-MANAGER
+            tags:
+              - {$numberOfSources: {oneSource:{$format: "AWS::EC2::VPCEndpoint"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   empty-component
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Synthetics')]"}
+    parent:  {$path: "Properties.VPCConfig.SubnetIds[]|map(&values(@), @)[]"}
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   api-gateway
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "api-gateway (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::ApiGateway')]"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   athena
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "athena (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Athena')]"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   CD-MQ
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-MQ (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::AmazonMQ')]"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   cf-cloudfront
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "cf-cloudfront (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::CloudFront')]"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   cloudtrail
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::CloudTrail')]"}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   cognito
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::Cognito::UserPool']"}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   cognito
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::Cognito::IdentityPool']"}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   CD-CONFIG
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-CONFIG (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Config')]"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   elastic-container-registry
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "elastic-container-registry (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::ECR')]"}}
+    $altsource:
+      - $mappingType: {$root: "Resources|squash(@)[?Type=='AWS::EC2::VPCEndpoint']"}
+        $mappingPath: {$path: "Properties.ServiceName"}
+        $mappingLookups:
+          - regex: ^(.*)ecr.dkr$
+            name: ECR from VPCEndpoint
+            type: elastic-container-registry
+            tags:
+              - { $format: "{_key} ({Type})" }
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   elastic-container-kubernetes
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::EKS::Cluster')]"}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   elasticache
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "elasticache (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::ElastiCache')]"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   CD-GUARDDUTY
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-GUARDDUTY (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::GuardDuty')]"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   CD-INSPECTOR
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-INSPECTOR (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Inspector')]"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   CD-MACIE
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-MACIE (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Macie')]"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   CD-AWS-NETWORK-FIREWALL
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::NetworkFirewall::Firewall']"}
+    parent:  {$path: "Properties.VpcId.Ref"}
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   redshift
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::Redshift::Cluster']"}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id:     {$format: "{name}"}
+    type:   CD-SES
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-SES (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::SES')]"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   sns
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "sns (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::SNS')]"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   step-functions
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::StepFunctions::StateMachine')]"}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+
+  - id:     {$format: "{name}"}
+    type:   CD-WAF
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-WAF (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::WAF')]"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   kinesis-data-analytics
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "kinesis-data-analytics (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::KinesisAnalytics')]"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   kinesis-data-analytics
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "kinesis-data-analytics (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::Kinesis::')]"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+  - id:     {$format: "{name}"}
+    type:   kinesis-data-firehose
+    name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "kinesis-data-firehose (grouped)" }}}
+    $source: {$singleton: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::KinesisFirehose')]"}}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource:{$path: "Type"}, multipleSource:{ $format: "{_key} ({Type})"}}}
+
+#NEW SG MAPPINGS (AUXILIARY SG)
+
+#type 4
+# internet custom component for a security group egress
+  - id:   {$format: "{name}" }
+    type: generic-client
+    name: { $ip: { $path: "Properties.SecurityGroupEgress[0].CidrIp" } }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupEgress[0].CidrIp]" }
+    parent: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    tags:
+      - Outbound connection destination IP
+
+  # internet custom component for a security group ingress
+  # All those Cidrips that are not ips such as vpc names will not generate an unnecessary document
+  - id: { $format: "{name}" }
+    type: generic-client
+    name: { $ip: { $path: "Properties.SecurityGroupIngress[0].CidrIp" } }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupIngress[0].CidrIp]" }
+    parent: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    tags:
+      - Inbound connection source IP
+
+
+# Default catchall
+#  - id:          { $format: "{name}"}
+#    $source:
+#      $catchall: {$root: "Resources|squash(@)"}
+#    type:        {$path: "Type"}
+#    name:        {$path: "_key"}
+#    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+#    tags:
+#      - { $path: "Type" }
+
+dataflows:
+#Begin: SG MAPPINGS
+#type 1
+  - id:     {$format: "{name}"}
+    name:   {$format: "{_key}"}
+    $source: {$root: "Resources|squash(@)[?Properties.SecurityGroupIds]"}
+    source: {$path: "_key"}
+    destination: {$hub: {$path: "Properties.SecurityGroupIds|map(&values(@), @)[0][0][0]"}}
+    tags:
+
+  - id:     {$format: "{name}"}
+    name:   {$format: "{_key}"}
+    $source: {$root: "Resources|squash(@)[?Properties.SecurityGroups]"}
+    source: {$path: "_key"}
+    destination: {$hub: {$path: "Properties.SecurityGroups|map(&values(@), @)[0][0][0]"}}
+    tags:
+
+  - id:     {$format: "{name}"}
+    name:   {$format: "{_key}"}
+    $source: {$root: "Resources|squash(@)[?Properties.NetworkConfiguration.AwsvpcConfiguration.SecurityGroups]"}
+    source: {$path: "_key"}
+    destination: {$hub: {$path: "Properties.NetworkConfiguration.AwsvpcConfiguration.SecurityGroups|map(&values(@), @)[0][0][0]"}}
+    tags:
+
+  - id:     {$format: "{name}"}
+    name:   {$format: "{_key}"}
+    $source: {$root: "Resources|squash(@)[?Properties.VPCConfig.SecurityGroupIds]"}
+    source: {$path: "_key"}
+    destination: {$hub: {$path: "Properties.VPCConfig.SecurityGroupIds|map(&values(@), @)[0][0][0]"}}
+    tags:
+
+#type 2
+  - id:     {$format: "{name}"}
+    name:   {$format: "{_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroupIngress']"}
+    source: {$hub: {$path: "Properties.SourceSecurityGroupId|squash(@)[0][0]"}}
+    destination: {$hub: {$path: "Properties.GroupId"}}
+    tags:
+      - $path: "Properties.Description"
+      - $path: "Properties.IpProtocol"
+      - $path: "Properties.FromPort"
+      - $path: "Properties.ToPort"
+
+  - id:     {$format: "{name}"}
+    name:   {$format: "{_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroupEgress']"}
+    source: {$hub: {$path: "Properties.GroupId"}}
+    destination: {$hub: {$path: "Properties.DestinationSecurityGroupId|squash(@)[0][0]"}}
+    tags:
+      - $path: "Properties.Description"
+      - $path: "Properties.IpProtocol"
+      - $path: "Properties.FromPort"
+      - $path: "Properties.ToPort"
+#type 3
+  - id:     {$format: "{name}"}
+    name:   {$format: "{_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup']"}
+    source: {$path: "Properties.SecurityGroupIngress[0].CidrIp"}
+    destination: {$hub:{$path: "_key"}}
+    tags:
+      - $path: "Properties.SecurityGroupIngress[0].Description"
+      - $path: "Properties.SecurityGroupIngress[0].IpProtocol"
+      - $path: "Properties.SecurityGroupIngress[0].FromPort"
+      - $path: "Properties.SecurityGroupIngress[0].ToPort"
+
+  - id:     {$format: "{name}"}
+    name:   {$format: "{_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup']"}
+    source: {$hub:{$path: "_key"}}
+    destination: {$path: "Properties.SecurityGroupEgress[0].CidrIp"}
+    tags:
+      - $path: "Properties.SecurityGroupEgress[0].Description"
+      - $path: "Properties.SecurityGroupEgress[0].IpProtocol"
+      - $path: "Properties.SecurityGroupEgress[0].CidrIp"
+
+#End: SG MAPPINGS
+
+  - id:     {$format: "{name}"}
+    name:   {$format: "dataflow to Lambda function in {_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::Lambda::EventSourceMapping']"}
+    source:  {$path: "Properties.EventSourceArn|squash(@)[0]"}
+    destination: {$path: "Properties.FunctionName.Ref"}
+
+  - id:     {$format: "{name}"}
+    name:   {$format: "dataflow from Lambda function on Failure {_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::Lambda::EventSourceMapping']"}
+    source:  {$findFirst: ["Properties.FunctionName.Ref", "Properties.FunctionName"]}
+    destination: {$path: {$searchParams:{ searchPath: "Properties.DestinationConfig.OnFailure.Destination|squash(@)[0]"}}}
+
+  - id:     {$format: "{name}"}
+    name:   {$format: "S3 dataflow from {_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::S3::Bucket']"}
+    source:  {$path: "_key"}
+    destination: {$path: {$searchParams:{ searchPath: "Properties.LoggingConfiguration.DestinationBucketName.Ref"}}}
+
+  - id:     {$format: "{name}"}
+    name:    {$format: "API gateway data flow from {_key}"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::ApiGateway::Authorizer']"}
+    source:  {$path: "_key"}
+    destination: {$path: "Properties.ProviderARNs[0]|squash(@)[0]"}
+    tags:
+      - API gateway dataflow
+

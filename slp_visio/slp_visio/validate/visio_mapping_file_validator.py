@@ -1,4 +1,4 @@
-from startleft.processors.base.mapping import MultipleMappingFileValidator
+from slp_base import MultipleMappingFileValidator
 
 
 class VisioMappingFileValidator(MultipleMappingFileValidator):

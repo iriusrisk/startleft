@@ -1,5 +1,5 @@
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
-from startleft.otm.otm import Trustzone, Component
+from otm.otm.otm import Trustzone, Component
 
 
 class DiagramComponentMapper:

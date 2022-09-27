@@ -1,0 +1,14 @@
+trustzones:
+  - idd:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+
+components:
+  - id:          {$format: "{type}.{name}.id"}
+    type:        ec2
+    $source:     {$root: "resource|get(@, 'aws_instance')"}
+    name:        {$path: "keys(@)[0]"}
+    parent:      {$path: "*.subnet_id[0] | [0] | re_sub('[\\$\\{\\}]', '', @)"}
+    tags:
+      - {$path: "Type"}
+
+dataflows: []

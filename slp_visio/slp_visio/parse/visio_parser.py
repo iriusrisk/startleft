@@ -4,9 +4,9 @@ from slp_visio.slp_visio.parse.diagram_pruner import DiagramPruner
 from slp_visio.slp_visio.parse.mappers.diagram_component_mapper import DiagramComponentMapper
 from slp_visio.slp_visio.parse.mappers.diagram_connector_mapper import DiagramConnectorMapper
 from slp_visio.slp_visio.parse.mappers.diagram_trustzone_mapper import DiagramTrustzoneMapper
-from startleft.otm.otm import Component, Dataflow, Trustzone
-from startleft.otm.otm_builder import OtmBuilder
-from startleft.processors.base.provider_parser import ProviderParser
+from otm.otm.otm import Component, Dataflow, Trustzone
+from otm.otm.otm_builder import OtmBuilder
+from slp_base import ProviderParser
 
 
 class VisioParser(ProviderParser):
