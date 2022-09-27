@@ -1,6 +1,6 @@
-from startleft.processors.mtmt.entity.mtmt_entity_border import MTMBorder
-from startleft.processors.mtmt.tm7_to_json import Tm7ToJson
-from tests.resources import test_resource_paths
+from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
+from slp_mtmt.slp_mtmt.tm7_to_json import Tm7ToJson
+from slp_mtmt.tests.resources import test_resource_paths
 
 
 class TestMTMTEntityBorder:

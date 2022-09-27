@@ -1,4 +1,4 @@
-from startleft.processors.mtmt.entity.mtmt_entity_border import MTMBorder
+from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
 
 
 class MTMLine:

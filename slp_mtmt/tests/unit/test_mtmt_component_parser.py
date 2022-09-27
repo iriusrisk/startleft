@@ -1,8 +1,7 @@
-from startleft.processors.mtmt.mtmt_loader import MTMTLoader
-from startleft.processors.mtmt.mtmt_mapping_file_loader import MTMTMappingFileLoader
-from startleft.processors.mtmt.parse.mtmt_component_parser import MTMTComponentParser
-from tests.resources import test_resource_paths
-from tests.resources.test_resource_paths import mtmt_empty_mapping_file, mtmt_mapping_filled_file
+from slp_mtmt.slp_mtmt.mtmt_loader import MTMTLoader
+from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMappingFileLoader
+from slp_mtmt.slp_mtmt.parse.mtmt_component_parser import MTMTComponentParser
+from slp_mtmt.tests.resources import test_resource_paths
 
 
 class TestMTMTComponentParser:
@@ -25,7 +24,7 @@ class TestMTMTComponentParser:
         mtmt.load()
 
         # AND the default default_mtmt_mapping_file
-        with open(mtmt_empty_mapping_file) as file:
+        with open(test_resource_paths.mtmt_empty_mapping_file) as file:
             mapping_file_data = file.read()
 
         # WHEN the load method of the MtmtMappingFileLoader is called
@@ -48,7 +47,7 @@ class TestMTMTComponentParser:
         mtmt.load()
 
         # AND the default default_mtmt_mapping_file
-        with open(mtmt_mapping_filled_file) as file:
+        with open(test_resource_paths.mtmt_mapping_filled_file) as file:
             mapping_file_data = file.read()
 
         # WHEN the load method of the MtmtMappingFileLoader is called

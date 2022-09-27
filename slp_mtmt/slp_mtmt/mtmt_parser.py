@@ -3,6 +3,7 @@ from otm.otm.otm_builder import OtmBuilder
 from slp_base.slp_base.provider_parser import ProviderParser
 from slp_base.slp_base.provider_type import EtmType
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
+from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMapping
 from slp_mtmt.slp_mtmt.parse.mtmt_component_parser import MTMTComponentParser
 from slp_mtmt.slp_mtmt.parse.mtmt_connector_parser import MTMTConnectorParser
 from slp_mtmt.slp_mtmt.parse.mtmt_trustzone_parser import MTMTTrustzoneParser

@@ -93,9 +93,6 @@ visio_aws_shapes_otm_expected = path + '/visio/aws-shapes.otm'
 visio_aws_with_tz_and_vpc_otm_expected = path + '/visio/aws-with-tz-and-vpc.otm'
 visio_orphan_dataflows_otm_expected = path + '/visio/visio-orphan-dataflows.otm'
 
-# MTMT
-mtmt_empty_mapping_file = path + '/mtmt/mtmt-empty-mapping.yaml'
-mtmt_mapping_filled_file = path + '/mtmt/mtmt-mapping-filled.yaml'
 
 
 

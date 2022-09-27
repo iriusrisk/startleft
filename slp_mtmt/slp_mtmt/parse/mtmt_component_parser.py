@@ -1,7 +1,7 @@
-from startleft.otm.otm import Component, Trustzone
-from startleft.processors.mtmt.entity.mtmt_entity_border import MTMBorder
-from startleft.processors.mtmt.mtmt_entity import MTMT
-from startleft.processors.mtmt.mtmt_mapping_file_loader import MTMTMapping
+from otm.otm.otm import Component, Trustzone
+from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
+from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
+from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMapping
 
 
 class MTMTComponentParser:
