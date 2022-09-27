@@ -14,14 +14,14 @@ class MTMTComponentParser:
         components = []
         for mtmt_border in self.source.borders:
             if mtmt_border.is_component:
-                mtmt_type = self.__calculate_otm_type(mtmt_border.type)
+                mtmt_type = self.__calculate_otm_type(mtmt_border.name)
                 if mtmt_type is not None:
                     components.append(self.__create_component(mtmt_border))
         return components
 
     def __create_component(self, mtmt: MTMBorder) -> Component:
         trustzone = self.get_default_trustzone()
-        mtmt_type = self.__calculate_otm_type(mtmt.type)
+        mtmt_type = self.__calculate_otm_type(mtmt.name)
         if mtmt_type is not None:
             return Component(id=mtmt.id,
                              name=mtmt.name,

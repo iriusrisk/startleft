@@ -9,7 +9,7 @@ class TestMapping(TestCase):
 
     def test_multiple_mapping_file_validator(self):
         mapping_file_schema = 'etm_mapping_schema.json'
-        mapping_file = mtmt_mapping_file
+        mapping_file = mtmt_empty_mapping_file
 
         with open(mapping_file) as file:
             mapping_file_data = file.read()
@@ -21,7 +21,7 @@ class TestMapping(TestCase):
 
     def test_mapping_file_validator(self):
         mapping_file_schema = 'etm_mapping_schema.json'
-        mapping_file = mtmt_mapping_file
+        mapping_file = mtmt_empty_mapping_file
 
         with open(mapping_file) as file:
             mapping_file_data = file.read()

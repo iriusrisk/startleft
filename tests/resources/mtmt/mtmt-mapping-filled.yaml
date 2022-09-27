@@ -8,5 +8,9 @@ components:
     type:   "ec2"
   - label:  "StencilEllipse"
     type:   "empty-component"
+  - label:  "Phone"
+    type:   "android-device-client"
+  - label:  "Attacker"
+    type:   "empty-component"
 
 dataflows: []

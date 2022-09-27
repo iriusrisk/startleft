@@ -94,7 +94,7 @@ visio_orphan_dataflows_otm_expected = path + '/visio/visio-orphan-dataflows.otm'
 
 # Mtmt
 model_mtmt_source_file = path + '/mtmt/test_model.tm7'
-mtmt_mapping_file = path + '/mtmt/mtmt-mapping.yaml'
+mtmt_empty_mapping_file = path + '/mtmt/mtmt-empty-mapping.yaml'
 mtmt_mapping_filled_file = path + '/mtmt/mtmt-mapping-filled.yaml'
 default_mtmt_single_mapping_file = path + '/mtmt/mtmt-default-mapping-single-element.yaml'
 default_mtmt_multiple_mapping_file = path + '/mtmt/mtmt-default-mapping-multiple-elements.yaml'
