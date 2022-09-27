@@ -287,13 +287,13 @@ class TestCloudformationProcessor:
         with pytest.raises(MappingFileNotValidError):
             CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], mapping_file).process()
 
-    @pytest.mark.parametrize('cloudformation_file_1, cloudformation_file_2',
-                             [(get_data(test_resource_paths.cloudformation_invalid_size), None),
-                              (get_data(test_resource_paths.cloudformation_invalid_size),
-                              get_data(test_resource_paths.cloudformation_invalid_size)),
-                              (get_data(test_resource_paths.cloudformation_invalid_size),
-                               get_data(test_resource_paths.cloudformation_resources_file))])
-    def test_invalid_cloudformation_file(self, cloudformation_file_1, cloudformation_file_2):
+    @pytest.mark.parametrize('cloudformation_file',
+                             [[get_data(test_resource_paths.cloudformation_invalid_size)],
+                              [get_data(test_resource_paths.cloudformation_invalid_size),
+                              get_data(test_resource_paths.cloudformation_invalid_size)],
+                              [get_data(test_resource_paths.cloudformation_invalid_size),
+                               get_data(test_resource_paths.cloudformation_resources_file)]])
+    def test_invalid_cloudformation_file(self, cloudformation_file):
         # GIVEN a sample invalid CFT file
         # AND a valid iac mappings file
         mapping_file = [get_data(SAMPLE_VALID_MAPPING_FILE)]
@@ -301,8 +301,7 @@ class TestCloudformationProcessor:
         # WHEN creating OTM project from IaC file
         # THEN raises OtmBuildingError
         with pytest.raises(IacFileNotValidError):
-            CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file_1, cloudformation_file_2],
-                                    mapping_file).process()
+            CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, cloudformation_file, mapping_file).process()
 
     def test_run_valid_simple_iac_mapping_file(self):
         # GIVEN a valid CFT file
