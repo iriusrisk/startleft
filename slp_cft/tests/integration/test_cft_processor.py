@@ -330,7 +330,6 @@ class TestCloudformationProcessor:
         assert validate_and_diff_otm(otm.json(), OTM_EXPECTED_RESULT, excluded_regex) == {}
 
     def test_run_empty_multiple_iac_files(self):
-        pass
         # GIVEN a request without any iac_file key
         mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE_IR)
         # WHEN the method CloudformationProcessor::process is invoked
