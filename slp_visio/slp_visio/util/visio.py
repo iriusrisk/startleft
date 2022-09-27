@@ -3,6 +3,34 @@ from math import pi
 from vsdx import Shape
 
 
+def get_shape_text(shape: Shape) -> str:
+    result = shape.text.replace('\n', '')
+    if not result:
+        result = get_child_shapes_text(shape.child_shapes)
+
+    if not result:
+        result = get_master_shape_text(shape)
+
+    return (result or "").strip()
+
+
+def get_master_shape_text(shape: Shape) -> str:
+    if not shape.master_shape:
+        return ""
+
+    result = shape.master_shape.text.replace('\n', '')
+    if not result:
+        result = get_child_shapes_text(shape.master_shape.child_shapes)
+
+    return (result or "").strip()
+
+
+def get_child_shapes_text(shapes: [Shape]) -> str:
+    if not shapes:
+        return ""
+    return "".join(shape.text for shape in shapes).replace('\n', '')
+
+
 def get_x_center(shape: Shape) -> float:
     return float(shape.center_x_y[0])
 
