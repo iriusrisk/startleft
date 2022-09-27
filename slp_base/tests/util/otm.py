@@ -13,30 +13,38 @@ internet_id = 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
 internet_name = 'Internet'
 
 
-def __compare_otm_files(expected_filename: str,
-                        actual_filename: str,
-                        excluded_regex) -> DeepDiff:
+def validate_and_diff_filename(actual_filename: str, expected_filename: str, excluded_regex):
     expected = OtmFileLoader().load(expected_filename)
     actual = OtmFileLoader().load(actual_filename)
+    return validate_and_diff(actual, expected, excluded_regex)
+
+
+def validate_and_diff_otm(actual: dict, expected_filename: str, excluded_regex):
+    expected = OtmFileLoader().load(expected_filename)
+    return validate_and_diff(actual, expected, excluded_regex)
+
+
+def __compare_otm_files(expected: dict,
+                        actual: dict,
+                        excluded_regex) -> DeepDiff:
     return DeepDiff(expected, actual, ignore_order=True, exclude_regex_paths=excluded_regex)
 
 
-def __validate_otm_schema(otm_filename) -> Schema:
-    otm = OtmFileLoader().load(otm_filename)
+def __validate_otm_schema(otm) -> Schema:
     schema: Schema = Schema('otm_schema.json')
     schema.validate(otm)
     return schema
 
 
-def validate_and_diff(actual_filename: str, expected_filename: str, excluded_regex):
+def validate_and_diff(actual: dict, expected: dict, excluded_regex):
     """
     Utils for validating otm has a correct Schema
     and OTM contains expected data
     """
-    schema = __validate_otm_schema(actual_filename)
+    schema = __validate_otm_schema(actual)
     if not schema.valid:
         return {'schema_errors': schema.errors}
-    diff = __compare_otm_files(expected_filename, actual_filename, excluded_regex)
+    diff = __compare_otm_files(expected, actual, excluded_regex)
     if diff:
         return diff
     return {}
