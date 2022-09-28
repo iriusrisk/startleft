@@ -13,6 +13,8 @@ custom_mtmt_single_mapping_file = path + '/mapping/mtmt-custom-mapping-single-el
 custom_mtmt_multiple_mapping_file = path + '/mapping/mtmt-custom-mapping-multiple-elements.yaml'
 custom_bad_formed_file = path + '/mapping/mtmt-custom-bad-formed-file.yaml'
 default_mtmt_empty_elements = path + '/mapping/mtmt-default-mapping-empty-elements.yaml'
+mtmt_empty_mapping_file = path + '/mapping/mtmt-empty-mapping.yaml'
+mtmt_mapping_filled_file = path + '/mapping/mtmt-mapping-filled.yaml'
 
 # mtmt
 model_mtmt_source_file = path + '/mtmt/test_model.tm7'

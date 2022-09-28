@@ -1,15 +1,5 @@
+from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_line import MTMLine
-
-
-class MTMBorder:
-    def __init__(self, source: dict):
-        pass
-
-    def get_components(self):
-        pass
-
-    def get_trustzones(self):
-        pass
 
 
 class MTMThreat:
