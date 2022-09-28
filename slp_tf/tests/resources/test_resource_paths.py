@@ -26,6 +26,10 @@ terraform_specific_functions = path + '/tf/terraform_specific_functions.tf'
 terraform_modules = path + '/tf/terraform_modules_sample.tf'
 terraform_extra_modules_sample = path + '/tf/terraform_extra_modules_sample.tf'
 terraform_elb = path + '/tf/elb.tf'
+terraform_single_tf = path + '/tf/single_tf_file.tf'
+terraform_networks = path + '/tf/networks_tf_file.tf'
+terraform_resources = path + '/tf/resources_tf_file.tf'
+terraform_invalid_size = path + '/tf/terraform_invalid_size.tf'
 
 # mapping
 default_terraform_mapping = path + '/mapping/default-terraform-mapping.yaml'
@@ -36,3 +40,6 @@ terraform_mapping_specific_functions = path + '/mapping/terraform_mapping_specif
 terraform_mapping_modules = path + '/mapping/terraform_mapping_modules.yaml'
 terraform_mapping_extra_modules = path + '/mapping/terraform_mapping_extra_modules.yaml'
 terraform_iriusrisk_tf_aws_mapping = path + '/mapping/iriusrisk-tf-aws-mapping.yaml'
+
+# otm
+tf_file_expected_result = path + '/otm/tf-file-expected-result.otm'
