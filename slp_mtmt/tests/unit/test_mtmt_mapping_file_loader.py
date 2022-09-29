@@ -2,7 +2,8 @@ import pytest
 
 from slp_base import LoadingMappingFileError
 from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMappingFileLoader
-from slp_mtmt.tests.resources.test_resource_paths import custom_mtmt_single_mapping_file, custom_mtmt_multiple_mapping_file, \
+from slp_mtmt.tests.resources.test_resource_paths import custom_mtmt_single_mapping_file, \
+    custom_mtmt_multiple_mapping_file, \
     no_mandatory_label_added_mtmt_mapping_file, trustzones_no_mandatory_label_added_mtmt_mapping_file, \
     default_mtmt_single_mapping_file, default_mtmt_multiple_mapping_file, custom_bad_formed_file, \
     default_mtmt_empty_elements
