@@ -8,7 +8,7 @@ class TestMTMTComponentParser:
 
     components_expected_added_for_filled_mapping_file = [
         {'id': '5b0bab1d-89c8-499d-b9aa-a5d19652aa5f', 'name': 'Phone', 'type': 'android-device-client',
-         'parent': {'trustZone': 'b61d6911-338d-46a8-9f39-8dcd24abfe91'},
+         'parent': {'trustZone': '5b0bab1d-89c8-499d-b9aa-a5d19652aa5f'},
          'properties': {'Name': 'Phone', 'Out Of Scope': 'false', 'Mobile OS': 'Android'}},
         {'id': 'b61d6911-338d-46a8-9f39-8dcd24abfe91', 'name': 'Attacker', 'type': 'empty-component',
          'parent': {'trustZone': 'b61d6911-338d-46a8-9f39-8dcd24abfe91'},
