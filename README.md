@@ -20,3 +20,6 @@ All the info is available at: https://github.com/iriusrisk/startleft/wiki/Source
 
 # Open Threat Model (OTM)
 See GitHub wiki: https://github.com/iriusrisk/startleft/wiki/Open-Threat-Model-(OTM) 
+
+# Change Log
+All release notes are documented in [Releases Section](https://github.com/iriusrisk/startleft/releases)
