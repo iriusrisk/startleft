@@ -2,11 +2,23 @@ from collections import defaultdict
 from xml.etree import ElementTree as ET
 
 
+def get_attrs(attrs):
+    result = {}
+    if attrs is not None:
+        for key, value in attrs.items():
+            result[remove_curly_info(key)] = value
+    return result
+
+
 def get_tag(t):
-    if '}' in t.tag:
-        return t.tag.split('}')[1]
+    return remove_curly_info(t.tag)
+
+
+def remove_curly_info(value):
+    if '}' in value:
+        return value.split('}')[1]
     else:
-        return t.tag
+        return value
 
 
 def xml2dict(t):
@@ -26,6 +38,10 @@ def xml2dict(t):
                 d[get_tag(t)]['text'] = text
         else:
             d[get_tag(t)] = text
+
+    if t.attrib:
+        d['attrib'] = get_attrs(t.attrib)
+
     return d
 
 
