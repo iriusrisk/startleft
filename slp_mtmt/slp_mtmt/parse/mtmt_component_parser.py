@@ -1,7 +1,8 @@
-from otm.otm.otm import Component, Trustzone
+from otm.otm.otm import Component
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
 from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMapping
+from slp_mtmt.slp_mtmt.util.border_parent_calculator import BorderParentCalculator
 
 
 class MTMTComponentParser:
@@ -19,17 +20,16 @@ class MTMTComponentParser:
                     components.append(self.__create_component(mtmt_border))
         return components
 
-    def __create_component(self, mtmt: MTMBorder) -> Component:
-        trustzone = self.get_default_trustzone()
-        mtmt_type = self.__calculate_otm_type(mtmt.name)
+    def __create_component(self, border: MTMBorder) -> Component:
+        trustzone_id = self.__get_trustzone_id(border)
+        mtmt_type = self.__calculate_otm_type(border.name)
         if mtmt_type is not None:
-            return Component(id=mtmt.id,
-                             name=mtmt.name,
+            return Component(id=border.id,
+                             name=border.name,
                              type=mtmt_type,
-                             # TODO implements parents field in OPT-315
                              parent_type="trustZone",
-                             parent=trustzone.id,
-                             properties=mtmt.properties)
+                             parent=trustzone_id,
+                             properties=border.properties)
 
     def __calculate_otm_type(self, component_type: str) -> str:
         return self.__find_mapped_component_by_label(component_type)
@@ -38,6 +38,9 @@ class MTMTComponentParser:
         return self.mapping.mapping_components[label]['type'] if label in self.mapping.mapping_components \
             else None
 
-    @staticmethod
-    def get_default_trustzone():
-        return Trustzone("b61d6911-338d-46a8-9f39-8dcd24abfe91", "Public Cloud")
+    def __get_trustzone_id(self, border: MTMBorder):
+        parent_calculator = BorderParentCalculator()
+        for candidate in self.source.borders:
+            if parent_calculator.is_parent(candidate, border):
+                return candidate.id
+        return ""
