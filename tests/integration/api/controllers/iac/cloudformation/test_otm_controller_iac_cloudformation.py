@@ -1,24 +1,23 @@
 import json
 from unittest.mock import patch
 
-import pytest
 import responses
 from fastapi.testclient import TestClient
 from pytest import mark
 
-from sl_util.sl_util import file_utils as FileUtils
+from slp_base import IacType
 from slp_base.slp_base.errors import LoadingIacFileError, IacFileNotValidError, MappingFileNotValidError, \
     LoadingMappingFileError, OtmResultError, OtmBuildingError
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.iac import iac_create_otm_controller
-from tests.resources.test_resource_paths import default_cloudformation_mapping, default_terraform_mapping, \
-    example_json, cloudformation_malformed_mapping_wrong_id, invalid_yaml, \
-    terraform_aws_singleton_components_unix_line_breaks, cloudformation_all_functions, \
-    cloudformation_mapping_all_functions, terraform_specific_functions, terraform_mapping_specific_functions, \
-    cloudformation_gz, visio_aws_shapes
+from tests.resources.test_resource_paths import default_cloudformation_mapping, example_json, \
+    cloudformation_malformed_mapping_wrong_id, invalid_yaml, cloudformation_all_functions, \
+    cloudformation_mapping_all_functions, cloudformation_gz, visio_aws_shapes, cloudformation_multiple_files_networks, \
+    cloudformation_multiple_files_resources
+
+TESTING_IAC_TYPE = IacType.CLOUDFORMATION.value
 
 webapp = fastapi_server.initialize_webapp()
-
 client = TestClient(webapp)
 
 
@@ -43,29 +42,6 @@ class TestOtmControllerIaCCloudformation:
     uc_k = ('proj_K', 'proj K', cloudformation_gz, None, cft_map, 'IacFileNotValidError')
     uc_l = ('proj_L', 'proj L', visio_aws_shapes, None, cft_map, 'IacFileNotValidError')
 
-    @mark.parametrize('project_id,project_name,cft_filename,cft_mimetype,mapping_filename,error_type',
-                      [uc_a, uc_b, uc_c, uc_d, uc_e, uc_f, uc_h, uc_i, uc_j, uc_k])
-    def test_create_project_validation_error(self, project_id: str, project_name: str, cft_filename, cft_mimetype,
-                                             mapping_filename, error_type):
-        # Given a body
-        body = {'iac_type': 'CLOUDFORMATION', 'id': project_id, 'name': project_name}
-
-        # And the request files
-        cft_file = None if cft_filename is None else (cft_filename, open(cft_filename, 'rb'), cft_mimetype)
-        mapping_file = None if mapping_filename is None else (
-            mapping_filename, open(mapping_filename, 'rb'), 'text/yaml')
-        files = {'iac_file': cft_file, 'mapping_file': mapping_file}
-
-        # When I do post on cloudformation endpoint
-        response = client.post(get_url(), files=files, data=body)
-
-        # Then
-        assert response.status_code == 400
-        assert response.headers['content-type'] == 'application/json'
-        res_body = json.loads(response.content.decode('utf-8'))
-        assert res_body['status'] == '400'
-        assert res_body['error_type'] == error_type
-
     @responses.activate
     def test_create_otm_ok(self):
         # Given a project_id
@@ -77,7 +53,7 @@ class TestOtmControllerIaCCloudformation:
 
         # When I do post on cloudformation endpoint
         files = {'iac_file': iac_file, 'mapping_file': mapping_file}
-        body = {'iac_type': 'CLOUDFORMATION', 'id': f'{project_id}', 'name': 'project_A_name'}
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
         # Then the OTM is returned inside the response as JSON
@@ -89,39 +65,28 @@ class TestOtmControllerIaCCloudformation:
         assert '"trustZones": ' in response.text
         assert '"components": ' in response.text
 
-    @responses.activate
-    @pytest.mark.parametrize('filename,break_line', [
-        (terraform_aws_singleton_components_unix_line_breaks, '\n'),
-        (terraform_aws_singleton_components_unix_line_breaks, '\r\n'),
-        (terraform_aws_singleton_components_unix_line_breaks, '\r')
-    ])
-    def test_create_otm_ok_all_line_breaks(self, filename: str, break_line: str):
-        # Given a project_id
-        project_id: str = 'project_A_id'
+    @mark.parametrize('project_id,project_name,cft_filename,cft_mimetype,mapping_filename,error_type',
+                      [uc_a, uc_b, uc_c, uc_d, uc_e, uc_f, uc_h, uc_i, uc_j, uc_k])
+    def test_create_project_validation_error(self, project_id: str, project_name: str, cft_filename, cft_mimetype,
+                                             mapping_filename, error_type):
+        # Given a body
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': project_id, 'name': project_name}
 
         # And the request files
-        iac_file = (filename, open(filename, 'rb'), 'application/json')
-        mapping_file = (default_terraform_mapping, open(default_terraform_mapping, 'r'), 'text/yaml')
-
-        # And the iac_data with custom line breaks
-        iac_data = FileUtils.get_byte_data(filename).decode().replace('\n', break_line)
+        cft_file = None if cft_filename is None else (cft_filename, open(cft_filename, 'rb'), cft_mimetype)
+        mapping_file = None if mapping_filename is None else (
+            mapping_filename, open(mapping_filename, 'rb'), 'text/yaml')
+        files = {'iac_file': cft_file, 'mapping_file': mapping_file}
 
         # When I do post on cloudformation endpoint
-        files = {'iac_file': iac_file, 'mapping_file': mapping_file}
-        body = {'iac_type': 'TERRAFORM', 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
-        # Then the iac file has the expected line break
-        assert f'{break_line} ' in iac_data
-
-        # And the OTM is returned inside the response as JSON
-        assert response.status_code == iac_create_otm_controller.RESPONSE_STATUS_CODE
-        assert response.headers.get('content-type') == 'application/json'
-        assert '"otmVersion": "0.1.0"' in response.text
-        assert '"project": ' in response.text
-        assert '"name": "project_A_name"' in response.text
-        assert '"trustZones": ' in response.text
-        assert '"components": ' in response.text
+        # Then the error is returned inside the response as JSON
+        assert response.status_code == 400
+        assert response.headers['content-type'] == 'application/json'
+        res_body = json.loads(response.content.decode('utf-8'))
+        assert res_body['status'] == '400'
+        assert res_body['error_type'] == error_type
 
     @responses.activate
     @patch('slp_cft.slp_cft.validate.cft_validator.CloudformationValidator.validate')
@@ -139,7 +104,7 @@ class TestOtmControllerIaCCloudformation:
 
         # When I do post on cloudformation endpoint
         files = {'iac_file': iac_file, 'mapping_file': mapping_file}
-        body = {'iac_type': 'CLOUDFORMATION', 'id': f'{project_id}', 'name': 'project_A_name'}
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
         # Then the error is returned inside the response as JSON
@@ -169,7 +134,7 @@ class TestOtmControllerIaCCloudformation:
 
         # When I do post on cloudformation endpoint
         files = {'iac_file': iac_file, 'mapping_file': mapping_file}
-        body = {'iac_type': 'CLOUDFORMATION', 'id': f'{project_id}', 'name': 'project_A_name'}
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
         # Then the error is returned inside the response as JSON
@@ -200,7 +165,7 @@ class TestOtmControllerIaCCloudformation:
 
         # When I do post on cloudformation endpoint
         files = {'iac_file': iac_file, 'mapping_file': mapping_file}
-        body = {'iac_type': 'CLOUDFORMATION', 'id': f'{project_id}', 'name': 'project_A_name'}
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
         # Then the error is returned inside the response as JSON
@@ -231,7 +196,7 @@ class TestOtmControllerIaCCloudformation:
 
         # When I do post on cloudformation endpoint
         files = {'iac_file': iac_file, 'mapping_file': mapping_file}
-        body = {'iac_type': 'CLOUDFORMATION', 'id': f'{project_id}', 'name': 'project_A_name'}
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
         # Then the error is returned inside the response as JSON
@@ -261,7 +226,7 @@ class TestOtmControllerIaCCloudformation:
 
         # When I do post on cloudformation endpoint
         files = {'iac_file': iac_file, 'mapping_file': mapping_file}
-        body = {'iac_type': 'CLOUDFORMATION', 'id': f'{project_id}', 'name': 'project_A_name'}
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
         # Then the error is returned inside the response as JSON
@@ -291,7 +256,7 @@ class TestOtmControllerIaCCloudformation:
 
         # When I do post on cloudformation endpoint
         files = {'iac_file': iac_file, 'mapping_file': mapping_file}
-        body = {'iac_type': 'CLOUDFORMATION', 'id': f'{project_id}', 'name': 'project_A_name'}
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
         # Then the error is returned inside the response as JSON
@@ -322,7 +287,7 @@ class TestOtmControllerIaCCloudformation:
 
         # When I do post on cloudformation endpoint
         files = {'iac_file': iac_file, 'mapping_file': mapping_file}
-        body = {'iac_type': 'CLOUDFORMATION', 'id': f'{project_id}', 'name': 'project_A_name'}
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
         # Then the error is returned inside the response as JSON
@@ -353,7 +318,7 @@ class TestOtmControllerIaCCloudformation:
 
         # When I do post on cloudformation endpoint
         files = {'iac_file': iac_file, 'mapping_file': mapping_file}
-        body = {'iac_type': 'CLOUDFORMATION', 'id': f'{project_id}', 'name': 'project_A_name'}
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
         # Then the error is returned inside the response as JSON
@@ -378,7 +343,7 @@ class TestOtmControllerIaCCloudformation:
 
         # When I do post on cloudformation endpoint
         files = {'iac_file': iac_file, 'mapping_file': mapping_file}
-        body = {'iac_type': 'CLOUDFORMATION', 'id': f'{project_id}', 'name': 'project_A_name'}
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
         # Then the OTM is returned without errors inside the response as JSON
@@ -394,21 +359,25 @@ class TestOtmControllerIaCCloudformation:
         assert len(json.loads(response.text)["components"]) == 5
 
     @responses.activate
-    def test_mapping_file_terraform_specific_functions(self):
+    def test_create_otm_multiple_files_ok(self):
         # Given a project_id
         project_id: str = 'project_A_id'
 
-        # And the request files, containing a mapping file with all terraform specific functions
-        iac_file = (terraform_specific_functions, open(terraform_specific_functions, 'r'), 'application/json')
-        mapping_file = (
-            terraform_mapping_specific_functions, open(terraform_mapping_specific_functions, 'r'), 'text/yaml')
+        # And the request files, two definition files, and one mapping file
+        iac_file_networks = (
+            cloudformation_multiple_files_networks, open(cloudformation_multiple_files_networks, 'r'),
+            'application/json')
+        iac_file_resources = (
+            cloudformation_multiple_files_resources, open(cloudformation_multiple_files_resources, 'r'),
+            'application/json')
+        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'r'), 'text/yaml')
 
-        # When I do post on terraform endpoint
-        files = {'iac_file': iac_file, 'mapping_file': mapping_file}
-        body = {'iac_type': 'TERRAFORM', 'id': f'{project_id}', 'name': 'project_A_name'}
+        # When I do post on cloudformation endpoint
+        files = [('iac_file', iac_file_networks), ('iac_file', iac_file_resources), ('mapping_file', mapping_file)]
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
-        # Then the OTM is returned without errors inside the response as JSON
+        # Then the OTM is returned inside the response as JSON
         assert response.status_code == iac_create_otm_controller.RESPONSE_STATUS_CODE
         assert response.headers.get('content-type') == 'application/json'
         assert '"otmVersion": "0.1.0"' in response.text
@@ -417,5 +386,29 @@ class TestOtmControllerIaCCloudformation:
         assert '"trustZones": ' in response.text
         assert '"components": ' in response.text
 
-        # And all the expected components are mapped
-        assert len(json.loads(response.text)["components"]) == 3
+        # And all the expected components are mapped (5 from networks, 17 from resources)
+        assert len(json.loads(response.text)["components"]) == 22
+
+    @responses.activate
+    def test_create_otm_multiple_files_on_validating_iac_error(self):
+        # Given a project_id
+        project_id: str = 'project_A_id'
+
+        # And the request files, two definition files, and one mapping file
+        iac_file_networks = (
+            cloudformation_multiple_files_networks, open(cloudformation_multiple_files_networks, 'r'),
+            'application/json')
+        iac_file_invalid = ''
+        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'r'), 'text/yaml')
+
+        # When I do post on cloudformation endpoint
+        files = [('iac_file', iac_file_networks), ('iac_file', iac_file_invalid), ('mapping_file', mapping_file)]
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then the error is returned inside the response as JSON
+        assert response.status_code == 400
+        assert response.headers['content-type'] == 'application/json'
+        res_body = json.loads(response.content.decode('utf-8'))
+        assert res_body['status'] == '400'
+        assert res_body['error_type'] == 'IacFileNotValidError'
