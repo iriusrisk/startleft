@@ -96,8 +96,3 @@ custom_vpc_mapping = path + '/visio/custom-vpc-mapping.yaml'
 visio_aws_shapes_otm_expected = path + '/visio/aws-shapes.otm'
 visio_aws_with_tz_and_vpc_otm_expected = path + '/visio/aws-with-tz-and-vpc.otm'
 visio_orphan_dataflows_otm_expected = path + '/visio/visio-orphan-dataflows.otm'
-
-
-
-
-

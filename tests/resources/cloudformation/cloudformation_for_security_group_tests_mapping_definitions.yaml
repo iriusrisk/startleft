@@ -512,7 +512,7 @@ dataflows:
     source: {$path: "Properties.SecurityGroupIngress[0].CidrIp"}
     destination: {$hub:{$path: "_key"}}
     tags:
-      - $path: "Properties.SecurityGroupEgress[0].Description"
+      - $path: "Properties.SecurityGroupIngress[0].Description"
       - $path: "Properties.SecurityGroupIngress[0].IpProtocol"
       - $path: "Properties.SecurityGroupIngress[0].FromPort"
       - $path: "Properties.SecurityGroupIngress[0].ToPort"
