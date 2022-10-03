@@ -395,3 +395,26 @@ class TestOtmControllerIaCTerraform:
 
         # And all the expected components are mapped (3 from first, 28 from second)
         assert len(json.loads(response.text)["components"]) == 12
+
+    @responses.activate
+    def test_create_otm_multiple_files_on_validating_iac_error(self):
+        # Given a project_id
+        project_id: str = 'project_A_id'
+
+        # And the request files, two definition files, and one mapping file
+        iac_file_valid = (
+            terraform_multiple_files_one, open(terraform_multiple_files_one, 'r'),
+            'application/json')
+        iac_file_invalid = ''
+        mapping_file = (default_terraform_mapping, open(default_terraform_mapping, 'r'), 'text/yaml')
+
+        files = [('iac_file', iac_file_valid), ('iac_file', iac_file_invalid), ('mapping_file', mapping_file)]
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then the error is returned inside the response as JSON
+        assert response.status_code == 400
+        assert response.headers['content-type'] == 'application/json'
+        res_body = json.loads(response.content.decode('utf-8'))
+        assert res_body['status'] == '400'
+        assert res_body['error_type'] == 'IacFileNotValidError'

@@ -395,14 +395,14 @@ class TestOtmControllerIaCCloudformation:
         project_id: str = 'project_A_id'
 
         # And the request files, two definition files, and one mapping file
-        iac_file_networks = (
+        iac_file_valid = (
             cloudformation_multiple_files_networks, open(cloudformation_multiple_files_networks, 'r'),
             'application/json')
         iac_file_invalid = ''
         mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'r'), 'text/yaml')
 
         # When I do post on cloudformation endpoint
-        files = [('iac_file', iac_file_networks), ('iac_file', iac_file_invalid), ('mapping_file', mapping_file)]
+        files = [('iac_file', iac_file_valid), ('iac_file', iac_file_invalid), ('mapping_file', mapping_file)]
         body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
