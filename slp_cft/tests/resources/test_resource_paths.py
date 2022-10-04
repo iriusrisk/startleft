@@ -22,3 +22,4 @@ cloudformation_component_without_parent = path + '/cft/cloudformation_component_
 cloudformation_skipped_component_without_parent = path + '/cft/cloudformation_component_without_parent_skipped.json'
 cloudformation_unknown_resource = path + '/cft/cloudformation_unknown_resource.json'
 cloudformation_all_functions = path + '/cft/cloudformation_all_functions.json'
+multiple_stack_plus_s3_ec2 = path + '/cft/multiple_stack_plus_s3_ec2.yaml'

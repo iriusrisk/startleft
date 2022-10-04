@@ -131,16 +131,16 @@ class TestCloudformationProcessor:
 
         # AND the dataflows for SG are generated
         assert list(filter(lambda obj: obj.name == 'ServiceLB -> Service'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node, otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'Canary -> ServiceLB'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node, otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert not list(filter(lambda obj: obj.name == 'Canary -> Service'
-                        and "-hub-" not in obj.source_node
-                        and "-hub-" not in obj.destination_node, otm.dataflows))
+                                           and "-hub-" not in obj.source_node
+                                           and "-hub-" not in obj.destination_node, otm.dataflows))
 
     def test_run_security_groups_use_case_a_2(self):
         # GIVEN a valid CFT file
@@ -166,36 +166,36 @@ class TestCloudformationProcessor:
 
         # AND the dataflows for SG are generated
         assert list(filter(lambda obj: obj.name == 'ServiceLB -> Service'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node, otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'ServiceLB2 -> Service'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node, otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'ServiceLB -> Service2'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node, otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'ServiceLB2 -> Service2'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node, otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert not list(filter(lambda obj: obj.name == 'ServiceLB -> ServiceLB2'
-                        and "-hub-" not in obj.source_node
-                        and "-hub-" not in obj.destination_node, otm.dataflows))
+                                           and "-hub-" not in obj.source_node
+                                           and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert not list(filter(lambda obj: obj.name == 'ServiceLB2 -> ServiceLB'
-                        and "-hub-" not in obj.source_node
-                        and "-hub-" not in obj.destination_node, otm.dataflows))
+                                           and "-hub-" not in obj.source_node
+                                           and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert not list(filter(lambda obj: obj.name == 'Service -> Service2'
-                        and "-hub-" not in obj.source_node
-                        and "-hub-" not in obj.destination_node, otm.dataflows))
+                                           and "-hub-" not in obj.source_node
+                                           and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert not list(filter(lambda obj: obj.name == 'Service2 -> Service'
-                        and "-hub-" not in obj.source_node
-                        and "-hub-" not in obj.destination_node, otm.dataflows))
+                                           and "-hub-" not in obj.source_node
+                                           and "-hub-" not in obj.destination_node, otm.dataflows))
 
     def test_run_security_groups_use_case_b(self):
         # GIVEN a valid CFT file
@@ -217,15 +217,15 @@ class TestCloudformationProcessor:
         assert list(filter(lambda obj: obj.name == 'VPCssmmessages', otm.components))
         assert list(filter(lambda obj: obj.name == 'VPCmonitoring', otm.components))
         assert list(filter(lambda obj: obj.name == '0.0.0.0/0'
-                    and obj.type == 'generic-client', otm.components))
+                                       and obj.type == 'generic-client', otm.components))
         assert list(filter(lambda obj: obj.name == '255.255.255.255/32'
-                    and obj.type == 'generic-client', otm.components))
+                                       and obj.type == 'generic-client', otm.components))
 
         # AND the dataflows for SG are generated
         assert list(filter(lambda obj: obj.name == 'VPCssm -> VPCssmSecurityGroup'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node
-                    , otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node
+                           , otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'VPCssmSecurityGroup -> VPCssm'
                                        and "-hub-" not in obj.source_node
@@ -233,29 +233,29 @@ class TestCloudformationProcessor:
                            , otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'VPCssmmessages -> VPCssmmessagesSecurityGroup'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node
-                    , otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node
+                           , otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'VPCssmmessagesSecurityGroup -> VPCssmmessages'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node
-                    , otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node
+                           , otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'VPCmonitoring -> VPCmonitoringSecurityGroup'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node
-                    , otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node
+                           , otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'VPCmonitoringSecurityGroup -> VPCmonitoring'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node
-                    , otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node
+                           , otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'Service -> OutboundSecurityGroup'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node
-                    , otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node
+                           , otm.dataflows))
 
     @pytest.mark.parametrize('mapping_file', [None, [None]])
     def test_mapping_files_not_provided(self, mapping_file):
@@ -290,3 +290,18 @@ class TestCloudformationProcessor:
         with pytest.raises(IacFileNotValidError):
             CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], mapping_file).process()
 
+    def test_multiple_stack_plus_s3_ec2(self):
+        # GIVEN the file with multiple Subnet AWS::EC2::Instance different configurations
+        cloudformation_file = get_data(test_resource_paths.multiple_stack_plus_s3_ec2)
+        # AND a valid iac mappings file
+        mapping_file = [get_data(SAMPLE_VALID_MAPPING_FILE)]
+
+        # WHEN processing
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], mapping_file).process()
+
+        assert len(otm.components) == 9
+        publicSubnet1Id = [component for component in otm.components if component.name == 'PublicSubnet1'][0].id
+        assert publicSubnet1Id
+        ec2WithWrongParent = [component for component in otm.components if
+                              component.type == 'ec2' and component.parent != publicSubnet1Id]
+        assert len(ec2WithWrongParent) == 0
