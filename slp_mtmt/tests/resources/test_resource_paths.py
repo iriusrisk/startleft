@@ -18,5 +18,6 @@ mtmt_mapping_filled_file = path + '/mapping/mtmt-mapping-filled.yaml'
 
 # mtmt
 model_mtmt_source_file = path + '/mtmt/test_model.tm7'
-
-
+model_mtmt_with_lines = path + '/mtmt/test_model_lines.tm7'
+model_mtmt_mvp = path + '/mtmt/MTMT_MVP.tm7'
+mapping_mtmt_mvp = path + '/mapping/MTMT_MVP.yaml'

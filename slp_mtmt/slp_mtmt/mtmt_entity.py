@@ -1,15 +1,5 @@
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
-
-
-class MTMLine:
-    def __init__(self, source: dict):
-        pass
-
-    def get_dataflows(self):
-        pass
-
-    def get_trustzones(self):
-        pass
+from slp_mtmt.slp_mtmt.entity.mtmt_entity_line import MTMLine
 
 
 class MTMThreat:

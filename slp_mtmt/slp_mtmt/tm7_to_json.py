@@ -41,7 +41,7 @@ def xml2dict(t):
 
     if t.attrib:
         d['attrib'] = get_attrs(t.attrib)
-
+        
     return d
 
 

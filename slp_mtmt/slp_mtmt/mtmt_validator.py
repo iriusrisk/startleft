@@ -2,8 +2,8 @@ import logging
 
 import magic as magik
 
-from slp_base import DiagramFileNotValidError
 from slp_base import ProviderValidator
+from slp_base.slp_base.errors import SourceFileNotValidError
 
 logger = logging.getLogger(__name__)
 
@@ -28,11 +28,11 @@ class MTMTValidator(ProviderValidator):
         size = len(self.mt_data)
         if size > MAX_SIZE or size < MIN_SIZE:
             msg = 'Provided MTMT file is not valid. Invalid size'
-            raise DiagramFileNotValidError('TM file is not valid', msg, msg)
+            raise SourceFileNotValidError('TM file is not valid', msg, msg)
 
     def __validate_content_type(self):
         magic = magik.Magic(mime=True)
         mime = magic.from_buffer(self.mt_data)
         if mime not in VALID_MIME:
             msg = 'Invalid content type for diag_file'
-            raise DiagramFileNotValidError('TM file is not valid', msg, msg)
+            raise SourceFileNotValidError('TM file is not valid', msg, msg)

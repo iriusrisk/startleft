@@ -27,14 +27,10 @@ class MTMTParser(ProviderParser):
         return MTMTConnectorParser().parse()
 
     def __get_mtmt_trustzones(self) -> list:
-        return MTMTTrustzoneParser().parse()
-
-    def __get_mtmt_default_trustzones(self):
-        return MTMTTrustzoneParser().parse_default_trustzone()
+        return MTMTTrustzoneParser(self.source, self.mtmt_mapping).parse()
 
     def build_otm(self) -> OTM:
         return OtmBuilder(self.project_id, self.project_name, EtmType.MTMT) \
-            .add_default_trustzone(self.__get_mtmt_default_trustzones()) \
             .add_trustzones(self.__get_mtmt_trustzones()) \
             .add_components(self.__get_mtmt_components()) \
             .add_dataflows(self.__get_mtmt_dataflows()) \
