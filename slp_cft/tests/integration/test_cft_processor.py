@@ -1,14 +1,22 @@
 import pytest
 
 from sl_util.sl_util.file_utils import get_data
-from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError
+from slp_base.tests.util.otm import validate_and_diff_otm
+from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError, \
+    LoadingIacFileError
 from slp_cft import CloudformationProcessor
 from slp_cft.tests.resources import test_resource_paths
+from slp_cft.tests.utility import excluded_regex
 
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
 SAMPLE_VALID_CFT_FILE = test_resource_paths.cloudformation_for_mappings_tests_json
 SAMPLE_VALID_MAPPING_FILE = test_resource_paths.default_cloudformation_mapping
+SAMPLE_SINGLE_VALID_CFT_FILE = test_resource_paths.cloudformation_single_file
+SAMPLE_VALID_MAPPING_FILE_IR = test_resource_paths.cloudformation_mapping_iriusrisk
+SAMPLE_NETWORKS_CFT_FILE = test_resource_paths.cloudformation_networks_file
+SAMPLE_RESOURCES_CFT_FILE = test_resource_paths.cloudformation_resources_file
+OTM_EXPECTED_RESULT = test_resource_paths.otm_expected_result
 
 
 class TestCloudformationProcessor:
@@ -279,7 +287,12 @@ class TestCloudformationProcessor:
         with pytest.raises(MappingFileNotValidError):
             CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], mapping_file).process()
 
-    @pytest.mark.parametrize('cloudformation_file', [get_data(test_resource_paths.cloudformation_invalid_size)])
+    @pytest.mark.parametrize('cloudformation_file',
+                             [[get_data(test_resource_paths.cloudformation_invalid_size)],
+                              [get_data(test_resource_paths.cloudformation_invalid_size),
+                              get_data(test_resource_paths.cloudformation_invalid_size)],
+                              [get_data(test_resource_paths.cloudformation_invalid_size),
+                               get_data(test_resource_paths.cloudformation_resources_file)]])
     def test_invalid_cloudformation_file(self, cloudformation_file):
         # GIVEN a sample invalid CFT file
         # AND a valid iac mappings file
@@ -288,7 +301,41 @@ class TestCloudformationProcessor:
         # WHEN creating OTM project from IaC file
         # THEN raises OtmBuildingError
         with pytest.raises(IacFileNotValidError):
-            CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], mapping_file).process()
+            CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, cloudformation_file, mapping_file).process()
+
+    def test_run_valid_simple_iac_mapping_file(self):
+        # GIVEN a valid CFT file
+        cloudformation_file = get_data(SAMPLE_SINGLE_VALID_CFT_FILE)
+        # AND a valid mapping file
+        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE_IR)
+
+        # WHEN the method CloudformationProcessor::process is invoked
+        otm = CloudformationProcessor('multiple-files', 'multiple-files', [cloudformation_file],
+                                      [mapping_file]).process()
+
+        # THEN a file with the expected otm is returned
+        assert validate_and_diff_otm(otm.json(), OTM_EXPECTED_RESULT, excluded_regex) == {}
+
+    def test_run_valid_multiple_iac_mapping_files(self):
+        # GIVEN the valid CFT file
+        networks_cft_file = get_data(SAMPLE_NETWORKS_CFT_FILE)
+        # AND another valid CFT file
+        resources_cft_file = get_data(SAMPLE_RESOURCES_CFT_FILE)
+        # AND a valid mapping file
+        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE_IR)
+        # WHEN the method CloudformationProcessor::process is invoked
+        otm = CloudformationProcessor('multiple-files', 'multiple-files', [networks_cft_file, resources_cft_file],
+                                      [mapping_file]).process()
+        # THEN a file with the expected otm is returned
+        assert validate_and_diff_otm(otm.json(), OTM_EXPECTED_RESULT, excluded_regex) == {}
+
+    def test_run_empty_multiple_iac_files(self):
+        # GIVEN a request without any iac_file key
+        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE_IR)
+        # WHEN the method CloudformationProcessor::process is invoked
+        # THEN an RequestValidationError is raised
+        with pytest.raises(LoadingIacFileError):
+            CloudformationProcessor('multiple-files', 'multiple-files', [], mapping_file).process()
 
     def test_multiple_stack_plus_s3_ec2(self):
         # GIVEN the file with multiple Subnet AWS::EC2::Instance different configurations
