@@ -30,9 +30,9 @@ class TestMtmtProcessor:
         assert otm.project_name == "name"
 
         # AND the representations info is also right
-        assert otm.representations_id == "Microsoft Threat Model"
-        assert otm.representations_name == "Microsoft Threat Model"
-        assert otm.representations_type == "etm"
+        assert otm.representations_id == "Microsoft Threat Modeling Tool"
+        assert otm.representations_name == "Microsoft Threat Modeling Tool"
+        assert otm.representations_type == "threat-model"
 
         # AND the info inside trustzones is also right
         trustzone = otm.trustzones[0]
