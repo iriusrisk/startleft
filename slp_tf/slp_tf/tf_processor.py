@@ -15,20 +15,20 @@ class TerraformProcessor(OtmProcessor):
     Terraform implementation of OtmProcessor
     """
 
-    def __init__(self, project_id: str, project_name: str, source: [bytes], mappings: [bytes]):
+    def __init__(self, project_id: str, project_name: str, sources: [bytes], mappings: [bytes]):
         self.project_id = project_id
         self.project_name = project_name
-        self.source = source
+        self.sources = sources
         self.mappings = mappings
 
         self.terraform_loader = None
         self.mapping_loader = None
 
     def get_provider_validator(self) -> ProviderValidator:
-        return TerraformValidator(self.source)
+        return TerraformValidator(self.sources)
 
     def get_provider_loader(self) -> ProviderLoader:
-        self.terraform_loader = TerraformLoader(self.source)
+        self.terraform_loader = TerraformLoader(self.sources)
         return self.terraform_loader
 
     def get_mapping_validator(self) -> MappingValidator:
