@@ -29,4 +29,3 @@ class MTMTTrustzoneParser:
     def __calculate_otm_type(self, label: str) -> str:
         return self.mapping.mapping_trustzones[label]['type'] if label in self.mapping.mapping_trustzones \
             else None
-
