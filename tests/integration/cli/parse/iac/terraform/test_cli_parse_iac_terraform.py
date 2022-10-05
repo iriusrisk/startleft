@@ -2,7 +2,7 @@ from click.testing import CliRunner
 from pytest import mark
 
 from slp_base import LoadingIacFileError, MappingFileNotValidError
-from slp_base.tests.util.otm import validate_and_diff as validate_and_diff_otm
+from slp_base.tests.util.otm import validate_and_diff
 from startleft.startleft.cli.cli import parse_any
 from tests.integration.cli.parse.iac.test_cli_parse_iac import excluded_regex
 from tests.resources import test_resource_paths
@@ -54,7 +54,7 @@ class TestCliParseIaCTerraform:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            validate_and_diff_otm(output_file_name, OTM_AWS_SIMPLE_COMPONENTS_EXPECTED, excluded_regex)
+            assert validate_and_diff(output_file_name, OTM_AWS_SIMPLE_COMPONENTS_EXPECTED, excluded_regex) == {}
 
     def test_parse_terraform_unknown_resources(self):
         """
@@ -85,7 +85,7 @@ class TestCliParseIaCTerraform:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            validate_and_diff_otm(output_file_name, OTM_EMPTY_FILE, excluded_regex)
+            assert validate_and_diff(output_file_name, OTM_EMPTY_FILE, excluded_regex) == {}
 
     def test_parse_terraform_unknown_module(self):
         """
@@ -116,7 +116,7 @@ class TestCliParseIaCTerraform:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            validate_and_diff_otm(output_file_name, OTM_EMPTY_FILE, excluded_regex)
+            assert validate_and_diff(output_file_name, OTM_EMPTY_FILE, excluded_regex) == {}
 
     @mark.parametrize('filename', [invalid_tf])
     def test_parse_terraform_invalid_file(self, filename):
