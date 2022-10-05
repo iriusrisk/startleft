@@ -1,14 +1,22 @@
 import pytest
 
 from sl_util.sl_util.file_utils import get_data
-from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError
+from slp_base.tests.util.otm import validate_and_diff_otm
+from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError, \
+    LoadingIacFileError
 from slp_cft import CloudformationProcessor
 from slp_cft.tests.resources import test_resource_paths
+from slp_cft.tests.utility import excluded_regex
 
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
 SAMPLE_VALID_CFT_FILE = test_resource_paths.cloudformation_for_mappings_tests_json
 SAMPLE_VALID_MAPPING_FILE = test_resource_paths.default_cloudformation_mapping
+SAMPLE_SINGLE_VALID_CFT_FILE = test_resource_paths.cloudformation_single_file
+SAMPLE_VALID_MAPPING_FILE_IR = test_resource_paths.cloudformation_mapping_iriusrisk
+SAMPLE_NETWORKS_CFT_FILE = test_resource_paths.cloudformation_networks_file
+SAMPLE_RESOURCES_CFT_FILE = test_resource_paths.cloudformation_resources_file
+OTM_EXPECTED_RESULT = test_resource_paths.otm_expected_result
 
 
 class TestCloudformationProcessor:
@@ -213,16 +221,16 @@ class TestCloudformationProcessor:
 
         # AND the dataflows for SG are generated
         assert list(filter(lambda obj: obj.name == 'ServiceLB -> Service'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node, otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'Canary -> ServiceLB'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node, otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert not list(filter(lambda obj: obj.name == 'Canary -> Service'
-                        and "-hub-" not in obj.source_node
-                        and "-hub-" not in obj.destination_node, otm.dataflows))
+                                           and "-hub-" not in obj.source_node
+                                           and "-hub-" not in obj.destination_node, otm.dataflows))
 
     def test_run_security_groups_use_case_a_2(self):
         # GIVEN a valid CFT file
@@ -248,36 +256,36 @@ class TestCloudformationProcessor:
 
         # AND the dataflows for SG are generated
         assert list(filter(lambda obj: obj.name == 'ServiceLB -> Service'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node, otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'ServiceLB2 -> Service'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node, otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'ServiceLB -> Service2'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node, otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'ServiceLB2 -> Service2'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node, otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert not list(filter(lambda obj: obj.name == 'ServiceLB -> ServiceLB2'
-                        and "-hub-" not in obj.source_node
-                        and "-hub-" not in obj.destination_node, otm.dataflows))
+                                           and "-hub-" not in obj.source_node
+                                           and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert not list(filter(lambda obj: obj.name == 'ServiceLB2 -> ServiceLB'
-                        and "-hub-" not in obj.source_node
-                        and "-hub-" not in obj.destination_node, otm.dataflows))
+                                           and "-hub-" not in obj.source_node
+                                           and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert not list(filter(lambda obj: obj.name == 'Service -> Service2'
-                        and "-hub-" not in obj.source_node
-                        and "-hub-" not in obj.destination_node, otm.dataflows))
+                                           and "-hub-" not in obj.source_node
+                                           and "-hub-" not in obj.destination_node, otm.dataflows))
 
         assert not list(filter(lambda obj: obj.name == 'Service2 -> Service'
-                        and "-hub-" not in obj.source_node
-                        and "-hub-" not in obj.destination_node, otm.dataflows))
+                                           and "-hub-" not in obj.source_node
+                                           and "-hub-" not in obj.destination_node, otm.dataflows))
 
     def test_run_security_groups_use_case_b(self):
         # GIVEN a valid CFT file
@@ -299,15 +307,15 @@ class TestCloudformationProcessor:
         assert list(filter(lambda obj: obj.name == 'VPCssmmessages', otm.components))
         assert list(filter(lambda obj: obj.name == 'VPCmonitoring', otm.components))
         assert list(filter(lambda obj: obj.name == '0.0.0.0/0'
-                    and obj.type == 'generic-client', otm.components))
+                                       and obj.type == 'generic-client', otm.components))
         assert list(filter(lambda obj: obj.name == '255.255.255.255/32'
-                    and obj.type == 'generic-client', otm.components))
+                                       and obj.type == 'generic-client', otm.components))
 
         # AND the dataflows for SG are generated
         assert list(filter(lambda obj: obj.name == 'VPCssm -> VPCssmSecurityGroup'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node
-                    , otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node
+                           , otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'VPCssmSecurityGroup -> VPCssm'
                                        and "-hub-" not in obj.source_node
@@ -315,29 +323,29 @@ class TestCloudformationProcessor:
                            , otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'VPCssmmessages -> VPCssmmessagesSecurityGroup'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node
-                    , otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node
+                           , otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'VPCssmmessagesSecurityGroup -> VPCssmmessages'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node
-                    , otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node
+                           , otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'VPCmonitoring -> VPCmonitoringSecurityGroup'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node
-                    , otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node
+                           , otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'VPCmonitoringSecurityGroup -> VPCmonitoring'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node
-                    , otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node
+                           , otm.dataflows))
 
         assert list(filter(lambda obj: obj.name == 'Service -> OutboundSecurityGroup'
-                    and "-hub-" not in obj.source_node
-                    and "-hub-" not in obj.destination_node
-                    , otm.dataflows))
+                                       and "-hub-" not in obj.source_node
+                                       and "-hub-" not in obj.destination_node
+                           , otm.dataflows))
 
     @pytest.mark.parametrize('mapping_file', [None, [None]])
     def test_mapping_files_not_provided(self, mapping_file):
@@ -361,7 +369,12 @@ class TestCloudformationProcessor:
         with pytest.raises(MappingFileNotValidError):
             CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], mapping_file).process()
 
-    @pytest.mark.parametrize('cloudformation_file', [get_data(test_resource_paths.cloudformation_invalid_size)])
+    @pytest.mark.parametrize('cloudformation_file',
+                             [[get_data(test_resource_paths.cloudformation_invalid_size)],
+                              [get_data(test_resource_paths.cloudformation_invalid_size),
+                              get_data(test_resource_paths.cloudformation_invalid_size)],
+                              [get_data(test_resource_paths.cloudformation_invalid_size),
+                               get_data(test_resource_paths.cloudformation_resources_file)]])
     def test_invalid_cloudformation_file(self, cloudformation_file):
         # GIVEN a sample invalid CFT file
         # AND a valid iac mappings file
@@ -370,5 +383,38 @@ class TestCloudformationProcessor:
         # WHEN creating OTM project from IaC file
         # THEN raises OtmBuildingError
         with pytest.raises(IacFileNotValidError):
-            CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], mapping_file).process()
+            CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, cloudformation_file, mapping_file).process()
 
+    def test_run_valid_simple_iac_mapping_file(self):
+        # GIVEN a valid CFT file
+        cloudformation_file = get_data(SAMPLE_SINGLE_VALID_CFT_FILE)
+        # AND a valid mapping file
+        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE_IR)
+
+        # WHEN the method CloudformationProcessor::process is invoked
+        otm = CloudformationProcessor('multiple-files', 'multiple-files', [cloudformation_file],
+                                      [mapping_file]).process()
+
+        # THEN a file with the expected otm is returned
+        assert validate_and_diff_otm(otm.json(), OTM_EXPECTED_RESULT, excluded_regex) == {}
+
+    def test_run_valid_multiple_iac_mapping_files(self):
+        # GIVEN the valid CFT file
+        networks_cft_file = get_data(SAMPLE_NETWORKS_CFT_FILE)
+        # AND another valid CFT file
+        resources_cft_file = get_data(SAMPLE_RESOURCES_CFT_FILE)
+        # AND a valid mapping file
+        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE_IR)
+        # WHEN the method CloudformationProcessor::process is invoked
+        otm = CloudformationProcessor('multiple-files', 'multiple-files', [networks_cft_file, resources_cft_file],
+                                      [mapping_file]).process()
+        # THEN a file with the expected otm is returned
+        assert validate_and_diff_otm(otm.json(), OTM_EXPECTED_RESULT, excluded_regex) == {}
+
+    def test_run_empty_multiple_iac_files(self):
+        # GIVEN a request without any iac_file key
+        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE_IR)
+        # WHEN the method CloudformationProcessor::process is invoked
+        # THEN an RequestValidationError is raised
+        with pytest.raises(LoadingIacFileError):
+            CloudformationProcessor('multiple-files', 'multiple-files', [], mapping_file).process()
