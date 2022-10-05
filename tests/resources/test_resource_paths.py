@@ -13,7 +13,8 @@ empty_mapping_file = path + "/empty_mapping_file.yaml"
 # OTM
 otm_file_example = path + '/otm/otm_file_example.otm'
 otm_yaml_file_example = path + '/otm/otm_file_example_yaml.otm'
-otm_empty_file_example = path + '/otm/otm_empty_file_example.otm'
+otm_empty_file_example_tf = path + '/otm/otm_empty_file_example_tf.otm'
+otm_empty_file_example_cft = path + '/otm/otm_empty_file_example_cft.otm'
 
 # CLOUDFORMATION
 cloudformation_for_mappings_tests_json = path + '/cloudformation/cloudformation_for_mappings_tests.json'

@@ -11,5 +11,5 @@ class DiagramType(str, Provider):
 
 
 class EtmType(str, Provider):
-    MTMT = ("MTMT", "Microsoft Threat Model", "etm")
+    MTMT = ("MTMT", "Microsoft Threat Modeling Tool", "threat-model")
 
