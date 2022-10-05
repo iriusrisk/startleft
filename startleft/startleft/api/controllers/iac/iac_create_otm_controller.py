@@ -1,6 +1,7 @@
 import logging
 
 from fastapi import APIRouter, File, UploadFile, Form, Response
+from typing import List
 
 from _sl_build.modules import PROCESSORS
 from sl_util.sl_util.json_utils import get_otm_as_json
@@ -20,8 +21,10 @@ router = APIRouter(
 
 provider_resolver = ProviderResolver(PROCESSORS)
 
+
 @router.post(URL, status_code=RESPONSE_STATUS_CODE, description="Generates an OTM threat model from an IaC file")
-def iac(iac_file: UploadFile = File(..., description="File that contains the Iac definition"),
+def iac(iac_file: List[UploadFile]
+        = File(..., description="Files that contains Iac definitions to be merged into one data structure"),
         iac_type: IacType = Form(..., description="Type of IaC File: CLOUDFORMATION, TERRAFORM"),
         id: str = Form(..., description="ID of the new project"),
         name: str = Form(..., description="Name of the new project"),
@@ -30,16 +33,16 @@ def iac(iac_file: UploadFile = File(..., description="File that contains the Iac
     logger.info(f"POST request received for creating new project with id {id} and name {name} from IaC {iac_type} file")
 
     logger.info("Parsing Threat Model file to OTM")
+    iac_data = []
+    for iac_file_element in iac_file:
+        with iac_file_element.file as f:
+            iac_data.append(f.read())
 
-    with iac_file.file as f:
-        iac_data = f.read()
-
-    mapping_data_list = []
-
+    mapping_data = []
     with mapping_file.file as f:
-        mapping_data_list.append(f.read())
+        mapping_data.append(f.read())
 
-    processor = provider_resolver.get_processor(iac_type, id, name, [iac_data], mapping_data_list)
+    processor = provider_resolver.get_processor(iac_type, id, name, iac_data, mapping_data)
     otm = processor.process()
 
     return Response(status_code=201, media_type="application/json", content=get_otm_as_json(otm))

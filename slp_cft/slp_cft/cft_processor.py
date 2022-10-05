@@ -16,20 +16,20 @@ class CloudformationProcessor(OtmProcessor):
     Cloudformation implementation of OtmProcessor
     """
 
-    def __init__(self, project_id: str, project_name: str, source: [bytes], mappings: [bytes]):
+    def __init__(self, project_id: str, project_name: str, sources: [bytes], mappings: [bytes]):
         self.project_id = project_id
         self.project_name = project_name
-        self.source = source
+        self.sources = sources
         self.mappings = mappings
 
         self.cloudformation_loader = None
         self.mapping_loader = None
 
     def get_provider_validator(self) -> ProviderValidator:
-        return CloudformationValidator(self.source)
+        return CloudformationValidator(self.sources)
 
     def get_provider_loader(self) -> ProviderLoader:
-        self.cloudformation_loader = CloudformationLoader(self.source)
+        self.cloudformation_loader = CloudformationLoader(self.sources)
         return self.cloudformation_loader
 
     def get_mapping_validator(self) -> MappingValidator:

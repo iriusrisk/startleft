@@ -2,7 +2,7 @@ from click.testing import CliRunner
 from pytest import mark
 
 from slp_base.slp_base.errors import MappingFileNotValidError, DiagramFileNotValidError
-from slp_base.tests.util.otm import validate_and_diff as validate_and_diff_otm
+from slp_base.tests.util.otm import validate_and_diff_filename
 from startleft.startleft.cli.cli import parse_any
 from tests.resources import test_resource_paths
 
@@ -59,7 +59,7 @@ class TestCliParseDiagram:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            assert validate_and_diff_otm(output_file_name, OTM_AWS_SHAPES_EXPECTED, excluded_regex) == {}
+            assert validate_and_diff_filename(output_file_name, OTM_AWS_SHAPES_EXPECTED, excluded_regex) == {}
 
     def test_parse_diagram_with_custom_mapping_file_ok(self):
         """
@@ -92,7 +92,7 @@ class TestCliParseDiagram:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            assert validate_and_diff_otm(output_file_name, OTM_AWS_WITH_TZ_AND_VPC, excluded_regex) == {}
+            assert validate_and_diff_filename(output_file_name, OTM_AWS_WITH_TZ_AND_VPC, excluded_regex) == {}
 
     def test_parse_diagram_with_orphan_dataflows(self):
         """
@@ -123,7 +123,7 @@ class TestCliParseDiagram:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            assert validate_and_diff_otm(output_file_name, OTM_ORPHAN_DATAFLOWS, excluded_regex) == {}
+            assert validate_and_diff_filename(output_file_name, OTM_ORPHAN_DATAFLOWS, excluded_regex) == {}
 
     @mark.parametrize('filename', [VISIO_INVALID_FILE_SIZE, VISIO_INVALID_FILE_TYPE])
     def test_parse_diagram_with_invalid_visio_file(self, filename):

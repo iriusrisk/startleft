@@ -2,13 +2,13 @@ import logging
 
 from fastapi import APIRouter, File, UploadFile, Form, Response
 
-import sl_util.sl_util.json_utils as jsonUtils
 from _sl_build.modules import PROCESSORS
+from sl_util.sl_util import json_utils
 from slp_base.slp_base.provider_resolver import ProviderResolver
 from slp_base.slp_base.provider_type import EtmType
 from startleft.startleft.api.controllers.otm_controller import RESPONSE_STATUS_CODE, PREFIX, controller_responses
 
-URL = '/etm'
+URL = '/external-threat-model'
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +18,7 @@ router = APIRouter(
 )
 
 provider_resolver = ProviderResolver(PROCESSORS)
+
 
 @router.post(URL, status_code=RESPONSE_STATUS_CODE,
              description="Generates an OTM threat model from a Threat Model file",
@@ -48,4 +49,4 @@ def etm(source_file: UploadFile = File(..., description="File that contains the 
     processor = provider_resolver.get_processor(source_type, id, name, etm_data, mapping_data_list)
     otm = processor.process()
 
-    return Response(status_code=201, media_type="application/json", content=jsonUtils.get_otm_as_json(otm))
+    return Response(status_code=201, media_type="application/json", content=json_utils.get_otm_as_json(otm))

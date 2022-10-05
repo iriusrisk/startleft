@@ -1,0 +1,23 @@
+trustzones:
+  - label:  Internet
+    type: Public Cloud
+    id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - label: Private Secured Cloud
+    type: Private Secured Cloud
+    id: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+
+components:
+  - label:  Mobile Client
+    type:   android-device-client
+
+  - label:  Public API v2
+    type:   rest-full-web-service
+
+  - label:  Accounting PostgreSQL
+    type:   CD-MICROSOFT-AZURE-DB-POSTGRESQL
+
+  - label:  Azure File Storage
+    type:   azure-storage
+
+dataflows: []
