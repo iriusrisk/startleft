@@ -216,7 +216,6 @@ class TestTerraformProcessor:
         with pytest.raises(IacFileNotValidError):
             TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], mapping_file).process()
 
-    # Parse a Simple IaC file
     def test_expected_separated_networks_components(self):
         # GIVEN the single tf file with all the resources
         single_file = get_data(test_resource_paths.terraform_single_tf)
@@ -231,7 +230,7 @@ class TestTerraformProcessor:
         # WHEN the method TerraformProcessor::process is invoked for the single file
         otm_single = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [single_file], [mapping_file]).process()
 
-        # AND the method TerraformProcessor::process is invoked for the single file
+        # AND the method TerraformProcessor::process is invoked for the separated files
         otm_multiple = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [networks, resources], [mapping_file]).process()
 
         # THEN both generated OTMs are valid and equal
@@ -240,7 +239,6 @@ class TestTerraformProcessor:
         # AND their content is the expected
         assert validate_and_diff(otm_single, expected_separated_networks_components, VALIDATION_EXCLUDED_REGEX) == {}
 
-    # Parse an empty Array IaC file
     def test_process_empty_source_file_array(self):
         # GIVEN an empty array IaC file
         terraform_empty_iac_array = []

@@ -1,3 +1,5 @@
+from typing import Union
+
 from deepdiff import DeepDiff
 
 from otm.otm.otm import OTM
@@ -14,7 +16,7 @@ internet_id = 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
 internet_name = 'Internet'
 
 
-def __load_otm (otm: dict | str | OTM):
+def __load_otm (otm: Union[dict, str, OTM]):
     if isinstance(otm, dict):
         return otm
 
@@ -37,7 +39,7 @@ def __validate_otm_schema(otm) -> Schema:
     return schema
 
 
-def validate_and_diff(actual: dict | str | OTM, expected: dict | str | OTM, excluded_regex):
+def validate_and_diff(actual: Union[dict, str, OTM], expected: Union[dict, str, OTM], excluded_regex):
     """
     Utils for validating otm has a correct Schema
     and OTM contains expected data
