@@ -36,3 +36,16 @@ terraform_mapping_specific_functions = path + '/mapping/terraform_mapping_specif
 terraform_mapping_modules = path + '/mapping/terraform_mapping_modules.yaml'
 terraform_mapping_extra_modules = path + '/mapping/terraform_mapping_extra_modules.yaml'
 terraform_iriusrisk_tf_aws_mapping = path + '/mapping/iriusrisk-tf-aws-mapping.yaml'
+
+# otm
+expected_aws_altsource_components = path + '/otm/expected_aws_altsource_components.otm'
+expected_aws_dataflows = path + '/otm/expected_aws_dataflows.otm'
+expected_aws_parent_children_components = path + '/otm/expected_aws_parent_children_components.otm'
+expected_aws_security_groups_components = path + '/otm/expected_aws_security_groups_components.otm'
+expected_aws_singleton_components = path + '/otm/expected_aws_singleton_components.otm'
+expected_elb_example = path + '/otm/expected_elb_example.otm'
+expected_extra_modules = path + '/otm/expected_extra_modules.otm'
+expected_mapping_modules = path + '/otm/expected_mapping_modules.otm'
+expected_mapping_skipped_component_without_parent = path + '/otm/expected_mapping_skipped_component_without_parent.otm'
+expected_no_resources = path + '/otm/expected_no_resources.otm'
+expected_run_valid_mappings = path + '/otm/expected_run_valid_mappings.otm'
