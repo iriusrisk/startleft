@@ -26,7 +26,7 @@ Commands:
 You can also get help for the specific commands.
 
 ```
-Usage: startleft parse [OPTIONS] SOURCE_FILE...
+Usage: startleft parse [OPTIONS] SOURCE_FILE_1 SOURCE_FILE_2 ... SOURCE_FILE_N
 
   Parses source files into Open Threat Model
 
@@ -88,7 +88,7 @@ GET /health
 ```
 POST /api/v1/startleft/iac
 Request Body:
-    iac_file:                   Required. File that contains the IaC definition
+    iac_file:                   Required. File that contains the IaC definition. If you want to add more than one IaC file, you need to duplicate this tag as many times as files you want to upload.
     iac_type:                   Required. Type of the IaC File: [CLOUDFORMATION, TERRAFORM]
     id                          Required. ID of the new project
     name                        Required. Name of the new project

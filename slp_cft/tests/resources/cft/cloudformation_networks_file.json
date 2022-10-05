@@ -1,0 +1,54 @@
+{
+    "Resources": {
+        "CustomVPC": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": "10.0.0.0/16"
+            }
+        },
+        "PrivateSubnet1": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "CustomVPC"
+                },
+                "AvailabilityZone": "Select",
+                "CidrBlock": "10.0.2.0/24",
+                "MapPublicIpOnLaunch": false
+            }
+        },
+        "PrivateSubnet2": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "CustomVPC"
+                },
+                "AvailabilityZone": "elect",
+                "CidrBlock": "10.0.3.0/24",
+                "MapPublicIpOnLaunch": false
+            }
+        },
+        "PublicSubnet1": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "CustomVPC"
+                },
+                "AvailabilityZone": "Select",
+                "CidrBlock": "10.0.0.0/24",
+                "MapPublicIpOnLaunch": false
+            }
+        },
+        "PublicSubnet2": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "CustomVPC"
+                },
+                "AvailabilityZone": "Select",
+                "CidrBlock": "10.0.1.0/24",
+                "MapPublicIpOnLaunch": false
+            }
+        }
+    }
+}

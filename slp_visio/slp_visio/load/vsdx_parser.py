@@ -13,7 +13,7 @@ DIAGRAM_LIMITS_PADDING = 2
 
 def load_visio_page_from_file(visio_filename: str):
     with VisioFile(visio_filename) as vis:
-        return vis.pages[0].shapes[0]
+        return vis.pages[0]
 
 
 def is_connector(shape: Shape) -> bool:
@@ -61,7 +61,7 @@ class VsdxParser:
         floor_coordinates = [None, None]
         top_coordinates = [0, 0]
 
-        for shape_limits in map(get_limits, self.page.sub_shapes()):
+        for shape_limits in map(get_limits, self.page.child_shapes):
             if not floor_coordinates[0] or shape_limits[0][0] < floor_coordinates[0]:
                 floor_coordinates[0] = shape_limits[0][0] - DIAGRAM_LIMITS_PADDING
 
@@ -77,7 +77,7 @@ class VsdxParser:
         return DiagramLimits([floor_coordinates, top_coordinates])
 
     def __load_page_elements(self):
-        for shape in self.page.sub_shapes():
+        for shape in self.page.child_shapes:
             if is_connector(shape):
                 self.__add_connector(shape)
             elif is_boundary(shape):

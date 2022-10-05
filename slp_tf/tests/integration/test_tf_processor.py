@@ -1,7 +1,8 @@
 import pytest
 
-from sl_util.sl_util.file_utils import get_data
-from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError
+from sl_util.sl_util.file_utils import get_data, get_byte_data
+from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError, \
+    LoadingIacFileError
 from slp_tf import TerraformProcessor
 from slp_tf.tests.resources import test_resource_paths
 
@@ -214,3 +215,69 @@ class TestTerraformProcessor:
         # Then raises OtmBuildingError
         with pytest.raises(IacFileNotValidError):
             TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], mapping_file).process()
+
+    # Parse a Simple IaC file
+    def test_process_single_tf_file(self):
+        # GIVEN the single tf file
+        terraform_file = get_data(test_resource_paths.terraform_single_tf)
+
+        # AND the iriusrisk-tf-aws-mapping.yaml file
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+
+        # WHEN the method TerraformProcessor::process is invoked
+        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
+
+        # THEN a file with the single_tf_file-expected-result.otm contents is returned
+        assert validate_and_diff_otm(otm.json(), test_resource_paths.tf_file_expected_result, VALIDATION_EXCLUDED_REGEX) == {}
+
+    # Parse a Multiple IaC file
+    def test_process_multiple_tf_file(self):
+        # GIVEN the multiples tf file
+        terraform_networks = get_data(test_resource_paths.terraform_networks)
+        terraform_resources = get_data(test_resource_paths.terraform_resources)
+
+        # AND the iriusrisk-tf-aws-mapping.yaml file
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+
+        # WHEN the method TerraformProcessor::process is invoked
+        otm = TerraformProcessor(
+            SAMPLE_ID, SAMPLE_NAME, [terraform_networks, terraform_resources], [mapping_file]
+        ).process()
+
+        # THEN a file with the single_tf_file-expected-result.otm contents is returned
+        assert validate_and_diff_otm(otm.json(), test_resource_paths.tf_file_expected_result, VALIDATION_EXCLUDED_REGEX) == {}
+
+    # Parse an empty Array IaC file
+    def test_process_empty_source_file_array(self):
+        # GIVEN an empty array IaC file
+        terraform_empty_iac_array = []
+
+        # AND the iriusrisk-tf-aws-mapping.yaml file
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+
+        # WHEN the method TerraformProcessor::process is invoked
+        # THEN an LoadingIacFileError  is returned
+        with pytest.raises(LoadingIacFileError):
+            TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, terraform_empty_iac_array, [mapping_file]).process()
+
+    @pytest.mark.parametrize('source', [
+        # GIVEN a request with one iac_file keys with no value
+        [get_data(test_resource_paths.terraform_invalid_size)],
+        # GIVEN a request with all iac_file keys with no value
+        [get_data(test_resource_paths.terraform_invalid_size),
+         get_data(test_resource_paths.terraform_invalid_size)],
+        # GIVEN a request with some iac_file keys with no value
+        [get_data(test_resource_paths.terraform_single_tf),
+         get_data(test_resource_paths.terraform_invalid_size)],
+        # GIVEN a request with some iac_file keys with invalid format
+        [get_data(test_resource_paths.terraform_single_tf),
+         get_byte_data(test_resource_paths.terraform_gz)]
+    ])
+    def test_mapping_files_not_provided(self, source):
+        # AND the iriusrisk-tf-aws-mapping.yaml file
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+
+        # WHEN creating OTM project from IaC file
+        # THEN an LoadingIacFileError  is returned
+        with pytest.raises(IacFileNotValidError):
+            TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, source, [mapping_file]).process()
