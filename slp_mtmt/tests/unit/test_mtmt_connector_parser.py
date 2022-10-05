@@ -34,14 +34,14 @@ class TestMTMTConnectorParser:
         assert dataflow.source_node == '5d15323e-3729-4694-87b1-181c90af5045'
         assert dataflow.destination_node == '91882aca-8249-49a7-96f0-164b68411b48'
         dataflow = dataflows[3]
-        assert dataflow.id == 'f894ed9d-d1c3-42b7-9010-34274bf01c84'
-        assert dataflow.source_node == '5d15323e-3729-4694-87b1-181c90af5045'
-        assert dataflow.destination_node == '91882aca-8249-49a7-96f0-164b68411b48'
+        assert dataflow.id == 'd826de3d-1464-4d1f-8105-aa0449a50aec'
+        assert dataflow.source_node == '91882aca-8249-49a7-96f0-164b68411b48'
+        assert dataflow.destination_node == '5d15323e-3729-4694-87b1-181c90af5045'
         dataflow = dataflows[4]
         assert dataflow.id == '9840bcdf-c444-437d-8289-d5468f41b0db'
         assert dataflow.source_node == '6183b7fa-eba5-4bf8-a0af-c3e30d144a10'
         assert dataflow.destination_node == '5d15323e-3729-4694-87b1-181c90af5045'
         dataflow = dataflows[5]
-        assert dataflow.id == 'bf3d1783-c7c8-43dd-bfa4-efafeac1fe14'
-        assert dataflow.source_node == '6183b7fa-eba5-4bf8-a0af-c3e30d144a10'
-        assert dataflow.destination_node == '5d15323e-3729-4694-87b1-181c90af5045'
+        assert dataflow.id == '5861370d-b333-4d4b-9420-95425026e9c9'
+        assert dataflow.source_node == '5d15323e-3729-4694-87b1-181c90af5045'
+        assert dataflow.destination_node == '6183b7fa-eba5-4bf8-a0af-c3e30d144a10'

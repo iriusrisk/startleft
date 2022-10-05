@@ -90,14 +90,14 @@ class TestMTMTLine:
         assert line.target_guid == '91882aca-8249-49a7-96f0-164b68411b48'
 
         line = lines[3]
-        assert line.id == 'f894ed9d-d1c3-42b7-9010-34274bf01c84'
+        assert line.id == 'd826de3d-1464-4d1f-8105-aa0449a50aec'
         assert line.description == 'Response'
         assert line.type == 'Connector'
         assert line.is_dataflow
         assert not line.is_trustzone
         assert line.name == 'File Response'
-        assert line.source_guid == '5d15323e-3729-4694-87b1-181c90af5045'
-        assert line.target_guid == '91882aca-8249-49a7-96f0-164b68411b48'
+        assert line.source_guid == '91882aca-8249-49a7-96f0-164b68411b48'
+        assert line.target_guid == '5d15323e-3729-4694-87b1-181c90af5045'
 
         line = lines[4]
         assert line.id == '9840bcdf-c444-437d-8289-d5468f41b0db'
@@ -110,11 +110,11 @@ class TestMTMTLine:
         assert line.target_guid == '5d15323e-3729-4694-87b1-181c90af5045'
 
         line = lines[5]
-        assert line.id == 'bf3d1783-c7c8-43dd-bfa4-efafeac1fe14'
+        assert line.id == '5861370d-b333-4d4b-9420-95425026e9c9'
         assert line.description == 'Response'
         assert line.type == 'Connector'
         assert line.is_dataflow
         assert not line.is_trustzone
         assert line.name == 'API Response'
-        assert line.source_guid == '6183b7fa-eba5-4bf8-a0af-c3e30d144a10'
-        assert line.target_guid == '5d15323e-3729-4694-87b1-181c90af5045'
+        assert line.source_guid == '5d15323e-3729-4694-87b1-181c90af5045'
+        assert line.target_guid == '6183b7fa-eba5-4bf8-a0af-c3e30d144a10'
