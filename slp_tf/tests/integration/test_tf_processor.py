@@ -235,10 +235,10 @@ class TestTerraformProcessor:
         otm_multiple = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [networks, resources], [mapping_file]).process()
 
         # THEN both generated OTMs are valid and equal
-        assert validate_and_diff(otm_single.json(), otm_multiple.json(), VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm_single, otm_multiple, VALIDATION_EXCLUDED_REGEX) == {}
 
         # AND their content is the expected
-        assert validate_and_diff(otm_single.json(), expected_separated_networks_components, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm_single, expected_separated_networks_components, VALIDATION_EXCLUDED_REGEX) == {}
 
     # Parse an empty Array IaC file
     def test_process_empty_source_file_array(self):

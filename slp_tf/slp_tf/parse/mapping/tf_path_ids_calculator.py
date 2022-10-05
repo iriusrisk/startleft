@@ -1,3 +1,5 @@
+from typing import Optional
+
 from otm.otm.otm import Component
 
 
@@ -20,7 +22,7 @@ class TerraformPathIdsCalculator:
 
         return self.path_ids
 
-    def __calculate_path_id(self, component: Component) -> str | None:
+    def __calculate_path_id(self, component: Component) -> Optional[str]:
         parent_path_id = self.__get_parent_path_id(component)
         if not parent_path_id:
             return None
@@ -31,7 +33,7 @@ class TerraformPathIdsCalculator:
 
         return path_id
 
-    def __get_parent_path_id(self, component: Component) -> str | None:
+    def __get_parent_path_id(self, component: Component) -> Optional[str]:
         if is_trustzone_parent(component):
             return component.parent
 
