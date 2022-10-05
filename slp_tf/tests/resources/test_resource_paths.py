@@ -42,7 +42,7 @@ terraform_mapping_extra_modules = path + '/mapping/terraform_mapping_extra_modul
 terraform_iriusrisk_tf_aws_mapping = path + '/mapping/iriusrisk-tf-aws-mapping.yaml'
 
 # otm
-tf_file_expected_result = path + '/otm/tf-file-expected-result.otm'
+expected_separated_networks_components = path + '/otm/expected_separated_network_components.otm'
 expected_aws_altsource_components = path + '/otm/expected_aws_altsource_components.otm'
 expected_aws_dataflows = path + '/otm/expected_aws_dataflows.otm'
 expected_aws_parent_children_components = path + '/otm/expected_aws_parent_children_components.otm'

@@ -1,5 +1,6 @@
 from deepdiff import DeepDiff
 
+from otm.otm.otm import OTM
 from slp_base.slp_base.otm_file_loader import OtmFileLoader
 from slp_base.slp_base.schema import Schema
 
@@ -13,15 +14,15 @@ internet_id = 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
 internet_name = 'Internet'
 
 
-def validate_and_diff_filename(actual_filename: str, expected_filename: str, excluded_regex):
-    expected = OtmFileLoader().load(expected_filename)
-    actual = OtmFileLoader().load(actual_filename)
-    return validate_and_diff(actual, expected, excluded_regex)
+def __load_otm (otm: dict | str | OTM):
+    if isinstance(otm, dict):
+        return otm
 
+    if isinstance(otm, OTM):
+        return otm.json()
 
-def validate_and_diff_otm(actual: dict, expected_filename: str, excluded_regex):
-    expected = OtmFileLoader().load(expected_filename)
-    return validate_and_diff(actual, expected, excluded_regex)
+    if isinstance(otm, str):
+        return OtmFileLoader().load(otm)
 
 
 def __compare_otm_files(expected: dict,
@@ -36,15 +37,18 @@ def __validate_otm_schema(otm) -> Schema:
     return schema
 
 
-def validate_and_diff(actual: dict, expected: dict, excluded_regex):
+def validate_and_diff(actual: dict | str | OTM, expected: dict | str | OTM, excluded_regex):
     """
     Utils for validating otm has a correct Schema
     and OTM contains expected data
     """
-    schema = __validate_otm_schema(actual)
+    actual_otm = __load_otm(actual)
+    expected_otm = __load_otm(expected)
+
+    schema = __validate_otm_schema(actual_otm)
     if not schema.valid:
         return {'schema_errors': schema.errors}
-    diff = __compare_otm_files(expected, actual, excluded_regex)
+    diff = __compare_otm_files(expected_otm, actual_otm, excluded_regex)
     if diff:
         return diff
     return {}

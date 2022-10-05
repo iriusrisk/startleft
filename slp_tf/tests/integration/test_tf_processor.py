@@ -6,12 +6,12 @@ from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError,
 from slp_tf import TerraformProcessor
 from slp_tf.tests.resources import test_resource_paths
 
-from slp_base.tests.util.otm import validate_and_diff as validate_and_diff_otm
+from slp_base.tests.util.otm import validate_and_diff
 from slp_tf.tests.resources.test_resource_paths import expected_aws_dataflows, expected_aws_altsource_components, \
     expected_run_valid_mappings, expected_aws_parent_children_components, expected_aws_singleton_components, \
     expected_aws_security_groups_components, expected_mapping_skipped_component_without_parent, expected_no_resources, \
     expected_mapping_modules, expected_extra_modules, expected_elb_example, terraform_for_mappings_tests_json, \
-    default_terraform_aws_mapping
+    default_terraform_aws_mapping, expected_separated_networks_components
 
 VALIDATION_EXCLUDED_REGEX = r"root\[\'dataflows'\]\[.+?\]\['id'\]"
 
@@ -34,7 +34,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff_otm(otm.json(), expected_run_valid_mappings, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_run_valid_mappings, VALIDATION_EXCLUDED_REGEX) == {}
 
     def test_aws_dataflows(self):
         # GIVEN a valid TF file with some resources
@@ -47,7 +47,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff_otm(otm.json(), expected_aws_dataflows, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_aws_dataflows, VALIDATION_EXCLUDED_REGEX) == {}
 
     def test_aws_parent_children_components(self):
         # GIVEN a valid TF file with some resources
@@ -60,7 +60,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff_otm(otm.json(), expected_aws_parent_children_components, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_aws_parent_children_components, VALIDATION_EXCLUDED_REGEX) == {}
 
     def test_aws_singleton_components(self):
         # GIVEN a valid TF file with some resources
@@ -73,7 +73,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff_otm(otm.json(), expected_aws_singleton_components, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_aws_singleton_components, VALIDATION_EXCLUDED_REGEX) == {}
 
     def test_aws_altsource_components(self):
         # GIVEN a valid TF file with some resources
@@ -86,7 +86,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff_otm(otm.json(), expected_aws_altsource_components, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_aws_altsource_components, VALIDATION_EXCLUDED_REGEX) == {}
 
     def test_aws_security_groups_components(self):
         # GIVEN a valid TF file with some resources
@@ -99,7 +99,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff_otm(otm.json(), expected_aws_security_groups_components, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_aws_security_groups_components, VALIDATION_EXCLUDED_REGEX) == {}
 
     def test_mapping_component_without_parent(self):
         # GIVEN a valid TF file
@@ -128,7 +128,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff_otm(otm.json(), expected_mapping_skipped_component_without_parent, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_mapping_skipped_component_without_parent, VALIDATION_EXCLUDED_REGEX) == {}
 
     def test_no_resources(self):
         # GIVEN a valid TF file with some resources
@@ -141,7 +141,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff_otm(otm.json(), expected_no_resources, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_no_resources, VALIDATION_EXCLUDED_REGEX) == {}
 
     def test_mapping_modules(self):
         # GIVEN a valid TF file with some TF modules
@@ -154,7 +154,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff_otm(otm.json(), expected_mapping_modules, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_mapping_modules, VALIDATION_EXCLUDED_REGEX) == {}
 
     def test_extra_modules(self):
         # GIVEN a valid TF file with some special TF modules
@@ -167,7 +167,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff_otm(otm.json(), expected_extra_modules, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_extra_modules, VALIDATION_EXCLUDED_REGEX) == {}
 
     def test_elb_example(self):
         # GIVEN a valid TF file with some special TF modules
@@ -180,7 +180,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff_otm(otm.json(), expected_elb_example, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_elb_example, VALIDATION_EXCLUDED_REGEX) == {}
 
     @pytest.mark.parametrize('mapping_file', [None, [None]])
     def test_mapping_files_not_provided(self, mapping_file):
@@ -217,35 +217,28 @@ class TestTerraformProcessor:
             TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], mapping_file).process()
 
     # Parse a Simple IaC file
-    def test_process_single_tf_file(self):
-        # GIVEN the single tf file
-        terraform_file = get_data(test_resource_paths.terraform_single_tf)
+    def test_expected_separated_networks_components(self):
+        # GIVEN the single tf file with all the resources
+        single_file = get_data(test_resource_paths.terraform_single_tf)
+
+        # AND the same resources separated in two files
+        networks = get_data(test_resource_paths.terraform_networks)
+        resources = get_data(test_resource_paths.terraform_resources)
 
         # AND the iriusrisk-tf-aws-mapping.yaml file
         mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
-        # WHEN the method TerraformProcessor::process is invoked
-        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
+        # WHEN the method TerraformProcessor::process is invoked for the single file
+        otm_single = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [single_file], [mapping_file]).process()
 
-        # THEN a file with the single_tf_file-expected-result.otm contents is returned
-        assert validate_and_diff_otm(otm.json(), test_resource_paths.tf_file_expected_result, VALIDATION_EXCLUDED_REGEX) == {}
+        # AND the method TerraformProcessor::process is invoked for the single file
+        otm_multiple = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [networks, resources], [mapping_file]).process()
 
-    # Parse a Multiple IaC file
-    def test_process_multiple_tf_file(self):
-        # GIVEN the multiples tf file
-        terraform_networks = get_data(test_resource_paths.terraform_networks)
-        terraform_resources = get_data(test_resource_paths.terraform_resources)
+        # THEN both generated OTMs are valid and equal
+        assert validate_and_diff(otm_single.json(), otm_multiple.json(), VALIDATION_EXCLUDED_REGEX) == {}
 
-        # AND the iriusrisk-tf-aws-mapping.yaml file
-        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
-
-        # WHEN the method TerraformProcessor::process is invoked
-        otm = TerraformProcessor(
-            SAMPLE_ID, SAMPLE_NAME, [terraform_networks, terraform_resources], [mapping_file]
-        ).process()
-
-        # THEN a file with the single_tf_file-expected-result.otm contents is returned
-        assert validate_and_diff_otm(otm.json(), test_resource_paths.tf_file_expected_result, VALIDATION_EXCLUDED_REGEX) == {}
+        # AND their content is the expected
+        assert validate_and_diff(otm_single.json(), expected_separated_networks_components, VALIDATION_EXCLUDED_REGEX) == {}
 
     # Parse an empty Array IaC file
     def test_process_empty_source_file_array(self):

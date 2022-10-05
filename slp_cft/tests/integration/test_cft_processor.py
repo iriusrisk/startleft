@@ -1,7 +1,7 @@
 import pytest
 
 from sl_util.sl_util.file_utils import get_data
-from slp_base.tests.util.otm import validate_and_diff_otm
+from slp_base.tests.util.otm import validate_and_diff
 from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError, \
     LoadingIacFileError
 from slp_cft import CloudformationProcessor
@@ -314,7 +314,7 @@ class TestCloudformationProcessor:
                                       [mapping_file]).process()
 
         # THEN a file with the expected otm is returned
-        assert validate_and_diff_otm(otm.json(), OTM_EXPECTED_RESULT, excluded_regex) == {}
+        assert validate_and_diff(otm, OTM_EXPECTED_RESULT, excluded_regex) == {}
 
     def test_run_valid_multiple_iac_mapping_files(self):
         # GIVEN the valid CFT file
@@ -327,7 +327,7 @@ class TestCloudformationProcessor:
         otm = CloudformationProcessor('multiple-files', 'multiple-files', [networks_cft_file, resources_cft_file],
                                       [mapping_file]).process()
         # THEN a file with the expected otm is returned
-        assert validate_and_diff_otm(otm.json(), OTM_EXPECTED_RESULT, excluded_regex) == {}
+        assert validate_and_diff(otm, OTM_EXPECTED_RESULT, excluded_regex) == {}
 
     def test_run_empty_multiple_iac_files(self):
         # GIVEN a request without any iac_file key
