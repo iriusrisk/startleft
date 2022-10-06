@@ -21,11 +21,18 @@ class MTMTTrustzoneParser:
 
     def __create_trustzone(self, border: MTMBorder) -> Trustzone:
         mtmt_type = self.__calculate_otm_type(border.name)
+        trustzone_id = self.calculate_otm_id(border.name)
         if mtmt_type is not None:
-            return Trustzone(id=border.id,
+            return Trustzone(id=trustzone_id,
                              name=border.name,
                              properties=border.properties)
 
     def __calculate_otm_type(self, label: str) -> str:
-        return self.mapping.mapping_trustzones[label]['type'] if label in self.mapping.mapping_trustzones \
+        return self.__get_label_value(label, 'type')
+
+    def calculate_otm_id(self, label: str) -> str:
+        return self.__get_label_value(label, 'id')
+
+    def __get_label_value(self, label, key):
+        return self.mapping.mapping_trustzones[label][key] if label in self.mapping.mapping_trustzones \
             else None
