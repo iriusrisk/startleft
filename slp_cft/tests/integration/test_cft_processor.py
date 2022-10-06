@@ -351,3 +351,19 @@ class TestCloudformationProcessor:
         assert otm.components[0].parent_type == 'trustZone'
         assert len(otm.components) == 1
         assert otm.components[0].parent == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
+
+    def test_multiple_stack_plus_s3_ec2(self):
+        # GIVEN the file with multiple Subnet AWS::EC2::Instance different configurations
+        cloudformation_file = get_data(test_resource_paths.multiple_stack_plus_s3_ec2)
+        # AND a valid iac mappings file
+        mapping_file = [get_data(SAMPLE_VALID_MAPPING_FILE)]
+
+        # WHEN processing
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], mapping_file).process()
+
+        assert len(otm.components) == 9
+        publicSubnet1Id = [component for component in otm.components if component.name == 'PublicSubnet1'][0].id
+        assert publicSubnet1Id
+        ec2WithWrongParent = [component for component in otm.components if
+                              component.type == 'ec2' and component.parent != publicSubnet1Id]
+        assert len(ec2WithWrongParent) == 0

@@ -2,14 +2,16 @@ from otm.otm.otm import Component
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
 from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMapping
+from slp_mtmt.slp_mtmt.parse.mtmt_trustzone_parser import MTMTTrustzoneParser
 from slp_mtmt.slp_mtmt.util.border_parent_calculator import BorderParentCalculator
 
 
 class MTMTComponentParser:
 
-    def __init__(self, source: MTMT, mapping: MTMTMapping):
+    def __init__(self, source: MTMT, mapping: MTMTMapping, trustzone_parser: MTMTTrustzoneParser):
         self.source = source
         self.mapping = mapping
+        self.trustzoneParser = trustzone_parser
 
     def parse(self):
         components = []
@@ -42,5 +44,5 @@ class MTMTComponentParser:
         parent_calculator = BorderParentCalculator()
         for candidate in self.source.borders:
             if parent_calculator.is_parent(candidate, border):
-                return candidate.id
+                return self.trustzoneParser.calculate_otm_id(candidate.name)
         return ""
