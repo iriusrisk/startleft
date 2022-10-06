@@ -44,11 +44,13 @@ components:
 ## Custom mapping file
 The aim of this mapping file is to map the Visio generic shapes from templates such circles, rectangles, etc.
 
-Because a generic shape has no meaning from the thread modeling point of view, it's mandatory laleling them on the 
+Because a generic shape has no meaning from the thread modeling point of view, it's mandatory laleling them on the
 custom-mapping file in order to map to OTM.
 
+This custom file prevails over default one, meaning that if any of the mappings appears more than once,
+the one from the custom mapping file will be use, instead of default mapping file one.
 
-e.g: 
+e.g:
 ```commandline
 components:
   - label:  My DynamoDB in a circle
