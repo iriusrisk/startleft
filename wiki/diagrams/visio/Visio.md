@@ -48,7 +48,7 @@ Because a generic shape has no meaning from the thread modeling point of view, i
 custom-mapping file in order to map to OTM.
 
 This custom file prevails over default one, meaning that if any of the mappings appears more than once,
-the one from the custom mapping file will be use, instead of default mapping file one.
+the one from the custom mapping file will be used, instead of the one in the default mapping file.
 
 e.g:
 ```commandline
