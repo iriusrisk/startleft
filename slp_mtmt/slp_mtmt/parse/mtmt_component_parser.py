@@ -49,5 +49,5 @@ class MTMTComponentParser:
         parent_calculator = BorderParentCalculator()
         for candidate in self.source.borders:
             if parent_calculator.is_parent(candidate, border):
-                return self.trustzoneParser.calculate_otm_id(candidate.name)
+                return self.trustzoneParser.calculate_otm_id(candidate)
         return ""

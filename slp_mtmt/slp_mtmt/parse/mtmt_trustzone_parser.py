@@ -14,24 +14,24 @@ class MTMTTrustzoneParser:
         trustzones = []
         for mtmt_border in self.source.borders:
             if mtmt_border.is_trustzone:
-                mtmt_type = self.__calculate_otm_type(mtmt_border.name)
-                if mtmt_type is not None:
-                    trustzones.append(self.__create_trustzone(mtmt_border))
+                trustzone = self.create_trustzone(mtmt_border)
+                if trustzone is not None:
+                    trustzones.append(trustzone)
         return trustzones
 
-    def __create_trustzone(self, border: MTMBorder) -> Trustzone:
-        mtmt_type = self.__calculate_otm_type(border.name)
-        trustzone_id = self.calculate_otm_id(border.name)
+    def create_trustzone(self, border: MTMBorder) -> Trustzone:
+        mtmt_type = self.__calculate_otm_type(border)
         if mtmt_type is not None:
+            trustzone_id = self.calculate_otm_id(border)
             return Trustzone(id=trustzone_id,
-                             name=border.name,
-                             properties=border.properties)
+                                 name=border.name,
+                                 properties=border.properties)
 
-    def __calculate_otm_type(self, label: str) -> str:
-        return self.__get_label_value(label, 'type')
+    def __calculate_otm_type(self, border: MTMBorder) -> str:
+        return self.__get_label_value(border.stencil_name, 'type')
 
-    def calculate_otm_id(self, label: str) -> str:
-        return self.__get_label_value(label, 'id')
+    def calculate_otm_id(self, border: MTMBorder) -> str:
+        return self.__get_label_value(border.stencil_name, 'id')
 
     def __get_label_value(self, label, key):
         return self.mapping.mapping_trustzones[label][key] if label in self.mapping.mapping_trustzones \

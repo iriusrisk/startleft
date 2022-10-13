@@ -1,23 +1,28 @@
 trustzones:
-  - label:  Internet
+  - label: Remote User Zone
     type: Internet
     id: f0ba7722-39b6-4c81-8290-a30a248bb8d9
 
-  - label: Private Secured Cloud
+  - label: Azure Trust Boundary
     type: Private Secured Cloud
     id: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
 
 components:
-  - label:  Mobile Client
-    type:   android-device-client
+  - label: Mobile Client
+    key: Mobile Client Technologies
+    values:
+      - value: Android
+        type: android-device-client
+      - value: iOS
+        type: ios-device-client
 
-  - label:  Public API v2
-    type:   rest-full-web-service
+  - label:  Web API
+    type:   web-service
 
-  - label:  Accounting PostgreSQL
-    type:   CD-MICROSOFT-AZURE-DB-POSTGRESQL
+  - label: Azure Database for PostgreSQL
+    type: CD-MICROSOFT-AZURE-DB-POSTGRESQL
 
-  - label:  Azure File Storage
+  - label:  Azure Storage
     type:   azure-storage
 
 dataflows: []

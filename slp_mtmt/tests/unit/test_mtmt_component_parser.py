@@ -78,7 +78,7 @@ class TestMTMTComponentParser:
         mtmt.load()
 
         # AND the default default_mtmt_mapping_file
-        with open(test_resource_paths.mtmt_default_mapping) as file:
+        with open(test_resource_paths.mapping_mtmt_mvp) as file:
             mapping_file_data = file.read()
 
         # WHEN the load method of the MtmtMappingFileLoader is called

@@ -5,7 +5,7 @@ from slp_mtmt.tests.resources import test_resource_paths
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
 SAMPLE_VALID_MTMT_FILE = test_resource_paths.model_mtmt_mvp
-SAMPLE_VALID_MAPPING_FILE = test_resource_paths.mtmt_default_mapping
+SAMPLE_VALID_MAPPING_FILE = test_resource_paths.mapping_mtmt_mvp
 
 
 class TestMtmtProcessor:
