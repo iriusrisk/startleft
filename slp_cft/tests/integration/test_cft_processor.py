@@ -1,9 +1,9 @@
 import pytest
 
 from sl_util.sl_util.file_utils import get_data
-from slp_base.tests.util.otm import validate_and_diff_otm
 from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError, \
     LoadingIacFileError
+from slp_base.tests.util.otm import validate_and_diff_otm
 from slp_cft import CloudformationProcessor
 from slp_cft.tests.resources import test_resource_paths
 from slp_cft.tests.utility import excluded_regex
@@ -355,3 +355,34 @@ class TestCloudformationProcessor:
         # THEN an RequestValidationError is raised
         with pytest.raises(LoadingIacFileError):
             CloudformationProcessor('multiple-files', 'multiple-files', [], mapping_file).process()
+
+    @pytest.mark.parametrize('source', [
+        # GIVEN a standalone SecurityGroupEgress configuration
+        [get_data(test_resource_paths.standalone_securitygroupegress_configuration)],
+        # GIVEN a standalone SecurityGroupIngress configuration
+        [get_data(test_resource_paths.standalone_securitygroupingress_configuration)]])
+    def test_security_group_configuration(self, source):
+        # AND a CFT mapping file
+        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE)
+        # WHEN the method CloudformationProcessor::process is invoked
+        otm = CloudformationProcessor('id', 'name', source, [mapping_file]).process()
+        # THEN otm has a generic-client in Internet Trustzone
+        assert otm.components[0].parent_type == 'trustZone'
+        assert len(otm.components) == 1
+        assert otm.components[0].parent == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
+
+    def test_multiple_stack_plus_s3_ec2(self):
+        # GIVEN the file with multiple Subnet AWS::EC2::Instance different configurations
+        cloudformation_file = get_data(test_resource_paths.multiple_stack_plus_s3_ec2)
+        # AND a valid iac mappings file
+        mapping_file = [get_data(SAMPLE_VALID_MAPPING_FILE)]
+
+        # WHEN processing
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], mapping_file).process()
+
+        assert len(otm.components) == 9
+        publicSubnet1Id = [component for component in otm.components if component.name == 'PublicSubnet1'][0].id
+        assert publicSubnet1Id
+        ec2WithWrongParent = [component for component in otm.components if
+                              component.type == 'ec2' and component.parent != publicSubnet1Id]
+        assert len(ec2WithWrongParent) == 0
