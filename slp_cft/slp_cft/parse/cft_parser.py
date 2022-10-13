@@ -7,8 +7,15 @@ from slp_base.slp_base.provider_parser import ProviderParser
 from slp_base.slp_base.provider_type import IacType
 from slp_cft.slp_cft.parse.mapping.cft_sourcemodel import CloudformationSourceModel
 from slp_cft.slp_cft.parse.mapping.cft_transformer import CloudformationTransformer
+from slp_cft.slp_cft.parse.mapping.mappers.cft_base_mapper import CloudformationBaseMapper
 
 logger = logging.getLogger(__name__)
+
+
+def set_default_trustzone_for_unknown_component_parent(otm: OTM):
+    for component in otm.components:
+        if component.parent_type == 'trustZone' and component.parent not in [trustzone.id for trustzone in otm.trustzones]:
+            component.parent = CloudformationBaseMapper.DEFAULT_TRUSTZONE
 
 
 class CloudformationParser(ProviderParser):
@@ -29,6 +36,7 @@ class CloudformationParser(ProviderParser):
     def build_otm(self) -> OTM:
         try:
             self.transformer.run(self.mapping)
+            set_default_trustzone_for_unknown_component_parent(self.otm)
         except Exception as e:
             logger.error(f'{e}')
             detail = e.__class__.__name__
