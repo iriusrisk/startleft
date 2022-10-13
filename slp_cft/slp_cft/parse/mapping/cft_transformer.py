@@ -1,6 +1,7 @@
 import logging
 import uuid
 
+from slp_cft.slp_cft.parse.mapping.mappers.cft_base_mapper import CloudformationBaseMapper
 from slp_cft.slp_cft.parse.mapping.mappers.cft_component_mapper import CloudformationComponentMapper
 from slp_cft.slp_cft.parse.mapping.mappers.cft_dataflow_mapper import CloudformationDataflowMapper
 from slp_cft.slp_cft.parse.mapping.mappers.cft_trustzone_mapper import CloudformationTrustzoneMapper
@@ -82,15 +83,22 @@ class CloudformationTransformer:
 
         for final_component in results:
             parent_component = next(filter(lambda x: x["id"] == final_component['parent'], results), None)
-            if parent_component:
-                final_component["parent_type"] = "component"
-            else:
-                final_component["parent_type"] = "trustZone"
+
+            self.set_parent(final_component, parent_component)
 
             self.threat_model.add_component(**final_component)
             logger.debug(f"Added component: [{final_component['name']}][{final_component['id']}]"
                          f"{final_component['tags']}" if 'tags' in final_component else "")
         logger.info(f"Added {results.__len__()} components successfully")
+
+    def set_parent(self, final_component, parent_component):
+        if parent_component:
+            final_component["parent_type"] = "component"
+        else:
+            final_component["parent_type"] = "trustZone"
+
+            if final_component["parent"] not in [trustzone["id"] for trustzone in self.iac_mapping["trustzones"]]:
+                final_component["parent"] = CloudformationBaseMapper.DEFAULT_TRUSTZONE
 
     def __find_components(self):
         logger.debug("Finding components")
