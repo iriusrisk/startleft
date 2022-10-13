@@ -1,0 +1,109 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "project-name",
+    "id": "project-id"
+  },
+  "representations": [
+    {
+      "name": "Visio",
+      "id": "Visio",
+      "type": "diagram",
+      "size": {
+        "width": 1000,
+        "height": 1000
+      }
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "13",
+      "name": "Bucket",
+      "type": "s3",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "19",
+      "name": "Bucket",
+      "type": "s3",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "31",
+      "name": "Amazon MQ",
+      "type": "CD-MQ",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "46",
+      "name": "Amazon MQ",
+      "type": "CD-MQ",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "86",
+      "name": "Database",
+      "type": "rds",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "99",
+      "name": "Amazon MQ",
+      "type": "CD-MQ",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    }
+  ],
+  "dataflows": [
+    {
+      "id": "94",
+      "name": "d340c46b-dd38-4776-b710-0de876202d91",
+      "source": "31",
+      "destination": "19"
+    },
+    {
+      "id": "114",
+      "name": "c88b71c5-8414-4d73-bcc9-93c2c93453e0",
+      "source": "46",
+      "destination": "19"
+    },
+    {
+      "id": "115",
+      "name": "be73041c-99f8-4fd2-80de-a09d5525fbb9",
+      "source": "99",
+      "destination": "19"
+    },
+    {
+      "id": "116",
+      "name": "49d40f6e-1cfc-4065-a72d-ed54d94ca214",
+      "source": "99",
+      "destination": "86"
+    },
+    {
+      "id": "117",
+      "name": "2c8eb200-5cdf-4ab0-9c91-43240c52b0f9",
+      "source": "46",
+      "destination": "13"
+    }
+  ]
+}

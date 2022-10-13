@@ -5,12 +5,13 @@ import responses
 from fastapi.testclient import TestClient
 from pytest import mark
 
-from startleft.api import fastapi_server
-from startleft.api.controllers.diagram import diag_create_otm_controller
-from startleft.api.errors import DiagramFileNotValidError, MappingFileNotValidError, LoadingMappingFileError, \
+from slp_base.slp_base.errors import DiagramFileNotValidError, MappingFileNotValidError, LoadingMappingFileError, \
     OtmResultError, OtmBuildingError, LoadingDiagramFileError
+from startleft.startleft.api import fastapi_server
+from startleft.startleft.api.controllers.diagram import diag_create_otm_controller
 from tests.resources import test_resource_paths
-from tests.resources.test_resource_paths import visio_aws_with_tz_and_vpc, default_visio_mapping, custom_vpc_mapping
+from tests.resources.test_resource_paths import visio_aws_with_tz_and_vpc, default_visio_mapping, \
+    custom_vpc_mapping
 
 IRIUSRISK_URL = ''
 
@@ -207,7 +208,7 @@ class TestOtmControllerDiagramVisio:
         assert otm['dataflows'][3]['destination'] == '41'
 
     @responses.activate
-    @patch('startleft.validators.visio_validator.VisioValidator.validate')
+    @patch('slp_visio.slp_visio.validate.visio_validator.VisioValidator.validate')
     def test_response_on_validating_diagram_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -237,7 +238,7 @@ class TestOtmControllerDiagramVisio:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg 1'
 
     @responses.activate
-    @patch('startleft.diagram.external_diagram_to_otm.ExternalDiagramToOtm.run')
+    @patch('slp_visio.slp_visio.parse.visio_parser.VisioParser.build_otm')
     def test_response_on_loading_diagram_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -267,7 +268,7 @@ class TestOtmControllerDiagramVisio:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg 1'
 
     @responses.activate
-    @patch('startleft.validators.mapping_validator.MappingValidator.validate')
+    @patch('slp_visio.slp_visio.validate.visio_mapping_file_validator.VisioMappingFileValidator.validate')
     def test_response_on_validating_mapping_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -298,7 +299,7 @@ class TestOtmControllerDiagramVisio:
         assert body_response['errors'][0]['errorMessage'] == 'schema errors messages'
 
     @responses.activate
-    @patch('startleft.mapping.mapping_file_loader.MappingFileLoader.load')
+    @patch('slp_base.slp_base.mapping_file_loader.MappingFileLoader.load')
     def test_response_on_loading_mapping_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -329,7 +330,7 @@ class TestOtmControllerDiagramVisio:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @responses.activate
-    @patch('startleft.otm.otm_validator.OtmValidator.validate')
+    @patch('slp_base.slp_base.otm_validator.OtmValidator.validate')
     def test_response_on_otm_result_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -359,7 +360,7 @@ class TestOtmControllerDiagramVisio:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @responses.activate
-    @patch('startleft.diagram.external_diagram_to_otm.ExternalDiagramToOtm.run')
+    @patch('slp_visio.slp_visio.parse.visio_parser.VisioParser.build_otm')
     def test_response_on_otm_building_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'

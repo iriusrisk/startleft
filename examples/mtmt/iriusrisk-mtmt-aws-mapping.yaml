@@ -1,0 +1,10 @@
+trustzones:
+  - label:  ""
+    type:   ""
+    id:     ""
+
+components:
+  - label:  ""
+    type:   ""
+
+dataflows: []

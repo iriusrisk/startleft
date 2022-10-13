@@ -6,11 +6,11 @@ import responses
 from fastapi.testclient import TestClient
 from pytest import mark
 
-from startleft.api import fastapi_server
-from startleft.api.controllers.iac import iac_create_otm_controller
-from startleft.api.errors import IacFileNotValidError, LoadingIacFileError, MappingFileNotValidError, \
+from sl_util.sl_util import file_utils as FileUtils
+from slp_base import IacFileNotValidError, LoadingIacFileError, MappingFileNotValidError, \
     LoadingMappingFileError, OtmResultError, OtmBuildingError
-from startleft.utils.file_utils import FileUtils
+from startleft.startleft.api import fastapi_server
+from startleft.startleft.api.controllers.iac import iac_create_otm_controller
 from tests.resources.test_resource_paths import default_terraform_mapping, \
     terraform_aws_singleton_components_unix_line_breaks, terraform_malformed_mapping_wrong_id, terraform_gz, \
     visio_aws_shapes, invalid_tf, terraform_aws_simple_components
@@ -100,7 +100,7 @@ class TestOtmControllerIaCTerraform:
         assert '"components": ' in response.text
 
     @responses.activate
-    @patch('startleft.validators.iac_validator.IacValidator.validate')
+    @patch('slp_tf.slp_tf.validate.tf_validator.TerraformValidator.validate')
     def test_response_on_validating_iac_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -130,7 +130,7 @@ class TestOtmControllerIaCTerraform:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg 1'
 
     @responses.activate
-    @patch('startleft.iac.iac_to_otm.IacToOtm.load_source_data')
+    @patch('slp_tf.slp_tf.tf_processor.TerraformProcessor.process')
     def test_response_on_loading_iac_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -160,7 +160,7 @@ class TestOtmControllerIaCTerraform:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg 1'
 
     @responses.activate
-    @patch('startleft.validators.mapping_validator.MappingValidator.validate')
+    @patch('slp_tf.slp_tf.validate.tf_mapping_file_validator.TerraformMappingFileValidator.validate')
     def test_response_on_validating_mapping_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -191,7 +191,7 @@ class TestOtmControllerIaCTerraform:
         assert body_response['errors'][0]['errorMessage'] == 'schema errors messages'
 
     @responses.activate
-    @patch('startleft.mapping.mapping_file_loader.MappingFileLoader.load')
+    @patch('slp_tf.slp_tf.load.tf_mapping_file_loader.TerraformMappingFileLoader.load')
     def test_response_on_loading_mapping_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -222,7 +222,7 @@ class TestOtmControllerIaCTerraform:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @responses.activate
-    @patch('startleft.otm.otm_validator.OtmValidator.validate')
+    @patch('slp_base.slp_base.otm_validator.OtmValidator.validate')
     def test_response_on_otm_result_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -252,7 +252,7 @@ class TestOtmControllerIaCTerraform:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @responses.activate
-    @patch('startleft.iac.iac_to_otm.IacToOtm.run')
+    @patch('slp_tf.slp_tf.tf_processor.TerraformProcessor.process')
     def test_response_on_otm_building_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'

@@ -1,10 +1,10 @@
 from click.testing import CliRunner
 from pytest import mark
 
-from startleft.api.errors import MappingFileNotValidError, LoadingDiagramFileError
-from startleft.cli import parse_any
+from slp_base.slp_base.errors import MappingFileNotValidError, DiagramFileNotValidError
+from slp_base.tests.util.otm import validate_and_diff as validate_and_diff_otm
+from startleft.startleft.cli.cli import parse_any
 from tests.resources import test_resource_paths
-from tests.util.otm import validate_and_diff as validate_and_diff_otm
 
 # mappings
 VISIO_DEFAULT_VALID_MAPPING_FILENAME = test_resource_paths.default_visio_mapping
@@ -152,8 +152,8 @@ class TestCliParseDiagram:
             # When parsing
             result = runner.invoke(parse_any, args)
 
-            # Then a LoadingDiagramFileError is returned
-            assert isinstance(result.exception, LoadingDiagramFileError)
+            # Then a DiagramFileNotValidError is returned
+            assert isinstance(result.exception, DiagramFileNotValidError)
 
     def test_parse_diagram_with_invalid_default_mapping(self):
         """
