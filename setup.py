@@ -34,8 +34,8 @@ setup(
             "pytest-runner==6.0.0",
         ],
         "test": [
-            'tox==3.25.1',
-            'pytest==7.1.2',
+            'tox==3.26.0',
+            'pytest==7.1.3',
             'responses==0.21.0',
             'deepdiff==5.8.1'
         ]
