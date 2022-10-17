@@ -1,0 +1,59 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "name",
+    "id": "id"
+  },
+  "representations": [
+    {
+      "name": "Terraform",
+      "id": "Terraform",
+      "type": "code"
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-foo",
+      "name": "foo",
+      "type": "vpc",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_vpc"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-foo.aws_subnet-baz",
+      "name": "baz",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-foo"
+      },
+      "tags": [
+        "aws_subnet"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-foo.aws_subnet-bar",
+      "name": "bar",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-foo"
+      },
+      "tags": [
+        "aws_subnet"
+      ]
+    }
+  ],
+  "dataflows": []
+}
