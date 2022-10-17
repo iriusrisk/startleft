@@ -191,7 +191,7 @@ class TestMTMTMappingFileLoader:
         mtmt_mapping = get_mtmt_mapping(test_resource_paths.mtmt_default_mapping)
 
         # THEN we check the components and trustzones are correctly mapped
-        assert len(mtmt_mapping.mapping_trustzones) == 5
+        assert len(mtmt_mapping.mapping_trustzones) == 6
         assert len(mtmt_mapping.mapping_components) == 56
         assert len(mtmt_mapping.mapping_dataflows) == 0
         assert mtmt_mapping.mapping_trustzones.get('Internet Boundary').get(
@@ -204,6 +204,7 @@ class TestMTMTMappingFileLoader:
             'id') == '6376d53e-6461-412b-8e04-7b3fe2b397de'
         assert mtmt_mapping.mapping_trustzones.get('Sandbox Trust Boundary Border').get(
             'id') == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
+        assert mtmt_mapping.mapping_trustzones.get('default').get('id') == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
         assert mtmt_mapping.mapping_components.get('ADFS').get('type') == 'active-directory'
         mobile_client = mtmt_mapping.mapping_components.get('Mobile Client')
         assert mobile_client['key'] == 'Mobile Client Technologies'

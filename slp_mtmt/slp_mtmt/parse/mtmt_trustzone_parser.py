@@ -1,7 +1,13 @@
+import logging
+
 from otm.otm.otm import Trustzone
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
 from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMapping
+
+DEFAULT_LABEL = 'default'
+
+logger = logging.getLogger(__name__)
 
 
 class MTMTTrustzoneParser:
@@ -24,8 +30,8 @@ class MTMTTrustzoneParser:
         if mtmt_type is not None:
             trustzone_id = self.calculate_otm_id(border)
             return Trustzone(id=trustzone_id,
-                                 name=border.name,
-                                 properties=border.properties)
+                             name=border.name,
+                             properties=border.properties)
 
     def __calculate_otm_type(self, border: MTMBorder) -> str:
         return self.__get_label_value(border.stencil_name, 'type')
@@ -34,5 +40,13 @@ class MTMTTrustzoneParser:
         return self.__get_label_value(border.stencil_name, 'id')
 
     def __get_label_value(self, label, key):
-        return self.mapping.mapping_trustzones[label][key] if label in self.mapping.mapping_trustzones \
-            else None
+        try:
+            if label in self.mapping.mapping_trustzones:
+                return self.mapping.mapping_trustzones[label][key]
+            else:
+                return self.mapping.mapping_trustzones[DEFAULT_LABEL][key]
+        except KeyError:
+            logger.warning(f'Mapping file error. The trustzone "{label}" is not present or does not has '
+                           f' "{key}" and any default trustzone is present')
+
+        return None

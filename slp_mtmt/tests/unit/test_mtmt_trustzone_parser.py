@@ -55,3 +55,21 @@ class TestMTMTTrustzoneParser:
         trustzone = trustzones[1]
         assert trustzone.id == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
         assert trustzone.name == 'The CorpNet Trust Boundary'
+
+
+    def test_parse_unmapped_trustzones(self):
+        # GIVEN the Mtmt data with one trustzone
+        mtmt = get_mtmt_from_file(test_resource_paths.mtmt_unmapped_trustzone)
+
+        # AND the mapping data without the mapping of the trustzone
+        mtmt_mapping = get_mapping_from_file(test_resource_paths.mtmt_default_mapping)
+
+        # THEN a MtmtMapping is returned with the default trustzone
+        parser = MTMTTrustzoneParser(mtmt, mtmt_mapping)
+        trustzones = parser.parse()
+
+        assert len(trustzones) == 1
+        trustzone = trustzones[0]
+        assert trustzone.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+        assert trustzone.name == 'Internet Explorer Boundaries'
+
