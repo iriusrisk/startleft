@@ -6,8 +6,8 @@
   },
   "representations": [
     {
-      "name": "Terraform",
-      "id": "Terraform",
+      "name": "CloudFormation",
+      "id": "CloudFormation",
       "type": "code"
     }
   ],
