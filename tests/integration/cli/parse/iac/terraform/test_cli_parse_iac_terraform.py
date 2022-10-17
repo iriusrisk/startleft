@@ -17,7 +17,7 @@ TERRAFORM_UNKNOWN_RESOURCE = test_resource_paths.terraform_unknown_resource
 TERRAFORM_UNKNOWN_MODULE = test_resource_paths.terraform_unknown_module
 # otm
 OTM_AWS_SIMPLE_COMPONENTS_EXPECTED = test_resource_paths.terraform_aws_simple_components_otm_expected
-OTM_EMPTY_FILE = test_resource_paths.otm_empty_file_example
+OTM_EMPTY_FILE = test_resource_paths.otm_empty_file_terraform_example
 
 
 class TestCliParseIaCTerraform:

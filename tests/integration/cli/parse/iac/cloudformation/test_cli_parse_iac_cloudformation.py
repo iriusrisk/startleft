@@ -16,7 +16,7 @@ CLOUDFORMATION_UNKNOWN_RESOURCE = test_resource_paths.cloudformation_unknown_res
 CLOUDFORMATION_INVALID_FILE_SIZE = test_resource_paths.cloudformation_invalid_size
 # otm
 OTM_CFT_FOR_MAPPING_TESTS = test_resource_paths.cloudformation_for_mappings_tests_json_otm_expected
-OTM_EMPTY_FILE = test_resource_paths.otm_empty_file_example
+OTM_EMPTY_FILE = test_resource_paths.otm_empty_file_cloudformation_example
 
 
 class TestCliParseIaCCloudformation:
@@ -53,7 +53,7 @@ class TestCliParseIaCCloudformation:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            validate_and_diff_otm(output_file_name, OTM_CFT_FOR_MAPPING_TESTS, excluded_regex)
+            assert validate_and_diff_otm(output_file_name, OTM_CFT_FOR_MAPPING_TESTS, excluded_regex) == {}
 
     def test_parse_cloudformation_unknown_resources(self):
         """
@@ -84,7 +84,7 @@ class TestCliParseIaCCloudformation:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            validate_and_diff_otm(output_file_name, OTM_EMPTY_FILE, excluded_regex)
+            assert validate_and_diff_otm(output_file_name, OTM_EMPTY_FILE, excluded_regex) == {}
 
     @mark.parametrize('filename', [CLOUDFORMATION_INVALID_FILE_SIZE])
     def test_parse_cloudformation_invalid_file(self, filename):
