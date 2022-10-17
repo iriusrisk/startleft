@@ -135,8 +135,15 @@ class CloudformationComponentMapper(CloudformationBaseMapper):
                         component_tags, singleton_multiple_tags = self.__get_component_tags(source_model,
                                                                                             alt_source_object,
                                                                                             mapping_tags)
-                        component = {"id": str(uuid.uuid4()), "name": component_name,
-                                     "type": mapping_lookup["type"], "parent": self.id_map[self.DEFAULT_TRUSTZONE]}
+
+                        alt_source_object["altsource"] = True
+
+                        component = {"id": str(uuid.uuid4()),
+                                     "name": component_name,
+                                     "type": mapping_lookup["type"],
+                                     "parent": self.id_map[self.DEFAULT_TRUSTZONE],
+                                     "source": alt_source_object
+                                     }
 
                         component = self.set_optional_parameters_to_resource(component, mapping_tags,
                                                                              component_tags,
