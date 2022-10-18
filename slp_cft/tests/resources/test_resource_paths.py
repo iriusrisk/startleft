@@ -14,6 +14,8 @@ cloudformation_for_security_groups_mapping = path + \
                                              '/mapping/cloudformation_for_security_group_tests_mapping_definitions.yaml'
 cloudformation_malformed_mapping_wrong_id = path + '/mapping/cloudformation_malformed_mapping_wrong_id.yaml'
 cloudformation_mapping_iriusrisk = path + '/mapping/iriusrisk-cft-mapping.yaml'
+cloudformation_mapping_without_ref = path + '/mapping/iriusrisk-cft-mapping_without_ref.yaml'
+
 
 # cft
 cloudformation_for_mappings_tests_json = path + '/cft/cloudformation_for_mappings_tests.json'
@@ -28,3 +30,10 @@ cloudformation_all_functions = path + '/cft/cloudformation_all_functions.json'
 cloudformation_single_file = path + '/cft/cloudformation_single_file.json'
 cloudformation_networks_file = path + '/cft/cloudformation_networks_file.json'
 cloudformation_resources_file = path + '/cft/cloudformation_resources_file.json'
+multiple_stack_plus_s3_ec2 = path + '/cft/multiple_stack_plus_s3_ec2.yaml'
+cloudformation_with_ref_function_and_default_property_json = path + '/cft/cloudformation_with_ref_and_default.json'
+cloudformation_with_ref_function_and_without_default_property_json = \
+    path + '/cft/cloudformation_with_ref_and_without_default.json'
+cloudformation_with_ref_function_and_default_property_yaml = path + '/cft/cloudformation_with_ref_and_default.yaml'
+cloudformation_with_ref_function_and_without_parameters = path + \
+                                                          '/cft/cloudformation_with_ref_and_without_parameters.json'
