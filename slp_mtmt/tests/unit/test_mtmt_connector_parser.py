@@ -1,20 +1,37 @@
+from sl_util.sl_util.file_utils import get_byte_data
 from slp_mtmt.slp_mtmt.mtmt_loader import MTMTLoader
+from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMappingFileLoader
+from slp_mtmt.slp_mtmt.parse.mtmt_component_parser import MTMTComponentParser
 from slp_mtmt.slp_mtmt.parse.mtmt_connector_parser import MTMTConnectorParser
+from slp_mtmt.slp_mtmt.parse.mtmt_trustzone_parser import MTMTTrustzoneParser
 from slp_mtmt.tests.resources import test_resource_paths
+
+SAMPLE_VALID_MTMT_FILE = test_resource_paths.model_mtmt_mvp
+SAMPLE_VALID_MAPPING_FILE = test_resource_paths.mtmt_default_mapping
 
 
 class TestMTMTConnectorParser:
 
     def test_parse_connectors(self):
-        # GIVEN the source Mtmt data
-        with open(test_resource_paths.model_mtmt_mvp, 'r') as f:
-            xml = f.read()
-        # AND the provider loader
-        mtmt: MTMTLoader = MTMTLoader(xml)
-        mtmt.load()
+        # GIVEN a valid MTMT file
+        xml = get_byte_data(SAMPLE_VALID_MTMT_FILE)
+        mtmt_loader: MTMTLoader = MTMTLoader(xml)
+        mtmt_loader.load()
+        mtmt = mtmt_loader.get_mtmt()
 
-        # AND the parser
-        parser = MTMTConnectorParser(mtmt.get_mtmt())
+        # AND a valid MTMT mapping file
+        mapping_data = get_byte_data(SAMPLE_VALID_MAPPING_FILE)
+        mapping_loader = MTMTMappingFileLoader(mapping_data)
+        mtmt_mapping = mapping_loader.get_mtmt_mapping()
+
+        # AND the trustzone parser
+        trustzone_parser = MTMTTrustzoneParser(mtmt, mtmt_mapping)
+
+        # AND the component parser
+        component_parser = MTMTComponentParser(mtmt, mtmt_mapping, trustzone_parser)
+
+        # AND the connector parser
+        parser = MTMTConnectorParser(mtmt, component_parser)
 
         # WHEN the parse method is called
         dataflows = parser.parse()

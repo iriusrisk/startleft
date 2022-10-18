@@ -20,12 +20,13 @@ class MTMTParser(ProviderParser):
         self.project_id = project_id
         self.project_name = project_name
         self.trustzoneParser = MTMTTrustzoneParser(self.source, self.mtmt_mapping)
+        self.component_parser = MTMTComponentParser(self.source, self.mtmt_mapping, self.trustzoneParser)
 
-    def __get_mtmt_components(self, trustzones):
-        return MTMTComponentParser(self.source, self.mtmt_mapping, self.trustzoneParser).parse()
+    def __get_mtmt_components(self):
+        return self.component_parser.parse()
 
     def __get_mtmt_dataflows(self):
-        return MTMTConnectorParser(self.source).parse()
+        return MTMTConnectorParser(self.source, self.component_parser).parse()
 
     def __get_mtmt_trustzones(self) -> list:
         return self.trustzoneParser.parse()
@@ -34,6 +35,6 @@ class MTMTParser(ProviderParser):
         trustzones = self.__get_mtmt_trustzones()
         return OtmBuilder(self.project_id, self.project_name, EtmType.MTMT) \
             .add_trustzones(trustzones) \
-            .add_components(self.__get_mtmt_components(trustzones)) \
+            .add_components(self.__get_mtmt_components()) \
             .add_dataflows(self.__get_mtmt_dataflows()) \
             .build()
