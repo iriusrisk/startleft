@@ -10,6 +10,8 @@ from slp_cft.tests.utility import excluded_regex
 
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
+DEFAULT_TRUSTZONE_ID = "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+SAMPLE_UNKNOWN_PARENT_CFT_FILE = test_resource_paths.cloudformation_component_with_unknown_parent
 SAMPLE_VALID_CFT_FILE = test_resource_paths.cloudformation_for_mappings_tests_json
 SAMPLE_VALID_MAPPING_FILE = test_resource_paths.default_cloudformation_mapping
 SAMPLE_SINGLE_VALID_CFT_FILE = test_resource_paths.cloudformation_single_file
@@ -20,6 +22,23 @@ OTM_EXPECTED_RESULT = test_resource_paths.otm_expected_result
 
 
 class TestCloudformationProcessor:
+    def test_set_default_trustzone_as_parent_when_parent_not_exists(self):
+        # GIVEN a valid CFT file with a resource (VPCssm) with a parent which is not declared as component itself (CustomVPC)
+        cloudformation_file = get_data(test_resource_paths.cloudformation_component_with_unknown_parent)
+
+        # AND a valid CFT mapping file
+        mapping_file = get_data(test_resource_paths.default_cloudformation_mapping)
+
+        # WHEN the CFT file is processed
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
+
+        # THEN the number of TZs, components and dataflows are right
+        assert len(otm.trustzones) == 1
+        assert len(otm.components) == 5
+
+        # AND the VPCssm component has the default trustzone id as parent, instead of the CustomVPC unknown component id
+        assert list(filter(lambda component: component.parent_type == 'trustZone' and
+                                             component.parent == DEFAULT_TRUSTZONE_ID, otm.components))
 
     def test_component_dataflow_ids(self):
         # GIVEN a valid CFT file with some resources
@@ -372,7 +391,7 @@ class TestCloudformationProcessor:
     @pytest.mark.parametrize('cloudformation_file',
                              [[get_data(test_resource_paths.cloudformation_invalid_size)],
                               [get_data(test_resource_paths.cloudformation_invalid_size),
-                              get_data(test_resource_paths.cloudformation_invalid_size)],
+                               get_data(test_resource_paths.cloudformation_invalid_size)],
                               [get_data(test_resource_paths.cloudformation_invalid_size),
                                get_data(test_resource_paths.cloudformation_resources_file)]])
     def test_invalid_cloudformation_file(self, cloudformation_file):
