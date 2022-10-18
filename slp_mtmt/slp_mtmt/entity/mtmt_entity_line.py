@@ -32,6 +32,14 @@ class MTMLine:
         return self.type in is_dataflow_stencil_list
 
     @property
+    def source_guid(self):
+        return self.source.get('Value').get('SourceGuid')
+
+    @property
+    def target_guid(self):
+        return self.source.get('Value').get('TargetGuid')
+
+    @property
     def properties(self):
         properties = {}
         for _property in self.source.get('Value', {}).get('Properties', {}).get('anyType'):
@@ -56,4 +64,6 @@ class MTMLine:
                + 'type: ' + str(self.type) + ', ' \
                + 'is_trustzone: ' + str(self.is_trustzone) + ', ' \
                + 'is_dataflow: ' + str(self.is_dataflow) + ', ' \
+               + 'source_guid: ' + str(self.source_guid) + ', ' \
+               + 'target_guid: ' + str(self.target_guid) + ', ' \
                + 'properties: ' + str(self.properties) + '}'

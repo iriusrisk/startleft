@@ -143,6 +143,17 @@
       ]
     },
     {
+      "id": "d33f4a1f-e816-450f-8d5b-946457308961",
+      "name": "RDSCluster",
+      "type": "rds",
+      "parent": {
+          "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+          "AWS::RDS::DBCluster"
+      ]
+    },
+    {
       "id": "b93c5f93-7f15-4012-8fd6-126df1b83f52",
       "name": "DummyApiUserPool",
       "type": "cognito",

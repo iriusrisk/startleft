@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: 2010-09-09
+﻿AWSTemplateFormatVersion: 2010-09-09
 Description: >-
   NOTE: This stack has been modified to include all the Subnet EC2 configuration allowed.
   AWS CloudFormation Sample Template for a simple VPC and simple static web app. This template installs a web application that is
