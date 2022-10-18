@@ -104,4 +104,4 @@ Request Body:
     default_mapping_file        Required. File that contains the default mapping file between the diagram resources and threat model resources
     custom_mapping_file         Optional. File that contains the custom user mapping file between the diagram resources and threat model resources
 ```
-> See Visio usage on [diagrams/visio/Visio.md](diagrams/visio/Visio.md) 
+> See Visio usage on [diagrams/visio/Visio.md](startleft-processors/diagram/Visio.md) 
