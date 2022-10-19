@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 VALID_MIME = ('application/json', 'text/yaml', 'text/plain')
 
 MAX_SIZE = 20 * 1024 * 1024
-MIN_SIZE = 20
+MIN_SIZE = 13
 
 
 class CloudformationValidator(ProviderValidator):
