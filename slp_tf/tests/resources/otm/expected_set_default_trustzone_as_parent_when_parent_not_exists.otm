@@ -1,0 +1,59 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "name",
+    "id": "id"
+  },
+  "representations": [
+    {
+      "name": "Terraform",
+      "id": "Terraform",
+      "type": "code"
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "2adbe81d-7bf2-49df-b031-743ea13d6781",
+      "name": "E2CINSTANCE",
+      "type": "ec2",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_instance"
+      ]
+    },
+    {
+      "id": "b1367970-affa-4ab4-b763-c7763673aa18",
+      "name": "InterneteGateway",
+      "type": "empty-component",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_internet_gateway"
+      ]
+    },
+    {
+      "id": "5055022f-1bd0-408b-a6a7-5db2b3df998a",
+      "name": "aws_vpc_endpoint",
+      "type": "CD-SYSTEMS-MANAGER",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_vpc_endpoint"
+      ]
+    }
+  ],
+  "dataflows": []
+}
