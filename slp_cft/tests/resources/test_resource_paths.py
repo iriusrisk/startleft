@@ -4,7 +4,6 @@ path = os.path.dirname(__file__)
 
 # generic
 invalid_yaml = path + '/generic/invalid-yaml.yaml'
-otm_expected_result = path + '/generic/otm_expected_result.otm'
 
 # mapping
 default_cloudformation_mapping = path + '/mapping/cloudformation_mapping.yaml'
@@ -32,3 +31,7 @@ multiple_stack_plus_s3_ec2 = path + '/cft/multiple_stack_plus_s3_ec2.yaml'
 standalone_securitygroupegress_configuration = path + '/cft/standalone_securitygroupegress_configuration.yaml'
 standalone_securitygroupingress_configuration = path + '/cft/standalone_securitygroupingress_configuration.yaml'
 cloudformation_component_with_unknown_parent = path + '/cft/cloudformation_component_with_unknown_parent.json'
+
+# otm
+otm_expected_result = path + '/otm/otm_expected_result.otm'
+expected_set_default_trustzone_as_parent_when_parent_not_exists = path + '/otm/expected_set_default_trustzone_as_parent_when_parent_not_exists.otm'

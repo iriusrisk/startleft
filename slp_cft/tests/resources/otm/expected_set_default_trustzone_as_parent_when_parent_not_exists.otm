@@ -1,0 +1,70 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "name",
+    "id": "id"
+  },
+  "representations": [
+    {
+      "name": "CloudFormation",
+      "id": "CloudFormation",
+      "type": "code"
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "cc05874d-02d0-4a0c-b09b-e12308144211",
+      "name": "E2CINSTANCE",
+      "type": "ec2",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "AWS::EC2::Instance"
+      ]
+    },
+    {
+      "id": "f7438001-9d67-4cc4-9e00-55c6969d50a5",
+      "name": "PrivateSubnet1",
+      "type": "empty-component",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "AWS::EC2::Subnet"
+      ]
+    },
+    {
+      "id": "c31dfc2e-c989-4037-b1d3-b9666e5df069",
+      "name": "InterneteGateway",
+      "type": "empty-component",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "AWS::EC2::InternetGateway"
+      ]
+    },
+    {
+      "id": "9a75eddf-5369-4cca-8ebc-61592177a555",
+      "name": "AWS::EC2::VPCEndpoint",
+      "type": "CD-SYSTEMS-MANAGER",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "AWS::EC2::VPCEndpoint"
+      ]
+    }
+  ],
+  "dataflows": []
+}
