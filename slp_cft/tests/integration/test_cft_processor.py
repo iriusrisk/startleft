@@ -1,15 +1,17 @@
 import pytest
 
 from sl_util.sl_util.file_utils import get_data
-from slp_base.tests.util.otm import validate_and_diff_otm
 from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError, \
     LoadingIacFileError
+from slp_base.tests.util.otm import validate_and_diff_otm
 from slp_cft import CloudformationProcessor
 from slp_cft.tests.resources import test_resource_paths
 from slp_cft.tests.utility import excluded_regex
 
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
+DEFAULT_TRUSTZONE_ID = "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+SAMPLE_UNKNOWN_PARENT_CFT_FILE = test_resource_paths.cloudformation_component_with_unknown_parent
 SAMPLE_VALID_CFT_FILE = test_resource_paths.cloudformation_for_mappings_tests_json
 SAMPLE_VALID_MAPPING_FILE = test_resource_paths.default_cloudformation_mapping
 SAMPLE_SINGLE_VALID_CFT_FILE = test_resource_paths.cloudformation_single_file
@@ -20,6 +22,23 @@ OTM_EXPECTED_RESULT = test_resource_paths.otm_expected_result
 
 
 class TestCloudformationProcessor:
+    def test_set_default_trustzone_as_parent_when_parent_not_exists(self):
+        # GIVEN a valid CFT file with a resource (VPCssm) with a parent which is not declared as component itself (CustomVPC)
+        cloudformation_file = get_data(test_resource_paths.cloudformation_component_with_unknown_parent)
+
+        # AND a valid CFT mapping file
+        mapping_file = get_data(test_resource_paths.default_cloudformation_mapping)
+
+        # WHEN the CFT file is processed
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
+
+        # THEN the number of TZs, components and dataflows are right
+        assert len(otm.trustzones) == 1
+        assert len(otm.components) == 5
+
+        # AND the VPCssm component has the default trustzone id as parent, instead of the CustomVPC unknown component id
+        assert list(filter(lambda component: component.parent_type == 'trustZone' and
+                                             component.parent == DEFAULT_TRUSTZONE_ID, otm.components))
 
     def test_run_valid_mappings(self):
         # GIVEN a valid CFT file with some resources
@@ -290,7 +309,7 @@ class TestCloudformationProcessor:
     @pytest.mark.parametrize('cloudformation_file',
                              [[get_data(test_resource_paths.cloudformation_invalid_size)],
                               [get_data(test_resource_paths.cloudformation_invalid_size),
-                              get_data(test_resource_paths.cloudformation_invalid_size)],
+                               get_data(test_resource_paths.cloudformation_invalid_size)],
                               [get_data(test_resource_paths.cloudformation_invalid_size),
                                get_data(test_resource_paths.cloudformation_resources_file)]])
     def test_invalid_cloudformation_file(self, cloudformation_file):
@@ -336,3 +355,34 @@ class TestCloudformationProcessor:
         # THEN an RequestValidationError is raised
         with pytest.raises(LoadingIacFileError):
             CloudformationProcessor('multiple-files', 'multiple-files', [], mapping_file).process()
+
+    @pytest.mark.parametrize('source', [
+        # GIVEN a standalone SecurityGroupEgress configuration
+        [get_data(test_resource_paths.standalone_securitygroupegress_configuration)],
+        # GIVEN a standalone SecurityGroupIngress configuration
+        [get_data(test_resource_paths.standalone_securitygroupingress_configuration)]])
+    def test_security_group_configuration(self, source):
+        # AND a CFT mapping file
+        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE)
+        # WHEN the method CloudformationProcessor::process is invoked
+        otm = CloudformationProcessor('id', 'name', source, [mapping_file]).process()
+        # THEN otm has a generic-client in Internet Trustzone
+        assert otm.components[0].parent_type == 'trustZone'
+        assert len(otm.components) == 1
+        assert otm.components[0].parent == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
+
+    def test_multiple_stack_plus_s3_ec2(self):
+        # GIVEN the file with multiple Subnet AWS::EC2::Instance different configurations
+        cloudformation_file = get_data(test_resource_paths.multiple_stack_plus_s3_ec2)
+        # AND a valid iac mappings file
+        mapping_file = [get_data(SAMPLE_VALID_MAPPING_FILE)]
+
+        # WHEN processing
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], mapping_file).process()
+
+        assert len(otm.components) == 9
+        publicSubnet1Id = [component for component in otm.components if component.name == 'PublicSubnet1'][0].id
+        assert publicSubnet1Id
+        ec2WithWrongParent = [component for component in otm.components if
+                              component.type == 'ec2' and component.parent != publicSubnet1Id]
+        assert len(ec2WithWrongParent) == 0

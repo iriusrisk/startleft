@@ -1,12 +1,14 @@
 from otm.otm.otm import Dataflow
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_line import MTMLine
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
+from slp_mtmt.slp_mtmt.parse.mtmt_component_parser import MTMTComponentParser
 
 
 class MTMTConnectorParser:
 
-    def __init__(self, source: MTMT):
+    def __init__(self, source: MTMT, component_parser: MTMTComponentParser):
         self.source: MTMT = source
+        self.component_parser = component_parser
 
     def parse(self) -> [Dataflow]:
         dataflows = []
@@ -17,10 +19,12 @@ class MTMTConnectorParser:
 
     @staticmethod
     def __create_dataflow(line: MTMLine) -> Dataflow:
+        source_node_id = line.source_guid
+        target_node_id = line.target_guid
         return Dataflow(id=line.id,
                         name=line.name,
                         properties=line.properties,
-                        source_node=line.source_guid,
-                        destination_node=line.target_guid,
+                        source_node=source_node_id,
+                        destination_node=target_node_id,
                         bidirectional=False
                         )

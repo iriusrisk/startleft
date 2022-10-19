@@ -87,3 +87,25 @@ class TestBorderParentCalculator:
 
         # THEN validate
         assert not is_parent
+
+    @mark.parametrize('parent_value,child_value', [
+        ({'Left': '50', 'Width': '200', 'Top': '100', 'Height': '100'},
+         {'Left': '50', 'Width': '200', 'Top': '100', 'Height': '100'}),
+        ({'Left': '150', 'Width': '500', 'Top': '10', 'Height': '320'},
+         {'Left': '150', 'Width': '500', 'Top': '10', 'Height': '320'})
+    ])
+    def test_equal_coordinates(self, parent_value, child_value):
+        # GIVEN the parent MTMT border
+        parent_source = {'Value': parent_value}
+        parent = MTMBorder(parent_source)
+
+        # AND the child MTMT border
+        child_source = {'Value': child_value}
+        child = MTMBorder(child_source)
+
+        # WHEN we check if parent is the child parent
+        calculator = BorderParentCalculator()
+        is_parent = calculator.is_parent(parent, child)
+
+        # THEN validate
+        assert not is_parent

@@ -1,20 +1,37 @@
+from sl_util.sl_util.file_utils import get_byte_data
 from slp_mtmt.slp_mtmt.mtmt_loader import MTMTLoader
+from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMappingFileLoader
+from slp_mtmt.slp_mtmt.parse.mtmt_component_parser import MTMTComponentParser
 from slp_mtmt.slp_mtmt.parse.mtmt_connector_parser import MTMTConnectorParser
+from slp_mtmt.slp_mtmt.parse.mtmt_trustzone_parser import MTMTTrustzoneParser
 from slp_mtmt.tests.resources import test_resource_paths
+
+SAMPLE_VALID_MTMT_FILE = test_resource_paths.model_mtmt_mvp
+SAMPLE_VALID_MAPPING_FILE = test_resource_paths.mtmt_default_mapping
 
 
 class TestMTMTConnectorParser:
 
     def test_parse_connectors(self):
-        # GIVEN the source Mtmt data
-        with open(test_resource_paths.model_mtmt_mvp, 'r') as f:
-            xml = f.read()
-        # AND the provider loader
-        mtmt: MTMTLoader = MTMTLoader(xml)
-        mtmt.load()
+        # GIVEN a valid MTMT file
+        xml = get_byte_data(SAMPLE_VALID_MTMT_FILE)
+        mtmt_loader: MTMTLoader = MTMTLoader(xml)
+        mtmt_loader.load()
+        mtmt = mtmt_loader.get_mtmt()
 
-        # AND the parser
-        parser = MTMTConnectorParser(mtmt.get_mtmt())
+        # AND a valid MTMT mapping file
+        mapping_data = get_byte_data(SAMPLE_VALID_MAPPING_FILE)
+        mapping_loader = MTMTMappingFileLoader(mapping_data)
+        mtmt_mapping = mapping_loader.get_mtmt_mapping()
+
+        # AND the trustzone parser
+        trustzone_parser = MTMTTrustzoneParser(mtmt, mtmt_mapping)
+
+        # AND the component parser
+        component_parser = MTMTComponentParser(mtmt, mtmt_mapping, trustzone_parser)
+
+        # AND the connector parser
+        parser = MTMTConnectorParser(mtmt, component_parser)
 
         # WHEN the parse method is called
         dataflows = parser.parse()
@@ -34,14 +51,14 @@ class TestMTMTConnectorParser:
         assert dataflow.source_node == '5d15323e-3729-4694-87b1-181c90af5045'
         assert dataflow.destination_node == '91882aca-8249-49a7-96f0-164b68411b48'
         dataflow = dataflows[3]
-        assert dataflow.id == 'f894ed9d-d1c3-42b7-9010-34274bf01c84'
-        assert dataflow.source_node == '5d15323e-3729-4694-87b1-181c90af5045'
-        assert dataflow.destination_node == '91882aca-8249-49a7-96f0-164b68411b48'
+        assert dataflow.id == 'd826de3d-1464-4d1f-8105-aa0449a50aec'
+        assert dataflow.source_node == '91882aca-8249-49a7-96f0-164b68411b48'
+        assert dataflow.destination_node == '5d15323e-3729-4694-87b1-181c90af5045'
         dataflow = dataflows[4]
         assert dataflow.id == '9840bcdf-c444-437d-8289-d5468f41b0db'
         assert dataflow.source_node == '6183b7fa-eba5-4bf8-a0af-c3e30d144a10'
         assert dataflow.destination_node == '5d15323e-3729-4694-87b1-181c90af5045'
         dataflow = dataflows[5]
-        assert dataflow.id == 'bf3d1783-c7c8-43dd-bfa4-efafeac1fe14'
-        assert dataflow.source_node == '6183b7fa-eba5-4bf8-a0af-c3e30d144a10'
-        assert dataflow.destination_node == '5d15323e-3729-4694-87b1-181c90af5045'
+        assert dataflow.id == '5861370d-b333-4d4b-9420-95425026e9c9'
+        assert dataflow.source_node == '5d15323e-3729-4694-87b1-181c90af5045'
+        assert dataflow.destination_node == '6183b7fa-eba5-4bf8-a0af-c3e30d144a10'
