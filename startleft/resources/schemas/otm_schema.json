@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "otmVersion": "0.1.0",
     "type": "object",
-    "required": ["project"],
+    "required": ["project", "otmVersion"],
     "properties": {
         "project": {
             "type": "object",
