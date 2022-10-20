@@ -88,7 +88,7 @@
       ]
     },
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.dummyvpcssm-altsource",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.dummyvpcssm",
       "name": "DummyVPCssm",
       "type": "empty-component",
       "parent": {
@@ -99,7 +99,7 @@
       ]
     },
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.dummyvpcssm-altsource",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.dummyvpcssm",
       "name": "DummyVPCssm",
       "type": "empty-component",
       "parent": {
@@ -110,7 +110,7 @@
       ]
     },
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.dummyvpcssmmessages-altsource",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.dummyvpcssmmessages",
       "name": "DummyVPCssmmessages",
       "type": "empty-component",
       "parent": {
@@ -121,7 +121,7 @@
       ]
     },
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.dummyvpcssmmessages-altsource",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.dummyvpcssmmessages",
       "name": "DummyVPCssmmessages",
       "type": "empty-component",
       "parent": {
@@ -132,7 +132,7 @@
       ]
     },
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.dummyvpcdynamodb-altsource",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.dummyvpcdynamodb",
       "name": "DummyVPCdynamodb",
       "type": "empty-component",
       "parent": {

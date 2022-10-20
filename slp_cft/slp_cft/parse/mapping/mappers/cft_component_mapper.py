@@ -136,13 +136,17 @@ class CloudformationComponentMapper(CloudformationBaseMapper):
                                                                                             alt_source_object,
                                                                                             mapping_tags)
 
-                        alt_source_object["altsource"] = True
+                        # if a new object is not created could be problems related with updating the same object with
+                        # the "altsource" property, as the jmespath search for altsource components returns the same
+                        # object as the original search of the component
+                        alt_source_object_copy = alt_source_object.copy()
+                        alt_source_object_copy["altsource"] = True
 
                         component = {"id": str(uuid.uuid4()),
                                      "name": component_name,
                                      "type": mapping_lookup["type"],
                                      "parent": self.id_map[self.DEFAULT_TRUSTZONE],
-                                     "source": alt_source_object
+                                     "source": alt_source_object_copy
                                      }
 
                         component = self.set_optional_parameters_to_resource(component, mapping_tags,
