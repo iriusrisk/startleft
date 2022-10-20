@@ -24,6 +24,10 @@ class MTMBorder:
         return self.source.get('attrib', {}).get('type')
 
     @property
+    def stencil_name(self):
+        return self.source.get('Value', {}).get('Properties', {}).get('anyType')[0].get('DisplayName', {})
+
+    @property
     def generic_type_id(self):
         return self.source.get('Value', {}).get('GenericTypeId')
 

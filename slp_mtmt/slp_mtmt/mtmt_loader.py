@@ -10,7 +10,7 @@ class MTMTLoader(ProviderLoader):
     Builder for an MTM class from the xml data
     """
 
-    def load(self) -> MTMT:
+    def load(self):
         self.__read()
         self.mtmt = MTMT(borders=self.borders, lines=self.lines, threats=self.threats, know_base=self.know_base)
 
@@ -31,13 +31,16 @@ class MTMTLoader(ProviderLoader):
             = surface_model_ if isinstance(surface_model_, collections.abc.Sequence) else [surface_model_]
 
         for surface_model in surface_model_array:
-            for border in surface_model['Borders']['KeyValueOfguidanyType']:
-                self.borders.append(MTMBorder(border))
-            for line in surface_model['Lines']['KeyValueOfguidanyType']:
-                self.lines.append(MTMLine(line))
+            if 'Borders' in surface_model and surface_model['Borders'] is not None:
+                for border in surface_model['Borders']['KeyValueOfguidanyType']:
+                    self.borders.append(MTMBorder(border))
+            if 'Lines' in surface_model and surface_model['Lines'] is not None:
+                for line in surface_model['Lines']['KeyValueOfguidanyType']:
+                    self.lines.append(MTMLine(line))
 
-        for threat in model_['ThreatInstances']['KeyValueOfstringThreatpc_P0_PhOB']:
-            self.threats.append(MTMThreat(threat))
+        if 'ThreatInstances' in model_ and model_['ThreatInstances'] is not None:
+            for threat in model_['ThreatInstances']['KeyValueOfstringThreatpc_P0_PhOB']:
+                self.threats.append(MTMThreat(threat))
         self.know_base = MTMKnowledge(model_['KnowledgeBase'])
 
     def get_mtmt(self) -> MTMT:

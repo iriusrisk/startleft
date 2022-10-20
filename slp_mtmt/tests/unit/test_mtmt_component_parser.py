@@ -31,7 +31,7 @@ class TestMTMTComponentParser:
                         'Name': 'Public API v2',
                         'Out Of Scope': 'false',
                         'Web API Technologies': 'Select'},
-         'type': 'rest-full-web-service'},
+         'type': 'web-service'},
         {'id': '91882aca-8249-49a7-96f0-164b68411b48',
          'name': 'Azure File Storage',
          'parent': {'trustZone': '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'},
