@@ -17,7 +17,7 @@
     "VPCssm": {
       "Type": "AWS::EC2::VPCEndpoint",
       "Properties": {
-        "ServiceName": "com.amazonaws.us-east-1.ssm",
+        "ServiceName": "the.service.name",
         "VpcId": {
           "Ref": "CustomVPC"
         },
