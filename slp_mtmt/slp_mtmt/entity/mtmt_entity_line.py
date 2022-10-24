@@ -1,27 +1,14 @@
-is_trustzone_stencil_list = ['LineBoundary']
-is_dataflow_stencil_list = ['Connector']
+from slp_mtmt.slp_mtmt.entity.mtmt_entity import MTMEntity, is_dataflow_stencil_list, is_trustzone_stencil_list
 
 
-class MTMLine:
+class MTMLine(MTMEntity):
 
     def __init__(self, source: dict):
-        self.source = source
-
-    @property
-    def id(self):
-        return self.source.get('Key')
-
-    @property
-    def name(self):
-        return self.properties.get('Name', self.__get_first_property())  # fallback is first property
+        super().__init__(source)
 
     @property
     def description(self):
         return self.__get_first_property()
-
-    @property
-    def type(self):
-        return self.source.get('attrib', {}).get('type')
 
     @property
     def is_trustzone(self) -> bool:
