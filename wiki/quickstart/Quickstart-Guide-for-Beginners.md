@@ -5,7 +5,10 @@ some commands, set up the REST API and, in summary, familiarize yourself with th
 ## Prerequisites
 * Install the **[latest version of Python](https://www.python.org/downloads/)**.
 * Install **[pip3](https://pip.pypa.io/en/stable/installation/)**.
-* Install **[git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)**
+* Install **[git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).**
+
+*During this guide some files will be downloaded or generated, so you can optionally create a folder to keep them
+organized.*
 
 ## Install StartLeft
 Install the last stable version of the tool using pip:
@@ -27,43 +30,47 @@ startleft, version <your-installed-version>
 The `parse` is the main command of the StartLeft CLI that enables you to perform the whole process of conversion
 to OTM by providing one or multiple source files and a mapping file. It presents slight variations depending on the type 
 of input source that you can check in the [CLI](../Command-Line-Interface.md) section or in each specific processor 
-documentation, but, to get an idea of its behavior, you can perform a conversion from an IaC file 
-(in this case a CFT from the `examples/cloudformation`folder) with this command:
+documentation, but, to get an idea of its behavior, you can perform a conversion from an IaC file:
+
+First of all, let's download one of the examples contained in the StartLeft's `examples/terraform` folder:
+
+```shell
+wget https://raw.githubusercontent.com/iriusrisk/startleft/main/examples/terraform/multinetwork_security_groups_with_lb.tf
+```
+
+This is a rich example where you can see in action some the capabilities of StartLeft. It represents the Threat Model for
+an architecture with two trust zones and several VPCs which contain many types of AWS components.
+
+Now, we need to download the mapping file where the configuration for parsing this source is located. In this case, 
+we will download an example that maps to IriusRisk components. It is placed in the same `examples/terraform` folder:
+```shell
+https://raw.githubusercontent.com/iriusrisk/startleft/main/examples/terraform/iriusrisk-tf-aws-mapping.yaml
+```
+
+With this two files we are ready to execute the `parse` command in order to generate the Threat Model in OTM format:
 ```shell
 startleft parse \
-	--iac-type CLOUDFORMATION \
-	--mapping-file iriusrisk-cft-mapping.yaml \
+	--iac-type TERRAFORM \
+	--mapping-file iriusrisk-tf-aws-mapping.yaml \
 	--output-file multinetwork_security_groups_with_lb.otm \
-	--project-name "CFT MN Security Groups with LB" \
-	--project-id "cft-mn-sg-lb" \
-	multinetwork_security_groups_with_lb.json
+	--project-name "Terraform MN Security Groups with LB" \
+	--project-id "tf-mn-sg-lb" \
+	multinetwork_security_groups_with_lb.tf
 ```
 
-If your infrastructure is defined in separated IaC files, you can merge and parse them in a single command:
-```shell
-startleft parse \
-	--iac-type CLOUDFORMATION \
-	--mapping-file iriusrisk-cft-mapping.yaml \
-	--output-file split-cft-files.otm \
-	--project-name "Split CFT files" \
-	--project-id "split-cft-files" \
-	split/networks_cft_file.json
-	split/resources_cft_file.json
-```
-
-In case you want to parse a diagram (using examples from `examples/visio), a couple of modifiers change:
-```shell
-startleft parse \
-      --diagram-type visio \
-      --output-file aws-with-tz-and-vpc.otm \
-      --project-name "Visio AWS" \
-      --project-id "visio-aws" \
-      --default-mapping-file iriusrisk-visio-aws-mapping \
-      aws-with-tz-and-vpc.vsdx
-```
+Finally, you can open the generated `multinetwork_security_groups_with_lb.otm` with your favourite text editor and check 
+how a Threat Model has been automatically generated from the Terraform file. 
 
 ## The server command
-[TBD]
+Using StartLeft as a service is the most useful strategy for integrate it with other tools. The different ways of 
+configuring this service are deeply described in the [Quickstart guide for integrations](quickstart/Quickstart-Guide-for-Integrations.md) 
+and [REST API](../REST-API.md) sections. However, you can begin to familiarize yourself with this mode by setting up the server 
+through the CLI using the command:
+```shell
+startleft server
+```
+Then open a web browser, in [http://localhost:5000/docs](http://localhost:5000/docs) you will find a Swagger page with the documentation of the API.
+It is completely functional, so you can just send requests from there to get used to the tool. 
 
 ## Auxiliary commands
 Apart from the `parse`, the CLI provides you with a group of utility commands that simplifies a lot the work with the 
@@ -82,43 +89,61 @@ startleft parse --help
 ```
 
 ### validate
-This command is able to perform validations over two types of files:
-* **IaC mapping files**, deeply described in each processor's docs, used to create relationships between types in the source
-    and their expected equivalent in the OTM (i.e: an `AWS::EC2::Instance` type in CFT matches the `ec2` type in IriusRisk).
-    An example of a valid IaC mapping file may be found in the folder `examples/cloudformation`. 
+This command is able to perform validations over three types of files:
+#### **IaC mapping files**
+Deeply described in each processor's docs, used to create relationships between types in the source
+and their expected equivalent in the OTM (i.e: an `aws_instance` type in Terraform matches the `ec2` type in IriusRisk).
+If we take the same mapping file we have downloaded for the `parse` command, we can execute:
 ```shell
-startleft validate --iac-mapping-file iriusrisk-cft-mapping.yaml
+startleft validate --iac-mapping-file iriusrisk-tf-aws-mapping.yaml
 ```
 
-* **Diagram mapping files**, also described in the processors' documentation, allows you to validate the format of mapping
-    files used for diagram conversions. You can try this with the mapping file located in `examples/visio`.
+#### **Diagram mapping files**
+Also described in the processors' documentation, allows you to validate the format of mapping
+files used for diagram conversions. 
+    
+Let's download the IriusRisk's Visio mapping file located in the `examples/visio` folder:
+```shell
+wget https://raw.githubusercontent.com/iriusrisk/startleft/main/examples/visio/iriusrisk-visio-aws-mapping.yaml
+```
+Now we can validate it using the following StartLeft command:
 ```shell
 startleft validate --diagram-mapping-file iriusrisk-visio-aws-mapping.yaml
 ```
 
-* **OTM** files that may have been generated by StartLeft or have been handcrafted by any user. To see how to validate 
-   an OTM file you can look into the `examples/manual` folder.
+#### **OTM** 
+These files may have been generated by StartLeft or have been handcrafted by any user. To see how to validate 
+an OTM file, we can download an example from the `examples/manual` folder.
+```shell
+wget https://raw.githubusercontent.com/iriusrisk/startleft/main/examples/manual/manual.otm
+```
+
+And then validate it by executing:
 ```shell
 startleft validate --otm-file manual.otm
 ```
 
+#### All at once
 Finally, the command is also able to execute multiple validations at the same time:
 ```shell
 startleft validate \
     --otm-file manual.otm \
-    --iac-mapping-file iriusrisk-cft-mapping.yaml \
+    --iac-mapping-file iriusrisk-tf-aws-mapping.yaml \
     --diagram-mapping-file iriusrisk-visio-aws-mapping.yaml
 ```
 
 ### search
 This is an auxiliary utility only supported currently for IaC mapping files. Due to the complexity of these files, whose detail can be checked
 [here](../startleft-processors/iac/Source-Mapping.md), sometimes it is useful to test some expressions directly before
-including them in the final mapping file. For example, taking an example CFT file from `examples/cloudformation`, we can do:
+including them in the final mapping file. 
+
+For example, let's use the same Terraform file that we have downloaded for the `parse` command and perform a simple query:
+
 ```shell
 startleft search \
-    --iac-type CLOUDFORMATION \
-    --query Resources|squash(@)[?Type=='AWS::EC2::VPC']
-    multinetwork_security_groups_with_lb.json
+    --iac-type TERRAFORM \
+    --query Resources|squash(@)[?Type=='aws_instance']
+    multinetwork_security_groups_with_lb.tf
 ```
 
 
