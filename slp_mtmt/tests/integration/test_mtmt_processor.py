@@ -56,7 +56,7 @@ class TestMtmtProcessor:
         component = otm.components[2]
         assert component.id == '5d15323e-3729-4694-87b1-181c90af5045'
         assert component.name == 'Public API v2'
-        assert component.type == 'rest-full-web-service'
+        assert component.type == 'web-service'
         assert component.parent == "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
         component = otm.components[3]
         assert component.id == '91882aca-8249-49a7-96f0-164b68411b48'

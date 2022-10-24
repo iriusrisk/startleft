@@ -1,0 +1,203 @@
+trustzones:
+
+  - label: Internet Boundary
+    type: Internet
+    id: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+
+  - label: CorpNet Trust Boundary
+    type: Private Secured
+    id: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+
+  - label: Generic Trust Border Boundary
+    type: Public
+    id: 6376d53e-6461-412b-8e04-7b3fe2b397de
+
+  - label: Generic Trust Line Boundary
+    type: Public
+    id: 6376d53e-6461-412b-8e04-7b3fe2b397de
+
+  - label: Sandbox Trust Boundary Border
+    type: Private Secured
+    id: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+
+  - label: default
+    type: Public Cloud
+    id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+
+components:
+
+  - label: ADFS
+    type: active-directory
+
+  - label: Authorization Provider
+    type: oauth2-authorization-server
+
+  - label: Azure AD Microsoft
+    type: microsoft-azure-environment
+
+  - label: Azure App Service API App
+    type: CD-MICROSOFT-AZURE-APP-SERVICE-ENV
+
+  - label: Azure App Service Mobile App
+    type: CD-MICROSOFT-AZURE-APP-SERVICE-ENV
+
+  - label: Azure App Service Web App
+    type: CD-MICROSOFT-AZURE-APP-SERVICE-ENV
+
+  - label: Azure Cosmos DB
+    type: CD-MICROSOFT-AZURE-APP-SERVICE-ENV
+
+  - label: Azure Data Factory
+    type: CD-MICROSOFT-AZURE-DATA-FACTORY
+
+  - label: Azure Database for MySQL
+    type: CD-MICROSOFT-AZURE-DB-MYSQL
+
+  - label: Azure Database for PostgreSQL
+    type: CD-MICROSOFT-AZURE-DB-POSTGRESQL
+
+  - label: Azure Event Hub
+    type: CD-MICROSOFT-AZURE-EVENT-HUB
+
+  - label: Azure Key Vault
+    type: microsoft-azure-key-vault
+
+  - label: Azure Logic Apps
+    type: microsoft-azure-logic-apps
+
+  - label: Azure ML
+    type: CD-MICROSOFT-AZURE-MACH-LEARN
+
+  - label: Azure SQL Data Warehouse Database
+    type: azure-sql
+
+  - label: Azure SQL Database
+    type: azure-sql
+
+  - label: Azure Storage
+    type: azure-storage
+
+  - label: Azure Stream Analytics
+    type: CD-MICROSOFT-AZURE-STR-ANALYTICS
+
+  - label: Azure Traffic Manager
+    type: microsoft-azure-traffic-manager
+
+  - label: Browser
+    type: web-ui
+
+  - label: Browser and ActiveX Plugins
+    type: web-ui
+
+  - label: Browser Client
+    type: web-client
+
+  - label: Cloud Storage
+    type: other-database
+
+  - label: Cookies
+    type: other-database
+
+  - label: Database
+    type: other-database
+
+  - label: Device
+    type: CD-GENERIC-DEVICE
+
+  - label: Emergency stop
+    type: CD-EMERGENCY-STOP
+
+  - label: External Web Application
+    type: web-application-server-side
+
+  - label: External Web Service
+    type: web-service
+
+  - label: File System
+    type: file-system
+
+  - label: Generic Data Store
+    type: other-database
+
+  - label: Host
+    type: generic-service
+
+  - label: HTML5 Local Storage
+    type: other-database
+
+  - label: Identity Server
+    type: IAM
+
+  - label: Imaging Device
+    type: CD-IMAGING-DEVICE
+
+  - label: Ionizing Radiation Source
+    type: CD-IONIZING-RADIATION-SOURCE
+
+  - label: IoT Cloud Gateway
+    type: api-gateway
+
+  - label: IoT Device
+    type: iot-operating-system
+
+  - label: IoT Field Gateway
+    type: api-gateway
+
+  - label: LDAP Client
+    type: ldap-directory
+
+  - label: Managed Application
+    type: web-application-server-side
+
+  - label: Mobile Client
+    key: Mobile Client Technologies
+    values:
+      - value: Android
+        type: android-device-client
+      - value: iOS
+        type: ios-device-client
+
+  - label: Moving Gantry or C Arm
+    type: CD-MOVING-GANTRY
+
+  - label: Non Relational Database
+    type: other-nosql-key-value-store
+
+  - label: Pharmaceutical Pump
+    type: CD-PHARMACEUTICAL-PUMP
+
+  - label: Sensor
+    type: CD-SENSOR
+
+  - label: SQL Database
+    type: other-sql-database
+
+  - label: SSH Client
+    type: CD-SSH-CLIENT
+
+  - label: SSH Server
+    type: CD-SSH-SERVER
+
+  - label: Thick Client
+    type: rich-client
+
+  - label: Third Party EMR Interface
+    type: other-database
+
+  - label: Virtual Machine
+    type: CD-VIRTUAL-MACHINE
+
+  - label: Web API
+    type: web-service
+
+  - label: Web Application
+    type: web-application-server-side
+
+  - label: Web Server
+    type: generic-service
+
+  - label: Web Service
+    type: web-service
+
+dataflows: []

@@ -47,4 +47,13 @@ class BorderParentCalculator:
         if parent_bottom < child_bottom:
             return False
 
+        if parent_bottom == child_bottom and \
+                parent_right == parent_right and \
+                parent_top == parent_top and \
+                parent_left == parent_left:
+            return False
+
         return True
+
+
+
