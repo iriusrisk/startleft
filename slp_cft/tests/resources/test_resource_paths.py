@@ -34,4 +34,4 @@ cloudformation_component_with_unknown_parent = path + '/cft/cloudformation_compo
 
 # otm
 otm_expected_result = path + '/otm/otm_expected_result.otm'
-expected_set_default_trustzone_as_parent_when_parent_not_exists = path + '/otm/expected_set_default_trustzone_as_parent_when_parent_not_exists.otm'
+expected_orphan_component_is_not_mapped = path + '/otm/expected_orphan_component_is_not_mapped.otm'

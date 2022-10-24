@@ -3,10 +3,10 @@ import pytest
 from sl_util.sl_util.file_utils import get_data
 from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError, \
     LoadingIacFileError
-from slp_base.tests.util.otm import validate_and_diff_otm, validate_and_diff
+from slp_base.tests.util.otm import validate_and_diff_otm
 from slp_cft import CloudformationProcessor
 from slp_cft.tests.resources import test_resource_paths
-from slp_cft.tests.resources.test_resource_paths import expected_set_default_trustzone_as_parent_when_parent_not_exists
+from slp_cft.tests.resources.test_resource_paths import expected_orphan_component_is_not_mapped
 from slp_cft.tests.utility import excluded_regex
 
 SAMPLE_ID = 'id'
@@ -23,7 +23,7 @@ OTM_EXPECTED_RESULT = test_resource_paths.otm_expected_result
 
 
 class TestCloudformationProcessor:
-    def test_set_default_trustzone_as_parent_when_parent_not_exists(self):
+    def test_orphan_component_is_not_mapped(self):
         # GIVEN a valid CFT file with a resource (VPCssm) with a parent which is not declared as component itself (CustomVPC)
         cloudformation_file = get_data(test_resource_paths.cloudformation_component_with_unknown_parent)
 
@@ -35,7 +35,7 @@ class TestCloudformationProcessor:
 
         # THEN the VPCsmm component without parents is omitted
         # AND the rest of the OTM details match the expected
-        assert validate_and_diff_otm(otm.json(), expected_set_default_trustzone_as_parent_when_parent_not_exists, excluded_regex) == {}
+        assert validate_and_diff_otm(otm.json(), expected_orphan_component_is_not_mapped, excluded_regex) == {}
 
     def test_run_valid_mappings(self):
         # GIVEN a valid CFT file with some resources

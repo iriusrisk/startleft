@@ -44,4 +44,4 @@ terraform_iriusrisk_tf_aws_mapping = path + '/mapping/iriusrisk-tf-aws-mapping.y
 
 # otm
 tf_file_expected_result = path + '/otm/tf-file-expected-result.otm'
-expected_set_default_trustzone_as_parent_when_parent_not_exists = path + '/otm/expected_set_default_trustzone_as_parent_when_parent_not_exists.otm'
+expected_orphan_component_is_not_mapped = path + '/otm/expected_orphan_component_is_not_mapped.otm'

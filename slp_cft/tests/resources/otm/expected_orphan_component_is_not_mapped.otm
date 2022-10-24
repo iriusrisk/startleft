@@ -6,8 +6,8 @@
   },
   "representations": [
     {
-      "name": "Terraform",
-      "id": "Terraform",
+      "name": "CloudFormation",
+      "id": "CloudFormation",
       "type": "code"
     }
   ],
@@ -22,36 +22,36 @@
   ],
   "components": [
     {
-      "id": "2adbe81d-7bf2-49df-b031-743ea13d6781",
+      "id": "cc05874d-02d0-4a0c-b09b-e12308144211",
       "name": "E2CINSTANCE",
       "type": "ec2",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
-        "aws_instance"
+        "AWS::EC2::Instance"
       ]
     },
     {
-      "id": "b1367970-affa-4ab4-b763-c7763673aa18",
+      "id": "f7438001-9d67-4cc4-9e00-55c6969d50a5",
+      "name": "PrivateSubnet1",
+      "type": "empty-component",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "AWS::EC2::Subnet"
+      ]
+    },
+    {
+      "id": "c31dfc2e-c989-4037-b1d3-b9666e5df069",
       "name": "InterneteGateway",
       "type": "empty-component",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
-        "aws_internet_gateway"
-      ]
-    },
-    {
-      "id": "5055022f-1bd0-408b-a6a7-5db2b3df998a",
-      "name": "aws_vpc_endpoint",
-      "type": "CD-SYSTEMS-MANAGER",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "tags": [
-        "aws_vpc_endpoint"
+        "AWS::EC2::InternetGateway"
       ]
     }
   ],

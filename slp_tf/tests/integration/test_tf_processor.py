@@ -4,10 +4,10 @@ from sl_util.sl_util.file_utils import get_data, get_byte_data
 from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError, \
     LoadingIacFileError
 from slp_base.tests.util import otm as utils
-from slp_base.tests.util.otm import validate_and_diff_otm, validate_and_diff
+from slp_base.tests.util.otm import validate_and_diff_otm
 from slp_tf import TerraformProcessor
 from slp_tf.tests.resources import test_resource_paths
-from slp_tf.tests.resources.test_resource_paths import expected_set_default_trustzone_as_parent_when_parent_not_exists
+from slp_tf.tests.resources.test_resource_paths import expected_orphan_component_is_not_mapped
 from slp_tf.tests.utility import excluded_regex
 
 PUBLIC_CLOUD_TZ_ID = 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
@@ -43,7 +43,7 @@ def assert_otm_dataflow(otm, position, source_node, destination_node, name):
 
 class TestTerraformProcessor:
 
-    def test_set_default_trustzone_as_parent_when_parent_not_exists(self):
+    def test_orphan_component_is_not_mapped(self):
         # GIVEN a valid TF file with a resource (VPCssm) whose parents do (private VPCs) not exist in the file
         terraform_file = get_data(test_resource_paths.terraform_component_with_unknown_parent)
 
@@ -55,7 +55,7 @@ class TestTerraformProcessor:
 
         # THEN the VPCsmm components without parents are omitted
         # AND the rest of the OTM details match the expected
-        assert validate_and_diff_otm(otm.json(), expected_set_default_trustzone_as_parent_when_parent_not_exists, excluded_regex) == {}
+        assert validate_and_diff_otm(otm.json(), expected_orphan_component_is_not_mapped, excluded_regex) == {}
 
 
     def test_run_valid_mappings(self):
