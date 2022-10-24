@@ -25,6 +25,8 @@ class MTMTComponentParser:
 
     def __create_component(self, border: MTMBorder) -> Component:
         trustzone_id = self.__get_trustzone_id(border)
+        if trustzone_id is None:
+            trustzone_id = self.manage_orphaned()
         mtmt_type = self.__calculate_otm_type(border)
         if mtmt_type is not None:
             return Component(id=border.id,
@@ -50,4 +52,9 @@ class MTMTComponentParser:
         for candidate in self.source.borders:
             if parent_calculator.is_parent(candidate, border):
                 return self.trustzoneParser.calculate_otm_id(candidate)
-        return ""
+
+    def manage_orphaned(self) -> str:
+        default_trustzone = self.trustzoneParser.default_trustzone
+        if default_trustzone is not None:
+            self.trustzoneParser.add_default()
+            return default_trustzone.id

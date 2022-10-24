@@ -32,9 +32,10 @@ class MTMTParser(ProviderParser):
         return self.trustzoneParser.parse()
 
     def build_otm(self) -> OTM:
+        components = self.__get_mtmt_components()
         trustzones = self.__get_mtmt_trustzones()
         return OtmBuilder(self.project_id, self.project_name, EtmType.MTMT) \
             .add_trustzones(trustzones) \
-            .add_components(self.__get_mtmt_components()) \
+            .add_components(components) \
             .add_dataflows(self.__get_mtmt_dataflows()) \
             .build()
