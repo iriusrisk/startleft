@@ -46,7 +46,7 @@ class DiagramComponentMapper:
 
     def __calculate_parent_id(self, component: DiagramComponent) -> str:
         if not component.parent:
-            return self.default_trustzone.id
+            return self.default_trustzone.id if self.default_trustzone else None
 
         return self.trustzone_mappings[component.parent.name]['id'] \
             if component.parent.name in self.trustzone_mappings \

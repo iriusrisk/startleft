@@ -7,6 +7,46 @@ from slp_visio.tests.resources import test_resource_paths
 
 
 class TestVisioProcessor:
+    def test_empty_mapping_file(self):
+        visio_file = open(test_resource_paths.visio_aws_shapes, "r")
+        otm = VisioProcessor(
+            "project-id",
+            "project-name",
+            visio_file,
+            [get_data(test_resource_paths.empty_mapping)],
+        ).process()
+
+        assert len(otm.trustzones) == 0
+        assert len(otm.components) == 0
+        assert len(otm.dataflows) == 0
+
+    def test_empty_visio_file(self):
+        visio_file = open(test_resource_paths.visio_empty, "r")
+        otm = VisioProcessor(
+            "project-id",
+            "project-name",
+            visio_file,
+            [get_data(test_resource_paths.default_visio_mapping)],
+        ).process()
+
+        assert len(otm.trustzones) == 1
+        assert len(otm.components) == 0
+        assert len(otm.dataflows) == 0
+        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
+
+    def test_empty_mapping_and_visio_files(self):
+        visio_file = open(test_resource_paths.visio_empty, "r")
+        otm = VisioProcessor(
+            "project-id",
+            "project-name",
+            visio_file,
+            [get_data(test_resource_paths.empty_mapping)],
+        ).process()
+
+        assert len(otm.trustzones) == 0
+        assert len(otm.components) == 0
+        assert len(otm.dataflows) == 0
+
     def test_aws_shapes(self):
         visio_file = open(test_resource_paths.visio_aws_shapes, "r")
         otm = VisioProcessor(
@@ -142,8 +182,8 @@ class TestVisioProcessor:
 
         check_otm_representations_size(otm)
 
-        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
-        check_otm_trustzone(otm, 1, private_secured_id, private_secured_name)
+        check_otm_trustzone(otm, 0, private_secured_id, private_secured_name)
+        check_otm_trustzone(otm, 1, public_cloud_id, public_cloud_name)
 
         check_otm_component(otm, 0, 'ec2', 'Custom machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
         check_otm_component(otm, 1, 'rds', 'Private Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
@@ -188,9 +228,9 @@ class TestVisioProcessor:
 
         check_otm_representations_size(otm)
 
-        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
-        check_otm_trustzone(otm, 1, internet_id, internet_name)
-        check_otm_trustzone(otm, 2, private_secured_id, private_secured_name)
+        check_otm_trustzone(otm, 0, internet_id, internet_name)
+        check_otm_trustzone(otm, 1, private_secured_id, private_secured_name)
+        check_otm_trustzone(otm, 2, public_cloud_id, public_cloud_name)
 
         check_otm_component(otm, 0, 'ec2', 'Custom machine', 'f0ba7722-39b6-4c81-8290-a30a248bb8d9')
         check_otm_component(otm, 1, 'rds', 'Private Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
