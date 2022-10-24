@@ -24,7 +24,7 @@ OTM_EXPECTED_RESULT = test_resource_paths.otm_expected_result
 class TestCloudformationProcessor:
     def test_orphan_component_is_not_mapped(self):
         # GIVEN a valid CFT file with a resource (VPCssm) with a parent which is not declared as component itself (CustomVPC)
-        cloudformation_file = get_data(test_resource_paths.terraform_orphan_component)
+        cloudformation_file = get_data(test_resource_paths.cloudformation_orphan_component)
 
         # AND a valid CFT mapping file
         mapping_file = get_data(test_resource_paths.default_cloudformation_mapping)
