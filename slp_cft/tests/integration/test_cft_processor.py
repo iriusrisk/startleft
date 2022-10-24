@@ -12,7 +12,6 @@ from slp_cft.tests.utility import excluded_regex
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
 DEFAULT_TRUSTZONE_ID = "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-SAMPLE_UNKNOWN_PARENT_CFT_FILE = test_resource_paths.cloudformation_component_with_unknown_parent
 SAMPLE_VALID_CFT_FILE = test_resource_paths.cloudformation_for_mappings_tests_json
 SAMPLE_VALID_MAPPING_FILE = test_resource_paths.default_cloudformation_mapping
 SAMPLE_SINGLE_VALID_CFT_FILE = test_resource_paths.cloudformation_single_file
@@ -25,7 +24,7 @@ OTM_EXPECTED_RESULT = test_resource_paths.otm_expected_result
 class TestCloudformationProcessor:
     def test_orphan_component_is_not_mapped(self):
         # GIVEN a valid CFT file with a resource (VPCssm) with a parent which is not declared as component itself (CustomVPC)
-        cloudformation_file = get_data(test_resource_paths.cloudformation_component_with_unknown_parent)
+        cloudformation_file = get_data(test_resource_paths.terraform_orphan_component)
 
         # AND a valid CFT mapping file
         mapping_file = get_data(test_resource_paths.default_cloudformation_mapping)

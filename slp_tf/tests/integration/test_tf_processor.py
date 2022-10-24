@@ -45,7 +45,7 @@ class TestTerraformProcessor:
 
     def test_orphan_component_is_not_mapped(self):
         # GIVEN a valid TF file with a resource (VPCssm) whose parents do (private VPCs) not exist in the file
-        terraform_file = get_data(test_resource_paths.terraform_component_with_unknown_parent)
+        terraform_file = get_data(test_resource_paths.terraform_orphan_component)
 
         # AND a valid TF mapping file
         mapping_file = get_data(test_resource_paths.default_terraform_aws_mapping)

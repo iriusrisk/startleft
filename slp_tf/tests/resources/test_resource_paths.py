@@ -30,7 +30,7 @@ terraform_single_tf = path + '/tf/single_tf_file.tf'
 terraform_networks = path + '/tf/networks_tf_file.tf'
 terraform_resources = path + '/tf/resources_tf_file.tf'
 terraform_invalid_size = path + '/tf/terraform_invalid_size.tf'
-terraform_component_with_unknown_parent = path + '/tf/terraform_component_with_unknown_parent.tf'
+terraform_orphan_component = path + '/tf/terraform_orphan_component.tf'
 
 # mapping
 default_terraform_mapping = path + '/mapping/default-terraform-mapping.yaml'
