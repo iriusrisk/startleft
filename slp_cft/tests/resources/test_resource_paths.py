@@ -5,6 +5,8 @@ path = os.path.dirname(__file__)
 # generic
 invalid_yaml = path + '/generic/invalid-yaml.yaml'
 otm_expected_result = path + '/generic/otm_expected_result.otm'
+otm_with_only_default_trustzone_expected_result = path + '/generic/otm_with_only_default_trustzone_expected_result.otm'
+minimal_otm_expected_result = path + '/generic/minimal_otm_expected_result.otm'
 
 # mapping
 default_cloudformation_mapping = path + '/mapping/cloudformation_mapping.yaml'
@@ -14,6 +16,7 @@ cloudformation_for_security_groups_mapping = path + \
                                              '/mapping/cloudformation_for_security_group_tests_mapping_definitions.yaml'
 cloudformation_malformed_mapping_wrong_id = path + '/mapping/cloudformation_malformed_mapping_wrong_id.yaml'
 cloudformation_mapping_iriusrisk = path + '/mapping/iriusrisk-cft-mapping.yaml'
+empty_cloudformation_mapping = path + '/mapping/empty_cloudformation_mapping.yaml'
 
 # cft
 cloudformation_for_mappings_tests_json = path + '/cft/cloudformation_for_mappings_tests.json'
@@ -32,3 +35,4 @@ multiple_stack_plus_s3_ec2 = path + '/cft/multiple_stack_plus_s3_ec2.yaml'
 standalone_securitygroupegress_configuration = path + '/cft/standalone_securitygroupegress_configuration.yaml'
 standalone_securitygroupingress_configuration = path + '/cft/standalone_securitygroupingress_configuration.yaml'
 cloudformation_component_with_unknown_parent = path + '/cft/cloudformation_component_with_unknown_parent.json'
+cloudformation_minimal_content = path + '/cft/cloudformation_minimal_content.json'

@@ -569,3 +569,31 @@ class TestTerraformProcessor:
         # THEN an LoadingIacFileError  is returned
         with pytest.raises(IacFileNotValidError):
             TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, source, [mapping_file]).process()
+
+    def test_minimal_tf_file(self):
+        # Given a minimal valid TF file
+        terraform_minimal_file = get_data(test_resource_paths.terraform_minimal_content)
+
+        # and the default mapping file for TF
+        mapping_file = get_data(test_resource_paths.default_terraform_mapping)
+
+        # When parsing the file with Startleft and the default mapping file
+        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_minimal_file], [mapping_file]).process()
+
+        # Then an empty OTM containing only the default trustzone is generated
+        assert validate_and_diff_otm(otm.json(), test_resource_paths.otm_with_only_default_trustzone_expected_result,
+                                     excluded_regex) == {}
+
+    def test_generate_empty_otm_with_empty_mapping_file(self):
+        # Given an empty mapping file
+        mapping_file = get_data(test_resource_paths.empty_terraform_mapping)
+
+        # and a valid TF file with content
+        terraform_file = get_data(test_resource_paths.terraform_aws_simple_components)
+
+        # When parsing the file with Startleft and the empty mapping file
+        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
+
+        # Then an empty OTM, without any threat modeling content, is generated
+        assert validate_and_diff_otm(otm.json(), test_resource_paths.minimal_otm_expected_result,
+                                     excluded_regex) == {}
