@@ -4,9 +4,6 @@ path = os.path.dirname(__file__)
 
 # generic
 invalid_yaml = path + '/generic/invalid-yaml.yaml'
-otm_expected_result = path + '/generic/otm_expected_result.otm'
-otm_with_only_default_trustzone_expected_result = path + '/generic/otm_with_only_default_trustzone_expected_result.otm'
-minimal_otm_expected_result = path + '/generic/minimal_otm_expected_result.otm'
 
 # mapping
 default_cloudformation_mapping = path + '/mapping/cloudformation_mapping.yaml'
@@ -36,3 +33,10 @@ standalone_securitygroupegress_configuration = path + '/cft/standalone_securityg
 standalone_securitygroupingress_configuration = path + '/cft/standalone_securitygroupingress_configuration.yaml'
 cloudformation_component_with_unknown_parent = path + '/cft/cloudformation_component_with_unknown_parent.json'
 cloudformation_minimal_content = path + '/cft/cloudformation_minimal_content.json'
+cloudformation_orphan_component = path + '/cft/cloudformation_orphan_component.json'
+
+# otm
+otm_expected_result = path + '/otm/otm_expected_result.otm'
+expected_orphan_component_is_not_mapped = path + '/otm/expected_orphan_component_is_not_mapped.otm'
+otm_with_only_default_trustzone_expected_result = path + '/generic/otm_with_only_default_trustzone_expected_result.otm'
+minimal_otm_expected_result = path + '/generic/minimal_otm_expected_result.otm'

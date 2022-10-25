@@ -31,6 +31,7 @@ terraform_networks = path + '/tf/networks_tf_file.tf'
 terraform_resources = path + '/tf/resources_tf_file.tf'
 terraform_invalid_size = path + '/tf/terraform_invalid_size.tf'
 terraform_minimal_content = path + '/tf/terraform_minimal_content.tf'
+terraform_orphan_component = path + '/tf/terraform_orphan_component.tf'
 
 # mapping
 default_terraform_mapping = path + '/mapping/default-terraform-mapping.yaml'
@@ -47,3 +48,4 @@ empty_terraform_mapping = path + '/mapping/empty_terraform_mapping.yaml'
 tf_file_expected_result = path + '/otm/tf-file-expected-result.otm'
 otm_with_only_default_trustzone_expected_result = path + '/otm/otm_with_only_default_trustzone_expected_result.otm'
 minimal_otm_expected_result = path + '/otm/minimal_otm_expected_result.otm'
+expected_orphan_component_is_not_mapped = path + '/otm/expected_orphan_component_is_not_mapped.otm'
