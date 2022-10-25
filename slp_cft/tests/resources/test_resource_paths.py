@@ -38,5 +38,5 @@ cloudformation_orphan_component = path + '/cft/cloudformation_orphan_component.j
 # otm
 otm_expected_result = path + '/otm/otm_expected_result.otm'
 expected_orphan_component_is_not_mapped = path + '/otm/expected_orphan_component_is_not_mapped.otm'
-otm_with_only_default_trustzone_expected_result = path + '/generic/otm_with_only_default_trustzone_expected_result.otm'
-minimal_otm_expected_result = path + '/generic/minimal_otm_expected_result.otm'
+otm_with_only_default_trustzone_expected_result = path + '/otm/otm_with_only_default_trustzone_expected_result.otm'
+minimal_otm_expected_result = path + '/otm/minimal_otm_expected_result.otm'
