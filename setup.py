@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='IriusRisk StartLeft',
+    name='startleft',
     description='Parse Infrastructure as Code files to the Open Threat Model format and upload them to IriusRisk',
     license='Apache2',
     author='Fraser Scott',
@@ -28,7 +28,6 @@ setup(
         'vsdx==0.5.10',
         'python-magic==0.4.27'
     ],
-    use_scm_version=True,
     extras_require={
         "setup": [
             "pytest-runner==6.0.0",

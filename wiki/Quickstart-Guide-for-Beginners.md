@@ -29,7 +29,7 @@ startleft, version <your-installed-version>
 ## The parse command
 The `parse` is the main command of the StartLeft CLI that enables you to perform the whole process of conversion
 to OTM by providing one or multiple source files and a mapping file. It presents slight variations depending on the type 
-of input source that you can check in the [CLI](../Command-Line-Interface.md) section or in each specific processor 
+of input source that you can check in the [CLI](usage/Command-Line-Interface.md) section or in each specific processor 
 documentation, but, to get an idea of its behavior, you can perform a conversion from an IaC file:
 
 First of all, let's download one of the examples contained in the StartLeft's `examples/terraform` folder:
@@ -64,7 +64,7 @@ how a Threat Model has been automatically generated from the Terraform file.
 ## The server command
 Using StartLeft as a service is the most useful strategy for integrate it with other tools. The different ways of 
 configuring this service are deeply described in the [Quickstart guide for integrations](quickstart/Quickstart-Guide-for-Integrations.md) 
-and [REST API](../REST-API.md) sections. However, you can begin to familiarize yourself with this mode by setting up the server 
+and [REST API](usage/REST-API.md) sections. However, you can begin to familiarize yourself with this mode by setting up the server 
 through the CLI using the command:
 ```shell
 startleft server
@@ -134,7 +134,7 @@ startleft validate \
 
 ### search
 This is an auxiliary utility only supported currently for IaC mapping files. Due to the complexity of these files, whose detail can be checked
-[here](../startleft-processors/iac/Source-Mapping.md), sometimes it is useful to test some expressions directly before
+[here](startleft-processors/iac/TD - Source-Mapping.md), sometimes it is useful to test some expressions directly before
 including them in the final mapping file. 
 
 For example, let's use the same Terraform file that we have downloaded for the `parse` command and perform a simple query:
