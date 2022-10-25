@@ -30,6 +30,7 @@ terraform_single_tf = path + '/tf/single_tf_file.tf'
 terraform_networks = path + '/tf/networks_tf_file.tf'
 terraform_resources = path + '/tf/resources_tf_file.tf'
 terraform_invalid_size = path + '/tf/terraform_invalid_size.tf'
+terraform_orphan_component = path + '/tf/terraform_orphan_component.tf'
 
 # mapping
 default_terraform_mapping = path + '/mapping/default-terraform-mapping.yaml'
@@ -42,6 +43,8 @@ terraform_mapping_extra_modules = path + '/mapping/terraform_mapping_extra_modul
 terraform_iriusrisk_tf_aws_mapping = path + '/mapping/iriusrisk-tf-aws-mapping.yaml'
 
 # otm
+tf_file_expected_result = path + '/otm/tf-file-expected-result.otm'
+expected_orphan_component_is_not_mapped = path + '/otm/expected_orphan_component_is_not_mapped.otm'
 expected_separated_networks_components = path + '/otm/expected_separated_network_components.otm'
 expected_aws_altsource_components = path + '/otm/expected_aws_altsource_components.otm'
 expected_aws_dataflows = path + '/otm/expected_aws_dataflows.otm'
