@@ -1,0 +1,565 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "name",
+    "id": "id"
+  },
+  "representations": [
+    {
+      "name": "Terraform",
+      "id": "Terraform",
+      "type": "code"
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    },
+    {
+      "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
+      "name": "Internet",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc",
+      "name": "CustomVPC",
+      "type": "vpc",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_vpc"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1",
+      "name": "PrivateSubnet1",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc"
+      },
+      "tags": [
+        "aws_subnet"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2",
+      "name": "PrivateSubnet2",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc"
+      },
+      "tags": [
+        "aws_subnet"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-publicsubnet1",
+      "name": "PublicSubnet1",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc"
+      },
+      "tags": [
+        "aws_subnet"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-publicsubnet2",
+      "name": "PublicSubnet2",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc"
+      },
+      "tags": [
+        "aws_subnet"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_vpc_endpoint-vpcssm",
+      "name": "VPCssm",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1"
+      },
+      "tags": [
+        "aws_vpc_endpoint"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_vpc_endpoint-vpcssm",
+      "name": "VPCssm",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2"
+      },
+      "tags": [
+        "aws_vpc_endpoint"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_vpc_endpoint-vpcssmmessages",
+      "name": "VPCssmmessages",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1"
+      },
+      "tags": [
+        "aws_vpc_endpoint"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_vpc_endpoint-vpcssmmessages",
+      "name": "VPCssmmessages",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2"
+      },
+      "tags": [
+        "aws_vpc_endpoint"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_vpc_endpoint-vpcmonitoring",
+      "name": "VPCmonitoring",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1"
+      },
+      "tags": [
+        "aws_vpc_endpoint"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_vpc_endpoint-vpcmonitoring",
+      "name": "VPCmonitoring",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2"
+      },
+      "tags": [
+        "aws_vpc_endpoint"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_ecs_service-service",
+      "name": "Service",
+      "type": "elastic-container-service",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1"
+      },
+      "tags": [
+        "aws_ecs_service"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_ecs_service-service",
+      "name": "Service",
+      "type": "elastic-container-service",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2"
+      },
+      "tags": [
+        "aws_ecs_service"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_ecs_service-service.aws_ecs_task_definition-servicetaskdefinition",
+      "name": "ServiceTaskDefinition",
+      "type": "docker-container",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_ecs_service-service"
+      },
+      "tags": [
+        "aws_ecs_task_definition"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_ecs_service-service.aws_ecs_task_definition-servicetaskdefinition",
+      "name": "ServiceTaskDefinition",
+      "type": "docker-container",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_ecs_service-service"
+      },
+      "tags": [
+        "aws_ecs_task_definition"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_lb-servicelb",
+      "name": "ServiceLB",
+      "type": "load-balancer",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1"
+      },
+      "tags": [
+        "aws_lb"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_lb-servicelb",
+      "name": "ServiceLB",
+      "type": "load-balancer",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2"
+      },
+      "tags": [
+        "aws_lb"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-publicsubnet1.aws_synthetics_canary-canary",
+      "name": "Canary",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-publicsubnet1"
+      },
+      "tags": [
+        "aws_synthetics_canary"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-publicsubnet2.aws_synthetics_canary-canary",
+      "name": "Canary",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-publicsubnet2"
+      },
+      "tags": [
+        "aws_synthetics_canary"
+      ]
+    },
+    {
+      "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup",
+      "name": "0.0.0.0/0",
+      "type": "generic-client",
+      "parent": {
+        "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
+      },
+      "tags": [
+        "Outbound connection destination IP"
+      ]
+    },
+    {
+      "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-outboundsecuritygroup",
+      "name": "255.255.255.255/32",
+      "type": "generic-client",
+      "parent": {
+        "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
+      },
+      "tags": [
+        "Outbound connection destination IP"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-vpcssm-altsource",
+      "name": "Systems Manager from VPCEndpoint (grouped)",
+      "type": "CD-SYSTEMS-MANAGER",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "VPCssm (aws_vpc_endpoint)",
+        "VPCssmmessages (aws_vpc_endpoint)"
+      ]
+    }
+  ],
+  "dataflows": [
+    {
+      "id": "dc25ed39-f706-425d-a70d-a4bd6b6e45dc",
+      "name": "VPCssmSecurityGroup -> VPCssm",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_vpc_endpoint-vpcssm",
+      "tags": [
+        "from CustomVPC:443",
+        "tcp",
+        "443",
+        "443"
+      ]
+    },
+    {
+      "id": "2715d9b8-5000-464e-840d-e4188383b1a0",
+      "name": "VPCssm -> VPCssmSecurityGroup",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_vpc_endpoint-vpcssm",
+      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup",
+      "tags": [
+        "Allow all outbound traffic by default",
+        "-1",
+        "0.0.0.0/0"
+      ]
+    },
+    {
+      "id": "7c7687d7-03ff-445a-ab3d-e0f52da46095",
+      "name": "VPCssmSecurityGroup -> VPCssm",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_vpc_endpoint-vpcssm",
+      "tags": [
+        "from CustomVPC:443",
+        "tcp",
+        "443",
+        "443"
+      ]
+    },
+    {
+      "id": "f22f9bc8-b7f2-4037-96b5-5a2bd06a3832",
+      "name": "VPCssm -> VPCssmSecurityGroup",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_vpc_endpoint-vpcssm",
+      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup",
+      "tags": [
+        "Allow all outbound traffic by default",
+        "-1",
+        "0.0.0.0/0"
+      ]
+    },
+    {
+      "id": "350d8f84-e148-4f39-818a-c05a47ecaa3c",
+      "name": "VPCssmmessagesSecurityGroup -> VPCssmmessages",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_vpc_endpoint-vpcssmmessages",
+      "tags": [
+        "from CustomVPC:443",
+        "tcp",
+        "443",
+        "443"
+      ]
+    },
+    {
+      "id": "cea04b53-9b0e-4346-8bd7-6713fe1fbd47",
+      "name": "VPCssmmessages -> VPCssmmessagesSecurityGroup",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_vpc_endpoint-vpcssmmessages",
+      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup",
+      "tags": [
+        "Allow all outbound traffic by default",
+        "-1",
+        "0.0.0.0/0"
+      ]
+    },
+    {
+      "id": "dfabf2f6-8747-4028-aa82-73f94c3504e9",
+      "name": "VPCssmmessagesSecurityGroup -> VPCssmmessages",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_vpc_endpoint-vpcssmmessages",
+      "tags": [
+        "from CustomVPC:443",
+        "tcp",
+        "443",
+        "443"
+      ]
+    },
+    {
+      "id": "aefec2da-54d9-447e-b2fd-824a2d40228e",
+      "name": "VPCssmmessages -> VPCssmmessagesSecurityGroup",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_vpc_endpoint-vpcssmmessages",
+      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup",
+      "tags": [
+        "Allow all outbound traffic by default",
+        "-1",
+        "0.0.0.0/0"
+      ]
+    },
+    {
+      "id": "95d40554-0998-4816-8c32-88852ce9a53e",
+      "name": "VPCmonitoringSecurityGroup -> VPCmonitoring",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_vpc_endpoint-vpcmonitoring",
+      "tags": [
+        "from CustomVPC:443",
+        "tcp",
+        "443",
+        "443"
+      ]
+    },
+    {
+      "id": "8b6f7e7f-b9b5-4a2f-8cb2-e1241b98bdfa",
+      "name": "VPCmonitoring -> VPCmonitoringSecurityGroup",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_vpc_endpoint-vpcmonitoring",
+      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup",
+      "tags": [
+        "Allow all outbound traffic by default",
+        "-1",
+        "0.0.0.0/0"
+      ]
+    },
+    {
+      "id": "7e20b625-b581-48da-b5b7-ca2cca6dff92",
+      "name": "VPCmonitoringSecurityGroup -> VPCmonitoring",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_vpc_endpoint-vpcmonitoring",
+      "tags": [
+        "from CustomVPC:443",
+        "tcp",
+        "443",
+        "443"
+      ]
+    },
+    {
+      "id": "693e6c3a-4d16-4333-b52a-2d6ac724119d",
+      "name": "VPCmonitoring -> VPCmonitoringSecurityGroup",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_vpc_endpoint-vpcmonitoring",
+      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup",
+      "tags": [
+        "Allow all outbound traffic by default",
+        "-1",
+        "0.0.0.0/0"
+      ]
+    },
+    {
+      "id": "c752bf3b-4c5e-4e92-a18c-aa59add042de",
+      "name": "Service -> OutboundSecurityGroup",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_ecs_service-service",
+      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-outboundsecuritygroup",
+      "tags": [
+        "Disallow all traffic",
+        "icmp",
+        "255.255.255.255/32"
+      ]
+    },
+    {
+      "id": "1dd2f2fe-ed15-4210-89d0-f62365cf8137",
+      "name": "Service -> OutboundSecurityGroup",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_ecs_service-service",
+      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-outboundsecuritygroup",
+      "tags": [
+        "Disallow all traffic",
+        "icmp",
+        "255.255.255.255/32"
+      ]
+    },
+    {
+      "id": "e0967c57-0e9f-4ba1-96cc-e4294b755811",
+      "name": "ServiceLB -> Service",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_lb-servicelb",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_ecs_service-service",
+      "tags": [
+        "Load balancer to target",
+        "tcp",
+        "80",
+        "80",
+        "Load balancer to target",
+        "tcp",
+        "80",
+        "80"
+      ]
+    },
+    {
+      "id": "708f8066-c235-463a-b82a-4d5c8e50a86c",
+      "name": "ServiceLB -> Service",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_lb-servicelb",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_ecs_service-service",
+      "tags": [
+        "Load balancer to target",
+        "tcp",
+        "80",
+        "80",
+        "Load balancer to target",
+        "tcp",
+        "80",
+        "80"
+      ]
+    },
+    {
+      "id": "caa3eb3d-b76e-44d6-9a85-f58ec949783b",
+      "name": "Canary -> ServiceLB",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-publicsubnet1.aws_synthetics_canary-canary",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_lb-servicelb",
+      "tags": [
+        "from CanarySecurityGroup:443",
+        "tcp",
+        "443",
+        "443",
+        "to ServiceLBSecurityGroup:443",
+        "tcp",
+        "443",
+        "443"
+      ]
+    },
+    {
+      "id": "5de76908-2743-4719-8cb9-2f1ded2ac206",
+      "name": "Canary -> ServiceLB",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-publicsubnet2.aws_synthetics_canary-canary",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_lb-servicelb",
+      "tags": [
+        "from CanarySecurityGroup:443",
+        "tcp",
+        "443",
+        "443",
+        "to ServiceLBSecurityGroup:443",
+        "tcp",
+        "443",
+        "443"
+      ]
+    },
+    {
+      "id": "d80383ac-8250-4d63-95a2-91c097f22bc4",
+      "name": "ServiceLB -> Service",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_lb-servicelb",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_ecs_service-service",
+      "tags": [
+        "Load balancer to target",
+        "tcp",
+        "80",
+        "80",
+        "Load balancer to target",
+        "tcp",
+        "80",
+        "80"
+      ]
+    },
+    {
+      "id": "98981307-21a0-4978-b197-2ef0530e2d13",
+      "name": "ServiceLB -> Service",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_lb-servicelb",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_ecs_service-service",
+      "tags": [
+        "Load balancer to target",
+        "tcp",
+        "80",
+        "80",
+        "Load balancer to target",
+        "tcp",
+        "80",
+        "80"
+      ]
+    },
+    {
+      "id": "a1722d4c-d827-4b75-9089-1ea8429a4853",
+      "name": "Canary -> ServiceLB",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-publicsubnet1.aws_synthetics_canary-canary",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_lb-servicelb",
+      "tags": [
+        "from CanarySecurityGroup:443",
+        "tcp",
+        "443",
+        "443",
+        "to ServiceLBSecurityGroup:443",
+        "tcp",
+        "443",
+        "443"
+      ]
+    },
+    {
+      "id": "ef9fa1e4-fcc7-4c0d-9cae-85112f286699",
+      "name": "Canary -> ServiceLB",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-publicsubnet2.aws_synthetics_canary-canary",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_lb-servicelb",
+      "tags": [
+        "from CanarySecurityGroup:443",
+        "tcp",
+        "443",
+        "443",
+        "to ServiceLBSecurityGroup:443",
+        "tcp",
+        "443",
+        "443"
+      ]
+    }
+  ]
+}
