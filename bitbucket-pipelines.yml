@@ -13,7 +13,5 @@ pipelines:
             - pip
           script:
             - pip install .
-            - pip install deepdiff
-            - pip install responses
-            - pip install pytest
+            - pip install -e ".[setup,test]"
             - python run_tests.py
