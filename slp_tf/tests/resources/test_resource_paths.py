@@ -30,6 +30,9 @@ terraform_single_tf = path + '/tf/single_tf_file.tf'
 terraform_networks = path + '/tf/networks_tf_file.tf'
 terraform_resources = path + '/tf/resources_tf_file.tf'
 terraform_invalid_size = path + '/tf/terraform_invalid_size.tf'
+terraform_main_referenced_variables = path + '/tf/terraform_main_referenced_variables.tf'
+terraform_vars_referenced_variables = path + '/tf/terraform_vars_referenced_variables.tf'
+terraform_variables_file_referenced_variables = path + '/tf/terraform_variables_files_referenced_variables.tfvars'
 
 # mapping
 default_terraform_mapping = path + '/mapping/default-terraform-mapping.yaml'
@@ -43,3 +46,4 @@ terraform_iriusrisk_tf_aws_mapping = path + '/mapping/iriusrisk-tf-aws-mapping.y
 
 # otm
 tf_file_expected_result = path + '/otm/tf-file-expected-result.otm'
+tf_file_referenced_vars_expected_result = path + '/otm/tf-file-referenced-vars-expected-result.otm'
