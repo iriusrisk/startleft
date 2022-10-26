@@ -311,4 +311,4 @@ class TestTerraformProcessor:
         ).process()
 
         # THEN a file with the single_tf_file-expected-result.otm contents is returned
-        assert validate_and_diff_otm(otm.json(), test_resource_paths.tf_file_referenced_vars_expected_result, excluded_regex) == {}
+        assert validate_and_diff(otm.json(), test_resource_paths.tf_file_referenced_vars_expected_result, excluded_regex) == {}
