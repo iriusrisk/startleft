@@ -1,0 +1,126 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "name",
+    "id": "id"
+  },
+  "representations": [
+    {
+      "name": "Terraform",
+      "id": "Terraform",
+      "type": "code"
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-dynamodb-altsource",
+      "name": "DynamoDB from VPCEndpoint",
+      "type": "dynamodb",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "dynamodb (aws_vpc_endpoint)"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-ssm",
+      "name": "ssm",
+      "type": "empty-component",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_vpc_endpoint"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-ssm_messages",
+      "name": "ssm_messages",
+      "type": "empty-component",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_vpc_endpoint"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-ecr",
+      "name": "ecr",
+      "type": "empty-component",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_vpc_endpoint"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-dynamodb",
+      "name": "dynamodb",
+      "type": "empty-component",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_vpc_endpoint"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-s3",
+      "name": "s3",
+      "type": "empty-component",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_vpc_endpoint"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-s3-altsource",
+      "name": "S3 from VPCEndpoint",
+      "type": "s3",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "s3 (aws_vpc_endpoint)"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-ssm-altsource",
+      "name": "Systems Manager from VPCEndpoint (grouped)",
+      "type": "CD-SYSTEMS-MANAGER",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "ssm (aws_vpc_endpoint)",
+        "ssm_messages (aws_vpc_endpoint)"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-ecr-altsource",
+      "name": "ECR from VPCEndpoint",
+      "type": "elastic-container-registry",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "ecr (aws_vpc_endpoint)"
+      ]
+    }
+  ],
+  "dataflows": []
+}
