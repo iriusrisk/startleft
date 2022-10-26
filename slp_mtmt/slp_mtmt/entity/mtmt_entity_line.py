@@ -20,11 +20,45 @@ class MTMLine(MTMEntity):
 
     @property
     def source_guid(self):
-        return self.source.get('Value').get('SourceGuid')
+        return self.__extract_value('SourceGuid')
 
     @property
     def target_guid(self):
-        return self.source.get('Value').get('TargetGuid')
+        return self.__extract_value('TargetGuid')
+
+    @property
+    def handle_x(self):
+        return self.__extract_int_value('HandleX')
+
+    @property
+    def handle_y(self):
+        return self.__extract_int_value('HandleY')
+
+    @property
+    def source_x(self):
+        return self.__extract_int_value('SourceX')
+
+    @property
+    def source_y(self):
+        return self.__extract_int_value('SourceY')
+
+    @property
+    def target_x(self):
+        return self.__extract_int_value('TargetX')
+
+    @property
+    def target_y(self):
+        return self.__extract_int_value('TargetY')
+
+    @property
+    def coordinates(self):
+        return self.handle_x, self.handle_y, self.source_x, self.source_y, self.target_x, self.target_y
+
+    def __extract_value(self, key):
+        return self.source.get('Value').get(key)
+
+    def __extract_int_value(self, key):
+        return int(self.__extract_value(key))
 
     @property
     def properties(self):

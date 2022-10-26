@@ -25,6 +25,11 @@ class MTMTTrustzoneParser:
                 trustzone = self.create_trustzone(mtmt_border)
                 if trustzone is not None:
                     self.trustzones.append(trustzone)
+        for mtmt_line in self.source.lines:
+            if mtmt_line.is_trustzone:
+                trustzone = self.create_trustzone(mtmt_line)
+                if trustzone is not None:
+                    self.trustzones.append(trustzone)
         return self.trustzones
 
     def create_trustzone(self, border: MTMBorder) -> Trustzone:
@@ -64,6 +69,3 @@ class MTMTTrustzoneParser:
             trustzone_id = self.mapping.mapping_trustzones[DEFAULT_LABEL]['id']
             return Trustzone(id=trustzone_id,
                              name=DEFAULT_NAME)
-
-
-

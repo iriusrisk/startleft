@@ -5,6 +5,7 @@ from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMapping
 from slp_mtmt.slp_mtmt.parse.mtmt_trustzone_parser import MTMTTrustzoneParser
 from slp_mtmt.slp_mtmt.parse.resolvers.resolvers import get_type_resolver
 from slp_mtmt.slp_mtmt.util.border_parent_calculator import BorderParentCalculator
+from slp_mtmt.slp_mtmt.util.line_parent_calculator import LineParentCalculator
 
 
 class MTMTComponentParser:
@@ -50,6 +51,10 @@ class MTMTComponentParser:
     def __get_trustzone_id(self, border: MTMBorder):
         parent_calculator = BorderParentCalculator()
         for candidate in self.source.borders:
+            if parent_calculator.is_parent(candidate, border):
+                return self.trustzoneParser.calculate_otm_id(candidate)
+        parent_calculator = LineParentCalculator()
+        for candidate in self.source.lines:
             if parent_calculator.is_parent(candidate, border):
                 return self.trustzoneParser.calculate_otm_id(candidate)
 
