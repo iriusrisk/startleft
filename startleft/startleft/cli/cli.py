@@ -16,11 +16,11 @@ from slp_base.slp_base.otm_validator import OtmValidator
 from slp_base.slp_base.provider_resolver import ProviderResolver
 from slp_cft.slp_cft.cft_searcher import CloudformationSearcher
 from slp_tf.slp_tf.tf_searcher import TerraformSearcher
-from startleft.startleft.cli.clioptions.exclusion_option import Exclusion
-from startleft.startleft.messages import *
-from startleft.startleft.version import version
 from startleft.startleft.api import fastapi_server
+from startleft.startleft.cli.clioptions.exclusion_option import Exclusion
 from startleft.startleft.log import get_log_level, configure_logging
+from startleft.startleft.messages import *
+from version import version
 
 logger = logging.getLogger(__name__)
 provider_resolver = ProviderResolver(PROCESSORS)
