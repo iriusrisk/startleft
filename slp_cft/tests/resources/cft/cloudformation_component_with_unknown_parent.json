@@ -1,0 +1,29 @@
+{
+  "Resources": {
+    "PrivateSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+      }
+    },
+    "InterneteGateway": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {}
+    },
+    "E2CINSTANCE": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+      }
+    },
+    "VPCssm": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "ServiceName": "com.amazonaws.us-east-1.ssm",
+        "VpcId": {
+          "Ref": "CustomVPC"
+        },
+        "PrivateDnsEnabled": true,
+        "VpcEndpointType": "Interface"
+      }
+    }
+  }
+}
