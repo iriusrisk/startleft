@@ -13,7 +13,8 @@ empty_mapping_file = path + "/empty_mapping_file.yaml"
 # OTM
 otm_file_example = path + '/otm/otm_file_example.otm'
 otm_yaml_file_example = path + '/otm/otm_file_example_yaml.otm'
-otm_empty_file_example = path + '/otm/otm_empty_file_example.otm'
+otm_empty_file_terraform_example = path + '/otm/otm_empty_file_terraform_example.otm'
+otm_empty_file_cloudformation_example = path + '/otm/otm_empty_file_cloudformation_example.otm'
 
 # CLOUDFORMATION
 cloudformation_for_mappings_tests_json = path + '/cloudformation/cloudformation_for_mappings_tests.json'
@@ -27,6 +28,8 @@ cloudformation_component_without_parent = path + '/cloudformation/cloudformation
 cloudformation_skipped_component_without_parent = path + '/cloudformation/cloudformation_component_without_parent_skipped.json'
 cloudformation_unknown_resource = path + '/cloudformation/cloudformation_unknown_resource.json'
 cloudformation_all_functions = path + '/cloudformation/cloudformation_all_functions.json'
+cloudformation_multiple_files_networks = path + '/cloudformation/cloudformation_multiple_files_networks.json'
+cloudformation_multiple_files_resources = path + '/cloudformation/cloudformation_multiple_files_resources.json'
 # mapping
 default_cloudformation_mapping = path + '/cloudformation/cloudformation_mapping.yaml'
 cloudformation_mapping_component_without_parent = path + '/cloudformation/cloudformation_mapping_component_without_parent.yaml'
@@ -53,6 +56,8 @@ terraform_gz = path + '/terraform/terraform.gz'
 terraform_specific_functions = path + '/terraform/terraform_specific_functions.tf'
 terraform_modules = path + '/terraform/terraform_modules_sample.tf'
 terraform_extra_modules_sample = path + '/terraform/terraform_extra_modules_sample.tf'
+terraform_multiple_files_one = path + '/terraform/aws_simple_components.tf'
+terraform_multiple_files_two = path + '/terraform/aws_dataflows.tf'
 # mapping
 default_terraform_mapping = path + '/terraform/default-terraform-mapping.yaml'
 default_terraform_aws_mapping = path + '/terraform/aws_terraform_mapping.yaml'
@@ -92,8 +97,3 @@ custom_vpc_mapping = path + '/visio/custom-vpc-mapping.yaml'
 visio_aws_shapes_otm_expected = path + '/visio/aws-shapes.otm'
 visio_aws_with_tz_and_vpc_otm_expected = path + '/visio/aws-with-tz-and-vpc.otm'
 visio_orphan_dataflows_otm_expected = path + '/visio/visio-orphan-dataflows.otm'
-
-
-
-
-

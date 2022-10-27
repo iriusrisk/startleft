@@ -1,0 +1,55 @@
+{
+  "Resources": {
+    "myVPC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsSupport": "true",
+        "EnableDnsHostnames": "true",
+        "Tags": [
+          {"Key": "stack", "Value": "production"}
+        ]
+      }
+    },
+    "ssm": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "VpcId": {"Ref": "myVPC"},
+        "ServiceName": {"Fn::Sub": "com.amazonaws.${AWS::Region}.ssm"},
+        "VpcEndpointType": "Interface"
+      }
+    },
+    "ssm_messages": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "VpcId": {"Ref": "myVPC"},
+        "ServiceName": {"Fn::Sub": "com.amazonaws.${AWS::Region}.ssmmessages"},
+        "VpcEndpointType": "Interface"
+      }
+    },
+    "ecr": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "VpcId": {"Ref": "myVPC"},
+        "ServiceName": {"Fn::Sub": "com.amazonaws.${AWS::Region}.ecr.dkr"},
+        "VpcEndpointType": "Interface"
+      }
+    },
+    "dynamodb": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "VpcId": {"Ref": "myVPC"},
+        "ServiceName": {"Fn::Sub": "com.amazonaws.${AWS::Region}.dynamodb"},
+        "VpcEndpointType": "Interface"
+      }
+    },
+    "s3": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "VpcId": {"Ref": "myVPC"},
+        "ServiceName": {"Fn::Sub": "com.amazonaws.${AWS::Region}.s3"},
+        "VpcEndpointType": "Interface"
+      }
+    }
+  }
+}

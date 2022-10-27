@@ -1,6 +1,7 @@
 import logging
 import uuid
 
+from slp_cft.slp_cft.parse.mapping.mappers.cft_base_mapper import CloudformationBaseMapper
 from slp_cft.slp_cft.parse.mapping.mappers.cft_component_mapper import CloudformationComponentMapper
 from slp_cft.slp_cft.parse.mapping.mappers.cft_dataflow_mapper import CloudformationDataflowMapper
 from slp_cft.slp_cft.parse.mapping.mappers.cft_trustzone_mapper import CloudformationTrustzoneMapper
@@ -66,31 +67,12 @@ class CloudformationTransformer:
     def transform_components(self):
         logger.info("Adding components")
 
-        components = self.__find_components()
+        components = self.__calculate_singletons(self.__find_components())
 
-        results_without_singleton = self.__get_components(components.components, components.skip) + self.__get_catchall(
-            components.catchall, components.skip)
+        self.__remove_aux_data(components)
+        self.__add_components_to_otm(components)
 
-        results = self.__get_singleton(components.singleton, components.skip, results_without_singleton)
-
-        # removal of auxiliary data before adding components
-        for component in results:
-            if "singleton_multiple_name" in component:
-                del component["singleton_multiple_name"]
-            if "singleton_multiple_tags" in component:
-                del component["singleton_multiple_tags"]
-
-        for final_component in results:
-            parent_component = next(filter(lambda x: x["id"] == final_component['parent'], results), None)
-            if parent_component:
-                final_component["parent_type"] = "component"
-            else:
-                final_component["parent_type"] = "trustZone"
-
-            self.threat_model.add_component(**final_component)
-            logger.debug(f"Added component: [{final_component['name']}][{final_component['id']}]"
-                         f"{final_component['tags']}" if 'tags' in final_component else "")
-        logger.info(f"Added {results.__len__()} components successfully")
+        logger.info(f"Added {components.__len__()} components successfully")
 
     def __find_components(self):
         logger.debug("Finding components")
@@ -114,6 +96,40 @@ class CloudformationTransformer:
 
                 found_components.components.append(component)
         return found_components
+
+    def __remove_aux_data(self, components):
+        for component in components:
+            if "singleton_multiple_name" in component:
+                del component["singleton_multiple_name"]
+            if "singleton_multiple_tags" in component:
+                del component["singleton_multiple_tags"]
+
+    def __calculate_singletons(self, components):
+        results_without_singleton = \
+            self.__get_components(components.components, components.skip) + \
+            self.__get_catchall(components.catchall, components.skip)
+
+        return self.__get_singleton(components.singleton, components.skip, results_without_singleton)
+
+    def __add_components_to_otm(self, components):
+        for component in components:
+            parent_type = self.__get_parent_type(component, components)
+            if not parent_type:
+                continue
+
+            component['parent_type'] = parent_type
+
+            self.threat_model.add_component(**component)
+            logger.debug(f"Added component: [{component['name']}][{component['id']}]"
+                         f"{component['tags']}" if 'tags' in component else "")
+
+    def __get_parent_type(self, component, components):
+        if component['parent'] in [trustzone["id"] for trustzone in self.iac_mapping["trustzones"]]:
+            return 'trustZone'
+
+        parent_component = next(filter(lambda x: x["id"] == component['parent'], components), None)
+        if parent_component:
+            return 'component'
 
     def __get_components(self, components, skip):
         results = []

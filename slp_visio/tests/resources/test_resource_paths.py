@@ -8,6 +8,7 @@ invalid_yaml = path + '/generic/invalid-yaml.yaml'
 # mapping
 default_visio_mapping = path + '/mapping/aws-visio-mapping.yaml'
 custom_vpc_mapping = path + '/mapping/custom-vpc-mapping.yaml'
+empty_mapping = path + '/mapping/empty-mapping.yaml'
 
 # visio
 visio_aws_with_tz_and_vpc = path + '/visio/aws-with-tz-and-vpc.vsdx'
@@ -29,3 +30,5 @@ visio_invalid_file_size = path + '/visio/invalid-file-size.vsdx'
 visio_invalid_file_type = path + '/visio/invalid-file-type.pdf'
 visio_modified_single_connectors = path + '/visio/modified-single-connectors.vsdx'
 visio_bidirectional_connectors = path + '/visio/bidirectional-connectors.vsdx'
+visio_complex_stencil_text = path + '/visio/standalone-with-custom-name-AWS-complex-stencils-shapes.vsdx'
+visio_empty = path + '/visio/empty-diagram.vsdx'
