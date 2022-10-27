@@ -45,9 +45,12 @@ class VisioParser(ProviderParser):
         return DiagramConnectorMapper(self.diagram.connectors).to_otm()
 
     def __build_otm(self, trustzones: [Trustzone], components: [Component], dataflows: [Dataflow]):
-        return OtmBuilder(self.project_id, self.project_name, self.diagram.diagram_type) \
-            .add_default_trustzone(self.__default_trustzone) \
+        otm_builder = OtmBuilder(self.project_id, self.project_name, self.diagram.diagram_type) \
             .add_trustzones(trustzones) \
             .add_components(components) \
-            .add_dataflows(dataflows) \
-            .build()
+            .add_dataflows(dataflows)
+
+        if self.__default_trustzone:
+            otm_builder.add_default_trustzone(self.__default_trustzone)
+
+        return otm_builder.build()

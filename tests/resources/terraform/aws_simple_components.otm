@@ -1,60 +1,45 @@
 {
-  "otmVersion": "0.1.0",
-  "project": {
-    "name": "test_parse_terraform_file_ok",
-    "id": "test_parse_terraform_file_ok"
-  },
-  "representations": [
-    {
-      "name": "Terraform",
-      "id": "Terraform",
-      "type": "code"
-    }
-  ],
-  "trustZones": [
-    {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
-      "name": "Public Cloud",
-      "risk": {
-        "trustRating": 10
-      }
-    }
-  ],
-  "components": [
-      {
-        "id": "c4b9c67d-697a-4123-ac03-53c8bf79ceca",
+    "otmVersion": "0.1.0",
+    "project": {
+        "name": "test_parse_terraform_file_ok",
+        "id": "test_parse_terraform_file_ok"
+    },
+    "representations": [{
+        "name": "Terraform",
+        "id": "Terraform",
+        "type": "code"
+    }],
+    "trustZones": [{
+        "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+        "name": "Public Cloud",
+        "risk": {
+            "trustRating": 10
+        }
+    }],
+    "components": [{
+        "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_cloudtrail-foobar",
         "name": "foobar",
         "type": "cloudtrail",
         "parent": {
-          "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
         },
-        "tags": [
-          "aws_cloudtrail"
-        ]
-      },
-      {
-        "id": "3ceb32ee-dbee-4814-b355-89f70a5f1adc",
+        "tags": ["aws_cloudtrail"]
+    }, {
+        "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_s3_bucket-foo_s3_bucket",
         "name": "foo_s3_bucket",
         "type": "s3",
         "parent": {
-          "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
         },
-        "tags": [
-          "aws_s3_bucket"
-        ]
-      },
-      {
-        "id": "da6956e7-0523-443a-91fe-de8bb8f8cadb",
+        "tags": ["aws_s3_bucket"]
+    }, {
+        "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_sqs_queue-terraform_queue",
         "name": "terraform_queue",
         "type": "sqs-simple-queue-service",
         "parent": {
-          "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
         },
-        "tags": [
-          "aws_sqs_queue"
-        ]
-      }
-    ],
-
-  "dataflows": []
+        "tags": ["aws_sqs_queue"]
+    }],
+    "dataflows": []
 }

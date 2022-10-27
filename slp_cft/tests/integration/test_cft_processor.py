@@ -3,15 +3,16 @@ import pytest
 from sl_util.sl_util.file_utils import get_data
 from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError, \
     LoadingIacFileError
-from slp_base.tests.util.otm import validate_and_diff_otm
+from slp_base.tests.util.otm import validate_and_diff
 from slp_cft import CloudformationProcessor
 from slp_cft.tests.resources import test_resource_paths
+from slp_cft.tests.resources.test_resource_paths import expected_orphan_component_is_not_mapped
 from slp_cft.tests.utility import excluded_regex
 
+VALIDATION_EXCLUDED_REGEX = r"root\[\'dataflows'\]\[.+?\]\['id'\]"
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
 DEFAULT_TRUSTZONE_ID = "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-SAMPLE_UNKNOWN_PARENT_CFT_FILE = test_resource_paths.cloudformation_component_with_unknown_parent
 SAMPLE_VALID_CFT_FILE = test_resource_paths.cloudformation_for_mappings_tests_json
 SAMPLE_VALID_MAPPING_FILE = test_resource_paths.default_cloudformation_mapping
 SAMPLE_SINGLE_VALID_CFT_FILE = test_resource_paths.cloudformation_single_file
@@ -19,12 +20,40 @@ SAMPLE_VALID_MAPPING_FILE_IR = test_resource_paths.cloudformation_mapping_iriusr
 SAMPLE_NETWORKS_CFT_FILE = test_resource_paths.cloudformation_networks_file
 SAMPLE_RESOURCES_CFT_FILE = test_resource_paths.cloudformation_resources_file
 OTM_EXPECTED_RESULT = test_resource_paths.otm_expected_result
+ALTSOURCE_COMPONENTS_OTM_EXPECTED = test_resource_paths.altsource_components_otm_expected
 
 
 class TestCloudformationProcessor:
-    def test_set_default_trustzone_as_parent_when_parent_not_exists(self):
+    def test_altsource_components(self):
+        # GIVEN a valid CFT file with altsource resources
+        cft_file = get_data(test_resource_paths.altsource_components_json)
+
+        # AND a valid CFT mapping file
+        mapping_file = get_data(test_resource_paths.default_cloudformation_mapping)
+
+        # WHEN the CFT file is processed
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cft_file], [mapping_file]).process()
+
+        # THEN the resulting OTM match the expected one
+        assert validate_and_diff(otm, ALTSOURCE_COMPONENTS_OTM_EXPECTED, VALIDATION_EXCLUDED_REGEX) == {}
+
+    def test_orphan_component_is_not_mapped(self):
         # GIVEN a valid CFT file with a resource (VPCssm) with a parent which is not declared as component itself (CustomVPC)
-        cloudformation_file = get_data(test_resource_paths.cloudformation_component_with_unknown_parent)
+        cloudformation_file = get_data(test_resource_paths.cloudformation_orphan_component)
+
+        # AND a valid CFT mapping file
+        mapping_file = get_data(test_resource_paths.default_cloudformation_mapping)
+
+        # WHEN the CFT file is processed
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
+
+        # THEN the VPCsmm component without parents is omitted
+        # AND the rest of the OTM details match the expected
+        assert validate_and_diff(otm.json(), expected_orphan_component_is_not_mapped, excluded_regex) == {}
+
+    def test_component_dataflow_ids(self):
+        # GIVEN a valid CFT file with some resources
+        cloudformation_file = get_data(test_resource_paths.cloudformation_for_security_group_tests_json)
 
         # AND a valid CFT mapping file
         mapping_file = get_data(test_resource_paths.default_cloudformation_mapping)
@@ -33,12 +62,77 @@ class TestCloudformationProcessor:
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
 
         # THEN the number of TZs, components and dataflows are right
-        assert len(otm.trustzones) == 1
-        assert len(otm.components) == 5
+        assert len(otm.trustzones) == 2
+        assert len(otm.components) == 22
+        assert len(otm.dataflows) == 22
 
-        # AND the VPCssm component has the default trustzone id as parent, instead of the CustomVPC unknown component id
-        assert list(filter(lambda component: component.parent_type == 'trustZone' and
-                                             component.parent == DEFAULT_TRUSTZONE_ID, otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet1', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet2', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcssm', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcssm', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcssmmessages', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcssmmessages', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcmonitoring', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcmonitoring', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.service', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.service', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.service.servicetaskdefinition', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.service.servicetaskdefinition', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.servicelb', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.servicelb', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet1.canary', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet2.canary', otm.components))
+        assert list(filter(lambda obj: obj.id == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup', otm.components))
+        assert list(filter(lambda obj: obj.id == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.outboundsecuritygroup', otm.components))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.vpcssm-altsource', otm.components))
+
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc'
+                                       and obj.destination_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcssm', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcssm'
+                                       and obj.destination_node == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc'
+                                       and obj.destination_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcssm', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcssm'
+                                       and obj.destination_node == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc'
+                                       and obj.destination_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcssmmessages', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcssmmessages'
+                                       and obj.destination_node == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc'
+                                       and obj.destination_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcssmmessages', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcssmmessages'
+                                       and obj.destination_node == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc'
+                                       and obj.destination_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcmonitoring', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcmonitoring'
+                                       and obj.destination_node == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc'
+                                       and obj.destination_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcmonitoring', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcmonitoring'
+                                       and obj.destination_node == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.service'
+                                       and obj.destination_node == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.outboundsecuritygroup', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.service'
+                                       and obj.destination_node == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.outboundsecuritygroup', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.servicelb'
+                                       and obj.destination_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.service', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.servicelb'
+                                       and obj.destination_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.service', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet1.canary'
+                                       and obj.destination_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.servicelb', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet2.canary'
+                                       and obj.destination_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.servicelb', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.servicelb'
+                                       and obj.destination_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.service', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.servicelb'
+                                       and obj.destination_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.service', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet1.canary'
+                                       and obj.destination_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.servicelb', otm.dataflows))
+        assert list(filter(lambda obj: obj.source_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet2.canary'
+                                       and obj.destination_node == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.servicelb', otm.dataflows))
 
     def test_run_valid_mappings(self):
         # GIVEN a valid CFT file with some resources
@@ -333,7 +427,7 @@ class TestCloudformationProcessor:
                                       [mapping_file]).process()
 
         # THEN a file with the expected otm is returned
-        assert validate_and_diff_otm(otm.json(), OTM_EXPECTED_RESULT, excluded_regex) == {}
+        assert validate_and_diff(otm, OTM_EXPECTED_RESULT, excluded_regex) == {}
 
     def test_run_valid_multiple_iac_mapping_files(self):
         # GIVEN the valid CFT file
@@ -346,7 +440,7 @@ class TestCloudformationProcessor:
         otm = CloudformationProcessor('multiple-files', 'multiple-files', [networks_cft_file, resources_cft_file],
                                       [mapping_file]).process()
         # THEN a file with the expected otm is returned
-        assert validate_and_diff_otm(otm.json(), OTM_EXPECTED_RESULT, excluded_regex) == {}
+        assert validate_and_diff(otm, OTM_EXPECTED_RESULT, excluded_regex) == {}
 
     def test_run_empty_multiple_iac_files(self):
         # GIVEN a request without any iac_file key
