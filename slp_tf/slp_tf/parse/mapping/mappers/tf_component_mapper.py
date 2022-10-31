@@ -56,7 +56,7 @@ class TerraformComponentMapper(TerraformBaseMapper):
                         continue
 
                     component_ids = self.__generate_id(
-                        source_model, source_object | base_component, component_name, parent_name_number)
+                        source_model, {**source_object, **base_component}, component_name, parent_name_number)
 
                     if isinstance(component_ids, str):
                         component_ids = [component_ids]
