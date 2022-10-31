@@ -43,7 +43,10 @@ class MTMTComponentParser:
     def __get_label_value(self, border: MTMBorder):
         label = border.stencil_name
         if label not in self.mapping.mapping_components:
-            return None
+            if 'default' in self.mapping.mapping_components:
+                label = 'default'
+            else:
+                return None
         map_ = self.mapping.mapping_components[label]
 
         return get_type_resolver(label).resolve(map_, border)
