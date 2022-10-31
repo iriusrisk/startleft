@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from startleft.startleft.version import version
+from version import version
 
 PREFIX = ''
 URL = '/health'
