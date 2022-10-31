@@ -100,7 +100,7 @@ class TerraformTransformer:
         default_component_mapping_template = self.__default_component_mapping_template()
 
         for mapping in self.iac_mapping["components"]:
-            mapper = TerraformComponentMapper(default_component_mapping_template | mapping)
+            mapper = TerraformComponentMapper({**default_component_mapping_template, **mapping})
             mapper.id_map = self.id_map
             for component in mapper.run(self.source_model, self.id_parents):
                 if isinstance(mapping["$source"], dict):
