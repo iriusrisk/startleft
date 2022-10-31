@@ -4,6 +4,14 @@ import uuid
 from slp_tf.slp_tf.parse.mapping.mappers.tf_base_mapper import TerraformBaseMapper
 
 
+def get_children(mapping):
+    children = mapping.get("$source", {}).get("$children", None)
+    if not children:
+        children = mapping.get("children", None)
+
+    return children
+
+
 class TerraformComponentMapper(TerraformBaseMapper):
     def run(self, source_model, id_parents):
         """
@@ -16,9 +24,10 @@ class TerraformComponentMapper(TerraformBaseMapper):
 
         source_objects = self.format_source_objects(source_model.search(self.mapping["$source"], source=None))
         mapping_name, mapping_tags = self.get_mappings_for_name_and_tags(self.mapping)
+        component_type = self.mapping["type"]
 
         for source_object in source_objects:
-            component_type = source_model.search(self.mapping["type"], source=source_object)
+            source_object['type'] = component_type
             component_name, singleton_multiple_name = self.__get_component_names(source_model, source_object,
                                                                                  mapping_name)
             parent_names, parents_from_component = self.__get_parent_names(source_model, source_object, id_parents,
@@ -46,7 +55,8 @@ class TerraformComponentMapper(TerraformBaseMapper):
                     if self.repeated_type4_hub_definition_component(self.mapping, self.id_map, component_name):
                         continue
 
-                    component_ids = self.__generate_id(source_model, base_component, component_name, parent_name_number)
+                    component_ids = self.__generate_id(
+                        source_model, source_object | base_component, component_name, parent_name_number)
 
                     if isinstance(component_ids, str):
                         component_ids = [component_ids]
@@ -56,7 +66,7 @@ class TerraformComponentMapper(TerraformBaseMapper):
                         component["id"] = component_id
 
                         # If the component is defining child components the ID must be saved in a parent dict
-                        if "$children" in self.mapping["$source"]:
+                        if get_children(self.mapping):
                             self.__add_child_to_parent_list(source_model, source_object, component_id, id_parents)
                         elif "$skip" not in self.mapping["$source"] and "$parent" in self.mapping["parent"]:
                             # $parent and $children are related mappings
@@ -82,7 +92,7 @@ class TerraformComponentMapper(TerraformBaseMapper):
     def __add_child_to_parent_list(self, source_model, source_object, parent_id, id_parents):
         self.logger.debug("Component is defining child components...")
         child_id = str(uuid.uuid4())
-        child_name = source_model.search(self.mapping["$source"]["$children"], source=source_object)
+        child_name = source_model.search(get_children(self.mapping), source=source_object)
 
         self.__add_child_to_childs_map(child_id, child_name)
 
@@ -165,7 +175,8 @@ class TerraformComponentMapper(TerraformBaseMapper):
         if "name" in self.mapping:
             source_component_name = self.get_first_element_from_list(source_model.search(mapping, source=source_object))
             if self.is_terraform_variable_reference(source_component_name):
-                source_component_name = self.format_terraform_variable(source_model, source_object, source_component_name)
+                source_component_name = self.format_terraform_variable(
+                    source_model, source_object, source_component_name)
             elif self.is_terraform_resource_reference(source_component_name):
                 source_component_name = self.get_resource_name_from_resource_reference(source_component_name)
 
@@ -233,8 +244,7 @@ class TerraformComponentMapper(TerraformBaseMapper):
         return c_tags, c_multiple_tags
 
     def __multiple_sources_mapping_inside(self, mapping_definition):
-        return "$singleton" in self.mapping["$source"] and \
-               len(list(filter(lambda obj: "$numberOfSources" in obj, mapping_definition))) > 0
+        return len(list(filter(lambda obj: "$numberOfSources" in obj, mapping_definition))) > 0
 
     def __get_parent_names(self, source_model, source_object, id_parents, component_name):
         # Retrieves a list of parent resource names (components or trustZones) of the element.

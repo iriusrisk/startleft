@@ -49,6 +49,27 @@ class TerraformLoader(ProviderLoader):
         if not self.terraform:
             raise_empty_sources_error()
 
+        self._func_squash_terraform()
+
+    def _func_squash_terraform(self):
+        if self.terraform is not None and 'resource' in self.terraform:
+            for component_type_obj in self.terraform['resource']:
+                if isinstance(component_type_obj, dict):
+                    resource_type, resource_key, resource_properties = (None,) * 3
+                    for component_type, component_name_obj in component_type_obj.items():
+                        resource_type = component_type
+                        if isinstance(component_name_obj, dict):
+                            component_name, properties = list(component_name_obj.items())[0]
+                            resource_key = component_name
+                            resource_properties = properties
+                    component_type_obj["tf_type"] = resource_type
+                    component_type_obj["tf_name"] = resource_key
+                    component_type_obj["tf_props"] = resource_properties
+                    # Deprecated, but included for the seek to maximize compatibility between mappings
+                    component_type_obj["Type"] = resource_type
+                    component_type_obj["_key"] = resource_key
+                    component_type_obj["Properties"] = resource_properties
+
     def __merge_hcl2_data(self, tf_data):
         self.terraform = always_merger.merge(self.terraform, tf_data)
 

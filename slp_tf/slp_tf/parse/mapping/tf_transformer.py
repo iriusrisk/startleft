@@ -73,13 +73,34 @@ class TerraformTransformer:
 
         logger.info(f"Added {components.__len__()} components successfully")
 
+    def __find_trustzone_parent_by_default(self):
+        for trustzone in self.iac_mapping["trustzones"]:
+            if trustzone.get("default", False):
+                return trustzone["id"]
+
+    def __default_component_mapping_template(self):
+        default_component_mapping_template = {
+            "id": {"$format": "{tf_type}.{name}"},
+            "name": {"$numberOfSources":
+                         {"oneSource": {"$path": "tf_name"}, "multipleSource": {"$format": "{type} (grouped)"}}},
+            "tags": [{"$numberOfSources":
+                          {"oneSource": {"$path": "tf_type"}, "multipleSource": {"$format": "{tf_name} ({tf_type})"}}}]
+        }
+
+        if trustzone_parent_by_default := self.__find_trustzone_parent_by_default():
+            default_component_mapping_template["parent"] = {"$parent": trustzone_parent_by_default}
+
+        return default_component_mapping_template
+
     def __find_components(self):
         logger.debug("Finding components")
 
         found_components = ComponentLists()
 
+        default_component_mapping_template = self.__default_component_mapping_template()
+
         for mapping in self.iac_mapping["components"]:
-            mapper = TerraformComponentMapper(mapping)
+            mapper = TerraformComponentMapper(default_component_mapping_template | mapping)
             mapper.id_map = self.id_map
             for component in mapper.run(self.source_model, self.id_parents):
                 if isinstance(mapping["$source"], dict):
@@ -277,8 +298,8 @@ class TerraformTransformer:
             destination_resource_id = self.id_map[destination_resource_id]
 
         # creates a dataflow with common fields to both
-        dataflow = TerraformDataflowMapper.create_core_dataflow(df_name, source_obj, source_resource_id,
-                                                                destination_resource_id)
+        dataflow = TerraformDataflowMapper.create_core_dataflow(
+            df_name, source_obj, source_resource_id, destination_resource_id)
         # adds additional fields
         dataflow["id"] = str(uuid.uuid4())
 
