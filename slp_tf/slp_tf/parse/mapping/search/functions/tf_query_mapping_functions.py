@@ -1,3 +1,5 @@
+from typing import Union
+
 from slp_tf.slp_tf.parse.mapping.jmespath.tf_custom_jmespath import jmespath_search
 
 
@@ -42,7 +44,7 @@ def __generate_full_path(root, conditions):
     return f"{root}|{'|'.join([elem for elem in conditions if elem])}"
 
 
-def __generate_jmespath_query(attribute: str, value: str | list, condition):
+def __generate_jmespath_query(attribute: str, value: Union[str, list], condition):
     """
     Generates a JMESPath query with the following format: [[?$attribute=='$value'], ....]
     :param attribute: Left part of the condition
