@@ -2,8 +2,8 @@ trustzones:
   - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
     name: Public Cloud
 
-# SG MAPPING (AUXILIARY SG)
-# type 4
+  # SG MAPPING (AUXILIARY SG)
+  # type 4
   - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
     name: Internet
     $source: {$singleton: {$root: "resource|squash_terraform(@)[?Type=='aws_security_group' && Properties.egress[0].cidr_blocks]"}}
@@ -55,7 +55,7 @@ components:
     type:        ec2
     $source:     {$root: "resource|get(@, 'aws_instance')"}
     name:        {$path: "keys(@)[0]"}
-    parent:      {$path: "*.subnet_id[0] | [0] | re_sub('[\\$\\{\\}]', '', @)"} # TODO Check this expression
+    parent:      {$path: "*.subnet_id[0] | [0] | re_sub('[\\$\\{\\}]', '', @)"} #TODO
     tags:
       - {$path: "Type"}
 
@@ -438,8 +438,32 @@ components:
     tags:
       - Inbound connection source IP
 
+  - id: { $format: "{name}" }
+    type: rds
+    name: { $path: "_key" }
+    $source: { $root: "module|get_module_terraform(@, 'terraform-aws-modules/rds/aws')" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: vpc
+    name: { $path: "_key" }
+    $source: { $root: "module|get_module_terraform(@, 'terraform-aws-modules/vpc/aws')" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: load-balancer
+    name: { $path: "_key" }
+    $source: { $root: "module|get_module_terraform(@, 'terraform-aws-modules/alb/aws')" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
 dataflows:
-#### Security Groups ####
+  #### Security Groups ####
   #### Type 1 #### - Resource to Security Group
   - id:           {$format: "{name}"}
     name:         {$format: "{_key}"}
@@ -511,7 +535,7 @@ dataflows:
       - $path: "Properties.egress[0].description"
       - $path: "Properties.egress[0].protocol"
       - $path: "Properties.egress[0].cidr_blocks|join(',', @)"
-#### Security Groups ####
+  #### Security Groups ####
   - id:           {$format: "{name}"}
     name:         {$format: "dataflow to Lambda function in {_key}"}
     $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_lambda_event_source_mapping']"}

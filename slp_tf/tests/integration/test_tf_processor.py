@@ -10,7 +10,7 @@ from slp_tf.tests.resources.test_resource_paths import expected_aws_dataflows, e
     expected_run_valid_mappings, expected_aws_parent_children_components, expected_aws_singleton_components, \
     expected_aws_security_groups_components, expected_mapping_skipped_component_without_parent, expected_no_resources, \
     expected_mapping_modules, expected_extra_modules, expected_elb_example, terraform_for_mappings_tests_json, \
-    default_terraform_aws_mapping, expected_separated_networks_components
+    expected_separated_networks_components, terraform_iriusrisk_tf_aws_mapping
 from slp_tf.tests.resources.test_resource_paths import expected_orphan_component_is_not_mapped
 from slp_tf.tests.utility import excluded_regex
 
@@ -22,7 +22,7 @@ VALIDATION_EXCLUDED_REGEX = r"root\[\'dataflows'\]\[.+?\]\['id'\]"
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
 SAMPLE_VALID_TF_FILE = terraform_for_mappings_tests_json
-SAMPLE_VALID_MAPPING_FILE = default_terraform_aws_mapping
+SAMPLE_VALID_MAPPING_FILE = terraform_iriusrisk_tf_aws_mapping
 
 
 class TestTerraformProcessor:
@@ -32,7 +32,7 @@ class TestTerraformProcessor:
         terraform_file = get_data(test_resource_paths.terraform_orphan_component)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(test_resource_paths.default_terraform_aws_mapping)
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
@@ -47,7 +47,7 @@ class TestTerraformProcessor:
         terraform_file = get_data(test_resource_paths.terraform_for_mappings_tests_json)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(test_resource_paths.default_terraform_aws_mapping)
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
@@ -60,7 +60,7 @@ class TestTerraformProcessor:
         terraform_file = get_data(test_resource_paths.terraform_aws_dataflows)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(test_resource_paths.default_terraform_aws_mapping)
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
@@ -73,7 +73,7 @@ class TestTerraformProcessor:
         terraform_file = get_data(test_resource_paths.terraform_aws_parent_children_components)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(test_resource_paths.default_terraform_aws_mapping)
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
@@ -86,7 +86,7 @@ class TestTerraformProcessor:
         terraform_file = get_data(test_resource_paths.terraform_aws_singleton_components_unix_line_breaks)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(test_resource_paths.default_terraform_aws_mapping)
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
@@ -99,7 +99,7 @@ class TestTerraformProcessor:
         terraform_file = get_data(test_resource_paths.terraform_aws_altsource_components)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(test_resource_paths.default_terraform_aws_mapping)
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
@@ -112,7 +112,7 @@ class TestTerraformProcessor:
         terraform_file = get_data(test_resource_paths.terraform_aws_security_groups_components)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(test_resource_paths.default_terraform_aws_mapping)
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
@@ -154,7 +154,7 @@ class TestTerraformProcessor:
         terraform_file = get_data(test_resource_paths.terraform_no_resources)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(test_resource_paths.default_terraform_aws_mapping)
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()

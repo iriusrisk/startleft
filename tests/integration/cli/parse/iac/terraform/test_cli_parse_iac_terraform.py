@@ -9,7 +9,7 @@ from tests.resources import test_resource_paths
 from tests.resources.test_resource_paths import invalid_tf
 
 # mappings
-TERRAFORM_VALID_MAPPING_FILENAME = test_resource_paths.default_terraform_aws_mapping
+TERRAFORM_VALID_MAPPING_FILENAME = test_resource_paths.terraform_iriusrisk_tf_aws_mapping
 TERRAFORM_WRONG_ID_MAPPING_FILENAME = test_resource_paths.terraform_malformed_mapping_wrong_id
 # IaC files
 TERRAFORM_AWS_SIMPLE_COMPONENTS = test_resource_paths.terraform_aws_simple_components

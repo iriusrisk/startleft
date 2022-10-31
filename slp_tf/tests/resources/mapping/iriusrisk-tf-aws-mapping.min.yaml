@@ -1,0 +1,330 @@
+trustzones:
+  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+    default: true
+
+  # SG MAPPING (AUXILIARY SG)
+  # type 4
+  - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    name: Internet
+    $source: {$singleton: {$type: "aws_se curity_group", $props: "egress[0].cidr_blocks"}}
+
+# The order of the components is important because parent components must be defined before child components
+components:
+
+  - type:        CD-ACM
+    $source:     {$singleton: {$type: "aws_acm_certificate"}}
+
+  - type:        cloudwatch
+    $source:     {$singleton: {$type: "aws_cloudwatch_metric_alarm"}}
+
+  - type:        dynamodb
+    $source:     {$type: "aws_dynamodb_table"}
+    $altsource:
+      - $mappingType: {$type: "aws_vpc_endpoint"}
+        $mappingPath: {$path: "*.service_name | [0]"}
+        $mappingLookups:
+          - regex: ^(.*)dynamodb$
+            name:  DynamoDB from VPCEndpoint
+            type:  dynamodb
+            tags:
+              - {$format: "{_key} ({Type})"}
+
+  - type:        vpc
+    $source:     {$type: "aws_vpc"}
+
+  - type:        ec2
+    $source:     {$type: "aws_instance"}
+    parent:      {$path: "*.subnet_id[0] | [0] | re_sub('[\\$\\{\\}]', '', @)"}
+
+  - type:        empty-component
+    $source:     {$type: "aws_subnet"}
+    # Remove [re_sub('aws_[\\w-]+\\.', '', @)] for $id change
+#    parent:      {$path: "*.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('\\.id', '', @)"}
+    parent:      {$path: "*.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('aws_[\\w-]+\\.', '', @) | re_sub('\\.id', '', @)"}
+
+  - type:        empty-component
+    $source:     {$type: "aws_vpc_endpoint"}
+    # Remove [re_sub('aws_[\\w-]+\\.', '', @)] for $id change
+#    parent:      {$findFirst: ["*.subnet_ids[]", "*.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('\\.id', '', @)"]}
+    parent:      {$findFirst: ["*.subnet_ids[]", "*.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('aws_[\\w-]+\\.', '', @) | re_sub('\\.id', '', @)"]}
+
+  - type:        empty-component
+    $source:     {$type: "aws_internet_gateway"}
+
+  - type:        elastic-container-service
+    $source:     {$type:  "aws_ecs_service"}
+    parent:      {$path:  "tf_props.network_configuration[0].subnets"}
+    children:    {$path:  "tf_props.task_definition|split(@, '.')[1]"}
+
+  - type:        docker-container
+    $source:     {$type: "aws_ecs_task_definition"}
+
+  - type:        load-balancer
+    $source:     {$type: ["aws_lb", "aws_elb"]}
+    parent:      {$path: "tf_props.subnets"}
+
+  - type:        kms
+    $source:     {$singleton: {$type: "aws_kms_key"}}
+
+
+  - type:        aws-lambda-function
+    $source:     {$type: "aws_lambda_function"}
+
+  - type:        cloudwatch
+    $source:     {$singleton: {$type: "aws_cloudwatch_log_group"}}
+
+  - type:        rds
+    $source:     {$type: "aws_db_instance"}
+
+  - type:        rds
+    $source:     {$type: "aws_rds_cluster"}
+
+  - type:        route-53
+    $source:     {$type: "aws_route53_zone"}
+
+  - type:        s3
+    $source:     {$type: "aws_s3_bucket"}
+    $altsource:
+      - $mappingType: {$type: "aws_vpc_endpoint"}
+        $mappingPath: {$path: "*.service_name | [0]"}
+        $mappingLookups:
+          - regex: ^(.*)s3$
+            name: S3 from VPCEndpoint
+            type: s3
+            tags:
+              - {$format: "{_key} ({Type})"}
+
+  - type:        CD-SECRETS-MANAGER
+    $source:     {$singleton: {$type: "aws_secretsmanager_secret"}}
+
+  - type:        sqs-simple-queue-service
+    $source:     {$root: "resource|get(@, 'aws_sqs_queue')"}
+
+  - type:        CD-SYSTEMS-MANAGER
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_ssm_')"}} # function
+    $altsource:
+      - $mappingType: {$type: "aws_vpc_endpoint"}
+        $mappingPath: {$path: "*.service_name | [0]"}
+        $mappingLookups:
+          - regex: ^(.*)ssm$
+            name: {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "Systems Manager from VPCEndpoint (grouped)"}}}
+            type:  CD-SYSTEMS-MANAGER
+            tags:
+              - {$numberOfSources: {oneSource: {$format: "aws_vpc_endpoint"}, multipleSource: {$format: "{_key} ({Type})"}}}
+          - regex: ^(.*)ssmmessages$
+            name: {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "Systems Manager from VPCEndpoint (grouped)"}}}
+            type:  CD-SYSTEMS-MANAGER
+            tags:
+              - {$numberOfSources: {oneSource: {$format: "aws_vpc_endpoint"}, multipleSource: {$format: "{_key} ({Type})"}}}
+
+  - type:        empty-component
+    $source:     {$type: "aws_synthetics_canary"}
+    parent:      {$path: "tf_props.vpc_config[0].subnet_ids"}
+
+  - type:        api-gateway
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_api_gateway_')"}} # function
+
+  - type:        athena
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_athena_')"}} # function
+
+  - type:        CD-MQ
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_mq_')"}} # function
+
+  - type:        cf-cloudfront
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_cloudfront_')"}} # function
+
+  - type:        cloudtrail
+    $source:     {$type: "aws_cloudtrail"}
+
+  - type:        cognito
+    $source:     {$type: ["aws_cognito_user_pool", "aws_cognito_identity_pool"]}
+
+  - type:        CD-CONFIG
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_config_')"}} # function
+
+  - type:        elastic-container-registry
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_ecr_')"}} # function
+    $altsource:
+      - $mappingType: {$type: "aws_vpc_endpoint"}
+        $mappingPath: {$path: "*.service_name | [0]"}
+        $mappingLookups:
+          - regex: ^(.*)ecr.dkr$
+            name:  ECR from VPCEndpoint
+            type:  elastic-container-registry
+            tags:
+              - {$format: "{_key} ({Type})"}
+
+  - type:        elastic-container-kubernetes
+    $source:     {$type: "aws_eks_cluster"}
+
+  - type:        elasticache
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_elasticache_')"}} # function
+
+  - type:        CD-GUARDDUTY
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_guardduty_')"}} # function
+
+  - type:        CD-INSPECTOR
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_inspector_')"}} # function
+
+  - type:        CD-MACIE
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_macie2_')"}} # function
+
+  - type:        CD-AWS-NETWORK-FIREWALL
+    $source:     {$type: "aws_networkfirewall_firewall"}
+    parent:      {$path: "tf_props.vpc_id"}
+
+  - type:        redshift
+    $source:     {$type: "aws_redshift_cluster"}
+
+  - type:        CD-SES
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_ses_')"}} # function
+
+  - type:        sns
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_sns_')"}} # function
+
+  - type:        step-functions
+    $source:     {$root: "resource|get_starts_with(@, 'aws_sfn_')"}  # function
+
+  - type:        CD-WAF
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_waf_')"}} # function
+
+  - type:        kinesis-data-analytics
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_kinesis_analytics_')"}} # function
+
+  - type:        kinesis-data-analytics
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_kinesis_stream')"}} # function
+
+  - type:        kinesis-data-firehose
+    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_kinesis_firehose_')"}} # function
+
+  - type:        generic-client
+    name:        {$ip: {$path: "tf_props.egress[0].cidr_blocks"}}
+    $source:     {$type: "aws_security_group", $props: "egress[0].cidr_blocks"}
+    parent:      f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    tags:
+      - Outbound connection destination IP
+
+  - type:        generic-client
+    name:        {$ip: {$path: "tf_props.ingress[0].cidr_blocks"}}
+    $source:     {$type: "aws_security_group", $props: "ingress[0].cidr_blocks"}
+    parent:      f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    tags:
+      - Inbound connection source IP
+
+  - type: rds
+    $source: {$root: "module|get_module_terraform(@, 'terraform-aws-modules/rds/aws')"} # module
+
+  - type: vpc
+    $source: { $root: "module|get_module_terraform(@, 'terraform-aws-modules/vpc/aws')" } # module
+
+  - type: load-balancer
+    $source: { $root: "module|get_module_terraform(@, 'terraform-aws-modules/alb/aws')" } # module
+
+dataflows:
+  #### Security Groups ####
+  #### Type 1 #### - Resource to Security Group
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'security_group_ids')]"}
+    source:       {$path: "_key"}
+    destination:  {$hub: {$path: "Properties.security_group_ids"}}
+    tags:
+
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'security_groups')]"}
+    source:       {$path: "_key"}
+    destination:  {$hub: {$path: "Properties.security_groups"}}
+    tags:
+
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'network_configuration') && contains(keys(Properties.network_configuration[0]), 'security_groups')]"}
+    source:       {$path: "_key"}
+    destination:  {$hub: {$path: "Properties.network_configuration[0].security_groups"}}
+    tags:
+
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'vpc_config')]"}
+    source:       {$path: "_key"}
+    destination:  {$hub: {$path: "Properties.vpc_config[0].security_group_ids"}}
+    tags:
+  #### Type 2 #### Security Group to Security Group
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_security_group_rule' && Properties.type=='ingress']"}
+    source:       {$hub: {$path: "Properties.source_security_group_id"}}
+    destination:  {$hub: {$path: "Properties.security_group_id"}}
+    tags:
+      - $path: "Properties.description"
+      - $path: "Properties.protocol"
+      - $path: "Properties.from_port|to_string(@)"
+      - $path: "Properties.to_port|to_string(@)"
+
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$type: "aws_security_group_rule", $props: "type=='egress']"}
+    source:       {$hub: {$path: "Properties.security_group_id"}}
+    destination:  {$hub: {$path: "Properties.source_security_group_id"}}
+    tags:
+      - $path: "Properties.description"
+      - $path: "Properties.protocol"
+      - $path: "Properties.from_port|to_string(@)"
+      - $path: "Properties.to_port|to_string(@)"
+  #### Type 3 #### - Security Group to Resource
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$type: "aws_security_group"}
+    source:       {$path: "Properties.ingress[0].cidr_blocks"}
+    destination:  {$hub: {$path: "_key"}}
+    tags:
+      - $path: "Properties.ingress[0].description"
+      - $path: "Properties.ingress[0].protocol"
+      - $path: "Properties.ingress[0].from_port|to_string(@)"
+      - $path: "Properties.ingress[0].to_port|to_string(@)"
+
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$type: "aws_security_group"}
+    source:       {$hub: {$path: "_key"}}
+    destination:  {$path: "Properties.egress[0].cidr_blocks"}
+    tags:
+      - $path: "Properties.egress[0].description"
+      - $path: "Properties.egress[0].protocol"
+      - $path: "Properties.egress[0].cidr_blocks|join(',', @)"
+  #### Security Groups ####
+  - id:           {$format: "{name}"}
+    name:         {$format: "dataflow to Lambda function in {_key}"}
+    $source:      {$type: "aws_lambda_event_source_mapping"}
+    source:       {$path: "Properties.event_source_arn"}
+    destination:  {$path: "Properties.function_name"}
+
+  - id:           {$format: "{name}"}
+    name:         {$format: "dataflow from Lambda function on Failure {_key}"}
+    $source:      {$type: "aws_lambda_event_source_mapping"}
+    source:       {$path: "Properties.function_name"}
+    destination:  {$path: "Properties.destination_config[0].on_failure[0].destination_arn"}
+
+  # The parameter "logging" is deprecated. Use the resource "aws_s3_bucket_logging" instead
+  - id:           {$format: "{name}"}
+    name:         {$format: "S3 dataflow from {_key}"}
+    $source:      {$type: "aws_s3_bucket"}
+    source:       {$path: "_key"}
+    destination:  {$path: "Properties.logging[0].target_bucket"}
+
+  - id:           {$format: "{name}"}
+    name:         {$format: "S3 dataflow from {Type}"}
+    $source:      {$type: "aws_s3_bucket_logging"}
+    source:       {$path: "Properties.bucket" }
+    destination:  {$path: "Properties.target_bucket"}
+  # The parameter "logging" is deprecated. Use the resource "aws_s3_bucket_logging" instead
+
+  - id:           {$format: "{name}"}
+    name:         {$format: "API gateway data flow from {Type}"}
+    $source:      {$type: "aws_api_gateway_authorizer"}
+    source:       {$numberOfSources: {oneSource: {$path: "_key"}, multipleSource: {$format: "api-gateway (grouped)"}}}
+    destination:  {$path: "Properties.provider_arns[0]"}
+    tags:
+      - API gateway dataflow
