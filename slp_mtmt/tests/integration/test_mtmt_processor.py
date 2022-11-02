@@ -1,3 +1,4 @@
+from otm.otm.otm import Representation
 from sl_util.sl_util.file_utils import get_byte_data
 from slp_mtmt import MTMTProcessor
 from slp_mtmt.tests.resources import test_resource_paths
@@ -30,9 +31,11 @@ class TestMtmtProcessor:
         assert otm.project_name == "name"
 
         # AND the representations info is also right
-        assert otm.representations_id == "Microsoft Threat Modeling Tool"
-        assert otm.representations_name == "Microsoft Threat Modeling Tool"
-        assert otm.representations_type == "threat-model"
+        assert len(otm.representations) == 1
+        representation: Representation = otm.representations[0]
+        assert representation.id == "Microsoft Threat Modeling Tool"
+        assert representation.name == "Microsoft Threat Modeling Tool"
+        assert representation.type == "threat-model"
 
         # AND the info inside trustzones is also right
         trustzone = otm.trustzones[0]
