@@ -6,7 +6,8 @@ trustzones:
   #type 4
   - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
     name: Internet
-    $source: {$singleton: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties.SecurityGroupEgress[0].CidrIp]"}}
+    $source: {$singleton:
+                {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup' && Properties | (SecurityGroupEgress[0].CidrIp || SecurityGroupIngress[0].CidrIp)]"}}
 
 # The order of the components is important because parent components must be defined before child components
 components:
@@ -55,7 +56,10 @@ components:
     type:   ec2
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::Instance']"}
-    parent:  {$findFirst: {$searchParams:{ searchPath: ["Properties.SubnetId.Ref","Properties.SubnetId"], defaultValue: "b61d6911-338d-46a8-9f39-8dcd24abfe91"}}}
+    parent: { $findFirst: { $searchParams: { searchPath: [
+      "Properties | SubnetId.Ref || (NetworkInterfaces[].SubnetId.Ref | [0])",
+      "Properties | SubnetId || (NetworkInterfaces[].SubnetId | [0])"
+    ], defaultValue: "b61d6911-338d-46a8-9f39-8dcd24abfe91" } } }
     tags:
       - { $path: "Type" }
 
