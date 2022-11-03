@@ -34,6 +34,8 @@ standalone_securitygroupingress_configuration = path + '/cft/standalone_security
 cloudformation_component_with_unknown_parent = path + '/cft/cloudformation_component_with_unknown_parent.json'
 cloudformation_minimal_content = path + '/cft/cloudformation_minimal_content.json'
 cloudformation_orphan_component = path + '/cft/cloudformation_orphan_component.json'
+altsource_components_json = path + '/cft/altsource_components.json'
+altsource_components_otm_expected = path + '/otm/expected_altsource_components.otm'
 
 # otm
 otm_expected_result = path + '/otm/otm_expected_result.otm'
