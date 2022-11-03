@@ -28,25 +28,6 @@ ALTSOURCE_COMPONENTS_OTM_EXPECTED = test_resource_paths.altsource_components_otm
 
 
 class TestCloudformationProcessor:
-    def test_set_default_trustzone_as_parent_when_parent_not_exists(self):
-        # GIVEN a valid CFT file with a resource (VPCssm) with a parent which is not declared as component itself (CustomVPC)
-        cloudformation_file = get_data(test_resource_paths.cloudformation_component_with_unknown_parent)
-
-        # AND a valid CFT mapping file
-        mapping_file = get_data(test_resource_paths.default_cloudformation_mapping)
-
-        # WHEN the CFT file is processed
-        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
-
-        # THEN the number of TZs, components and dataflows are right
-        assert len(otm.trustzones) == 1
-        assert len(otm.components) == 5
-
-        # AND the VPCssm component has the default trustzone id as parent, instead of the CustomVPC unknown component id
-        assert list(filter(lambda component: component.parent_type == 'trustZone' and
-                                             component.parent == DEFAULT_TRUSTZONE_ID, otm.components))
-
-
     def test_altsource_components(self):
         # GIVEN a valid CFT file with altsource resources
         cft_file = get_data(test_resource_paths.altsource_components_json)
