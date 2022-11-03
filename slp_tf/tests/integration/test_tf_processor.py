@@ -295,3 +295,20 @@ class TestTerraformProcessor:
         # THEN an LoadingIacFileError  is returned
         with pytest.raises(IacFileNotValidError):
             TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, source, [mapping_file]).process()
+
+    def test_variable_references_in_tfvars_file_processed_ok(self):
+        # GIVEN the multiples tf file and tfvars file
+        terraform_main = get_data(test_resource_paths.terraform_main_referenced_variables)
+        terraform_vars = get_data(test_resource_paths.terraform_variables_file_referenced_variables)
+        terraform_referenced_vars = get_data(test_resource_paths.terraform_vars_referenced_variables)
+
+        # AND the iriusrisk-tf-aws-mapping.yaml file
+        mapping_file = get_data(test_resource_paths.default_terraform_mapping)
+
+        # WHEN the method TerraformProcessor::process is invoked
+        otm = TerraformProcessor(
+            SAMPLE_ID, SAMPLE_NAME, [terraform_main, terraform_vars, terraform_referenced_vars], [mapping_file]
+        ).process()
+
+        # THEN a file with the single_tf_file-expected-result.otm contents is returned
+        assert validate_and_diff(otm.json(), test_resource_paths.tf_file_referenced_vars_expected_result, excluded_regex) == {}
