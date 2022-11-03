@@ -2,7 +2,7 @@ from click.testing import CliRunner
 from pytest import mark
 
 from slp_base import LoadingIacFileError, MappingFileNotValidError
-from slp_base.tests.util.otm import validate_and_diff_filename as validate_and_diff
+from slp_base.tests.util.otm import validate_and_diff
 from startleft.startleft.cli.cli import parse_any
 from tests.integration.cli.parse.iac.test_cli_parse_iac import excluded_regex
 from tests.resources import test_resource_paths
@@ -17,7 +17,7 @@ TERRAFORM_UNKNOWN_RESOURCE = test_resource_paths.terraform_unknown_resource
 TERRAFORM_UNKNOWN_MODULE = test_resource_paths.terraform_unknown_module
 # otm
 OTM_AWS_SIMPLE_COMPONENTS_EXPECTED = test_resource_paths.terraform_aws_simple_components_otm_expected
-OTM_EMPTY_FILE = test_resource_paths.otm_empty_file_example_tf
+OTM_EMPTY_FILE = test_resource_paths.otm_empty_file_terraform_example
 
 
 class TestCliParseIaCTerraform:
