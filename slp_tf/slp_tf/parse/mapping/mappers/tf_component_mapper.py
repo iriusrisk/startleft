@@ -13,6 +13,13 @@ def get_children(mapping):
 
 
 class TerraformComponentMapper(TerraformBaseMapper):
+
+    def __init__(self, mapping, default_trustzone):
+        super(TerraformComponentMapper, self).__init__(mapping)
+        # Set the "b61d6911-338d-46a8-9f39-8dcd24abfe91" if default_trustzone none exist in mapping file
+        # for giving compatibility with the verbose IR mapping file
+        self.default_trustzone = default_trustzone or "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+
     def run(self, source_model, id_parents):
         """
         Iterates through the source model and returns the parameters to create the components
@@ -135,8 +142,8 @@ class TerraformComponentMapper(TerraformBaseMapper):
                     result = re.match(mapping_lookup["regex"], value)
 
                     if result is not None:
-                        if self.DEFAULT_TRUSTZONE not in self.id_map:
-                            self.id_map[self.DEFAULT_TRUSTZONE] = str(uuid.uuid4())
+                        if self.default_trustzone not in self.id_map:
+                            self.id_map[self.default_trustzone] = str(uuid.uuid4())
 
                         mapping_name, mapping_tags = self.get_mappings_for_name_and_tags(mapping_lookup)
                         component_name, singleton_multiple_name = self.__get_component_names(source_model,
@@ -148,7 +155,7 @@ class TerraformComponentMapper(TerraformBaseMapper):
                         alt_source_object['altsource'] = True
 
                         component = {"id": str(uuid.uuid4()), "name": component_name,
-                                     "type": mapping_lookup["type"], "parent": self.id_map[self.DEFAULT_TRUSTZONE],
+                                     "type": mapping_lookup["type"], "parent": self.id_map[self.default_trustzone],
                                      "source": alt_source_object}
 
                         component = self.set_optional_parameters_to_resource(component, mapping_tags,
@@ -294,19 +301,19 @@ class TerraformComponentMapper(TerraformBaseMapper):
 
         if isinstance(parent, list):
             if len(parent) == 0:
-                parent = [self.DEFAULT_TRUSTZONE]
+                parent = [self.default_trustzone]
             for index, resource_id in enumerate(parent):
                 if self.is_terraform_resource_reference(resource_id):
                     parent[index] = self.get_resource_name_from_resource_reference(resource_id)
         if isinstance(parent, str):
             if parent == "":
-                parent = [self.DEFAULT_TRUSTZONE]
+                parent = [self.default_trustzone]
             else:
                 parent = [self.get_resource_name_from_resource_reference(parent)
                           if self.is_terraform_resource_reference(parent) else parent]
 
         if parent is None:
-            parent = [self.DEFAULT_TRUSTZONE]
+            parent = [self.default_trustzone]
 
         return parent, parents_from_component
 

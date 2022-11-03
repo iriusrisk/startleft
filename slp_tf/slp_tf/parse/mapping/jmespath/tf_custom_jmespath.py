@@ -1,6 +1,27 @@
 import re
+from copy import deepcopy
 
 import jmespath
+
+
+def _adapt_dict(resource):
+    """
+    This function is an intern adapter method
+    In a dictionary, will return a new copy with:
+    1st Element value will be the value of the 1st element on the dictionary
+    The rest element will be the same
+    Example: {"aws_type":{x:y}, attributes} => {x:y, attributes}
+    :param resource:
+    :return:
+    """
+    if resource:
+        new_element = {}
+        for index, key in enumerate(resource):
+            if index == 0:  # First element will be extracted
+                new_element = deepcopy(resource[key])
+            else:
+                new_element[key] = resource[key]
+        return new_element
 
 
 def add_type_and_name(obj, component_type, component_name):
@@ -24,17 +45,6 @@ class TerraformCustomFunctions(jmespath.functions.Functions):
     def _func_re_sub(self, pattern, replace, s):
         return re.sub(pattern, replace, s)
 
-    @jmespath.functions.signature({'types': ['object']})
-    # For future reference: [*].{ src: @, flt: *|[0].b }[?flt == 'some text 2'].src
-    # If squash returns an array of key'd dicts, the above filter would need to be used
-    def _func_squash(self, obj):
-        temp = []
-        for k, v in obj.items():
-            if isinstance(v, dict):
-                v["_key"] = k
-            temp.append(v)
-        return temp
-
     @jmespath.functions.signature({'types': ['array', 'null']})
     def _func_squash_terraform(self, component_types_arr):
         source_objects = []
@@ -56,6 +66,19 @@ class TerraformCustomFunctions(jmespath.functions.Functions):
                 source_objects.append(source_object)
 
         return source_objects
+
+    @jmespath.functions.signature({'types': ['array']})
+    def _func_adapt(self, resources):
+        """
+        This function is an adapter for the intern logic of slp_tf
+        :param resources: An array of tf objects
+        :return:
+        """
+        result = []
+        if resources:
+            for resource in resources:
+                result.append(_adapt_dict(resource))
+        return result
 
     @jmespath.functions.signature({'types': ['array', 'null']}, {'types': ['string']})
     def _func_get_starts_with(self, obj_arr, component_type):

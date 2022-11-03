@@ -41,7 +41,7 @@ def __generate_full_path(root, conditions):
     :param conditions: Conditions for generating the query
     :return: The full JMESPath Query for seeking in resources
     """
-    return f"{root}|{'|'.join([elem for elem in conditions if elem])}"
+    return f"{root}|{'|'.join([elem for elem in conditions if elem])}|adapt(@)"
 
 
 def __generate_jmespath_query(attribute: str, value: Union[str, list], condition):

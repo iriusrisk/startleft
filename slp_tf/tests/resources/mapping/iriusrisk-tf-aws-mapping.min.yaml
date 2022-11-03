@@ -7,7 +7,7 @@ trustzones:
   # type 4
   - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
     name: Internet
-    $source: {$singleton: {$type: "aws_se curity_group", $props: "egress[0].cidr_blocks"}}
+    $source: {$singleton: {$type: "aws_security_group", $props: "egress[0].cidr_blocks"}}
 
 # The order of the components is important because parent components must be defined before child components
 components:
@@ -45,9 +45,8 @@ components:
 
   - type:        empty-component
     $source:     {$type: "aws_vpc_endpoint"}
-    # Remove [re_sub('aws_[\\w-]+\\.', '', @)] for $id change
-#    parent:      {$findFirst: ["*.subnet_ids[]", "*.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('\\.id', '', @)"]}
-    parent:      {$findFirst: ["*.subnet_ids[]", "*.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('aws_[\\w-]+\\.', '', @) | re_sub('\\.id', '', @)"]}
+    # Remove [re_sub('aws_[\\w-]+\\.', '', @)] for $id change when dataflows are fixed
+    parent:      {$findFirst: ["tf_props.subnet_ids[]", "tf_props.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('aws_[\\w-]+\\.', '', @) | re_sub('\\.id', '', @)"]}
 
   - type:        empty-component
     $source:     {$type: "aws_internet_gateway"}
@@ -224,37 +223,27 @@ components:
 dataflows:
   #### Security Groups ####
   #### Type 1 #### - Resource to Security Group
-  - id:           {$format: "{name}"}
-    name:         {$format: "{_key}"}
-    $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'security_group_ids')]"}
+  - $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'security_group_ids')]"}
     source:       {$path: "_key"}
     destination:  {$hub: {$path: "Properties.security_group_ids"}}
     tags:
 
-  - id:           {$format: "{name}"}
-    name:         {$format: "{_key}"}
-    $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'security_groups')]"}
+  - $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'security_groups')]"}
     source:       {$path: "_key"}
     destination:  {$hub: {$path: "Properties.security_groups"}}
     tags:
 
-  - id:           {$format: "{name}"}
-    name:         {$format: "{_key}"}
-    $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'network_configuration') && contains(keys(Properties.network_configuration[0]), 'security_groups')]"}
+  - $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'network_configuration') && contains(keys(Properties.network_configuration[0]), 'security_groups')]"}
     source:       {$path: "_key"}
     destination:  {$hub: {$path: "Properties.network_configuration[0].security_groups"}}
     tags:
 
-  - id:           {$format: "{name}"}
-    name:         {$format: "{_key}"}
-    $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'vpc_config')]"}
+  - $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'vpc_config')]"}
     source:       {$path: "_key"}
     destination:  {$hub: {$path: "Properties.vpc_config[0].security_group_ids"}}
     tags:
   #### Type 2 #### Security Group to Security Group
-  - id:           {$format: "{name}"}
-    name:         {$format: "{_key}"}
-    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_security_group_rule' && Properties.type=='ingress']"}
+  - $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_security_group_rule' && Properties.type=='ingress']"}
     source:       {$hub: {$path: "Properties.source_security_group_id"}}
     destination:  {$hub: {$path: "Properties.security_group_id"}}
     tags:
@@ -263,9 +252,7 @@ dataflows:
       - $path: "Properties.from_port|to_string(@)"
       - $path: "Properties.to_port|to_string(@)"
 
-  - id:           {$format: "{name}"}
-    name:         {$format: "{_key}"}
-    $source:      {$type: "aws_security_group_rule", $props: "type=='egress']"}
+  - $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_security_group_rule' && Properties.type=='egress']"}
     source:       {$hub: {$path: "Properties.security_group_id"}}
     destination:  {$hub: {$path: "Properties.source_security_group_id"}}
     tags:
@@ -274,9 +261,7 @@ dataflows:
       - $path: "Properties.from_port|to_string(@)"
       - $path: "Properties.to_port|to_string(@)"
   #### Type 3 #### - Security Group to Resource
-  - id:           {$format: "{name}"}
-    name:         {$format: "{_key}"}
-    $source:      {$type: "aws_security_group"}
+  - $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_security_group']"}
     source:       {$path: "Properties.ingress[0].cidr_blocks"}
     destination:  {$hub: {$path: "_key"}}
     tags:
@@ -285,9 +270,7 @@ dataflows:
       - $path: "Properties.ingress[0].from_port|to_string(@)"
       - $path: "Properties.ingress[0].to_port|to_string(@)"
 
-  - id:           {$format: "{name}"}
-    name:         {$format: "{_key}"}
-    $source:      {$type: "aws_security_group"}
+  - $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_security_group']"}
     source:       {$hub: {$path: "_key"}}
     destination:  {$path: "Properties.egress[0].cidr_blocks"}
     tags:
@@ -295,35 +278,30 @@ dataflows:
       - $path: "Properties.egress[0].protocol"
       - $path: "Properties.egress[0].cidr_blocks|join(',', @)"
   #### Security Groups ####
-  - id:           {$format: "{name}"}
-    name:         {$format: "dataflow to Lambda function in {_key}"}
-    $source:      {$type: "aws_lambda_event_source_mapping"}
+  - name:         {$format: "dataflow to Lambda function in {_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_lambda_event_source_mapping']"}
     source:       {$path: "Properties.event_source_arn"}
     destination:  {$path: "Properties.function_name"}
 
-  - id:           {$format: "{name}"}
-    name:         {$format: "dataflow from Lambda function on Failure {_key}"}
-    $source:      {$type: "aws_lambda_event_source_mapping"}
+  - name:         {$format: "dataflow from Lambda function on Failure {_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_lambda_event_source_mapping']"}
     source:       {$path: "Properties.function_name"}
     destination:  {$path: "Properties.destination_config[0].on_failure[0].destination_arn"}
 
   # The parameter "logging" is deprecated. Use the resource "aws_s3_bucket_logging" instead
-  - id:           {$format: "{name}"}
-    name:         {$format: "S3 dataflow from {_key}"}
-    $source:      {$type: "aws_s3_bucket"}
+  - name:         {$format: "S3 dataflow from {_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_s3_bucket']"}
     source:       {$path: "_key"}
     destination:  {$path: "Properties.logging[0].target_bucket"}
 
-  - id:           {$format: "{name}"}
-    name:         {$format: "S3 dataflow from {Type}"}
-    $source:      {$type: "aws_s3_bucket_logging"}
+  - name:         {$format: "S3 dataflow from {Type}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_s3_bucket_logging']"}
     source:       {$path: "Properties.bucket" }
     destination:  {$path: "Properties.target_bucket"}
   # The parameter "logging" is deprecated. Use the resource "aws_s3_bucket_logging" instead
 
-  - id:           {$format: "{name}"}
-    name:         {$format: "API gateway data flow from {Type}"}
-    $source:      {$type: "aws_api_gateway_authorizer"}
+  - name:         {$format: "API gateway data flow from {Type}"}
+    $source:      {$root: "resource|squash_terraform(@)[?Type=='aws_api_gateway_authorizer']"}
     source:       {$numberOfSources: {oneSource: {$path: "_key"}, multipleSource: {$format: "api-gateway (grouped)"}}}
     destination:  {$path: "Properties.provider_arns[0]"}
     tags:

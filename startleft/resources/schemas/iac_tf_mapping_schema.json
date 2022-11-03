@@ -37,7 +37,7 @@
             "type": "array",
             "items": {
                 "type": "object",
-                "required": ["id", "name", "source", "destination"],
+                "required": ["source", "destination"],
                 "properties": {
                     "id": {"$ref": "#/definitions/query"},
                     "name": {"$ref": "#/definitions/query"},

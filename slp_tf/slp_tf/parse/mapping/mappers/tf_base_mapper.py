@@ -6,8 +6,6 @@ from abc import ABC, abstractmethod
 class TerraformBaseMapper(ABC):
     logger = logging.getLogger(__name__)
 
-    DEFAULT_TRUSTZONE = "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-
     def __init__(self, mapping):
         self.mapping = mapping
         self.id_map = {}

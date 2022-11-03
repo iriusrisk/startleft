@@ -25,6 +25,13 @@ class ComponentLists:
         self.singleton = []
 
 
+def _default_dataflow_mapping_template():
+    return {
+        "id":   {"$format": "{name}"},
+        "name": {"$format": "{_key}"}
+    }
+
+
 class TerraformTransformer:
     def __init__(self, source_model=None, threat_model=None):
         self.source_model = source_model
@@ -80,7 +87,8 @@ class TerraformTransformer:
 
     def __default_component_mapping_template(self):
         default_component_mapping_template = {
-            "id": {"$format": "{tf_type}.{name}"},
+            # "id": {"$format": "{tf_type}.{name}"},
+            "id": {"$format": "{name}"},
             "name": {"$numberOfSources":
                          {"oneSource": {"$path": "tf_name"}, "multipleSource": {"$format": "{type} (grouped)"}}},
             "tags": [{"$numberOfSources":
@@ -100,7 +108,8 @@ class TerraformTransformer:
         default_component_mapping_template = self.__default_component_mapping_template()
 
         for mapping in self.iac_mapping["components"]:
-            mapper = TerraformComponentMapper({**default_component_mapping_template, **mapping})
+            mapper = TerraformComponentMapper(
+                {**default_component_mapping_template, **mapping}, self.__find_trustzone_parent_by_default())
             mapper.id_map = self.id_map
             for component in mapper.run(self.source_model, self.id_parents):
                 if isinstance(mapping["$source"], dict):
@@ -222,8 +231,9 @@ class TerraformTransformer:
     def transform_dataflows(self):
         logger.info("Adding dataflows")
         logger.debug("Finding dataflows")
+        default_dataflow_mapping_template = _default_dataflow_mapping_template()
         for mapping in self.iac_mapping["dataflows"]:
-            mapper = TerraformDataflowMapper(mapping)
+            mapper = TerraformDataflowMapper({**default_dataflow_mapping_template, **mapping})
             mapper.id_map = self.id_map
             for dataflow in mapper.run(self.source_model, self.id_dataflows):
                 self.threat_model.add_dataflow(**dataflow)

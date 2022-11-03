@@ -39,7 +39,7 @@ terraform_mapping_specific_functions = path + '/mapping/terraform_mapping_specif
 terraform_mapping_modules = path + '/mapping/terraform_mapping_modules.yaml'
 terraform_mapping_extra_modules = path + '/mapping/terraform_mapping_extra_modules.yaml'
 terraform_iriusrisk_tf_aws_mapping = path + '/mapping/iriusrisk-tf-aws-mapping.yaml'
-#terraform_iriusrisk_tf_aws_mapping = path + '/mapping/iriusrisk-tf-aws-mapping.min.yaml'
+terraform_iriusrisk_tf_aws_min_mapping = path + '/mapping/iriusrisk-tf-aws-mapping.min.yaml'
 
 # otm
 tf_file_expected_result = path + '/otm/tf-file-expected-result.otm'
