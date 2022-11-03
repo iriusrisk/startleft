@@ -16,7 +16,7 @@ internet_id = 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
 internet_name = 'Internet'
 
 
-def __load_otm (otm: Union[dict, str, OTM]):
+def __load_otm(otm: Union[dict, str, OTM]):
     if isinstance(otm, dict):
         return otm
 
@@ -54,6 +54,11 @@ def validate_and_diff(actual: Union[dict, str, OTM], expected: Union[dict, str, 
     if diff:
         return diff
     return {}
+
+
+def validate_and_diff_otm(actual: dict, expected_filename: str, excluded_regex):
+    expected = OtmFileLoader().load(expected_filename)
+    return validate_and_diff(actual, expected, excluded_regex)
 
 
 def check_otm_trustzone(otm, position, trustzone_id, name):

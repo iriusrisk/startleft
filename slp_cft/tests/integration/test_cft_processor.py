@@ -3,7 +3,7 @@ import pytest
 from sl_util.sl_util.file_utils import get_data
 from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError, \
     LoadingIacFileError
-from slp_base.tests.util.otm import validate_and_diff
+from slp_base.tests.util.otm import validate_and_diff, validate_and_diff_otm
 from slp_cft import CloudformationProcessor
 from slp_cft.tests.resources import test_resource_paths
 from slp_cft.tests.resources.test_resource_paths import expected_orphan_component_is_not_mapped
@@ -480,3 +480,31 @@ class TestCloudformationProcessor:
         ec2WithWrongParent = [component for component in otm.components if
                               component.type == 'ec2' and component.parent != publicSubnet1Id]
         assert len(ec2WithWrongParent) == 0
+
+    def test_minimal_cft_file(self):
+        # Given a minimal valid CFT file
+        cft_minimal_file = get_data(test_resource_paths.cloudformation_minimal_content)
+
+        # and the default mapping file for CFT
+        mapping_file = get_data(test_resource_paths.default_cloudformation_mapping)
+
+        # When parsing the file with Startleft and the default mapping file
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cft_minimal_file], [mapping_file]).process()
+
+        # Then an empty OTM containing only the default trustzone is generated
+        assert validate_and_diff_otm(otm.json(), test_resource_paths.otm_with_only_default_trustzone_expected_result,
+                                     excluded_regex) == {}
+
+    def test_generate_empty_otm_with_empty_mapping_file(self):
+        # Given an empty mapping file
+        mapping_file = get_data(test_resource_paths.empty_cloudformation_mapping)
+
+        # and a valid CFT file with content
+        cloudformation_file = get_data(test_resource_paths.cloudformation_for_mappings_tests_json)
+
+        # When parsing the file with Startleft and the empty mapping file
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
+
+        # Then an empty OTM, without any threat modeling content, is generated
+        assert validate_and_diff_otm(otm.json(), test_resource_paths.minimal_otm_expected_result,
+                                     excluded_regex) == {}
