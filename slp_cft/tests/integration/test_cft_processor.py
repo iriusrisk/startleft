@@ -17,8 +17,12 @@ SAMPLE_VALID_CFT_FILE = test_resource_paths.cloudformation_for_mappings_tests_js
 SAMPLE_VALID_MAPPING_FILE = test_resource_paths.default_cloudformation_mapping
 SAMPLE_SINGLE_VALID_CFT_FILE = test_resource_paths.cloudformation_single_file
 SAMPLE_VALID_MAPPING_FILE_IR = test_resource_paths.cloudformation_mapping_iriusrisk
+SAMPLE_MAPPING_FILE_WITHOUT_REF = test_resource_paths.cloudformation_mapping_without_ref
 SAMPLE_NETWORKS_CFT_FILE = test_resource_paths.cloudformation_networks_file
 SAMPLE_RESOURCES_CFT_FILE = test_resource_paths.cloudformation_resources_file
+SAMPLE_REF_DEFAULT_JSON = test_resource_paths.cloudformation_with_ref_function_and_default_property_json
+SAMPLE_REF_DEFAULT_YAML = test_resource_paths.cloudformation_with_ref_function_and_default_property_yaml
+SAMPLE_REF_WITHOUT_DEFAULT_JSON = test_resource_paths.cloudformation_with_ref_function_and_without_default_property_json
 OTM_EXPECTED_RESULT = test_resource_paths.otm_expected_result
 ALTSOURCE_COMPONENTS_OTM_EXPECTED = test_resource_paths.altsource_components_otm_expected
 
@@ -427,7 +431,7 @@ class TestCloudformationProcessor:
                                       [mapping_file]).process()
 
         # THEN a file with the expected otm is returned
-        assert validate_and_diff(otm, OTM_EXPECTED_RESULT, excluded_regex) == {}
+        assert validate_and_diff_otm(otm.json(), OTM_EXPECTED_RESULT, excluded_regex) == {}
 
     def test_run_valid_multiple_iac_mapping_files(self):
         # GIVEN the valid CFT file
@@ -440,7 +444,7 @@ class TestCloudformationProcessor:
         otm = CloudformationProcessor('multiple-files', 'multiple-files', [networks_cft_file, resources_cft_file],
                                       [mapping_file]).process()
         # THEN a file with the expected otm is returned
-        assert validate_and_diff(otm, OTM_EXPECTED_RESULT, excluded_regex) == {}
+        assert validate_and_diff_otm(otm.json(), OTM_EXPECTED_RESULT, excluded_regex) == {}
 
     def test_run_empty_multiple_iac_files(self):
         # GIVEN a request without any iac_file key
@@ -480,6 +484,55 @@ class TestCloudformationProcessor:
         ec2WithWrongParent = [component for component in otm.components if
                               component.type == 'ec2' and component.parent != publicSubnet1Id]
         assert len(ec2WithWrongParent) == 0
+
+    def test_parsing_cft_json_file_with_ref(self):
+        # GIVEN a cloudformation JSON  file
+        cloudformation_file = get_data(SAMPLE_REF_DEFAULT_JSON)
+        # AND a mapping file that matches a component whose name is a Ref Value
+        # AND the ref value is a Parameter with Default Attribute
+        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE_IR)
+        # WHEN parsing the file
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file],
+                                      [mapping_file]).process()
+        # THEN the component name is the Default attribute of the parameter
+        assert list(filter(lambda obj: obj.name == '0.0.0.0/0', otm.components))
+
+    def test_parsing_cft_yaml_file_with_ref(self):
+        # GIVEN a cloudformation YAML  file
+        cloudformation_file = get_data(SAMPLE_REF_DEFAULT_YAML)
+        # AND a mapping file that matches a component whose name is a Ref Value
+        # AND the ref value is a Resource
+        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE_IR)
+        # WHEN parsing the file
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file],
+                                      [mapping_file]).process()
+        # THEN the component name is the name of the Resource
+        assert list(filter(lambda obj: obj.name == '0.0.0.0/0', otm.components))
+
+    def test_parsing_cft_json_file_without_ref(self):
+        # GIVEN a cloudformation file
+        cloudformation_file = get_data(SAMPLE_REF_WITHOUT_DEFAULT_JSON)
+        # AND a mapping file that matches a component whose name is a Ref Value
+        # AND the ref value is a Parameter without Default Attribute
+        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE_IR)
+        # WHEN parsing the file
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file],
+                                      [mapping_file]).process()
+        # THEN the component name is the name of the Parameter
+        assert list(filter(lambda obj: obj.name == 'PublicSGSource', otm.components))
+
+    def test_mapping_without_ref_attribute(self):
+        # GIVEN a mapping file with searchPath: ["Properties.SubnetId.Ref","Properties.SubnetId"] function
+        cloudformation_file = get_data(test_resource_paths.multiple_stack_plus_s3_ec2)
+        mapping_file = get_data(SAMPLE_MAPPING_FILE_WITHOUT_REF)
+        # WHEN parsing a CFT
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file],
+                                      [mapping_file]).process()
+        # THEN check if the line could be change for only access to Properties.SubnetId.
+        my_ec2_instance2 =  list(filter(lambda obj: obj.name == 'MyEC2Instance2', otm.components))
+        public_subnet = list(filter(lambda obj: obj.name == 'PublicSubnet1', otm.components))
+        assert my_ec2_instance2[0].parent_type == 'component'
+        assert my_ec2_instance2[0].parent == public_subnet[0].id
 
     def test_minimal_cft_file(self):
         # Given a minimal valid CFT file

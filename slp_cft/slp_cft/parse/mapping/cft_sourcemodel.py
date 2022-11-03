@@ -196,8 +196,13 @@ class CloudformationSourceModel:
 
     def __jmespath_search(self, search_path, source):
         try:
-            return jmespath.search(search_path, source, options=self.jmespath_options)
-
+            source_objects = jmespath.search(search_path, source, options=self.jmespath_options)
+            if 'Ref' in source_objects:
+                ref = source_objects['Ref']
+                return jmespath.search("Parameters." + ref + ".Default || '" + ref + "'", self.data,
+                                        options=self.jmespath_options)
+            else:
+                return source_objects
         except:
             return None
 

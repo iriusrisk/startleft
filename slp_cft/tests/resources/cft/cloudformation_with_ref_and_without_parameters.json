@@ -1,0 +1,61 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Custom Standaolne SecurityGroupIngress Configuration ",
+    "Resources": {
+        "PublicSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Condition": "EC2SecurityEnabled",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "SimpleVPC"
+                },
+                "GroupName": {
+                    "Fn::Join": [
+                        "-",
+                        [
+                            {
+                                "Ref": "NamingPrefix"
+                            },
+                            "SG"
+                        ]
+                    ]
+                },
+                "GroupDescription": "Enable HTTP access via port 80 and 443 to the allowed CIDR",
+                "SecurityGroupEgress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "CidrIp": {
+                            "Ref": "PublicSGSource"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "443",
+                        "ToPort": "443",
+                        "CidrIp": {
+                            "Ref": "PublicSGSource"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": {
+                            "Fn::Join": [
+                                "-",
+                                [
+                                    {
+                                        "Ref": "NamingPrefix"
+                                    },
+                                    "SG"
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
