@@ -80,6 +80,7 @@ class TerraformCustomFunctions(jmespath.functions.Functions):
                     module_source = module[c_type]['source']
                     if module_source == module_type:
                         new_obj = self.add_type_and_name(module[c_type], module_source, c_type)
+                        new_obj['module'] = True
                         source_objects.append(new_obj)
 
         return source_objects

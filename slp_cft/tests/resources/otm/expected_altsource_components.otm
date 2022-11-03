@@ -1,0 +1,137 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "name",
+    "id": "id"
+  },
+  "representations": [
+    {
+      "name": "CloudFormation",
+      "id": "CloudFormation",
+      "type": "code"
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.myvpc",
+      "name": "myVPC",
+      "type": "vpc",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "AWS::EC2::VPC"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.myvpc.ssm",
+      "name": "ssm",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.myvpc"
+      },
+      "tags": [
+        "AWS::EC2::VPCEndpoint"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.myvpc.ssm_messages",
+      "name": "ssm_messages",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.myvpc"
+      },
+      "tags": [
+        "AWS::EC2::VPCEndpoint"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.myvpc.ecr",
+      "name": "ecr",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.myvpc"
+      },
+      "tags": [
+        "AWS::EC2::VPCEndpoint"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.myvpc.dynamodb",
+      "name": "dynamodb",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.myvpc"
+      },
+      "tags": [
+        "AWS::EC2::VPCEndpoint"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.myvpc.s3",
+      "name": "s3",
+      "type": "empty-component",
+      "parent": {
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.myvpc"
+      },
+      "tags": [
+        "AWS::EC2::VPCEndpoint"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.dynamodb-altsource",
+      "name": "DynamoDB from VPCEndpoint",
+      "type": "dynamodb",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "dynamodb (AWS::EC2::VPCEndpoint)"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.s3-altsource",
+      "name": "S3 from VPCEndpoint",
+      "type": "s3",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "s3 (AWS::EC2::VPCEndpoint)"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.ssm-altsource",
+      "name": "Systems Manager from VPCEndpoint (grouped)",
+      "type": "CD-SYSTEMS-MANAGER",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "ssm (AWS::EC2::VPCEndpoint)",
+        "ssm_messages (AWS::EC2::VPCEndpoint)"
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.ecr-altsource",
+      "name": "ECR from VPCEndpoint",
+      "type": "elastic-container-registry",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "ecr (AWS::EC2::VPCEndpoint)"
+      ]
+    }
+  ],
+  "dataflows": []
+}
