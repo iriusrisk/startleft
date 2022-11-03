@@ -3,7 +3,7 @@ import pytest
 from sl_util.sl_util.file_utils import get_data
 from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError, \
     LoadingIacFileError
-from slp_base.tests.util.otm import validate_and_diff
+from slp_base.tests.util.otm import validate_and_diff, validate_and_diff_otm
 from slp_cft import CloudformationProcessor
 from slp_cft.tests.resources import test_resource_paths
 from slp_cft.tests.resources.test_resource_paths import expected_orphan_component_is_not_mapped
