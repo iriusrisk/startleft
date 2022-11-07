@@ -13,14 +13,14 @@ setup(
     python_requires='>=3.6',
     install_requires=[
         'pyyaml==6.0',
-        'jsonschema==4.16.0',
+        'jsonschema==4.17.0',
         'deepmerge==1.1.0',
         'jmespath==1.0.1',
         'lxml==4.9.1',
         'python-hcl2==3.0.5',
         'requests==2.28.1',
         'xmltodict==0.13.0',
-        'fastapi==0.85.1',
+        'fastapi==0.85.2',
         'python-multipart==0.0.5',
         'click==8.1.3',
         'uvicorn==0.19.0',
@@ -36,8 +36,8 @@ setup(
         "test": [
             'tox==3.26.0',
             'pytest==7.2.0',
-            'responses==0.21.0',
-            'deepdiff==5.8.1'
+            'responses==0.22.0',
+            'deepdiff==6.2.1'
         ]
     },
     entry_points='''
