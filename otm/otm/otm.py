@@ -1,4 +1,5 @@
 import logging
+from enum import Enum
 
 logger = logging.getLogger(__name__)
 
@@ -7,17 +8,15 @@ class OTM:
     def __init__(self, project_name, project_id, provider):
         self.project_name = project_name
         self.project_id = project_id
-        self.representations_id = provider.provider_name
-        self.representations_name = provider.provider_name
-        self.representations_type = provider.provider_type
-        self.representations_size = {
-            "width": 1000,
-            "height": 1000
-        }
 
+        self.representations = []
         self.trustzones = []
         self.components = []
         self.dataflows = []
+
+        default_size = {"width": 1000, "height": 1000}
+        self.representations.append(Representation(id_=provider.provider_name, name=provider.provider_name,
+                                                   type_=provider.provider_type, size=default_size))
 
     def objects_by_type(self, type):
         if type == "trustzone":
@@ -34,21 +33,14 @@ class OTM:
                 "name": self.project_name,
                 "id": self.project_id
             },
-            "representations": [
-                {
-                    "name": self.representations_name,
-                    "id": self.representations_id,
-                    "type": self.representations_type,
-                }
-            ],
+            "representations": [],
             "trustZones": [],
             "components": [],
             "dataflows": []
         }
 
-        if self.representations_type == "diagram":
-            data["representations"][0]["size"] = self.representations_size
-
+        for representation in self.representations:
+            data["representations"].append(representation.json())
         for trustzone in self.trustzones:
             data["trustZones"].append(trustzone.json())
         for component in self.components:
@@ -157,4 +149,32 @@ class Dataflow:
             result["properties"] = self.properties
         if self.tags:
             result["tags"] = self.tags
+        return result
+
+
+class RepresentationType(Enum):
+    DIAGRAM = 'diagram'
+    CODE = 'code'
+
+
+class Representation:
+    def __init__(self, id_: str, name: str, type_: str, description: str = None, attributes: dict = None, size=None):
+        self.id = id_
+        self.name = name
+        self.type = type_
+        self.description = description
+        self.attributes = attributes
+        self.size = size if self.type == RepresentationType.DIAGRAM.value else None
+
+    def json(self):
+        result = {"name": self.name,
+                  "id": self.id,
+                  "type": self.type
+                  }
+        if self.description is not None:
+            result['description'] = self.description
+        if self.attributes is not None and len(self.attributes) > 0:
+            result['attributes'] = self.attributes
+        if self.size is not None and len(self.size) > 0:
+            result['size'] = self.size
         return result
