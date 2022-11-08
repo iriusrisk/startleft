@@ -32,6 +32,22 @@ class MTMBorder:
         return self.source.get('Value', {}).get('GenericTypeId')
 
     @property
+    def height(self):
+        return self.__extract_int_value('Height')
+
+    @property
+    def width(self):
+        return self.__extract_int_value('Width')
+
+    @property
+    def left(self):
+        return self.__extract_int_value('Left')
+
+    @property
+    def top(self):
+        return self.__extract_int_value('Top')
+
+    @property
     def properties(self):
         properties = {}
         for element in self.source.get('Value', {}).get('Properties', {}).get('anyType'):
@@ -59,3 +75,9 @@ class MTMBorder:
                + 'is_component: ' + str(self.is_component) + ', ' \
                + 'is_trustzone: ' + str(self.is_trustzone) + ', ' \
                + 'properties: ' + str(self.properties) + '}'
+
+    def __extract_value(self, key):
+        return self.source.get('Value').get(key)
+
+    def __extract_int_value(self, key):
+        return int(self.__extract_value(key))

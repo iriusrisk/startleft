@@ -1,4 +1,4 @@
-from otm.otm.otm import OTM
+from otm.otm.otm import OTM, DiagramRepresentation, RepresentationType
 from otm.otm.otm_builder import OtmBuilder
 from slp_base.slp_base.provider_parser import ProviderParser
 from slp_base.slp_base.provider_type import EtmType
@@ -19,8 +19,14 @@ class MTMTParser(ProviderParser):
         self.mtmt_mapping = mtmt_mapping
         self.project_id = project_id
         self.project_name = project_name
-        self.trustzoneParser = MTMTTrustzoneParser(self.source, self.mtmt_mapping)
-        self.component_parser = MTMTComponentParser(self.source, self.mtmt_mapping, self.trustzoneParser)
+        self.representations = [DiagramRepresentation(id_=f'{self.project_id}-diagram',
+                                                      name=f'{self.project_id} Diagram Representation',
+                                                      type_=str(RepresentationType.DIAGRAM.value),
+                                                      size={'width': 2000, 'height': 2000}
+                                                      )]
+        self.trustzoneParser = MTMTTrustzoneParser(self.source, self.mtmt_mapping, self.representations[0].id)
+        self.component_parser = MTMTComponentParser(self.source, self.mtmt_mapping, self.trustzoneParser,
+                                                    self.representations[0].id)
 
     def __get_mtmt_components(self):
         return self.component_parser.parse()
@@ -31,10 +37,13 @@ class MTMTParser(ProviderParser):
     def __get_mtmt_trustzones(self) -> list:
         return self.trustzoneParser.parse()
 
+    def __get_mtmt_representations(self) -> list:
+        return self.representations
+
     def build_otm(self) -> OTM:
-        trustzones = self.__get_mtmt_trustzones()
         return OtmBuilder(self.project_id, self.project_name, EtmType.MTMT) \
-            .add_trustzones(trustzones) \
+            .add_representations(self.__get_mtmt_representations()) \
+            .add_trustzones(self.__get_mtmt_trustzones()) \
             .add_components(self.__get_mtmt_components()) \
             .add_dataflows(self.__get_mtmt_dataflows()) \
             .build()

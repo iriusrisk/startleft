@@ -14,9 +14,13 @@ class OTM:
         self.components = []
         self.dataflows = []
 
-        default_size = {"width": 1000, "height": 1000}
-        self.representations.append(Representation(id_=provider.provider_name, name=provider.provider_name,
-                                                   type_=provider.provider_type, size=default_size))
+        if provider.provider_type == RepresentationType.DIAGRAM.value:
+            default_size = {"width": 1000, "height": 1000}
+            self.add_diagram_representation(id_=provider.provider_name, name=provider.provider_name,
+                                            type_=provider.provider_type, size=default_size)
+        else:
+            self.add_representation(id_=provider.provider_name, name=provider.provider_name,
+                                    type_=provider.provider_type)
 
     def objects_by_type(self, type):
         if type == "trustzone":
@@ -65,13 +69,20 @@ class OTM:
                                        destination_node=destination_node, source=source, properties=properties,
                                        tags=tags))
 
+    def add_representation(self, id_=None, name=None, type_=None):
+        self.representations.append(Representation(id_=id_, name=name, type_=type_))
+
+    def add_diagram_representation(self, id_=None, name=None, type_=None, size=None):
+        self.representations.append(DiagramRepresentation(id_=id_, name=name, type_=type_, size=size))
+
 
 class Trustzone:
-    def __init__(self, id=None, name=None, source=None, properties=None):
+    def __init__(self, id=None, name=None, source=None, properties=None, representations=None):
         self.id = id
         self.name = name
         self.source = source
         self.properties = properties
+        self.representations = representations
 
     def __eq__(self, other):
         return type(other) == Trustzone and self.id == other.id
@@ -92,12 +103,14 @@ class Trustzone:
         }
         if self.properties:
             result["properties"] = self.properties
+        if self.representations:
+            result["representations"] = [r.json() for r in self.representations]
         return result
 
 
 class Component:
     def __init__(self, id=None, name=None, type=None, parent=None, parent_type=None, source=None,
-                 properties=None, tags=None):
+                 properties=None, tags=None, representations=None):
         self.id = id
         self.name = name
         self.type = type
@@ -106,6 +119,7 @@ class Component:
         self.source = source
         self.properties = properties
         self.tags = tags
+        self.representations = representations
 
     def json(self):
         result = {
@@ -121,6 +135,8 @@ class Component:
             result["properties"] = self.properties
         if self.tags:
             result["tags"] = self.tags
+        if self.representations:
+            result["representations"] = [r.json() for r in self.representations]
         return result
 
 
@@ -155,16 +171,20 @@ class Dataflow:
 class RepresentationType(Enum):
     DIAGRAM = 'diagram'
     CODE = 'code'
+    THREAT_MODEL = 'threat-model'
 
 
 class Representation:
-    def __init__(self, id_: str, name: str, type_: str, description: str = None, attributes: dict = None, size=None):
+    """
+    See https://github.com/iriusrisk/OpenThreatModel#representations-object
+    """
+
+    def __init__(self, id_: str, name: str, type_: str, description: str = None, attributes: dict = None):
         self.id = id_
         self.name = name
         self.type = type_
         self.description = description
         self.attributes = attributes
-        self.size = size if self.type == RepresentationType.DIAGRAM.value else None
 
     def json(self):
         result = {"name": self.name,
@@ -175,6 +195,49 @@ class Representation:
             result['description'] = self.description
         if self.attributes is not None and len(self.attributes) > 0:
             result['attributes'] = self.attributes
+        return result
+
+
+class DiagramRepresentation(Representation):
+    """
+    See https://github.com/iriusrisk/OpenThreatModel#diagram
+    """
+
+    def __init__(self, id_: str, name: str, type_: str, description: str = None, attributes: dict = None, size=None):
+        super(DiagramRepresentation, self).__init__(id_=id_, type_=type_, name=name, description=description,
+                                                    attributes=attributes)
+        self.size = size if self.type == RepresentationType.DIAGRAM.value else None
+
+    def json(self):
+        result = Representation.json(self)
+        if self.size is not None:
+            result['size'] = self.size
+        return result
+
+
+class RepresentationElement:
+    """
+    See https://github.com/iriusrisk/OpenThreatModel#representation-element-for-diagram
+    """
+
+    def __init__(self, id_: str, name: str, representation: str, position: dict = None, size: dict = None,
+                 attributes: dict = None):
+        self.id = id_
+        self.name = name
+        self.representation = representation
+        self.position = position
+        self.size = size
+        self.attributes = attributes
+
+    def json(self):
+        result = {"name": self.name, "id": self.id}
+        if self.representation is not None:
+            result['representation'] = self.representation
         if self.size is not None and len(self.size) > 0:
             result['size'] = self.size
+        if self.position is not None and len(self.position) > 0:
+            result['position'] = self.position
+        if self.attributes is not None and len(self.attributes) > 0:
+            result['attributes'] = self.attributes
+
         return result
