@@ -1,0 +1,30 @@
+# This workflow will install Python 3.8, Starleft dependencies and then run Starleft tests.
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Startleft automated testing
+
+on: [workflow_dispatch,push,pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+          pip install -e ".[setup,test]"
+
+      - name: Test with pytest
+        run: |
+          python run_tests.py
