@@ -24,11 +24,8 @@ Once you got familiarized with the basics explained in this page, you will need 
 customize the behavior of the processor in order to configure your own conversions. For that, you should take a look 
 to these pages:
 * Further details about how to operate with CFT files in the [CloudFormation manual page](CloudFormation-Manual.md).
-* Detailed information about how to build your own mapping files in the [CloudFormation mapping page]
-  (CloudFormation-Mapping.md).
-
-More details about the operation of this processor and **how to build and customize CFT mapping files** can be found in 
-the [CloudFormation manual page](CloudFormation-Manual.md).
+* Detailed information about how to build your own mapping files in the 
+[CloudFormation mapping page](CloudFormation-Mapping.md).
 
 ## A basic example
 
@@ -164,7 +161,7 @@ startleft parse \
 	ec2-cft.json
 ```
 
-### CURL
+### cURL
 You can get the same result if through the StartLeft's REST API. For that, in first place we need to set up the 
 server with the command:
 ```shell
