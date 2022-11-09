@@ -87,12 +87,17 @@ class TerraformTransformer:
 
     def __default_component_mapping_template(self):
         default_component_mapping_template = {
-            # "id": {"$format": "{tf_type}.{name}"},
             "id": {"$format": "{name}"},
             "name": {"$numberOfSources":
-                         {"oneSource": {"$path": "tf_name"}, "multipleSource": {"$format": "{type} (grouped)"}}},
+                {
+                    "oneSource": {"$path": "resource_name"},
+                    "multipleSource": {"$format": "{type} (grouped)"}
+                }},
             "tags": [{"$numberOfSources":
-                          {"oneSource": {"$path": "tf_type"}, "multipleSource": {"$format": "{tf_name} ({tf_type})"}}}]
+                {
+                    "oneSource": {"$path": "resource_type"},
+                    "multipleSource": {"$format": "{resource_name} ({resource_type})"}
+                }}]
         }
 
         if trustzone_parent_by_default := self.__find_trustzone_parent_by_default():

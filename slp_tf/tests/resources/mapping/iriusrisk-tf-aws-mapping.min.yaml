@@ -26,9 +26,6 @@ components:
         $mappingLookups:
           - regex: ^(.*)dynamodb$
             name:  DynamoDB from VPCEndpoint
-            type:  dynamodb
-            tags:
-              - {$format: "{_key} ({Type})"}
 
   - type:        vpc
     $source:     {$type: "aws_vpc"}
@@ -39,33 +36,29 @@ components:
 
   - type:        empty-component
     $source:     {$type: "aws_subnet"}
-    # Remove [re_sub('aws_[\\w-]+\\.', '', @)] for $id change
-#    parent:      {$path: "*.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('\\.id', '', @)"}
     parent:      {$path: "*.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('aws_[\\w-]+\\.', '', @) | re_sub('\\.id', '', @)"}
 
   - type:        empty-component
     $source:     {$type: "aws_vpc_endpoint"}
-    # Remove [re_sub('aws_[\\w-]+\\.', '', @)] for $id change when dataflows are fixed
-    parent:      {$findFirst: ["tf_props.subnet_ids[]", "tf_props.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('aws_[\\w-]+\\.', '', @) | re_sub('\\.id', '', @)"]}
+    parent:      {$findFirst: ["resource_properties.subnet_ids[]", "resource_properties.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('aws_[\\w-]+\\.', '', @) | re_sub('\\.id', '', @)"]}
 
   - type:        empty-component
     $source:     {$type: "aws_internet_gateway"}
 
   - type:        elastic-container-service
     $source:     {$type:  "aws_ecs_service"}
-    parent:      {$path:  "tf_props.network_configuration[0].subnets"}
-    children:    {$path:  "tf_props.task_definition|split(@, '.')[1]"}
+    parent:      {$path:  "resource_properties.network_configuration[0].subnets"}
+    children:    {$path:  "resource_properties.task_definition|split(@, '.')[1]"}
 
   - type:        docker-container
     $source:     {$type: "aws_ecs_task_definition"}
 
   - type:        load-balancer
     $source:     {$type: ["aws_lb", "aws_elb"]}
-    parent:      {$path: "tf_props.subnets"}
+    parent:      {$path: "resource_properties.subnets"}
 
   - type:        kms
     $source:     {$singleton: {$type: "aws_kms_key"}}
-
 
   - type:        aws-lambda-function
     $source:     {$type: "aws_lambda_function"}
@@ -90,48 +83,44 @@ components:
         $mappingLookups:
           - regex: ^(.*)s3$
             name: S3 from VPCEndpoint
-            type: s3
-            tags:
-              - {$format: "{_key} ({Type})"}
 
   - type:        CD-SECRETS-MANAGER
     $source:     {$singleton: {$type: "aws_secretsmanager_secret"}}
 
   - type:        sqs-simple-queue-service
-    $source:     {$root: "resource|get(@, 'aws_sqs_queue')"}
+    $source:     {$type: "aws_sqs_queue"}
 
   - type:        CD-SYSTEMS-MANAGER
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_ssm_')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_ssm_\w*$}}}
     $altsource:
       - $mappingType: {$type: "aws_vpc_endpoint"}
         $mappingPath: {$path: "*.service_name | [0]"}
         $mappingLookups:
           - regex: ^(.*)ssm$
             name: {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "Systems Manager from VPCEndpoint (grouped)"}}}
-            type:  CD-SYSTEMS-MANAGER
             tags:
               - {$numberOfSources: {oneSource: {$format: "aws_vpc_endpoint"}, multipleSource: {$format: "{_key} ({Type})"}}}
           - regex: ^(.*)ssmmessages$
             name: {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "Systems Manager from VPCEndpoint (grouped)"}}}
-            type:  CD-SYSTEMS-MANAGER
             tags:
               - {$numberOfSources: {oneSource: {$format: "aws_vpc_endpoint"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - type:        empty-component
     $source:     {$type: "aws_synthetics_canary"}
-    parent:      {$path: "tf_props.vpc_config[0].subnet_ids"}
+    parent:      {$path: "resource_properties.vpc_config[0].subnet_ids"}
 
   - type:        api-gateway
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_api_gateway_')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_api_gateway_\w*$}}}
+
 
   - type:        athena
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_athena_')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_athena_\w*$}}}
 
   - type:        CD-MQ
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_mq_')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_mq_\w*$}}}
 
   - type:        cf-cloudfront
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_cloudfront_')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_cloudfront_\w*$}}}
 
   - type:        cloudtrail
     $source:     {$type: "aws_cloudtrail"}
@@ -140,85 +129,82 @@ components:
     $source:     {$type: ["aws_cognito_user_pool", "aws_cognito_identity_pool"]}
 
   - type:        CD-CONFIG
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_config_')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_config_\w*$}}}
 
   - type:        elastic-container-registry
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_ecr_')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_ecr_\w*$}}}
     $altsource:
       - $mappingType: {$type: "aws_vpc_endpoint"}
         $mappingPath: {$path: "*.service_name | [0]"}
         $mappingLookups:
           - regex: ^(.*)ecr.dkr$
             name:  ECR from VPCEndpoint
-            type:  elastic-container-registry
-            tags:
-              - {$format: "{_key} ({Type})"}
 
   - type:        elastic-container-kubernetes
     $source:     {$type: "aws_eks_cluster"}
 
   - type:        elasticache
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_elasticache_')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_elasticache_\w*$}}}
 
   - type:        CD-GUARDDUTY
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_guardduty_')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_guardduty_\w*$}}}
 
   - type:        CD-INSPECTOR
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_inspector_')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_inspector_\w*$}}}
 
   - type:        CD-MACIE
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_macie2_')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_macie2_\w*$}}}
 
   - type:        CD-AWS-NETWORK-FIREWALL
     $source:     {$type: "aws_networkfirewall_firewall"}
-    parent:      {$path: "tf_props.vpc_id"}
+    parent:      {$path: "resource_properties.vpc_id"}
 
   - type:        redshift
     $source:     {$type: "aws_redshift_cluster"}
 
   - type:        CD-SES
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_ses_')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_ses_\w*$}}}
 
   - type:        sns
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_sns_')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_sns_\w*$}}}
 
   - type:        step-functions
-    $source:     {$root: "resource|get_starts_with(@, 'aws_sfn_')"}  # function
+    $source:     {$type: {$regex: ^aws_sfn_\w*$}}
 
   - type:        CD-WAF
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_waf_')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_waf_\w*$}}}
 
   - type:        kinesis-data-analytics
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_kinesis_analytics_')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_kinesis_analytics_\w*$}}}
 
   - type:        kinesis-data-analytics
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_kinesis_stream')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_kinesis_stream\w*$}}}
 
   - type:        kinesis-data-firehose
-    $source:     {$singleton: {$root: "resource|get_starts_with(@, 'aws_kinesis_firehose_')"}} # function
+    $source:     {$singleton: {$type: {$regex: ^aws_kinesis_firehose_\w*$}}}
 
   - type:        generic-client
-    name:        {$ip: {$path: "tf_props.egress[0].cidr_blocks"}}
+    name:        {$ip: {$path: "resource_properties.egress[0].cidr_blocks"}}
     $source:     {$type: "aws_security_group", $props: "egress[0].cidr_blocks"}
     parent:      f0ba7722-39b6-4c81-8290-a30a248bb8d9
     tags:
       - Outbound connection destination IP
 
   - type:        generic-client
-    name:        {$ip: {$path: "tf_props.ingress[0].cidr_blocks"}}
+    name:        {$ip: {$path: "resource_properties.ingress[0].cidr_blocks"}}
     $source:     {$type: "aws_security_group", $props: "ingress[0].cidr_blocks"}
     parent:      f0ba7722-39b6-4c81-8290-a30a248bb8d9
     tags:
       - Inbound connection source IP
 
   - type: rds
-    $source: {$root: "module|get_module_terraform(@, 'terraform-aws-modules/rds/aws')"} # module
+    $source: {$module: "terraform-aws-modules/rds/aws"}
 
   - type: vpc
-    $source: { $root: "module|get_module_terraform(@, 'terraform-aws-modules/vpc/aws')" } # module
+    $source: {$module: "terraform-aws-modules/vpc/aws"}
 
   - type: load-balancer
-    $source: { $root: "module|get_module_terraform(@, 'terraform-aws-modules/alb/aws')" } # module
+    $source: {$module: "terraform-aws-modules/alb/aws"}
 
 dataflows:
   #### Security Groups ####

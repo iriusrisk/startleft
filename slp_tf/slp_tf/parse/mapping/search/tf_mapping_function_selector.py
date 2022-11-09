@@ -1,5 +1,5 @@
 from slp_tf.slp_tf.parse.mapping.search.functions.tf_custom_mapping_functions import root, skip, parent, singleton, \
-    catchall, hub, ip, lookup, path, format, find_first, number_of_sources
+    catchall, hub, ip, lookup, path, format, find_first, number_of_sources, module
 from slp_tf.slp_tf.parse.mapping.search.functions.tf_query_mapping_functions import query
 
 
@@ -25,6 +25,7 @@ class MappingFunctionSelector:
             "$type": query,
             "$name": query,
             "$props": query,
+            "$module": module,
         }
 
     def get(self, obj):

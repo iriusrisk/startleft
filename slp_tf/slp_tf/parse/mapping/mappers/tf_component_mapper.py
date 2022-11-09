@@ -124,6 +124,12 @@ class TerraformComponentMapper(TerraformBaseMapper):
         elif isinstance(self.id_map[child_name], list):
             self.id_map[child_name].append(child_id)
 
+    def __default_alt_source_mapping_lookups_template(self):
+        return {
+            "type": self.mapping["type"],
+            "tags": [{"$format": "{resource_name} ({resource_type})"}]
+        }
+
     def __get_alt_source_components(self, source_model) -> []:
         self.logger.debug("No components found. Trying to find components from alternative source")
         alt_source = self.mapping["$altsource"]
@@ -139,6 +145,7 @@ class TerraformComponentMapper(TerraformBaseMapper):
                 value = self.get_altsource_mapping_path_value(source_model, alt_source_object, mapping_path)
 
                 for mapping_lookup in mapping_lookups:
+                    mapping_lookup = {**self.__default_alt_source_mapping_lookups_template(), **mapping_lookup}
                     result = re.match(mapping_lookup["regex"], value)
 
                     if result is not None:

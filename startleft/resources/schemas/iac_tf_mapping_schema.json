@@ -49,6 +49,17 @@
         }
     },
     "definitions": {
+        "regex": {
+            "type": "object",
+            "required": ["$regex"],
+            "properties": {
+                "$props": {
+                    "anyOf": [
+                        {"type": "string"}
+                    ]
+                }
+            }
+        },
         "query": {
             "anyOf": [
                 {
@@ -111,7 +122,8 @@
                                 "$type": {
                                     "anyOf": [
                                         {"type": "string"},
-                                        {"type": "array"}
+                                        {"type": "array", "items": {"type": "string"}},
+                                        {"$ref": "#/definitions/regex"}
                                     ]
                                 }
                             }
@@ -123,7 +135,8 @@
                                 "$name": {
                                     "anyOf": [
                                         {"type": "string"},
-                                        {"type": "array"}
+                                        {"type": "array", "items": {"type": "string"}},
+                                        {"$ref": "#/definitions/regex"}
                                     ]
                                 }
                             }
@@ -135,7 +148,8 @@
                                 "$props": {
                                     "anyOf": [
                                         {"type": "string"},
-                                        {"type": "array"}
+                                        {"type": "array", "items": {"type": "string"}},
+                                        {"$ref": "#/definitions/regex"}
                                     ]
                                 }
                             }
@@ -284,6 +298,17 @@
                             "anyOf": [
                                 {"type": "string"},
                                 {"$ref": "#/definitions/query"}
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "required": ["$module"],
+                    "properties": {
+                        "$hub": {
+                            "anyOf": [
+                                {"type": "string"}
                             ]
                         }
                     }

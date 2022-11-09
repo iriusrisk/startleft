@@ -62,9 +62,9 @@ class TerraformLoader(ProviderLoader):
                             component_name, properties = list(component_name_obj.items())[0]
                             resource_key = component_name
                             resource_properties = properties
-                    component_type_obj["tf_type"] = resource_type
-                    component_type_obj["tf_name"] = resource_key
-                    component_type_obj["tf_props"] = resource_properties
+                    component_type_obj["resource_type"] = resource_type
+                    component_type_obj["resource_name"] = resource_key
+                    component_type_obj["resource_properties"] = resource_properties
                     # Deprecated, but included for the seek to maximize compatibility between mappings
                     component_type_obj["Type"] = resource_type
                     component_type_obj["_key"] = resource_key

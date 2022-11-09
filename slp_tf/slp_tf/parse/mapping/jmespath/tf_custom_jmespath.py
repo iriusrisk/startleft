@@ -1,7 +1,10 @@
+import logging
 import re
 from copy import deepcopy
 
 import jmespath
+
+logger = logging.getLogger(__name__)
 
 
 def _adapt_dict(resource):
@@ -30,8 +33,8 @@ def add_type_and_name(obj, component_type, component_name):
     new_obj['Type'] = component_type
     new_obj['_key'] = component_name
     # Included with the purpose of maximize compatibility between mappings
-    new_obj["tf_type"] = component_type
-    new_obj['tf_name'] = component_name
+    new_obj["resource_type"] = component_type
+    new_obj['resource_name'] = component_name
 
     return new_obj
 
@@ -49,7 +52,7 @@ class TerraformCustomFunctions(jmespath.functions.Functions):
     def _func_squash_terraform(self, component_types_arr):
         source_objects = []
 
-        # Squash will include: tf_type, tf_name and tf_props
+        # Squash will include: resource_type, resource_name and resource_properties
         # with the purpose of maximize compatibility between mappings
         if component_types_arr is not None:
             for component_type_obj in component_types_arr:
@@ -57,12 +60,12 @@ class TerraformCustomFunctions(jmespath.functions.Functions):
                 source_object = {}
                 if isinstance(component_name_obj, dict):
                     source_object["Type"] = component_type
-                    source_object["tf_type"] = component_type
+                    source_object["resource_type"] = component_type
                     for component_name, properties in component_name_obj.items():
                         source_object["_key"] = component_name
-                        source_object["tf_name"] = component_name
+                        source_object["resource_name"] = component_name
                         source_object["Properties"] = properties
-                        source_object["tf_props"] = component_name
+                        source_object["resource_properties"] = component_name
                 source_objects.append(source_object)
 
         return source_objects
@@ -127,12 +130,24 @@ class TerraformCustomFunctions(jmespath.functions.Functions):
     def _func_split(self, string, separator):
         return string.split(separator)
 
+    @jmespath.functions.signature({'types': ['array', 'null']}, {'types': ['string']}, {'types': ['string']})
+    def _func_regex(self, resources, key, regex):
+        logger.debug(f"finding in {resources} with {key} and {regex}")
+        result = []
+        if resources:
+            for resource in resources:
+                if re.match(regex, resource.get(key)):
+                    result.append(resource)
+        return result
+
 
 jmespath_options = jmespath.Options(custom_functions=TerraformCustomFunctions())
 
 
 def jmespath_search(search_path, source):
     try:
+        logger.debug(f"jmespath search with expression {search_path}")
         return jmespath.search(search_path, source, options=jmespath_options)
-    except:
+    except Exception as e:
+        logger.error('jmespath search with expression %s failed. \nError: %s', search_path, e)
         return None

@@ -220,3 +220,17 @@ def number_of_sources(mapping_source, **kwargs):
     tf_source_model = kwargs.get("tf_source_model")
     source = kwargs.get("source")
     return __multiple_source_search(tf_source_model, source, mapping_source)
+
+
+def module(mapping_source, **kwargs):
+    """
+    JMESPath search through the module section matching by source's attribute
+    :param mapping_source: The $source for a mapping component
+    :param kwargs:
+        source_model_data: The completely TF dictionary
+    :return: The jmespath search of the $module value
+    """
+
+    source_model_data = kwargs.get("source_model_data", None)
+    return jmespath_search(
+        f"module|get_module_terraform(@, '{mapping_source['$module']}')", source_model_data)
