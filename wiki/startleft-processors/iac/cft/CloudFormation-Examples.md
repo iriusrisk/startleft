@@ -5,10 +5,7 @@
 You can find some sample source files inside the `examples` directory:
 
 * `examples/cloudformation` contains CloudFormation Template example files to convert into OTM format.
-* `examples/cloudformation/split` contains a complete CloudFormation Template example file split into two different files. 
-* `examples/terraform` contains Terraform example files to convert into OTM format.
-* `examples/manual` contains the OTM example file detailed in [Hand Crafted OTM](#hand-crafted-OTM).
-* `examples/visio` contains Visio example files to convert into OTM format.
+* `examples/cloudformation/split` contains a complete CloudFormation Template example file split into two different files.
 
 To process this examples, it is mandatory to use the mapping files according to the file data type. 
 You can find some sample mapping files inside the `examples` directory:
