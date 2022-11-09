@@ -4,14 +4,14 @@
 As you can see in the [architecture page](../Architecture.md) StartLeft Processors (SLPs) are the special kind of modules
 where the conversion into OTM logic is actually implemented. All of them are based in the same interfaces, defined in the 
 `slp_base` module. So, if you want to create a new SLP, you simply have to:
-* Create the module with an implementation class for each `slp_base` interface.
-* Implement freely your solution inside the module.
-* Add your module to the StartLeft configuration associating it to an input format.
+* Create your module extending `slp_base`.
+* Implement the parsing logic in your module.
+* Configure StartLeft to use your module.
 
-Below you have a guided tutorial for creating a new SLP for a very basic invented input format that you can use as a base
-for building your own.
+Below you have a guided tutorial for easily performing this steps and creating a new SLP for a very basic invented 
+input format that you can use as a base for building your own.
 
-## Defining a sample input format
+## Defining a sample input format (for demo purposes)
 
 ---
 > **Note**: The SLPs are classified in IaC, Diagram or External Threat Model (ETM). However, it is only
@@ -32,16 +32,19 @@ Source (MAIS)_. A sample file of this format could be something like:
 ```
 
 We need to define a format for the mappings between the source file and OTM. An example of this mapping file could be:
+> **Note**: Remind that the [OTM standard](../../Open-Threat-Model-(OTM).md) forces each component to have a parent.
+> This is the reason because we include this default TrustZone for this example.
 ```yaml
-trustZones:
+  trustZones:
   - id: public-cloud
-    name: Public Cloud
-    default: true
+  name: Public Cloud
+  default: true
 
 components:
   - source_type: server
     otm_type: otm-server
 ```
+
 
 So the resulting OTM for this example should be something like:
 ```json
@@ -154,7 +157,8 @@ class IacType(str, Provider):
 
 ### Implement `slp_base` interfaces
 > **Note**: In order to simplify this tutorial, we will not implement any validation nor process loading or processing errors, but, for 
-> a real implementation, yu must read the [errors management page](../Errors-Management.md) to know the errors you should 
+> a real implementation, you must read the [errors management page](../Errors-Management.md) to know the errors you 
+> should 
 > raise in each stage of the conversion process.
 
 We already know the main structure of the conversion process, so we can create our own implementation classes in the production 
