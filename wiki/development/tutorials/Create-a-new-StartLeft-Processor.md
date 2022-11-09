@@ -428,10 +428,12 @@ The whole module appears now like this:
 **You are done! Execute the test and verify that the conversion process is happily performed!**
 
 ## Configuring and exposing the SLP
+
+---
 At this point we already have our processor up and running, so it is time to expose it. For that, 
 no code is needed, and you only need to perform the configuration steps below.
 
-## Configure the module
+### Configure the module
 1. Go to the `_sl_build/modules.py` class, where you can find the modules' configuration.
 2. In the `PROCESSORS` variable, add `slp_mais` as `forbidden_dependency` for all the existent SLP modules.
 3. Create a new entry in the array with the configuration for our `slp_mais` module:
@@ -444,7 +446,7 @@ no code is needed, and you only need to perform the configuration steps below.
      }
 ```
  
-## Try it on the REST API
+### Try it on the REST API
 Launch the REST API as explained in the [Quickstart Guide for Developers](../Quickstart-Guide-for-Developers.md)
 and check the Swagger page in [http://localhost:5000/docs](http://localhost:5000/docs). You can see that the MAIS IaC
 type is already available in the `POST /iac` endpoint:

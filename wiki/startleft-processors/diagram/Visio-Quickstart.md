@@ -1,0 +1,235 @@
+# Visio Quickstart
+
+---
+
+## What is Microsoft Visio?
+
+---
+> **Note**: <u>It is important to notice that the only supported Visio format is the 
+> [VSDX](https://docs.microsoft.com/en-us/office/client-developer/visio/introduction-to-the-visio-file-formatvsdx)</u>. 
+> If you want to import another format, you previously need to convert it to vsdx. Otherwise, you will get an error.
+
+[Microsoft Visio](https://www.microsoft.com/en-us/microsoft-365/visio/flowchart-software) is a tool that 
+enables its users to freely draw diagrams of any kind from scratch or based on templates.
+
+From the point of view of StartLeft, it is a place where infrastructure or threat model diagrams can be created. 
+Despite the fact that Visio gives to their users complete freedom to build whatever they want in the diagram, 
+architecture or threat modelling diagrams tend to share a more or less common structure and StartLeft pretend to 
+take advantage of this in order to automatize the processing of the diagrams to create threat models in the OTM format.
+
+
+### Microsoft Visio Stencils
+Visio Stencils are a specially interesting use case, because they are predefined Visio shapes that can be reused 
+in every diagram. StartLeft is able to identify this kind of shapes so that their mappings can be also reused 
+for converting different diagrams. This is the case, for example, of the 
+[Visio AWS stencils](https://support.microsoft.com/en-us/office/create-aws-diagrams-in-visio-138206bf-d10f-4583-9f31-885ce706af49), 
+that are prebuilt shapes which represent a bunch of reusable AWS components. This feature allows StartLeft clients 
+like [IriusRisk](https://iriusrisk.com) to define a default mapping file with all this stencils and inject it in 
+every request to StartLeft so the user does not need to create the mappings each time.
+
+## The `slp_visio` module
+
+---
+The `slp_visio` module is the StartLeft Processor responsible for converting Microsoft Visio files into OTM. Of course, 
+Visio is a completely open tool, so not every diagram is susceptible to be parsed into OTM automatically, but the 
+fact is that there are many situations where the StartLeft process may be very useful.
+
+### Mapping introduction
+Its operation is based on two types of mapping files hierarchically processed, that is, <u>in case a shape is mapped 
+in both mapping files, the mapping in the custom mapping file has preference over the default one</u>:
+* The **default mapping file** is expected to contain those mappings that may be potentially reused across different 
+  conversion requests. The typical use cases for this mapping file are predefined Visio Shapes like the AWS stencils 
+  mentioned before or more simple shapes like the database shape, for example.
+* The **custom mapping file** is the file where the user can introduce the mappings for their own specific 
+  components. As mentioned above, the user has absolute freedom to draw and name shapes that may be relevant for the 
+  threat model. <u>Only mapped shapes will be parsed into the OTM</u> so here is the place where you need to place the 
+  mappings for everything you want to be processed.
+
+Further details about the mapping behavior may be found in the [Visio-Mapping page](Visio-Mapping.md). Regarding, 
+the usage of StartLeft to converting Visio files, you can check the manuals for the 
+[CLI](../../usage/Command-Line-Interface.md) and the [REST API](../../usage/REST-API.md).
+
+
+## A basic example
+
+---
+Suppose you have an architecture diagram like the one below, that contains two TrustZones (_Public Cloud_ and 
+_Private Secured Cloud_), a VPC and components that may belong to Stencils (_My EC2_ and _Private Database_) or 
+generic ones (_My Custom Machine_).
+<p align="center"><img src="../../images/visio-basic-example.png"></p>
+
+You may want to upload it to a threat modelling tool like [IriusRisk](http://iriusrisk.com) to build a threat model 
+like this:
+
+<p align="center"><img src="../../images/visio-irius-basic-example.png"></p>
+
+The more usual configuration for performing this conversion is having two mapping files. On one hand, you would have 
+your reusable **default mapping file** that contains mappings for the AWS stencils, with a content like this:
+```yaml
+trustzones:
+  - label:  Public Cloud
+    type:   Public Cloud
+    id:     b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+components:
+  - label:  Amazon EC2
+    type:   ec2
+
+  - label:  Database
+    type:   rds
+```
+
+On the other hand, for this specific request, you need to provide a **custom mapping file** which contains the 
+mappings for the generic elements of the diagram (_My Custom VPC_, _My Custom Machine_ and the _Private Secured Cloud_ 
+TrustZone):
+```yaml
+trustzones:
+  - label:  Private Secured Cloud
+    type:   Private Secured
+    id:     2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+
+components:
+  - label:  My Custom Machine
+    type:   empty-component
+
+  - label:  My Custom VPC
+    type:   empty-component
+```
+
+The result of sending to StartLeft this diagram with these mapping files would be an OTM with all the components we 
+had in the original Visio source:
+<details>
+  <summary>basic-visio-example.otm</summary>
+
+```json
+{
+    "otmVersion": "0.1.0",
+    "project": {
+        "name": "My Visio Basic Example",
+        "id": "my-visio-basic-example"
+    },
+    "representations": [
+        {
+            "name": "Visio",
+            "id": "Visio",
+            "type": "diagram",
+            "size": {
+                "width": 1000,
+                "height": 1000
+            }
+        }
+    ],
+    "trustZones": [
+        {
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "name": "Public Cloud",
+            "risk": {
+                "trustRating": 10
+            }
+        },
+        {
+            "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+            "name": "Private Secured",
+            "risk": {
+                "trustRating": 10
+            }
+        }
+    ],
+    "components": [
+        {
+            "id": "67",
+            "name": "My Custom VPC",
+            "type": "empty-component",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            }
+        },
+        {
+            "id": "12",
+            "name": "My EC2",
+            "type": "ec2",
+            "parent": {
+                "component": "67"
+            }
+        },
+        {
+            "id": "30",
+            "name": "Private Database",
+            "type": "rds",
+            "parent": {
+                "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+            }
+        },
+        {
+            "id": "68",
+            "name": "My Custom Machine",
+            "type": "empty-component",
+            "parent": {
+                "component": "67"
+            }
+        }
+    ],
+    "dataflows": [
+        {
+            "id": "34",
+            "name": "0d61e659-90a3-450e-adca-65aa08382c68",
+            "source": "12",
+            "destination": "30"
+        },
+        {
+            "id": "69",
+            "name": "f6d209c4-a507-48ca-a9ed-7d10c1d0cc78",
+            "source": "68",
+            "destination": "12"
+        }
+    ]
+}
+```
+</details>
+
+### CLI
+> **Note**: Before continue, make sure you have
+> [StartLeft properly installed](../../../Quickstart-Guide-for-Beginners.md) in your machine.
+
+First of all, retrieve all the necessary files:
+* Download the `visio-basic-example.vsdx` from [here](../../../examples/visio/visio-basic-example.vsdx).
+* Save default mapping above with the name `default-mapping.yaml`.
+* Save custom mapping above with the name `custom-mapping.yaml`.
+
+Now we are going to execute StartLeft for these files so that an `ec2.otm` file will be generated in our working
+directory with identical contents to the one above.
+```shell
+startleft parse \
+	--diagram-type VISIO \
+	--default-mapping-file default-mapping.yaml \
+	--custom-mapping-file custom-mapping.yaml \
+	--output-file basic-visio-example.otm \
+	--project-id "my-visio-basic-example" \
+	--project-name "My Visio Basic Example" \
+	visio-basic-example.vsdx
+```
+
+### cURL
+You can get the same result if through the StartLeft's REST API. For that, in first place we need to set up the
+server with the command:
+```shell
+startleft server
+```
+
+If you want to run the server in a specific port, you can do:
+```shell
+startleft server -p 8080
+```
+
+
+Then, execute the following command to retrieve the OTM file with your EC2 component:
+```shell
+curl --location --request POST 'localhost:5000/api/v1/startleft/diagram' \
+--header 'Content-Type: multipart/form-data' \
+--header 'Accept: application/json' \
+--form 'diag_type="VISIO"' \
+--form 'diag_file=@"./ec2-cft.json"' \
+--form 'default_mapping_file=@"./default-mapping.yaml"' \
+--form 'custom_mapping_file=@"./custom-mapping.yaml"' \
+--form 'id="my-visio-basic-example"' \
+--form 'name="My Visio Basic Example"'

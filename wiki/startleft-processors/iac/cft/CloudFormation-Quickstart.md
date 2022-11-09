@@ -8,24 +8,23 @@ From the [official AWS CloudFormation page](https://aws.amazon.com/cloudformatio
 > AWS CloudFormation is a service that gives developers and businesses an easy way to create a collection of related AWS 
 and third-party resources, and provision and manage them in an orderly and predictable fashion.
 
-From the point of view of StartLeft, CloudFormation Templates (CFT) are Infrastructure as Code (IaC) input sources 
-which describes an infrastructure susceptible to be processed in order to generate a threat model written in the OTM 
-format.
+From the StartLeft's perspective, a CloudFormation Template (CFT) is a file that defines a set of components with 
+relationships among them which can be interpreted to create a threat model. 
 
-## The `slp_cft` processor
+## The `slp_cft` module
 
 ---
-The `slp_cft` module is the StartLeft Processor responsible for processing CFT files into OTM. Its operation is based 
+The `slp_cft` module is the StartLeft Processor responsible for converting CFT files into OTM. Its operation is based 
 on a mapping file that enables the users to define the translations between the source AWS types and the expected 
-output 
-in the OTM file. 
+output in the OTM file. 
 
 Once you got familiarized with the basics explained in this page, you will need to know more about how to use and 
 customize the behavior of the processor in order to configure your own conversions. For that, you should take a look 
-to these pages:
-* Further details about how to operate with CFT files in the [CloudFormation manual page](CloudFormation-Manual.md).
-* Detailed information about how to build your own mapping files in the 
-[CloudFormation mapping page](CloudFormation-Mapping.md).
+to the [CloudFormation mapping page](CloudFormation-Mapping.md), where you will find all the information you need, from 
+basic to advanced to build your own CFT mapping files.
+
+Apart from this, you may also find interesting the generic usage manuals for the [CLI](../../../usage/Command-Line-Interface.md) 
+and [REST API](../../../usage/REST-API.md).
 
 ## A basic example
 
