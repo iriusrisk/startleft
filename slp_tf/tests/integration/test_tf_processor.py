@@ -3,7 +3,7 @@ import pytest
 from sl_util.sl_util.file_utils import get_data, get_byte_data
 from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError, \
     LoadingIacFileError
-from slp_base.tests.util.otm import validate_and_diff
+from slp_base.tests.util.otm import validate_and_diff, validate_and_diff_otm
 from slp_tf import TerraformProcessor
 from slp_tf.tests.resources import test_resource_paths
 from slp_tf.tests.resources.test_resource_paths import expected_aws_dataflows, expected_aws_altsource_components, \
@@ -295,3 +295,48 @@ class TestTerraformProcessor:
         # THEN an LoadingIacFileError  is returned
         with pytest.raises(IacFileNotValidError):
             TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, source, [mapping_file]).process()
+
+    def test_minimal_tf_file(self):
+        # Given a minimal valid TF file
+        terraform_minimal_file = get_data(test_resource_paths.terraform_minimal_content)
+
+        # and the default mapping file for TF
+        mapping_file = get_data(test_resource_paths.default_terraform_mapping)
+
+        # When parsing the file with Startleft and the default mapping file
+        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_minimal_file], [mapping_file]).process()
+
+        # Then an empty OTM containing only the default trustzone is generated
+        assert validate_and_diff_otm(otm.json(), test_resource_paths.otm_with_only_default_trustzone_expected_result,
+                                     excluded_regex) == {}
+
+    def test_generate_empty_otm_with_empty_mapping_file(self):
+        # Given an empty mapping file
+        mapping_file = get_data(test_resource_paths.empty_terraform_mapping)
+
+        # and a valid TF file with content
+        terraform_file = get_data(test_resource_paths.terraform_aws_simple_components)
+
+        # When parsing the file with Startleft and the empty mapping file
+        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
+
+        # Then an empty OTM, without any threat modeling content, is generated
+        assert validate_and_diff_otm(otm.json(), test_resource_paths.minimal_otm_expected_result,
+                                     excluded_regex) == {}
+
+    def test_variable_references_in_tfvars_file_processed_ok(self):
+        # GIVEN the multiples tf file and tfvars file
+        terraform_main = get_data(test_resource_paths.terraform_main_referenced_variables)
+        terraform_vars = get_data(test_resource_paths.terraform_variables_file_referenced_variables)
+        terraform_referenced_vars = get_data(test_resource_paths.terraform_vars_referenced_variables)
+
+        # AND the iriusrisk-tf-aws-mapping.yaml file
+        mapping_file = get_data(test_resource_paths.default_terraform_mapping)
+
+        # WHEN the method TerraformProcessor::process is invoked
+        otm = TerraformProcessor(
+            SAMPLE_ID, SAMPLE_NAME, [terraform_main, terraform_vars, terraform_referenced_vars], [mapping_file]
+        ).process()
+
+        # THEN a file with the single_tf_file-expected-result.otm contents is returned
+        assert validate_and_diff(otm.json(), test_resource_paths.tf_file_referenced_vars_expected_result, excluded_regex) == {}
