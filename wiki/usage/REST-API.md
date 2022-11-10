@@ -1,7 +1,9 @@
-## API server
+# REST API
+
+---
 
 StartLeft can also be deployed as a standalone REST server if you prefer the communication via API.
-In this operation mode, Startleft gives back the OTM file in the HTTP response.
+In this operation mode, StartLeft gives back the OTM file in the HTTP response.
 If you want to use the server option on the application:
 
 ```
@@ -11,7 +13,7 @@ Usage: startleft server [OPTIONS]...
   Launches the REST server to generate OTMs from requests
 
 Options:
-  -p, --port INTEGER  Startleft deployment port.
+  -p, --port INTEGER  StartLeft deployment port.
   --help              Show this message and exit.
 ```
 
@@ -19,7 +21,8 @@ By executing `startleft server` it is possible to see the command-line messages 
 
 ```Uvicorn running on http://127.0.0.1:5000 (Press CTRL+C to quit)```
 
-so indicating Startleft's REST API is ready. You can see the endpoints provided by opening the following URL in a web browser: http://127.0.0.1:5000/docs
+so indicating StartLeft's REST API is ready. You can see the endpoints provided by opening the following URL in a 
+web browser: http://127.0.0.1:5000/docs
 
 Available endpoints:
 ```
@@ -44,4 +47,4 @@ Request Body:
     default_mapping_file        Required. File that contains the default mapping file between the diagram resources and threat model resources
     custom_mapping_file         Optional. File that contains the custom user mapping file between the diagram resources and threat model resources
 ```
-> See Visio usage on [diagrams/visio/Visio.md](startleft-processors/diagram/Visio-Mapping.md) 
+ 

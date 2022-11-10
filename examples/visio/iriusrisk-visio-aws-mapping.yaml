@@ -8,35 +8,99 @@ trustzones:
     id:     2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
 
 components:
-    # Stencil: AWS Analytics
-  - label:  Amazon Athena
-    type:   athena
+  ################################################################################################
+  #   AWS STENCILS
+  ################################################################################################
 
-  - label:  Amazon Elasticsearch Service
-    type:   elasticsearch
+  # AWS Analytics
+  ########################
+  - label: Amazon Athena
+    type: athena
 
-  - label:  Amazon Kinesis Data Analytics
-    type:   kinesis-data-analytics
+  - label: Amazon Elasticsearch Service
+    type: elasticsearch
 
-  - label:  Amazon Kinesis Data Firehose
-    type:   kinesis-data-firehose
+  - label: Amazon Kinesis Data Analytics
+    type: kinesis-data-analytics
 
-  - label:  Amazon Kinesis Data Streams
-    type:   kinesis-data-streams
+  - label: Amazon Kinesis Data Firehose
+    type: kinesis-data-firehose
 
-  - label:  Amazon Managed Streaming for Kafka
-    type:   CD-MSK
+  - label: Amazon Kinesis Data Streams
+    type: kinesis-data-streams
 
-  - label:  Amazon Quicksight
-    type:   CD-QUICKSIGHT
+  - label: Amazon Managed Streaming for Kafka
+    type: CD-MSK
 
-  - label:  Amazon Redshift
-    type:   redshift
+  - label: Amazon Quicksight
+    type: CD-QUICKSIGHT
 
-  - label:  AWS Glue
-    type:   CD-GLUE
+  - label: Amazon Redshift
+    type: redshift
 
-    # Stencil: AWS Application Integration
+  - label: AWS Glue
+    type: CD-GLUE
+
+  # mapped to empty-component
+  - label: Amazon CloudSearch
+    type: empty-component
+
+  - label: Amazon EMR Cluster
+    type: empty-component
+
+  - label: Amazon EMR
+    type: empty-component
+
+  - label: Amazon Kinesis Video Streams
+    type: empty-component
+
+  - label: Amazon Kinesis
+    type: empty-component
+
+  - label: Amazon Redshift Dense compute node
+    type: empty-component
+
+  - label: Amazon Redshift Dense storage node
+    type: empty-component
+
+  - label: Analytics
+    type: empty-component
+
+  - label: AWS Data lake Resource icon
+    type: empty-component
+
+  - label: AWS Data Pipeline
+    type: empty-component
+
+  - label: AWS Glue Crawlers
+    type: empty-component
+
+  - label: AWS Glue Data catalog
+    type: empty-component
+
+  - label: AWS Lake Formation
+    type: empty-component
+
+  - label: EMR engine MapR M3
+    type: empty-component
+
+  - label: EMR engine MapR M5
+    type: empty-component
+
+  - label: EMR engine MapR M7
+    type: empty-component
+
+  - label: EMR engine
+    type: empty-component
+
+  - label: HDFS cluster
+    type: empty-component
+
+  - label: Search documents
+    type: empty-component
+
+  # AWS Application Integration
+  ########################
   - label:  Amazon EventBridge
     type:   eventbridge
 
@@ -52,18 +116,87 @@ components:
   - label:  AWS Step Functions
     type:   step-functions
 
-    # Stencil: AWS Blockchain
+    # mapped to empty-component
+  - label: Amazon AppSync
+    type: empty-component
+
+  - label: Application Integration
+    type: empty-component
+
+  - label: AWS Console Mobile Application
+    type: empty-component
+
+  - label: AWS Express Workflows
+    type: empty-component
+
+  - label: Custom event bus
+    type: empty-component
+
+  - label: Default event bus
+    type: empty-component
+
+  - label: Email Notification
+    type: empty-component
+
+  - label: Event
+    type: empty-component
+
+  - label: HTTP Notification
+    type: empty-component
+
+  - label: Message
+    type: empty-component
+
+  - label: Queue
+    type: empty-component
+
+  - label: SaaS event bus
+    type: empty-component
+
+  - label: Topic
+    type: empty-component
+
+  # AWS AR VR
+  ########################
+  # mapped to empty-component
+  - label: Amazon Sumerian
+    type: empty-component
+
+  - label: AR VR
+    type: empty-component
+
+  # AWS Blockchain
+  ########################
   - label:  Amazon Managed Blockchain
     type:   CD-MANAGEDBLOCKCHAIN
 
   - label:  Amazon Quantum Ledger Database
     type:   CD-QLDB
 
-    # Stencil: AWS Business Application
+  # mapped to empty-component
+  - label: Blockchain resource
+    type: empty-component
+
+  - label: Blockchain
+    type: empty-component
+
+  # AWS Business Application
+  ########################
   - label:  Alexa For Business
     type:   CD-ALEXA-FOR-BUSINESS
 
-    # Stencil: AWS Compute
+  # mapped to empty-component
+  - label: Amazon Chime
+    type: empty-component
+
+  - label: Amazon WorkMail
+    type: empty-component
+
+  - label: Business Applications
+    type: empty-component
+
+  # AWS Compute
+  ########################
   - label:  Amazon EC2 Container Registry
     type:   elastic-container-registry
 
@@ -88,11 +221,294 @@ components:
   - label:  Lambda Function
     type:   aws-lambda-function
 
-    # Stencil: AWS Containers
-  - label: AWS Step Functions workflow
-    type: step-functions
+  # mapped to empty-component
+  - label: A1 Instance
+    type: empty-component
 
-    # Stencil: AWS Customer Engagement
+  - label: Amazon Application Auto Scaling
+    type: empty-component
+
+  - label: Amazon Lightsail
+    type: empty-component
+
+  - label: AMI
+    type: empty-component
+
+  - label: Auto Scaling
+    type: empty-component
+
+  - label: AWS Batch
+    type: empty-component
+
+  - label: AWS Compute Optimizer
+    type: empty-component
+
+  - label: AWS Elastic Beanstalk Application
+    type: empty-component
+
+  - label: AWS Elastic Beanstalk Deployment
+    type: empty-component
+
+  - label: AWS Elastic Beanstalk
+    type: empty-component
+
+  - label: AWS Fargate
+    type: empty-component
+
+  - label: AWS Local Zones
+    type: empty-component
+
+  - label: AWS Outposts
+    type: empty-component
+
+  - label: AWS Serverless Application Repository
+    type: empty-component
+
+  - label: AWS Thinkbox Deadline
+    type: empty-component
+
+  - label: AWS Thinkbox Draft
+    type: empty-component
+
+  - label: AWS Thinkbox Frost
+    type: empty-component
+
+  - label: AWS Thinkbox Krakatoa
+    type: empty-component
+
+  - label: AWS Thinkbox Sequoia
+    type: empty-component
+
+  - label: AWS Thinkbox Stoke
+    type: empty-component
+
+  - label: AWS Thinkbox XMesh
+    type: empty-component
+
+  - label: AWS Wavelength
+    type: empty-component
+
+  - label: Bottlerocket
+    type: empty-component
+
+  - label: C4 Instance
+    type: empty-component
+
+  - label: C5 Instance
+    type: empty-component
+
+  - label: C5n Instance
+    type: empty-component
+
+  - label: Compute
+    type: empty-component
+
+  - label: Container1
+    type: empty-component
+
+  - label: Container2
+    type: empty-component
+
+  - label: Container3
+    type: empty-component
+
+  - label: D2 Instance
+    type: empty-component
+
+  - label: DB on Instance
+    type: empty-component
+
+  - label: Elastic IP Address
+    type: empty-component
+
+  - label: F1 Instance
+    type: empty-component
+
+  - label: G3 Instance
+    type: empty-component
+
+  - label: H1 Instance
+    type: empty-component
+
+  - label: High Memory Instance
+    type: empty-component
+
+  - label: I3 Instance
+    type: empty-component
+
+  - label: Instance with CloudWatch
+    type: empty-component
+
+  - label: Instance
+    type: empty-component
+
+  - label: Instances
+    type: empty-component
+
+  - label: M4 Instance
+    type: empty-component
+
+  - label: M5 Instance
+    type: empty-component
+
+  - label: M5a Instance
+    type: empty-component
+
+  - label: Optimized Instance
+    type: empty-component
+
+  - label: P2 Instance
+    type: empty-component
+
+  - label: P3 Instance
+    type: empty-component
+
+  - label: Parallel Cluster
+    type: empty-component
+
+  - label: R4 Instance
+    type: empty-component
+
+  - label: R5 Instance
+    type: empty-component
+
+  - label: R5a Instance
+    type: empty-component
+
+  - label: Registry
+    type: empty-component
+
+  - label: Rescue
+    type: empty-component
+
+  - label: Service
+    type: empty-component
+
+  - label: Spot instance
+    type: empty-component
+
+  - label: T3 Instance light bg copy
+    type: empty-component
+
+  - label: T3 Instance
+    type: empty-component
+
+  - label: T3a Instance
+    type: empty-component
+
+  - label: Task
+    type: empty-component
+
+  - label: VMware Cloud On AWS
+    type: empty-component
+
+  - label: X1 Instance
+    type: empty-component
+
+  - label: X1e Instance
+    type: empty-component
+
+  - label: z1d Instance
+    type: empty-component
+
+  # AWS Containers
+  ########################
+  - label: AWS Step Functions workflow
+    type:  step-functions
+
+  # mapped to empty-component
+  - label: Region
+    type: empty-component
+
+  - label: AWS Cloud 1
+    type: empty-component
+
+  - label: Corporate data center
+    type: empty-component
+
+  - label: Elastic Beanstalk  Container
+    type: empty-component
+
+  - label: Public Subnet
+    type: empty-component
+
+  - label: Server Contents
+    type: empty-component
+
+  - label: Generic Group 1
+    type: empty-component
+
+  - label: Private Subnet 2
+    type: empty-component
+
+  - label: Spot Fleet
+    type: empty-component
+
+  - label: Security Group
+    type: empty-component
+
+  - label: VPC
+    type: empty-component
+
+  - label: Availability Zone
+    type: empty-component
+
+  - label: Generic Group 2
+    type: empty-component
+
+  - label: EC2 instance contents
+    type: empty-component
+
+  - label: Private Subnet 1
+    type: empty-component
+
+  - label: AWS Cloud 2
+    type: empty-component
+
+  - label: Auto Scaling Group
+    type: empty-component
+
+  # AWS Cost Management
+  ########################
+  # mapped to empty-component
+  - label: AWS Budgets
+    type: empty-component
+
+  - label: AWS Cost and Usage Report
+    type: empty-component
+
+  - label: AWS Cost Explorer
+    type: empty-component
+
+  - label: AWS Cost Management
+    type: empty-component
+
+  - label: Reserved Instance Reporting
+    type: empty-component
+
+  - label: Savings Plans
+    type: empty-component
+
+  # AWS Customer Enablement
+  ########################
+  # mapped to empty-component
+  - label: AWS IQ
+    type: empty-component
+
+  - label: AWS Managed Services
+    type: empty-component
+
+  - label: AWS Professional Services
+    type: empty-component
+
+  - label: AWS Support
+    type: empty-component
+
+  - label: Customer Enablement
+    type: empty-component
+
+  # AWS Customer Engagement
+  ########################
   - label:  Amazon Pinpoint
     type:   CD-PINPOINT
 
@@ -102,7 +518,15 @@ components:
   - label:  Amazon Simple Email Service SES
     type:   CD-SES
 
-    # Stencil: AWS Database
+  # mapped to empty-component
+  - label: Amazon Connect
+    type: empty-component
+
+  - label: Customer Engagement
+    type: empty-component
+
+  # AWS Database
+  ########################
   - label:  Amazon DynamoDB Accelerator (DAX)
     type:   dynamodb
 
@@ -130,25 +554,240 @@ components:
   - label:  ElastiCache For Redis
     type:   elasticache
 
-    # Stencil: AWS Developer Tools
+  # mapped to empty-component
+  - label: Amazon Aurora instance alt
+    type: empty-component
+
+  - label: Amazon Aurora instance
+    type: empty-component
+
+  - label: Amazon Aurora
+    type: empty-component
+
+  - label: Amazon Managed Apache Cassandra Service
+    type: empty-component
+
+  - label: Amazon RDS instance alt
+    type: empty-component
+
+  - label: Amazon RDS instance
+    type: empty-component
+
+  - label: Amazon RDS on VMware
+    type: empty-component
+
+  - label: Amazon Timestream
+    type: empty-component
+
+  - label: Attribute
+    type: empty-component
+
+  - label: Attributes
+    type: empty-component
+
+  - label: AWS Database Migration Service
+    type: empty-component
+
+  - label: Cache Node
+    type: empty-component
+
+  - label: Database Migration Workflow
+    type: empty-component
+
+  - label: Dense Compute Node
+    type: empty-component
+
+  - label: Dense Storage Node
+    type: empty-component
+
+  - label: Global Secondary Index
+    type: empty-component
+
+  - label: Item
+    type: empty-component
+
+  - label: Items
+    type: empty-component
+
+  - label: MariaDB instance alt
+    type: empty-component
+
+  - label: MariaDB instance
+    type: empty-component
+
+  - label: MySQL instance alt
+    type: empty-component
+
+  - label: MySQL instance
+    type: empty-component
+
+  - label: Oracle instance alt
+    type: empty-component
+
+  - label: Oracle instance
+    type: empty-component
+
+  - label: PIOP
+    type: empty-component
+
+  - label: PIOPS
+    type: empty-component
+
+  - label: PostgreSQL instance alt
+    type: empty-component
+
+  - label: PostgreSQL instance
+    type: empty-component
+
+  - label: SQL Server instance alt
+    type: empty-component
+
+  - label: SQL Server instance
+    type: empty-component
+
+  - label: Table
+    type: empty-component
+
+  # AWS Developer Tools
+  ########################
   - label:  AWS Cloud9
     type:   CD-CLOUD9
 
   - label:  AWS X Ray
     type:   CD-XRAY
 
-    # Stencil: AWS End User Computing
+  # mapped to empty-component
+  - label: Amazon DynamoDB DAX
+    type: empty-component
+
+  - label: AWS Cloud Development Kit
+    type: empty-component
+
+  - label: AWS CodeBuild
+    type: empty-component
+
+  - label: AWS CodeCommit
+    type: empty-component
+
+  - label: AWS CodeDeploy
+    type: empty-component
+
+  - label: AWS CodePipeline
+    type: empty-component
+
+  - label: AWS CodeStar
+    type: empty-component
+
+  - label: AWS Command Line Interface
+    type: empty-component
+
+  - label: AWS Tools And SDKs
+    type: empty-component
+
+  - label: Cloud9 Resource
+    type: empty-component
+
+  - label: Developer Tools
+    type: empty-component
+
+  # AWS End User Computing
+  ########################
   - label:  Amazon Workspaces
     type:   CD-WORKSPACES
 
-    # Stencil: AWS General
+  # mapped to empty-component
+  - label: Amazon Appstream 2.0
+    type: empty-component
+
+  - label: Amazon WorkDocs
+    type: empty-component
+
+  - label: Amazon WorkLink
+    type: empty-component
+
+  - label: End User Computing
+    type: empty-component
+
+  # AWS Game Tech
+  ########################
+  # mapped to empty-component
+  - label: Amazon GameLift
+    type: empty-component
+
+  - label: Game Tech
+    type: empty-component
+
+  # AWS General
+  ########################
   - label:  Generic Firewall
     type:   CD-AWS-NETWORK-FIREWALL
 
   - label:  SDK
     type:   CD-SDK
 
-    # Stencil: AWS Internet of Things
+  # mapped to empty-component
+  - label: AWS Email
+    type: empty-component
+
+  - label: AWS Marketplace
+    type: empty-component
+
+  - label: Client
+    type: empty-component
+
+  - label: Disk
+    type: empty-component
+
+  - label: Forums
+    type: empty-component
+
+  - label: General
+    type: empty-component
+
+  - label: Generic database
+    type: empty-component
+
+  - label: Internet alt1
+    type: empty-component
+
+  - label: Internet alt2
+    type: empty-component
+
+  - label: Internet gateway
+    type: empty-component
+
+  - label: Mobile client
+    type: empty-component
+
+  - label: Multimedia
+    type: empty-component
+
+  - label: Office building
+    type: empty-component
+
+  - label: SAML token
+    type: empty-component
+
+  - label: SSL padlock
+    type: empty-component
+
+  - label: Tape storage
+    type: empty-component
+
+  - label: Toolkit
+    type: empty-component
+
+  - label: Traditional server
+    type: empty-component
+
+  - label: User
+    type: empty-component
+
+  - label: Users
+    type: empty-component
+
+  # AWS Internet of Things
+  ########################
   - label:  AWS IoT 1 Click
     type:   CD-IOT-1-CLICK
 
@@ -173,7 +812,255 @@ components:
   - label:  AWS IoT Things Graph
     type:   CD-IOT-THINGS-GRAPH
 
-    # Stencil: AWS Management Governance
+  # mapped to empty-component
+  - label: Amazon FreeRTOS
+    type: empty-component
+
+  - label: AWS IoT Button
+    type: empty-component
+
+  - label: Channel
+    type: empty-component
+
+  - label: Connector
+    type: empty-component
+
+  - label: Data Set
+    type: empty-component
+
+  - label: Data Store
+    type: empty-component
+
+  - label: Internet of Things
+    type: empty-component
+
+  - label: IoT Action
+    type: empty-component
+
+  - label: IoT Actuator
+    type: empty-component
+
+  - label: IoT Alexa enabled device
+    type: empty-component
+
+  - label: IoT Alexa skill
+    type: empty-component
+
+  - label: IoT Alexa voice service
+    type: empty-component
+
+  - label: IoT Bank
+    type: empty-component
+
+  - label: IoT Bicycle
+    type: empty-component
+
+  - label: IoT Camera
+    type: empty-component
+
+  - label: IoT Car
+    type: empty-component
+
+  - label: IoT Cart
+    type: empty-component
+
+  - label: IoT Certificate manager
+    type: empty-component
+
+  - label: IoT Coffee pot
+    type: empty-component
+
+  - label: IoT Desired state
+    type: empty-component
+
+  - label: IoT Device gateway
+    type: empty-component
+
+  - label: IoT Device Jobs Resource
+    type: empty-component
+
+  - label: IoT Door lock
+    type: empty-component
+
+  - label: IoT Echo
+    type: empty-component
+
+  - label: IoT Factory
+    type: empty-component
+
+  - label: IoT Fire TV stick
+    type: empty-component
+
+  - label: IoT Fire TV
+    type: empty-component
+
+  - label: IoT Generic
+    type: empty-component
+
+  - label: IoT Hardware board
+    type: empty-component
+
+  - label: IoT House
+    type: empty-component
+
+  - label: IoT HTTP 2 protocol
+    type: empty-component
+
+  - label: IoT HTTP protocol
+    type: empty-component
+
+  - label: IoT Lambda function
+    type: empty-component
+
+  - label: IoT Lightbulb
+    type: empty-component
+
+  - label: IoT Medical emergency
+    type: empty-component
+
+  - label: IoT MQTT protocol
+    type: empty-component
+
+  - label: IoT Over the air update
+    type: empty-component
+
+  - label: IoT Police emergency
+    type: empty-component
+
+  - label: IoT Policy
+    type: empty-component
+
+  - label: IoT Reported state
+    type: empty-component
+
+  - label: IoT Rule
+    type: empty-component
+
+  - label: IoT Sensor
+    type: empty-component
+
+  - label: IoT Servo
+    type: empty-component
+
+  - label: IoT Shadow
+    type: empty-component
+
+  - label: IoT Simulator
+    type: empty-component
+
+  - label: IoT Thermostat
+    type: empty-component
+
+  - label: IoT Topic
+    type: empty-component
+
+  - label: IoT Travel
+    type: empty-component
+
+  - label: IoT Utility
+    type: empty-component
+
+  - label: IoT Windfarm
+    type: empty-component
+
+  - label: Notebook
+    type: empty-component
+
+  - label: Pipeline
+    type: empty-component
+
+  # AWS Machine Learning
+  ########################
+  # mapped to empty-component
+  - label: Amazon Augmented AI
+    type: empty-component
+
+  - label: Amazon CodeGuru
+    type: empty-component
+
+  - label: Amazon Comprehend
+    type: empty-component
+
+  - label: Amazon Elastic Inference
+    type: empty-component
+
+  - label: Amazon Forecast
+    type: empty-component
+
+  - label: Amazon Fraud Detector
+    type: empty-component
+
+  - label: Amazon Kendra
+    type: empty-component
+
+  - label: Amazon Lex
+    type: empty-component
+
+  - label: Amazon Personalize
+    type: empty-component
+
+  - label: Amazon Polly
+    type: empty-component
+
+  - label: Amazon Rekognition Image
+    type: empty-component
+
+  - label: Amazon Rekognition Video
+    type: empty-component
+
+  - label: Amazon Rekognition
+    type: empty-component
+
+  - label: Amazon SageMaker Ground Truth
+    type: empty-component
+
+  - label: Amazon SageMaker Model
+    type: empty-component
+
+  - label: Amazon SageMaker Notebook
+    type: empty-component
+
+  - label: Amazon SageMaker Train
+    type: empty-component
+
+  - label: Amazon SageMaker
+    type: empty-component
+
+  - label: Amazon Textract
+    type: empty-component
+
+  - label: Amazon Transcribe
+    type: empty-component
+
+  - label: Amazon Translate
+    type: empty-component
+
+  - label: Apache MXNet on AWS
+    type: empty-component
+
+  - label: AWS Deep Learning AMIs
+    type: empty-component
+
+  - label: AWS Deep Learning Containers
+    type: empty-component
+
+  - label: AWS DeepComposer
+    type: empty-component
+
+  - label: AWS DeepLens
+    type: empty-component
+
+  - label: AWS DeepRacer
+    type: empty-component
+
+  - label: Machine Learning
+    type: empty-component
+
+  - label: TensorFlow on AWS
+    type: empty-component
+
+  # AWS Management Governance
+  ########################
   - label:  Amazon CloudWatch
     type:   cloudwatch
 
@@ -204,7 +1091,204 @@ components:
   - label:  AWS Systems Manager
     type:   CD-SYSTEMS-MANAGER
 
-    # Stencil: AWS Mobile
+  # mapped to empty-component
+  - label: Account
+    type: empty-component
+
+  - label: Alarm
+    type: empty-component
+
+  - label: Apps
+    type: empty-component
+
+  - label: Automation
+    type: empty-component
+
+  - label: AWS Auto Scaling
+    type: empty-component
+
+  - label: AWS Command Line Interface
+    type: empty-component
+
+  - label: AWS Control Tower
+    type: empty-component
+
+  - label: AWS License Manager
+    type: empty-component
+
+  - label: AWS Managed Services
+    type: empty-component
+
+  - label: AWS Personal Health Dashboard
+    type: empty-component
+
+  - label: AWS Trusted Advisor
+    type: empty-component
+
+  - label: AWS Well Architected Tool
+    type: empty-component
+
+  - label: Change Set
+    type: empty-component
+
+  - label: Checklist Cost
+    type: empty-component
+
+  - label: Checklist Fault Tolerant
+    type: empty-component
+
+  - label: Checklist Performance
+    type: empty-component
+
+  - label: Checklist Security
+    type: empty-component
+
+  - label: Checklist
+    type: empty-component
+
+  - label: Deployments
+    type: empty-component
+
+  - label: Documents
+    type: empty-component
+
+  - label: Event (event-based)
+    type: empty-component
+
+  - label: Event (time-based)
+    type: empty-component
+
+  - label: Instances
+    type: empty-component
+
+  - label: Inventory
+    type: empty-component
+
+  - label: Layers
+    type: empty-component
+
+  - label: Maintenance Windows
+    type: empty-component
+
+  - label: Management and Governance
+    type: empty-component
+
+  - label: Monitoring
+    type: empty-component
+
+  - label: Organizational unit
+    type: empty-component
+
+  - label: Parameter Store
+    type: empty-component
+
+  - label: Patch Manager
+    type: empty-component
+
+  - label: Permissions
+    type: empty-component
+
+  - label: Resources
+    type: empty-component
+
+  - label: Rule
+    type: empty-component
+
+  - label: Run Command
+    type: empty-component
+
+  - label: Stack
+    type: empty-component
+
+  - label: Stack2
+    type: empty-component
+
+  - label: State Manager
+    type: empty-component
+
+  - label: Systems Manager OpsCenter
+    type: empty-component
+
+  - label: Template
+    type: empty-component
+
+  # AWS Media Services
+  ########################
+  # mapped to empty-component
+  - label: Amazon Elastic Transcoder
+    type: empty-component
+
+  - label: Amazon Kinesis Video Streams
+    type: empty-component
+
+  - label: AWS Elemental Conductor
+    type: empty-component
+
+  - label: AWS Elemental Delta
+    type: empty-component
+
+  - label: AWS Elemental Live
+    type: empty-component
+
+  - label: AWS Elemental MediaConnect
+    type: empty-component
+
+  - label: AWS Elemental MediaLive
+    type: empty-component
+
+  - label: AWS Elemental Server
+    type: empty-component
+
+  - label: Media Services
+    type: empty-component
+
+  # AWS Migration Transfer
+  ########################
+  # mapped to empty-component
+  - label: AWS Application Discovery Service
+    type: empty-component
+
+  - label: AWS DataSync Agent
+    type: empty-component
+
+  - label: AWS DataSync
+    type: empty-component
+
+  - label: AWS FTP
+    type: empty-component
+
+  - label: AWS FTPS
+    type: empty-component
+
+  - label: AWS Migration Hub
+    type: empty-component
+
+  - label: AWS Server Migration Service
+    type: empty-component
+
+  - label: AWS SFTP
+    type: empty-component
+
+  - label: AWS Snowball Edge
+    type: empty-component
+
+  - label: AWS Snowball
+    type: empty-component
+
+  - label: AWS Snowmobile
+    type: empty-component
+
+  - label: AWS Transfer Family
+    type: empty-component
+
+  - label: CloudEndure Migration
+    type: empty-component
+
+  - label: Migration and Transfer
+    type: empty-component
+
+  # AWS Mobile
+  ########################
   - label:  Amazon API Gateway Endpoint
     type:   api-gateway
 
@@ -214,7 +1298,21 @@ components:
   - label:  Amazon Pinpoint
     type:   CD-PINPOINT
 
-    # Stencil: AWS Networking Content Delivery
+  # mapped to empty-component
+  - label: AWS Amplify
+    type: empty-component
+
+  - label: AWS AppSync
+    type: empty-component
+
+  - label: AWS Device Farm
+    type: empty-component
+
+  - label: Mobile
+    type: empty-component
+
+  # AWS Networking Content Delivery
+  ########################
   - label:  Amazon API Gateway Endpoint
     type:   api-gateway
 
@@ -236,7 +1334,135 @@ components:
   - label:  Elastic Load Balancing
     type:   load-balancer
 
-    # Stencil: AWS Security Identity Compliance
+  # mapped to empty-component
+  - label: Application load balancer
+    type: empty-component
+
+  - label: AWS App Mesh
+    type: empty-component
+
+  - label: AWS Client VPN
+    type: empty-component
+
+  - label: AWS Direct Connect
+    type: empty-component
+
+  - label: AWS Global Accelerator
+    type: empty-component
+
+  - label: AWS PrivateLink
+    type: empty-component
+
+  - label: AWS Site to Site VPN
+    type: empty-component
+
+  - label: AWS Transit Gateway
+    type: empty-component
+
+  - label: Classic load balancer
+    type: empty-component
+
+  - label: Customer Gateway
+    type: empty-component
+
+  - label: Download Distribution
+    type: empty-component
+
+  - label: Edge Location
+    type: empty-component
+
+  - label: Elastic Network Adapter
+    type: empty-component
+
+  - label: Elastic Network Interface
+    type: empty-component
+
+  - label: Endpoints
+    type: empty-component
+
+  - label: Flow Logs
+    type: empty-component
+
+  - label: Hosted Zone
+    type: empty-component
+
+  - label: Internet Gateway
+    type: empty-component
+
+  - label: NAT Gateway
+    type: empty-component
+
+  - label: Network Access Control List
+    type: empty-component
+
+  - label: Network load balancer
+    type: empty-component
+
+  - label: Networking and Content Delivery
+    type: empty-component
+
+  - label: Peering
+    type: empty-component
+
+  - label: Route Table
+    type: empty-component
+
+  - label: Router
+    type: empty-component
+
+  - label: Streaming Distribution
+    type: empty-component
+
+  - label: Traffic Mirroring
+    type: empty-component
+
+  - label: VPN Connection
+    type: empty-component
+
+  - label: VPN Gateway
+    type: empty-component
+
+  # AWS Quantum Technologies
+  ########################
+  # mapped to empty-component
+  - label: AWS Braket
+    type: empty-component
+
+  - label: Quantum Technologies
+    type: empty-component
+
+  # AWS Robotics
+  ########################
+  # mapped to empty-component
+  - label: AWS RoboMaker
+    type: empty-component
+
+  - label: Cloud Extension ROS
+    type: empty-component
+
+  - label: Development Environment
+    type: empty-component
+
+  - label: Fleet Management
+    type: empty-component
+
+  - label: Robotics
+    type: empty-component
+
+  - label: Simulation
+    type: empty-component
+
+  # AWS Satellite
+  ########################
+  # mapped to empty-component
+  - label: AWS Ground Station
+    type: empty-component
+
+  - label: Satellite
+    type: empty-component
+
+  # AWS Security Identity Compliance
+  ########################
   - label:  Amazon Cognito
     type:   cognito
 
@@ -270,7 +1496,84 @@ components:
   - label:  AWS WAF
     type:   CD-WAF
 
-    # Stencil: AWS Storage
+  # mapped to empty-component
+  - label: Access Analyzer
+    type: empty-component
+
+  - label: AD Connector
+    type: empty-component
+
+  - label: Add on
+    type: empty-component
+
+  - label: Amazon Cloud Directory
+    type: empty-component
+
+  - label: Amazon Detective
+    type: empty-component
+
+  - label: AWS Artifact
+    type: empty-component
+
+  - label: AWS Certificate Authority
+    type: empty-component
+
+  - label: AWS CloudHSM
+    type: empty-component
+
+  - label: AWS Directory Service
+    type: empty-component
+
+  - label: AWS Managed Microsoft AD
+    type: empty-component
+
+  - label: AWS Resource Access Manager
+    type: empty-component
+
+  - label: AWS Shield Advanced
+    type: empty-component
+
+  - label: AWS Shield
+    type: empty-component
+
+  - label: AWS Single Sign On
+    type: empty-component
+
+  - label: AWS STS Alternate
+    type: empty-component
+
+  - label: AWS STS
+    type: empty-component
+
+  - label: AWS WAF Filtering rule
+    type: empty-component
+
+  - label: Data Encryption Key
+    type: empty-component
+
+  - label: Encrypted Data
+    type: empty-component
+
+  - label: MFA Token
+    type: empty-component
+
+  - label: Permissions
+    type: empty-component
+
+  - label: Role
+    type: empty-component
+
+  - label: Security Hub Finding
+    type: empty-component
+
+  - label: Security Identity and Compliance
+    type: empty-component
+
+  - label: Simple AD
+    type: empty-component
+
+  # AWS Storage
+  ########################
   - label:  Amazon Elastic File System EFS
     type:   elastic-file-system
 
@@ -282,5 +1585,93 @@ components:
 
   - label:  Bucket
     type:   s3
+
+  # mapped to empty-component
+  - label: Amazon Elastic Block Store EBS
+    type: empty-component
+
+  - label: Amazon FSx for Lustre
+    type: empty-component
+
+  - label: Amazon FSx
+    type: empty-component
+
+  - label: Amazon S3 Glacier
+    type: empty-component
+
+  - label: Archive
+    type: empty-component
+
+  - label: AWS Backup
+    type: empty-component
+
+  - label: AWS Snowball Edge
+    type: empty-component
+
+  - label: AWS Snowball
+    type: empty-component
+
+  - label: AWS Snowmobile
+    type: empty-component
+
+  - label: AWS Storage Gateway
+    type: empty-component
+
+  - label: Cached Volume
+    type: empty-component
+
+  - label: CloudEndure Disaster Recovery
+    type: empty-component
+
+  - label: File Gateway
+    type: empty-component
+
+  - label: File system
+    type: empty-component
+
+  - label: General Access Points
+    type: empty-component
+
+  - label: Infrequent Access
+    type: empty-component
+
+  - label: Multiple volumes Resource Icon
+    type: empty-component
+
+  - label: Non Cached Volume
+    type: empty-component
+
+  - label: Object
+    type: empty-component
+
+  - label: Snapshot
+    type: empty-component
+
+  - label: Snowball Import Export
+    type: empty-component
+
+  - label: Standard Storage class
+    type: empty-component
+
+  - label: Storage
+    type: empty-component
+
+  - label: Tape Gateway
+    type: empty-component
+
+  - label: Vault
+    type: empty-component
+
+  - label: Virtual Tape Library
+    type: empty-component
+
+  - label: Volume Gateway
+    type: empty-component
+
+  - label: Volume
+    type: empty-component
+
+  - label: VPC Access Points
+    type: empty-component
 
 dataflows: []

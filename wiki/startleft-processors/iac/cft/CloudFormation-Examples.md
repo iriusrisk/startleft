@@ -1,19 +1,20 @@
 # CloudFormation Template examples
 
 ---
+## Sources
 
+---
 You can find some sample source files inside the `examples` directory:
 
 * `examples/cloudformation` contains CloudFormation Template example files to convert into OTM format.
 * `examples/cloudformation/split` contains a complete CloudFormation Template example file split into two different files.
 
 To process this examples, it is mandatory to use the mapping files according to the file data type. 
-You can find some sample mapping files inside the `examples` directory:
-* `examples/cloudformation` contains mappings for Cloudformation files.
-* `examples/terraform` contains mappings for Terraform files.
-* `examples/visio` contains mappings for Visio files.
+You can find some sample mapping files inside the `examples/cloudformation` directory.
 
-## CloudFormation
+## Examples
+
+---
 CloudFormation is the AWS tool which lets you model, provision, and manage AWS and third-party resources by treating 
 infrastructure as code. Startleft's repository contains an example CloudFormation mapping file that enables you to 
 generate threat models based on the OTM standard from both a single or multiple CloudFormation template files using 

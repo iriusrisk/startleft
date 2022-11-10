@@ -24,15 +24,16 @@ in every diagram. StartLeft is able to identify this kind of shapes so that thei
 for converting different diagrams. This is the case, for example, of the 
 [Visio AWS stencils](https://support.microsoft.com/en-us/office/create-aws-diagrams-in-visio-138206bf-d10f-4583-9f31-885ce706af49), 
 that are prebuilt shapes which represent a bunch of reusable AWS components. This feature allows StartLeft clients 
-like [IriusRisk](https://iriusrisk.com) to define a default mapping file with all this stencils and inject it in 
-every request to StartLeft so the user does not need to create the mappings each time.
+like [IriusRisk](https://iriusrisk.com) to define a 
+[default mapping file with all these stencils](../../../examples/visio/iriusrisk-visio-aws-mapping.yaml) and inject 
+it in every request to StartLeft so the user does not need to create the mappings each time.
 
 ## The `slp_visio` module
 
 ---
-The `slp_visio` module is the StartLeft Processor responsible for converting Microsoft Visio files into OTM. Of course, 
-Visio is a completely open tool, so not every diagram is susceptible to be parsed into OTM automatically, but the 
-fact is that there are many situations where the StartLeft process may be very useful.
+The `slp_visio` module is the StartLeft Processor responsible for converting Microsoft Visio files into OTM. 
+Although not every diagram is susceptible to be parsed into OTM automatically, the fact is that there are many 
+situations where the StartLeft process may be very useful. 
 
 ### Mapping introduction
 Its operation is based on two types of mapping files hierarchically processed, that is, <u>in case a shape is mapped 

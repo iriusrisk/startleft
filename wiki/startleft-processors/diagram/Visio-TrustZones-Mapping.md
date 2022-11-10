@@ -84,10 +84,9 @@ will not be generated. In case of boundary TrustZones, they will be simply ignor
 #### Supported types of arcs
 > **Note**: <u>This is a relevant limitation</u>.
 
-There are several types of shapes that could be used to determine boundaries in the diagram, and we will need to 
-evolve startleft to support them. The version we currently have of Visio does not support all the shapes, and we 
-only have a real life customer example. **So, for now, we only support the Curved shape Visio type to process TrustZones**.
-In the future, we will probably to include more types.
+There are several types of shapes that could be used to determine boundaries in the diagram, and we will need to evolve 
+StartLeft to support them. **Currently, we only support the Curved shape Visio type to process TrustZones**.
+It may be evolved in the future in order to include more types of connectors.
 
 #### Zones calculation
 To build the diagram zones from the arc shapes, we generate internal components based on the intersection of the secant 
