@@ -20,7 +20,7 @@ setup(
         'python-hcl2==3.0.5',
         'requests==2.28.1',
         'xmltodict==0.13.0',
-        'fastapi==0.85.2',
+        'fastapi==0.86.0',
         'python-multipart==0.0.5',
         'click==8.1.3',
         'uvicorn==0.19.0',
