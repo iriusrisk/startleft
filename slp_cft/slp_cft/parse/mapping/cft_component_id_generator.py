@@ -57,7 +57,7 @@ class CloudformationComponentIdGenerator:
             return self.__generate_regular_component_id()
 
     def __generate_regular_component_id(self):
-        return build_path_id([self.parent_id, self.name, self.additional_data])
+        return build_path_id([self.parent_id, self.name, self.additional_id_data])
 
     def __generate_altsource_component_id(self):
         return self.__generate_regular_component_id() + '-altsource'
