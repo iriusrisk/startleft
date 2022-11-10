@@ -371,8 +371,8 @@ We have already implemented all the necessary classes to perform the conversion 
 to verify they are working fine.
 
 #### Create the test resources
-We are going to create a single happy path test using the resources from the 
-[Defining a sample input format](#Defining-a-sample-input-format) section. So, inside the `slp_mais/tests/resources` folder:
+We are going to create a single happy path test using the resources from the section where the MAIS format is defined. 
+So, inside the `slp_mais/tests/resources` folder:
 
 1. Copy the MAIS source file with the name `mais-sample.json`.
 2. Copy the mapping file with the name `mapping-sample.yaml`.

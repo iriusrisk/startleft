@@ -148,7 +148,7 @@ startleft parse \
 	--output-file ec2.otm \
 	--project-id "my-ec2-project" \
 	--project-name "My EC2 project" \
-	ec2-cft.json
+	ec2-tf.json
 ```
 
 ### cURL
