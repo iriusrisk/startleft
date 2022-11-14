@@ -243,7 +243,7 @@ class TestTerraformProcessor:
         terraform_file = [get_data(test_resource_paths.invalid_tf)]
 
         # And a valid iac mappings file
-        mapping_file = [get_data(terraform_iriusrisk_tf_aws_mapping)]
+        mapping_file = [get_data(terraform_iriusrisk_tf_aws_min_mapping)]
 
         # When creating OTM project from IaC file
         # Then raises OtmBuildingError
@@ -284,7 +284,7 @@ class TestTerraformProcessor:
         terraform_empty_iac_array = []
 
         # AND the iriusrisk-tf-aws-mapping.yaml file
-        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_min_mapping)
 
         # WHEN the method TerraformProcessor::process is invoked
         # THEN an LoadingIacFileError  is returned
@@ -306,7 +306,7 @@ class TestTerraformProcessor:
     ])
     def test_iac_file_is_invalid(self, source):
         # AND the iriusrisk-tf-aws-mapping.yaml file
-        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_min_mapping)
 
         # WHEN creating OTM project from IaC file
         # THEN an LoadingIacFileError  is returned

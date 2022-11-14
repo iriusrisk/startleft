@@ -65,7 +65,7 @@ class TerraformCustomFunctions(jmespath.functions.Functions):
                         source_object["_key"] = component_name
                         source_object["resource_name"] = component_name
                         source_object["Properties"] = properties
-                        source_object["resource_properties"] = component_name
+                        source_object["resource_properties"] = properties
                 source_objects.append(source_object)
 
         return source_objects

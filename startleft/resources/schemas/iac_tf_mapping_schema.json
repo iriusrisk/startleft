@@ -156,18 +156,6 @@
                         },
                         {
                             "type": "object",
-                            "required": ["$filter"],
-                            "properties": {
-                                "$type": {
-                                    "anyOf": [
-                                        {"type": "string"},
-                                        {"type": "array"}
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            "type": "object",
                             "required": ["$path"],
                             "properties": {
                                 "$path": {
