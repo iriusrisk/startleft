@@ -72,6 +72,12 @@ to familiarize yourself with the different modules, including their relationship
 specially relevant considering that forbidden imports between modules will remain in _python collect_ errors that prevent 
 StartLeft to start and that may confuse you.
 
+## Errors management
+In spite of the modularized architecture of StartLeft, the process of reading and parsing an input source and
+convert it into OTM has a set of fixed stages defined in the `slp_base` module. For each of these stages, there are
+a set of predefined errors that must be used in order to get coherent and descriptive errors in the REST API or CLI
+responses. All you need to know about the errors management is in the [Errors management page](Errors-Management.md).
+
 ## Creating a new StartLeft Processor
 Once you have the environment in place and a general idea about the organization of the code, we can already take a look 
 to the most common use cases for StartLeft contributions through the documented tutorials.

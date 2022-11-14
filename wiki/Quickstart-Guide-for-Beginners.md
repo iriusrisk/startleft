@@ -38,7 +38,8 @@ First of all, let's download one of the examples contained in the StartLeft's `e
 wget https://raw.githubusercontent.com/iriusrisk/startleft/main/examples/terraform/multinetwork_security_groups_with_lb.tf
 ```
 
-This is a rich example where you can see in action some the capabilities of StartLeft. It represents the Threat Model for
+This is a rich example where you can see in action some capabilities of StartLeft. It represents the Threat 
+Model for
 an architecture with two trust zones and several VPCs which contain many types of AWS components.
 
 Now, we need to download the mapping file where the configuration for parsing this source is located. In this case, 
