@@ -1,7 +1,5 @@
 # Quickstart Guide for Developers
 
----
-
 StartLeft is an Open Source project open to collaborators to extend or improve its functionality. Despite the fact that 
 it was born as an internal IriusRisk project, there are some characteristic that makes it specially suitable to grown 
 through the contributions of the community:
@@ -11,16 +9,12 @@ through the contributions of the community:
 * The [modularized architecture](Architecture.md) enables collaborators to contribute to each format's processor without conflicts.
 
 ## How to contribute?
-
----
 The IriusRisk team is currently the coordinator of the project and, ultimately, the responsible for validating the Pull Requests
 created by the collaborators. All you need to know before start contributing is explained in the [Contributing.md](../../Contributing.md) 
 file. Anyway, it is important to consider that, before creating your own fork or PR, you should check the 
 [open issues](https://github.com/iriusrisk/startleft/issues) to assure that there is no one related with what you pretend to do.
 
 ## Set up the environment
-
----
 There are no special requirements about a specific IDE or special steps to perform that makes StartLeft different from any
 Python project. However, as PyCharm (or IntelliJ with the python plugin) is one of the most common python IDEs, some related 
 facilities are provided related to it.
@@ -73,16 +67,12 @@ a set of portable and preconfigured run configurations are provided. So, the fin
 following the instructions detailed [here](Run-Configurations.md) and assure that you can execute StartLeft from your PyCharm.
 
 ## Architecture
-
----
 With your development environment ready, it is strongly advised to take a look to the [architecture page](Architecture.md)
 to familiarize yourself with the different modules, including their relationships and common internal structure. This is
 specially relevant considering that forbidden imports between modules will remain in _python collect_ errors that prevent 
 StartLeft to start and that may confuse you.
 
 ## Creating a new StartLeft Processor
-
----
 Once you have the environment in place and a general idea about the organization of the code, we can already take a look 
 to the most common use cases for StartLeft contributions through the documented tutorials.
 

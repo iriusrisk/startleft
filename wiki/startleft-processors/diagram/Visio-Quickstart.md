@@ -1,10 +1,6 @@
 # Visio Quickstart
 
----
-
 ## What is Microsoft Visio?
-
----
 > **Note**: <u>It is important to notice that the only supported Visio format is the 
 > [VSDX](https://docs.microsoft.com/en-us/office/client-developer/visio/introduction-to-the-visio-file-formatvsdx)</u>. 
 > If you want to import another format, you previously need to convert it to vsdx. Otherwise, you will get an error.
@@ -29,8 +25,6 @@ like [IriusRisk](https://iriusrisk.com) to define a
 it in every request to StartLeft so the user does not need to create the mappings each time.
 
 ## The `slp_visio` module
-
----
 The `slp_visio` module is the StartLeft Processor responsible for converting Microsoft Visio files into OTM. 
 Although not every diagram is susceptible to be parsed into OTM automatically, the fact is that there are many 
 situations where the StartLeft process may be very useful. 
@@ -52,8 +46,6 @@ the usage of StartLeft to converting Visio files, you can check the manuals for 
 
 
 ## A basic example
-
----
 Suppose you have an architecture diagram like the one below, that contains two TrustZones (_Public Cloud_ and 
 _Private Secured Cloud_), a VPC and components that may belong to Stencils (_My EC2_ and _Private Database_) or 
 generic ones (_My Custom Machine_).

@@ -1,10 +1,6 @@
 # Command Line Interface (CLI)
 
----
-
 ## Commands Help
-
----
 For help, just run `startleft` without arguments:
 
 ```
@@ -65,8 +61,6 @@ Options:
 ```
 
 ## Validating a hand-crafted OTM
-
----
 
 Validation is a CLI specific feature and the OTM validation is an special feature of StartLeft, because it does not 
 have to do with any format, but it allows the users to validate OTM files generated in any way, even like in that 

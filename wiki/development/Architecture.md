@@ -1,10 +1,6 @@
 # Architecture
 
----
-
 ## Context
-
----
 Startleft is a modularized application that groups a set of processors that are able to convert different formats to 
 [OTM](../Open-Threat-Model-(OTM).md). It can be used through a CLI, and it also exposes a REST API. However, the point of 
 access is indifferent as, under the hood, both make use of the same conversion logic, that is implemented in a special 
@@ -16,8 +12,6 @@ consumed by the core through the REST API. For instance, this is a general view 
 <p align="center"><img src="../images/iriusrisk-integration.png"></p>
 
 ## Module Based Architecture
-
----
 The internal architecture of the StartLeft application is based on a set of modules with well-defined responsibilities and dependencies.
 
 <p align="center"><img src="../images/startleft-modules.png"></p>
@@ -106,8 +100,6 @@ So, **when a new processor or a new important behavior is added to Startleft, we
 tests at project level in this package**.
 
 ## Modules Description
-
----
 ### startleft
 This is the main module whose origin is the initial Startleft project that used to contain all the processing logic for 
 the first conversion formats. As part of the modularization process, it was lightened so that it does no longer implements 
@@ -222,8 +214,6 @@ Managing the imports between modules to raise an error in case of a forbidden de
 <ins>Imports</ins>: No imports allowed.
 
 ## Building
-
----
 All the modules inside Startleft are, at the end of the day, Python modules, so `pip` does not have any problem to install a 
 project based on them. For this reason, the installation of the Startleft project can be simply done by executing this command 
 inside the StartLeft repository's root folder:
@@ -237,8 +227,6 @@ module inside it. This means that, to reference some class or module inside it, 
 For example, in the `docker-compose` command or the docker `ENTRYPOINT`, the FastAPI webapp entry point must be referenced in this way:
 
 ## Testing
-
----
 As stated before in this document, each module is an independent software unit with their own tests set. This means that 
 the test only can be executed module by module. In PyCharm, for example, a run configuration must be created for executing 
 the tests in each module:

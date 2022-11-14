@@ -1,7 +1,5 @@
 # REST API
 
----
-
 StartLeft can also be deployed as a standalone REST server if you prefer the communication via API.
 In this operation mode, StartLeft gives back the OTM file in the HTTP response.
 If you want to use the server option on the application:

@@ -1,6 +1,4 @@
 # Create a new StartLeft Processor (SLP)
-
----
 As you can see in the [architecture page](../Architecture.md) StartLeft Processors (SLPs) are the special kind of modules
 where the conversion into OTM logic is actually implemented. All of them are based in the same interfaces, defined in the 
 `slp_base` module. So, if you want to create a new SLP, you simply have to:
@@ -12,8 +10,6 @@ Below you have a guided tutorial for easily performing this steps and creating a
 input format that you can use as a base for building your own.
 
 ## Defining a sample input format (for demo purposes)
-
----
 > **Note**: The SLPs are classified in IaC, Diagram or External Threat Model (ETM). However, it is only
 > a logical division and the instructions defined in this tutorial are valid for creating SLPs of any kind.
 
@@ -85,8 +81,6 @@ So the resulting OTM for this example should be something like:
 ```
 
 ## Understanding the `slp_base` interfaces
-
----
 The `OtmProcessor` class inside the `slp_base` module defines the conversion process using a template method, whose behavior depends on the implementations
 of the rest of the interfaces in the module.
 <p align="center"><img src="../../images/conversion-process.png"></p>
@@ -95,8 +89,6 @@ In order to implement our sample processor, we need to know the structure of the
 <p align="center"><img src="../../images/slp_base-interfaces.png"></p>
 
 ## Creating the module
-
----
 For this tutorial, we are going to create a new SLP for parsing _My awesome input source (MAIS)_ files which is going to be called
 `slp_mais`. First, we need to set up our development environment as explained in the [Quickstart Guide for Developers](../Quickstart-Guide-for-Developers.md).
 
@@ -428,8 +420,6 @@ The whole module appears now like this:
 **You are done! Execute the test and verify that the conversion process is happily performed!**
 
 ## Configuring and exposing the SLP
-
----
 At this point we already have our processor up and running, so it is time to expose it. For that, 
 no code is needed, and you only need to perform the configuration steps below.
 

@@ -1,6 +1,4 @@
 # Visio Mapping
-
----
 The greatest challenge for mapping Microsoft Visio files is that it is a completely open format where the user can
 place whatever they want. For that reason, the `slp_visio` works with some premises in order to build an OTM file
 with only the necessary information:
@@ -14,8 +12,6 @@ with only the necessary information:
   define parent relationships in the mapping files.
 
 ## Mapping hierarchy
-
----
 The StartLeft's Visio SLP support two types of mapping files. They both have exactly the same structure and behavior,
 but are intended to be used for different types of mappings. 
 
@@ -40,8 +36,6 @@ mapping appears in both mapping files, the one in the custom file has preference
 
 
 ## Mapping file structure
-
----
 The Visio mapping file is expected to be a YAML file whose structure is exactly defined by its
 [json schema](../../../startleft/resources/schemas/diagram_mapping_schema.json). It is divided in three great blocks 
 described in deep below. So, the root structure of the file is composed by three arrays for the mappings of each 

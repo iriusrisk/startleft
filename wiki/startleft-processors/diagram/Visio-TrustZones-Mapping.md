@@ -1,9 +1,5 @@
 # Visio TrustZones Mapping
-
----
 ## Visio shapes context
-
----
 Trustzones in a Visio diagram can be represented in different ways and, in any of them, it does not exist a perfect 
 method to unambiguously identify the TrustZone to which a component belongs. This page pretends to clarify the 
 different 
@@ -34,8 +30,6 @@ The shapely object we use for the Visio shapes representation is the Polygon and
 that objects can be found [here](https://shapely.readthedocs.io/en/stable/manual.html).
 
 ## TrustZone identification
-
----
 We have two ways to identify TrustZones in a Visio diagram that are described below. However, it is important to notice 
 that, regardless the type of TrustZone calculation, **no TrustZone will be included in the OTM if it does not appear in 
 the mapping file**. If some TrustZone candidate is identified in the Visio diagram, but it is not in the mapping file, 
@@ -193,8 +187,6 @@ To keep this document simpler, the functions are omitted, but they can be checke
 `irregular_zones.py` file.
 
 ## Limitations
-
----
 Currently, there are a couple of significant limitations to take into account regarding the trustzone identification:
 
 * In boundary TrustZones, if a shape is located between the secant and the arc itself, it is not considered part of 

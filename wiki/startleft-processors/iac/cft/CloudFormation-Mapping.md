@@ -1,7 +1,5 @@
 # CloudFormation mapping
 
----
-
 A source mapping file (or 'mapping files' for short) describe how to find components, dataflows, and trustzones in source file data structures.
 
 To accomplish this, a mapping file contains additional logic around a collection of JMESPath queries which are used.
@@ -18,8 +16,6 @@ Each contains a list of 0 or more objects that describe how to find the respecti
 Take a look at the [JSONSchema](https://github.com/iriusrisk/startleft/blob/main/startleft/data/mapping_schema.json) file for more details.
 
 ## JMESPath Queries
-
----
 
 Special $action fields begin with a dollar sign ($) and do not directly contribute to the OTM output. Instead, they specify an action and behaviour used to process the source files or generate the OTM output. 
 
@@ -46,8 +42,6 @@ For more information on how to create a JMESPath search query, checkout the webs
 
 ## Hardcoded values
 
----
-
 In addition to using $source and other special $actions, you can also just hardcode values which will be taken and mapped as is. For example, you may want to specify a default trustzone which wouldn't be found anywhere in the source files. You can do this easily just by adding it to a mapping file:
 
 ```
@@ -59,8 +53,6 @@ For mapping trustzones to IriusRisk trustzones, `id` field must take internal Ir
 These values are defined in the internal CloudFormation mapping file.
 
 ## Lookup table
-
----
 
 Just in case there are some inconsistencies in naming conventions used, and you need to be able to translate one name into another, a simple lookup key-value table section can be added to the mapping file.
 
@@ -82,8 +74,6 @@ lookup:
 To give a final value of `amuchlongernameA`.
 
 ## Additional JMESPath functions
-
----
 
 Parsing of IaC files may be sometimes complex, so that the built-in JMESPath described above are not enough. For that cases,
 a set of custom functions has been created to simplify and make more powerful the creation of mapping files.

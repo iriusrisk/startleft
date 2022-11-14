@@ -1,9 +1,5 @@
 # Terraform Quickstart
-
----
 ## What is Terraform?
-
----
 From the [official Terraform page](https://www.terraform.io/): 
 > Terraform is an open-source infrastructure as code software tool that enables you to safely and predictably create, 
 > change, and improve infrastructure.
@@ -12,8 +8,6 @@ From the StartLeft's perspective, a Terraform (TF) defines a format to write fil
 with relationships among them which can be interpreted to create a threat model. 
 
 ## The `slp_tf` module
-
----
 The `slp_tf` module is the StartLeft Processor responsible for converting TF files into OTM. Its operation is based 
 on a mapping file that enables the users to define the translations between the source TF types and the expected 
 output in the OTM file. 
@@ -27,8 +21,6 @@ Apart from this, you may also find interesting the generic usage manuals for the
 and [REST API](../../../usage/REST-API.md).
 
 ## A basic example
-
----
 
 Let's suppose you have a TF file with a single 
 [EC2 instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance)
@@ -177,8 +169,6 @@ curl --location --request POST 'localhost:5000/api/v1/startleft/iac' \
 ```
 
 ## More examples
-
----
 The infrastructure built with Terraform may be as complex as you want. This is the reason because 
 StartLeft, through the mapping files, is intended to be configurable, so you can extend or modify its behavior and/or 
 create your own mappings on demand.

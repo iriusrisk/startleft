@@ -1,7 +1,5 @@
 # Quickstart Guide for Integrations
 
----
-
 The final goal of StartLeft is being integrated within processes that requires the generation of a Threat Model. Examples
 of this are:
 * A CI/CD pipeline for modifications in IaC files.
@@ -12,8 +10,6 @@ The more common scenario for these use cases is that they are automatized. For t
 be used by another services or applications in a smoothy way. The different ways of doing this are explained along this page.
 
 ## As a service
-
----
 This type of integration fits specially well when we need to integrate StartLeft with some application that requires 
 OTM conversion features. For instance, [IriusRisk](https://www.iriusrisk.com/) provides importing endpoints for different
 sources that internally rely on a StartLeft service for generating an OTM as a common intermediate state:
@@ -113,8 +109,6 @@ ENTRYPOINT ["uvicorn", "startleft.startleft.api.fastapi_server:webapp", "--host"
 ```
 
 ## In batch processes
-
----
 The [Command Line Interface](../usage/Command-Line-Interface.md) enables the users to easily create scripts for converting from different sources to OTM in batch, but
 also to perform other operations like validating files. For doing that, you simply need to install startleft on your machine or 
 creating a StartLeft docker image able to read the scripts you want to process.
@@ -129,8 +123,6 @@ special interest in having some feature available through some interface, please
 
 
 ## As modules as library (For future)
-
----
 StartLeft is a complete tool that exposes OTM conversion functionalities through different interfaces. However, it would 
 be very useful for some customers to create their own python tools for parsing different formats to OTM without having to 
 install and use a CLI or set up a REST API.

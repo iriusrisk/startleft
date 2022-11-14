@@ -1,10 +1,6 @@
 # Errors management
 
----
-
 # Steps
-
----
 The management of errors on Startleft  are handled on three separated steps:
 
 1. Reading the source file IaC/diagram
@@ -14,8 +10,6 @@ The management of errors on Startleft  are handled on three separated steps:
 <p align="center"><img src="../images/conversion-stages.png"></p>
 
 ## Error types
-
----
 On steps 1 and 2 we can have two error groups:
 
 * **Validation error**: The file is not valid due to wrong mime type, maxsize, etc.
@@ -36,8 +30,6 @@ does not permit load its content.
 
 ## Http statuses and exit codes
 
----
-
 | Error code                 | HTTP Status | CLI exit code |
 |----------------------------|:-----------:|--------------:|
 | `LoadingIacFileError`      |     400     |             1 |
@@ -52,8 +44,6 @@ does not permit load its content.
 
 
 ## Http response body
-
----
 The response body on any of this cases will be a json with this structure:
 ```json
 {

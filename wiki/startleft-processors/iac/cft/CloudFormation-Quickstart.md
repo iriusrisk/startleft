@@ -1,9 +1,5 @@
 # CloudFormation Quickstart
-
----
 ## What is CloudFormation?
-
----
 From the [official AWS CloudFormation page](https://aws.amazon.com/cloudformation/): 
 > AWS CloudFormation is a service that gives developers and businesses an easy way to create a collection of related AWS 
 and third-party resources, and provision and manage them in an orderly and predictable fashion.
@@ -12,8 +8,6 @@ From the StartLeft's perspective, a CloudFormation Template (CFT) is a file that
 relationships among them which can be interpreted to create a threat model. 
 
 ## The `slp_cft` module
-
----
 The `slp_cft` module is the StartLeft Processor responsible for converting CFT files into OTM. Its operation is based 
 on a mapping file that enables the users to define the translations between the source AWS types and the expected 
 output in the OTM file. 
@@ -27,8 +21,6 @@ Apart from this, you may also find interesting the generic usage manuals for the
 and [REST API](../../../usage/REST-API.md).
 
 ## A basic example
-
----
 
 Let's suppose you have a CFT file with a single
 [AWS::EC2:Instance](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-instance.html)
@@ -186,8 +178,6 @@ curl --location --request POST 'localhost:5000/api/v1/startleft/iac' \
 ```
 
 ## More examples
-
----
 The infrastructure built with CloudFormation Templates may be as complex as you want. This is the reason because 
 StartLeft, through the mapping files, is intended to be configurable, so you can extend or modify its behavior and/or 
 create your own mappings on demand.
