@@ -6,7 +6,7 @@ From the [official Microsoft Threat Model Tool page](https://learn.microsoft.com
 > The Threat Modeling Tool is a core element of the Microsoft Security Development Lifecycle (SDL). 
 > It allows software architects to identify and mitigate potential security issues.
 
-From the point of view of StartLeft, a MTMT file is a external threat model (external because is not OTM) input source
+From the point of view of StartLeft, a MTMT file is an external threat model (external because is not OTM) input source
 which has information about:
  - The diagram: With stencils, trust zones and dataflows, their relationships and their visual representation.
  - The threats
