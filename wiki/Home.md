@@ -1,5 +1,3 @@
-# StartLeft
-
 **StartLeft** is an automation tool for **generating Threat Models** written in the [Open Threat Model (OTM)](Open-Threat-Model-(OTM).md) 
 format **from a variety of different sources** such as IaC files, diagrams or projects exported from 
 Threat Modelling tools.
