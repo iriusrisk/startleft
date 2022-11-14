@@ -102,8 +102,7 @@ class TestTerraformProcessor:
         # THEN the resulting OTM match the expected one
         assert validate_and_diff(otm, expected_aws_singleton_components, VALIDATION_EXCLUDED_REGEX) == {}
 
-    @pytest.mark.parametrize('mapping_file', [
-        terraform_iriusrisk_tf_aws_min_mapping, terraform_iriusrisk_tf_aws_mapping])
+    @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_min_mapping])
     def test_aws_altsource_components(self, mapping_file):
         # GIVEN a valid TF file with some resources
         terraform_file = get_data(test_resource_paths.terraform_aws_altsource_components)

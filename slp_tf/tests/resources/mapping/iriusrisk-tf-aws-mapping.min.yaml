@@ -98,12 +98,8 @@ components:
         $mappingLookups:
           - regex: ^(.*)ssm$
             name: {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "Systems Manager from VPCEndpoint (grouped)"}}}
-            tags:
-              - {$numberOfSources: {oneSource: {$format: "aws_vpc_endpoint"}, multipleSource: {$format: "{_key} ({Type})"}}}
           - regex: ^(.*)ssmmessages$
             name: {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "Systems Manager from VPCEndpoint (grouped)"}}}
-            tags:
-              - {$numberOfSources: {oneSource: {$format: "aws_vpc_endpoint"}, multipleSource: {$format: "{_key} ({Type})"}}}
 
   - type:        empty-component
     $source:     {$type: "aws_synthetics_canary"}

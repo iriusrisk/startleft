@@ -127,7 +127,12 @@ class TerraformComponentMapper(TerraformBaseMapper):
     def __default_alt_source_mapping_lookups_template(self):
         return {
             "type": self.mapping["type"],
-            "tags": [{"$format": "{resource_name} ({resource_type})"}]
+            "name": f'{self.mapping["type"]} from altsource',
+            "tags": [{
+                "$numberOfSources":
+                    {"oneSource": {"$path": "resource_type"},
+                     "multipleSource": {"$format": "{resource_name} ({resource_type})"}}
+            }]
         }
 
     def __get_alt_source_components(self, source_model) -> []:
