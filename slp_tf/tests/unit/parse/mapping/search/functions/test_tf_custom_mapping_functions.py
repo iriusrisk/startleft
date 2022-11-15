@@ -86,7 +86,7 @@ class TestTfCustomMappingFunctions:
         assert data == "aws_vpc_endpoint"
 
     def test_path_search_params_with_default(self):
-        mapping_source = {"$path": {"$searchParams": {"searchPath": "**", "defaultValue": "value_by_default"}}}
+        mapping_source = {"$path": {"$searchParams": {"searchPath": "not_found", "defaultValue": "value_by_default"}}}
         data = path(mapping_source, source=self.source_model_data["resource"][0])
         assert data == "value_by_default"
 

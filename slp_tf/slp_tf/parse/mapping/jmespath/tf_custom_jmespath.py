@@ -44,8 +44,9 @@ class TerraformCustomFunctions(jmespath.functions.Functions):
     def _func_tail(self, string, count):
         return string[-count:]
 
-    @jmespath.functions.signature({'types': ['string']}, {'types': ['string']}, {'types': ['string']})
+    @jmespath.functions.signature({'types': ['string']}, {'types': ['string']}, {'types': ['string', 'null']})
     def _func_re_sub(self, pattern, replace, s):
+        s = s or ""
         return re.sub(pattern, replace, s)
 
     @jmespath.functions.signature({'types': ['array', 'null']})
@@ -70,7 +71,7 @@ class TerraformCustomFunctions(jmespath.functions.Functions):
 
         return source_objects
 
-    @jmespath.functions.signature({'types': ['array']})
+    @jmespath.functions.signature({'types': ['array', 'null']})
     def _func_adapt(self, resources):
         """
         This function is an adapter for the intern logic of slp_tf
@@ -145,9 +146,5 @@ jmespath_options = jmespath.Options(custom_functions=TerraformCustomFunctions())
 
 
 def jmespath_search(search_path, source):
-    try:
-        logger.debug(f"jmespath search with expression {search_path}")
-        return jmespath.search(search_path, source, options=jmespath_options)
-    except Exception as e:
-        logger.error('jmespath search with expression %s failed. \nError: %s', search_path, e)
-        return None
+    logger.debug(f"jmespath search with expression {search_path}")
+    return jmespath.search(search_path, source, options=jmespath_options)
