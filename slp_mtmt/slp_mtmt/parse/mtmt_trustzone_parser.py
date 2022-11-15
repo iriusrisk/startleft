@@ -6,8 +6,6 @@ from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
 from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMapping
 from slp_mtmt.slp_mtmt.util.component_representation_calculator import ComponentRepresentationCalculator
 
-calculate_representation = ComponentRepresentationCalculator.calculate_representation
-
 DEFAULT_LABEL = 'default'
 
 logger = logging.getLogger(__name__)
@@ -31,7 +29,7 @@ class MTMTTrustzoneParser:
 
     def create_trustzone(self, border: MTMBorder) -> Trustzone:
         mtmt_type = self.__calculate_otm_type(border)
-        representations = calculate_representation(border, self.diagram_representation)
+        representations = ComponentRepresentationCalculator.calculate_representation(border, self.diagram_representation)
         if mtmt_type is not None:
             trustzone_id = self.calculate_otm_id(border)
             return Trustzone(id=trustzone_id,

@@ -14,7 +14,7 @@ class MTMTComponentParser:
                  diagram_representation: str):
         self.source = source
         self.mapping = mapping
-        self.trustzoneParser = trustzone_parser
+        self.trustzone_parser = trustzone_parser
         self.diagram_representation = diagram_representation
 
     def parse(self):
@@ -28,7 +28,7 @@ class MTMTComponentParser:
 
     def __create_component(self, border: MTMBorder) -> Component:
         trustzone = self.__get_trustzone(border)
-        trustzone_id = self.trustzoneParser.calculate_otm_id(trustzone) if trustzone else ""
+        trustzone_id = self.trustzone_parser.calculate_otm_id(trustzone) if trustzone else ""
         mtmt_type = self.__calculate_otm_type(border)
         representation = ComponentRepresentationCalculator.calculate_representation(border,
                                                                                     self.diagram_representation,
