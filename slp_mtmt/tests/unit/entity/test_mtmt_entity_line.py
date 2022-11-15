@@ -68,6 +68,13 @@ class TestMTMTLine:
         assert line.name == 'PSQL Request'
         assert line.source_guid == '5d15323e-3729-4694-87b1-181c90af5045'
         assert line.target_guid == '53245f54-0656-4ede-a393-357aeaa2e20f'
+        assert line.source_x == 846
+        assert line.source_y == 261
+        assert line.target_x == 980
+        assert line.target_y == 232
+        assert line.handle_x == 892
+        assert line.handle_y == 210
+        assert line.handle_y == 210
 
         line = lines[1]
         assert line.id == '36091fd8-dba8-424e-a3cd-784ea6bcb9e0'
@@ -78,6 +85,12 @@ class TestMTMTLine:
         assert line.name == 'PSQL Response'
         assert line.source_guid == '53245f54-0656-4ede-a393-357aeaa2e20f'
         assert line.target_guid == '5d15323e-3729-4694-87b1-181c90af5045'
+        assert line.source_x == 980
+        assert line.source_y == 232
+        assert line.target_x == 846
+        assert line.target_y == 261
+        assert line.handle_x == 918
+        assert line.handle_y == 275
 
         line = lines[2]
         assert line.id == 'f5fe3c6e-e10b-4252-a4aa-4ec6108c96a6'
