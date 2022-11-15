@@ -4,6 +4,7 @@ from otm.otm.otm import Trustzone
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
 from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMapping
+from slp_mtmt.slp_mtmt.util.component_representation_calculator import ComponentRepresentationCalculator
 
 DEFAULT_LABEL = 'default'
 
@@ -12,9 +13,10 @@ logger = logging.getLogger(__name__)
 
 class MTMTTrustzoneParser:
 
-    def __init__(self, source: MTMT, mapping: MTMTMapping):
+    def __init__(self, source: MTMT, mapping: MTMTMapping, diagram_representation: str):
         self.source: MTMT = source
         self.mapping = mapping
+        self.diagram_representation = diagram_representation
 
     def parse(self):
         trustzones = []
@@ -27,11 +29,13 @@ class MTMTTrustzoneParser:
 
     def create_trustzone(self, border: MTMBorder) -> Trustzone:
         mtmt_type = self.__calculate_otm_type(border)
+        representations = ComponentRepresentationCalculator.calculate_representation(border, self.diagram_representation)
         if mtmt_type is not None:
             trustzone_id = self.calculate_otm_id(border)
             return Trustzone(id=trustzone_id,
                              name=border.name,
-                             properties=border.properties)
+                             properties=border.properties,
+                             representations=[representations])
 
     def __calculate_otm_type(self, border: MTMBorder) -> str:
         return self.__get_label_value(border.stencil_name, 'type')
