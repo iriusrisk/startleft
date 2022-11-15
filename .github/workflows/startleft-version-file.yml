@@ -1,5 +1,4 @@
 # This workflow will generate version.py file with the content version=[maximum tag value in the branch + commit number]
-# StartLeft only uses tags for release purposes, following the format: x.y.z
 
 name: StartLeft automated version file generation
 
@@ -24,7 +23,6 @@ jobs:
       - name: Commit report
         run: |
           git add version.py
-          git config --global user.name 'dfernandezvigo'
-          git config --global user.email 'dfernandezvigo@users.noreply.github.com'
+          git config user.name 'github-actions[bot]' && git config user.email 'github-actions[bot]@users.noreply.github.com'
           git commit -am "version.py updated"
           git push
