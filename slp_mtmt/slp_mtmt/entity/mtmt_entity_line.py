@@ -1,27 +1,14 @@
-is_trustzone_stencil_list = ['LineBoundary']
-is_dataflow_stencil_list = ['Connector']
+from slp_mtmt.slp_mtmt.entity.mtmt_entity import MTMEntity, is_dataflow_stencil_list, is_trustzone_stencil_list
 
 
-class MTMLine:
+class MTMLine(MTMEntity):
 
     def __init__(self, source: dict):
-        self.source = source
-
-    @property
-    def id(self):
-        return self.source.get('Key')
-
-    @property
-    def name(self):
-        return self.properties.get('Name', self.__get_first_property())  # fallback is first property
+        super().__init__(source)
 
     @property
     def description(self):
         return self.__get_first_property()
-
-    @property
-    def type(self):
-        return self.source.get('attrib', {}).get('type')
 
     @property
     def is_trustzone(self) -> bool:
@@ -33,11 +20,45 @@ class MTMLine:
 
     @property
     def source_guid(self):
-        return self.source.get('Value').get('SourceGuid')
+        return self.__extract_value('SourceGuid')
 
     @property
     def target_guid(self):
-        return self.source.get('Value').get('TargetGuid')
+        return self.__extract_value('TargetGuid')
+
+    @property
+    def handle_x(self):
+        return self.__extract_int_value('HandleX')
+
+    @property
+    def handle_y(self):
+        return self.__extract_int_value('HandleY')
+
+    @property
+    def source_x(self):
+        return self.__extract_int_value('SourceX')
+
+    @property
+    def source_y(self):
+        return self.__extract_int_value('SourceY')
+
+    @property
+    def target_x(self):
+        return self.__extract_int_value('TargetX')
+
+    @property
+    def target_y(self):
+        return self.__extract_int_value('TargetY')
+
+    @property
+    def coordinates(self):
+        return self.handle_x, self.handle_y, self.source_x, self.source_y, self.target_x, self.target_y
+
+    def __extract_value(self, key):
+        return self.source.get('Value').get(key)
+
+    def __extract_int_value(self, key):
+        return int(self.__extract_value(key))
 
     @property
     def properties(self):
