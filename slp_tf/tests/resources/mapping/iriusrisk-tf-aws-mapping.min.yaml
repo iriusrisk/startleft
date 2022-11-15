@@ -67,10 +67,7 @@ components:
     $source:     {$singleton: {$type: "aws_cloudwatch_log_group"}}
 
   - type:        rds
-    $source:     {$type: "aws_db_instance"}
-
-  - type:        rds
-    $source:     {$type: "aws_rds_cluster"}
+    $source:     {$type: ["aws_db_instance", "aws_rds_cluster"]}
 
   - type:        route-53
     $source:     {$type: "aws_route53_zone"}
