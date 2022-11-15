@@ -1,0 +1,37 @@
+site_name: StartLeft Wiki Test
+site_url: https://dantolin-iriusrisk.github.io/test-startleft-wiki/
+nav:
+  - Home: index.md
+  - Open Threat Model (OTM): Open-Threat-Model-(OTM).md
+  - Quickstart Guide for Beginners: Quickstart-Guide-for-Beginners.md
+  - About this documentation: About.md
+  - Usage:
+      - Command Line Interface (CLI): usage/Command-Line-Interface.md
+      - REST API: usage/REST-API.md
+  - Guide for Integrations:
+      - Quickstart Guide for Integrations: integration/Quickstart-Guide-for-Integrations/Quickstart-Guide-for-Integrations.md
+  - Guide for Developers:
+      - Quickstart Guide for Developers: development/Quickstart-Guide-for-Developers/Quickstart-Guide-for-Developers.md
+      - Create a new SLP: development/Create-a-new-StartLeft-Processor/Create-a-new-StartLeft-Processor.md
+      - Architecture: development/Architecture/Architecture.md
+      - Errors management: development/Errors-Management/Errors-Management.md
+      - Run Configurations: development/Run-Configurations/Run-Configurations.md
+  - StartLeft Processors (SLP):
+    - MTMT: startleft-processors/external-threat-model/MTMT.md
+    - CloudFormation Template:
+      - CloudFormation Quickstart: startleft-processors/iac/cft/CloudFormation-Quickstart/CloudFormation-Quickstart.md
+      - CloudFormation Mapping: startleft-processors/iac/cft/CloudFormation-Mapping.md
+      - CloudFormation Examples: startleft-processors/iac/cft/CloudFormation-Examples.md
+    - Terraform:
+      - Terraform Quickstart: startleft-processors/iac/tf/Terraform-Quickstart/Terraform-Quickstart.md
+      - Terraform Mapping: startleft-processors/iac/tf/Terraform-Mapping.md
+      - Terraform Examples: startleft-processors/iac/tf/Terraform-Examples.md
+    - Visio:
+      - Visio Quickstart: startleft-processors/diagram/Visio-Quickstart/Visio-Quickstart.md
+      - Visio Mapping: startleft-processors/diagram/Visio-Mapping/Visio-Mapping.md
+      - Visio TrustZones Mapping: startleft-processors/diagram/Visio-TrustZones-Mapping/Visio-TrustZones-Mapping.md
+
+collapse_navigation: true
+titles_only: true
+
+theme: readthedocs

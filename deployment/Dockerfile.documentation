@@ -1,0 +1,11 @@
+FROM nginx:1.23
+
+RUN apt update && apt -yq install mkdocs
+
+COPY . .
+
+RUN mkdocs build -c
+
+RUN apt remove -yq mkdocs
+
+COPY site/ /usr/share/nginx/html

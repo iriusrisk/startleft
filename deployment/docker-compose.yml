@@ -1,0 +1,16 @@
+services:
+  docs:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile.documentation
+    ports:
+      - 8000:80
+    container_name: startleft-docs
+
+  application:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile.application
+    ports:
+      - 5000:5000
+    container_name: startleft-app
