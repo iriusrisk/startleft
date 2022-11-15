@@ -17,6 +17,4 @@ RUN pip install .
 # Remove git dependency
 RUN apk del git
 
-RUN rm -rf startleft-repo
-
 ENTRYPOINT ["uvicorn", "startleft.startleft.api.fastapi_server:webapp", "--host", "0.0.0.0", "--port", "5000"]
