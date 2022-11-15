@@ -1,6 +1,5 @@
 # This workflow will generate version.py file with the content version=[maximum tag value in the branch + commit number]
 # StartLeft only uses tags for release purposes, following the format: x.y.z
-# Added commit information is useful for development and QA tracking
 
 name: StartLeft automated version file generation
 
