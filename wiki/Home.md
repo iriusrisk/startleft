@@ -1,0 +1,1 @@
+### All you need to know about StartLeft is available in [the documentation page](http://iriusrisk.github.io/startleft). 

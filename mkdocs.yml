@@ -1,5 +1,5 @@
-site_name: StartLeft Wiki Test
-site_url: https://dantolin-iriusrisk.github.io/test-startleft-wiki/
+site_name: StartLeft
+site_url: https://iriusrisk.github.io/startleft/
 nav:
   - Home: index.md
   - Open Threat Model (OTM): Open-Threat-Model-(OTM).md
@@ -17,7 +17,9 @@ nav:
       - Errors management: development/Errors-Management/Errors-Management.md
       - Run Configurations: development/Run-Configurations/Run-Configurations.md
   - StartLeft Processors (SLP):
-    - MTMT: startleft-processors/external-threat-model/MTMT.md
+    - Microsoft Threat Modelling Tool (MTMT):
+      - MTMT Quickstart: startleft-processors/external-threat-model/mtmt/MTMT-Quickstart.md
+      - MTMT Mapping: startleft-processors/external-threat-model/mtmt/MTMT-Mapping.md
     - CloudFormation Template:
       - CloudFormation Quickstart: startleft-processors/iac/cft/CloudFormation-Quickstart/CloudFormation-Quickstart.md
       - CloudFormation Mapping: startleft-processors/iac/cft/CloudFormation-Mapping.md
