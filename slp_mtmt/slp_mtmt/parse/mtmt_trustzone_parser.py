@@ -7,6 +7,7 @@ from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMapping
 from slp_mtmt.slp_mtmt.util.component_representation_calculator import ComponentRepresentationCalculator
 
 DEFAULT_LABEL = 'default'
+DEFAULT_NAME = 'Default trustzone'
 
 logger = logging.getLogger(__name__)
 
@@ -16,16 +17,22 @@ class MTMTTrustzoneParser:
     def __init__(self, source: MTMT, mapping: MTMTMapping, diagram_representation: str):
         self.source: MTMT = source
         self.mapping = mapping
+        self.trustzones = []
+        self.default_trustzone = self.create_default_trustzone()
         self.diagram_representation = diagram_representation
 
     def parse(self):
-        trustzones = []
         for mtmt_border in self.source.borders:
             if mtmt_border.is_trustzone:
                 trustzone = self.create_trustzone(mtmt_border)
                 if trustzone is not None:
-                    trustzones.append(trustzone)
-        return trustzones
+                    self.trustzones.append(trustzone)
+        for mtmt_line in self.source.lines:
+            if mtmt_line.is_trustzone:
+                trustzone = self.create_trustzone(mtmt_line)
+                if trustzone is not None:
+                    self.trustzones.append(trustzone)
+        return self.trustzones
 
     def create_trustzone(self, border: MTMBorder) -> Trustzone:
         mtmt_type = self.__calculate_otm_type(border)
@@ -54,3 +61,15 @@ class MTMTTrustzoneParser:
                            f' "{key}" and any default trustzone is present')
 
         return None
+
+    def add_default(self):
+        for tz in self.trustzones:
+            if tz.name == self.default_trustzone.name:
+                return
+        self.trustzones.append(self.default_trustzone)
+
+    def create_default_trustzone(self):
+        if self.mapping is not None and DEFAULT_LABEL in self.mapping.mapping_trustzones:
+            trustzone_id = self.mapping.mapping_trustzones[DEFAULT_LABEL]['id']
+            return Trustzone(id=trustzone_id,
+                             name=DEFAULT_NAME)

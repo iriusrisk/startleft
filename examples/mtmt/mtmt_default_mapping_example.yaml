@@ -27,9 +27,6 @@ trustzones:
 
 components:
 
-  - label: default
-    type: empty-component
-
   - label: ADFS
     type: active-directory
 

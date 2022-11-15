@@ -192,7 +192,7 @@ class TestMTMTMappingFileLoader:
 
         # THEN we check the components and trustzones are correctly mapped
         assert len(mtmt_mapping.mapping_trustzones) == 6
-        assert len(mtmt_mapping.mapping_components) == 56
+        assert len(mtmt_mapping.mapping_components) == 57
         assert len(mtmt_mapping.mapping_dataflows) == 0
         assert mtmt_mapping.mapping_trustzones.get('Internet Boundary').get(
             'id') == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'

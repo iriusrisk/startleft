@@ -38,7 +38,7 @@ class TerraformBaseMapper(ABC):
         for variable in source_model.data["variable"]:
             for variable_name, variable_properties in variable.items():
                 if variable_name == name:
-                    return variable_properties["default"][0]
+                    return source_model.data[name][0] if name in source_model.data else variable_properties["default"][0]
 
     def format_terraform_variable(self, source_model, source_object, value):
         vpc_resource_name = self.get_vpc_resource_name_from_variable_reference(source_model, value)

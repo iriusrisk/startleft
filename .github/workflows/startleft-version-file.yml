@@ -1,0 +1,30 @@
+# This workflow will generate version.py file with the content version=[maximum tag value in the branch + commit number]
+# StartLeft only uses tags for release purposes, following the format: x.y.z
+
+name: StartLeft automated version file generation
+
+on:
+  push:
+    branches:
+      [main,release/*,dev]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: create version file
+        run: |
+          touch version.py
+      - name: Get latest version
+        run: |
+          git fetch --prune --unshallow
+          echo "version=$(git describe --tags)" > version.py
+          cat version.py
+      - name: Commit report
+        run: |
+          git add version.py
+          git config --global user.name 'dfernandezvigo'
+          git config --global user.email 'dfernandezvigo@users.noreply.github.com'
+          git commit -am "version.py updated"
+          git push

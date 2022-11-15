@@ -1,31 +1,10 @@
-is_component_stencil_list = ['StencilRectangle', 'StencilEllipse', 'StencilParallelLines']
-is_trustzone_stencil_list = ['BorderBoundary', 'LineBoundary']
+from slp_mtmt.slp_mtmt.entity.mtmt_entity import MTMEntity, is_component_stencil_list, is_trustzone_stencil_list
 
 
-class MTMBorder:
+class MTMBorder(MTMEntity):
 
     def __init__(self, source: dict):
-        self.source = source
-
-    @property
-    def id(self):
-        return self.source.get('Key')
-
-    @property
-    def name(self):
-        name = None
-        for borderType in self.source.get('Value', {}).get('Properties', {}).get('anyType'):
-            if borderType.get('DisplayName', '') == 'Name':
-                name = borderType.get('Value', {}).get('text')
-        return name
-
-    @property
-    def type(self):
-        return self.source.get('attrib', {}).get('type')
-
-    @property
-    def stencil_name(self):
-        return self.source.get('Value', {}).get('Properties', {}).get('anyType')[0].get('DisplayName', {})
+        super().__init__(source)
 
     @property
     def generic_type_id(self):
