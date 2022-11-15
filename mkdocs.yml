@@ -9,31 +9,28 @@ nav:
       - Command Line Interface (CLI): usage/Command-Line-Interface.md
       - REST API: usage/REST-API.md
   - Guide for Integrations:
-      - Quickstart Guide for Integrations: integration/Quickstart-Guide-for-Integrations/Quickstart-Guide-for-Integrations.md
+      - Quickstart Guide for Integrations: integration/Quickstart-Guide-for-Integrations.md
   - Guide for Developers:
-      - Quickstart Guide for Developers: development/Quickstart-Guide-for-Developers/Quickstart-Guide-for-Developers.md
-      - Create a new SLP: development/Create-a-new-StartLeft-Processor/Create-a-new-StartLeft-Processor.md
-      - Architecture: development/Architecture/Architecture.md
-      - Errors management: development/Errors-Management/Errors-Management.md
-      - Run Configurations: development/Run-Configurations/Run-Configurations.md
+      - Quickstart Guide for Developers: development/Quickstart-Guide-for-Developers.md
+      - Create a new SLP: development/Create-a-new-StartLeft-Processor.md
+      - Architecture: development/Architecture.md
+      - Errors management: development/Errors-Management.md
+      - Run Configurations: development/Run-Configurations.md
   - StartLeft Processors (SLP):
     - Microsoft Threat Modelling Tool (MTMT):
       - MTMT Quickstart: startleft-processors/external-threat-model/mtmt/MTMT-Quickstart.md
       - MTMT Mapping: startleft-processors/external-threat-model/mtmt/MTMT-Mapping.md
     - CloudFormation Template:
-      - CloudFormation Quickstart: startleft-processors/iac/cft/CloudFormation-Quickstart/CloudFormation-Quickstart.md
+      - CloudFormation Quickstart: startleft-processors/iac/cft/CloudFormation-Quickstart.md
       - CloudFormation Mapping: startleft-processors/iac/cft/CloudFormation-Mapping.md
       - CloudFormation Examples: startleft-processors/iac/cft/CloudFormation-Examples.md
     - Terraform:
-      - Terraform Quickstart: startleft-processors/iac/tf/Terraform-Quickstart/Terraform-Quickstart.md
+      - Terraform Quickstart: startleft-processors/iac/tf/Terraform-Quickstart.md
       - Terraform Mapping: startleft-processors/iac/tf/Terraform-Mapping.md
       - Terraform Examples: startleft-processors/iac/tf/Terraform-Examples.md
     - Visio:
-      - Visio Quickstart: startleft-processors/diagram/Visio-Quickstart/Visio-Quickstart.md
-      - Visio Mapping: startleft-processors/diagram/Visio-Mapping/Visio-Mapping.md
-      - Visio TrustZones Mapping: startleft-processors/diagram/Visio-TrustZones-Mapping/Visio-TrustZones-Mapping.md
-
-collapse_navigation: true
-titles_only: true
+      - Visio Quickstart: startleft-processors/diagram/Visio-Quickstart.md
+      - Visio Mapping: startleft-processors/diagram/Visio-Mapping.md
+      - Visio TrustZones Mapping: startleft-processors/diagram/Visio-TrustZones-Mapping.md
 
 theme: readthedocs

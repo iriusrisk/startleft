@@ -4,7 +4,7 @@
 
 ---
 Startleft is a modularized application that groups a set of processors that are able to convert different formats to 
-[OTM](../../Open-Threat-Model-(OTM).md). It can be used through a CLI, and it also exposes a REST API. However, the 
+[OTM](../Open-Threat-Model-(OTM).md). It can be used through a CLI, and it also exposes a REST API. However, the 
 point of 
 access is indifferent as, under the hood, both make use of the same conversion logic, that is implemented in a special 
 type of modules called SLPs (StartLeft Processor), described below in this page.
@@ -149,7 +149,7 @@ potentially arise.
 
 * Defining the main conversion process using a template pattern in the class `OtmProcessor`.
 * Defining a set of interfaces for each step of the process (source and mapping files loading and validating, OTM conversion process and OTM validation) that must be implemented by the specific SLPs.
-* Defining all the [possible errors](../Errors-Management/Errors-Management.md) that may arise through the conversion process.
+* Defining all the [possible errors](Errors-Management.md) that may arise through the conversion process.
 * Defining a ``ProviderResolver` class to dynamically retrieve the right SLP based on the source type (CFT, TF, etc.).
 
 <u>Imported by</u>:  `startleft`, SLPs.

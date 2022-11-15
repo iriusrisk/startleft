@@ -57,7 +57,7 @@ and consume it with any REST client as Postman. Anyway, **the best way to start 
 
 One of the most interesting aspects of StartLeft is that it is easily integrable within processes that may need to generate
 Threat Models. **The different ways of integrating StartLeft are described in the 
-[Quickstart guide for integrations](integration/Quickstart-Guide-for-Integrations/Quickstart-Guide-for-Integrations.md)**.
+[Quickstart guide for integrations](integration/Quickstart-Guide-for-Integrations.md)**.
 
 ## How can I contribute?
 
@@ -65,5 +65,5 @@ Threat Models. **The different ways of integrating StartLeft are described in th
 
 StartLeft is an Open Source application whose modularized architecture based on processors is specially focused
 on simplifying the collaboration for any developer. **If you want to contribute, check out the 
-[Quickstart guide for developers](development/Quickstart-Guide-for-Developers/Quickstart-Guide-for-Developers.md)**. Soon will be also available a 
+[Quickstart guide for developers](development/Quickstart-Guide-for-Developers.md)**. Soon will be also available a 
 _Contributing file_ summarizing the basics. 

@@ -19,7 +19,7 @@ The StartLeft's Visio SLP support two types of mapping files. They both have exa
 but are intended to be used for different types of mappings. 
 
 ### Default mapping file
-As stated in the [Visio Quickstart](../Visio-Quickstart/Visio-Quickstart.md), stencils are a powerful Visio feature. From the point of 
+As stated in the [Visio Quickstart](Visio-Quickstart.md), stencils are a powerful Visio feature. From the point of 
 view of StartLeft, those users that use them in their diagrams may reduce a lot the work they have to do in order to 
 build their mappings. This is because the mappings for the stencils can be reused across every request to StartLeft 
 and does not need to be created each time.
@@ -55,7 +55,7 @@ dataflows: []
 Each of these arrays contains the information for mapping shapes into TrustZones, Components or Dataflows, respectively.
 
 ### Mapping TrustZones
-The [OTM standard](../../../Open-Threat-Model-(OTM).md) defines that every component in the threat model must have a 
+The [OTM standard](../../Open-Threat-Model-(OTM).md) defines that every component in the threat model must have a 
 parent, so you must be sure that the mapping file contains a mapping entry for all the TrustZones present in the 
 diagram as well as a default one so, if no parent can be calculated for a component, it can fall into this default 
 TrustZone. 
@@ -90,7 +90,7 @@ The resultant OTM would contain a TrustZone like this:
 
 These are the basics for the TrustZone mapping behavior, but TrustZones may be defined in different and more complex 
 ways that are explained in deep in the 
-[TrustZones mapping's page](../Visio-TrustZones-Mapping/Visio-TrustZones-Mapping.md).
+[TrustZones mapping's page](Visio-TrustZones-Mapping.md).
 
 #### Default TrustZone
 Sometimes maybe it is not possible to calculate a parent for a component. Since it necessarily must have one, we 

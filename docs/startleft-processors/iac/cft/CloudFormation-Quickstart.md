@@ -18,11 +18,11 @@ output in the OTM file.
 
 Once you got familiarized with the basics explained in this page, you will need to know more about how to use and 
 customize the behavior of the processor in order to configure your own conversions. For that, you should take a look 
-to the [CloudFormation mapping page](../CloudFormation-Mapping.md), where you will find all the information you need, from 
+to the [CloudFormation mapping page](CloudFormation-Mapping.md), where you will find all the information you need, from 
 basic to advanced, to build your own CFT mapping files.
 
-Apart from this, you may also find interesting the generic usage manuals for the [CLI](../../../../usage/Command-Line-Interface.md) 
-and [REST API](../../../../usage/REST-API.md).
+Apart from this, you may also find interesting the generic usage manuals for the [CLI](../../../usage/Command-Line-Interface.md) 
+and [REST API](../../../usage/REST-API.md).
 
 ## A basic example
 
@@ -141,7 +141,7 @@ threat modelling tool like IriusRisk.
 
 ### CLI
 > **Note**: Before continue, make sure you have 
-> [StartLeft properly installed](../../../../Quickstart-Guide-for-Beginners.md) in your machine.
+> [StartLeft properly installed](../../../Quickstart-Guide-for-Beginners.md) in your machine.
 
 Save the files above in your file system with these names:
 
@@ -193,5 +193,5 @@ StartLeft, through the mapping files, is intended to be configurable, so you can
 create your own mappings on demand.
 
 To help you to walk through more complex situations with larger CFT and mapping files, we have created a page with 
-[explained CFT examples](../CloudFormation-Examples.md) which may be useful for you as a base for build your own mapping 
+[explained CFT examples](CloudFormation-Examples.md) which may be useful for you as a base for build your own mapping 
 files.

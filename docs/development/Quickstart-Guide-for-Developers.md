@@ -7,7 +7,7 @@ through the contributions of the community:
 * The nature of the project, whose natural functional escalation is based on the support of new, independent, source formats.
 * The conversion into OTM is based on configuration files that can also be created independently depending on the expected
   OTM use.
-* The [modularized architecture](../Architecture/Architecture.md) enables collaborators to contribute to each format's 
+* The [modularized architecture](Architecture.md) enables collaborators to contribute to each format's 
   processor without conflicts.
 
 ## How to contribute?
@@ -68,13 +68,13 @@ We only need to click on _Configure a Python interpreter..._ and accept the prop
 #### Import the run configurations
 Since StartLeft is a quite complex project with different commands and test sets that can be launched independently, 
 a set of portable and preconfigured run configurations are provided. So, the final configuration step is to import them
-following the instructions detailed [here](../Run-Configurations/Run-Configurations.md) and assure that you can execute StartLeft from your PyCharm.
+following the instructions detailed [here](Run-Configurations.md) and assure that you can execute StartLeft from your PyCharm.
 
 ## Architecture
 
 ---
 With your development environment ready, it is strongly advised to take a look to the 
-[architecture page](../Architecture/Architecture.md)
+[architecture page](Architecture.md)
 to familiarize yourself with the different modules, including their relationships and common internal structure. This is
 specially relevant considering that forbidden imports between modules will remain in _python collect_ errors that prevent 
 StartLeft to start and that may confuse you.
@@ -85,7 +85,7 @@ StartLeft to start and that may confuse you.
 In spite of the modularized architecture of StartLeft, the process of reading and parsing an input source and
 convert it into OTM has a set of fixed stages defined in the `slp_base` module. For each of these stages, there are
 a set of predefined errors that must be used in order to get coherent and descriptive errors in the REST API or CLI
-responses. All you need to know about the errors management is in the [errors management page](../Errors-Management/Errors-Management.md).
+responses. All you need to know about the errors management is in the [errors management page](Errors-Management.md).
 
 ## Creating a new StartLeft Processor
 
@@ -97,5 +97,5 @@ A very interesting situation is when the user want to make StartLeft support a n
 know the interfaces you need to implement and the minimal configuration to expose it through the CLI and the REST API.
 
 You can easily go through this creation process in this 
-[tutorial page](../Create-a-new-StartLeft-Processor/Create-a-new-StartLeft-Processor.md).
+[tutorial page](Create-a-new-StartLeft-Processor.md).
 

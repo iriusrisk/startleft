@@ -25,7 +25,7 @@ operate.
 
 ### Deploy locally
 If you only want to experiment with the API, this is probably the simplest way. For that, you need to have
-StartLeft installed in your machine like explained in the [Quickstart Guide for Beginners](../../Quickstart-Guide-for-Beginners.md)
+StartLeft installed in your machine like explained in the [Quickstart Guide for Beginners](../Quickstart-Guide-for-Beginners.md)
 and execute the command:
 ```shell
 startleft server
@@ -94,7 +94,7 @@ This command should return:
   }
 }
 ```
-For more details about how to use the StartLeft API, you can check the [REST API page](../../usage/REST-API.md).
+For more details about how to use the StartLeft API, you can check the [REST API page](../usage/REST-API.md).
 
 #### Custom Dockerfile
 The Dockerfile provided should be enough for the most common integration scenarios, but, of course, it is possible to
@@ -115,7 +115,7 @@ ENTRYPOINT ["uvicorn", "startleft.startleft.api.fastapi_server:webapp", "--host"
 ## In batch processes
 
 ---
-The [Command Line Interface](../../usage/Command-Line-Interface.md) enables the users to easily create scripts for converting from different sources to OTM in batch, but
+The [Command Line Interface](../usage/Command-Line-Interface.md) enables the users to easily create scripts for converting from different sources to OTM in batch, but
 also to perform other operations like validating files. For doing that, you simply need to install startleft on your machine or 
 creating a StartLeft docker image able to read the scripts you want to process.
 
@@ -125,7 +125,7 @@ there are no REST endpoint for them. On the other hand, not all the formats can 
 command, but all of them are supported in the REST API. These inconsistencies are expected to be solved in a short/medium
 term with a small impact, since the transformation logic and the access interfaces are already decoupled. Thus, if you have
 special interest in having some feature available through some interface, please raise an issue or create a fork following the
-[Quickstart guide for developers](../../development/Quickstart-Guide-for-Developers/Quickstart-Guide-for-Developers.md).
+[Quickstart guide for developers](../development/Quickstart-Guide-for-Developers.md).
 
 
 ## As modules as library (For future)
@@ -135,7 +135,7 @@ StartLeft is a complete tool that exposes OTM conversion functionalities through
 be very useful for some customers to create their own python tools for parsing different formats to OTM without having to 
 install and use a CLI or set up a REST API.
 
-As you can see in the [Architecture page](../../development/Architecture/Architecture.md), each StartLeft module is an 
+As you can see in the [Architecture page](../development/Architecture.md), each StartLeft module is an 
 independent piece
 of software. Thus, **releasing useful modules as the SLPs or the OTM module is currently under study**.
 However, even though an advanced user could manage to install and use startleft as a library, it is not recommended because 

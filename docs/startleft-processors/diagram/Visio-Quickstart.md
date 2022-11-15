@@ -46,9 +46,9 @@ in both mapping files, the mapping in the custom mapping file has preference ove
   mappings for everything you want to be processed.
 
 Further details about the mapping behavior may be found in the 
-[Visio-Mapping page](../Visio-Mapping/Visio-Mapping.md). Regarding, the usage of StartLeft to converting Visio files,
+[Visio-Mapping page](Visio-Mapping.md). Regarding, the usage of StartLeft to converting Visio files,
 you can check the manuals for the 
-[CLI](../../../usage/Command-Line-Interface.md) and the [REST API](../../../usage/REST-API.md).
+[CLI](../../usage/Command-Line-Interface.md) and the [REST API](../../usage/REST-API.md).
 
 
 ## A basic example
@@ -191,7 +191,7 @@ had in the original Visio source:
 
 ### CLI
 > **Note**: Before continue, make sure you have
-> [StartLeft properly installed](../../../Quickstart-Guide-for-Beginners.md) in your machine.
+> [StartLeft properly installed](../../Quickstart-Guide-for-Beginners.md) in your machine.
 
 First of all, retrieve all the necessary files:
 

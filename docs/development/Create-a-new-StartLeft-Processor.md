@@ -1,5 +1,5 @@
 # Create a new StartLeft Processor (SLP)
-As you can see in the [architecture page](../Architecture/Architecture.md) StartLeft Processors (SLPs) are the special kind of 
+As you can see in the [architecture page](Architecture.md) StartLeft Processors (SLPs) are the special kind of 
 modules
 where the conversion into OTM logic is actually implemented. All of them are based in the same interfaces, defined in the 
 `slp_base` module. So, if you want to create a new SLP, you simply have to:
@@ -32,7 +32,7 @@ Source (MAIS)_. A sample file of this format could be something like:
 ```
 
 We need to define a format for the mappings between the source file and OTM. An example of this mapping file could be:
-> **Note**: Remind that the [OTM standard](../../Open-Threat-Model-(OTM).md) forces each component to have a parent.
+> **Note**: Remind that the [OTM standard](../Open-Threat-Model-(OTM).md) forces each component to have a parent.
 > This is the reason because we include this default TrustZone for this example.
 ```yaml
 trustZones:
@@ -98,7 +98,7 @@ In order to implement our sample processor, we need to know the structure of the
 
 ---
 For this tutorial, we are going to create a new SLP for parsing _My awesome input source (MAIS)_ files which is going to be called
-`slp_mais`. First, we need to set up our development environment as explained in the [Quickstart Guide for Developers](../Quickstart-Guide-for-Developers/Quickstart-Guide-for-Developers.md).
+`slp_mais`. First, we need to set up our development environment as explained in the [Quickstart Guide for Developers](Quickstart-Guide-for-Developers.md).
 
 
 ### Build the module structure
@@ -158,7 +158,7 @@ class IacType(str, Provider):
 
 ### Implement `slp_base` interfaces
 > **Note**: In order to simplify this tutorial, we will not implement any validation nor process loading or processing errors, but, for 
-> a real implementation, you must read the [errors management page](../Errors-Management/Errors-Management.md) to know the errors you 
+> a real implementation, you must read the [errors management page](Errors-Management.md) to know the errors you 
 > should 
 > raise in each stage of the conversion process.
 
@@ -450,7 +450,7 @@ no code is needed, and you only need to perform the configuration steps below.
 ```
  
 ### Try it on the REST API
-Launch the REST API as explained in the [Quickstart Guide for Developers](../Quickstart-Guide-for-Developers/Quickstart-Guide-for-Developers.md)
+Launch the REST API as explained in the [Quickstart Guide for Developers](Quickstart-Guide-for-Developers.md)
 and check the Swagger page in [http://localhost:5000/docs](http://localhost:5000/docs). You can see that the MAIS IaC
 type is already available in the `POST /iac` endpoint:
 

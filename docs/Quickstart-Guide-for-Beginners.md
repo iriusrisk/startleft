@@ -73,7 +73,7 @@ how a Threat Model has been automatically generated from the Terraform file.
 
 ---
 Using StartLeft as a service is the most useful strategy for integrate it with other tools. The different ways of 
-configuring this service are deeply described in the [Quickstart guide for Integrations](integration/Quickstart-Guide-for-Integrations/Quickstart-Guide-for-Integrations.md) 
+configuring this service are deeply described in the [Quickstart guide for Integrations](integration/Quickstart-Guide-for-Integrations.md) 
 and [REST API](usage/REST-API.md) sections. However, you can begin to familiarize yourself with this mode by setting up the server 
 through the CLI using the command:
 ```shell
