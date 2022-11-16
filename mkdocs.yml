@@ -17,20 +17,20 @@ nav:
       - Errors management: development/Errors-Management.md
       - Run Configurations: development/Run-Configurations.md
   - StartLeft Processors (SLP):
-    - Microsoft Threat Modelling Tool (MTMT):
-      - MTMT Quickstart: startleft-processors/external-threat-model/mtmt/MTMT-Quickstart.md
-      - MTMT Mapping: startleft-processors/external-threat-model/mtmt/MTMT-Mapping.md
-    - CloudFormation Template:
-      - CloudFormation Quickstart: startleft-processors/iac/cft/CloudFormation-Quickstart.md
-      - CloudFormation Mapping: startleft-processors/iac/cft/CloudFormation-Mapping.md
-      - CloudFormation Examples: startleft-processors/iac/cft/CloudFormation-Examples.md
-    - Terraform:
-      - Terraform Quickstart: startleft-processors/iac/tf/Terraform-Quickstart.md
-      - Terraform Mapping: startleft-processors/iac/tf/Terraform-Mapping.md
-      - Terraform Examples: startleft-processors/iac/tf/Terraform-Examples.md
-    - Visio:
-      - Visio Quickstart: startleft-processors/diagram/Visio-Quickstart.md
-      - Visio Mapping: startleft-processors/diagram/Visio-Mapping.md
-      - Visio TrustZones Mapping: startleft-processors/diagram/Visio-TrustZones-Mapping.md
+      - Microsoft Threat Modelling Tool (MTMT):
+          - MTMT Quickstart: startleft-processors/external-threat-model/mtmt/MTMT-Quickstart.md
+          - MTMT Mapping: startleft-processors/external-threat-model/mtmt/MTMT-Mapping.md
+      - CloudFormation Template:
+          - CloudFormation Quickstart: startleft-processors/iac/cft/CloudFormation-Quickstart.md
+          - CloudFormation Mapping: startleft-processors/iac/cft/CloudFormation-Mapping.md
+          - CloudFormation Examples: startleft-processors/iac/cft/CloudFormation-Examples.md
+      - Terraform:
+          - Terraform Quickstart: startleft-processors/iac/tf/Terraform-Quickstart.md
+          - Terraform Mapping: startleft-processors/iac/tf/Terraform-Mapping.md
+          - Terraform Examples: startleft-processors/iac/tf/Terraform-Examples.md
+      - Visio:
+          - Visio Quickstart: startleft-processors/diagram/Visio-Quickstart.md
+          - Visio Mapping: startleft-processors/diagram/Visio-Mapping.md
+          - Visio TrustZones Mapping: startleft-processors/diagram/Visio-TrustZones-Mapping.md
 
 theme: readthedocs

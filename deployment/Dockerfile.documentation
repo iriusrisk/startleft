@@ -4,8 +4,6 @@ RUN apt update && apt -yq install mkdocs
 
 COPY . .
 
-RUN mkdocs build -c
+RUN mkdocs build -c -d /usr/share/nginx/html
 
 RUN apt remove -yq mkdocs
-
-COPY site/ /usr/share/nginx/html
