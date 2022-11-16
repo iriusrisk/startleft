@@ -1,25 +1,17 @@
-# IriusRisk StartLeft
+# StartLeft
 
-Parse IaC and other files to the [Open Threat Model](https://github.com/iriusrisk/OpenThreatModel) format and upload them to IriusRisk.
+---
+**StartLeft** is an automation tool for **generating Threat Models** written in the 
+[Open Threat Model (OTM)](http://iriusrisk.github.io/startleft/site/Open-Threat-Model-%28OTM%29/)
+format **from a variety of different sources** such as IaC files, diagrams or projects exported from
+Threat Modelling tools.
 
-Note: This software is early release and is provided as-is.
+## Documentation
 
-# Setup
-Setup details in: https://github.com/iriusrisk/startleft/wiki/Setup
+---
+All you need to know about StartLeft is available in our [documentation](http://iriusrisk.github.io/startleft).
 
-# Usage
+## Change Log
 
-It is possible to see all commands in: https://github.com/iriusrisk/startleft/wiki/Usage
-
-# Examples
-
-More info about Startleft example source files in https://github.com/iriusrisk/startleft/wiki/Examples
-
-# Source Mapping
-All the info is available at: https://github.com/iriusrisk/startleft/wiki/Source-Mapping
-
-# Open Threat Model (OTM)
-See GitHub wiki: https://github.com/iriusrisk/startleft/wiki/Open-Threat-Model-(OTM) 
-
-# Change Log
-All release notes are documented in [Releases Section](https://github.com/iriusrisk/startleft/releases)
+---
+All release notes are documented in [Releases Section](https://github.com/iriusrisk/startleft/releases).
