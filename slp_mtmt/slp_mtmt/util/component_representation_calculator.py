@@ -1,25 +1,15 @@
-from otm.otm.otm import RepresentationElement
-from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
+from slp_mtmt.slp_mtmt.util.representation_calculator import RepresentationCalculator
 
 
-class ComponentRepresentationCalculator:
+class ComponentRepresentationCalculator(RepresentationCalculator):
 
-    @staticmethod
-    def calculate_representation(border: MTMBorder, representation: str,
-                                 parent: MTMBorder = None) -> RepresentationElement:
-        representation_id = border.id + '-representation'
-        representation_name = border.name + ' Representation'
-        if parent:
-            x, y = ComponentRepresentationCalculator.get_relative_coordinates(border, parent)
+    def get_position(self) -> (int, int):
+        if self.parent:
+            x = self.element.left - self.parent.left
+            y = self.element.top - self.parent.top
         else:
-            x, y = border.left, border.top
-        position = {"x": x, "y": y}
-        size = {"width": border.width, "height": border.height}
-        return RepresentationElement(id_=representation_id, name=representation_name,
-                                     representation=representation, position=position, size=size)
-
-    @staticmethod
-    def get_relative_coordinates(border: MTMBorder, parent: MTMBorder) -> (int, int):
-        x = border.left - parent.left
-        y = border.top - parent.top
+            x, y = self.element.left, self.element.top
         return x, y
+
+    def get_size(self) -> (int, int):
+        return self.element.width, self.element.height

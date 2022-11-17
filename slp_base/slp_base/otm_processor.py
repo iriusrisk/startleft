@@ -2,6 +2,7 @@ import abc
 
 from otm.otm.otm import OTM
 from slp_base.slp_base.mapping import MappingLoader, MappingValidator
+from slp_base.slp_base.otm_representations_pruner import OtmRepresentationsPruner
 from slp_base.slp_base.otm_validator import OtmValidator
 from slp_base.slp_base.provider_loader import ProviderLoader
 from slp_base.slp_base.provider_parser import ProviderParser
@@ -34,6 +35,7 @@ class OtmProcessor(metaclass=abc.ABCMeta):
         self.get_mapping_loader().load()
 
         otm = self.get_provider_parser().build_otm()
+        OtmRepresentationsPruner(otm).prune()
         OtmValidator().validate(otm.json())
 
         return otm

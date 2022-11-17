@@ -1,3 +1,6 @@
+import json
+from unittest.mock import patch
+
 from otm.otm.otm import Representation, DiagramRepresentation, RepresentationElement
 from sl_util.sl_util.file_utils import get_byte_data
 from slp_mtmt import MTMTProcessor
@@ -7,6 +10,10 @@ SAMPLE_ID = 'example-project'
 SAMPLE_NAME = 'Example Project'
 SAMPLE_VALID_MTMT_FILE = test_resource_paths.model_mtmt_mvp
 SAMPLE_VALID_MAPPING_FILE = test_resource_paths.mapping_mtmt_mvp
+DEFAULT_MAPPING_FILE = test_resource_paths.mtmt_default_mapping
+MTMT_MISSING_POSITION = test_resource_paths.missing_position
+MTMT_EXAMPLE_POSITION = test_resource_paths.example_position_tm7
+OTM_EXAMPLE_POSITION = test_resource_paths.example_position_otm
 
 
 class TestMtmtProcessor:
@@ -45,7 +52,7 @@ class TestMtmtProcessor:
         # AND the info inside trustzones is also right
         for trustzone in otm.trustzones:
             assert len(trustzone.representations) == 1
-            element_representation : RepresentationElement = trustzone.representations[0]
+            element_representation: RepresentationElement = trustzone.representations[0]
             assert element_representation.representation == 'example-project-diagram'
             assert element_representation.name == trustzone.name + ' Representation'
         trustzone = otm.trustzones[0]
@@ -128,3 +135,65 @@ class TestMtmtProcessor:
         assert dataflow.id == '5861370d-b333-4d4b-9420-95425026e9c9'
         assert dataflow.source_node == '5d15323e-3729-4694-87b1-181c90af5045'
         assert dataflow.destination_node == '6183b7fa-eba5-4bf8-a0af-c3e30d144a10'
+
+    @patch('slp_base.slp_base.otm_validator.OtmValidator.validate')
+    def test_run_some_missing_source_coordinates(self, validate):
+        # GIVEN a valid MTMT file with some resources
+        source_file = get_byte_data(MTMT_MISSING_POSITION)
+
+        # AND a valid MTMT mapping file
+        mapping_file = get_byte_data(SAMPLE_VALID_MAPPING_FILE)
+
+        # AND we avoid the otm validation
+        validate.side_effect = None
+
+        # WHEN the MTMT file is processed
+        otm = MTMTProcessor(SAMPLE_ID, SAMPLE_NAME, source_file, [mapping_file]).process()
+
+        # THEN the number of TZs, components and dataflows are right
+        assert len(otm.trustzones) == 2
+        assert len(otm.components) == 4
+        assert len(otm.dataflows) == 6
+
+        # AND the project info is also right
+        assert otm.project_id == "example-project"
+        assert otm.project_name == "Example Project"
+
+        # AND the representations info is also right
+        assert len(otm.representations) == 2
+        tm_representation: Representation = otm.representations[0]
+        assert tm_representation.id == 'Microsoft Threat Modeling Tool'
+        assert tm_representation.name == 'Microsoft Threat Modeling Tool'
+        assert tm_representation.type == 'threat-model'
+        diag_representation: DiagramRepresentation = otm.representations[1]
+        assert diag_representation.id == 'example-project-diagram'
+        assert diag_representation.name == 'example-project Diagram Representation'
+        assert diag_representation.type == 'diagram'
+        assert diag_representation.size == {'width': 2000, 'height': 2000}
+
+        # AND no trust zone has representations
+        for trustzone in otm.trustzones:
+            assert len(trustzone.representations) == 0
+
+        # AND no component has representations
+        for component in otm.components:
+            assert len(component.representations) == 0
+
+    def test_coordinates_borders(self):
+        # GIVEN a valid MTMT file with all resources as borders
+        source_file = get_byte_data(MTMT_EXAMPLE_POSITION)
+
+        # AND a valid MTMT mapping file
+        mapping_file = get_byte_data(DEFAULT_MAPPING_FILE)
+
+        # AND the expected OTM
+        expected_otm = json.loads(get_byte_data(OTM_EXAMPLE_POSITION))
+
+        # WHEN the MTMT file is processed
+        otm = MTMTProcessor(SAMPLE_ID, SAMPLE_NAME, source_file, [mapping_file]).process()
+
+        # AND we get the json OTM
+        otm_json = otm.json()
+
+        # THEN we check the result is as expected
+        assert otm_json == expected_otm
