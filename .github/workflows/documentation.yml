@@ -16,5 +16,6 @@ jobs:
           python-version: "3.8"
       - run: pip install --upgrade pip && pip install mkdocs mkdocs-gen-files
       - run: git config user.name 'github-actions[bot]' && git config user.email 'github-actions[bot]@users.noreply.github.com'
+      - run: pip install mkdocs-material
       - name: Publish docs
         run: mkdocs gh-deploy
