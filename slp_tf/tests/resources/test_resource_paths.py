@@ -35,6 +35,7 @@ terraform_orphan_component = path + '/tf/terraform_orphan_component.tf'
 terraform_main_referenced_variables = path + '/tf/terraform_main_referenced_variables.tf'
 terraform_vars_referenced_variables = path + '/tf/terraform_vars_referenced_variables.tf'
 terraform_variables_file_referenced_variables = path + '/tf/terraform_variables_files_referenced_variables.tfvars'
+terraform_components_from_same_resource = path + '/tf/terraform_components_from_same_resource.tf'
 
 # mapping
 default_terraform_mapping = path + '/mapping/default-terraform-mapping.yaml'
