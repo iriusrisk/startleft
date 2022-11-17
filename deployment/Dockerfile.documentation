@@ -1,9 +1,5 @@
-FROM nginx:1.23
+FROM squidfunk/mkdocs-material
 
-RUN apt update && apt -yq install mkdocs
+RUN pip install --upgrade pip
 
 COPY . .
-
-RUN mkdocs build -c -d /usr/share/nginx/html
-
-RUN apt remove -yq mkdocs

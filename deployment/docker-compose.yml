@@ -4,7 +4,7 @@ services:
       context: ..
       dockerfile: deployment/Dockerfile.documentation
     ports:
-      - 8000:80
+      - 8000:8000
     container_name: startleft-docs
 
   application:
