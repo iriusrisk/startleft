@@ -75,9 +75,10 @@ class OTM:
 
 
 class Trustzone:
-    def __init__(self, id=None, name=None, source=None, properties=None):
+    def __init__(self, id=None, name=None, type=None, source=None, properties=None):
         self.id = id
         self.name = name
+        self.type = type
         self.source = source
         self.properties = properties
 
@@ -85,7 +86,8 @@ class Trustzone:
         return type(other) == Trustzone and self.id == other.id
 
     def __repr__(self) -> str:
-        return f'Trustzone(id="{self.id}", name="{self.name}", source="{self.source}", properties="{self.properties}")'
+        return f'Trustzone(id="{self.id}", name="{self.name}", type="{self.type}", source="{self.source}",' \
+               f' properties="{self.properties}")'
 
     def __hash__(self):
         return hash(self.__repr__())
@@ -94,6 +96,7 @@ class Trustzone:
         result = {
             "id": self.id,
             "name": self.name,
+            "type": self.type,
             "risk": {
                 "trustRating": 10
             }
