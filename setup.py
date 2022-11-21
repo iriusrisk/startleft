@@ -28,7 +28,10 @@ setup(
         'vsdx==0.5.11',
         'python-magic==0.4.27'
     ],
-    use_scm_version=True,
+    use_scm_version={
+        'write_to': 'startleft/version.py',
+        'git_describe_command': 'git describe --tags'
+    },
     extras_require={
         "setup": [
             "pytest-runner==6.0.0",
