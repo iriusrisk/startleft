@@ -1,6 +1,8 @@
 import json
 from unittest.mock import patch
 
+from pytest import mark
+
 from otm.otm.otm import Representation, DiagramRepresentation, RepresentationElement
 from sl_util.sl_util.file_utils import get_byte_data
 from slp_mtmt import MTMTProcessor
@@ -14,6 +16,10 @@ DEFAULT_MAPPING_FILE = test_resource_paths.mtmt_default_mapping
 MTMT_MISSING_POSITION = test_resource_paths.missing_position
 MTMT_EXAMPLE_POSITION = test_resource_paths.example_position_tm7
 OTM_EXAMPLE_POSITION = test_resource_paths.example_position_otm
+MTMT_EXAMPLE_1LINE = test_resource_paths.position_1line_tz_tm7
+OTM_EXAMPLE_1LINE = test_resource_paths.position_1line_tz_otm
+MTMT_EXAMPLE_1ORPHAN = test_resource_paths.position_1orphan_tm7
+OTM_EXAMPLE_1ORPHAN = test_resource_paths.position_1orphan_otm
 
 
 class TestMtmtProcessor:
@@ -179,15 +185,20 @@ class TestMtmtProcessor:
         for component in otm.components:
             assert len(component.representations) == 0
 
-    def test_coordinates_borders(self):
-        # GIVEN a valid MTMT file with all resources as borders
-        source_file = get_byte_data(MTMT_EXAMPLE_POSITION)
+    @mark.parametrize('source, expected', [
+        (MTMT_EXAMPLE_POSITION, OTM_EXAMPLE_POSITION),
+        (MTMT_EXAMPLE_1LINE, OTM_EXAMPLE_1LINE),
+        (MTMT_EXAMPLE_1ORPHAN, OTM_EXAMPLE_1ORPHAN)
+    ])
+    def test_coordinates_borders(self, source, expected):
+        # GIVEN a valid MTMT file
+        source_file = get_byte_data(source)
 
         # AND a valid MTMT mapping file
         mapping_file = get_byte_data(DEFAULT_MAPPING_FILE)
 
         # AND the expected OTM
-        expected_otm = json.loads(get_byte_data(OTM_EXAMPLE_POSITION))
+        expected_otm = json.loads(get_byte_data(expected))
 
         # WHEN the MTMT file is processed
         otm = MTMTProcessor(SAMPLE_ID, SAMPLE_NAME, source_file, [mapping_file]).process()

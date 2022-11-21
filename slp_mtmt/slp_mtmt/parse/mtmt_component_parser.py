@@ -36,14 +36,16 @@ class MTMTComponentParser:
         calculator = ComponentRepresentationCalculator(self.diagram_representation, border, trustzone)
         representation = calculator.calculate_representation()
         if mtmt_type is not None:
-            return Component(id=border.id,
+            component = Component(id=border.id,
                              name=border.name,
                              type=mtmt_type,
                              parent_type="trustZone",
                              parent=trustzone_id,
                              properties=border.properties,
-                             source=border,
-                             representations=[representation])
+                             source=border)
+            if representation:
+                component.representations = [representation]
+            return component
 
     def __calculate_otm_type(self, border: MTMBorder) -> str:
         return self.__get_label_value(border)
@@ -67,7 +69,7 @@ class MTMTComponentParser:
         parent_calculator = LineParentCalculator()
         for candidate in self.source.lines:
             if parent_calculator.is_parent(candidate, border):
-                return self.trustzone_parser.calculate_otm_id(candidate)
+                return candidate
         return None
 
     def manage_orphaned(self) -> str:

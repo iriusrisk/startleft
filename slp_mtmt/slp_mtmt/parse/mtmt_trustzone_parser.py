@@ -38,13 +38,13 @@ class MTMTTrustzoneParser:
         mtmt_type = self.__calculate_otm_type(border)
         if mtmt_type is not None:
             calculator = TrustzoneRepresentationCalculator(self.diagram_representation, border)
-            representations = calculator.calculate_representation()
+            representation = calculator.calculate_representation()
             trustzone_id = self.calculate_otm_id(border)
             tz = Trustzone(id=trustzone_id,
                            name=border.name,
                            properties=border.properties)
-            if representations:
-                tz.representations = [representations]
+            if representation:
+                tz.representations = [representation]
             return tz
 
     def __calculate_otm_type(self, border: MTMBorder) -> str:
