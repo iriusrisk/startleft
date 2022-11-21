@@ -20,7 +20,7 @@ from startleft.startleft.api import fastapi_server
 from startleft.startleft.cli.clioptions.exclusion_option import Exclusion
 from startleft.startleft.log import get_log_level, configure_logging
 from startleft.startleft.messages import *
-from version import version
+from startleft.version import version
 
 logger = logging.getLogger(__name__)
 provider_resolver = ProviderResolver(PROCESSORS)
