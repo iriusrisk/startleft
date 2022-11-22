@@ -38,9 +38,11 @@ class TestMtmtProcessor:
         trustzone = otm.trustzones[0]
         assert trustzone.id == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
         assert trustzone.name == 'Internet'
+        assert not trustzone.type
         trustzone = otm.trustzones[1]
         assert trustzone.id == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
         assert trustzone.name == 'Private Secured Cloud'
+        assert not trustzone.type
 
         # AND the info inside components is also right
         component = otm.components[0]
