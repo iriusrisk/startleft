@@ -14,7 +14,7 @@ class MockedComponentIdGenerator:
         self.parent_id = parent_id
 
     @staticmethod
-    def from_component_source(component_source: {}, parent_id: str):
+    def from_component_source(component_source: {}, parent_id: str, component_name: str = ''):
         return MockedComponentIdGenerator(
             name=component_source['_key'],
             type=component_source['Type'],
