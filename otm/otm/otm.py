@@ -1,6 +1,4 @@
-import logging
-
-logger = logging.getLogger(__name__)
+from otm.otm.entity.threats import OtmThreatInstance
 
 
 class OTM:
@@ -14,10 +12,11 @@ class OTM:
             "width": 1000,
             "height": 1000
         }
-
         self.trustzones = []
         self.components = []
         self.dataflows = []
+        self.threats = []
+        self.mitigations = []
 
     def objects_by_type(self, type):
         if type == "trustzone":
@@ -55,6 +54,14 @@ class OTM:
             data["components"].append(component.json())
         for dataflow in self.dataflows:
             data["dataflows"].append(dataflow.json())
+        if len(self.threats) > 0:
+            data["threats"] = []
+            for threat in self.threats:
+                data["threats"].append(threat.json())
+        if len(self.mitigations) > 0:
+            data["mitigations"] = []
+            for mitigation in self.mitigations:
+                data["mitigations"].append(mitigation.json())
 
         return data
 
@@ -87,6 +94,7 @@ class Trustzone:
     def __repr__(self) -> str:
         return f'Trustzone(id="{self.id}", name="{self.name}", source="{self.source}", properties="{self.properties}")'
 
+    # TODO: hash code does not return true when the equals does
     def __hash__(self):
         return hash(self.__repr__())
 
@@ -105,7 +113,7 @@ class Trustzone:
 
 class Component:
     def __init__(self, id=None, name=None, type=None, parent=None, parent_type=None, source=None,
-                 properties=None, tags=None):
+                 properties=None, tags=None, threats: [OtmThreatInstance] = None):
         self.id = id
         self.name = name
         self.type = type
@@ -114,6 +122,10 @@ class Component:
         self.source = source
         self.properties = properties
         self.tags = tags
+        self.threats: [OtmThreatInstance] = threats or []
+
+    def add_threat(self, threat: OtmThreatInstance):
+        self.threats.append(threat)
 
     def json(self):
         result = {
@@ -129,12 +141,18 @@ class Component:
             result["properties"] = self.properties
         if self.tags:
             result["tags"] = self.tags
+
+        if len(self.threats) > 0:
+            result["threats"] = []
+            for threat in self.threats:
+                result["threats"].append(threat.json())
+
         return result
 
 
 class Dataflow:
-    def __init__(self, id=None, name=None, bidirectional=None, source_node=None, destination_node=None, source=None,
-                 properties=None, tags=None):
+    def __init__(self, id=None, name=None, bidirectional: bool = None, source_node=None, destination_node=None,
+                 source=None, properties=None, tags=None):
         self.id = id
         self.name = name
         self.bidirectional = bidirectional
@@ -151,10 +169,12 @@ class Dataflow:
             "source": self.source_node,
             "destination": self.destination_node
         }
+
         if self.bidirectional is not None:
             result["bidirectional"] = self.bidirectional
         if self.properties:
             result["properties"] = self.properties
         if self.tags:
             result["tags"] = self.tags
+
         return result

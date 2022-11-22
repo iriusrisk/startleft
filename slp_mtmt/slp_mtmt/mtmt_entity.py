@@ -1,10 +1,6 @@
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_line import MTMLine
-
-
-class MTMThreat:
-    def __init__(self, source: dict):
-        pass
+from slp_mtmt.slp_mtmt.entity.mtmt_entity_threatinstance import MTMThreat
 
 
 class MTMKnowledge:

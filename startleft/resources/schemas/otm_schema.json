@@ -177,7 +177,7 @@
                         "items": {"type": "string"}
                     },
                     "risk": {
-                        "type": "array",
+                        "type": "object",
                         "items": {
                             "type": "object",
                             "required": ["likelihood", "impact"],

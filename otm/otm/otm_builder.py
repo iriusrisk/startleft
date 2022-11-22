@@ -1,3 +1,5 @@
+from otm.otm.entity.mitigations import OtmMitigation
+from otm.otm.entity.threats import OtmThreat
 from otm.otm.otm import OTM, Component, Dataflow, Trustzone
 from otm.otm.provider import Provider
 from sl_util.sl_util.iterations_utils import IterationUtils
@@ -31,6 +33,13 @@ class OtmBuilder:
         self.otm.dataflows = dataflows
         return self
 
+    def add_threats(self, threats: [OtmThreat]):
+        self.otm.threats = threats
+        return self
+
+    def add_mitigations(self, mitigations: [OtmMitigation]):
+        self.otm.mitigations = mitigations
+        return self
+
     def __init_otm(self):
         self.otm = OTM(self.project_name, self.project_id, self.provider)
-
