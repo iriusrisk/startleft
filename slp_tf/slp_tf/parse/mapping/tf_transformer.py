@@ -82,7 +82,7 @@ class TerraformTransformer:
 
     def __find_trustzone_parent_by_default(self):
         for trustzone in self.iac_mapping["trustzones"]:
-            if trustzone.get("default", False):
+            if trustzone.get("$default", False):
                 return trustzone["id"]
 
     def __default_component_mapping_template(self):

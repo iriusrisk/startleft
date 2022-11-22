@@ -7,7 +7,7 @@ from slp_tf.slp_tf.parse.mapping.mappers.tf_base_mapper import TerraformBaseMapp
 def get_children(mapping):
     children = mapping.get("$source", {}).get("$children", None)
     if not children:
-        children = mapping.get("children", None)
+        children = mapping.get("$children", None)
 
     return children
 

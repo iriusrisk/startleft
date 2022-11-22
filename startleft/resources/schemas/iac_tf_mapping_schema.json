@@ -15,7 +15,8 @@
                 "properties": {
                     "id": {"$ref": "#/definitions/query"},
                     "name": {"$ref": "#/definitions/query"},
-                    "$source": {"$ref": "#/definitions/query"}
+                    "$source": {"$ref": "#/definitions/query"},
+                    "$default": {"type": "boolean"}
                 }
             }
         },

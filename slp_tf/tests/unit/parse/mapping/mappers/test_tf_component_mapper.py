@@ -13,6 +13,6 @@ class TestTfComponentMapper:
 
     def test_get_children_from_children(self):
         mapping = {
-            "children": True
+            "$children": True
         }
         assert get_children(mapping)
