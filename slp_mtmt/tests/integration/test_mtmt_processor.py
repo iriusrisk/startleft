@@ -36,33 +36,35 @@ class TestMtmtProcessor:
 
         # AND the info inside trustzones is also right
         trustzone = otm.trustzones[0]
-        assert trustzone.id == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
+        assert trustzone.id == '75605184-4ca0-43be-ba4c-5fa5ad15e367'
         assert trustzone.name == 'Internet'
+        assert trustzone.type == 'internet'
         trustzone = otm.trustzones[1]
-        assert trustzone.id == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
+        assert trustzone.id == '24cdf4da-ac7f-4a35-bab0-29256d4169bf'
         assert trustzone.name == 'Private Secured Cloud'
+        assert trustzone.type == 'private-secured'
 
         # AND the info inside components is also right
         component = otm.components[0]
         assert component.id == '53245f54-0656-4ede-a393-357aeaa2e20f'
         assert component.name == 'Accounting PostgreSQL'
         assert component.type == 'CD-MICROSOFT-AZURE-DB-POSTGRESQL'
-        assert component.parent == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
+        assert component.parent == '24cdf4da-ac7f-4a35-bab0-29256d4169bf'
         component = otm.components[1]
         assert component.id == '6183b7fa-eba5-4bf8-a0af-c3e30d144a10'
         assert component.name == 'Mobile Client'
         assert component.type == 'android-device-client'
-        assert component.parent == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
+        assert component.parent == '75605184-4ca0-43be-ba4c-5fa5ad15e367'
         component = otm.components[2]
         assert component.id == '5d15323e-3729-4694-87b1-181c90af5045'
         assert component.name == 'Public API v2'
         assert component.type == 'web-service'
-        assert component.parent == "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+        assert component.parent == "24cdf4da-ac7f-4a35-bab0-29256d4169bf"
         component = otm.components[3]
         assert component.id == '91882aca-8249-49a7-96f0-164b68411b48'
         assert component.name == 'Azure File Storage'
         assert component.type == 'azure-storage'
-        assert component.parent == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
+        assert component.parent == '24cdf4da-ac7f-4a35-bab0-29256d4169bf'
 
         # AND the info inside dataflows is also right
         dataflow = otm.dataflows[0]

@@ -15,6 +15,7 @@
     {
       "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "name": "Public Cloud",
+      "type": null,
       "risk": {
         "trustRating": 10
       }
@@ -143,14 +144,14 @@
       ]
     },
     {
-      'id': 'b61d6911-338d-46a8-9f39-8dcd24abfe91.rdscluster',
-      'name': 'RDSCluster',
-      'type': 'rds',
-      'parent': {
-        'trustZone': 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.rdscluster",
+      "name": "RDSCluster",
+      "type": "rds",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
-      'tags': [
-        'AWS::RDS::DBCluster'
+      "tags": [
+        "AWS::RDS::DBCluster"
       ]
     },
     {

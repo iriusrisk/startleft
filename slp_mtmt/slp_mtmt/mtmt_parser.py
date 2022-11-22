@@ -26,7 +26,7 @@ class MTMTParser(ProviderParser):
         return self.component_parser.parse()
 
     def __get_mtmt_dataflows(self):
-        return MTMTConnectorParser(self.source, self.component_parser).parse()
+        return MTMTConnectorParser(self.source).parse()
 
     def __get_mtmt_trustzones(self) -> list:
         return self.trustzoneParser.parse()

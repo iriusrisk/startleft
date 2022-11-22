@@ -55,11 +55,11 @@ class MTMTComponentParser:
         parent_calculator = BorderParentCalculator()
         for candidate in self.source.borders:
             if parent_calculator.is_parent(candidate, border):
-                return self.trustzoneParser.calculate_otm_id(candidate)
+                return candidate.id
         parent_calculator = LineParentCalculator()
         for candidate in self.source.lines:
             if parent_calculator.is_parent(candidate, border):
-                return self.trustzoneParser.calculate_otm_id(candidate)
+                return candidate.id
 
     def manage_orphaned(self) -> str:
         default_trustzone = self.trustzoneParser.default_trustzone
