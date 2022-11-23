@@ -5,7 +5,7 @@
 Trustzones in a Visio diagram can be represented in different ways and, in any of them, it does not exist a perfect 
 method to unambiguously identify the TrustZone to which a component belongs. This page pretends to clarify the 
 different 
-mechanisms used by startleft to identify TrustZones and assign components to them during the Visio diagram parsing 
+mechanisms used by StartLeft to identify TrustZones and assign components to them during the Visio diagram parsing 
 to an Open Threat Model (OTM).
 
 ### Use of shapely Polygons
@@ -128,7 +128,7 @@ the borders of the diagrams, that are essential for the calculations described b
 The first step of the process is translating the Visio angle from the [-pi, pi] range to (0, 2pi] to simplify further 
 calculations using the following expression:
 `angle = angle + 2*pi if angle < 0`
-> **Note**: Notice that Visio angles are given in radians and so they are processed in Startleft.
+> **Note**: Notice that Visio angles are given in radians and so they are processed in StartLeft.
 
 Once we have the angle normalized, there are two possible cases. The first one is when we have a perfectly vertical or 
 horizontal secant. In this case, we will build a quadrant component (the _Private Secured Cloud_ on the first example of 

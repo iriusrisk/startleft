@@ -14,7 +14,7 @@ You can find some sample mapping files inside the `examples/cloudformation` dire
 
 ---
 CloudFormation is the AWS tool which lets you model, provision, and manage AWS and third-party resources by treating 
-infrastructure as code. Startleft's repository contains an example CloudFormation mapping file that enables you to 
+infrastructure as code. StartLeft's repository contains an example CloudFormation mapping file that enables you to 
 generate threat models based on the OTM standard from both a single or multiple CloudFormation template files using 
 a single command.
 
@@ -22,7 +22,7 @@ The following examples, which are located in the `examples/cloudformation` and `
 directories, show you how to carry out the different stages of the process separately or in a single step.
 
 ### Security Groups on multinetwork with Load Balancer
-This is a rich example when you can see in action some the capabilities of startleft. It represents the threat model for
+This is a rich example when you can see in action some the capabilities of StartLeft. It represents the threat model for
 an architecture with two trust zones and several _Virtual Private Networks_ which contain elements such as:
 
 * [Elastic Load Balancer](https://aws.amazon.com/elasticloadbalancing/).
@@ -44,7 +44,7 @@ startleft parse \
 ```
 
 ### Other examples
-There are inside the startleft repositories some other CloudFormation files with different architectures that allows you 
+There are inside the StartLeft repositories some other CloudFormation files with different architectures that allows you 
 to experiment with different mappings and options. For them, the same commands described before can be applied.
 
 * `elb-no-waf`. This is the simplest example, including only a public cloud as a `TrustZone` with an AWS Elastic Load 

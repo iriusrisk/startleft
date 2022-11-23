@@ -3,7 +3,7 @@
 A source mapping file (or "mapping files" for short) describe how to find components, dataflows, and trustzones in source file data structures.
 
 To accomplish this, a mapping file contains additional logic around a collection of JMESPath queries which are used.
-Also, some exclusive Startleft actions based upon JMESPath may be used in mapping files to solve the most complex mappings.
+Also, some exclusive StartLeft actions based upon JMESPath may be used in mapping files to solve the most complex mappings.
 
 Source mapping files are made up of three main sections corresponding the main sections in an OTM file, plus an optional lookup section described below:
 

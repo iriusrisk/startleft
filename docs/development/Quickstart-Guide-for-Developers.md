@@ -1,7 +1,7 @@
 # Quickstart Guide for Developers
 
-StartLeft is an Open Source project open to collaborators to extend or improve its functionality. Despite the fact that 
-it was born as an internal IriusRisk project, there are some characteristic that makes it specially suitable to grown 
+StartLeft is an Open Source project open for collaborators to extend or improve its functionality. Despite the fact that 
+it was born as an internal IriusRisk project, there are some characteristic that makes it specially suitable to grow 
 through the contributions of the community:
 
 * The nature of the project, whose natural functional escalation is based on the support of new, independent, source formats.
@@ -12,19 +12,19 @@ through the contributions of the community:
 
 ## How to contribute?
 The IriusRisk team is currently the coordinator of the project and, ultimately, the responsible for validating the Pull Requests
-created by the collaborators. All you need to know before start contributing will be explained soon in a 
+created by the collaborators. All you need to know before you start contributing will be explained soon in a 
 _Contributing_ file. Anyway, it is important to consider that, before creating your own fork or PR, you should check the 
-[open issues](https://github.com/iriusrisk/startleft/issues) to assure that there is no one related with what you pretend to do.
+[open issues](https://github.com/iriusrisk/startleft/issues) to ensure that there is none related with what you intend to do.
 
 ## Set up the environment
 
 ---
-There are no special requirements about a specific IDE or special steps to perform that makes StartLeft different from any
+There are no special requirements about a specific IDE or special steps to perform that make StartLeft different from any
 Python project. However, as PyCharm (or IntelliJ with the python plugin) is one of the most common python IDEs, some related 
-facilities are provided related to it.
+utilities are provided.
 
 ### Basic configuration
-Regardless the IDE you use, we can generalize the cloning of the project and the creation and configuration of the python virtual 
+Regardless of the IDE you use, we can generalize the cloning of the project and the creation and configuration of the python virtual 
 environment.
 
 First, we need to clone the project and move to its project:
@@ -44,7 +44,7 @@ Now, install all the required dependencies, including the ones required for setu
 pip install -e ".[setup,test]"
 ```
 
-If everything worked fine, you should be able to start the server inside this virtual environment and with no errors in 
+If everything worked fine, you should be able to start the server inside this virtual environment and with no errors 
 shown in the logs:
 ```shell
 startleft server
@@ -77,7 +77,7 @@ With your development environment ready, it is strongly advised to take a look t
 [architecture page](Architecture.md)
 to familiarize yourself with the different modules, including their relationships and common internal structure. This is
 specially relevant considering that forbidden imports between modules will remain in _python collect_ errors that prevent 
-StartLeft to start and that may confuse you.
+StartLeft to start which can lead to confusion.
 
 ## Errors management
 
@@ -85,7 +85,7 @@ StartLeft to start and that may confuse you.
 In spite of the modularized architecture of StartLeft, the process of reading and parsing an input source and
 convert it into OTM has a set of fixed stages defined in the `slp_base` module. For each of these stages, there are
 a set of predefined errors that must be used in order to get coherent and descriptive errors in the REST API or CLI
-responses. All you need to know about the errors management is in the [errors management page](Errors-Management.md).
+responses. All you need to know about the errors management is explained in the [errors management page](Errors-Management.md).
 
 ## Creating a new StartLeft Processor
 
@@ -93,7 +93,7 @@ responses. All you need to know about the errors management is in the [errors ma
 Once you have the environment in place and a general idea about the organization of the code, we can already take a look 
 to the most common use cases for StartLeft contributions through the documented tutorials.
 
-A very interesting situation is when the user want to make StartLeft support a new format. In that case, you will need to 
+A very interesting situation is when the user wants to make StartLeft support a new format. In that case, you will need to 
 know the interfaces you need to implement and the minimal configuration to expose it through the CLI and the REST API.
 
 You can easily go through this creation process in this 

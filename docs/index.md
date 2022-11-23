@@ -10,8 +10,8 @@ Threat Modelling tools.
 
 ---
 
-Automation and integration are the core goals of StartLeft. It was born as an internal project of [IriusRisk](https://www.iriusrisk.com/), whose leader threat 
-modelling tool allows the users to build a whole Threat Model of an application only by depicting its architecture in a diagram.
+Automation and integration are the core goals of StartLeft. It was born as an internal project of [IriusRisk](https://www.iriusrisk.com/), whose leading threat 
+modelling tool allows the users to build a complete Threat Model of an application only by depicting its architecture in a diagram.
 However, there is a bunch of formats in which the architecture (or directly the TM) can be defined. This led [IriusRisk](https://www.iriusrisk.com/) to create
 and share with the community two key resources:
 
@@ -48,7 +48,7 @@ Split by type, the currently supported input formats are:
 ---
 
 Simply install the tool and play with its Command Line Interface. You can also set up a REST API with a single command
-and consume it with any REST client as Postman. Anyway, **the best way to start is following the 
+and consume it with any REST client such as Postman. Anyway, **the best way to start is by following the 
 [Quickstart guide for beginners](Quickstart-Guide-for-Beginners.md)**.
 
 ## How can I integrate it?
@@ -65,5 +65,5 @@ Threat Models. **The different ways of integrating StartLeft are described in th
 
 StartLeft is an Open Source application whose modularized architecture based on processors is specially focused
 on simplifying the collaboration for any developer. **If you want to contribute, check out the 
-[Quickstart guide for developers](development/Quickstart-Guide-for-Developers.md)**. Soon will be also available a 
-_Contributing file_ summarizing the basics. 
+[Quickstart guide for developers](development/Quickstart-Guide-for-Developers.md)**. A _Contributing file_ summarizing 
+the basics will also be available soon. 
