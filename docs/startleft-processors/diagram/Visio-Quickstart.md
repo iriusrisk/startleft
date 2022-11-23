@@ -4,15 +4,15 @@
 
 ---
 > **Note**: <u>It is important to notice that the only supported Visio format is the 
-> [VSDX](https://docs.microsoft.com/en-us/office/client-developer/visio/introduction-to-the-visio-file-formatvsdx)</u>. 
+> [VSDX](https://docs.microsoft.com/en-us/office/client-developer/visio/introduction-to-the-visio-file-formatvsdx) format</u>. 
 > If you want to import another format, you previously need to convert it to vsdx. Otherwise, you will get an error.
 
 [Microsoft Visio](https://www.microsoft.com/en-us/microsoft-365/visio/flowchart-software) is a tool that 
 enables its users to freely draw diagrams of any kind from scratch or based on templates.
 
 From the point of view of StartLeft, it is a place where infrastructure or threat model diagrams can be created. 
-Despite the fact that Visio gives to their users complete freedom to build whatever they want in the diagram, 
-architecture or threat modelling diagrams tend to share a more or less common structure and StartLeft pretend to 
+Despite the fact that Visio gives their users complete freedom to build whatever they want in the diagram, 
+architecture or threat modelling diagrams tend to share a more or less common structure and StartLeft pretends to 
 take advantage of this in order to automatize the processing of the diagrams to create threat models in the OTM format.
 
 
@@ -42,11 +42,11 @@ in both mapping files, the mapping in the custom mapping file has preference ove
   mentioned before or more simple shapes like the database shape, for example.
 * The **custom mapping file** is the file where the user can introduce the mappings for their own specific 
   components. As mentioned above, the user has absolute freedom to draw and name shapes that may be relevant for the 
-  threat model. <u>Only mapped shapes will be parsed into the OTM</u> so here is the place where you need to place the 
+  threat model. <u>Only mapped shapes will be parsed into the OTM</u> so this is the place where you need to place the 
   mappings for everything you want to be processed.
 
 Further details about the mapping behavior may be found in the 
-[Visio-Mapping page](Visio-Mapping.md). Regarding, the usage of StartLeft to converting Visio files,
+[Visio-Mapping page](Visio-Mapping.md). Regarding the usage of StartLeft to converting Visio files,
 you can check the manuals for the 
 [CLI](../../usage/Command-Line-Interface.md) and the [REST API](../../usage/REST-API.md).
 
@@ -65,7 +65,7 @@ like this:
 
 ![img/visio-irius-basic-example.png](img/visio-irius-basic-example.png)
 
-The more usual configuration for performing this conversion is having two mapping files. On one hand, you would have 
+The most usual configuration for performing this conversion is having two mapping files. On one hand, you would have 
 your reusable **default mapping file** that contains mappings for the AWS stencils, with a content like this:
 ```yaml
 trustzones:
@@ -79,6 +79,8 @@ components:
 
   - label:  Database
     type:   rds
+
+dataflows: []
 ```
 
 On the other hand, for this specific request, you need to provide a **custom mapping file** which contains the 
@@ -96,6 +98,8 @@ components:
 
   - label:  My Custom VPC
     type:   empty-component
+
+dataflows: []
 ```
 
 The result of sending to StartLeft this diagram with these mapping files would be an OTM with all the components we 
@@ -232,7 +236,7 @@ curl --location --request POST 'localhost:5000/api/v1/startleft/diagram' \
 --header 'Content-Type: multipart/form-data' \
 --header 'Accept: application/json' \
 --form 'diag_type="VISIO"' \
---form 'diag_file=@"./ec2-cft.json"' \
+--form 'diag_file=@"./visio-basic-example.vsdx"' \
 --form 'default_mapping_file=@"./default-mapping.yaml"' \
 --form 'custom_mapping_file=@"./custom-mapping.yaml"' \
 --form 'id="my-visio-basic-example"' \

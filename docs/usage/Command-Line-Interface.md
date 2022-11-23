@@ -126,5 +126,5 @@ Can create this threat model in IriusRisk:
 
 <p align="center"><img src="https://user-images.githubusercontent.com/78788891/154970903-61442af4-6792-4cd1-8dad-70fb347f5f4d.png"></p>
 
-That remains in the following threats:
+And generates the following threats:
 <p align="center"><img src="https://user-images.githubusercontent.com/78788891/154971033-5480f0b7-0d2f-4f53-83ef-b29c569fec86.png"></p>

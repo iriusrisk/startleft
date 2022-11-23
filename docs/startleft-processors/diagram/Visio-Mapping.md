@@ -1,5 +1,5 @@
 # Visio Mapping
-The greatest challenge for mapping Microsoft Visio files is that it is a completely open format where the user can
+The greatest challenge when mapping Microsoft Visio files is that it is a completely open format where the user can
 place whatever they want. For that reason, the `slp_visio` works with some premises in order to build an OTM file
 with only the necessary information:
 
@@ -8,7 +8,7 @@ with only the necessary information:
 * The only shapes that will be parsed into the OTM components are the ones whose name or type matches some label in the 
   mapping file. The rest of them will be ignored.
 * There is no need to create mappings for the DataFlows, they will be generated from those Visio connectors that 
-  link components that have been also mapped into the OTM.
+  link components that have also been mapped into the OTM.
 * Nested shapes are automatically processed and parsed to the OTM components and TrustZones. There is no need to 
   define parent relationships in the mapping files.
 
@@ -24,18 +24,18 @@ view of StartLeft, those users that use them in their diagrams may reduce a lot 
 build their mappings. This is because the mappings for the stencils can be reused across every request to StartLeft 
 and does not need to be created each time.
 
-Other potential case or mappings reuse are the generic TrustZones. Even you may have some diagrams with specific 
-TrustZones, it is a common case to have a fistful of them that tend to be present in the most of your diagrams. 
+Other potential case or mappings reuse are the generic TrustZones. Even if you may have some diagrams with specific 
+TrustZones, it is a common case to have a fistful of them that tend to be present in most of your diagrams. 
 Thus, you should not need to map them again and again. In conclusion, for all those elements that you do not want to 
 map in each request because are common and reusable, you can build a default mapping file. Indeed, if you are 
-going to use StartLeft in a script or pipeline, you can simply save the default mapping file and inject them in 
-every StartLeft request. So is, for example, how IriusRisk's import processes work.
+going to use StartLeft in a script or pipeline, you can simply save the default mapping file and inject it in 
+every StartLeft request. That is, for example, how IriusRisk's import processes work.
 
 ### Custom mapping file
-This file is used to cover the rest of elements that are not generic, but specific for a concrete diagram. 
+This file is used to cover the rest of elements that are not generic, but specific to a concrete diagram. 
 Remember that only the shapes whose type or name are in the mapping file will be parsed into the OTM so, everything 
 you need to be processed in a Visio file should be in the default or in the custom mapping file. <u>In case the same 
-mapping appears in both mapping files, the one in the custom file has preference</u>.
+mapping appears in both mapping files, the one in the custom file takes preference</u>.
 
 
 ## Mapping file structure
@@ -43,7 +43,7 @@ mapping appears in both mapping files, the one in the custom file has preference
 ---
 The Visio mapping file is expected to be a YAML file whose structure is exactly defined by its
 [json schema](https://github.com/iriusrisk/startleft/blob/main/startleft/resources/schemas/diagram_mapping_schema.json). 
-It is divided in three great blocks described in deep below. So, the root structure of the file is composed by three 
+It is divided in three great blocks described in depth below. So, the root structure of the file is composed by three 
 arrays for the mappings of each type of element:
 
 ```yaml
@@ -52,11 +52,12 @@ components: []
 dataflows: []
 ```
 
-Each of these arrays contains the information for mapping shapes into TrustZones, Components or Dataflows, respectively.
+Each of these arrays contains the information for mapping shapes into TrustZones, Components or Dataflows, respectively. 
+Also note that all three are mandatory and have to be included in each mapping file, even if they only contain an empty array.
 
 ### Mapping TrustZones
 The [OTM standard](../../Open-Threat-Model-(OTM).md) defines that every component in the threat model must have a 
-parent, so you must be sure that the mapping file contains a mapping entry for all the TrustZones present in the 
+parent, so you must make sure that the mapping file contains a mapping entry for all the TrustZones present in the 
 diagram as well as a default one so, if no parent can be calculated for a component, it can fall into this default 
 TrustZone. 
 ```yaml
@@ -93,9 +94,9 @@ ways that are explained in deep in the
 [TrustZones mapping's page](Visio-TrustZones-Mapping.md).
 
 #### Default TrustZone
-Sometimes maybe it is not possible to calculate a parent for a component. Since it necessarily must have one, we 
-need to define a default TrustZone to be used in these cases. At this point, there is no way to configure what is 
-the default TrustZone and <u>the one whose label is _Public Cloud_ will always be selected as the default one</u>. In a 
+Sometimes it may not be possible to calculate a parent for a component. Since it must necessarily have one, we 
+need to define a default TrustZone to be used in these cases. At this point, there is no way to configure which is 
+the default TrustZone and <u>the one whose label is _Public Cloud_ will always be selected as the default one</u>. In the 
 near future, a new attribute will be added to the TrustZone mappings so this could be configurable.  
 
 ### Mapping Components
@@ -145,7 +146,7 @@ components:
     type:   empty-component
 ```
 
-The OTM result would be:
+The resulting OTM would be:
 ```json
 {
   // The ID is the unique id got from the Visio file
@@ -159,8 +160,8 @@ The OTM result would be:
 }
 ```
 
-Finally, it is important to notice that <u>the mapping by name has priority over the mapping by type</u>. So if you 
-include in the default mapping file a mapping for the _My EC2_ component by its name like this:
+Finally, it is important to notice that <u>mapping by name has priority over mapping by type</u>. So if you 
+include mappings in both mapping files for the _My EC2_ component like this:
 ```yaml
 // In the default mapping file
 components:
@@ -173,7 +174,7 @@ components:
     type:   empty-component
 ```
 
-This would result in a OTM like this:
+It would result in a OTM like this:
 ```json
 {
   // The ID is the unique id got from the Visio file
@@ -188,8 +189,8 @@ This would result in a OTM like this:
 ```
 
 ### Mapping DataFlows
-Despite the fact that a `dataflows` tag is already defined in the mapping file structure, the DataFlows mapping 
-process is fixed and not configurable. Basically, it takes all the arrows in the Visio source that connect 
+Despite the fact that a `dataflows` tag is already defined in the mapping file structure, and it is required by the schema,
+the DataFlows mapping process is fixed and not configurable. Basically, it takes all the arrows in the Visio source that connect 
 components that are mapped and create a DataFlow for them. If some arrow connects shapes that are not mapped, the 
 DataFlow is not created. This can be easily understood with the following picture:
 

@@ -111,13 +111,14 @@ Every module must have a common structure and minimum files to work. So let's st
 2. Override the module importer for the module (for preventing forbidden imports among modules) by creating a `slp_mais/__init__.py` 
 file with this content:
 ```python
-###################################################################
-# This folder is not actually intended to be a regular package    #
-# HOWEVER, we need to keep this __init.py__ file in order to      #
-# make it visible by other modules.                               #
-# In future versions, this package should be moved to a lib so    #
+######################################################################
+# This folder is not actually intended to be a regular package       #
+# HOWEVER, we need to keep this __init.py__ file in order to         #
+# make it visible by other modules.                                  #
+# In future versions, this package should be moved to a lib so       #
 # that it will be an independent module instead of a "false" package #
-###################################################################
+######################################################################
+
 # DON'T REMOVE: Module importer overwritten to prevent bidirectional dependencies
 from _sl_build.secure_importer import override_module_importer
 override_module_importer()

@@ -2,14 +2,14 @@
 ## Visio shapes context
 
 ---
-Trustzones in a Visio diagram can be represented in different ways and, in any of them, it does not exist a perfect 
+Trustzones in a Visio diagram can be represented in different ways and, in each of them, it does not exist a perfect 
 method to unambiguously identify the TrustZone to which a component belongs. This page pretends to clarify the 
 different 
 mechanisms used by StartLeft to identify TrustZones and assign components to them during the Visio diagram parsing 
 to an Open Threat Model (OTM).
 
 ### Use of shapely Polygons
-Visio diagrams only has two ways to relate shapes:
+Visio diagrams only have two ways to relate shapes:
 
 * **Connectors between shapes**, that are used to create OTM dataflows.
 
@@ -30,13 +30,13 @@ This would be an example of a Visio diagram and the simplified model we generate
 ![img/shapes-representation.png](img/shapes-representation.png)
 
 The shapely object we use for the Visio shapes representation is the Polygon and an extensive manual of how to manipulate 
-that objects can be found [here](https://shapely.readthedocs.io/en/stable/manual.html).
+those objects can be found [here](https://shapely.readthedocs.io/en/stable/manual.html).
 
 ## TrustZone identification
 
 ---
 We have two ways to identify TrustZones in a Visio diagram that are described below. However, it is important to notice 
-that, regardless the type of TrustZone calculation, **no TrustZone will be included in the OTM if it does not appear in 
+that, regardless of the type of TrustZone calculation, **no TrustZone will be included in the OTM if it does not appear in 
 the mapping file**. If some TrustZone candidate is identified in the Visio diagram, but it is not in the mapping file, 
 the TrustZone will be ignored or processed as a normal component depending on the case.
 
@@ -57,7 +57,7 @@ perform the following steps:
 
 As stated before, Visio does not provide information about if a shape is over or “belongs to“ another one. To solve this, 
 we use the shapely’s `Polygon` representations of each shape. For each shape, we check if it is contained in another one 
-by using the shapely’s `Polygon`'s function `contains(Polygon) -> bool`. This function let us know if some shape contains 
+by using the shapely’s `Polygon`'s function `contains(Polygon) -> bool`. This function lets us know if some shape contains 
 another.
 
 #### Nested components
@@ -71,8 +71,8 @@ contained in the `Public Cloud`, so it is selected as its parent. Finally, the `
 shape, and it is mapped as TrustZone in the mapping file, so it is converted into one.
 
 ### Boundary TrustZone
-> **Note**: The tangent would be more precise than the secant, but given its center point is more difficult from the Visio 
-> data, so we use the secant, whose calculations should be also valid for other types or arcs, like elliptical ones.
+> **Note**: The tangent would be more precise than the secant, but given that its center point is more difficult from the Visio 
+> data, we use the secant, whose calculations should be also valid for other types or arcs, like elliptical ones.
 
 Boundaries are the most common way to delimite TrustZones in a threat model. However, their graphic representation is 
 more lax than the nested shapes, because they simply use arcs to define zones in the diagram. For example:
@@ -81,7 +81,7 @@ more lax than the nested shapes, because they simply use arcs to define zones in
 
 In this case, we need to use the arcs that define the boundaries to generate different zones in the diagram  and then 
 check the shapes that belong to those zones. Anyway, do not forget that, **if a TrustZone is not in the mapping file, it 
-will not be generated. In case of boundary TrustZones, they will be simply ignored**.
+will not be generated. In case of boundary TrustZones, they will simply be ignored**.
 
 #### Supported types of arcs
 > **Note**: <u>This is a relevant limitation</u>.
@@ -128,17 +128,17 @@ the borders of the diagrams, that are essential for the calculations described b
 The first step of the process is translating the Visio angle from the [-pi, pi] range to (0, 2pi] to simplify further 
 calculations using the following expression:
 `angle = angle + 2*pi if angle < 0`
-> **Note**: Notice that Visio angles are given in radians and so they are processed in StartLeft.
+> **Note**: Notice that Visio angles are given in radians and so that is how they are processed in StartLeft.
 
 Once we have the angle normalized, there are two possible cases. The first one is when we have a perfectly vertical or 
 horizontal secant. In this case, we will build a quadrant component (the _Private Secured Cloud_ on the first example of 
 this section). The second case is when the secant is sloped with a certain angle, and we need to calculate the 
-intersection used the formula of the line (the other two cases in the example).
+intersection using the formula of the line (the other two cases in the example).
 
 
 **<u>Quadrant building</u>**
    
-This is the simpliest case. We only have to know the orientation of the arc and then build the quadrant based on 
+This is the simplest case. We only have to know the orientation of the arc and then build the quadrant based on 
 the X or Y value depending on the case. The correspondences between the four possible orientations and the 
 normalized Visio angle are the following:
 
@@ -157,7 +157,7 @@ For each of these orientations, we have a function to determine the points of th
 **<u>Irregular zone building</u>**
 
 In this case we have to calculate the formula of the secant line in order to calculate the point of intersection 
-with the borders of the diagram. For that, the first step is getting the line angle. Notice that it is different to 
+with the borders of the diagram. For that, the first step is getting the line angle. Notice that it is different from 
 the Visio shape angle. For example, in the previous arc figure, the shape angle is pi/4 radians and the secant 
 angle is 0 radians. To get the real angle, we need to perform the following calculation:
 
@@ -175,7 +175,7 @@ def calc_slope_angle(angle):
 
 Then, we calculate the slope with the tangent: `slope = tan(slope_angle)`
 
-Once we have the slope and some point (the `PinX`, `PinY` coordinates), we already can calculate the formulas for 
+Once we have the slope and some point (the `PinX`, `PinY` coordinates), we can already calculate the formulas for 
 getting the Y value from the X and viceversa.
 
 ```python
@@ -187,7 +187,7 @@ def calc_x_formula(slope: float, any_line_point: tuple):
     return lambda y: y / slope + any_line_point[0] - (any_line_point[1] / slope)
 ```
 
-From this point on, the process is similar to the quadrant. In first place, we need to determine the orientation of the arc:
+From this point on, the process is similar to the quadrant. In the first place, we need to determine the orientation of the arc:
 
 * **UPPER_LEFT**: `pi / 4 <= angle <= (3 / 4) * pi` 
 * **UPPER_RIGHT**: `0 <= angle <= pi / 4 or (7 / 4) * pi <= angle <= 2 * pi` 
