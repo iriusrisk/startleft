@@ -71,8 +71,9 @@ contained in the `Public Cloud`, so it is selected as its parent. Finally, the `
 shape, and it is mapped as TrustZone in the mapping file, so it is converted into one.
 
 ### Boundary TrustZone
-> **Note**: The tangent would be more precise than the secant, but given that its center point is more difficult from the Visio 
-> data, we use the secant, whose calculations should be also valid for other types or arcs, like elliptical ones.
+> **Note**: The tangent would be more precise than the secant, but given that its center point is more difficult to 
+> extract from the Visio data, we use the secant, whose calculations should be also valid for other types or arcs, 
+> like elliptical ones.
 
 Boundaries are the most common way to delimite TrustZones in a threat model. However, their graphic representation is 
 more lax than the nested shapes, because they simply use arcs to define zones in the diagram. For example:

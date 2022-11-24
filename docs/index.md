@@ -20,9 +20,10 @@ and share with the community two key resources:
 * **StartLeft**, a tool for automating the conversion from different sources into OTM.
 
 In some cases, StartLeft acts only as a format translator, like in case of diagrams or Threat Model sources, but it has also
-specific and configurable logic for generating Threat Models from Infrastructure as Code (IaC) files, which brings a great 
-advantage reducing the necessary knowledge and manual work required for translating infrastructure into TM, as well as 
-enabling the users to make amazing things like integrating the generation of the TM in a CI/CD pipeline of the actual IaC file.
+specific and configurable logic for generating Threat Models (TMs) from Infrastructure as Code (IaC) files, which 
+brings a great advantage reducing the necessary knowledge and manual work required for translating infrastructure 
+into TM, as well as enabling the users to make amazing things like integrating the generation of the TM in a CI/CD 
+pipeline of the actual IaC file.
 
 StartLeft is currently an Open Source application powered by [IriusRisk](https://www.iriusrisk.com/), that is already using it 
 as an intermediate service for all the imports of new projects from external sources.

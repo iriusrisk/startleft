@@ -99,8 +99,7 @@ it is recommended to follow a common one for every module. The one chosen is spl
 
 At the root level of the StartLeft repository (the same as the other modules) a general tests package is located. Unlike 
 the test packages located inside each module, this one is generic to the entire the StartLeft project and contains integration tests 
-that involves logic belonging to all the modules. By definition, this package can only contain integration tests. The boundaries 
-between this kind of tests and the ones developed by QA is hard to define, but it is clear that they are necessary, at least for now. 
+that involves logic belonging to all the modules. By definition, this package can only contain integration tests. 
 So, **when a new processor or a new important behavior is added to StartLeft, we need to create their associated integration 
 tests at the project level in this package**.
 
@@ -118,8 +117,7 @@ itself takes place.
 <u>Imported by</u>:  Not imported.
 
 <u>Imports</u>: `_sl_build`, `slp_base`, `sl_util`, `otm`. It also imports `slp_cft` and `slp_tf` to support the 
-search function, 
-whose future is under evaluation.
+search function, whose future is under evaluation.
 
 ### sl_util
 This is currently the only module that contains common utilities for the rest of the modules of StartLeft. The `sl` prefix 
@@ -130,7 +128,7 @@ modules or, if not, maybe a new one should be created.
 
 <u>Main responsibilities</u>: Offer general (not processor specific) utilities related to StartLeft.
 
-<u>Imported by</u>:  `startleft`, `slp_base`, SLPs, `otm` (this one should be removed).
+<u>Imported by</u>:  `startleft`, `slp_base`, SLPs, `otm`.
 
 <u>Imports</u>: No imports.
 
