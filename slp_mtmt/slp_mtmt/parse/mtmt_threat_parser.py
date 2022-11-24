@@ -54,7 +54,7 @@ class MTMThreatParser:
                         OtmMitigation(
                             threat.id,
                             get_first_sentence(threat.possible_mitigations),
-                            threat.steps
+                            threat.steps or threat.possible_mitigations
                         )
                     )
 

@@ -5,8 +5,10 @@ class OtmThreat:
     def __init__(self, threat_id, name, category, description=None):
         self.id = threat_id
         self.name = name
-        self.description = description
         self.category = category
+        self.description = description
+        self.likelihood = 100
+        self.impact = 100
 
     def __eq__(self, other):
         return other is not None and type(other) is OtmThreat and self.id == other.id
@@ -15,22 +17,22 @@ class OtmThreat:
         return hash(self.id)
 
     def json(self):
-        result = {
+        json = {
             "name": self.name,
             "id": self.id,
             "categories": [
                 self.category
             ],
             "risk": {
-                "likelihood": 100,
-                "impact": 100
+                "likelihood": self.likelihood,
+                "impact": self.impact
             }
         }
 
         if self.description:
-            result["description"] = self.description
+            json["description"] = self.description
 
-        return result
+        return json
 
 
 class OtmThreatInstance:
@@ -49,14 +51,14 @@ class OtmThreatInstance:
         self.mitigations.append(mitigation)
 
     def json(self):
-        result = {
+        json = {
             "threat": self.threat_id,
-            "state": self.state,
-            "mitigations": []
+            "state": self.state
         }
 
         if len(self.mitigations) > 0:
+            json["mitigations"] = []
             for mitigation in self.mitigations:
-                result["mitigations"].append(mitigation.json())
+                json["mitigations"].append(mitigation.json())
 
-        return result
+        return json

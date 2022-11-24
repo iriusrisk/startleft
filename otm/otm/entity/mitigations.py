@@ -2,8 +2,8 @@ class OtmMitigation:
     def __init__(self, mitigation_id, name, description=None):
         self.id = mitigation_id
         self.name = name
-        self.risk_reduction = 100
         self.description = description
+        self.risk_reduction = 100
 
     def __eq__(self, other):
         return other is not None and type(other) is OtmMitigation and self.id == other.id
@@ -12,16 +12,16 @@ class OtmMitigation:
         return hash(self.id)
 
     def json(self):
-        result = {
+        json = {
             "name": self.name,
             "id": self.id,
             "riskReduction": self.risk_reduction
         }
 
         if self.description:
-            result["description"] = self.description
+            json["description"] = self.description
 
-        return result
+        return json
 
 
 class OtmMitigationInstance:
@@ -36,9 +36,9 @@ class OtmMitigationInstance:
         return hash(self.mitigation_id)
 
     def json(self):
-        result = {
+        json = {
             "mitigation": self.mitigation_id,
             "state": self.state
         }
 
-        return result
+        return json
