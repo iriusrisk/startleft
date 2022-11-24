@@ -89,3 +89,6 @@ curl --location --request POST 'localhost:5000/api/v1/startleft/external-threat-
 --form 'id="my-mtmt-project"' \
 --form 'name="My MTMT project"'
 ```
+
+## Position of the elements
+For details about how we map the position of the elements, please read [MTMT-elements-position.md](MTMT-elements-position.md) 
