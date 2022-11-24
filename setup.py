@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
 
 from startleft.startleft._version.version_scheme import guess_startleft_semver
+from startleft.startleft._version.local_scheme import guess_startleft_semver_suffix
 
 
 setup(
@@ -34,6 +35,7 @@ setup(
     use_scm_version={
         'write_to': 'startleft/version.py',
         'version_scheme': guess_startleft_semver,
+        'local_scheme': guess_startleft_semver_suffix,
         'git_describe_command': 'git describe --tags --long --match *[0-9]*'
     },
     extras_require={
