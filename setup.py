@@ -1,5 +1,8 @@
 from setuptools import setup, find_packages
 
+from startleft.startleft._version.version_scheme import guess_startleft_semver
+
+
 setup(
     name='IriusRisk StartLeft',
     description='Parse Infrastructure as Code files to the Open Threat Model format and upload them to IriusRisk',
@@ -30,7 +33,8 @@ setup(
     ],
     use_scm_version={
         'write_to': 'startleft/version.py',
-        'git_describe_command': 'git describe --tags'
+        'version_scheme': guess_startleft_semver,
+        'git_describe_command': 'git describe --tags --long --match *[0-9]*'
     },
     extras_require={
         "setup": [
