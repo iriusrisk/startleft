@@ -77,7 +77,7 @@ override_module_importer()
 The structure inside it is completely free, and it depends only on the needs of the logic implemented in the module.
 
 #### Test Code Package
-As it has been already stated along this document, each module is a completely independent piece of software. Of course, 
+As has been already stated along this document, each module is a completely independent piece of software. Of course, 
 this also includes that it must also contain its own test code. Since each module has specific responsibilities, these are 
 the only ones that need to be tested from both a unitary and integration perspective. For example, every SLP must 
 have unitary tests for the classes implemented there, but also integration tests that verifies that the whole conversion to 

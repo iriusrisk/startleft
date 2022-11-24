@@ -14,7 +14,7 @@ clarification, please raise an issue in the
 ---
 The documentation shown here applies to the 
 [latest stable version of StartLeft](https://github.com/iriusrisk/startleft/releases). If you want to check the 
-documentation of a previous version or for an ongoing developments, you can do it by checking out the desired branch and 
+documentation of a previous version or for an ongoing development, you can do it by checking out the desired branch and 
 deploying its documentation. To do that, first we need to select the right branch:
 
 * `main` is the branch for the latest stable version.

@@ -60,7 +60,7 @@ This run configuration runs that script in order to execute all the tests for th
 Tests have their own specific section of run configurations with the following subsections.
 
 #### Module tests
-Each StartLeft module (StartLeft Modularized Architecture) has a run configuration to launch its tests. The naming for this run configurations is:
+Each [StartLeft module](Architecture.md) has a run configuration to launch its tests. The naming for this run configurations is:
 
 `[MODULE_NAME][TESTS]` 
 
