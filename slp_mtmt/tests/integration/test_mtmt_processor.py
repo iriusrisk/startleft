@@ -24,6 +24,8 @@ class TestMtmtProcessor:
         assert len(otm.trustzones) == 2
         assert len(otm.components) == 4
         assert len(otm.dataflows) == 6
+        assert len(otm.threats) == 43
+        assert len(otm.mitigations) == 43
 
         # AND the project info is also right
         assert otm.project_id == "id"
@@ -48,21 +50,25 @@ class TestMtmtProcessor:
         assert component.name == 'Accounting PostgreSQL'
         assert component.type == 'CD-MICROSOFT-AZURE-DB-POSTGRESQL'
         assert component.parent == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
+        assert len(component.threats) == 3
         component = otm.components[1]
         assert component.id == '6183b7fa-eba5-4bf8-a0af-c3e30d144a10'
         assert component.name == 'Mobile Client'
         assert component.type == 'android-device-client'
         assert component.parent == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
+        assert len(component.threats) == 2
         component = otm.components[2]
         assert component.id == '5d15323e-3729-4694-87b1-181c90af5045'
         assert component.name == 'Public API v2'
         assert component.type == 'web-service'
         assert component.parent == "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+        assert len(component.threats) == 31
         component = otm.components[3]
         assert component.id == '91882aca-8249-49a7-96f0-164b68411b48'
         assert component.name == 'Azure File Storage'
         assert component.type == 'azure-storage'
         assert component.parent == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
+        assert len(component.threats) == 7
 
         # AND the info inside dataflows is also right
         dataflow = otm.dataflows[0]
