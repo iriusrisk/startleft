@@ -3,36 +3,20 @@ trustzones:
     name: Public Cloud
 
 components:
-  - id: { $format: "{type}.{name}.id" }
-    type: aws_skipped_with_parent
-    name: { $path: "keys(@)[0]" }
+  - type: aws_skipped_with_parent
     $source:
-      $skip: { $root: "resource|get(@, 'aws_skipped_with_parent')" }
+      $skip: { $type: "aws_skipped_with_parent" }
     parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - { $path: "Type" }
 
-  - id: { $format: "{type}.{name}.id" }
-    type: aws_component_without_parent
-    name: { $path: "keys(@)[0]" }
-    $source: { $root: "resource|get(@, 'aws_component_without_parent')" }
-    tags:
-      - { $path: "Type" }
+  - type: aws_component_without_parent
+    $source: { $type: "aws_component_without_parent" }
 
-  - id: { $format: "{type}.{name}.id" }
-    type: aws_skipped_no_parent
-    name: { $path: "keys(@)[0]" }
+  - type: aws_skipped_no_parent
     $source:
-      $skip: { $root: "resource|get(@, 'aws_skipped_no_parent')" }
-    tags:
-      - { $path: "Type" }
+      $skip: { $type: "aws_skipped_no_parent" }
 
-  - id: { $format: "{type}.{name}.id" }
-    type: aws_control
-    name: { $path: "keys(@)[0]" }
-    $source: { $root: "resource|get(@, 'aws_control')" }
+  - type: aws_control
+    $source: { $type: "aws_control" }
     parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - { $path: "Type" }
 
 dataflows: [ ]
