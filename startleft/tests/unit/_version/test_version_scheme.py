@@ -1,6 +1,6 @@
 import pytest
 
-from _version.version_scheme import choose_strategy_by_branch, guess_startleft_semver
+from startleft.startleft._version.version_scheme import choose_strategy_by_branch, guess_startleft_semver
 from .version_mocks import *
 
 
