@@ -10,8 +10,8 @@ Threat Modelling tools.
 
 ---
 
-Automation and integration are the core goals of StartLeft. It was born as an internal project of [IriusRisk](https://www.iriusrisk.com/), whose leader threat 
-modelling tool allows the users to build a whole Threat Model of an application only by depicting its architecture in a diagram.
+Automation and integration are the core goals of StartLeft. It was born as an internal project of [IriusRisk](https://www.iriusrisk.com/), whose leading threat 
+modelling tool allows the users to build a complete Threat Model of an application only by depicting its architecture in a diagram.
 However, there is a bunch of formats in which the architecture (or directly the TM) can be defined. This led [IriusRisk](https://www.iriusrisk.com/) to create
 and share with the community two key resources:
 
@@ -20,9 +20,10 @@ and share with the community two key resources:
 * **StartLeft**, a tool for automating the conversion from different sources into OTM.
 
 In some cases, StartLeft acts only as a format translator, like in case of diagrams or Threat Model sources, but it has also
-specific and configurable logic for generating Threat Models from Infrastructure as Code (IaC) files, which brings a great 
-advantage reducing the necessary knowledge and manual work required for translating infrastructure into TM, as well as 
-enabling the users to make amazing things like integrating the generation of the TM in a CI/CD pipeline of the actual IaC file.
+specific and configurable logic for generating Threat Models (TMs) from Infrastructure as Code (IaC) files, which 
+brings a great advantage reducing the necessary knowledge and manual work required for translating infrastructure 
+into TM, as well as enabling the users to make amazing things like integrating the generation of the TM in a CI/CD 
+pipeline of the actual IaC file.
 
 StartLeft is currently an Open Source application powered by [IriusRisk](https://www.iriusrisk.com/), that is already using it 
 as an intermediate service for all the imports of new projects from external sources.
@@ -48,7 +49,7 @@ Split by type, the currently supported input formats are:
 ---
 
 Simply install the tool and play with its Command Line Interface. You can also set up a REST API with a single command
-and consume it with any REST client as Postman. Anyway, **the best way to start is following the 
+and consume it with any REST client such as Postman. Anyway, **the best way to start is by following the 
 [Quickstart guide for beginners](Quickstart-Guide-for-Beginners.md)**.
 
 ## How can I integrate it?
@@ -65,5 +66,5 @@ Threat Models. **The different ways of integrating StartLeft are described in th
 
 StartLeft is an Open Source application whose modularized architecture based on processors is specially focused
 on simplifying the collaboration for any developer. **If you want to contribute, check out the 
-[Quickstart guide for developers](development/Quickstart-Guide-for-Developers.md)**. Soon will be also available a 
-_Contributing file_ summarizing the basics. 
+[Quickstart guide for developers](development/Quickstart-Guide-for-Developers.md)**. A _Contributing file_ summarizing 
+the basics will also be available soon. 

@@ -1,7 +1,7 @@
 # Create a new StartLeft Processor (SLP)
-As you can see in the [architecture page](Architecture.md) StartLeft Processors (SLPs) are the special kind of 
+As you can see in the [architecture page](Architecture.md) StartLeft Processors (SLPs) are a special kind of 
 modules
-where the conversion into OTM logic is actually implemented. All of them are based in the same interfaces, defined in the 
+where the conversion into OTM logic is actually implemented. All of them are based on the same interfaces, defined in the 
 `slp_base` module. So, if you want to create a new SLP, you simply have to:
 
 * Create your module extending `slp_base`.
@@ -33,12 +33,12 @@ Source (MAIS)_. A sample file of this format could be something like:
 
 We need to define a format for the mappings between the source file and OTM. An example of this mapping file could be:
 > **Note**: Remind that the [OTM standard](../Open-Threat-Model-(OTM).md) forces each component to have a parent.
-> This is the reason because we include this default TrustZone for this example.
+> This is the reason we include this default TrustZone for this example.
 ```yaml
 trustZones:
   - id: public-cloud
-  name: Public Cloud
-  default: true
+    name: Public Cloud
+    default: true
 
 components:
   - source_type: server
@@ -90,7 +90,7 @@ of the rest of the interfaces in the module.
 
 ![img/conversion-process.png](img/conversion-process.png)
 
-In order to implement our sample processor, we need to know the structure of the provided interfaces, that looks like this.
+In order to implement our sample processor, we need to know the structure of the provided interfaces, which looks like this.
 
 ![img/slp_base-interfaces.png](img/slp_base-interfaces.png)
 
@@ -111,13 +111,14 @@ Every module must have a common structure and minimum files to work. So let's st
 2. Override the module importer for the module (for preventing forbidden imports among modules) by creating a `slp_mais/__init__.py` 
 file with this content:
 ```python
-###################################################################
-# This folder is not actually intended to be a regular package    #
-# HOWEVER, we need to keep this __init.py__ file in order to      #
-# make it visible by other modules.                               #
-# In future versions, this package should be moved to a lib so    #
-# that it will be an independent module instead a "false" package #
-###################################################################
+######################################################################
+# This folder is not actually intended to be a regular package       #
+# HOWEVER, we need to keep this __init.py__ file in order to         #
+# make it visible by other modules.                                  #
+# In future versions, this package should be moved to a lib so       #
+# that it will be an independent module instead of a "false" package #
+######################################################################
+
 # DON'T REMOVE: Module importer overwritten to prevent bidirectional dependencies
 from _sl_build.secure_importer import override_module_importer
 override_module_importer()
@@ -126,7 +127,7 @@ from .slp_mais import *
 
 ```
 
-3. Create the production code package, creating a folder `slp_mais/slp_mais` folder with an`__init__.py` file that exports
+3. Create the production code package, creating a folder `slp_mais/slp_mais` with an`__init__.py` file that exports
   the processor we are going to create in the next steps:
 ```python
 from .mais_processor import MAISProcessor
@@ -265,7 +266,7 @@ Create `mais_parser.py` file with the `MAISParser` class implementing `ProviderP
 * The MAIS source.
 * The MAIS mappings.
 
-Here is included almost trivial logic for processing our imaginary format, but this is the class where
+For this example, almost trivial logic for processing our imaginary format is included, but this is the class where
 you would need to actually implement your custom conversion process.
    
 ```python
@@ -371,7 +372,7 @@ Once you have created all the implementations, your slp_module package should ap
 
 ### Testing the SLP
 We have already implemented all the necessary classes to perform the conversion from MAIS to OTM, so let's create a test
-to verify they are working fine.
+to verify that they are working fine.
 
 #### Create the test resources
 We are going to create a single happy path test using the resources from the section where the MAIS format is defined. 
@@ -416,7 +417,6 @@ class TestMAISProcessor:
             sources=[mais_file],
             mappings=[mapping_file]
         ).process()
-
 
         # THEN a valid OTM file matching expected is generated
         assert validate_and_diff(otm, expected_otm, []) == {}

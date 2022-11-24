@@ -111,9 +111,9 @@ the mapping file. Let's see how to do it:
 
 
 ## Dataflows
-No need to be in the mapping file. Startleft will detect them and will fill the OTM dataflow automatically detecting
+No need to be in the mapping file. StartLeft will detect them and will fill the OTM dataflow automatically detecting
 the custom name, the source, and the destination
 ## Threats
-No need to be in the mapping file. Startleft will detect them and will fill the OTM threats automatically
+No need to be in the mapping file. StartLeft will detect them and will fill the OTM threats automatically
 ## Mitigations
-No need to be in the mapping file. Startleft will detect them and will fill the OTM mitigations automatically
+No need to be in the mapping file. StartLeft will detect them and will fill the OTM mitigations automatically

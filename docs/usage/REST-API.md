@@ -1,7 +1,7 @@
 # REST API
 
-StartLeft can also be deployed as a standalone REST server if you prefer the communication via API.
-In this operation mode, StartLeft gives back the OTM file in the HTTP response.
+StartLeft can also be deployed as a standalone REST server if you prefer to communicate via API.
+In this operation mode, StartLeft returns the OTM file in the HTTP response.
 If you want to use the server option on the application:
 
 ```shell
@@ -20,7 +20,7 @@ By executing `startleft server` it is possible to see the command-line messages 
 ```Uvicorn running on http://127.0.0.1:5000 (Press CTRL+C to quit)```
 
 so indicating StartLeft's REST API is ready. You can see the endpoints provided by opening the following URL in a 
-web browser: [http://127.0.0.1:5000/docs](http://127.0.0.1:5000/docs).
+web browser: [http://localhost:5000/docs](http://localhost:5000/docs).
 
 Available endpoints:
 ```

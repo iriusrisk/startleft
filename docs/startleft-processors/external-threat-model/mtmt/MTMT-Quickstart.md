@@ -63,7 +63,7 @@ Request Body:
 ### MTMT file
 The `source_file` field must contain a valid tm7 file.
 
-Startleft supports only the `tm7` format for Microsoft Threat Modeling Tool. 
+StartLeft supports only the `tm7` format for Microsoft Threat Modeling Tool. 
 
 
 ### Default mapping file
