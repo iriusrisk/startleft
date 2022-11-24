@@ -11,7 +11,7 @@ from slp_base import IacFileNotValidError, LoadingIacFileError, MappingFileNotVa
     LoadingMappingFileError, OtmResultError, OtmBuildingError, IacType
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.iac import iac_create_otm_controller
-from tests.resources.test_resource_paths import default_terraform_mapping, \
+from tests.resources.test_resource_paths import terraform_iriusrisk_tf_aws_mapping, \
     terraform_aws_singleton_components_unix_line_breaks, terraform_malformed_mapping_wrong_id, terraform_gz, \
     visio_aws_shapes, invalid_tf, terraform_aws_simple_components, terraform_specific_functions, \
     terraform_mapping_specific_functions, terraform_multiple_files_one, terraform_multiple_files_two
@@ -28,7 +28,7 @@ def get_url():
 
 class TestOtmControllerIaCTerraform:
     tf_file = terraform_aws_simple_components
-    tf_map = default_terraform_mapping
+    tf_map = terraform_iriusrisk_tf_aws_mapping
     wrong_id = terraform_malformed_mapping_wrong_id
     app_json = 'application/json'
     text_yaml = 'text/yaml'
@@ -56,7 +56,7 @@ class TestOtmControllerIaCTerraform:
 
         # And the request files
         iac_file = (filename, open(filename, 'rb'), 'application/json')
-        mapping_file = (default_terraform_mapping, open(default_terraform_mapping, 'r'), 'text/yaml')
+        mapping_file = (terraform_iriusrisk_tf_aws_mapping, open(terraform_iriusrisk_tf_aws_mapping, 'r'), 'text/yaml')
 
         # And the iac_data with custom line breaks
         iac_data = file_utils.get_byte_data(filename).decode().replace('\n', break_line)
@@ -377,7 +377,7 @@ class TestOtmControllerIaCTerraform:
         iac_file_two = (
             terraform_multiple_files_two, open(terraform_multiple_files_two, 'r'),
             'application/json')
-        mapping_file = (default_terraform_mapping, open(default_terraform_mapping, 'r'), 'text/yaml')
+        mapping_file = (terraform_iriusrisk_tf_aws_mapping, open(terraform_iriusrisk_tf_aws_mapping, 'r'), 'text/yaml')
 
         # When I do post on terraform endpoint
         files = [('iac_file', iac_file_one), ('iac_file', iac_file_two), ('mapping_file', mapping_file)]
@@ -406,7 +406,7 @@ class TestOtmControllerIaCTerraform:
             terraform_multiple_files_one, open(terraform_multiple_files_one, 'r'),
             'application/json')
         iac_file_invalid = ''
-        mapping_file = (default_terraform_mapping, open(default_terraform_mapping, 'r'), 'text/yaml')
+        mapping_file = (terraform_iriusrisk_tf_aws_mapping, open(terraform_iriusrisk_tf_aws_mapping, 'r'), 'text/yaml')
 
         files = [('iac_file', iac_file_valid), ('iac_file', iac_file_invalid), ('mapping_file', mapping_file)]
         body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}

@@ -4,7 +4,7 @@ from startleft.startleft._version.version_scheme import guess_startleft_semver
 
 
 setup(
-    name='IriusRisk StartLeft',
+    name='startleft',
     description='Parse Infrastructure as Code files to the Open Threat Model format and upload them to IriusRisk',
     license='Apache2',
     author='Fraser Scott',
