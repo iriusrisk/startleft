@@ -4,7 +4,22 @@ import uuid
 from slp_tf.slp_tf.parse.mapping.mappers.tf_base_mapper import TerraformBaseMapper
 
 
+def get_children(mapping):
+    children = mapping.get("$source", {}).get("$children", None)
+    if not children:
+        children = mapping.get("$children", None)
+
+    return children
+
+
 class TerraformComponentMapper(TerraformBaseMapper):
+
+    def __init__(self, mapping, default_trustzone):
+        super(TerraformComponentMapper, self).__init__(mapping)
+        # Set the "b61d6911-338d-46a8-9f39-8dcd24abfe91" if default_trustzone none exist in mapping file
+        # for giving compatibility with the verbose IR mapping file
+        self.default_trustzone = default_trustzone or "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+
     def run(self, source_model, id_parents):
         """
         Iterates through the source model and returns the parameters to create the components
@@ -16,9 +31,10 @@ class TerraformComponentMapper(TerraformBaseMapper):
 
         source_objects = self.format_source_objects(source_model.search(self.mapping["$source"], source=None))
         mapping_name, mapping_tags = self.get_mappings_for_name_and_tags(self.mapping)
+        component_type = self.mapping["type"]
 
         for source_object in source_objects:
-            component_type = source_model.search(self.mapping["type"], source=source_object)
+            source_object['type'] = component_type
             component_name, singleton_multiple_name = self.__get_component_names(source_model, source_object,
                                                                                  mapping_name)
             parent_names, parents_from_component = self.__get_parent_names(source_model, source_object, id_parents,
@@ -46,7 +62,8 @@ class TerraformComponentMapper(TerraformBaseMapper):
                     if self.repeated_type4_hub_definition_component(self.mapping, self.id_map, component_name):
                         continue
 
-                    component_ids = self.__generate_id(source_model, base_component, component_name, parent_name_number)
+                    component_ids = self.__generate_id(
+                        source_model, {**source_object, **base_component}, component_name, parent_name_number)
 
                     if isinstance(component_ids, str):
                         component_ids = [component_ids]
@@ -56,7 +73,7 @@ class TerraformComponentMapper(TerraformBaseMapper):
                         component["id"] = component_id
 
                         # If the component is defining child components the ID must be saved in a parent dict
-                        if "$children" in self.mapping["$source"]:
+                        if get_children(self.mapping):
                             self.__add_child_to_parent_list(source_model, source_object, component_id, id_parents)
                         elif "$skip" not in self.mapping["$source"] and "$parent" in self.mapping["parent"]:
                             # $parent and $children are related mappings
@@ -82,7 +99,7 @@ class TerraformComponentMapper(TerraformBaseMapper):
     def __add_child_to_parent_list(self, source_model, source_object, parent_id, id_parents):
         self.logger.debug("Component is defining child components...")
         child_id = str(uuid.uuid4())
-        child_name = source_model.search(self.mapping["$source"]["$children"], source=source_object)
+        child_name = source_model.search(get_children(self.mapping), source=source_object)
 
         self.__add_child_to_childs_map(child_id, child_name)
 
@@ -107,6 +124,17 @@ class TerraformComponentMapper(TerraformBaseMapper):
         elif isinstance(self.id_map[child_name], list):
             self.id_map[child_name].append(child_id)
 
+    def __default_alt_source_mapping_lookups_template(self):
+        return {
+            "type": self.mapping["type"],
+            "name": f'{self.mapping["type"]} from altsource',
+            "tags": [{
+                "$numberOfSources":
+                    {"oneSource": {"$path": "resource_type"},
+                     "multipleSource": {"$format": "{resource_name} ({resource_type})"}}
+            }]
+        }
+
     def __get_alt_source_components(self, source_model) -> []:
         self.logger.debug("No components found. Trying to find components from alternative source")
         alt_source = self.mapping["$altsource"]
@@ -122,11 +150,12 @@ class TerraformComponentMapper(TerraformBaseMapper):
                 value = self.get_altsource_mapping_path_value(source_model, alt_source_object, mapping_path)
 
                 for mapping_lookup in mapping_lookups:
+                    mapping_lookup = {**self.__default_alt_source_mapping_lookups_template(), **mapping_lookup}
                     result = re.match(mapping_lookup["regex"], value)
 
                     if result is not None:
-                        if self.DEFAULT_TRUSTZONE not in self.id_map:
-                            self.id_map[self.DEFAULT_TRUSTZONE] = str(uuid.uuid4())
+                        if self.default_trustzone not in self.id_map:
+                            self.id_map[self.default_trustzone] = str(uuid.uuid4())
 
                         mapping_name, mapping_tags = self.get_mappings_for_name_and_tags(mapping_lookup)
                         component_name, singleton_multiple_name = self.__get_component_names(source_model,
@@ -138,7 +167,7 @@ class TerraformComponentMapper(TerraformBaseMapper):
                         alt_source_object['altsource'] = True
 
                         component = {"id": str(uuid.uuid4()), "name": component_name,
-                                     "type": mapping_lookup["type"], "parent": self.id_map[self.DEFAULT_TRUSTZONE],
+                                     "type": mapping_lookup["type"], "parent": self.id_map[self.default_trustzone],
                                      "source": alt_source_object}
 
                         component = self.set_optional_parameters_to_resource(component, mapping_tags,
@@ -165,7 +194,8 @@ class TerraformComponentMapper(TerraformBaseMapper):
         if "name" in self.mapping:
             source_component_name = self.get_first_element_from_list(source_model.search(mapping, source=source_object))
             if self.is_terraform_variable_reference(source_component_name):
-                source_component_name = self.format_terraform_variable(source_model, source_object, source_component_name)
+                source_component_name = self.format_terraform_variable(
+                    source_model, source_object, source_component_name)
             elif self.is_terraform_resource_reference(source_component_name):
                 source_component_name = self.get_resource_name_from_resource_reference(source_component_name)
 
@@ -233,8 +263,7 @@ class TerraformComponentMapper(TerraformBaseMapper):
         return c_tags, c_multiple_tags
 
     def __multiple_sources_mapping_inside(self, mapping_definition):
-        return "$singleton" in self.mapping["$source"] and \
-               len(list(filter(lambda obj: "$numberOfSources" in obj, mapping_definition))) > 0
+        return len(list(filter(lambda obj: "$numberOfSources" in obj, mapping_definition))) > 0
 
     def __get_parent_names(self, source_model, source_object, id_parents, component_name):
         # Retrieves a list of parent resource names (components or trustZones) of the element.
@@ -284,19 +313,19 @@ class TerraformComponentMapper(TerraformBaseMapper):
 
         if isinstance(parent, list):
             if len(parent) == 0:
-                parent = [self.DEFAULT_TRUSTZONE]
+                parent = [self.default_trustzone]
             for index, resource_id in enumerate(parent):
                 if self.is_terraform_resource_reference(resource_id):
                     parent[index] = self.get_resource_name_from_resource_reference(resource_id)
         if isinstance(parent, str):
             if parent == "":
-                parent = [self.DEFAULT_TRUSTZONE]
+                parent = [self.default_trustzone]
             else:
                 parent = [self.get_resource_name_from_resource_reference(parent)
                           if self.is_terraform_resource_reference(parent) else parent]
 
         if parent is None:
-            parent = [self.DEFAULT_TRUSTZONE]
+            parent = [self.default_trustzone]
 
         return parent, parents_from_component
 

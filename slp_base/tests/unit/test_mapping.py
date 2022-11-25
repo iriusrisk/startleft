@@ -35,7 +35,7 @@ class TestMapping(TestCase):
 
     def test_mapping_file_validator_invalid_schema(self):
         mapping_file_schema = 'etm_mapping_schema.json'
-        mapping_file = test_resource_paths.default_terraform_mapping
+        mapping_file = test_resource_paths.tf_mapping
 
         with open(mapping_file) as file:
             mapping_file_data = file.read()
