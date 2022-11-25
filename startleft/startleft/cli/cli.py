@@ -6,7 +6,7 @@ import sys
 import click
 
 from _sl_build.modules import PROCESSORS
-from otm.otm.otm import OTM
+from otm.otm.entity.otm import Otm
 from sl_util.sl_util.file_utils import get_data
 from slp_base import CommonError
 from slp_base import DiagramType, OtmGenerationError
@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 provider_resolver = ProviderResolver(PROCESSORS)
 
 
-def get_otm_as_file(otm: OTM, out_file: str):
+def get_otm_as_file(otm: Otm, out_file: str):
     logger.info(f"Writing OTM file to '{out_file}'")
     try:
         with open(out_file, "w") as f:

@@ -1,9 +1,9 @@
 import re
 from enum import Enum
 
-from otm.otm.entity.mitigations import OtmMitigation, OtmMitigationInstance
-from otm.otm.entity.threats import OtmThreat, OtmThreatInstance
-from otm.otm.otm import Component
+from otm.otm.entity.mitigation import OtmMitigation, OtmMitigationInstance
+from otm.otm.entity.threat import OtmThreat, OtmThreatInstance
+from otm.otm.entity.component import OtmComponent
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_threatinstance import MTMThreat
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
 
@@ -21,8 +21,8 @@ def get_first_sentence(message: str):
     return message.split(".")[0]
 
 
-def add_threat_to_component(threat: MTMThreat, threat_instance: OtmThreatInstance, components: [Component]):
-    component: Component = next(
+def add_threat_to_component(threat: MTMThreat, threat_instance: OtmThreatInstance, components: [OtmComponent]):
+    component: OtmComponent = next(
         (component for component in components if component.id == threat.destination_component_id), None)
 
     if component is not None:
@@ -33,7 +33,7 @@ class MTMThreatParser:
     def __init__(self, source: MTMT):
         self.__source = source
 
-    def parse(self, components: [Component]):
+    def parse(self, components: [OtmComponent]):
         threats: [OtmThreat] = []
         mitigations: [OtmMitigation] = []
 

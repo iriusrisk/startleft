@@ -1,8 +1,8 @@
 import pytest
 
-from otm.otm.entity.mitigations import OtmMitigation, OtmMitigationInstance
-from otm.otm.entity.threats import OtmThreat, OtmThreatInstance
-from otm.otm.otm import Component
+from otm.otm.entity.mitigation import OtmMitigation, OtmMitigationInstance
+from otm.otm.entity.threat import OtmThreat, OtmThreatInstance
+from otm.otm.entity.component import OtmComponent
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_threatinstance import MTMThreat
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT, MTMKnowledge
 from slp_mtmt.slp_mtmt.parse.mtmt_threat_parser import MTMThreatParser, get_threat_description, \
@@ -177,10 +177,10 @@ class TestMTMThreatParser:
         "riskReduction": 100
     }
     components = [
-        Component(
-            id="ff5f3e59-caa6-464c-8b3e-528d6a3dbfbb",
+        OtmComponent(
+            component_id="ff5f3e59-caa6-464c-8b3e-528d6a3dbfbb",
             name="Micro-Batch (Managed App)",
-            type="web-application-server-side",
+            component_type="web-application-server-side",
             parent="2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
             parent_type="trustZone",
             properties={
@@ -269,10 +269,10 @@ class TestMTMThreatParser:
     ])
     def test_parse_mtmt_azure(self, mtmt_threat, expected_mitigation):
         components = [
-            Component(
-                id="ff5f3e59-caa6-464c-8b3e-528d6a3dbfbb",
+            OtmComponent(
+                component_id="ff5f3e59-caa6-464c-8b3e-528d6a3dbfbb",
                 name="Micro-Batch (Managed App)",
-                type="web-application-server-side",
+                component_type="web-application-server-side",
                 parent="2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
                 parent_type="trustZone",
                 properties={

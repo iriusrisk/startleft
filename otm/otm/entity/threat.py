@@ -1,4 +1,4 @@
-from otm.otm.entity.mitigations import OtmMitigationInstance
+from otm.otm.entity.mitigation import OtmMitigationInstance
 
 
 class OtmThreat:

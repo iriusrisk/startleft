@@ -4,7 +4,9 @@ from slp_visio.slp_visio.parse.diagram_pruner import DiagramPruner
 from slp_visio.slp_visio.parse.mappers.diagram_component_mapper import DiagramComponentMapper
 from slp_visio.slp_visio.parse.mappers.diagram_connector_mapper import DiagramConnectorMapper
 from slp_visio.slp_visio.parse.mappers.diagram_trustzone_mapper import DiagramTrustzoneMapper
-from otm.otm.otm import Component, Dataflow, Trustzone
+from otm.otm.entity.dataflow import OtmDataflow
+from otm.otm.entity.component import OtmComponent
+from otm.otm.entity.trustzone import OtmTrustzone
 from otm.otm.otm_builder import OtmBuilder
 from slp_base import ProviderParser
 
@@ -44,7 +46,7 @@ class VisioParser(ProviderParser):
     def __map_dataflows(self):
         return DiagramConnectorMapper(self.diagram.connectors).to_otm()
 
-    def __build_otm(self, trustzones: [Trustzone], components: [Component], dataflows: [Dataflow]):
+    def __build_otm(self, trustzones: [OtmTrustzone], components: [OtmComponent], dataflows: [OtmDataflow]):
         otm_builder = OtmBuilder(self.project_id, self.project_name, self.diagram.diagram_type) \
             .add_trustzones(trustzones) \
             .add_components(components) \
