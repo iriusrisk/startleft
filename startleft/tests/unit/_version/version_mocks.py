@@ -47,6 +47,9 @@ BUGFIX_VERSION = Mock(
 DEV_RTP_VERSION = Mock(
     branch='dev', tag='1.6.0rc1', distance=19, exact=False, node='g17d9f68')
 
+DEV_RTP_NO_DISTANCE_VERSION = Mock(
+    branch='dev', tag='1.6.0rc1', distance=0, exact=True, node='g17d9f68')
+
 # TODO: Review
 DEV_RP_VERSION = Mock(
     branch='dev', tag='1.6.0', distance=5, exact=False, node='g24d9a41')

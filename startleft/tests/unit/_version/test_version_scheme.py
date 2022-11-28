@@ -39,6 +39,7 @@ class TestVersionScheme:
         (BUGFIX_VERSION, '1.6.0rc1.dev1'),
         # DEV
         (DEV_RTP_VERSION, '1.7.0.dev19'),
+        (DEV_RTP_NO_DISTANCE_VERSION, '1.7.0'),
         (DEV_RP_VERSION, '1.7.0.dev5'),
         # FEATURE
         (FEATURE_RTP_VERSION, '1.7.0.dev3'),
@@ -53,6 +54,7 @@ class TestVersionScheme:
             'test_release_version_bugfix',
             'test_bugfix_version',
             'test_dev_rtp_version',
+            'test_dev_rtp_no_distance_version',
             'test_dev_rp_version',
             'test_feature_rtp_version',
             'test_feature_rp_version',

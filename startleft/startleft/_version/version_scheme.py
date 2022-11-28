@@ -51,6 +51,7 @@ def _patch_version_dev_commit_strategy(scm_version) -> str:
     """
     return __build_dev_version(
         semver=__increment_version(str(scm_version.tag), PATCH_VERSION_POSITION),
+        exact=scm_version.exact,
         distance=scm_version.distance
     )
 
@@ -65,6 +66,7 @@ def _tag_version_dev_commit_strategy(scm_version) -> str:
     """
     return __build_dev_version(
         semver=str(scm_version.tag),
+        exact=scm_version.exact,
         distance=scm_version.distance
     )
 
@@ -80,12 +82,16 @@ def _minor_version_dev_commit_strategy(scm_version) -> str:
 
     return __build_dev_version(
         semver=__increment_version(semver, MINOR_VERSION_POSITION),
+        exact=scm_version.exact,
         distance=scm_version.distance
     )
 
 
-def __build_dev_version(semver: str, distance: int):
-    return f'{semver}.dev{distance}'
+def __build_dev_version(semver: str, exact: bool, distance: int):
+    if exact or not distance:
+        return semver
+    else:
+        return f'{semver}.dev{distance}'
 
 
 def __increment_version(semver: str, position: int):
