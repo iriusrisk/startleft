@@ -5,13 +5,13 @@
 A source mapping file (or 'mapping file' for short) describe how to identify components, dataflows, trust zones, 
 threats and mitigations in source file and how to map them to the OTM equivalent.
 
-Let's see howto identify the different elements:
+Let's see how to identify the different elements:
 
 
 ## Trustzones
-For the trust zones we need to write two fields: ``label`` and ``id``
+For the trust zones we need to write two fields: ``label`` and ``type``
 
-The label will identify the MTMT trust zone by its type. 
+The label will identify the MTMT trust zone by its MTMT type. 
 
 Let's see an example with a trust zone in the MTMT_example.tm7
 
@@ -26,19 +26,24 @@ Our trustzone named ``Internet`` is of ``Generic Trust Border Boundary`` type.
 So we need to put this
 type in the label value.
 
-The id in the mapping file will be the id in the OTM trust zone output
+The type in the mapping file will be the type in the OTM trust zone output.
+In this example, the `Generic Trust Border Boundary` source trust zones
+will be mapped to a OTM trust zone which type will be `public`
 
 ```yaml
   - label: Generic Trust Border Boundary
-    id: 6376d53e-6461-412b-8e04-7b3fe2b397de
+    type:  public
 ```
+
+In the OTM each trust zone will have a unique id 
 
 The trust zone OTM output will be:
 ```json
   {"trustZones": [
     {
-      "id": "6376d53e-6461-412b-8e04-7b3fe2b397de",
+      "id": "7537441a-1c03-48c0-b9c8-f82d5906c139",
       "name": "Internet",
+      "type": "public",
       "risk": {
         "trustRating": 10
       },
@@ -48,6 +53,41 @@ The trust zone OTM output will be:
     }]}
 ```
 
+In case we have two trust zones with the same type, the OTM will have two trust zones
+with the same type but different id. In the mapping file is enough having mapped once:
+```yaml
+  - label: Generic Trust Border Boundary
+    type: public
+```
+
+With two trust zones of the same type the OTM output will be:
+```json
+  {"trustZones": [
+  {
+    "id": "7537441a-1c03-48c0-b9c8-f82d5906c139",
+    "name": "Internet",
+    "type": "public",
+    "risk": {
+      "trustRating": 10
+    },
+    "properties": {
+      "Name": "Internet"
+    }
+  },
+  {
+    "id": "bd837730-6a59-11ed-a798-772dcc832e1d",
+    "name": "Public zone",
+    "type": "public",
+    "risk": {
+      "trustRating": 10
+    },
+    "properties": {
+      "Name": "Public zone"
+    }
+  }
+]}
+```
+The id of the trust zone in the OTM will be the MTMT original component id in the source file
 
 ## Components
 For the components we need to write two fields: ``label`` and ``type``

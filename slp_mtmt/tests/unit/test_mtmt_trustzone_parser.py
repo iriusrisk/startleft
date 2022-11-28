@@ -31,11 +31,13 @@ class TestMTMTTrustzoneParser:
 
         assert len(trustzones) == 2
         trustzone = trustzones[0]
-        assert trustzone.id == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
+        assert trustzone.id == '75605184-4ca0-43be-ba4c-5fa5ad15e367'
         assert trustzone.name == 'Internet'
+        assert trustzone.type == 'internet'
         trustzone = trustzones[1]
-        assert trustzone.id == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
+        assert trustzone.id == '24cdf4da-ac7f-4a35-bab0-29256d4169bf'
         assert trustzone.name == 'Private Secured Cloud'
+        assert trustzone.type == 'private-secured'
 
     def test_parse_default_trustzones(self):
         # GIVEN the Mtmt data
@@ -50,11 +52,13 @@ class TestMTMTTrustzoneParser:
 
         assert len(trustzones) == 2
         trustzone = trustzones[0]
-        assert trustzone.id == '6376d53e-6461-412b-8e04-7b3fe2b397de'
+        assert trustzone.id == '283137d7-a5f8-4433-a1e3-85cfce467eaf'
         assert trustzone.name == 'The Generic Trust Border Boundary'
+        assert trustzone.type == 'public'
         trustzone = trustzones[1]
-        assert trustzone.id == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
+        assert trustzone.id == '2d580de4-73e2-4dc7-8b77-d4ac347454a3'
         assert trustzone.name == 'The CorpNet Trust Boundary'
+        assert trustzone.type == 'private-secured'
 
 
     def test_parse_unmapped_trustzones(self):
@@ -70,6 +74,7 @@ class TestMTMTTrustzoneParser:
 
         assert len(trustzones) == 1
         trustzone = trustzones[0]
-        assert trustzone.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+        assert trustzone.id == '128499a2-a137-450a-be99-c8ee519a66d6'
         assert trustzone.name == 'Internet Explorer Boundaries'
+        assert trustzone.type == 'public-cloud'
 
