@@ -31,12 +31,11 @@ class DiagramComponent:
     def __str__(self) -> str:
         return '{id: ' + str(self.id) + ', ' \
                + 'name: ' + self.name + ', ' \
-               + 'parent_id: ' + self.name + '}'
+               + 'parent_id: ' + str(self.parent.id if self.parent else None) + '}'
 
     def __repr__(self) -> str:
-        return '{id: ' + str(self.id) + ', ' \
-               + 'name: ' + self.name + ', ' \
-               + 'parent_id: ' + self.name + '}'
+        return self.__str__()
+
 
 
 class DiagramConnector:

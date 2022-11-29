@@ -1,47 +1,22 @@
+from pytest import mark
+
 from sl_util.sl_util.file_utils import get_data
 from slp_base.tests.util.otm import check_otm_representations_size, check_otm_trustzone, public_cloud_id, \
-    public_cloud_name, check_otm_component, check_otm_dataflow, private_secured_id, private_secured_name, internet_id, \
-    internet_name
+    public_cloud_name, check_otm_component, check_otm_dataflow, public_cloud_type, private_secured_type, internet_type
 from slp_visio.slp_visio.visio_processor import VisioProcessor
 from slp_visio.tests.resources import test_resource_paths
 
 
 class TestVisioProcessor:
-    def test_empty_mapping_file(self):
-        visio_file = open(test_resource_paths.visio_aws_shapes, "r")
-        otm = VisioProcessor(
-            "project-id",
-            "project-name",
-            visio_file,
-            [get_data(test_resource_paths.empty_mapping)],
-        ).process()
 
-        assert len(otm.trustzones) == 0
-        assert len(otm.components) == 0
-        assert len(otm.dataflows) == 0
-
-    def test_empty_visio_file(self):
-        visio_file = open(test_resource_paths.visio_empty, "r")
-        otm = VisioProcessor(
-            "project-id",
-            "project-name",
-            visio_file,
-            [get_data(test_resource_paths.default_visio_mapping)],
-        ).process()
-
-        assert len(otm.trustzones) == 1
-        assert len(otm.components) == 0
-        assert len(otm.dataflows) == 0
-        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
-
-    def test_empty_mapping_and_visio_files(self):
-        visio_file = open(test_resource_paths.visio_empty, "r")
-        otm = VisioProcessor(
-            "project-id",
-            "project-name",
-            visio_file,
-            [get_data(test_resource_paths.empty_mapping)],
-        ).process()
+    @mark.parametrize('vsdx,mapping', [
+        (test_resource_paths.visio_aws_shapes, test_resource_paths.empty_mapping),
+        (test_resource_paths.visio_empty, test_resource_paths.default_visio_mapping),
+        (test_resource_paths.visio_empty, test_resource_paths.empty_mapping)
+    ])
+    def test_empties(self, vsdx, mapping):
+        visio_file = open(vsdx, "r")
+        otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
 
         assert len(otm.trustzones) == 0
         assert len(otm.components) == 0
@@ -62,7 +37,7 @@ class TestVisioProcessor:
 
         check_otm_representations_size(otm)
 
-        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
+        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_type, public_cloud_name)
 
         check_otm_component(otm, 0, 'ec2', 'Amazon EC2')
         check_otm_component(otm, 1, 'ec2', 'Custom machine')
@@ -90,7 +65,7 @@ class TestVisioProcessor:
 
         check_otm_representations_size(otm)
 
-        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
+        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_type, public_cloud_name)
 
         check_otm_component(otm, 0, 'empty-component', 'Custom enterprise GW')
         check_otm_component(otm, 1, 'empty-component', 'Custom web server')
@@ -110,7 +85,7 @@ class TestVisioProcessor:
 
         check_otm_representations_size(otm)
 
-        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
+        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_type, public_cloud_name)
 
         check_otm_component(otm, 0, 'empty-component', 'Custom enterprise GW')
         check_otm_component(otm, 1, 'empty-component', 'Custom web server')
@@ -130,8 +105,8 @@ class TestVisioProcessor:
 
         check_otm_representations_size(otm)
 
-        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
-        check_otm_trustzone(otm, 1, private_secured_id, private_secured_name)
+        check_otm_trustzone(otm, 0, '47', public_cloud_type, 'Public Cloud')
+        check_otm_trustzone(otm, 1, '48', private_secured_type, 'Private Secured Cloud')
 
         check_otm_component(otm, 0, 'ec2', 'Amazon EC2')
         check_otm_component(otm, 1, 'ec2', 'Custom machine')
@@ -159,11 +134,11 @@ class TestVisioProcessor:
 
         check_otm_representations_size(otm)
 
-        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
-        check_otm_trustzone(otm, 1, private_secured_id, private_secured_name)
+        check_otm_trustzone(otm, 0, '62', public_cloud_type, 'Public Cloud')
+        check_otm_trustzone(otm, 1, '64', private_secured_type, 'Private Secured Cloud')
 
-        check_otm_component(otm, 0, 'ec2', 'Custom machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 1, 'rds', 'Private Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
+        check_otm_component(otm, 0, 'ec2', 'Custom machine', '62')
+        check_otm_component(otm, 1, 'rds', 'Private Database', '64')
 
         check_otm_dataflow(otm, 0, '12', '30')
 
@@ -182,11 +157,11 @@ class TestVisioProcessor:
 
         check_otm_representations_size(otm)
 
-        check_otm_trustzone(otm, 0, private_secured_id, private_secured_name)
-        check_otm_trustzone(otm, 1, public_cloud_id, public_cloud_name)
+        check_otm_trustzone(otm, 0, '64', private_secured_type, 'Private Secured Cloud')
+        check_otm_trustzone(otm, 1, '804b664a-7129-4a9e-a08c-16a99669f605', public_cloud_type, 'Public Cloud')
 
-        check_otm_component(otm, 0, 'ec2', 'Custom machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 1, 'rds', 'Private Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
+        check_otm_component(otm, 0, 'ec2', 'Custom machine', '804b664a-7129-4a9e-a08c-16a99669f605')
+        check_otm_component(otm, 1, 'rds', 'Private Database', '64')
 
         check_otm_dataflow(otm, 0, '12', '30')
 
@@ -205,11 +180,11 @@ class TestVisioProcessor:
 
         check_otm_representations_size(otm)
 
-        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
-        check_otm_trustzone(otm, 1, private_secured_id, private_secured_name)
+        check_otm_trustzone(otm, 0, '62', public_cloud_type, 'Public Cloud')
+        check_otm_trustzone(otm, 1, '64', private_secured_type, 'Private Secured Cloud')
 
-        check_otm_component(otm, 0, 'ec2', 'Custom machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 1, 'rds', 'Private Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
+        check_otm_component(otm, 0, 'ec2', 'Custom machine', '62')
+        check_otm_component(otm, 1, 'rds', 'Private Database', '64')
 
         check_otm_dataflow(otm, 0, '12', '30')
 
@@ -222,18 +197,17 @@ class TestVisioProcessor:
             [get_data(test_resource_paths.default_visio_mapping)],
         ).process()
 
-        assert len(otm.trustzones) == 3
+        assert len(otm.trustzones) == 2
         assert len(otm.components) == 2
         assert len(otm.dataflows) == 1
 
         check_otm_representations_size(otm)
 
-        check_otm_trustzone(otm, 0, internet_id, internet_name)
-        check_otm_trustzone(otm, 1, private_secured_id, private_secured_name)
-        check_otm_trustzone(otm, 2, public_cloud_id, public_cloud_name)
+        check_otm_trustzone(otm, 0, '66', internet_type, 'Internet')
+        check_otm_trustzone(otm, 1, '64', private_secured_type, 'Private Secured Cloud')
 
-        check_otm_component(otm, 0, 'ec2', 'Custom machine', 'f0ba7722-39b6-4c81-8290-a30a248bb8d9')
-        check_otm_component(otm, 1, 'rds', 'Private Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
+        check_otm_component(otm, 0, 'ec2', 'Custom machine', '66')
+        check_otm_component(otm, 1, 'rds', 'Private Database', '64')
 
         check_otm_dataflow(otm, 0, '12', '30')
 
@@ -252,13 +226,13 @@ class TestVisioProcessor:
 
         check_otm_representations_size(otm)
 
-        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
-        check_otm_trustzone(otm, 1, private_secured_id, private_secured_name)
-        check_otm_trustzone(otm, 2, internet_id, internet_name)
+        check_otm_trustzone(otm, 0, '62', public_cloud_type, 'Public Cloud')
+        check_otm_trustzone(otm, 1, '64', private_secured_type, 'Private Secured Cloud')
+        check_otm_trustzone(otm, 2, '70', internet_type, 'Internet')
 
-        check_otm_component(otm, 0, 'ec2', 'Custom machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 1, 'rds', 'Private Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
-        check_otm_component(otm, 2, 'ec2', 'Internet Machine', 'f0ba7722-39b6-4c81-8290-a30a248bb8d9')
+        check_otm_component(otm, 0, 'ec2', 'Custom machine', '62')
+        check_otm_component(otm, 1, 'rds', 'Private Database', '64')
+        check_otm_component(otm, 2, 'ec2', 'Internet Machine', '70')
 
         check_otm_dataflow(otm, 0, '12', '30')
         check_otm_dataflow(otm, 1, '65', '30')
@@ -278,8 +252,8 @@ class TestVisioProcessor:
 
         check_otm_representations_size(otm)
 
-        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
-        check_otm_trustzone(otm, 1, private_secured_id, private_secured_name)
+        check_otm_trustzone(otm, 0, '47', public_cloud_type, 'Public Cloud')
+        check_otm_trustzone(otm, 1, '48', private_secured_type, 'Private Secured Cloud')
 
         check_otm_component(otm, 0, 'ec2', 'Amazon EC2')
         check_otm_component(otm, 1, 'ec2', 'Custom machine')
@@ -307,7 +281,7 @@ class TestVisioProcessor:
 
         check_otm_representations_size(otm)
 
-        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
+        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_type, public_cloud_name)
 
         check_otm_component(otm, 0, 's3', 'Bucket')
         check_otm_component(otm, 1, 's3', 'Bucket')
@@ -337,14 +311,14 @@ class TestVisioProcessor:
 
         check_otm_representations_size(otm)
 
-        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
+        check_otm_trustzone(otm, 0, '804b664a-7129-4a9e-a08c-16a99669f605', public_cloud_type, 'Public Cloud')
 
-        check_otm_component(otm, 0, 'ec2', 'Amazon EC2', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 1, 'ec2', 'Amazon EC2', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 2, 'ec2', 'Amazon EC2', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 3, 'vpc', 'Amazon VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 4, 'vpc', 'Amazon VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 5, 'vpc', 'Amazon VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 0, 'ec2', 'Amazon EC2', '804b664a-7129-4a9e-a08c-16a99669f605')
+        check_otm_component(otm, 1, 'ec2', 'Amazon EC2', '804b664a-7129-4a9e-a08c-16a99669f605')
+        check_otm_component(otm, 2, 'ec2', 'Amazon EC2', '804b664a-7129-4a9e-a08c-16a99669f605')
+        check_otm_component(otm, 3, 'vpc', 'Amazon VPC', '804b664a-7129-4a9e-a08c-16a99669f605')
+        check_otm_component(otm, 4, 'vpc', 'Amazon VPC', '804b664a-7129-4a9e-a08c-16a99669f605')
+        check_otm_component(otm, 5, 'vpc', 'Amazon VPC', '804b664a-7129-4a9e-a08c-16a99669f605')
 
         check_otm_dataflow(otm, 0, '23', '1', True)
         check_otm_dataflow(otm, 1, '28', '6', True)
@@ -365,10 +339,10 @@ class TestVisioProcessor:
 
         check_otm_representations_size(otm)
 
-        check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
+        check_otm_trustzone(otm, 0, '804b664a-7129-4a9e-a08c-16a99669f605', public_cloud_type, 'Public Cloud')
 
-        check_otm_component(otm, 0, 'ec2', 'Amazon EC2', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 9, 'vpc', 'Amazon VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 0, 'ec2', 'Amazon EC2', '804b664a-7129-4a9e-a08c-16a99669f605')
+        check_otm_component(otm, 9, 'vpc', 'Amazon VPC', '804b664a-7129-4a9e-a08c-16a99669f605')
 
         check_otm_dataflow(otm, 0, '1', '41')
         check_otm_dataflow(otm, 1, '6', '46')

@@ -1,8 +1,8 @@
 from click.testing import CliRunner
 from pytest import mark
 
+from sl_util.sl_util.file_utils import get_data
 from slp_base.slp_base.errors import MappingFileNotValidError, DiagramFileNotValidError
-from slp_base.tests.util.otm import validate_and_diff
 from startleft.startleft.cli.cli import parse_any
 from tests.resources import test_resource_paths
 
@@ -21,8 +21,6 @@ VISIO_INVALID_FILE_TYPE = test_resource_paths.visio_invalid_file_type
 OTM_AWS_SHAPES_EXPECTED = test_resource_paths.visio_aws_shapes_otm_expected
 OTM_AWS_WITH_TZ_AND_VPC = test_resource_paths.visio_aws_with_tz_and_vpc_otm_expected
 OTM_ORPHAN_DATAFLOWS = test_resource_paths.visio_orphan_dataflows_otm_expected
-# the excluded regex for otm diff
-excluded_regex = r"root\[\'dataflows'\]\[.+?\]\['name'\]"
 
 
 class TestCliParseDiagram:
@@ -59,7 +57,7 @@ class TestCliParseDiagram:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            assert validate_and_diff(output_file_name, OTM_AWS_SHAPES_EXPECTED, excluded_regex) == {}
+            assert get_data(output_file_name) == get_data(OTM_AWS_SHAPES_EXPECTED)
 
     def test_parse_diagram_with_custom_mapping_file_ok(self):
         """
@@ -92,7 +90,7 @@ class TestCliParseDiagram:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            assert validate_and_diff(output_file_name, OTM_AWS_WITH_TZ_AND_VPC, excluded_regex) == {}
+            assert get_data(output_file_name) == get_data(OTM_AWS_WITH_TZ_AND_VPC)
 
     def test_parse_diagram_with_orphan_dataflows(self):
         """
@@ -123,7 +121,7 @@ class TestCliParseDiagram:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            assert validate_and_diff(output_file_name, OTM_ORPHAN_DATAFLOWS, excluded_regex) == {}
+            assert get_data(output_file_name) == get_data(OTM_ORPHAN_DATAFLOWS)
 
     @mark.parametrize('filename', [VISIO_INVALID_FILE_SIZE, VISIO_INVALID_FILE_TYPE])
     def test_parse_diagram_with_invalid_visio_file(self, filename):
