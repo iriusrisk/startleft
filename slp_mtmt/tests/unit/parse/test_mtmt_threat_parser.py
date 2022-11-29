@@ -6,7 +6,7 @@ from otm.otm.entity.component import OtmComponent
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_threatinstance import MTMThreat
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT, MTMKnowledge
 from slp_mtmt.slp_mtmt.parse.mtmt_threat_parser import MTMThreatParser, get_threat_description, \
-    get_mitigation_description
+    get_mitigation_description, remove_trailing_dot
 
 
 def assert_threat(threat: OtmThreat, json: dict):
@@ -65,7 +65,7 @@ class TestMTMThreatParser:
     expected_otm_mitigation = {
         "name": "Consider if the function could work with less access to memory, such as passing data rather than pointers",
         "id": 30,
-        "description": "Consider if the function could work with less access to memory, such as passing data rather than pointers.",
+        "description": "Consider if the function could work with less access to memory, such as passing data rather than pointers",
         "riskReduction": 100
     }
     threat_azure = {
@@ -93,7 +93,7 @@ class TestMTMThreatParser:
                     },
                     {
                         "Key": "UserThreatDescription",
-                        "Value": "An adversary may gain unauthorized access to Azure Data Factory (ingest) account in a subscription"
+                        "Value": "An adversary may gain unauthorized access to Azure Data Factory (ingest) account in a subscription."
                     },
                     {
                         "Key": "PossibleMitigations",
@@ -127,7 +127,7 @@ class TestMTMThreatParser:
     expected_otm_mitigation_azure = {
         "name": "Enable Role-Based Access Control (RBAC) to Azure storage account using Azure Resource Manager",
         "id": 30,
-        "description": "When you create a new storage account, you select a deployment model of Classic or Azure Resource Manager. The Classic model of creating resources in Azure only allows all-or-nothing access to the subscription, and in turn, the storage account. With the Azure Resource Manager model, you put the storage account in a resource group and control access to the management plane of that specific storage account using Azure Active Directory. For example, you can give specific users the ability to access the storage account keys, while other users can view information about the storage account, but cannot access the storage account keys.",
+        "description": "When you create a new storage account, you select a deployment model of Classic or Azure Resource Manager. The Classic model of creating resources in Azure only allows all-or-nothing access to the subscription, and in turn, the storage account. With the Azure Resource Manager model, you put the storage account in a resource group and control access to the management plane of that specific storage account using Azure Active Directory. For example, you can give specific users the ability to access the storage account keys, while other users can view information about the storage account, but cannot access the storage account keys",
         "riskReduction": 100
     }
     threat_azure_without_steps = {
@@ -155,7 +155,7 @@ class TestMTMThreatParser:
                     },
                     {
                         "Key": "UserThreatDescription",
-                        "Value": "An adversary may gain unauthorized access to Azure Data Factory (ingest) account in a subscription"
+                        "Value": "An adversary may gain unauthorized access to Azure Data Factory (ingest) account in a subscription."
                     },
                     {
                         "Key": "PossibleMitigations",
@@ -292,7 +292,7 @@ class TestMTMThreatParser:
 
     @pytest.mark.parametrize("mtmt_threat, expected_description", [
         (MTMThreat(threat_description_consider), "BEFORE"),
-        (MTMThreat(threat_description_without_consider), "No consider pattern."),
+        (MTMThreat(threat_description_without_consider), "No consider pattern"),
     ])
     def test_get_threat_description(self, mtmt_threat, expected_description):
         description = get_threat_description(mtmt_threat)
@@ -300,10 +300,21 @@ class TestMTMThreatParser:
         assert description == expected_description
 
     @pytest.mark.parametrize("mtmt_threat, expected_description", [
-        (MTMThreat(threat_with_mitigation), "Consider Mitigation Name. Mitigation Description."),
+        (MTMThreat(threat_with_mitigation), "Consider Mitigation Name. Mitigation Description"),
         (MTMThreat(threat_without_mitigation), None),
     ])
     def test_get_mitigation_description(self, mtmt_threat, expected_description):
         description = get_mitigation_description(mtmt_threat)
 
         assert description == expected_description
+
+    @pytest.mark.parametrize("message, expected_message", [
+        ("Mitigation Description Dot.", "Mitigation Description Dot"),
+        ("Mitigation Description No Dot", "Mitigation Description No Dot"),
+        ("Mitigation Description Dot. Mitigation Description Dot.", "Mitigation Description Dot. Mitigation Description Dot"),
+        (None, None)
+    ])
+    def test_remove_trailing_dot(self, message, expected_message):
+        message_without_trailing_dot = remove_trailing_dot(message)
+
+        assert message_without_trailing_dot == expected_message

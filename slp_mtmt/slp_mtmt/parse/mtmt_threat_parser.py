@@ -9,16 +9,20 @@ from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
 
 
 def get_threat_description(threat: MTMThreat):
-    return re.split("\\.\\s*Consider", threat.long_description)[0]
+    return remove_trailing_dot(re.split("\\.\\s*Consider", threat.long_description)[0])
 
 
 def get_mitigation_description(threat: MTMThreat):
     description = re.match(".*(Consider.+\\.)", threat.long_description)
-    return description.group(1) if description else None
+    return remove_trailing_dot(description.group(1)) if description else None
 
 
 def get_first_sentence(message: str):
     return message.split(".")[0]
+
+
+def remove_trailing_dot(message: str):
+    return message.rstrip(".") if message else None
 
 
 def add_threat_to_component(threat: MTMThreat, threat_instance: OtmThreatInstance, components: [OtmComponent]):
@@ -54,7 +58,7 @@ class MTMThreatParser:
                         OtmMitigation(
                             threat.id,
                             get_first_sentence(threat.possible_mitigations),
-                            threat.steps or threat.possible_mitigations
+                            remove_trailing_dot(threat.steps) or remove_trailing_dot(threat.possible_mitigations)
                         )
                     )
 
@@ -67,7 +71,7 @@ class MTMThreatParser:
                             OtmMitigation(
                                 threat.id,
                                 get_first_sentence(mitigation_description),
-                                mitigation_description
+                                remove_trailing_dot(mitigation_description)
                             )
                         )
 
