@@ -49,7 +49,7 @@ def _patch_version_dev_commit_strategy(scm_version) -> str:
     :param scm_version: An object from the setuptools_scm lib that contains all the git describe command output info.
     :return: The formatted str for the version.
     """
-    return __build_dev_version(
+    return __create_dev_version(
         semver=__increment_version(str(scm_version.tag), PATCH_VERSION_POSITION),
         exact=scm_version.exact,
         distance=scm_version.distance
@@ -64,7 +64,7 @@ def _tag_version_dev_commit_strategy(scm_version) -> str:
     :param scm_version: An object from the setuptools_scm lib that contains all the git describe command output info.
     :return: The formatted str for the version.
     """
-    return __build_dev_version(
+    return __create_dev_version(
         semver=str(scm_version.tag),
         exact=scm_version.exact,
         distance=scm_version.distance
@@ -80,14 +80,14 @@ def _minor_version_dev_commit_strategy(scm_version) -> str:
     """
     semver = re.sub(r'rc[0-9]+', '', str(str(scm_version.tag)))
 
-    return __build_dev_version(
+    return __create_dev_version(
         semver=__increment_version(semver, MINOR_VERSION_POSITION),
         exact=scm_version.exact,
         distance=scm_version.distance
     )
 
 
-def __build_dev_version(semver: str, exact: bool, distance: int):
+def __create_dev_version(semver: str, exact: bool, distance: int):
     if exact or not distance:
         return semver
     else:
@@ -95,6 +95,22 @@ def __build_dev_version(semver: str, exact: bool, distance: int):
 
 
 def __increment_version(semver: str, position: int):
-    version_parts = semver.split('.')
+    version_parts = __get_semver_parts(semver)
+
+    __increment_version_part(version_parts, position)
+
+    return __build_semver(version_parts)
+
+
+def __increment_version_part(version_parts: [], position: int):
     version_parts[position] = str(int(version_parts[position]) + 1)
+    if position == MINOR_VERSION_POSITION:
+        version_parts[PATCH_VERSION_POSITION] = '0'
+
+
+def __get_semver_parts(semver: str):
+    return semver.split('.')
+
+
+def __build_semver(version_parts: []):
     return '.'.join(version_parts)

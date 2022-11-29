@@ -31,7 +31,7 @@ class TestVersionScheme:
         (MAIN_NO_HOTFIX_VERSION, '1.5.0'),
         (MAIN_HOTFIX_VERSION, '1.5.1'),
         # HOTFIX
-        (HOTFIX_VERSION, '1.5.1.dev1'),
+        (HOTFIX_VERSION, '1.5.1.dev18'),
         # RELEASE
         (RELEASE_VERSION_NO_BUGFIX, '1.6.0rc1'),
         (RELEASE_VERSION_BUGFIX, '1.6.0rc1'),
@@ -40,26 +40,40 @@ class TestVersionScheme:
         # DEV
         (DEV_RTP_VERSION, '1.7.0.dev19'),
         (DEV_RTP_NO_DISTANCE_VERSION, '1.7.0'),
-        (DEV_RP_VERSION, '1.7.0.dev5'),
+        (DEV_RP_VERSION, '1.7.0.dev3'),
+        (DEV_RP_HOTFIX_VERSION, '1.7.0.dev3'),
         # FEATURE
         (FEATURE_RTP_VERSION, '1.7.0.dev3'),
-        (FEATURE_RP_VERSION, '1.7.0.dev5'),
+        (FEATURE_RP_VERSION, '1.7.0.dev4'),
+        (FEATURE_RP_HOTFIX_VERSION, '1.7.0.dev14'),
         # FREE BRANCH
         (FREE_BRANCH_RTP_VERSION, '1.7.0.dev7'),
         (FREE_BRANCH_RP_VERSION, '1.7.0.dev2'),
-    ], ids=['test_main_no_hotfix_version',
+        (FREE_BRANCH_RP_HOTFIX_VERSION, '1.7.0.dev1'),
+    ], ids=[
+            # MAIN
+            'test_main_no_hotfix_version',
             'test_main_hotfix_version',
+            # HOTFIX
             'test_hotfix_version',
+            # RELEASE
             'test_release_version_no_bugfix',
             'test_release_version_bugfix',
+            # BUGFIX
             'test_bugfix_version',
+            # DEV
             'test_dev_rtp_version',
             'test_dev_rtp_no_distance_version',
             'test_dev_rp_version',
+            'test_dev_rp_hotfix_version',
+            # FEATURE
             'test_feature_rtp_version',
             'test_feature_rp_version',
+            'test_feature_rp_hotfix_version',
+            # FREE BRANCH
             'test_free_branch_rtp_version',
-            'test_free_branch_rp_version'])
+            'test_free_branch_rp_version',
+            'test_free_branch_rp_hotfix_version'])
     def test_main(self, scm_version, expected_version):
         # GIVEN a ScmVersion mock
         # WHEN guess_startleft_semver is called
