@@ -59,8 +59,7 @@ terraform_extra_modules_sample = path + '/terraform/terraform_extra_modules_samp
 terraform_multiple_files_one = path + '/terraform/aws_simple_components.tf'
 terraform_multiple_files_two = path + '/terraform/aws_dataflows.tf'
 # mapping
-default_terraform_mapping = path + '/terraform/default-terraform-mapping.yaml'
-default_terraform_aws_mapping = path + '/terraform/aws_terraform_mapping.yaml'
+terraform_iriusrisk_tf_aws_mapping = path + '/terraform/iriusrisk-tf-aws-mapping.yaml'
 terraform_mapping_aws_component_without_parent = path + '/terraform/terraform_mapping_component_without_parent.yaml'
 terraform_malformed_mapping_wrong_id = path + '/terraform/terraform-malformed-mapping-wrong-id.yaml'
 terraform_mapping_specific_functions = path + '/terraform/terraform_mapping_specific_functions.yaml'

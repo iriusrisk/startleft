@@ -30,7 +30,7 @@
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
-        "dynamodb (aws_vpc_endpoint)"
+        "aws_vpc_endpoint"
       ]
     },
     {
@@ -96,7 +96,7 @@
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
-        "s3 (aws_vpc_endpoint)"
+        "aws_vpc_endpoint"
       ]
     },
     {
@@ -119,7 +119,7 @@
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
-        "ecr (aws_vpc_endpoint)"
+        "aws_vpc_endpoint"
       ]
     }
   ],

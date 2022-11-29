@@ -1,0 +1,5 @@
+FROM squidfunk/mkdocs-material
+
+RUN pip install --upgrade pip
+
+COPY . .
