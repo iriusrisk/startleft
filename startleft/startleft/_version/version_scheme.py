@@ -3,6 +3,8 @@ import re
 MINOR_VERSION_POSITION = 1
 PATCH_VERSION_POSITION = 2
 
+DEFAULT_VERSION = 'development-version'
+
 
 def choose_strategy_by_branch(branch_name: str) -> callable:
     """
@@ -25,11 +27,15 @@ def guess_startleft_semver(scm_version) -> str:
     Custom function to retrieve the StartLeft version from git tags. It is intended to be used by the setuptools_scm
     by injecting it through use_scm_version.version_scheme property. It is based on a strategy pattern with a
     specific behaviour depending on the branch over what the version is being calculated.
+    If there is some error in calculating the version, it uses DEFAULT_VERSION as fallback.
     :param scm_version: An object from the setuptools_scm lib that contains all the git describe command output info.
     :return: The formatted version of StartLeft (without the commit suffix, calculated by the local_scheme). I.e.:
     1.5.0.dev5
     """
-    return choose_strategy_by_branch(scm_version.branch)(scm_version)
+    try:
+        return choose_strategy_by_branch(scm_version.branch)(scm_version)
+    except Exception:
+        return DEFAULT_VERSION
 
 
 def _tag_version_strategy(scm_version) -> str:

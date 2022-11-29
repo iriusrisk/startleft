@@ -1,6 +1,6 @@
 import pytest
 
-from startleft.startleft._version.version_scheme import choose_strategy_by_branch, guess_startleft_semver
+from startleft.startleft._version.version_scheme import choose_strategy_by_branch, guess_startleft_semver, DEFAULT_VERSION
 from .version_mocks import *
 
 
@@ -77,5 +77,17 @@ class TestVersionScheme:
     def test_main(self, scm_version, expected_version):
         # GIVEN a ScmVersion mock
         # WHEN guess_startleft_semver is called
+        version = guess_startleft_semver(scm_version)
+
         # THEN the expected version is returned
-        assert guess_startleft_semver(scm_version) == expected_version
+        assert version == expected_version
+
+    def test_error_calculating_version(self):
+        # GIVEN some invalid version
+        version = Mock(branch= 'dev', tag='invalid_version')
+
+        # WHEN guess_startleft_semver_suffix is called
+        version = guess_startleft_semver(version)
+
+        # THEN no local part is returned
+        assert version == DEFAULT_VERSION

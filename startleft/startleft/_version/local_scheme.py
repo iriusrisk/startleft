@@ -1,3 +1,5 @@
+DEFAULT_LOCAL_PART = ''
+
 def choose_strategy_by_branch(branch_name: str) -> callable:
     """
     This function chooses the right strategy for calculating the version of the application based on the given branch name.
@@ -18,7 +20,10 @@ def guess_startleft_semver_suffix(scm_version) -> str:
     :param scm_version: An object from the setuptools_scm lib that contains all the git describe command output info.
     :return: The formatted local part of the version of StartLeft. I.e.: +g52d796a.
     """
-    return choose_strategy_by_branch(scm_version.branch)(scm_version)
+    try:
+        return choose_strategy_by_branch(scm_version.branch)(scm_version)
+    except Exception:
+        return DEFAULT_LOCAL_PART
 
 
 def _node_strategy(scm_version) -> str:
