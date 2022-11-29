@@ -2,6 +2,12 @@ from otm.otm.otm import Trustzone
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
 
 
+def find_type(trustzone_mapping):
+    if 'id' in trustzone_mapping:
+        return trustzone_mapping['id']
+    return trustzone_mapping['type']
+
+
 class DiagramTrustzoneMapper:
 
     def __init__(self, components: [DiagramComponent], trustzone_mappings: dict):
@@ -26,5 +32,5 @@ class DiagramTrustzoneMapper:
         return Trustzone(
             id=trustzone.id,
             name=trustzone.name,
-            type=trustzone_mapping['type']
+            type=find_type(trustzone_mapping)
         )

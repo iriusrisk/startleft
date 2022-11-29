@@ -5,10 +5,10 @@ from sl_util.sl_util.file_utils import get_data
 from slp_base.slp_base.errors import MappingFileNotValidError, DiagramFileNotValidError
 from startleft.startleft.cli.cli import parse_any
 from tests.resources import test_resource_paths
+from tests.resources.test_resource_paths import default_visio_mapping, default_visio_mapping_legacy, \
+    custom_vpc_mapping, custom_vpc_mapping_legacy
 
 # mappings
-VISIO_DEFAULT_VALID_MAPPING_FILENAME = test_resource_paths.default_visio_mapping
-VISIO_CUSTOM_VALID_MAPPING_FILENAME = test_resource_paths.custom_vpc_mapping
 INVALID_YAML = test_resource_paths.invalid_yaml
 # diagrams
 VISIO_DIAGRAM_AWS_SHAPES = test_resource_paths.visio_aws_shapes
@@ -28,7 +28,8 @@ class TestCliParseDiagram:
     The testing for click parse commands for Diagram files
     """
 
-    def test_parse_diagram_file_ok(self):
+    @mark.parametrize('mapping', [default_visio_mapping, default_visio_mapping_legacy])
+    def test_parse_diagram_file_ok(self, mapping):
         """
         Parse Visio file with default mapping file
         """
@@ -41,7 +42,7 @@ class TestCliParseDiagram:
                 # a valid diagram type
                 '--diagram-type', "VISIO",
                 #   and a valid mapping visio default file
-                '--default-mapping-file', VISIO_DEFAULT_VALID_MAPPING_FILENAME,
+                '--default-mapping-file', mapping,
                 #   and a valid project name
                 '--project-name', "test_parse_diagram_file_ok",
                 #   and a valid project id
@@ -59,7 +60,13 @@ class TestCliParseDiagram:
             # and validate and compare otm files
             assert get_data(output_file_name) == get_data(OTM_AWS_SHAPES_EXPECTED)
 
-    def test_parse_diagram_with_custom_mapping_file_ok(self):
+    @mark.parametrize('default_mapping,custom_mapping', [
+        (default_visio_mapping, custom_vpc_mapping),
+        (default_visio_mapping_legacy, custom_vpc_mapping_legacy),
+        (default_visio_mapping, custom_vpc_mapping_legacy),
+        (default_visio_mapping_legacy, custom_vpc_mapping),
+    ])
+    def test_parse_diagram_with_custom_mapping_file_ok(self, default_mapping, custom_mapping):
         """
         Parse Visio file with default and custom mapping files
         """
@@ -72,9 +79,9 @@ class TestCliParseDiagram:
                 # a valid diagram type
                 '--diagram-type', "VISIO",
                 #   and a valid mapping visio default file
-                '--default-mapping-file', VISIO_DEFAULT_VALID_MAPPING_FILENAME,
+                '--default-mapping-file', default_mapping,
                 #   and a valid custom mapping visio default file
-                '--custom-mapping-file', VISIO_CUSTOM_VALID_MAPPING_FILENAME,
+                '--custom-mapping-file', custom_mapping,
                 #   and a valid project name
                 '--project-name', "test_parse_diagram_file_ok",
                 #   and a valid project id
@@ -92,7 +99,8 @@ class TestCliParseDiagram:
             # and validate and compare otm files
             assert get_data(output_file_name) == get_data(OTM_AWS_WITH_TZ_AND_VPC)
 
-    def test_parse_diagram_with_orphan_dataflows(self):
+    @mark.parametrize('mapping', [default_visio_mapping, default_visio_mapping_legacy])
+    def test_parse_diagram_with_orphan_dataflows(self, mapping):
         """
         Parse Visio file with orphan dataflows
         """
@@ -105,7 +113,7 @@ class TestCliParseDiagram:
                 # a valid diagram type
                 '--diagram-type', "VISIO",
                 #   and a valid mapping visio default file
-                '--default-mapping-file', VISIO_DEFAULT_VALID_MAPPING_FILENAME,
+                '--default-mapping-file', mapping,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -137,7 +145,7 @@ class TestCliParseDiagram:
                 # a valid diagram type
                 '--diagram-type', "VISIO",
                 #   and a valid mapping visio default file
-                '--default-mapping-file', VISIO_DEFAULT_VALID_MAPPING_FILENAME,
+                '--default-mapping-file', default_visio_mapping,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id

@@ -11,7 +11,7 @@ from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.diagram import diag_create_otm_controller
 from tests.resources import test_resource_paths
 from tests.resources.test_resource_paths import visio_aws_with_tz_and_vpc, default_visio_mapping, \
-    custom_vpc_mapping
+    default_visio_mapping_legacy, custom_vpc_mapping, custom_vpc_mapping_legacy
 
 IRIUSRISK_URL = ''
 
@@ -29,14 +29,15 @@ octet_stream = 'application/octet-stream'
 
 class TestOtmControllerDiagramVisio:
 
+    @mark.parametrize('mapping', [default_visio_mapping, default_visio_mapping_legacy])
     @responses.activate
-    def test_create_otm_ok_only_default_mapping(self):
+    def test_create_otm_ok_only_default_mapping(self, mapping):
         # Given a project_id
         project_id: str = 'project_A_id'
 
         # When I do post on diagram endpoint
         files = {'diag_file': open(test_resource_paths.visio_aws_with_tz_and_vpc, 'rb'),
-                 'default_mapping_file': open(test_resource_paths.default_visio_mapping, 'rb')}
+                 'default_mapping_file': open(mapping, 'rb')}
         body = {'diag_type': 'VISIO', 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
@@ -125,15 +126,21 @@ class TestOtmControllerDiagramVisio:
         assert otm['dataflows'][3]['source'] == '12'
         assert otm['dataflows'][3]['destination'] == '41'
 
+    @mark.parametrize('default_mapping,custom_mapping', [
+        (default_visio_mapping, custom_vpc_mapping),
+        (default_visio_mapping_legacy, custom_vpc_mapping_legacy),
+        (default_visio_mapping, custom_vpc_mapping_legacy),
+        (default_visio_mapping_legacy, custom_vpc_mapping),
+    ])
     @responses.activate
-    def test_create_otm_ok_both_mapping_files(self):
+    def test_create_otm_ok_both_mapping_files(self, default_mapping, custom_mapping):
         # Given a project_id
         project_id: str = 'project_A_id'
 
         # When I do post on diagram endpoint
         files = {'diag_file': open(visio_aws_with_tz_and_vpc, 'rb'),
-                 'default_mapping_file': open(default_visio_mapping, 'rb'),
-                 'custom_mapping_file': open(custom_vpc_mapping, 'rb')}
+                 'default_mapping_file': open(default_mapping, 'rb'),
+                 'custom_mapping_file': open(custom_mapping, 'rb')}
         body = {'diag_type': 'VISIO', 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
