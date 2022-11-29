@@ -5,8 +5,8 @@ from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMapping
 from slp_mtmt.slp_mtmt.parse.mtmt_trustzone_parser import MTMTTrustzoneParser
 from slp_mtmt.slp_mtmt.parse.resolvers.resolvers import get_type_resolver
 from slp_mtmt.slp_mtmt.util.border_parent_calculator import BorderParentCalculator
-from slp_mtmt.slp_mtmt.util.line_parent_calculator import LineParentCalculator
 from slp_mtmt.slp_mtmt.util.component_representation_calculator import ComponentRepresentationCalculator
+from slp_mtmt.slp_mtmt.util.line_parent_calculator import LineParentCalculator
 
 
 class MTMTComponentParser:
@@ -29,22 +29,23 @@ class MTMTComponentParser:
 
     def __create_component(self, border: MTMBorder) -> Component:
         trustzone = self.__get_trustzone(border)
-        trustzone_id = self.trustzone_parser.calculate_otm_id(trustzone) if trustzone else ""
+        trustzone_id = self.trustzone_parser.calculate_otm_id(trustzone) if trustzone else None
         if trustzone_id is None:
             trustzone_id = self.manage_orphaned()
         mtmt_type = self.__calculate_otm_type(border)
-        representation = ComponentRepresentationCalculator.calculate_representation(border,
-                                                                                    self.diagram_representation,
-                                                                                    trustzone)
+        calculator = ComponentRepresentationCalculator(self.diagram_representation, border, trustzone)
+        representation = calculator.calculate_representation()
         if mtmt_type is not None:
-            return Component(id=border.id,
+            component = Component(id=border.id,
                              name=border.name,
                              type=mtmt_type,
                              parent_type="trustZone",
                              parent=trustzone_id,
                              properties=border.properties,
-                             source=border,
-                             representations=[representation])
+                             source=border)
+            if representation:
+                component.representations = [representation]
+            return component
 
     def __calculate_otm_type(self, border: MTMBorder) -> str:
         return self.__get_label_value(border)
@@ -68,12 +69,11 @@ class MTMTComponentParser:
         parent_calculator = LineParentCalculator()
         for candidate in self.source.lines:
             if parent_calculator.is_parent(candidate, border):
-                return self.trustzoneParser.calculate_otm_id(candidate)
+                return candidate
         return None
 
     def manage_orphaned(self) -> str:
-        default_trustzone = self.trustzoneParser.default_trustzone
+        default_trustzone = self.trustzone_parser.default_trustzone
         if default_trustzone is not None:
-            self.trustzoneParser.add_default()
+            self.trustzone_parser.add_default()
             return default_trustzone.id
-

@@ -59,4 +59,7 @@ class MTMBorder(MTMEntity):
         return self.source.get('Value').get(key)
 
     def __extract_int_value(self, key):
-        return int(self.__extract_value(key))
+        try:
+            return int(self.__extract_value(key))
+        except TypeError:
+            return

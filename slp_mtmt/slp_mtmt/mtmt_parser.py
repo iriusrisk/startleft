@@ -27,15 +27,18 @@ class MTMTParser(ProviderParser):
         self.trustzoneParser = MTMTTrustzoneParser(self.source, self.mtmt_mapping, self.representations[0].id)
         self.component_parser = MTMTComponentParser(self.source, self.mtmt_mapping, self.trustzoneParser,
                                                     self.representations[0].id)
+        self.trustzones = self.trustzoneParser.parse()
+        self.components = self.component_parser.parse()
+        self.dataflows = MTMTConnectorParser(self.source, self.component_parser).parse()
 
     def __get_mtmt_components(self):
-        return self.component_parser.parse()
+        return self.components
 
     def __get_mtmt_dataflows(self):
-        return MTMTConnectorParser(self.source, self.component_parser).parse()
+        return self.dataflows
 
     def __get_mtmt_trustzones(self) -> list:
-        return self.trustzoneParser.parse()
+        return self.trustzones
 
     def __get_mtmt_representations(self) -> list:
         return self.representations

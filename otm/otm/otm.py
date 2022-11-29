@@ -104,7 +104,7 @@ class Trustzone:
         if self.properties:
             result["properties"] = self.properties
         if self.representations:
-            result["representations"] = [r.json() for r in self.representations]
+            result["representations"] = [r.json()for r in self.representations]
         return result
 
 
