@@ -31,7 +31,7 @@ class TestLocalScheme:
         (MAIN_NO_HOTFIX_VERSION, ''),
         (MAIN_HOTFIX_VERSION, ''),
         # HOTFIX
-        (HOTFIX_VERSION, '+ge7812ca'),
+        (HOTFIX_VERSION, '+g550c1c9'),
         # RELEASE
         (RELEASE_VERSION_NO_BUGFIX, ''),
         (RELEASE_VERSION_BUGFIX, ''),
@@ -39,10 +39,10 @@ class TestLocalScheme:
         (BUGFIX_VERSION, '+g6cda015'),
         # DEV
         (DEV_RTP_VERSION, '+g17d9f68'),
-        (DEV_RP_VERSION, '+g24d9a41'),
+        (DEV_RP_VERSION, '+g3e49113'),
         # FEATURE
         (FEATURE_RTP_VERSION, '+ga1d748e'),
-        (FEATURE_RP_VERSION, '+ga1a547d'),
+        (FEATURE_RP_VERSION, '+g76d029f'),
         # FREE BRANCH
         (FREE_BRANCH_RTP_VERSION, '+g52d796a'),
         (FREE_BRANCH_RP_VERSION, '+g31a54fa'),
