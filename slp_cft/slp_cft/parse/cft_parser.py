@@ -1,6 +1,6 @@
 import logging
 
-from otm.otm.otm import OTM
+from otm.otm.entity.otm import Otm
 from otm.otm.otm_builder import OtmBuilder
 from slp_base.slp_base.errors import OtmBuildingError
 from slp_base.slp_base.provider_parser import ProviderParser
@@ -27,7 +27,7 @@ class CloudformationParser(ProviderParser):
         self.source_model = CloudformationSourceModel(self.source, self.otm)
         self.transformer = CloudformationTransformer(source_model=self.source_model, threat_model=self.otm)
 
-    def build_otm(self) -> OTM:
+    def build_otm(self) -> Otm:
         try:
             self.transformer.run(self.mapping)
             self.__set_full_path_in_ids()
