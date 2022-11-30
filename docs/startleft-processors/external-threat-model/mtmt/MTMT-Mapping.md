@@ -119,9 +119,9 @@ No need to be in the mapping file.
 
 StartLeft will extract OTM threats and threat instances, as well as OTM mitigations
 and mitigation instances from the same MTMT threat. Moreover the OTM component to which the OTM threat instance will be added
-is the destination component from the MTMT threat.
+is the destination component of the MTMT threat.
 
-Currently, Startleft maps threats and mitigations from two kind of templates:
+Currently, Startleft maps threats and mitigations from two kinds of templates:
 
 ### SDL TM Knowledge Base (Core) template
 #### A MTMT threat
@@ -175,7 +175,7 @@ There is a special case when the MTMT threat has no ". Consider" pattern in the 
 mitigation nor OTM mitigation instance will be mapped, only the OTM threat and threat instance can be mapped.
 
 ### Azure Threat Model Template (AzureArchitecture) template
-#### A MTMT threat without "Steps" field
+#### A MTMT threat without a "Steps" field
 ![img_1.png](img/mtmt_azure_threat_no_steps.png)
 
 will be mapped to an OTM threat
@@ -205,7 +205,7 @@ to an OTM Mitigation
   "description": "Enforce communication between clients and Azure Postgres DB to be over SSL/TLS by enabling the Enforce SSL connection feature on the server. Check that the connection strings used to connect to MySQL databases have the right configuration (e.g. ssl = true or sslmode=require or sslmode=true are set). Refer: <a href=\"https://aka.ms/tmt-th154a\">https://aka.ms/tmt-th154a</a> Configure MySQL server to use a verifiable SSL certificate (needed for SSL/TLS communication). Refer: <a href=\"https://aka.ms/tmt-th154b\">https://aka.ms/tmt-th154b</a>"
 }
 ```
-#### A MTMT threat with "Steps" field
+#### A MTMT threat with a "Steps" field
 ![img_3.png](img/mtmt_azure_threat_steps.png)
 
 will be mapped to an OTM threat
