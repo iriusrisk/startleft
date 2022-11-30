@@ -561,3 +561,53 @@ class TestCloudformationProcessor:
         # Then an empty OTM, without any threat modeling content, is generated
         assert validate_and_diff_otm(otm.json(), test_resource_paths.minimal_otm_expected_result,
                                      excluded_regex) == {}
+
+    def test_trustzone_types(self):
+        # GIVEN a valid CFT file
+        cloudformation_file = get_data(test_resource_paths.cloudformation_minimal_content)
+
+        # AND a valid CFT mapping file that defines two TZs, one with type and the one without type
+        mapping_file = get_data(test_resource_paths.cloudformation_trustzone_types_mapping)
+
+        # WHEN the CFT file is processed
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
+
+        # THEN the number of TZs, components and dataflows are right
+        assert len(otm.trustzones) == 2
+        assert len(otm.components) == 0
+        assert len(otm.dataflows) == 0
+
+        # AND the trustzone with a defined type has the correct value
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+                                       and obj.type == 'public-cloud', otm.trustzones))
+
+        # AND the trustzone without a defined type uses the ID value as type
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe99'
+                                       and obj.type == obj.id, otm.trustzones))
+
+    def test_components_with_trustzones_of_same_type(self):
+        # GIVEN a valid CFT file WITH some components mapped to different TZs of the same type
+        cloudformation_file = get_data(test_resource_paths.cloudformation_components_with_trustzones_of_same_type)
+
+        # AND a valid CFT mapping file that defines two different TZs of the same type
+        mapping_file = get_data(test_resource_paths.cloudformation_multiple_trustzones_same_type_mapping)
+
+        # WHEN the CFT file is processed
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
+
+        # THEN the number of TZs, components and dataflows are right
+        assert len(otm.trustzones) == 2
+        assert len(otm.components) == 2
+        assert len(otm.dataflows) == 0
+
+        # AND both trustzones have the same type, but different ID
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+                                       and obj.type == 'public-cloud', otm.trustzones))
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe99'
+                                       and obj.type == 'public-cloud', otm.trustzones))
+
+        # AND each component has the correct trustzone
+        assert otm.components[0].parent_type == 'trustZone'
+        assert otm.components[0].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+        assert otm.components[1].parent_type == 'trustZone'
+        assert otm.components[1].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe99'
