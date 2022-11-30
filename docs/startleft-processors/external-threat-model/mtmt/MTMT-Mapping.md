@@ -117,7 +117,7 @@ the custom name, the source, and the destination
 ## Threats and Mitigations
 No need to be in the mapping file.
 
-StartLeft will extract OTM hreats and threat instances, as well as OTM mitigations
+StartLeft will extract OTM threats and threat instances, as well as OTM mitigations
 and mitigation instances from the same MTMT threat. Moreover the OTM component to which the OTM threat instance will be added
 is the destination component from the MTMT threat.
 
