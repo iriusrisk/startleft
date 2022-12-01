@@ -153,7 +153,7 @@ For example, let's use the same Terraform file that we have downloaded for the `
 ```shell
 startleft search \
     --iac-type TERRAFORM \
-    --query Resources|squash(@)[?Type=='aws_instance']
+    --query "resource|get(@, 'aws_synthetics_canary')" \
     multinetwork_security_groups_with_lb.tf
 ```
 
