@@ -3,7 +3,7 @@ from pytest import mark
 
 from slp_base import IacFileNotValidError, MappingFileNotValidError
 from slp_base.slp_base.otm_file_loader import OtmFileLoader
-from slp_base.tests.util.otm import validate_and_diff_filename as validate_and_diff
+from slp_base.tests.util.otm import validate_and_diff
 from startleft.startleft.cli.cli import parse_any
 from tests.integration.cli.parse.iac.test_cli_parse_iac import excluded_regex
 from tests.resources import test_resource_paths
@@ -17,7 +17,7 @@ CLOUDFORMATION_UNKNOWN_RESOURCE = test_resource_paths.cloudformation_unknown_res
 CLOUDFORMATION_INVALID_FILE_SIZE = test_resource_paths.cloudformation_invalid_size
 # otm
 OTM_CFT_FOR_MAPPING_TESTS = test_resource_paths.cloudformation_for_mappings_tests_json_otm_expected
-OTM_EMPTY_FILE = test_resource_paths.otm_empty_file_example_cft
+OTM_EMPTY_FILE = test_resource_paths.otm_empty_file_cloudformation_example
 
 
 class TestCliParseIaCCloudformation:
