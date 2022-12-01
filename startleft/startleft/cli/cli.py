@@ -24,7 +24,7 @@ from startleft.version import version
 
 logger = logging.getLogger(__name__)
 provider_resolver = ProviderResolver(PROCESSORS)
-app_log_level = sys.argv[2]
+app_log_level = sys.argv[2] if len(sys.argv) > 2 else "INFO"
 
 def get_otm_as_file(otm: OTM, out_file: str):
     logger.info(f"Writing OTM file to '{out_file}'")
