@@ -7,7 +7,7 @@ You can find some sample source files inside the `examples` directory:
 * `examples/cloudformation` contains CloudFormation Template example files to convert into OTM format.
 * `examples/cloudformation/split` contains a complete CloudFormation Template example file split into two different files.
 
-To process this examples, it is mandatory to use the mapping files according to the file data type. 
+To process these examples, it is mandatory to use the mapping files according to the file data type. 
 You can find some sample mapping files inside the `examples/cloudformation` directory.
 
 ## Examples
@@ -22,7 +22,7 @@ The following examples, which are located in the `examples/cloudformation` and `
 directories, show you how to carry out the different stages of the process separately or in a single step.
 
 ### Security Groups on multinetwork with Load Balancer
-This is a rich example when you can see in action some the capabilities of StartLeft. It represents the threat model for
+This is a rich example when you can see in action some of the capabilities of StartLeft. It represents the threat model for
 an architecture with two trust zones and several _Virtual Private Networks_ which contain elements such as:
 
 * [Elastic Load Balancer](https://aws.amazon.com/elasticloadbalancing/).
@@ -31,7 +31,7 @@ an architecture with two trust zones and several _Virtual Private Networks_ whic
 * [VPC Endpoint](https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints.html)
 * [Security Groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html#VPCSecurityGroups) mapped as dataflows.
 
-The following command will parse the CloudFormation source file `multinetwork_security_groups_with_lb.json` creating a 
+The following command will parse the CloudFormation source file `multinetwork_security_groups_with_lb.json` creating an 
 OTM file `multinetwork_security_groups_with_lb.otm` in the process.
 ```shell
 startleft parse \
@@ -44,7 +44,7 @@ startleft parse \
 ```
 
 ### Other examples
-There are inside the StartLeft repositories some other CloudFormation files with different architectures that allows you 
+There are inside the StartLeft repositories some other CloudFormation files with different architectures that allow you 
 to experiment with different mappings and options. For them, the same commands described before can be applied.
 
 * `elb-no-waf`. This is the simplest example, including only a public cloud as a `TrustZone` with an AWS Elastic Load 
@@ -55,7 +55,7 @@ the same `TrustZone` public cloud.
 ### Split examples
 In the `examples/cloudformation/split` directory we have split the `multinetwork_security_groups_with_lb.json` into two 
 files which are `networks_cft_file.json` and `resources_cft_file.json`.
-The following command will parse both CloudFormation source files creating a OTM file 
+The following command will parse both CloudFormation source files creating an OTM file 
 `multinetwork_security_groups_with_lb_from_multiple_files.otm` in the process.
 ```shell
 startleft parse \
