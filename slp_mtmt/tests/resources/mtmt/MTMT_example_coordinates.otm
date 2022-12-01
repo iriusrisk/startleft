@@ -1,0 +1,553 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "Example Project",
+    "id": "example-project"
+  },
+  "representations": [
+    {
+      "name": "Microsoft Threat Modeling Tool",
+      "id": "Microsoft Threat Modeling Tool",
+      "type": "threat-model"
+    },
+    {
+      "name": "example-project Diagram Representation",
+      "id": "example-project-diagram",
+      "type": "diagram",
+      "size": {
+        "width": 2000,
+        "height": 2000
+      }
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "6376d53e-6461-412b-8e04-7b3fe2b397de",
+      "name": "Internet",
+      "risk": {
+        "trustRating": 10
+      },
+      "properties": {
+        "Name": "Internet",
+        "Dataflow Order": "0"
+      },
+      "representations": [
+        {
+          "name": "Internet Representation",
+          "id": "13ffd9d9-53ea-4b63-afab-07b730697ddd-representation",
+          "representation": "example-project-diagram",
+          "size": {
+            "width": 588,
+            "height": 497
+          },
+          "position": {
+            "x": 81,
+            "y": 83
+          }
+        }
+      ]
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Cloud",
+      "risk": {
+        "trustRating": 10
+      },
+      "properties": {
+        "Name": "Cloud",
+        "Dataflow Order": "0"
+      },
+      "representations": [
+        {
+          "name": "Cloud Representation",
+          "id": "acafa4b0-f94d-4077-8a42-74b959bd0796-representation",
+          "representation": "example-project-diagram",
+          "size": {
+            "width": 535,
+            "height": 488
+          },
+          "position": {
+            "x": 734,
+            "y": 88
+          }
+        }
+      ]
+    }
+  ],
+  "components": [
+    {
+      "id": "53245f54-0656-4ede-a393-357aeaa2e20f",
+      "name": "Accounting PostgreSQL",
+      "type": "CD-MICROSOFT-AZURE-DB-POSTGRESQL",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "properties": {
+        "Name": "Accounting PostgreSQL",
+        "Out Of Scope": "false",
+        "Azure Postgres DB Firewall Settings": "Select",
+        "Azure Postgres DB TLS Enforced": "Select"
+      },
+      "representations": [
+        {
+          "name": "Accounting PostgreSQL Representation",
+          "id": "53245f54-0656-4ede-a393-357aeaa2e20f-representation",
+          "representation": "example-project-diagram",
+          "size": {
+            "width": 100,
+            "height": 100
+          },
+          "position": {
+            "x": 334,
+            "y": 45
+          }
+        }
+      ]
+    },
+    {
+      "id": "6183b7fa-eba5-4bf8-a0af-c3e30d144a10",
+      "name": "Android",
+      "type": "android-device-client",
+      "parent": {
+        "trustZone": "6376d53e-6461-412b-8e04-7b3fe2b397de"
+      },
+      "properties": {
+        "Name": "Android",
+        "Out Of Scope": "false",
+        "Mobile Client Technologies": "Android"
+      },
+      "representations": [
+        {
+          "name": "Android Representation",
+          "id": "6183b7fa-eba5-4bf8-a0af-c3e30d144a10-representation",
+          "representation": "example-project-diagram",
+          "size": {
+            "width": 100,
+            "height": 100
+          },
+          "position": {
+            "x": 325,
+            "y": 56
+          }
+        }
+      ]
+    },
+    {
+      "id": "5d15323e-3729-4694-87b1-181c90af5045",
+      "name": "Public API v2",
+      "type": "web-service",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "properties": {
+        "Name": "Public API v2",
+        "Out Of Scope": "false",
+        "Web API Technologies": "Select",
+        "Hosting environment": "Select",
+        "Identity Provider": "Select"
+      },
+      "representations": [
+        {
+          "name": "Public API v2 Representation",
+          "id": "5d15323e-3729-4694-87b1-181c90af5045-representation",
+          "representation": "example-project-diagram",
+          "size": {
+            "width": 100,
+            "height": 100
+          },
+          "position": {
+            "x": 31,
+            "y": 155
+          }
+        }
+      ]
+    },
+    {
+      "id": "91882aca-8249-49a7-96f0-164b68411b48",
+      "name": "Azure File Storage",
+      "type": "azure-storage",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "properties": {
+        "Name": "Azure File Storage",
+        "Out Of Scope": "false",
+        "Storage Type": "Select",
+        "HTTPS Enforced": "Select",
+        "Network Security": "Select",
+        "CORS Enabled": "Select"
+      },
+      "representations": [
+        {
+          "name": "Azure File Storage Representation",
+          "id": "91882aca-8249-49a7-96f0-164b68411b48-representation",
+          "representation": "example-project-diagram",
+          "size": {
+            "width": 100,
+            "height": 100
+          },
+          "position": {
+            "x": 300,
+            "y": 161
+          }
+        }
+      ]
+    },
+    {
+      "id": "91c41c08-87c3-4740-a9fa-a37975717e93",
+      "name": "iOS",
+      "type": "ios-device-client",
+      "parent": {
+        "trustZone": "6376d53e-6461-412b-8e04-7b3fe2b397de"
+      },
+      "properties": {
+        "Name": "iOS",
+        "Out Of Scope": "false",
+        "Mobile Client Technologies": "iOS"
+      },
+      "representations": [
+        {
+          "name": "iOS Representation",
+          "id": "91c41c08-87c3-4740-a9fa-a37975717e93-representation",
+          "representation": "example-project-diagram",
+          "size": {
+            "width": 100,
+            "height": 100
+          },
+          "position": {
+            "x": 35,
+            "y": 181
+          }
+        }
+      ]
+    },
+    {
+      "id": "40560275-0a84-4e52-b67f-f9008519e608",
+      "name": "Browser",
+      "type": "web-ui",
+      "parent": {
+        "trustZone": "6376d53e-6461-412b-8e04-7b3fe2b397de"
+      },
+      "properties": {
+        "Name": "Browser",
+        "Out Of Scope": "false"
+      },
+      "representations": [
+        {
+          "name": "Browser Representation",
+          "id": "40560275-0a84-4e52-b67f-f9008519e608-representation",
+          "representation": "example-project-diagram",
+          "size": {
+            "width": 100,
+            "height": 100
+          },
+          "position": {
+            "x": 318,
+            "y": 359
+          }
+        }
+      ]
+    },
+    {
+      "id": "b56070fb-682d-4af7-8262-a31064d85ba1",
+      "name": "Web API",
+      "type": "web-service",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "properties": {
+        "Name": "Web API",
+        "Out Of Scope": "false",
+        "Web API Technologies": "Select",
+        "Hosting environment": "Select",
+        "Identity Provider": "Select"
+      },
+      "representations": [
+        {
+          "name": "Web API Representation",
+          "id": "b56070fb-682d-4af7-8262-a31064d85ba1-representation",
+          "representation": "example-project-diagram",
+          "size": {
+            "width": 100,
+            "height": 100
+          },
+          "position": {
+            "x": 155,
+            "y": 297
+          }
+        }
+      ]
+    },
+    {
+      "id": "07d453bf-8157-4623-a0e9-5107cc3ca0a5",
+      "name": "Azure Storage",
+      "type": "azure-storage",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "properties": {
+        "Name": "Azure Storage",
+        "Out Of Scope": "false",
+        "Storage Type": "Select",
+        "HTTPS Enforced": "Select",
+        "Network Security": "Select",
+        "CORS Enabled": "Select"
+      },
+      "representations": [
+        {
+          "name": "Azure Storage Representation",
+          "id": "07d453bf-8157-4623-a0e9-5107cc3ca0a5-representation",
+          "representation": "example-project-diagram",
+          "size": {
+            "width": 100,
+            "height": 100
+          },
+          "position": {
+            "x": 341,
+            "y": 293
+          }
+        }
+      ]
+    }
+  ],
+  "dataflows": [
+    {
+      "id": "eb072144-af37-4b75-b46b-b78111850d3e",
+      "name": "PSQL Request",
+      "source": "5d15323e-3729-4694-87b1-181c90af5045",
+      "destination": "53245f54-0656-4ede-a393-357aeaa2e20f",
+      "bidirectional": false,
+      "properties": {
+        "Request": {},
+        "Name": "PSQL Request",
+        "Dataflow Order": "0",
+        "Out Of Scope": "false",
+        "Reason For Out Of Scope": {},
+        "Configurable Attributes": {},
+        "As Generic Data Flow": {},
+        "Show Boundary Threats": "Select"
+      }
+    },
+    {
+      "id": "36091fd8-dba8-424e-a3cd-784ea6bcb9e0",
+      "name": "PSQL Response",
+      "source": "53245f54-0656-4ede-a393-357aeaa2e20f",
+      "destination": "5d15323e-3729-4694-87b1-181c90af5045",
+      "bidirectional": false,
+      "properties": {
+        "Response": {},
+        "Name": "PSQL Response",
+        "Dataflow Order": "0",
+        "Out Of Scope": "false",
+        "Reason For Out Of Scope": {},
+        "Configurable Attributes": {},
+        "As Generic Data Flow": {},
+        "Show Boundary Threats": "Select"
+      }
+    },
+    {
+      "id": "f5fe3c6e-e10b-4252-a4aa-4ec6108c96a6",
+      "name": "File Request",
+      "source": "5d15323e-3729-4694-87b1-181c90af5045",
+      "destination": "91882aca-8249-49a7-96f0-164b68411b48",
+      "bidirectional": false,
+      "properties": {
+        "Request": {},
+        "Name": "File Request",
+        "Dataflow Order": "0",
+        "Out Of Scope": "false",
+        "Reason For Out Of Scope": {},
+        "Configurable Attributes": {},
+        "As Generic Data Flow": {},
+        "Show Boundary Threats": "Select"
+      }
+    },
+    {
+      "id": "d826de3d-1464-4d1f-8105-aa0449a50aec",
+      "name": "File Response",
+      "source": "91882aca-8249-49a7-96f0-164b68411b48",
+      "destination": "5d15323e-3729-4694-87b1-181c90af5045",
+      "bidirectional": false,
+      "properties": {
+        "Response": {},
+        "Name": "File Response",
+        "Dataflow Order": "0",
+        "Out Of Scope": "false",
+        "Reason For Out Of Scope": {},
+        "Configurable Attributes": {},
+        "As Generic Data Flow": {},
+        "Show Boundary Threats": "Select"
+      }
+    },
+    {
+      "id": "9840bcdf-c444-437d-8289-d5468f41b0db",
+      "name": "API Request",
+      "source": "6183b7fa-eba5-4bf8-a0af-c3e30d144a10",
+      "destination": "5d15323e-3729-4694-87b1-181c90af5045",
+      "bidirectional": false,
+      "properties": {
+        "Request": {},
+        "Name": "API Request",
+        "Dataflow Order": "0",
+        "Out Of Scope": "false",
+        "Reason For Out Of Scope": {},
+        "Configurable Attributes": {},
+        "As Generic Data Flow": {},
+        "Show Boundary Threats": "Select"
+      }
+    },
+    {
+      "id": "5861370d-b333-4d4b-9420-95425026e9c9",
+      "name": "API Response",
+      "source": "5d15323e-3729-4694-87b1-181c90af5045",
+      "destination": "6183b7fa-eba5-4bf8-a0af-c3e30d144a10",
+      "bidirectional": false,
+      "properties": {
+        "Response": {},
+        "Name": "API Response",
+        "Dataflow Order": "0",
+        "Out Of Scope": "false",
+        "Reason For Out Of Scope": {},
+        "Configurable Attributes": {},
+        "As Generic Data Flow": {},
+        "Show Boundary Threats": "Select"
+      }
+    },
+    {
+      "id": "5bef4e92-a715-425d-8d47-13483c7bdfaa",
+      "name": "API Response",
+      "source": "5d15323e-3729-4694-87b1-181c90af5045",
+      "destination": "91c41c08-87c3-4740-a9fa-a37975717e93",
+      "bidirectional": false,
+      "properties": {
+        "Response": {},
+        "Name": "API Response",
+        "Dataflow Order": "0",
+        "Out Of Scope": "false",
+        "Reason For Out Of Scope": {},
+        "Configurable Attributes": {},
+        "As Generic Data Flow": {},
+        "Show Boundary Threats": "Select"
+      }
+    },
+    {
+      "id": "2da4b0b8-ac92-4b3e-8ff2-f921b51f31e9",
+      "name": "API Request",
+      "source": "91c41c08-87c3-4740-a9fa-a37975717e93",
+      "destination": "5d15323e-3729-4694-87b1-181c90af5045",
+      "bidirectional": false,
+      "properties": {
+        "Request": {},
+        "Name": "API Request",
+        "Dataflow Order": "0",
+        "Out Of Scope": "false",
+        "Reason For Out Of Scope": {},
+        "Configurable Attributes": {},
+        "As Generic Data Flow": {},
+        "Show Boundary Threats": "Select"
+      }
+    },
+    {
+      "id": "7f2708c4-733e-4d2f-92fd-3bd7e6126c3e",
+      "name": "API Response",
+      "source": "5d15323e-3729-4694-87b1-181c90af5045",
+      "destination": "40560275-0a84-4e52-b67f-f9008519e608",
+      "bidirectional": false,
+      "properties": {
+        "Response": {},
+        "Name": "API Response",
+        "Dataflow Order": "0",
+        "Out Of Scope": "false",
+        "Reason For Out Of Scope": {},
+        "Configurable Attributes": {},
+        "As Generic Data Flow": {},
+        "Show Boundary Threats": "Select"
+      }
+    },
+    {
+      "id": "6daf6a4c-cd7c-41a3-8ad2-52055856f684",
+      "name": "API Request",
+      "source": "40560275-0a84-4e52-b67f-f9008519e608",
+      "destination": "5d15323e-3729-4694-87b1-181c90af5045",
+      "bidirectional": false,
+      "properties": {
+        "Request": {},
+        "Name": "API Request",
+        "Dataflow Order": "0",
+        "Out Of Scope": "false",
+        "Reason For Out Of Scope": {},
+        "Configurable Attributes": {},
+        "As Generic Data Flow": {},
+        "Show Boundary Threats": "Select"
+      }
+    },
+    {
+      "id": "3cb51a75-9fc5-4a38-8453-c939a8ca7c11",
+      "name": "API Response",
+      "source": "b56070fb-682d-4af7-8262-a31064d85ba1",
+      "destination": "5d15323e-3729-4694-87b1-181c90af5045",
+      "bidirectional": false,
+      "properties": {
+        "Response": {},
+        "Name": "API Response",
+        "Dataflow Order": "0",
+        "Out Of Scope": "false",
+        "Reason For Out Of Scope": {},
+        "Configurable Attributes": {},
+        "As Generic Data Flow": {},
+        "Show Boundary Threats": "Select"
+      }
+    },
+    {
+      "id": "fedd702c-402f-46f3-b95e-93f6a6af79ac",
+      "name": "API Request",
+      "source": "5d15323e-3729-4694-87b1-181c90af5045",
+      "destination": "b56070fb-682d-4af7-8262-a31064d85ba1",
+      "bidirectional": false,
+      "properties": {
+        "Request": {},
+        "Name": "API Request",
+        "Dataflow Order": "0",
+        "Out Of Scope": "false",
+        "Reason For Out Of Scope": {},
+        "Configurable Attributes": {},
+        "As Generic Data Flow": {},
+        "Show Boundary Threats": "Select"
+      }
+    },
+    {
+      "id": "803afb30-cf2c-47e5-8dd5-26cdfd8db26b",
+      "name": "File Request",
+      "source": "b56070fb-682d-4af7-8262-a31064d85ba1",
+      "destination": "07d453bf-8157-4623-a0e9-5107cc3ca0a5",
+      "bidirectional": false,
+      "properties": {
+        "Request": {},
+        "Name": "File Request",
+        "Dataflow Order": "0",
+        "Out Of Scope": "false",
+        "Reason For Out Of Scope": {},
+        "Configurable Attributes": {},
+        "As Generic Data Flow": {},
+        "Show Boundary Threats": "Select"
+      }
+    },
+    {
+      "id": "3f6f8f3d-a4f1-4e8c-8120-2ea1fd13370d",
+      "name": "File Response",
+      "source": "07d453bf-8157-4623-a0e9-5107cc3ca0a5",
+      "destination": "b56070fb-682d-4af7-8262-a31064d85ba1",
+      "bidirectional": false,
+      "properties": {
+        "Response": {},
+        "Name": "File Response",
+        "Dataflow Order": "0",
+        "Out Of Scope": "false",
+        "Reason For Out Of Scope": {},
+        "Configurable Attributes": {},
+        "As Generic Data Flow": {},
+        "Show Boundary Threats": "Select"
+      }
+    }
+  ]
+}
