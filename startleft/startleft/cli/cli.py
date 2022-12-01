@@ -24,7 +24,7 @@ from startleft.version import version
 
 logger = logging.getLogger(__name__)
 provider_resolver = ProviderResolver(PROCESSORS)
-
+app_log_level = sys.argv[2]
 
 def get_otm_as_file(otm: OTM, out_file: str):
     logger.info(f"Writing OTM file to '{out_file}'")
@@ -207,7 +207,7 @@ def server(port: int):
     configure_logging(verbose=True)
     logger.info(f'Startleft version: {version}')
 
-    fastapi_server.run_webapp(port)
+    fastapi_server.run_webapp(port, app_log_level)
 
 
 if __name__ == '__main__':

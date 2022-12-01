@@ -16,7 +16,9 @@ from slp_base.slp_base.errors import CommonError
 from startleft.startleft.log import VERBOSE_MESSAGE_FORMAT
 
 webapp = FastAPI()
+uvicorn_logger = logging.getLogger('uvicorn.error')
 logger = logging.getLogger(__name__)
+logger.setLevel(uvicorn_logger.level)
 
 webapp.include_router(health_controller.router)
 webapp.include_router(iac_create_otm_controller.router)
@@ -31,8 +33,12 @@ def initialize_webapp():
     return webapp
 
 
-def get_log_config():
+def get_log_config(log_level):
     log_config = uvicorn.config.LOGGING_CONFIG
+    app_log_level = calculate_log_level_to_uvicorn(log_level)
+    log_config["loggers"]["uvicorn"]["level"] = app_log_level
+    log_config["loggers"]["uvicorn.error"]["level"] = app_log_level
+    log_config["loggers"]["uvicorn.access"]["level"] = app_log_level
     log_config["loggers"]["uvicorn"]["propagate"] = False
     log_config["formatters"]["access"]["fmt"] = VERBOSE_MESSAGE_FORMAT
     log_config["formatters"]["default"]["fmt"] = VERBOSE_MESSAGE_FORMAT
@@ -40,8 +46,8 @@ def get_log_config():
     return log_config
 
 
-def run_webapp(port: int):
-    uvicorn.run(webapp, host="127.0.0.1", port=port, log_config=get_log_config())
+def run_webapp(port: int, log_level: int):
+    uvicorn.run(webapp, host="127.0.0.1", port=port, log_config=get_log_config(log_level))
 
 
 @webapp.exception_handler(CommonError)
@@ -96,3 +102,14 @@ def common_response_handler(status_code: int, type_: str, title: str, detail: st
     error_response = ErrorResponse(error_type=type_, status=status_code, title=title, detail=detail, messages=messages)
 
     return JSONResponse(status_code=status_code, content=jsonable_encoder(error_response))
+
+
+def calculate_log_level_to_uvicorn(log_level: str):
+    if log_level == 'WARN':
+        return 'WARNING'
+    elif log_level == 'CRIT':
+        return 'CRITICAL'
+    elif log_level == 'NONE':
+        return 'INFO'
+    else:
+        return log_level
