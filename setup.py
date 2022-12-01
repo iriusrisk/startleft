@@ -1,5 +1,9 @@
 from setuptools import setup, find_packages
 
+from startleft.startleft._version.version_scheme import guess_startleft_semver
+from startleft.startleft._version.local_scheme import guess_startleft_semver_suffix
+
+
 setup(
     name='startleft',
     description='Parse Infrastructure as Code files to the Open Threat Model format and upload them to IriusRisk',
@@ -28,6 +32,12 @@ setup(
         'vsdx==0.5.11',
         'python-magic==0.4.27'
     ],
+    use_scm_version={
+        'write_to': 'startleft/version.py',
+        'version_scheme': guess_startleft_semver,
+        'local_scheme': guess_startleft_semver_suffix,
+        'git_describe_command': 'git describe --tags --long --match *[0-9]*'
+    },
     extras_require={
         "setup": [
             "pytest-runner==6.0.0",
