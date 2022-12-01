@@ -17,17 +17,17 @@
   ],
   "trustZones": [
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "id": "47",
       "name": "Public Cloud",
-      "type": null,
+      "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "risk": {
         "trustRating": 10
       }
     },
     {
-      "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
-      "name": "Private Secured",
-      "type": null,
+      "id": "48",
+      "name": "Private Secured Cloud",
+      "type": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
       "risk": {
         "trustRating": 10
       }
@@ -39,7 +39,7 @@
       "name": "Custom VPC",
       "type": "empty-component",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "47"
       }
     },
     {
@@ -63,7 +63,7 @@
       "name": "Private Database",
       "type": "rds",
       "parent": {
-        "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+        "trustZone": "48"
       }
     },
     {
@@ -71,7 +71,7 @@
       "name": "Amazon CloudWatch",
       "type": "cloudwatch",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "47"
       }
     },
     {
@@ -79,32 +79,32 @@
       "name": "Custom log system",
       "type": "cloudwatch",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "47"
       }
     }
   ],
   "dataflows": [
     {
       "id": "17",
-      "name": "4638ef81-e68d-4e59-b4d8-6afbce58904e",
+      "name": "21830dc6-840d-4254-bb35-f4b2c68561e5",
       "source": "1",
       "destination": "12"
     },
     {
       "id": "34",
-      "name": "80617f64-b8d3-4cf9-9bc1-6456c694e513",
+      "name": "89ab351c-6ae7-4afb-ad90-0eb045fd801a",
       "source": "12",
       "destination": "30"
     },
     {
       "id": "40",
-      "name": "9e14d9d4-10c0-4207-a857-6915f4e56380",
+      "name": "7aecb32c-e39f-4dc2-ad6e-7f5793161a6d",
       "source": "1",
       "destination": "35"
     },
     {
       "id": "46",
-      "name": "bb2f30ba-9624-46e3-80cd-b60456d7f944",
+      "name": "6ceb010f-8390-4dc5-943b-62d268c34e78",
       "source": "12",
       "destination": "41"
     }

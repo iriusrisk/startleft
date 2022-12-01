@@ -92,6 +92,11 @@ visio_bidirectional_connectors = path + '/visio/bidirectional-connectors.vsdx'
 # mapping
 default_visio_mapping = path + '/visio/aws-visio-mapping.yaml'
 custom_vpc_mapping = path + '/visio/custom-vpc-mapping.yaml'
+
+# legacy mapping
+default_visio_mapping_legacy = path + '/visio/legacy/aws-visio-mapping.yaml'
+custom_vpc_mapping_legacy = path + '/visio/legacy/custom-vpc-mapping.yaml'
+
 # expected otm results
 visio_aws_shapes_otm_expected = path + '/visio/aws-shapes.otm'
 visio_aws_with_tz_and_vpc_otm_expected = path + '/visio/aws-with-tz-and-vpc.otm'
