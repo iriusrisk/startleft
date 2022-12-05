@@ -195,16 +195,16 @@ class TestMTMTMappingFileLoader:
         assert len(mtmt_mapping.mapping_components) == 57
         assert len(mtmt_mapping.mapping_dataflows) == 0
         assert mtmt_mapping.mapping_trustzones.get('Internet Boundary').get(
-            'type') == 'internet'
+            'type') == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
         assert mtmt_mapping.mapping_trustzones.get('CorpNet Trust Boundary').get(
-            'type') == 'private-secured'
+            'type') == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
         assert mtmt_mapping.mapping_trustzones.get('Generic Trust Border Boundary').get(
-            'type') == 'public'
+            'type') == '6376d53e-6461-412b-8e04-7b3fe2b397de'
         assert mtmt_mapping.mapping_trustzones.get('Generic Trust Line Boundary').get(
-            'type') == 'public'
+            'type') == '6376d53e-6461-412b-8e04-7b3fe2b397de'
         assert mtmt_mapping.mapping_trustzones.get('Sandbox Trust Boundary Border').get(
-            'type') == 'private-secured'
-        assert mtmt_mapping.mapping_trustzones.get('default').get('type') == 'public-cloud'
+            'type') == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
+        assert mtmt_mapping.mapping_trustzones.get('default').get('type') == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
         assert mtmt_mapping.mapping_components.get('ADFS').get('type') == 'active-directory'
         mobile_client = mtmt_mapping.mapping_components.get('Mobile Client')
         assert mobile_client['key'] == 'Mobile Client Technologies'

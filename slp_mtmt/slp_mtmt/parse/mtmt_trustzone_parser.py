@@ -34,15 +34,17 @@ class MTMTTrustzoneParser:
         return self.trustzones
 
     def create_trustzone(self, border: MTMBorder) -> Trustzone:
-        mtmt_type = self.__calculate_otm_type(border)
-        if mtmt_type is not None:
-            trustzone_type = self.__calculate_otm_type(border)
+        otm_type = self.__calculate_otm_type(border)
+        if otm_type is not None:
             return Trustzone(id=border.id,
                              name=border.name,
-                             type=trustzone_type,
+                             type=otm_type,
                              properties=border.properties)
 
     def __calculate_otm_type(self, border: MTMBorder) -> str:
+        id = self.__get_label_value(border.stencil_name, 'id')
+        if id:
+            return id
         return self.__get_label_value(border.stencil_name, 'type')
 
     def __get_label_value(self, label, key):

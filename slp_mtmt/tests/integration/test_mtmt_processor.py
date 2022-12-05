@@ -1,21 +1,22 @@
+from pytest import mark
+
 from sl_util.sl_util.file_utils import get_byte_data
 from slp_mtmt import MTMTProcessor
-from slp_mtmt.tests.resources import test_resource_paths
+from slp_mtmt.tests.resources.test_resource_paths import mapping_mtmt_mvp_legacy, mapping_mtmt_mvp, model_mtmt_mvp
 
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
-SAMPLE_VALID_MTMT_FILE = test_resource_paths.model_mtmt_mvp
-SAMPLE_VALID_MAPPING_FILE = test_resource_paths.mapping_mtmt_mvp
 
 
 class TestMtmtProcessor:
 
-    def test_run_valid_mappings(self):
+    @mark.parametrize('mapping_file', [mapping_mtmt_mvp, mapping_mtmt_mvp_legacy])
+    def test_run_valid_mappings(self, mapping_file):
         # GIVEN a valid MTMT file with some resources
-        source_file = get_byte_data(SAMPLE_VALID_MTMT_FILE)
+        source_file = get_byte_data(model_mtmt_mvp)
 
         # AND a valid MTMT mapping file
-        mapping_file = get_byte_data(SAMPLE_VALID_MAPPING_FILE)
+        mapping_file = get_byte_data(mapping_file)
 
         # WHEN the MTMT file is processed
         otm = MTMTProcessor(SAMPLE_ID, SAMPLE_NAME, source_file, [mapping_file]).process()
@@ -38,11 +39,11 @@ class TestMtmtProcessor:
         trustzone = otm.trustzones[0]
         assert trustzone.id == '75605184-4ca0-43be-ba4c-5fa5ad15e367'
         assert trustzone.name == 'Internet'
-        assert trustzone.type == 'internet'
+        assert trustzone.type == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
         trustzone = otm.trustzones[1]
         assert trustzone.id == '24cdf4da-ac7f-4a35-bab0-29256d4169bf'
         assert trustzone.name == 'Private Secured Cloud'
-        assert trustzone.type == 'private-secured'
+        assert trustzone.type == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
 
         # AND the info inside components is also right
         component = otm.components[0]
