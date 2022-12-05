@@ -28,14 +28,15 @@ type in the label value.
 
 The type in the mapping file will be the type in the OTM trust zone output.
 In this example, the `Generic Trust Border Boundary` source trust zones
-will be mapped to a OTM trust zone which type will be `public`
+will be mapped to a OTM trust zone which type will be the value of the `type`
+in our mapping file.
 
 ```yaml
   - label: Generic Trust Border Boundary
-    type:  public
+    type:  6376d53e-6461-412b-8e04-7b3fe2b397de
 ```
 
-In the OTM each trust zone will have a unique id 
+In the OTM each trust zone will have a unique id and the type will be the type that we put in the mapping file
 
 The trust zone OTM output will be:
 ```json
@@ -43,7 +44,7 @@ The trust zone OTM output will be:
     {
       "id": "7537441a-1c03-48c0-b9c8-f82d5906c139",
       "name": "Internet",
-      "type": "public",
+      "type": "6376d53e-6461-412b-8e04-7b3fe2b397de",
       "risk": {
         "trustRating": 10
       },
@@ -57,7 +58,7 @@ In case we have two trust zones with the same type, the OTM will have two trust 
 with the same type but different id. In the mapping file is enough having mapped once:
 ```yaml
   - label: Generic Trust Border Boundary
-    type: public
+    type: 6376d53e-6461-412b-8e04-7b3fe2b397de
 ```
 
 With two trust zones of the same type the OTM output will be:
@@ -66,7 +67,7 @@ With two trust zones of the same type the OTM output will be:
   {
     "id": "7537441a-1c03-48c0-b9c8-f82d5906c139",
     "name": "Internet",
-    "type": "public",
+    "type": "6376d53e-6461-412b-8e04-7b3fe2b397de",
     "risk": {
       "trustRating": 10
     },
@@ -77,7 +78,7 @@ With two trust zones of the same type the OTM output will be:
   {
     "id": "bd837730-6a59-11ed-a798-772dcc832e1d",
     "name": "Public zone",
-    "type": "public",
+    "type": "6376d53e-6461-412b-8e04-7b3fe2b397de",
     "risk": {
       "trustRating": 10
     },
@@ -88,6 +89,11 @@ With two trust zones of the same type the OTM output will be:
 ]}
 ```
 The id of the trust zone in the OTM will be the MTMT original component id in the source file
+
+
+>Due to a backward compatibility StartLeft accepts as well the legacy mapping file format.
+>Please read [Legacy-Mapping-File-Format](legacy/Legacy-Mapping-File-Format.md)
+
 
 ## Components
 For the components we need to write two fields: ``label`` and ``type``
