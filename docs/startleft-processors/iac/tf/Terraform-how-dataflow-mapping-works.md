@@ -1,4 +1,5 @@
 # How Dataflow Mapping works
 
 ---
-TBD
+
+A section explaining how to build dataflow mappings will be available soon.

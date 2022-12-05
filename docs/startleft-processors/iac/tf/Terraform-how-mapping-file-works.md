@@ -1,9 +1,9 @@
 # How Terraform Mapping File works
 
 ---
-This page is an in-depth explanation of how `slp_tf` handle mapping and Terraform resource files to generate an OTM.
+This page is an in-depth explanation of how `slp_tf` handles mapping and Terraform resource files to generate an OTM.
 
-This diagram shows how mapping and terraform resource files are pre-processed to simplify and decouple the
+This diagram shows how mapping and Terraform resource files are pre-processed to simplify and decouple the
 Terraform parser logic from the input files.
 
 ![img/simple-diagram-about-slp_tf-internal-files-usage.png](img/simple-diagram-about-slp_tf-internal-files-usage.png)
@@ -37,10 +37,10 @@ a given collection of infrastructure. A configuration can consist of multiple fi
 
 ??? tip "Example for Network topology for Amazon Web Services"
 
-    The following example describes a simple network topology for Amazon Web Services, just to give a sense of the overall 
-    structure and syntax of the Terraform language. Similar configurations can be created for other virtual network services, 
-    using resource types defined by other providers, and a practical network configuration will often contain additional 
-    elements not shown here.
+    The following example describes a simple network topology for Amazon Web Services, just to give you a sense of the 
+    overall structure and syntax of the Terraform language. Similar configurations can be created for other virtual 
+    network services, using resource types defined by other providers, and a practical network configuration will 
+    often contain additional elements not shown here.
     
     ```terraform
     terraform {
@@ -138,7 +138,8 @@ Terraform source.
 This section will explain the three different sections into which a Mapping File is divided.
 
 ### How To Map TrustZones
-`slp_tf` delegates in the configured trustzone mapping behavior for creating them due to none TrustZone being present in IaC Terraform files, 
+The TrustZone is a Threat Modelling concept that will never be present as is in the Terraform
+source file. Thus, the `slp_tf` relies on the configuration defined in the `trustzones` section of the Mapping File. 
 ```yaml
 trustzones: # (1)!
   - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91 # (2)!
@@ -146,13 +147,13 @@ trustzones: # (1)!
     $default: true # (4)!
 ```
 
-1. **trustzones section** here is defined as the TrustZone mapping behavior. At least one TrustZone is needed to be defined
-2. set **trustzone[id]** value, which also can be used as a reference when setting the parent of a component `parent: public-cloud-01`
+1. **trustzones section** defines the TrustZone mapping behavior. At least one TrustZone is needed to be defined
+2. set **trustzone[id]** value, which also can be used as a reference when setting the parent of a component `parent: b61d6911-338d-46a8-9f39-8dcd24abfe91`
 3. set **trustzone[name]** value
 4. *Optional:* **default trustzone** to be used if a component does not define its parent
 
-The creation of some trustzone may depend on the existence of some resources in the original file, 
-to configure this behavior, the `$source` attribute is used.
+The creation of some TrustZone may depend on the existence of some resources in the original file. To configure this 
+behavior, the `$source` attribute is used.
 
 ```yaml
 trustzones:
@@ -174,7 +175,7 @@ trustzones:
 
     In this example, two TrustZones are created:
 
-    1. The `Public Cloud` is created as the default TrustZone
+    1. The `Public Cloud` is created as the default TrustZone.
     2. The `Internet` is created because a resource with `resource_type` == `aws_security_group` with `resource_properties` contains `egress[0].cidr_blocks` is present.
 
     === "Mapping file"
@@ -219,6 +220,7 @@ trustzones:
           name: Public Cloud
           risk:
             trustRating: 10
+
         - id: f0ba7722-39b6-4c81-8290-a30a248bb8d9
           name: Internet
           risk:
@@ -229,9 +231,9 @@ trustzones:
 ### How To Map Components
 This section explains several ways of mapping a resource to an OTM component.
 
-Those components are retrieved by the [Terraform Domain-specific language](Terraform-domain-specific-language.md) available functions 
-configured in **special mapping fields** `$source`. 
-We will use the `$type` Terraform-dsl function in the following examples for simplicity.
+Those components are retrieved by the [Terraform Domain-Specific Language](Terraform-domain-specific-language.md) 
+available functions configured in **special mapping fields** `$source`. 
+We will use the `$type` Terraform DSL function in the following examples for simplicity.
 
 #### Mapping a component
 
@@ -239,7 +241,8 @@ The easiest way to map a component is to define the output `type` value and the 
 
 ??? tip "Component Template Pattern"
 
-    For reducing the minimal amount of data needed for mapping files, a template pattern is used to set the common attributes.
+    To reduce the minimal amount of data needed for mapping files, a template pattern is used to set the common 
+    attributes.
     ```yaml
     id:     {$format: "{name}"}  # (1)!
     name:   # (2)!
@@ -264,7 +267,7 @@ The easiest way to map a component is to define the output `type` value and the 
     9. returns the `resource_type` as `oneSource` attribute
     10. returns the "`resource_name (resource_type)`" as `multipleSource` attribute
 
-    > :octicons-light-bulb-16: The values provided in the mapping file have always preferred over the template’s ones
+    > :octicons-light-bulb-16: The values provided in the mapping file have always priority over the template’s ones.
 
     **Example**
 
@@ -340,11 +343,13 @@ The easiest way to map a component is to define the output `type` value and the 
     - name: Terraform
       id: Terraform
       type: code
+
     trustZones:
     - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
       name: Public Cloud
       risk:
         trustRating: 10
+
     components:
     - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc
       name: CustomVPC
@@ -353,13 +358,14 @@ The easiest way to map a component is to define the output `type` value and the 
         trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
       tags:
       - aws_vpc
+
     dataflows: []
     ```
 
->  :octicons-light-bulb-16: The component identifier is generated by the internal component identifier for Terraform processor.
+>  :octicons-light-bulb-16: The component identifier is generated internally by the `slp_tf`. 
 
 #### Mapping an AltSource
-$altsource is a **special mapping fields** that specifies an alternative mapping when $source returns nothing.
+$altsource is a **special mapping field** that specifies an alternative mapping when $source returns nothing.
 
 This is the minimal configuration needed to configure an $altsource, the following **Example** configures an altsource for `aws_s3_bucket` 
 ```yaml
@@ -374,13 +380,14 @@ This is the minimal configuration needed to configure an $altsource, the followi
 
 1. **special mapping fields** specifies an alternative mapping when $source returns no object
 2. **special mapping fields** set the selected resources as the object to be mapped
-3. **special mapping fields** specifies the attribute to execute the $mappingLookups logic
-4. contains a set of regular expressions to search inside the string defined in $mappingType and $mappingPath. This field may be multiple because there may be more than one service to infer.
+3. **special mapping fields** specifies the attribute over the one the $mappingLookups logic will be executed
+4. contains a set of regular expressions to search inside the string defined in $mappingType and $mappingPath. This 
+   field may be multiple because there may be more than one service to infer
 5. if **regex** match with the $mappingPath the component is created
 
-:material-information-outline: This configuration maps a s3 by the existence of a resource with 
-`resource_type == aws_vpc_endpoint` and `*.service_name[0] match regex ^(.*)s3$`
-but it is only executed in case **none resource of aws_s3_bucket type exists**
+>   :material-information-outline: This configuration maps a s3 by the existence of a resource with 
+    `resource_type == aws_vpc_endpoint` and `*.service_name[0] match regex ^(.*)s3$`
+    but it is only executed in case **none resource of aws_s3_bucket type exists**.
 
 ??? tip "AltSource Template Pattern"
 
@@ -405,7 +412,8 @@ but it is only executed in case **none resource of aws_s3_bucket type exists**
     9. returns the `resource_type` as `oneSource` attribute
     10. returns the "`resource_name (resource_type)`" as `multipleSource` attribute
 
-    > :octicons-light-bulb-16: The values provided in the mapping file are always been preferred over the template’s ones
+    > :octicons-light-bulb-16: The values provided in the mapping file are always preferred over the template’s 
+    ones.
 
 === "Mapping file"
 
@@ -497,13 +505,15 @@ but it is only executed in case **none resource of aws_s3_bucket type exists**
     dataflows: []
     ```
 
->  :octicons-light-bulb-16: Note that the template component name is override for $mappingLookups[].name on the Mapping File
+>  :octicons-light-bulb-16: Note that the template component name is override for $mappingLookups[].name on the 
+> Mapping File.
 
 #### Mapping a Parent
-> :material-information-outline: The order of the components is important because parent components must be defined before child components
+> :material-information-outline: The order of the components is important because parent components must be defined 
+> before child components.
 
-When mapping a component, the default TrustZone is set to the parent component value by the component template pattern, 
-nevertheless it can be modified to set another TrustZones or Component with the attribute `component['parent']` in the mapping file.
+When mapping a component, the default TrustZone is set to the parent component value by the component template pattern,
+nevertheless, it can be modified to set other TrustZones or Component with the attribute `component['parent']` in the mapping file.
 
 === "Mapping file"
     ```yaml
@@ -584,13 +594,14 @@ nevertheless it can be modified to set another TrustZones or Component with the 
     dataflows: []
     ```
 
-> :octicons-light-bulb-16: This mapper defines a load-balancer by resources of type aws_lb or aws_elb
-> and set its parent by its `resource_properties.subnets` value, **this component will be created as many times as subnets exist**.
+> :octicons-light-bulb-16:  This mapper defines a load-balancer by resources of type `aws_lb` or `aws_elb` and sets its 
+> parent by its `resource_properties.subnets` value. **This component will be created as many times as subnets exist**.
 
 #### Mapping a Children
-> :material-information-outline: The order of the components is important because parent components must be defined before child components
+> :material-information-outline: The order of the components is important because parent components must be defined 
+> before child components.
 
-When mapping a component, it can define whose components are their children on the OTM, **$children** will set the
+When mapping a component, it can define what components are their children on the OTM. **$children** will set the
 parent attribute of those components on the OTM.
 
 === "Mapping file"
@@ -652,7 +663,8 @@ parent attribute of those components on the OTM.
 
 #### Mapping a Module
 
-The Terraform module section can map by using the **special mapping fields** $module to match the `module[].source` value.
+The modules imported in a Terraform file can be mapped into OTM components using the **special mapping field** 
+`$module` to match the `module[].source` value.
 
 === "Mapping file"
 
@@ -729,4 +741,4 @@ The Terraform module section can map by using the **special mapping fields** $mo
     ```
 
 ### How To Map Dataflows
-*WIP*
+This section is still *Work In Progress*.
