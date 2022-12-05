@@ -12,7 +12,7 @@ enables its users to freely draw diagrams of any kind from scratch or based on t
 
 From the point of view of StartLeft, it is a place where infrastructure or threat model diagrams can be created. 
 Despite the fact that Visio gives their users complete freedom to build whatever they want in the diagram, 
-architecture or threat modelling diagrams tend to share a more or less common structure and StartLeft pretends to 
+architecture or threat modeling diagrams tend to share a more or less common structure and StartLeft pretends to 
 take advantage of this in order to automatize the processing of the diagrams to create threat models in the OTM format.
 
 
@@ -60,7 +60,7 @@ generic ones (_My Custom Machine_).
 
 ![img/visio-basic-example.png](img/visio-basic-example.png)
 
-You may want to upload it to a threat modelling tool like [IriusRisk](http://iriusrisk.com) to build a threat model 
+You may want to upload it to a threat modeling tool like [IriusRisk](http://iriusrisk.com) to build a threat model 
 like this:
 
 ![img/visio-irius-basic-example.png](img/visio-irius-basic-example.png)

@@ -58,8 +58,8 @@ class OTM:
 
         return data
 
-    def add_trustzone(self, id=None, name=None, source=None, properties=None):
-        self.trustzones.append(Trustzone(id=id, name=name, source=source, properties=properties))
+    def add_trustzone(self, id=None, name=None, type=None, source=None, properties=None):
+        self.trustzones.append(Trustzone(id=id, name=name, type=type, source=source, properties=properties))
 
     def add_component(self, id=None, name=None, type=None, parent=None, parent_type=None, source=None,
                       properties=None, tags=None):
