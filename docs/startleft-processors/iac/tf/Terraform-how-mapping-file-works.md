@@ -1,5 +1,3 @@
-# How Terraform Mapping File works
-
 ---
 This page is an in-depth explanation of how `slp_tf` handles mapping and Terraform resource files to generate an OTM.
 

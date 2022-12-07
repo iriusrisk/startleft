@@ -3,8 +3,6 @@ search:
   boost: 2 
 ---
 
-# Terraform Domain-Specific Language
-
 ---
 
 There is an available Terraform Domain-Specific Language for easy mapping behavior configuration.

@@ -31,10 +31,10 @@ nav:
           - Terraform Quickstart: startleft-processors/iac/tf/Terraform-Quickstart.md
           - Terraform Mapping:
             - How To Create a Basic Mapping File: startleft-processors/iac/tf/Terraform-how-to-create-a-basic-mapping-file.md
-            - How Terraform Mapping File works: startleft-processors/iac/tf/Terraform-how-mapping-file-works.md
+            - How Mapping File works: startleft-processors/iac/tf/Terraform-how-mapping-file-works.md
             - How Dataflow Mapping File works: startleft-processors/iac/tf/Terraform-how-dataflow-mapping-works.md
-            - Terraform Domain-Specific Language: startleft-processors/iac/tf/Terraform-domain-specific-language.md
-            - Terraform Additional JMESPath functions: startleft-processors/iac/tf/Terraform-additional-jmespath-functions.md
+            - Domain-Specific Language: startleft-processors/iac/tf/Terraform-domain-specific-language.md
+            - Additional JMESPath functions: startleft-processors/iac/tf/Terraform-additional-jmespath-functions.md
           - Terraform Examples: startleft-processors/iac/tf/Terraform-Examples.md
       - Visio:
           - Visio Quickstart: startleft-processors/diagram/Visio-Quickstart.md
