@@ -1,4 +1,4 @@
-from otm.otm.otm import OTM, Component, Dataflow, Trustzone
+from otm.otm.otm import OTM, Component, Dataflow, Trustzone, Representation
 from otm.otm.provider import Provider
 from sl_util.sl_util.iterations_utils import IterationUtils
 
@@ -29,6 +29,10 @@ class OtmBuilder:
 
     def add_dataflows(self, dataflows: [Dataflow]):
         self.otm.dataflows = dataflows
+        return self
+
+    def add_representations(self, representations: [Representation]):
+        self.otm.representations.extend(representations)
         return self
 
     def __init_otm(self):
