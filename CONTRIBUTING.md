@@ -1,6 +1,4 @@
 # Welcome to the StartLeft contributing guide
-
----
 First off, thanks for taking the time to contribute!!
 
 StartLeft is an Open Source project that welcomes collaborators to extend or improve its functionality. Despite
@@ -9,13 +7,11 @@ makes it especially suitable to grow through the contributions of the community:
 
 * The nature of the project, whose functional scaling is based on the **support of new, independent, source
   formats**.
-* The **conversion into OTM is based on configuration files** that can also be created independently depending on the
-  expected OTM use.
+* The **conversion into the [Open Threat Model (OTM)](https://github.com/iriusrisk/OpenThreatModel) format is based on 
+  configuration files** that can also be created independently depending on the expected OTM use.
 * The **modularized architecture** enables collaborators to contribute to each format's processor without conflicts.
 
 ## New contributor guide
-
----
 The contributing strategy for StartLeft is based on standardized procedures for collaborating in GitHub Open Source
 projects, so these resources may be helpful for you:
 
@@ -26,8 +22,6 @@ projects, so these resources may be helpful for you:
 
 ## Getting started
 
----
-
 All you need to know about StartLeft is on its [documentation page](http://iriusrisk.github.io/startleft). Once you
 get familiarized with the project, you can check out the
 [Quickstart Guide for Developers](http://iriusrisk.github.io/startleft/development/Quickstart-Guide-for-Developers/),
@@ -35,16 +29,8 @@ which will guide you through the process of setting up the development environme
 the basics to start coding.
 
 ### Issues
-
-#### Create a new issue
 If you spot a problem with StartLeft, [search if an issue already exists](https://github.com/iriusrisk/startleft/issues).
 If a related issue does not exist, you can open a new issue.
-
-#### Solve an issue
-Scan through our [existing issues](https://github.com/iriusrisk/startleft/issues) to find one that interests you.
-Once you get it, check their status and comments. There you can see if there are some other developments in progress
-related to that issue. If you are not sure, create a comment asking about the situation of the task before
-submitting your own PR.
 
 ### Enhancements
 To propose improvements or changes that are not properly bugs or problems you can also use the
@@ -70,8 +56,6 @@ will be used. Summarizing, the steps that an external developer must follow to c
    release.
 
 ## Code conventions
-
----
 There are no specific code conventions for the StartLeft project. At this point, the generic
 [Style Guide for Python Code](https://peps.python.org/pep-0008/) is followed. So, please take a look at it before
 start coding, paying special attention to the
@@ -80,9 +64,8 @@ can be discussed to get aligned.
 
 
 ## Useful links
-
----
 * <a href="http://iriusrisk.github.io/startleft" target="_blank">StartLeft documentation</a>.
 * <a href="https://github.com/iriusrisk/startleft/issues" target="_blank">Open issues</a>.
 * <a href="https://github.com/iriusrisk/startleft/releases" target="_blank">Releases</a>.
+* <a href="https://github.com/iriusrisk/OpenThreatModel" target="_blank">Open Threat Model (OTM) standard definition</a>.
 * <a href="https://www.threatmodelingconnect.com/" target="_blank">Threat Modelling connect forum</a>.
