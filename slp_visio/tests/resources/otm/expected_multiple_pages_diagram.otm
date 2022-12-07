@@ -1,0 +1,81 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "project-name",
+    "id": "project-id"
+  },
+  "representations": [
+    {
+      "name": "Visio",
+      "id": "Visio",
+      "type": "diagram",
+      "size": {
+        "width": 1000,
+        "height": 1000
+      }
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    },
+    {
+      "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+      "name": "Private Secured",
+      "risk": {
+        "trustRating": 10
+      }
+    },
+    {
+      "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
+      "name": "Internet",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "12",
+      "name": "Custom machine",
+      "type": "ec2",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "30",
+      "name": "Private Database",
+      "type": "rds",
+      "parent": {
+        "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+      }
+    },
+    {
+      "id": "65",
+      "name": "Internet Machine",
+      "type": "ec2",
+      "parent": {
+        "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
+      }
+    }
+  ],
+  "dataflows": [
+    {
+      "id": "34",
+      "name": "2bb6c996-1cbb-4ebb-ae93-c1e3d350f68e",
+      "source": "12",
+      "destination": "30"
+    },
+    {
+      "id": "71",
+      "name": "af045351-db50-483b-b88e-3c5039231b5b",
+      "source": "65",
+      "destination": "30"
+    }
+  ]
+}

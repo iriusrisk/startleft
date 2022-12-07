@@ -1,0 +1,102 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "project-name",
+    "id": "project-id"
+  },
+  "representations": [
+    {
+      "name": "Visio",
+      "id": "Visio",
+      "type": "diagram",
+      "size": {
+        "width": 1000,
+        "height": 1000
+      }
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    },
+    {
+      "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+      "name": "Private Secured",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "1",
+      "name": "Amazon EC2",
+      "type": "ec2",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "12",
+      "name": "Custom machine",
+      "type": "ec2",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "30",
+      "name": "Private Database",
+      "type": "rds",
+      "parent": {
+        "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+      }
+    },
+    {
+      "id": "35",
+      "name": "Amazon CloudWatch",
+      "type": "cloudwatch",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "41",
+      "name": "Custom log system",
+      "type": "cloudwatch",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    }
+  ],
+  "dataflows": [
+    {
+      "id": "17",
+      "name": "7a81df00-9924-470d-89a5-948a15410309",
+      "source": "1",
+      "destination": "12"
+    },
+    {
+      "id": "34",
+      "name": "923ab960-52eb-4528-b363-f32d10003c41",
+      "source": "12",
+      "destination": "30"
+    },
+    {
+      "id": "40",
+      "name": "b7db024a-de3c-4ad4-9030-f6b0d75c2b44",
+      "source": "1",
+      "destination": "35"
+    },
+    {
+      "id": "46",
+      "name": "34d22f6f-e53e-4f5c-9161-bc9bfaf535f2",
+      "source": "12",
+      "destination": "41"
+    }
+  ]
+}
