@@ -6,6 +6,7 @@ nav:
   - Open Threat Model (OTM): Open-Threat-Model-(OTM).md
   - Quickstart Guide for Beginners: Quickstart-Guide-for-Beginners.md
   - About this documentation: About.md
+  - Versioning: Versioning.md
   - Usage:
       - Command Line Interface (CLI): usage/Command-Line-Interface.md
       - REST API: usage/REST-API.md
@@ -36,11 +37,27 @@ nav:
 
 theme:
   name: material
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
   features:
     - navigation.instant
     - navigation.tracking
     - search.suggest
     - search.highlight
+    - content.code.annotate
+    - content.tabs.link
 plugins:
   - search
 extra:
@@ -51,3 +68,18 @@ extra:
       as to measure the effectiveness of our documentation and whether users
       find what they're searching for. With your consent, you're helping us to
       make our documentation better.
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
