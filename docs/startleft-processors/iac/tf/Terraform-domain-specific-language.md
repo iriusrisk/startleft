@@ -6,7 +6,7 @@ search:
 ---
 
 There is an available Terraform Domain-Specific Language for easy mapping behavior configuration.
-This Terraform-DSL can split into two sections: Special Mapping Fields and Mapping functions.
+This Terraform-DSL can be split into two sections: Special Mapping Fields and Mapping functions.
 
 ## SPECIAL MAPPING FIELDS
 These functions begin with a dollar sign ($) and do not directly contribute to the OTM output. 
@@ -72,12 +72,13 @@ those components don't define their parent.
     ```
 
 ### *$*source
-This **special mapping field** *source* specifies the origin of the object type to be mapped, its behavior is configured
+This **special mapping field** *source* specifies the origin of the object type to be mapped. Its behavior is configured
 by the Terraform-DSL mapping functions to go through all the Terraform Resource files for returning the matching elements.
 
 **Applies to:** Components, TrustZones & Dataflows
 
-> :octicons-light-bulb-16: This map specifies the source for the empty-component with the resources of type aws_internet_gateway
+> :octicons-light-bulb-16: This mapping specifies the source for the empty-component with the resources of type 
+> `aws_internet_gateway`.
 
 === "Mapping file"
     ```yaml
@@ -141,35 +142,37 @@ Reference to [Mapping a Children](Terraform-how-mapping-file-works.md#mapping-a-
 
 These functions are used as parameters of the mapping attributes for configuring its behavior. 
 
-| $functions         | Type      | Description                                                                                                                                                                                                                                                                                    |
-|--------------------|-----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *$*type            | filter    | Finds a resource by its type                                                                                                                                                                                                                                                                   |
-| *$*name            | filter    | Finds a resource by its name                                                                                                                                                                                                                                                                   |
-| *$*props           | filter    | Finds a resource by its properties                                                                                                                                                                                                                                                             |
-| *$*regex           | filter    | Specifies a custom regex to be matched against the resource attribute                                                                                                                                                                                                                          |
-| *$*root            | filter    | JMESPath search through the entire source file data structure                                                                                                                                                                                                                                  |
-| *$*path            | accessor  | JMESPath search through the object identified in the $source. A default value is optional by using the $searchParams structure                                                                                                                                                                 |
-| *$*findFirst       | selector  | JMESPath search through the list of objects identified in the $source and returns the first successful match. A default value is optional by using the $searchParams structure                                                                                                                 |
-| *$*searchParams    | selector  | Specifies a default value for $path or $findFirst mapping functions                                                                                                                                                                                                                            |
-| *$*singleton       | group     | Specific objects to be unified under a single component or TrustZone                                                                                                                                                                                                                           |
-| *$*numberOfSources | selector  | When using singleton, allows you to set different values for output name or tags when the number of sources for the same mapping is single or multiple                                                                                                                                         |
-| *$*format          | formatter | A named format string based on the output of other $special fields.                                                                                                                                                                                                                            |
-| *$*module          | filter    | Search through the module section matching by source's attribute                                                                                                                                                                                                                               |
-| *$*skip            | filter    | A sub-field of $source, specifying specific objects to skip if not explicitly defined                                                                                                                                                                                                          |
-| *$*catchall        | filter    | A sub-field of $source, specifying a default search for all other objects not explicitly defined                                                                                                                                                                                               |
-| *$*lookup          | selector  | Allows you to look up the output of a $special field against a key-value lookup table                                                                                                                                                                                                          |
-| *$*hub             | connector | Only for dataflow's "source" and "destination" fields. Specially created for building dataflows from Security Group structures without generating components from them. Allows defining abstract contact points for larger end-to-end final dataflows                                          |
-| *$*ip              | group     | When defining a component's "name" field as $ip, will generate a singleton component for representing an external IP but without limitations of singleton for this case, so the "type" for the defined mapping definition with $ip (i.e. generic-terminal) will not be catalogued as singleton |
+| $functions         | Type      | Description                                                                                                                                                                                                                                                                                        |
+|--------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *$*type            | filter    | Finds a resource by its type                                                                                                                                                                                                                                                                       |
+| *$*name            | filter    | Finds a resource by its name                                                                                                                                                                                                                                                                       |
+| *$*props           | filter    | Finds a resource by its properties                                                                                                                                                                                                                                                                 |
+| *$*regex           | filter    | Specifies a custom regex to be matched by the given argument                                                                                                                                                                                                                                       |
+| *$*root            | filter    | JMESPath search through the entire source file data structure                                                                                                                                                                                                                                      |
+| *$*path            | accessor  | JMESPath search through the object identified in the $source. A default value is optional by using the `$searchParams `structure                                                                                                                                                                   |
+| *$*findFirst       | selector  | JMESPath search through the list of objects identified in the `$source` and returns the first successful match. A default value is optional by using the `$searchParams` structure                                                                                                                 |
+| *$*searchParams    | selector  | Specifies a default value for $path or `$findFirst` mapping functions                                                                                                                                                                                                                              |
+| *$*singleton       | grouper   | Specific objects to be unified under a single component or TrustZone                                                                                                                                                                                                                               |
+| *$*numberOfSources | selector  | When using a `$singleton`, it allows you to set different values for output name or tags when the number of sources for the same mapping is single or multiple                                                                                                                                     |
+| *$*format          | formatter | A named format string based on the output of other `$special` fields.                                                                                                                                                                                                                              |
+| *$*module          | filter    | Search through the module section matching by source's attribute                                                                                                                                                                                                                                   |
+| *$*skip            | filter    | A sub-field of `$source`, specifying specific objects to skip if not explicitly defined                                                                                                                                                                                                            |
+| *$*catchall        | filter    | A sub-field of `$source`, specifying a default search for all other objects not explicitly defined                                                                                                                                                                                                 |
+| *$*lookup          | selector  | Allows you to look up the output of a $special field against a key-value lookup table                                                                                                                                                                                                              |
+| *$*hub             | connector | Only for dataflow's "source" and "destination" fields. Specially created for building dataflows from Security Group structures without generating components from them. Allows defining abstract contact points for larger end-to-end final dataflows                                              |
+| *$*ip              | grouper   | When defining a component's "name" field as `$ip`, will generate a singleton component for representing an external IP but without limitations of singleton for this case, so the "type" for the defined mapping definition with `$ip` (i.e. generic-terminal) will not be catalogued as singleton |
 
 ### *$*type
-This **mapping function** *type* returns resources by its `resource_type` attribute on the [Terraform Source Dictionary](Terraform-how-mapping-file-works.md#terraform-source-dictionary).
-This function can be used combined with $name and $props to create a more complete query  
+This **mapping function** *type* returns resources by their `resource_type` attribute on the 
+[Terraform Source Dictionary](Terraform-how-mapping-file-works.md#terraform-source-dictionary).
+This function can be used combined with `$name` and `$props` to create a more complete query.  
 
 | Type   | Consumes            | Produces                          | Configuration params                                                                          | 
 |--------|---------------------|-----------------------------------|-----------------------------------------------------------------------------------------------|
  | filter | A list of resources | A resources list filtered by type | Can be configured with a string, a list of strings or using the ***$*regex mapping function** | 
  
-> :octicons-light-bulb-16: This map specifies the component rds by the resources of type in  (aws_db_instance, aws_rds_cluster)
+> :octicons-light-bulb-16: This mapping specifies the component rds by the resources of type in  (`aws_db_instance`, 
+> `aws_rds_cluster`)
 
 === "Mapping file"
     ```yaml
@@ -223,14 +226,15 @@ This function can be used combined with $name and $props to create a more comple
     ```
 
 ### *$*name
-This **mapping function** *name* returns resources by its `resource_name` attribute on the [Terraform Source Dictionary](Terraform-how-mapping-file-works.md#terraform-source-dictionary).
-This function can be used combined with $type and $props to create a more complete query  
+This **mapping function** *name* returns resources by their `resource_name` attribute on the 
+[Terraform Source Dictionary](Terraform-how-mapping-file-works.md#terraform-source-dictionary).
+This function can be used combined with `$type` and `$props` to create a more complete query.
 
 | Type   | Consumes            | Produces                          | Configuration params                                                                          | 
 |--------|---------------------|-----------------------------------|-----------------------------------------------------------------------------------------------|
  | filter | A list of resources | A resources list filtered by name | Can be configured with a string, a list of strings or using the ***$*regex mapping function** | 
  
-> :octicons-light-bulb-16: This map specifies the component rds by the resources with name mysql
+> :octicons-light-bulb-16: This mapping specifies the component `rds` by the resources with name `mysql`
 
 === "Mapping file"
     ```yaml
@@ -277,15 +281,16 @@ This function can be used combined with $type and $props to create a more comple
     ```
 
 ### *$*props
-This **mapping function** *props* returns resources by its `resource_properties` attribute on the [Terraform Source Dictionary](Terraform-how-mapping-file-works.md#terraform-source-dictionary).
-This function can be used combined with $type and $name to create a more complete query  
+This **mapping function** *props* returns resources by their `resource_properties` attribute on the 
+[Terraform Source Dictionary](Terraform-how-mapping-file-works.md#terraform-source-dictionary).
+This function can be used combined with $type and $name to create a more complete query.
 
 | Type   | Consumes            | Produces                                    | Configuration params                                                                          | 
 |--------|---------------------|---------------------------------------------|-----------------------------------------------------------------------------------------------|
  | filter | A list of resources | A resources list filtered by its properties | Can be configured with a string, a list of strings or using the ***$*regex mapping function** | 
  
-> :octicons-light-bulb-16: This map specifies the component generic-client by the resources with type aws_security_group
-> having the property egress[0].cidr_blocks present in resource_properties
+> :octicons-light-bulb-16: This mapping specifies the component `generic-client` by the resources with type 
+> `aws_security_group` having the property `egress[0].cidr_blocks`present in their `resource_properties`
 
 === "Mapping file"
     ```yaml
@@ -336,13 +341,13 @@ This function can be used combined with $type and $name to create a more complet
 
 ### *$*regex
 This **mapping function** *regex* allows configuring a custom regex to be matched against the resource attribute.
-This function can be used as a parameter for $type, $name and $props.  
+This function can be used as a parameter for `$type`, `$name` and `$props`.  
 
 | Type   | Consumes            | Produces                                           | Configuration params | 
 |--------|---------------------|----------------------------------------------------|----------------------|
  | filter | A list of resources | A resources list which attribute matches the regex | A valid regex        |
 
-> :octicons-light-bulb-16: This map specifies the component api-gateway by the resources with type 
+> :octicons-light-bulb-16: This mapping specifies the component `api-gateway` by the resources with type 
 > matching the regex `^aws_api_gateway_\w*$`
 
 === "Mapping file"
@@ -404,8 +409,9 @@ This **mapping function** *root* allows to search through the entire source file
 |--------|------------------------|-------------------------------------------------|----------------------|
  | filter | The entire source file | A resources list filtered by the JMESpath query | A JMESpath query     |
 
-> :octicons-light-bulb-16: When using *$*root, it may be useful to use Additional JMESPath functions.
-> This map specifies the component vpc by using the get JMESPath functions
+> :octicons-light-bulb-16: When using `$root`, it may be useful to use 
+> [Additional JMESPath functions](Terraform-additional-jmespath-functions.md). This map specifies the component 
+> `vpc` by using the get JMESPath functions
 
 === "Mapping file"
     ```yaml
@@ -454,14 +460,15 @@ This **mapping function** *root* allows to search through the entire source file
     ```
 
 ### *$*path
-This **mapping function** *path* allows getting the values from the object identified in the $source by using 
-<a href="https://jmespath.org/" target="_blank">JMESPath</a>. A default value is optional by using the $searchParams structure
+This **mapping function** *path* allows getting the values from the object identified in the `$source` by using 
+<a href="https://jmespath.org/" target="_blank">JMESPath</a>. A default value is optional by using the 
+`$searchParams` structure.
 
 | Type     | Consumes           | Produces                                | Configuration params                        | 
 |----------|--------------------|-----------------------------------------|---------------------------------------------|
  | accessor | The $source object | An attribute list filtered by the query | A JMESpath query or $searchParams structure |
 
-> :octicons-light-bulb-16: This map specifies the component empty-component which name is retrieved by
+> :octicons-light-bulb-16: This mapping specifies the component `empty-component` which name is retrieved by
 > the $source attribute `resouce_properties.cidr_block`
 
 === "Mapping file"
@@ -512,14 +519,14 @@ This **mapping function** *path* allows getting the values from the object ident
     ```
  
 ### *$*findFirst
-This **mapping function** *findFirst* search through the list of objects identified in the $source 
-and returning the first successful match. A default value is optional by using the $searchParams structure
+This **mapping function** *findFirst* searchs through the list of objects identified in the `$source` 
+and returns the first successful match. A default value is optional by using the `$searchParams` structure.
 
-| Type      | Consumes           | Produces           | Configuration params                                                 | 
-|-----------|--------------------|--------------------|----------------------------------------------------------------------|
- | formatter | The $source object | A string attribute | list of objects identified in the $source or $searchParams structure |
+| Type   | Consumes           | Produces           | Configuration params                                                                  | 
+|--------|--------------------|--------------------|---------------------------------------------------------------------------------------|
+ | filter | The $source object | A string attribute | A list of objects identified in the $source or <br/><br/><br/><br/><br/><br/>$searchParams <br/><br/><br/>structure |
 
-> :octicons-light-bulb-16: This map specifies a component rds whose name is configured by a list of attributes
+> :octicons-light-bulb-16: This mapping specifies a component rds whose name is configured by a list of attributes
 
 === "Mapping file"
     ```yaml
@@ -566,13 +573,14 @@ and returning the first successful match. A default value is optional by using t
     ```
  
 ### *$*searchParams
-This **mapping function** *searchParams* specifies a default value for $path or $findFirst mapping functions.
+This **mapping function** *searchParams* specifies a default value for `$path` or `$findFirst` mapping functions.
 
-| Type     | Consumes                          | Produces           | Configuration params                         | 
-|----------|-----------------------------------|--------------------|----------------------------------------------|
- | selector | The $path or $findFirst functions | A string attribute | The searchPath or defaultValue configuration |
+| Type     | Consumes                          | Produces           | Configuration params               | 
+|----------|-----------------------------------|--------------------|------------------------------------|
+ | selector | The $path or $findFirst functions | A string attribute | A searchPath and/or a defaultValue |
 
-> :octicons-light-bulb-16: This map specifies a component rds whose tag is retrieved from `resource_properties.engine`
+> :octicons-light-bulb-16: This mapping specifies a component rds whose tag is retrieved from `resource_properties.
+> engine`
 > with `rds` as default value.
 
 === "Mapping file"
@@ -633,16 +641,17 @@ This **mapping function** *searchParams* specifies a default value for $path or 
     ```
 
 ### *$*singleton
-This **mapping function** *singleton* allows objects to be unified under a single component or TrustZone.
-When exists multiples objects, the name and tag values change as configured on the 
-[Component Template Pattern](Terraform-how-mapping-file-works.md#mapping-a-component)
+This **mapping function** *singleton* unifies TF resources under a single component or TrustZone.
+This function is frequently combined with `$numberOfSources` for generating text fields like the name or the tags. 
+So is done, for example, in the default configuration described in the 
+[Component Template Pattern](Terraform-how-mapping-file-works.md#mapping-a-component).
 
 | Type  | Consumes            | Produces                                        | Configuration params           | 
 |-------|---------------------|-------------------------------------------------|--------------------------------|
  | group | A list of resources | A list of resources grouped by the given params | Mapping Function configuration |
 
-> :octicons-light-bulb-16: This map specifies a unique component CD-SYSTEMS-MANAGER 
-> by any number of resources whose name starts with `aws_ssm_`. 
+> :octicons-light-bulb-16: This mapping specifies a unique component `CD-SYSTEMS-MANAGER` 
+> for any number of resources whose name starts with `aws_ssm_`. 
 
 === "Mapping file"
     ```yaml
@@ -697,11 +706,12 @@ when the number of sources for the same mapping is single or multiple.
 |-------|--------------------|--------------------|-------------------------------------------------------|
  | group | The $source object | A string attribute | oneSource and multipleSource configuration attributes |
 
+The result of this function may be expressed as:
 ```python
 multipleSource if $singleton && (numberOfSources > 1) else oneSource
 ```
 
-> :octicons-light-bulb-16: This map specifies a unique component CD-SYSTEMS-MANAGER 
+> :octicons-light-bulb-16: This mapping specifies a unique component `CD-SYSTEMS-MANAGER` 
 > and set its name by `CD-SYSTEMS-MANAGER (grouped)` when found more than one resource. 
 
 === "Mapping file"
@@ -753,14 +763,14 @@ multipleSource if $singleton && (numberOfSources > 1) else oneSource
     ```
  
 ### *$*format
-This **mapping function** *format* returns a formatted version of the string, using values from $source 
+This **mapping function** *format* returns a formatted version of the string, using values from `$source` 
 and the `name` or `type` mapper attributes. These substitutions are identified by braces ('{' and '}')
 
 | Type      | Consumes                                                   | Produces           | Configuration params               | 
 |-----------|------------------------------------------------------------|--------------------|------------------------------------|
  | formatter | The $source object and `name` and `type` mapper attributes | A string attribute | The string formatter configuration |
 
-> :octicons-light-bulb-16: This map specifies a component rds whose name is configured by a complex string
+> :octicons-light-bulb-16: This mapping specifies a component `rds` whose name is configured by a complex string
 
 === "Mapping file"
     ```yaml
@@ -807,13 +817,15 @@ and the `name` or `type` mapper attributes. These substitutions are identified b
     ```
  
 ### *$*module
-This **mapping function** *module* searches through the module section matching by source's attribute.
+This **mapping function** *module* searches for 
+[modules in the TF configuration](https://developer.hashicorp.com/terraform/language/modules/syntax#calling-a-child-module) 
+matching by the `source`'s attribute. 
 
-| Type   | Consumes          | Produces                                      | Configuration params         | 
-|--------|-------------------|-----------------------------------------------|------------------------------|
- | filter | A list of modules | A modules list filtered by source's attribute | The source's attribute value |
+| Type   | Consumes            | Produces                                      | Configuration params         | 
+|--------|---------------------|-----------------------------------------------|------------------------------|
+ | filter | A list of resources | A modules list filtered by source's attribute | The source's attribute value |
 
-> :octicons-light-bulb-16: This map specifies a component rds by the module `terraform-aws-modules/rds/aws`
+> :octicons-light-bulb-16: This mapping specifies a component `rds` for the module `terraform-aws-modules/rds/aws`
 
 === "Mapping file"
     ```yaml
@@ -861,14 +873,14 @@ This **mapping function** *module* searches through the module section matching 
     ```
  
 ### *$*skip
-This **mapping function** *skip* specifying specific objects to skip if not explicitly defined
+This **mapping function** *skip* specifying specific objects to skip if not explicitly defined.
 
 | Type   | Consumes            | Produces                              | Configuration params           | 
 |--------|---------------------|---------------------------------------|--------------------------------|
  | filter | A list of resources | A resources list of resources to skip | Mapping Function configuration |
 
-> :octicons-light-bulb-16: This map specifies the component rds by the resources of type in  (aws_db_instance, aws_rds_cluster)
-> but skipping the resource with name `mysql-secret`
+> :octicons-light-bulb-16: This mapping specifies the component `rds` for the resources of type in  (`aws_db_instance`, 
+> `aws_rds_cluster`) but skipping the resource with name `mysql-secret`
 
 === "Mapping file"
     ```yaml
@@ -926,71 +938,45 @@ This **mapping function** *skip* specifying specific objects to skip if not expl
  
 ### *$*catchall
 
-This **mapping function** *catchall* specifying a default search for all other objects not explicitly defined
+This **mapping function** *catchall* is used to create a component for each resource that matches a certain query. 
 
 > A section explaining how to use *$*catchall will be available soon.
 
 [//]: # (| Type   | Consumes            | Produces                              | Configuration params           | )
-
 [//]: # (|--------|---------------------|---------------------------------------|--------------------------------|)
-
 [//]: # ( | filter | A list of resources | A resources list of resources to skip | Mapping Function configuration |)
-
 [//]: # ()
 [//]: # ()
-[//]: # (> :octicons-light-bulb-16: This map specifies the component rds by the resources of type in  &#40;aws_db_instance, aws_rds_cluster&#41;)
-
+[//]: # (> :octicons-light-bulb-16: This mapping specifies the component rds by the resources of type in  &#40; aws_db_instance, aws_rds_cluster&#41;)
 [//]: # (> but skipping the resource with name `mysql-secret`)
-
-
 [//]: # (=== "Mapping file")
-
 [//]: # ()
 [//]: # (    ```yaml)
-
 [//]: # (    trustzones:)
-
 [//]: # (      - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91)
-
 [//]: # (        name: Public Cloud)
-
 [//]: # (        $default: true)
-
 [//]: # (    components:)
-
 [//]: # (      - type:       rds)
-
 [//]: # (        $source:    {$type: ["aws_db_instance"]})
-
 [//]: # (      - type:       empty-component)
-
 [//]: # (        $source:    {$catchall: {$root: "resource|squash_terraform&#40;@&#41;"}})
-
 [//]: # (    dataflows: [])
-
 [//]: # (    ```)
-
 [//]: # (=== "Resource File")
-
 [//]: # ()
 [//]: # (    ```terraform)
-
 [//]: # (    resource "aws_db_instance" "mysql" {})
-
 [//]: # (    resource "aws_rds_cluster" "aurora-cluster-demo" {})
-
 [//]: # (    ```)
-
 [//]: # ()
 [//]: # (=== "OTM")
-
 [//]: # ()
 [//]: # (    ```yaml)
-
 [//]: # (    ```)
 
 ### *$*lookup
-This **mapping function** *lookup* allows you to look up the output of a $special field against a key-value lookup table.
+This **mapping function** *lookup* allows you to look up the output of a special field against a key-value lookup table.
 
 
 ??? tip "Example for lookup"
@@ -1021,8 +1007,8 @@ Security Group structures without generating components from them.
 > A section explaining how to use *$*hub will be available soon.
 
 ### *$*ip
-When defining a component's "name" field as $ip, will generate a singleton component for representing an external 
-IP but without limitations of singleton for this case, so the "type" for the defined mapping definition with $ip 
-(i.e. generic-terminal) will not be catalogued as singleton
+When defining a component's "name" field as `$ip`, will generate a singleton component for representing an external 
+IP but without limitations of singleton for this case, so the "type" for the defined mapping definition with `$ip` 
+(i.e. `generic-terminal`) will not be catalogued as singleton.
 
 > A section explaining how to use *$*ip will be available soon.

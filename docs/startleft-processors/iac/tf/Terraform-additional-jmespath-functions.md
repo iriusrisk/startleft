@@ -1,6 +1,6 @@
 ---
 
-Parsing of IaC files may be sometimes complex, so that the built-in JMESPath described above are not enough. For that cases,
+Parsing of IaC files may be sometimes complex, so that the built-in JMESPath functions are not enough. For that cases,
 a set of custom functions has been created to simplify and make more powerful the creation of mapping files.
 
 ## JMESPath functions
