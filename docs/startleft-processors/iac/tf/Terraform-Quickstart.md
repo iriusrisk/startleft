@@ -87,7 +87,7 @@ dataflows: []
 
 The combination of this TF and mapping file will result in the OTM file below, that contains the mapped TrustZone 
 and component along with all the necessary metadata defined by the standard and that is ready to be imported in a 
-threat modelling tool like IriusRisk.
+threat modeling tool like IriusRisk.
 
 ```json
 {

@@ -6,13 +6,14 @@ from otm.otm.otm import OTM
 from slp_base.slp_base.otm_file_loader import OtmFileLoader
 from slp_base.slp_base.schema import Schema
 
-public_cloud_id = 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+public_cloud_id = '804b664a-7129-4a9e-a08c-16a99669f605'
+public_cloud_type = 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
 public_cloud_name = 'Public Cloud'
 
-private_secured_id = '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
+private_secured_type = '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
 private_secured_name = 'Private Secured'
 
-internet_id = 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
+internet_type = 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
 internet_name = 'Internet'
 
 
@@ -61,9 +62,10 @@ def validate_and_diff_otm(actual: dict, expected_filename: str, excluded_regex):
     return validate_and_diff(actual, expected, excluded_regex)
 
 
-def check_otm_trustzone(otm, position, trustzone_id, name):
+def check_otm_trustzone(otm, position, trustzone_id, trustzone_type, name):
     assert otm.trustzones[position].id == trustzone_id
     assert otm.trustzones[position].name == name
+    assert otm.trustzones[position].type == trustzone_type
 
 
 def check_otm_component(otm, position, component_type, name, parent_id=None, tags=()):

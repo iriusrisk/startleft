@@ -1,22 +1,21 @@
-from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
 from otm.otm.otm import Trustzone
+from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
+
+
+def find_type(trustzone_mapping):
+    if 'id' in trustzone_mapping:
+        return trustzone_mapping['id']
+    return trustzone_mapping['type']
 
 
 class DiagramTrustzoneMapper:
 
-    def __init__(self, components: [DiagramComponent],  trustzone_mappings: dict):
+    def __init__(self, components: [DiagramComponent], trustzone_mappings: dict):
         self.components = components
         self.trustzone_mappings = trustzone_mappings
 
     def to_otm(self) -> [Trustzone]:
         return self.__map_to_otm(self.__filter_trustzones())
-
-    def get_default_trustzone(self) -> Trustzone:
-        if self.trustzone_mappings:
-            # at least the "Public Cloud" trustzone must be in the mapping file to be valid
-            default_trustzone_mapping = self.trustzone_mappings['Public Cloud']
-            return Trustzone(default_trustzone_mapping['id'], default_trustzone_mapping['type'])
-
 
     def __filter_trustzones(self) -> [DiagramComponent]:
         return list(filter(
@@ -31,6 +30,7 @@ class DiagramTrustzoneMapper:
     def __build_otm_trustzone(self, trustzone: DiagramComponent) -> Trustzone:
         trustzone_mapping = self.trustzone_mappings[trustzone.name]
         return Trustzone(
-            id=trustzone_mapping['id'],
-            name=trustzone_mapping['type']
+            id=trustzone.id,
+            name=trustzone.name,
+            type=find_type(trustzone_mapping)
         )

@@ -16,9 +16,9 @@ The `slp_cft` module is the StartLeft Processor responsible for converting CFT f
 on a mapping file that enables the users to define the translations between the source AWS types and the expected 
 output in the OTM file. 
 
-Once you got familiarized with the basics explained in this page, you will need to know more about how to use and 
+Once you got familiarized with the basics explained on this page, you will need to know more about how to use and 
 customize the behavior of the processor in order to configure your own conversions. For that, you should take a look 
-to the [CloudFormation mapping page](CloudFormation-Mapping.md), where you will find all the information you need, from 
+at the [CloudFormation mapping page](CloudFormation-Mapping.md), where you will find all the information you need, from 
 basic to advanced, to build your own CFT mapping files.
 
 Apart from this, you may also find interesting the generic usage manuals for the [CLI](../../../usage/Command-Line-Interface.md) 
@@ -74,13 +74,14 @@ equivalent type for an EC2 instance is an `ec2` component and the expected resul
 
 ![img/ec2-iriusrisk.png](img/ec2-iriusrisk.png)
 
-In that case, you will need a mapping file that contains, at least, a TrustZone and the mapping for the EC2 
+In that case, you will need a mapping file which contains, at least, a TrustZone and the mapping for the EC2 
 component. Notice that the standard requires that all the components must have a parent, in this case, the _Public 
 Cloud_ TrustZone. This mapping file could be as simple as this:
 ```yaml
 trustzones:
   - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
     name: Public Cloud
+    type: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
 components:
   - id:     {$format: "{name}"}
@@ -95,8 +96,8 @@ dataflows: []
 ```
 
 The combination of this CFT and mapping file will result in the OTM file below, that contains the mapped TrustZone 
-and component along with all the necessary metadata defined by the standard and that is ready to be imported in a 
-threat modelling tool like IriusRisk.
+and component along with all the necessary metadata defined by the standard and that is ready to be imported into a 
+threat modeling tool like IriusRisk.
 
 ```json
 {
@@ -116,6 +117,7 @@ threat modelling tool like IriusRisk.
         {
             "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
             "name": "Public Cloud",
+            "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
             "risk": {
                 "trustRating": 10
             }
@@ -140,8 +142,8 @@ threat modelling tool like IriusRisk.
 
 
 ### CLI
-> **Note**: Before continue, make sure you have 
-> [StartLeft properly installed](../../../Quickstart-Guide-for-Beginners.md) in your machine.
+> **Note**: Before continuing, make sure you have 
+> [StartLeft properly installed](../../../Quickstart-Guide-for-Beginners.md) on your machine.
 
 Save the files above in your file system with these names:
 
@@ -161,7 +163,7 @@ startleft parse \
 ```
 
 ### cURL
-You can get the same result if through the StartLeft's REST API. For that, in first place we need to set up the 
+You can get the same result through the StartLeft's REST API. For that, in the first place we need to set up the 
 server with the command:
 ```shell
 startleft server
@@ -193,5 +195,5 @@ StartLeft, through the mapping files, is intended to be configurable, so you can
 create your own mappings on demand.
 
 To help you to walk through more complex situations with larger CFT and mapping files, we have created a page with 
-[explained CFT examples](CloudFormation-Examples.md) which may be useful for you as a base for build your own mapping 
+[explained CFT examples](CloudFormation-Examples.md) which may be useful for you as a base for building your own mapping 
 files.

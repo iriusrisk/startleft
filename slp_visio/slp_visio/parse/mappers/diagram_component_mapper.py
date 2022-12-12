@@ -1,5 +1,6 @@
+from otm.otm.otm import Component, Trustzone
+from slp_base import MappingFileNotValidError
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
-from otm.otm.otm import Trustzone, Component
 
 
 class DiagramComponentMapper:
@@ -45,12 +46,15 @@ class DiagramComponentMapper:
         return self.component_mappings[label]['type'] if label in self.component_mappings else None
 
     def __calculate_parent_id(self, component: DiagramComponent) -> str:
-        if not component.parent:
-            return self.default_trustzone.id if self.default_trustzone else None
+        if component.parent:
+            return component.parent.id
 
-        return self.trustzone_mappings[component.parent.name]['id'] \
-            if component.parent.name in self.trustzone_mappings \
-            else component.parent.id
+        if self.default_trustzone:
+            return self.default_trustzone.id
+
+        raise MappingFileNotValidError('Mapping files are not valid',
+                                       'No default trust zone has been defined in the mapping file',
+                                       'Please, add a default trust zone')
 
     def __calculate_parent_type(self, component: DiagramComponent) -> str:
         if not component.parent or component.parent.name in self.trustzone_mappings.keys():

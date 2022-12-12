@@ -1,7 +1,7 @@
 trustzones:
   - label: Public Cloud
-    type: b61d6911-338d-46a8-9f39-8dcd24abfe91
-    default: true
+    type: Public Cloud
+    id: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
 components:
   - label:  Custom VPC

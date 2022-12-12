@@ -1,11 +1,11 @@
 # CloudFormation mapping
 
-A source mapping file (or "mapping files" for short) describe how to find components, dataflows, and trustzones in source file data structures.
+A source mapping file (or "mapping files" for short) describes how to find components, dataflows, and trustzones in source file data structures.
 
 To accomplish this, a mapping file contains additional logic around a collection of JMESPath queries which are used.
-Also, some exclusive StartLeft actions based upon JMESPath may be used in mapping files to solve the most complex mappings.
+Also, some exclusive StartLeft actions based on JMESPath may be used in mapping files to solve the most complex mappings.
 
-Source mapping files are made up of three main sections corresponding the main sections in an OTM file, plus an optional lookup section described below:
+Source mapping files are made up of three main sections corresponding to the main sections in an OTM file, plus an optional lookup section described below:
 
 * trustzones
 * components
@@ -40,7 +40,7 @@ This table describes each special $actions:
 | $ip              | When defining a component's "name" field as $ip, will generate a singleton component for representing an external IP but without limitations of singleton for this case, so the "type" for the defined mapping definition with $ip (i.e. generic-terminal) will not be catalogued as singleton. | name: { $ip: { $path: "Properties.SecurityGroupEgress[0].CidrIp" } }                                                                                                                                                                                                                                        |
 
 
-For more information on how to create a JMESPath search query, checkout the [website](https://jmespath.org/).
+For more information on how to create a JMESPath search query, check out the [website](https://jmespath.org/).
 
 ## Hardcoded values
 
@@ -50,11 +50,19 @@ In addition to using $source and other special $actions, you can also just hardc
 
 ```
 trustzones:
-  - id:   default-zone
+  - id:   tz1
     name: Default
+    type: default-zone
 ```
-For mapping trustzones to IriusRisk trustzones, `id` field must take internal IriusRisk values depending on the type of trustzone.
+The `id` field uniquely identifies a trustzone, and differentiates it from other trustzones of the same type.
+
+For mapping trustzones to IriusRisk trustzones, `type` field must take internal IriusRisk values depending on the type of trustzone.
 These values are defined in the internal CloudFormation mapping file.
+
+>For the purpose of preserving backwards compatibility, StartLeft also accepts the legacy mapping file format.
+> In this format, there is no `type` field and the `id` will be used as both, ID and type.
+>
+>It is not possible to have multiple trustzones of the same type when using this format.
 
 ## Lookup table
 
@@ -83,7 +91,7 @@ To give a final value of `amuchlongernameA`.
 
 ---
 
-Parsing of IaC files may be sometimes complex, so that the built-in JMESPath described above are not enough. For that cases,
+Parsing of IaC files may be sometimes complex, so that the built-in JMESPath described above are not enough. For those cases,
 a set of custom functions has been created to simplify and make more powerful the creation of mapping files.
 
 ### re_sub
@@ -104,7 +112,7 @@ def _func_squash(self, obj)
 
 This function is specially useful for Cloudformation mapping files. These have a root `Resources` object whose 
 top level keys are the resource names which have the resource objects as values. This structure is hard to iterate over 
-without losing the important name key. So you can use squash it and refer to the name through the `_key` field. 
+without losing the important name key. So you can use squash and refer to the name through the `_key` field. 
 
 ```yaml
 name:    {$path: "_key"}
@@ -122,7 +130,7 @@ def _func_tail(self, string, count)
 ### get_starts_with
 
 This function is equivalent to `get`, but instead of using the `component_type` argument to perform an exact filter, the
-target component type must starts with it.
+target component type must start with it.
 
 ```python
 def _func_get_starts_with(self, obj_arr, component_type)

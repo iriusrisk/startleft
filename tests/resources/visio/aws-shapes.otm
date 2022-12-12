@@ -17,11 +17,14 @@
   ],
   "trustZones": [
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "id": "804b664a-7129-4a9e-a08c-16a99669f605",
       "name": "Public Cloud",
-      "type": null,
+      "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "risk": {
         "trustRating": 10
+      },
+      "properties": {
+        "default": true
       }
     }
   ],
@@ -31,7 +34,7 @@
       "name": "Amazon EC2",
       "type": "ec2",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "804b664a-7129-4a9e-a08c-16a99669f605"
       }
     },
     {
@@ -39,7 +42,7 @@
       "name": "Custom machine",
       "type": "ec2",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "804b664a-7129-4a9e-a08c-16a99669f605"
       }
     },
     {
@@ -47,7 +50,7 @@
       "name": "Private Database",
       "type": "rds",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "804b664a-7129-4a9e-a08c-16a99669f605"
       }
     },
     {
@@ -55,7 +58,7 @@
       "name": "Amazon CloudWatch",
       "type": "cloudwatch",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "804b664a-7129-4a9e-a08c-16a99669f605"
       }
     },
     {
@@ -63,32 +66,32 @@
       "name": "Custom log system",
       "type": "cloudwatch",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "804b664a-7129-4a9e-a08c-16a99669f605"
       }
     }
   ],
   "dataflows": [
     {
       "id": "17",
-      "name": "67f78c2e-c73c-4e67-bf36-22c2a39410ce",
+      "name": "21830dc6-840d-4254-bb35-f4b2c68561e5",
       "source": "1",
       "destination": "12"
     },
     {
       "id": "34",
-      "name": "91789f03-2daf-4958-8bc5-384e3dc20139",
+      "name": "89ab351c-6ae7-4afb-ad90-0eb045fd801a",
       "source": "12",
       "destination": "30"
     },
     {
       "id": "40",
-      "name": "bcc40afc-be11-4cd0-8172-530068b44a5b",
+      "name": "7aecb32c-e39f-4dc2-ad6e-7f5793161a6d",
       "source": "1",
       "destination": "35"
     },
     {
       "id": "46",
-      "name": "b20c3bdb-a776-4b43-9488-9bbed604c848",
+      "name": "6ceb010f-8390-4dc5-943b-62d268c34e78",
       "source": "12",
       "destination": "41"
     }
