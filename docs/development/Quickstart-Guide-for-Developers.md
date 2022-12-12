@@ -1,8 +1,8 @@
 # Quickstart Guide for Developers
 
-StartLeft is an Open Source project open for collaborators to extend or improve its functionality. Despite the fact that 
-it was born as an internal IriusRisk project, there are some characteristic that makes it specially suitable to grow 
-through the contributions of the community:
+StartLeft is an Open Source project that welcomes collaborators to extend or improve its functionality. Despite the 
+fact that it was born as an internal IriusRisk project, there are some characteristic that makes it specially 
+suitable to grow through the contributions of the community:
 
 * The nature of the project, whose natural functional escalation is based on the support of new, independent, source formats.
 * The conversion into OTM is based on configuration files that can also be created independently depending on the expected
@@ -12,8 +12,9 @@ through the contributions of the community:
 
 ## How to contribute?
 The IriusRisk team is currently the coordinator of the project and, ultimately, the responsible for validating the Pull Requests
-created by the collaborators. All you need to know before you start contributing will be explained soon in a 
-_Contributing_ file. Anyway, it is important to consider that, before creating your own fork or PR, you should check the 
+created by the collaborators. All you need to know before you start contributing is in the 
+[CONTRIBUTING.md file](https://github.com/iriusrisk/startleft/blob/main/CONTRIBUTING.md). 
+Anyway, it is important to consider that, before creating your own fork or PR, you should check the 
 [open issues](https://github.com/iriusrisk/startleft/issues) to ensure that there is none related with what you intend to do.
 
 ## Set up the environment
