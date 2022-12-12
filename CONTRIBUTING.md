@@ -2,12 +2,12 @@
 First off, thanks for taking the time to contribute!!
 
 StartLeft is an Open Source project that welcomes collaborators to extend or improve its functionality. Despite
-the fact that it was born as an internal [IriusRisk](https://iriusrisk.com) project, there are some characteristic that 
-makes it especially suitable to grow through the contributions of the community:
+the fact that it was born as an internal [IriusRisk](https://iriusrisk.com) project, there are some characteristics
+that make it especially suitable to grow through the contributions of the community:
 
 * The nature of the project, whose functional scaling is based on the **support of new, independent, source
   formats**.
-* The **conversion into the [Open Threat Model (OTM)](https://github.com/iriusrisk/OpenThreatModel) format is based on 
+* The **conversion into the [Open Threat Model (OTM)](https://github.com/iriusrisk/OpenThreatModel) format is based on
   configuration files** that can also be created independently depending on the expected OTM use.
 * The **modularized architecture** enables collaborators to contribute to each format's processor without conflicts.
 
@@ -37,7 +37,7 @@ To propose improvements or changes that are not properly bugs or problems you ca
 [issues section](https://github.com/iriusrisk/startleft/issues). In this case, please try to be as clear as you can
 and include in your issue:
 * The **context** of the issue. Does it apply to the CLI? To the API? Is it an improvement for a specific SLP?
-* The **motivation** of the proposal. How will improve StartLeft the proposed change?
+* The **motivation** of the proposal. How will the proposed change improve StartLeft?
 * The **goal** of the issue. What is exactly the change that should be implemented?
 
 ### Make changes
@@ -58,7 +58,7 @@ will be used. Summarizing, the steps that an external developer must follow to c
 ## Code conventions
 There are no specific code conventions for the StartLeft project. At this point, the generic
 [Style Guide for Python Code](https://peps.python.org/pep-0008/) is followed. So, please take a look at it before
-start coding, paying special attention to the
+starting coding, paying special attention to the
 [naming conventions](https://peps.python.org/pep-0008/#naming-conventions). Anyway, if some doubt arises in a PR, it
 can be discussed to get aligned.
 
@@ -68,4 +68,4 @@ can be discussed to get aligned.
 * <a href="https://github.com/iriusrisk/startleft/issues" target="_blank">Open issues</a>.
 * <a href="https://github.com/iriusrisk/startleft/releases" target="_blank">Releases</a>.
 * <a href="https://github.com/iriusrisk/OpenThreatModel" target="_blank">Open Threat Model (OTM) standard definition</a>.
-* <a href="https://www.threatmodelingconnect.com/" target="_blank">Threat Modelling connect forum</a>.
+* <a href="https://www.threatmodelingconnect.com/" target="_blank">Threat Modeling connect forum</a>.
