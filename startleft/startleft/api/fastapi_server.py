@@ -35,7 +35,7 @@ def initialize_webapp():
 
 def get_log_config(log_level):
     log_config = uvicorn.config.LOGGING_CONFIG
-    app_log_level = calculate_log_level_to_uvicorn(log_level)
+    app_log_level = translate_log_level_into_uvicorn(log_level)
     log_config["loggers"]["uvicorn"]["level"] = app_log_level
     log_config["loggers"]["uvicorn.error"]["level"] = app_log_level
     log_config["loggers"]["uvicorn.access"]["level"] = app_log_level
@@ -104,12 +104,14 @@ def common_response_handler(status_code: int, type_: str, title: str, detail: st
     return JSONResponse(status_code=status_code, content=jsonable_encoder(error_response))
 
 
-def calculate_log_level_to_uvicorn(log_level: str):
-    if log_level == 'WARN':
-        return 'WARNING'
-    elif log_level == 'CRIT':
-        return 'CRITICAL'
-    elif log_level == 'NONE':
+def translate_log_level_into_uvicorn(log_level: int):
+    if log_level == 10:
+        return 'DEBUG'
+    elif log_level == 20:
         return 'INFO'
-    else:
-        return log_level
+    elif log_level == 30:
+        return 'WARNING'
+    elif log_level == 40:
+        return 'ERROR'
+    elif log_level == 50:
+        return 'CRITICAL'
