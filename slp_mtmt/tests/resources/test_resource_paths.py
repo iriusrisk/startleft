@@ -20,9 +20,7 @@ mtmt_default_mapping = path + '/mapping/mtmt_default_mapping.yaml'
 
 # legacy mapping
 mapping_mtmt_mvp_legacy = path + '/mapping/MTMT_MVP_legacy.yaml'
-mapping_mtmt_mvp_legacy_mix = path + '/mapping/MTMT_MVP_legacy_mix.yaml'
 mtmt_default_mapping_legacy = path + '/mapping/mtmt_default_mapping_legacy.yaml'
-mtmt_default_mapping_legacy_mix = path + '/mapping/mtmt_default_mapping_legacy_mix.yaml'
 
 # mtmt
 model_mtmt_source_file = path + '/mtmt/test_model.tm7'
