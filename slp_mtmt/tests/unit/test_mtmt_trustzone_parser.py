@@ -4,7 +4,7 @@ from slp_mtmt.slp_mtmt.parse.mtmt_trustzone_parser import MTMTTrustzoneParser
 from slp_mtmt.tests.mtmt_test_utils import get_mtmt_from_file, get_mapping_from_file
 from slp_mtmt.tests.resources import test_resource_paths
 from slp_mtmt.tests.resources.test_resource_paths import mapping_mtmt_mvp, model_mtmt_mvp, mapping_mtmt_mvp_legacy, \
-    mtmt_default_mapping, mtmt_default_mapping_legacy
+    mtmt_default_mapping, mtmt_default_mapping_legacy, mapping_mtmt_mvp_no_type, mtmt_default_mapping_no_type
 
 
 class TestMTMTTrustzoneParser:
@@ -22,7 +22,7 @@ class TestMTMTTrustzoneParser:
 
         assert len(trustzones) == 0
 
-    @mark.parametrize('mapping_file', [mapping_mtmt_mvp, mapping_mtmt_mvp_legacy])
+    @mark.parametrize('mapping_file', [mapping_mtmt_mvp, mapping_mtmt_mvp_legacy, mapping_mtmt_mvp_no_type])
     def test_parse_with_filled_mapping_file(self, mapping_file):
         # GIVEN the Mtmt data
         mtmt = get_mtmt_from_file(model_mtmt_mvp)
@@ -44,7 +44,7 @@ class TestMTMTTrustzoneParser:
         assert trustzone.name == 'Private Secured Cloud'
         assert trustzone.type == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
 
-    @mark.parametrize('mapping_file', [mtmt_default_mapping, mtmt_default_mapping_legacy])
+    @mark.parametrize('mapping_file', [mtmt_default_mapping, mtmt_default_mapping_legacy, mtmt_default_mapping_no_type])
     def test_parse_default_trustzones(self, mapping_file):
         # GIVEN the Mtmt data
         mtmt = get_mtmt_from_file(test_resource_paths.mtmt_sdl_all_components)
@@ -66,7 +66,7 @@ class TestMTMTTrustzoneParser:
         assert trustzone.name == 'The CorpNet Trust Boundary'
         assert trustzone.type == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
 
-    @mark.parametrize('mapping_file', [mtmt_default_mapping, mtmt_default_mapping_legacy])
+    @mark.parametrize('mapping_file', [mtmt_default_mapping, mtmt_default_mapping_legacy, mtmt_default_mapping_no_type])
     def test_parse_unmapped_trustzones(self, mapping_file):
         # GIVEN the Mtmt data with one trustzone
         mtmt = get_mtmt_from_file(test_resource_paths.mtmt_unmapped_trustzone)

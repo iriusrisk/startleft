@@ -21,6 +21,8 @@ mtmt_default_mapping = path + '/mapping/mtmt_default_mapping.yaml'
 # legacy mapping
 mapping_mtmt_mvp_legacy = path + '/mapping/MTMT_MVP_legacy.yaml'
 mtmt_default_mapping_legacy = path + '/mapping/mtmt_default_mapping_legacy.yaml'
+mapping_mtmt_mvp_no_type = path + '/mapping/MTMT_MVP_no_type.yaml'
+mtmt_default_mapping_no_type = path + '/mapping/mtmt_default_mapping_no_type.yaml'
 
 # mtmt
 model_mtmt_source_file = path + '/mtmt/test_model.tm7'

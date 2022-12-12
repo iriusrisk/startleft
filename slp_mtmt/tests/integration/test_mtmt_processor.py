@@ -2,7 +2,8 @@ from pytest import mark
 
 from sl_util.sl_util.file_utils import get_byte_data
 from slp_mtmt import MTMTProcessor
-from slp_mtmt.tests.resources.test_resource_paths import mapping_mtmt_mvp_legacy, mapping_mtmt_mvp, model_mtmt_mvp
+from slp_mtmt.tests.resources.test_resource_paths import mapping_mtmt_mvp_legacy, mapping_mtmt_mvp, model_mtmt_mvp, \
+    mapping_mtmt_mvp_no_type
 
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
@@ -10,7 +11,7 @@ SAMPLE_NAME = 'name'
 
 class TestMtmtProcessor:
 
-    @mark.parametrize('mapping_file', [mapping_mtmt_mvp, mapping_mtmt_mvp_legacy])
+    @mark.parametrize('mapping_file', [mapping_mtmt_mvp, mapping_mtmt_mvp_legacy, mapping_mtmt_mvp_no_type])
     def test_run_valid_mappings(self, mapping_file):
         # GIVEN a valid MTMT file with some resources
         source_file = get_byte_data(model_mtmt_mvp)

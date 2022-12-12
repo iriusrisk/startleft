@@ -8,7 +8,7 @@
             "type": "array",
             "items": {
                 "type": "object",
-                "required": ["label", "type"],
+                "required": ["label"],
                 "properties": {
                     "label": {"$ref": "#/definitions/query"},
                     "type": {"$ref": "#/definitions/query"}
