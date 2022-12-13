@@ -35,6 +35,7 @@ terraform_orphan_component = path + '/tf/terraform_orphan_component.tf'
 terraform_main_referenced_variables = path + '/tf/terraform_main_referenced_variables.tf'
 terraform_vars_referenced_variables = path + '/tf/terraform_vars_referenced_variables.tf'
 terraform_variables_file_referenced_variables = path + '/tf/terraform_variables_files_referenced_variables.tfvars'
+terraform_components_with_trustzones_of_same_type = path + '/tf/terraform_components_with_trustzones_of_same_type.tf'
 
 # mapping
 terraform_mapping_aws_component_without_parent = path + '/mapping/terraform_mapping_component_without_parent.yaml'
@@ -43,6 +44,8 @@ terraform_mapping_modules = path + '/mapping/terraform_mapping_modules.yaml'
 terraform_mapping_extra_modules = path + '/mapping/terraform_mapping_extra_modules.yaml'
 terraform_iriusrisk_tf_aws_mapping = path + '/mapping/iriusrisk-tf-aws-mapping.yaml'
 empty_terraform_mapping = path + '/mapping/empty_terraform_mapping.yaml'
+terraform_trustzone_types_mapping = path + '/mapping/terraform_trustzone_types_mapping.yaml'
+terraform_multiple_trustzones_same_type_mapping = path + '/mapping/terraform_multiple_trustzones_same_type_mapping.yaml'
 
 # otm
 tf_file_expected_result = path + '/otm/tf-file-expected-result.otm'

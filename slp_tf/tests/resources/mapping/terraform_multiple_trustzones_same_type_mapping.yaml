@@ -1,0 +1,19 @@
+trustzones:
+  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+    type: public-cloud
+    $default: true
+
+  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe99
+    name: Public Cloud
+    type: public-cloud
+
+components:
+  - type: vpc
+    $source: { $type: "aws_vpc" }
+
+  - type: rds
+    $source: { $type: [ "aws_db_instance", "aws_rds_cluster" ] }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe99
+
+dataflows: []

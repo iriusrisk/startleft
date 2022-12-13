@@ -12,14 +12,14 @@
     "trustZones": [{
         "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
         "name": "Public Cloud",
-        "type": null,
+        "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
         "risk": {
             "trustRating": 10
         }
     }, {
         "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
         "name": "Internet",
-        "type": null,
+        "type": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
         "risk": {
             "trustRating": 10
         }
