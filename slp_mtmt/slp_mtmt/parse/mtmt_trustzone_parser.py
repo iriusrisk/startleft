@@ -34,16 +34,21 @@ class MTMTTrustzoneParser:
         return self.trustzones
 
     def create_trustzone(self, border: MTMBorder) -> Trustzone:
-        mtmt_type = self.__calculate_otm_type(border)
-        if mtmt_type is not None:
-            trustzone_type = self.__calculate_otm_type(border)
+        otm_type = self.__calculate_otm_type(border)
+        if otm_type is not None:
             return Trustzone(id=border.id,
                              name=border.name,
-                             type=trustzone_type,
+                             type=otm_type,
                              properties=border.properties)
 
     def __calculate_otm_type(self, border: MTMBorder) -> str:
-        return self.__get_label_value(border.stencil_name, 'type')
+        return self.__get_mapping_type(border.stencil_name)
+
+    def __get_mapping_type(self, label) -> str:
+        id = self.__get_label_value(label, 'id')
+        if id:
+            return id
+        return self.__get_label_value(label, 'type')
 
     def __get_label_value(self, label, key):
         try:
@@ -65,6 +70,6 @@ class MTMTTrustzoneParser:
 
     def create_default_trustzone(self):
         if self.mapping is not None and DEFAULT_LABEL in self.mapping.mapping_trustzones:
-            trustzone_type = self.mapping.mapping_trustzones[DEFAULT_LABEL]['type']
+            trustzone_type = self.__get_mapping_type(DEFAULT_LABEL)
             trustzone_id = deterministic_uuid(trustzone_type)
             return Trustzone(id=trustzone_id, type=trustzone_type, name=DEFAULT_NAME)

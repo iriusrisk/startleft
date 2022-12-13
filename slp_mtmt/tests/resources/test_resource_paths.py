@@ -15,6 +15,14 @@ custom_bad_formed_file = path + '/mapping/mtmt-custom-bad-formed-file.yaml'
 default_mtmt_empty_elements = path + '/mapping/mtmt-default-mapping-empty-elements.yaml'
 mtmt_empty_mapping_file = path + '/mapping/mtmt-empty-mapping.yaml'
 mtmt_mapping_filled_file = path + '/mapping/mtmt-mapping-filled.yaml'
+mapping_mtmt_mvp = path + '/mapping/MTMT_MVP.yaml'
+mtmt_default_mapping = path + '/mapping/mtmt_default_mapping.yaml'
+
+# legacy mapping
+mapping_mtmt_mvp_legacy = path + '/mapping/MTMT_MVP_legacy.yaml'
+mtmt_default_mapping_legacy = path + '/mapping/mtmt_default_mapping_legacy.yaml'
+mapping_mtmt_mvp_no_type = path + '/mapping/MTMT_MVP_no_type.yaml'
+mtmt_default_mapping_no_type = path + '/mapping/mtmt_default_mapping_no_type.yaml'
 
 # mtmt
 model_mtmt_source_file = path + '/mtmt/test_model.tm7'
@@ -22,5 +30,3 @@ model_mtmt_with_lines = path + '/mtmt/test_model_lines.tm7'
 model_mtmt_mvp = path + '/mtmt/MTMT_MVP.tm7'
 mtmt_sdl_all_components = path + '/mtmt/SDL_all_components.tm7'
 mtmt_unmapped_trustzone = path + '/mtmt/unmapped-trustzone.tm7'
-mapping_mtmt_mvp = path + '/mapping/MTMT_MVP.yaml'
-mtmt_default_mapping = path + '/mapping/mtmt_default_mapping.yaml'

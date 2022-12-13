@@ -1,23 +1,22 @@
 trustzones:
 
   - label: Internet Boundary
-    type: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    id: f0ba7722-39b6-4c81-8290-a30a248bb8d9
 
   - label: CorpNet Trust Boundary
-    type: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+    id: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
 
   - label: Generic Trust Border Boundary
-    type: 6376d53e-6461-412b-8e04-7b3fe2b397de
+    id: 6376d53e-6461-412b-8e04-7b3fe2b397de
 
   - label: Generic Trust Line Boundary
-    type: 6376d53e-6461-412b-8e04-7b3fe2b397de
+    id: 6376d53e-6461-412b-8e04-7b3fe2b397de
 
   - label: Sandbox Trust Boundary Border
-    type: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+    id: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
 
   - label: default
-    type: b61d6911-338d-46a8-9f39-8dcd24abfe91
-
+    id: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
 components:
 
@@ -197,4 +196,4 @@ components:
   - label: Web Service
     type: web-service
 
-dataflows: [ ]
+dataflows: []
