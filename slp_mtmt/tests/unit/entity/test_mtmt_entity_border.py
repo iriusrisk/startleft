@@ -85,3 +85,35 @@ class TestMTMTEntityBorder:
 
         for index in range(0, len(borders) - 1):
             assert borders[index].properties == self.border_properties_expected_results[index]
+
+    def test_coordinates(self):
+        # GIVEN the source MTMT border
+        border_source = {
+            'Key': '294a595a-174d-452c-b38d-9c434f7f5bac',
+            'Value': {
+                'Properties': {
+                    'anyType': [
+                        {'DisplayName': 'MCU'},
+                        {'DisplayName': 'Name', 'Value': {'text': 'My_MCU'}}
+                    ]
+                },
+                'Height': '100', 'Left': '145', 'Top': '57', 'Width': '200'
+            },
+            'attrib': {'Id': 'i2', 'type': 'StencilRectangle'}
+        }
+
+        # WHEN we instantiate the MTMTBorder
+        border: MTMBorder = MTMBorder(border_source)
+
+        # THEN we check the border
+        assert border.properties == {'Name': 'My_MCU'}
+        assert border.top == 57
+        assert border.left == 145
+        assert border.width == 200
+        assert border.height == 100
+        assert border.name == 'My_MCU'
+        assert border.stencil_name == 'MCU'
+        assert border.type == 'StencilRectangle'
+        assert border.id == '294a595a-174d-452c-b38d-9c434f7f5bac'
+        assert not border.is_trustzone
+        assert border.is_component

@@ -1,35 +1,30 @@
-is_component_stencil_list = ['StencilRectangle', 'StencilEllipse', 'StencilParallelLines']
-is_trustzone_stencil_list = ['BorderBoundary', 'LineBoundary']
+from slp_mtmt.slp_mtmt.entity.mtmt_entity import MTMEntity, is_component_stencil_list, is_trustzone_stencil_list
 
 
-class MTMBorder:
+class MTMBorder(MTMEntity):
 
     def __init__(self, source: dict):
-        self.source = source
-
-    @property
-    def id(self):
-        return self.source.get('Key')
-
-    @property
-    def name(self):
-        name = None
-        for borderType in self.source.get('Value', {}).get('Properties', {}).get('anyType'):
-            if borderType.get('DisplayName', '') == 'Name':
-                name = borderType.get('Value', {}).get('text')
-        return name
-
-    @property
-    def type(self):
-        return self.source.get('attrib', {}).get('type')
-
-    @property
-    def stencil_name(self):
-        return self.source.get('Value', {}).get('Properties', {}).get('anyType')[0].get('DisplayName', {})
+        super().__init__(source)
 
     @property
     def generic_type_id(self):
         return self.source.get('Value', {}).get('GenericTypeId')
+
+    @property
+    def height(self):
+        return self.__extract_int_value('Height')
+
+    @property
+    def width(self):
+        return self.__extract_int_value('Width')
+
+    @property
+    def left(self):
+        return self.__extract_int_value('Left')
+
+    @property
+    def top(self):
+        return self.__extract_int_value('Top')
 
     @property
     def properties(self):
@@ -59,3 +54,12 @@ class MTMBorder:
                + 'is_component: ' + str(self.is_component) + ', ' \
                + 'is_trustzone: ' + str(self.is_trustzone) + ', ' \
                + 'properties: ' + str(self.properties) + '}'
+
+    def __extract_value(self, key):
+        return self.source.get('Value').get(key)
+
+    def __extract_int_value(self, key):
+        try:
+            return int(self.__extract_value(key))
+        except TypeError:
+            return
