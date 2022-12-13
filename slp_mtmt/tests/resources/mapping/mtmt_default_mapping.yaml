@@ -30,7 +30,7 @@ components:
   - label: Authorization Provider
     type: oauth2-authorization-server
 
-  - label: Azure AD Microsoft
+  - label: Azure AD
     type: microsoft-azure-environment
 
   - label: Azure App Service API App
@@ -197,4 +197,4 @@ components:
   - label: Web Service
     type: web-service
 
-dataflows: [ ]
+dataflows: []

@@ -30,3 +30,13 @@ model_mtmt_with_lines = path + '/mtmt/test_model_lines.tm7'
 model_mtmt_mvp = path + '/mtmt/MTMT_MVP.tm7'
 mtmt_sdl_all_components = path + '/mtmt/SDL_all_components.tm7'
 mtmt_unmapped_trustzone = path + '/mtmt/unmapped-trustzone.tm7'
+missing_position = path + '/mtmt/missing_coordinates.tm7'
+example_position_tm7 = path + '/mtmt/MTMT_example_coordinates.tm7'
+position_1line_tz_tm7 = path + '/mtmt/MTMT_example_coordinates_1_line_trustzone.tm7'
+position_1orphan_tm7 = path + '/mtmt/MTMT_example_coordinates_1_orphan.tm7'
+
+# OTM
+example_position_otm = path + '/mtmt/MTMT_example_coordinates.otm'
+position_1line_tz_otm = path + '/mtmt/MTMT_example_coordinates_1_line_trustzone.otm'
+position_1orphan_otm = path + '/mtmt/MTMT_example_coordinates_1_orphan.otm'
+
