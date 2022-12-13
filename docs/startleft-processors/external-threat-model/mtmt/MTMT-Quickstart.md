@@ -10,6 +10,7 @@ From the [official Microsoft Threat Model Tool page](https://learn.microsoft.com
 
 From the point of view of StartLeft, a MTMT file is an external threat model (external because is not OTM) input source
 which has information about:
+
  - The diagram: With stencils, trust zones and dataflows, their relationships and their visual representation.
  - The threats.
  - The mitigations.
