@@ -1,6 +1,7 @@
 site_name: StartLeft
 site_url: https://iriusrisk.github.io/startleft/
 repo_url: https://github.com/iriusrisk/startleft
+edit_uri: ""
 nav:
   - Home: index.md
   - Open Threat Model (OTM): Open-Threat-Model-(OTM).md
@@ -28,7 +29,12 @@ nav:
           - CloudFormation Examples: startleft-processors/iac/cft/CloudFormation-Examples.md
       - Terraform:
           - Terraform Quickstart: startleft-processors/iac/tf/Terraform-Quickstart.md
-          - Terraform Mapping: startleft-processors/iac/tf/Terraform-Mapping.md
+          - Terraform Mapping:
+            - How To Create a Basic Mapping File: startleft-processors/iac/tf/Terraform-how-to-create-a-basic-mapping-file.md
+            - How Mapping File works: startleft-processors/iac/tf/Terraform-how-mapping-file-works.md
+            - How Dataflow Mapping File works: startleft-processors/iac/tf/Terraform-how-dataflow-mapping-works.md
+            - Domain-Specific Language: startleft-processors/iac/tf/Terraform-domain-specific-language.md
+            - Additional JMESPath functions: startleft-processors/iac/tf/Terraform-additional-jmespath-functions.md
           - Terraform Examples: startleft-processors/iac/tf/Terraform-Examples.md
       - Visio:
           - Visio Quickstart: startleft-processors/diagram/Visio-Quickstart.md
