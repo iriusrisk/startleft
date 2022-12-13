@@ -1,10 +1,10 @@
-from otm.otm.otm import Component
+from otm.otm.entity.component import OtmComponent
 from slp_cft.slp_cft.parse.mapping.cft_component_id_generator import CloudformationComponentIdGenerator
 
 
 class CloudformationPathIdsCalculator:
 
-    def __init__(self, components: [Component]):
+    def __init__(self, components: [OtmComponent]):
         self.components = components
 
         self.path_ids = {}
@@ -23,7 +23,7 @@ class CloudformationPathIdsCalculator:
 
         return path_id
 
-    def __get_parent_path_id(self, component: Component) -> str:
+    def __get_parent_path_id(self, component: OtmComponent) -> str:
         if component.parent_type == 'trustZone':
             return component.parent
 

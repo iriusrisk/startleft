@@ -1,6 +1,6 @@
 import logging
 
-from otm.otm.otm import OTM
+from otm.otm.entity.otm import Otm
 from otm.otm.otm_builder import OtmBuilder
 from slp_base import OtmBuildingError
 from slp_base.slp_base.provider_parser import ProviderParser
@@ -30,7 +30,7 @@ class TerraformParser(ProviderParser):
         self.source_model.otm = self.otm
         self.transformer = TerraformTransformer(source_model=self.source_model, threat_model=self.otm)
 
-    def build_otm(self) -> OTM:
+    def build_otm(self) -> Otm:
         try:
             self.transformer.run(self.mapping)
 
