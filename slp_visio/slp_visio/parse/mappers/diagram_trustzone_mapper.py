@@ -4,7 +4,7 @@ from otm.otm.otm import Trustzone
 
 class DiagramTrustzoneMapper:
 
-    def __init__(self, components: [DiagramComponent],  trustzone_mappings: dict):
+    def __init__(self, components: [DiagramComponent], trustzone_mappings: dict):
         self.components = components
         self.trustzone_mappings = trustzone_mappings
 
@@ -17,11 +17,15 @@ class DiagramTrustzoneMapper:
             default_trustzone_mapping = self.trustzone_mappings['Public Cloud']
             return Trustzone(default_trustzone_mapping['id'], default_trustzone_mapping['type'])
 
-
     def __filter_trustzones(self) -> [DiagramComponent]:
-        return list(filter(
-            lambda c: c.name in self.trustzone_mappings and not c.parent,
-            self.components))
+        trustzones = []
+
+        for c in self.components:
+            if c.name in self.trustzone_mappings and not c.parent:
+                c.trustzone = True
+                trustzones.append(c)
+
+        return trustzones
 
     def __map_to_otm(self, trustzones: [DiagramComponent]) -> [Trustzone]:
         return list(map(self.__build_otm_trustzone, trustzones)) \
