@@ -2,7 +2,7 @@
 ## What is Terraform?
 
 ---
-From the [official Terraform page](https://www.terraform.io/): 
+From the <a href="https://www.terraform.io/" target="_blank">official Terraform page</a>: 
 > Terraform is an open-source infrastructure as code software tool that enables you to safely and predictably create, 
 > change, and improve infrastructure.
 
@@ -18,7 +18,7 @@ output in the OTM file.
 
 Once you got familiarized with the basics explained in this page, you will need to know more about how to use and 
 customize the behavior of the processor in order to configure your own conversions. For that, you should take a look 
-to the [Terraform mapping page](Terraform-Mapping.md), where you will find all the information you need, from 
+to the [Terraform mapping page](Terraform-how-to-create-a-basic-mapping-file.md), where you will find all the information you need, from 
 basic to advanced, to build your own CFT mapping files.
 
 Apart from this, you may also find interesting the generic usage manuals for the [CLI](../../../usage/Command-Line-Interface.md) 
@@ -29,7 +29,7 @@ and [REST API](../../../usage/REST-API.md).
 ---
 
 Let's suppose you have a TF file with a single 
-[EC2 instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance)
+<a href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance" target="_blank">EC2 instance</a>
 like this:
 
 
@@ -60,27 +60,23 @@ resource "aws_instance" "web" {
 }
 ```
 
-And you want to translate it to OTM in order to import it into [IriusRisk](https://www.iriusrisk.com/), whose 
-equivalent type for an EC2 instance is an `ec2` component and the expected resultant project should be like this:
+And you want to translate it to OTM in order to import it into <a href="https://www.iriusrisk.com/" target="_blank">IriusRisk</a>,
+whose equivalent type for an EC2 instance is an `ec2` component and the expected resultant project should be like this:
 
 ![img/ec2-iriusrisk.png](img/ec2-iriusrisk.png)
 
 In that case, you will need a mapping file that contains, at least, a TrustZone and the mapping for the EC2 
 component. Notice that the standard requires that all the components must have a parent, in this case, the _Public 
-Cloud_ TrustZone. This mapping file could be as simple as this:
+Cloud_ TrustZone is mapped as the default component's TrustZone. This mapping file could be as simple as this:
 ```yaml
 trustzones:
   - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
     name: Public Cloud
+    default: true
 
 components:
-  - id:          {$format: "{name}"}
-    type:        ec2
-    $source:     {$root: "resource|get(@, 'aws_instance')"}
-    name:        {$path: "keys(@)[0]"}
-    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - {$path: "Type"}
+  - type:        ec2
+    $source:     {$type: "aws_instance"}
 
 dataflows: []
 ```
@@ -91,41 +87,41 @@ threat modelling tool like IriusRisk.
 
 ```json
 {
-    "otmVersion": "0.1.0",
-    "project": {
-        "name": "My EC2 project",
-        "id": "my-ec2-project"
-    },
-    "representations": [
-        {
-            "name": "Terraform",
-            "id": "Terraform",
-            "type": "code"
-        }
-    ],
-    "trustZones": [
-        {
-            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
-            "name": "Public Cloud",
-            "risk": {
-                "trustRating": 10
-            }
-        }
-    ],
-    "components": [
-        {
-            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.myec2instance",
-            "name": "MyEC2Instance",
-            "type": "ec2",
-            "parent": {
-                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-            },
-            "tags": [
-                "aws_instance"
-            ]
-        }
-    ],
-    "dataflows": []
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "My EC2 project",
+    "id": "my-ec2-project"
+  },
+  "representations": [
+    {
+      "name": "Terraform",
+      "id": "Terraform",
+      "type": "code"
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_instance-web",
+      "name": "web",
+      "type": "ec2",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_instance"
+      ]
+    }
+  ],
+  "dataflows": []
 }
 ```
 
@@ -156,11 +152,6 @@ You can get the same result if through the StartLeft's REST API. For that, in fi
 server with the command:
 ```shell
 startleft server
-```
-
-If you want to run the server in a specific port, you can do:
-```shell
-startleft server -p 8080
 ```
 
 
