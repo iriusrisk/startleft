@@ -1,6 +1,6 @@
 from otm.otm.entity.otm import Otm
 from otm.otm.entity.component import OtmComponent
-from otm.otm.otm import DiagramRepresentation, RepresentationType
+from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
 from otm.otm.otm_builder import OtmBuilder
 from slp_base.slp_base.provider_parser import ProviderParser
 from slp_base.slp_base.provider_type import EtmType
@@ -58,9 +58,6 @@ class MTMTParser(ProviderParser):
 
     def __get_mtmt_representations(self) -> list:
         return self.representations
-
-    def __get_mtmt_threats_and_mitigations(self, components: [OtmComponent]):
-        return self.threat_parser.parse(components)
 
     def build_otm(self) -> Otm:
         threats, mitigations = self.__get_mtmt_threats_and_mitigations(self.__get_mtmt_components())

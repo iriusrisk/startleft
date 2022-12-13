@@ -2,7 +2,7 @@ from otm.otm.entity.otm import Otm
 from otm.otm.entity.dataflow import OtmDataflow
 from otm.otm.entity.component import OtmComponent
 from otm.otm.entity.trustzone import OtmTrustzone
-from otm.otm.otm import Representation
+from otm.otm.entity.representation import Representation
 from otm.otm.entity.mitigation import OtmMitigation
 from otm.otm.entity.threat import OtmThreat
 from otm.otm.provider import Provider

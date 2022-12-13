@@ -1,10 +1,11 @@
 class OtmTrustzone:
-    def __init__(self, trustzone_id, name, source=None, properties=None):
+    def __init__(self, trustzone_id, name, source=None, properties=None, representations=None):
         self.id = trustzone_id
         self.name = name
         self.source = source
         self.properties = properties
         self.trustrating = 10
+        self.representations = representations
 
     def __eq__(self, other):
         return type(other) == OtmTrustzone and self.id == other.id
@@ -26,5 +27,7 @@ class OtmTrustzone:
 
         if self.properties:
             json["properties"] = self.properties
+        if self.representations:
+            json["representations"] = [r.json() for r in self.representations]
 
         return json

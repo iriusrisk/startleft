@@ -1,4 +1,4 @@
-from otm.otm.otm import DiagramRepresentation, RepresentationType, RepresentationElement
+from otm.otm.entity.representation import DiagramRepresentation, RepresentationType, RepresentationElement
 from slp_mtmt.slp_mtmt.parse.mtmt_trustzone_parser import MTMTTrustzoneParser
 from slp_mtmt.tests.mtmt_test_utils import get_mtmt_from_file, get_mapping_from_file
 from slp_mtmt.tests.resources import test_resource_paths

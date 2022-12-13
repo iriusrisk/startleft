@@ -1,23 +1,30 @@
 from otm.otm.entity.component import OtmComponent
 from otm.otm.entity.dataflow import OtmDataflow
 from otm.otm.entity.trustzone import OtmTrustzone
+from otm.otm.entity.representation import Representation, DiagramRepresentation, RepresentationType
 
 
 class Otm:
     def __init__(self, project_name, project_id, provider):
         self.project_name = project_name
         self.project_id = project_id
-        self.representations_id = provider.provider_name
-        self.representations_name = provider.provider_name
-        self.representations_type = provider.provider_type
+        self.representations = []
         self.trustzones = []
         self.components = []
         self.dataflows = []
         self.threats = []
         self.mitigations = []
         self.version = "0.1.0"
-        self.representations_size_height = 1000
-        self.representations_size_width = 1000
+        self.representations_size_default_height = 1000
+        self.representations_size_default_width = 1000
+
+        if provider.provider_type == RepresentationType.DIAGRAM.value:
+            default_size = {"width": self.representations_size_default_width, "height": self.representations_size_default_height}
+            self.add_diagram_representation(id_=provider.provider_name, name=provider.provider_name,
+                                            type_=provider.provider_type, size=default_size)
+        else:
+            self.add_representation(id_=provider.provider_name, name=provider.provider_name,
+                                    type_=provider.provider_type)
 
     def objects_by_type(self, type):
         if type == "trustzone":
@@ -34,23 +41,14 @@ class Otm:
                 "name": self.project_name,
                 "id": self.project_id
             },
-            "representations": [
-                {
-                    "name": self.representations_name,
-                    "id": self.representations_id,
-                    "type": self.representations_type,
-                }
-            ],
+            "representations": [],
             "trustZones": [],
             "components": [],
             "dataflows": []
         }
 
-        if self.representations_type == "diagram":
-            json["representations"][0]["size"] = {
-                "width": self.representations_size_width,
-                "height": self.representations_size_height
-            }
+        for representation in self.representations:
+            json["representations"].append(representation.json())
         for trustzone in self.trustzones:
             json["trustZones"].append(trustzone.json())
         for component in self.components:
@@ -82,3 +80,9 @@ class Otm:
         self.dataflows.append(OtmDataflow(dataflow_id=id, name=name, bidirectional=bidirectional, source_node=source_node,
                                           destination_node=destination_node, source=source, properties=properties,
                                           tags=tags))
+
+    def add_representation(self, id_=None, name=None, type_=None):
+        self.representations.append(Representation(id_=id_, name=name, type_=type_))
+
+    def add_diagram_representation(self, id_=None, name=None, type_=None, size=None):
+        self.representations.append(DiagramRepresentation(id_=id_, name=name, type_=type_, size=size))
