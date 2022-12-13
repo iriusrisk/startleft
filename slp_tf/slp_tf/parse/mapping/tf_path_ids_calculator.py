@@ -50,4 +50,4 @@ class TerraformPathIdsCalculator:
         return next(filter(lambda x: x.id == parent_id, self.components), None)
 
     def __generate_component_id(self, component: OtmComponent, parent_id: str):
-        return self.id_generator.from_component_source(component.source, parent_id).generate_id()
+        return self.id_generator.from_component_source(component.source, parent_id, component.name).generate_id()

@@ -867,6 +867,6 @@ class TestCloudformationPathIdsCalculator:
         assert path_ids[
                    '7df85b9d-1e35-4551-a157-b91fe032a182'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet2.canary'
         assert path_ids[
-                   '11dd4b56-7033-4a94-875a-4180a0164865'] == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup'
+                   '11dd4b56-7033-4a94-875a-4180a0164865'] == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup.0_0_0_0_0'
         assert path_ids[
-                   'a0985c4f-4ce3-4cf5-8ac2-5da8027fc2c2'] == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.outboundsecuritygroup'
+                   'a0985c4f-4ce3-4cf5-8ac2-5da8027fc2c2'] == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.outboundsecuritygroup.255_255_255_255_32'

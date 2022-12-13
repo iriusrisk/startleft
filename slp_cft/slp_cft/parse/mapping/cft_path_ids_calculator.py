@@ -36,4 +36,5 @@ class CloudformationPathIdsCalculator:
         return next(filter(lambda x: x.id == parent_id, self.components), None)
 
     def __build_component_id(self, component: {}, parent_id: str):
-        return CloudformationComponentIdGenerator.from_component(component.source, parent_id).generate_id()
+        return CloudformationComponentIdGenerator.from_component(component.source, parent_id,
+                                                                         component.name).generate_id()
