@@ -118,7 +118,7 @@ the custom name, the source, and the destination.
 No need to be in the mapping file.
 
 StartLeft will extract OTM threats and threat instances, as well as OTM mitigations
-and mitigation instances from the same MTMT threat. Moreover the OTM component to which the OTM threat instance will be added
+and mitigation instances from the same MTMT threat. Moreover, the OTM component to which the OTM threat instance will be added
 is the destination component of the MTMT threat.
 
 Currently, Startleft maps threats and mitigations from two kinds of templates:
@@ -128,7 +128,7 @@ Currently, Startleft maps threats and mitigations from two kinds of templates:
 
 ![](img/mtmt_threat.png)
 
-will be mapped to an OTM threat
+will be mapped to an OTM threat:
 
 ```json
 {
@@ -145,7 +145,7 @@ will be mapped to an OTM threat
 }
 ```
 
-to an OTM mitigation
+to an OTM mitigation:
 
 ```json
 {
@@ -156,7 +156,8 @@ to an OTM mitigation
 }
 ```
 
-and also to an OTM threat instance along with its OTM mitigation instance, which will be mapped to the corresponding OTM component
+and also to an OTM threat instance along with its OTM mitigation instance, which will be mapped to the corresponding 
+OTM component:
 
 ```json
 {
@@ -178,7 +179,7 @@ mitigation nor OTM mitigation instance will be mapped, only the OTM threat and t
 #### A MTMT threat without a "Steps" field
 ![img_1.png](img/mtmt_azure_threat_no_steps.png)
 
-will be mapped to an OTM threat
+will be mapped to an OTM threat:
 
 ```json
 {
@@ -195,7 +196,7 @@ will be mapped to an OTM threat
 }
 ```
 
-to an OTM Mitigation
+to an OTM Mitigation:
 
 ```json
 {
@@ -208,7 +209,7 @@ to an OTM Mitigation
 #### A MTMT threat with a "Steps" field
 ![img_3.png](img/mtmt_azure_threat_steps.png)
 
-will be mapped to an OTM threat
+will be mapped to an OTM threat:
 
 ```json
 {
@@ -225,7 +226,7 @@ will be mapped to an OTM threat
 }
 ```
 
-to an OTM mitigation
+to an OTM mitigation:
 
 ```json
 {
@@ -236,7 +237,8 @@ to an OTM mitigation
 }
 ```
 
-and, in both cases, also to an OTM threat instance along with its OTM mitigation instance, which will be mapped to the corresponding OTM component
+and, in both cases, also to an OTM threat instance along with its OTM mitigation instance, which will be mapped to 
+the corresponding OTM component:
 
 
 
