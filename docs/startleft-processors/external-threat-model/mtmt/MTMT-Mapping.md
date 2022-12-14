@@ -2,22 +2,22 @@
 
 ---
 
-A source mapping file (or 'mapping file' for short) describe how to identify components, dataflows, trust zones, 
+A source mapping file (or 'mapping file' for short) describe how to identify components, dataflows, TrustZones, 
 threats and mitigations in source file and how to map them to the OTM equivalent.
 
 Let's see howto identify the different elements:
 
 
 ## Trustzones
-For the trust zones we need to write two fields: ``label`` and ``id``
+For the TrustZones we need to write two fields: ``label`` and ``id``
 
-The label will identify the MTMT trust zone by its type. 
+The label will identify the MTMT TrustZone by its type. 
 
-Let's see an example with a trust zone in the MTMT_example.tm7
+Let's see an example with a TrustZone in the MTMT_example.tm7:
 
 ![](img/MTMT_example.png)
 
-Our trustzone named ``Internet`` is of ``Generic Trust Border Boundary`` type.
+Our TrustZone named ``Internet`` is of ``Generic Trust Border Boundary`` type.
 
 
 
@@ -26,14 +26,14 @@ Our trustzone named ``Internet`` is of ``Generic Trust Border Boundary`` type.
 So we need to put this
 type in the label value.
 
-The id in the mapping file will be the id in the OTM trust zone output
+The id in the mapping file will be the id in the OTM TrustZone output:
 
 ```yaml
   - label: Generic Trust Border Boundary
     id: 6376d53e-6461-412b-8e04-7b3fe2b397de
 ```
 
-The trust zone OTM output will be:
+The TrustZone OTM output will be:
 ```json
   {"trustZones": [
     {
@@ -50,9 +50,9 @@ The trust zone OTM output will be:
 
 
 ## Components
-For the components we need to write two fields: ``label`` and ``type``
+For the components we need to write two fields: ``label`` and ``type``.
 
-The label will identify the MTMT component by its MTMT type. Let's see again the MTMT_example.tm7
+The label will identify the MTMT component by its MTMT type. Let's see again the MTMT_example.tm7:
 
 ![](img/MTMT_example.png)
 
@@ -86,7 +86,7 @@ The component OTM output will be:
       }
     }]}
 ```
-As you can see, the OTM component name is coming from the custom name in the MTMT, in our case ``Public API v2``
+As you can see, the OTM component name is coming from the custom name in the MTMT, in our case ``Public API v2``.
 
 ### Mobile Client Component
 The ``Mobile Client`` component is a special case that needs a little customization in the mapping file.
@@ -112,8 +112,8 @@ the mapping file. Let's see how to do it:
 
 ## Dataflows
 No need to be in the mapping file. StartLeft will detect them and will fill the OTM dataflow automatically detecting
-the custom name, the source, and the destination
+the custom name, the source, and the destination.
 ## Threats
-No need to be in the mapping file. StartLeft will detect them and will fill the OTM threats automatically
+No need to be in the mapping file. StartLeft will detect them and will fill the OTM threats automatically.
 ## Mitigations
-No need to be in the mapping file. StartLeft will detect them and will fill the OTM mitigations automatically
+No need to be in the mapping file. StartLeft will detect them and will fill the OTM mitigations automatically.
