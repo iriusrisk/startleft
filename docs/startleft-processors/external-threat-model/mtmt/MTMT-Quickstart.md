@@ -25,7 +25,6 @@ on a mapping file that enables the users to define the translations between:
 
 - The source stencils types and the OTM components output.
 - The source TrustZones and the OTM TrustZones output.
-- The source dataflows and the OTM dataflows output.
 
 Once you got familiarized with the basics explained in this page, you will need to know more about how to use the
 processor in order to create the mapping file for a successful conversion from MTMT to OTM. 
