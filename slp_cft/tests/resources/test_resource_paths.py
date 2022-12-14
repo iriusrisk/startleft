@@ -43,6 +43,7 @@ cloudformation_with_ref_function_and_without_default_property_json = \
 cloudformation_with_ref_function_and_default_property_yaml = path + '/cft/cloudformation_with_ref_and_default.yaml'
 cloudformation_with_ref_function_and_without_parameters = path + \
                                                           '/cft/cloudformation_with_ref_and_without_parameters.json'
+cloudformation_components_from_same_resource = path + '/cft/cloudformation_components_from_same_resource.json'
 
 # otm
 otm_expected_result = path + '/otm/otm_expected_result.otm'

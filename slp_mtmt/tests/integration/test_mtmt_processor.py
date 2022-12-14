@@ -3,8 +3,9 @@ from unittest.mock import patch
 
 from pytest import mark
 
-from otm.otm.otm import Representation, DiagramRepresentation, RepresentationElement
+from otm.otm.entity.representation import Representation, DiagramRepresentation, RepresentationElement
 from sl_util.sl_util.file_utils import get_byte_data
+from slp_base.tests.util.otm import validate_and_diff
 from slp_mtmt import MTMTProcessor
 from slp_mtmt.tests.resources import test_resource_paths
 
@@ -23,6 +24,11 @@ OTM_EXAMPLE_1ORPHAN = test_resource_paths.position_1orphan_otm
 
 
 class TestMtmtProcessor:
+    excluded_regex = [
+        r"root\['components'\]\[.+?\]\['threats'\]",
+        r"root\['threats'\]",
+        r"root\['mitigations'\]"
+    ]
 
     def test_run_valid_mappings(self):
         # GIVEN a valid MTMT file with some resources
@@ -38,6 +44,8 @@ class TestMtmtProcessor:
         assert len(otm.trustzones) == 2
         assert len(otm.components) == 4
         assert len(otm.dataflows) == 6
+        assert len(otm.threats) == 43
+        assert len(otm.mitigations) == 43
 
         # AND the project info is also right
         assert otm.project_id == "example-project"
@@ -90,6 +98,7 @@ class TestMtmtProcessor:
         element_representation = component.representations[0]
         assert element_representation.position == {'x': 231, 'y': 40}
         assert element_representation.size == {'height': 100, 'width': 100}
+        assert len(component.threats) == 3
         component = otm.components[1]
         assert component.id == '6183b7fa-eba5-4bf8-a0af-c3e30d144a10'
         assert component.name == 'Mobile Client'
@@ -98,6 +107,7 @@ class TestMtmtProcessor:
         element_representation = component.representations[0]
         assert element_representation.position == {'x': 101, 'y': 104}
         assert element_representation.size == {'height': 100, 'width': 100}
+        assert len(component.threats) == 2
         component = otm.components[2]
         assert component.id == '5d15323e-3729-4694-87b1-181c90af5045'
         assert component.name == 'Public API v2'
@@ -106,6 +116,7 @@ class TestMtmtProcessor:
         element_representation = component.representations[0]
         assert element_representation.position == {'x': 21, 'y': 101}
         assert element_representation.size == {'height': 100, 'width': 100}
+        assert len(component.threats) == 31
         component = otm.components[3]
         assert component.id == '91882aca-8249-49a7-96f0-164b68411b48'
         assert component.name == 'Azure File Storage'
@@ -114,6 +125,7 @@ class TestMtmtProcessor:
         element_representation = component.representations[0]
         assert element_representation.position == {'x': 230, 'y': 169}
         assert element_representation.size == {'height': 100, 'width': 100}
+        assert len(component.threats) == 7
 
         # AND the info inside dataflows is also right
         dataflow = otm.dataflows[0]
@@ -232,4 +244,4 @@ class TestMtmtProcessor:
         otm_json = otm.json()
 
         # THEN we check the result is as expected
-        assert otm_json == expected_otm
+        assert validate_and_diff(otm_json, expected_otm, self.excluded_regex) == {}

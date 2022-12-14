@@ -1,5 +1,6 @@
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
-from otm.otm.otm import Trustzone, Component
+from otm.otm.entity.component import OtmComponent
+from otm.otm.entity.trustzone import OtmTrustzone
 
 
 class DiagramComponentMapper:
@@ -7,13 +8,13 @@ class DiagramComponentMapper:
                  components: [DiagramComponent],
                  component_mappings: dict,
                  trustzone_mappings: dict,
-                 default_trustzone: Trustzone):
+                 default_trustzone: OtmTrustzone):
         self.components = components
         self.component_mappings = component_mappings
         self.trustzone_mappings = trustzone_mappings
         self.default_trustzone = default_trustzone
 
-    def to_otm(self) -> [Component]:
+    def to_otm(self) -> [OtmComponent]:
         return self.__map_to_otm(self.__filter_components())
 
     def __filter_components(self) -> [DiagramComponent]:
@@ -21,14 +22,14 @@ class DiagramComponentMapper:
             lambda c: c.name in self.component_mappings or c.type in self.component_mappings,
             self.components))
 
-    def __map_to_otm(self, component_candidates: [DiagramComponent]) -> [Component]:
+    def __map_to_otm(self, component_candidates: [DiagramComponent]) -> [OtmComponent]:
         return list(map(self.__build_otm_component, component_candidates))
 
-    def __build_otm_component(self, diagram_component: DiagramComponent) -> Component:
-        return Component(
-            id=diagram_component.id,
+    def __build_otm_component(self, diagram_component: DiagramComponent) -> OtmComponent:
+        return OtmComponent(
+            component_id=diagram_component.id,
             name=diagram_component.name,
-            type=self.__calculate_otm_type(diagram_component.name, diagram_component.type),
+            component_type=self.__calculate_otm_type(diagram_component.name, diagram_component.type),
             parent=self.__calculate_parent_id(diagram_component),
             parent_type=self.__calculate_parent_type(diagram_component)
         )

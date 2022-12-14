@@ -3,12 +3,12 @@
 import json
 import logging
 
-from otm.otm.otm import OTM
+from otm.otm.entity.otm import Otm
 
 logger = logging.getLogger(__name__)
 
 
-def get_otm_as_json(otm: OTM):
+def get_otm_as_json(otm: Otm):
     logger.info("getting OTM contents as JSON")
     return json.dumps(otm.json(), indent=2)
 

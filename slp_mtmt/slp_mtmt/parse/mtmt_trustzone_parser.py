@@ -1,6 +1,6 @@
 import logging
 
-from otm.otm.otm import Trustzone
+from otm.otm.entity.trustzone import OtmTrustzone
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
 from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMapping
@@ -34,13 +34,13 @@ class MTMTTrustzoneParser:
                     self.trustzones.append(trustzone)
         return self.trustzones
 
-    def create_border_trustzone(self, border: MTMBorder) -> Trustzone:
+    def create_border_trustzone(self, border: MTMBorder) -> OtmTrustzone:
         mtmt_type = self.__calculate_otm_type(border)
         if mtmt_type is not None:
             calculator = TrustzoneRepresentationCalculator(self.diagram_representation, border)
             representations = calculator.calculate_representation()
             trustzone_id = self.calculate_otm_id(border)
-            tz = Trustzone(id=trustzone_id,
+            tz = OtmTrustzone(trustzone_id=trustzone_id,
                            name=border.name,
                            properties=border.properties)
             if representations:
@@ -74,5 +74,4 @@ class MTMTTrustzoneParser:
     def create_default_trustzone(self):
         if self.mapping is not None and DEFAULT_LABEL in self.mapping.mapping_trustzones:
             trustzone_id = self.mapping.mapping_trustzones[DEFAULT_LABEL]['id']
-            return Trustzone(id=trustzone_id,
-                             name=DEFAULT_NAME)
+            return OtmTrustzone(trustzone_id=trustzone_id, name=DEFAULT_NAME)
