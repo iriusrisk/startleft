@@ -206,8 +206,7 @@ def server(port: int):
     configure_logging(verbose=True)
     logger.info(f'Startleft version: {version}')
 
-    fastapi_server.run_webapp(port, logging.getLogger().getEffectiveLevel())
-
+    fastapi_server.run_webapp(port)
 
 
 if __name__ == '__main__':

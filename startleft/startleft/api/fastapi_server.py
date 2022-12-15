@@ -13,12 +13,11 @@ from startleft.startleft.api.controllers.health import health_controller
 from startleft.startleft.api.controllers.iac import iac_create_otm_controller
 from startleft.startleft.api.error_response import ErrorResponse
 from slp_base.slp_base.errors import CommonError
-from startleft.startleft.log import VERBOSE_MESSAGE_FORMAT
+from startleft.startleft.log import VERBOSE_MESSAGE_FORMAT, get_uvicorn_log_level, set_log_level_from_uvicorn
 
 webapp = FastAPI()
-uvicorn_logger = logging.getLogger('uvicorn.error')
 logger = logging.getLogger(__name__)
-logger.setLevel(uvicorn_logger.level)
+set_log_level_from_uvicorn()
 
 webapp.include_router(health_controller.router)
 webapp.include_router(iac_create_otm_controller.router)
@@ -33,9 +32,9 @@ def initialize_webapp():
     return webapp
 
 
-def get_log_config(log_level):
+def get_log_config():
     log_config = uvicorn.config.LOGGING_CONFIG
-    app_log_level = translate_log_level_into_uvicorn(log_level)
+    app_log_level = get_uvicorn_log_level()
     log_config["loggers"]["uvicorn"]["level"] = app_log_level
     log_config["loggers"]["uvicorn.error"]["level"] = app_log_level
     log_config["loggers"]["uvicorn.access"]["level"] = app_log_level
@@ -46,8 +45,8 @@ def get_log_config(log_level):
     return log_config
 
 
-def run_webapp(port: int, log_level: int):
-    uvicorn.run(webapp, host="127.0.0.1", port=port, log_config=get_log_config(log_level))
+def run_webapp(port: int):
+    uvicorn.run(webapp, host="127.0.0.1", port=port, log_config=get_log_config())
 
 
 @webapp.exception_handler(CommonError)
@@ -103,15 +102,3 @@ def common_response_handler(status_code: int, type_: str, title: str, detail: st
 
     return JSONResponse(status_code=status_code, content=jsonable_encoder(error_response))
 
-
-def translate_log_level_into_uvicorn(log_level: int):
-    if log_level == 10:
-        return 'DEBUG'
-    elif log_level == 20:
-        return 'INFO'
-    elif log_level == 30:
-        return 'WARNING'
-    elif log_level == 40:
-        return 'ERROR'
-    elif log_level == 50:
-        return 'CRITICAL'

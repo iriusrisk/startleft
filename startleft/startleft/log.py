@@ -5,8 +5,14 @@ import click
 SIMPLE_MESSAGE_FORMAT = '%(message)s'
 VERBOSE_MESSAGE_FORMAT = '%(asctime)s %(process)d %(levelname)-8s%(module)s - %(message)s'
 
-def mock_sl():
-    print('Escribiendo')
+uvicorn_levels_map: dict = {
+    10: 'DEBUG',
+    20: 'INFO',
+    30: 'WARNING',
+    40: 'ERROR',
+    50: 'CRITICAL'
+}
+
 
 def __clean_root_handlers():
     for handler in logging.root.handlers:
@@ -42,3 +48,28 @@ def get_log_level(ctx, param, value):
         return levels[value.upper()]
     else:
         raise click.BadParameter(f"Log level must be one of: {', '.join(levels.keys())}")
+
+
+def get_root_log():
+    return logging.getLogger()
+
+
+def get_uvicorn_error_log():
+    return logging.getLogger('uvicorn.error')
+
+
+def __translate_log_level_into_uvicorn(log_level: int):
+    if log_level in uvicorn_levels_map:
+        return uvicorn_levels_map[log_level]
+    else:
+        raise click.BadParameter(f"Log level must be one of: {', '.join(log_level.keys())}")
+
+
+def get_uvicorn_log_level():
+    return __translate_log_level_into_uvicorn(get_root_log().getEffectiveLevel())
+
+
+def set_log_level_from_uvicorn():
+    uvicorn_log_level = get_uvicorn_error_log().level
+    configure_logging(True, uvicorn_log_level)
+    get_root_log().level = uvicorn_log_level
