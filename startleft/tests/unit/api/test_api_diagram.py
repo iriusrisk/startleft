@@ -7,11 +7,11 @@ import pytest
 import startleft.startleft.api.controllers.diagram.diag_create_otm_controller as diagram_controller
 from slp_base import OtmGenerationError, LoadingDiagramFileError, DiagramFileNotValidError, \
     MappingFileNotValidError, OtmResultError
-from otm.otm.otm import OTM
+from otm.otm.entity.otm import Otm
 from slp_base import DiagramType
 
 TESTING_DIAGRAM_TYPE = DiagramType.VISIO
-DUMMY_OTM = OTM("otm-mock", "otm mock", DiagramType.VISIO)
+DUMMY_OTM = Otm("otm-mock", "otm mock", DiagramType.VISIO)
 
 
 class TestApiDiagram:

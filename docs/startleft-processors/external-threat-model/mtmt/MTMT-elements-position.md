@@ -8,9 +8,9 @@ than the original.
 
 For this purpose we have:
  - The [Representation](https://github.com/iriusrisk/OpenThreatModel/blob/main/README.md#diagram)
-for the OTM
+for the OTM.
  - The [RepresentationElement](https://github.com/iriusrisk/OpenThreatModel/blob/main/README.md#representation-element-for-diagram)
-for the components and trust zones
+for the components and TrustZones.
 
 ## OTM
 In the representations of the OTM we are going to have a diagram representation, because
@@ -41,14 +41,16 @@ MTMT has diagram relevant information, such the canvas size.
 ```
 
 #### Representation fields
-- `name`: The name of this representation
+
+- `name`: The name of this representation.
 - `id`: The unique id of this representation. This field will be the reference for the 
-trustzones and components representations
-- `type`: The representation supported type. See [representation-supported-types](https://github.com/iriusrisk/OpenThreatModel/blob/main/README.md#representation-supported-types)
-- `size`: The canvas width and height
+  TrustZones and components representations.
+- `type`: The representation supported type. See 
+  [representation-supported-types](https://github.com/iriusrisk/OpenThreatModel/blob/main/README.md#representation-supported-types).
+- `size`: The canvas width and height.
 
 
-## Trustzones
+## TrustZones
 
 The `representations` element has two properties for the position info:
 
@@ -75,29 +77,30 @@ The `representations` element has two properties for the position info:
 }
 ```
 
-### Trustzone representation fields
- - `name`: The name of this representation
- - `id`: The unique id of this representation
- - `representation`: The id of the OTM representation explained before
- - `size`: The width and height of the trust zone
- - `position`: The position relative to the canvas
+### TrustZone representation fields
 
-This applies for the border boundaries trust zones.
+ - `name`: The name of this representation.
+ - `id`: The unique id of this representation.
+ - `representation`: The id of the OTM representation explained before.
+ - `size`: The width and height of the TrustZone.
+ - `position`: The position relative to the canvas.
 
-The trust zones delimited by a MTMT line boundary won't have representations because 
+This applies for the border boundaries TrustZones.
+
+The TrustZones delimited by a MTMT line boundary won't have representations because 
 its source size is undefined.
 
 
 ## Components
 
 Into the OTM components we have the `representations` property too, with the same
-fields as the trust zone.
+fields as the TrustZone.
 
-The difference between the component representation and the trust zone representation
+The difference between the component representation and the TrustZone representation
 is the position.
 
-While at the trustzones the position is relative to the canvas, 
-in the components the position is relative to the parent trust zone.
+While at the TrustZones the position is relative to the canvas, 
+in the components the position is relative to the parent TrustZone.
 Here an example:
 
 ```json

@@ -1,4 +1,4 @@
-from otm.otm.otm import DiagramRepresentation, RepresentationType
+from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
 from slp_mtmt.slp_mtmt.mtmt_loader import MTMTLoader
 from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMappingFileLoader
 from slp_mtmt.slp_mtmt.parse.mtmt_component_parser import MTMTComponentParser

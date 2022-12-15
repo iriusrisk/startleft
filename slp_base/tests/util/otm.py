@@ -2,7 +2,7 @@ from typing import Union
 
 from deepdiff import DeepDiff
 
-from otm.otm.otm import OTM
+from otm.otm.entity.otm import Otm
 from slp_base.slp_base.otm_file_loader import OtmFileLoader
 from slp_base.slp_base.schema import Schema
 
@@ -16,11 +16,11 @@ internet_id = 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
 internet_name = 'Internet'
 
 
-def __load_otm(otm: Union[dict, str, OTM]):
+def __load_otm(otm: Union[dict, str, Otm]):
     if isinstance(otm, dict):
         return otm
 
-    if isinstance(otm, OTM):
+    if isinstance(otm, Otm):
         return otm.json()
 
     if isinstance(otm, str):
@@ -39,7 +39,7 @@ def __validate_otm_schema(otm) -> Schema:
     return schema
 
 
-def validate_and_diff(actual: Union[dict, str, OTM], expected: Union[dict, str, OTM], excluded_regex):
+def validate_and_diff(actual: Union[dict, str, Otm], expected: Union[dict, str, Otm], excluded_regex):
     """
     Utils for validating otm has a correct Schema
     and OTM contains expected data
