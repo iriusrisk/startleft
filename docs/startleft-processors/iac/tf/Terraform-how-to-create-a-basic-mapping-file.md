@@ -39,12 +39,14 @@ mapping configuration examples that include these functions with their explanati
 
 ```yaml
 trustzones: # (1)!
-  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91 # (2)!
+  - id:   public-cloud # (2)!
     name: Public Cloud # (3)!
+    type: b61d6911-338d-46a8-9f39-8dcd24abfe91 # (16)!
     $default: true # (4)!
     
-  - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
+  - id:   internet
     name: Internet
+    type: f0ba7722-39b6-4c81-8290-a30a248bb8d9
     $source: {$singleton: # (5)!
                 {$type: "aws_security_group", # (6)!
                  $props: "egress[0].cidr_blocks"} # (7)!
@@ -58,7 +60,7 @@ components: # (8)!
   - type:        generic-client
     $source:     {$type: "aws_security_group",  # (12)!
                   $props: "egress[0].cidr_blocks"} 
-    parent:      f0ba7722-39b6-4c81-8290-a30a248bb8d9 # (13)!
+    parent:      internet # (13)!
     tags: # (14)!
       - Outbound connection destination IP
 
@@ -66,7 +68,7 @@ dataflows: [] # (15)!
 ```
 
 1. **trustzones section** defines the TrustZone mapping behavior. At least one TrustZone is needed to be defined
-2. set **trustzone[id]** value, which also can be used as a reference when setting the parent of a component `parent: b61d6911-338d-46a8-9f39-8dcd24abfe91`
+2. set **trustzone[id]** value, which also can be used as a reference when setting the parent of a component `parent: public-cloud`. The `id` field uniquely identifies a trustzone, and differentiates it from other trustzones of the same type.
 3. set **trustzone[name]** value
 4. *Optional:* **default trustzone** to be used if a component does not define its parent
 5. All the matching resources will be **unified** under a single TrustZone which will be created in case the `{$type: "aws_security_group", $props: "egress[0].cidr_blocks"}` query returns any element
@@ -80,6 +82,7 @@ dataflows: [] # (15)!
 13. *Optional:* set **component[parent]** as the *Internet TrustZone*
 14. *Optional:* set **component[tag]** value
 15. **dataflows section** is explained in detail on [How Dataflow Mapping works](Terraform-how-dataflow-mapping-works.md)
+16. set **trustzone[type]** value. For mapping trustzones to IriusRisk trustzones, `type` field must take internal IriusRisk values depending on the type of trustzone.
 
 ##### Special mapping fields
 These functions begin with a dollar sign ($) and do not directly contribute to the OTM output. 
