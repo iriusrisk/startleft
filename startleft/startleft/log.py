@@ -50,11 +50,11 @@ def get_log_level(ctx, param, value):
         raise click.BadParameter(f"Log level must be one of: {', '.join(levels.keys())}")
 
 
-def get_root_log():
+def get_root_logger():
     return logging.getLogger()
 
 
-def get_uvicorn_error_log():
+def get_uvicorn_logger():
     return logging.getLogger('uvicorn.error')
 
 
@@ -66,10 +66,10 @@ def __translate_log_level_into_uvicorn(log_level: int):
 
 
 def get_uvicorn_log_level():
-    return __translate_log_level_into_uvicorn(get_root_log().getEffectiveLevel())
+    return __translate_log_level_into_uvicorn(get_root_logger().getEffectiveLevel())
 
 
 def set_log_level_from_uvicorn():
-    uvicorn_log_level = get_uvicorn_error_log().level
+    uvicorn_log_level = get_uvicorn_logger().level
     configure_logging(True, uvicorn_log_level)
-    get_root_log().level = uvicorn_log_level
+    get_root_logger().level = uvicorn_log_level
