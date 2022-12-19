@@ -4,6 +4,7 @@ from unittest.mock import patch
 import responses
 from fastapi.testclient import TestClient
 from pytest import mark
+from slp_base.tests.util.otm import validate_and_diff
 
 from slp_base.slp_base.errors import DiagramFileNotValidError, MappingFileNotValidError, LoadingMappingFileError, \
     OtmResultError, OtmBuildingError, LoadingDiagramFileError
@@ -11,13 +12,15 @@ from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.diagram import diag_create_otm_controller
 from tests.resources import test_resource_paths
 from tests.resources.test_resource_paths import visio_aws_with_tz_and_vpc, default_visio_mapping, \
-    custom_vpc_mapping
+    custom_vpc_mapping, visio_create_otm_ok_only_default_mapping, visio_create_otm_ok_both_mapping_files
 
 IRIUSRISK_URL = ''
 
 webapp = fastapi_server.initialize_webapp()
 
 client = TestClient(webapp)
+
+VALIDATION_EXCLUDED_REGEX = r"root\[\'dataflows'\]\[.+?\]\['name'\]"
 
 
 def get_url():
@@ -45,83 +48,7 @@ class TestOtmControllerDiagramVisio:
         assert response.headers.get('content-type') == 'application/json'
         otm = json.loads(response.text)
 
-        assert otm['otmVersion'] == '0.1.0'
-        assert otm['project']['id'] == project_id
-        assert otm['project']['name'] == 'project_A_name'
-
-        assert len(otm['representations']) == 1
-
-        assert otm['representations'][0]['name'] == 'Visio'
-        assert otm['representations'][0]['id'] == 'Visio'
-        assert otm['representations'][0]['type'] == 'diagram'
-        assert otm['representations'][0]['size']['width'] == 1000
-        assert otm['representations'][0]['size']['height'] == 1000
-
-        assert len(otm['trustZones']) == 2
-
-        assert otm['trustZones'][0]['id'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-        assert otm['trustZones'][0]['name'] == 'Public Cloud'
-        assert len(otm['trustZones'][0]['risk']) == 1
-        assert otm['trustZones'][0]['risk']['trustRating'] == 10
-
-        assert otm['trustZones'][1]['id'] == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
-        assert otm['trustZones'][1]['name'] == 'Private Secured'
-        assert len(otm['trustZones'][1]['risk']) == 1
-        assert otm['trustZones'][1]['risk']['trustRating'] == 10
-
-        assert len(otm['components']) == 5
-
-        assert otm['components'][0]['id'] == '1'
-        assert otm['components'][0]['name'] == 'Amazon EC2'
-        assert otm['components'][0]['type'] == 'ec2'
-        assert len(otm['components'][0]['parent']) == 1
-        assert otm['components'][0]['parent']['trustZone'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-
-        assert otm['components'][1]['id'] == '12'
-        assert otm['components'][1]['name'] == 'Custom machine'
-        assert otm['components'][1]['type'] == 'ec2'
-        assert len(otm['components'][1]['parent']) == 1
-        assert otm['components'][1]['parent']['trustZone'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-
-        assert otm['components'][2]['id'] == '30'
-        assert otm['components'][2]['name'] == 'Private Database'
-        assert otm['components'][2]['type'] == 'rds'
-        assert len(otm['components'][2]['parent']) == 1
-        assert otm['components'][2]['parent']['trustZone'] == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
-
-        assert otm['components'][3]['id'] == '35'
-        assert otm['components'][3]['name'] == 'Amazon CloudWatch'
-        assert otm['components'][3]['type'] == 'cloudwatch'
-        assert len(otm['components'][3]['parent']) == 1
-        assert otm['components'][3]['parent']['trustZone'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-
-        assert otm['components'][4]['id'] == '41'
-        assert otm['components'][4]['name'] == 'Custom log system'
-        assert otm['components'][4]['type'] == 'cloudwatch'
-        assert len(otm['components'][4]['parent']) == 1
-        assert otm['components'][4]['parent']['trustZone'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-
-        assert len(otm['dataflows']) == 4
-
-        assert otm['dataflows'][0]['id'] == '17'
-        assert len(otm['dataflows'][0]['name']) == 36
-        assert otm['dataflows'][0]['source'] == '1'
-        assert otm['dataflows'][0]['destination'] == '12'
-
-        assert otm['dataflows'][1]['id'] == '34'
-        assert len(otm['dataflows'][1]['name']) == 36
-        assert otm['dataflows'][1]['source'] == '12'
-        assert otm['dataflows'][1]['destination'] == '30'
-
-        assert otm['dataflows'][2]['id'] == '40'
-        assert len(otm['dataflows'][2]['name']) == 36
-        assert otm['dataflows'][2]['source'] == '1'
-        assert otm['dataflows'][2]['destination'] == '35'
-
-        assert otm['dataflows'][3]['id'] == '46'
-        assert len(otm['dataflows'][3]['name']) == 36
-        assert otm['dataflows'][3]['source'] == '12'
-        assert otm['dataflows'][3]['destination'] == '41'
+        assert validate_and_diff(otm, visio_create_otm_ok_only_default_mapping, VALIDATION_EXCLUDED_REGEX) == {}
 
     @responses.activate
     def test_create_otm_ok_both_mapping_files(self):
@@ -140,72 +67,7 @@ class TestOtmControllerDiagramVisio:
         assert response.headers.get('content-type') == 'application/json'
         otm = json.loads(response.text)
 
-        assert otm['otmVersion'] == '0.1.0'
-        assert otm['project']['id'] == project_id
-        assert otm['project']['name'] == 'project_A_name'
-        assert len(otm['representations']) == 1
-        assert otm['representations'][0]['name'] == 'Visio'
-        assert otm['representations'][0]['id'] == 'Visio'
-        assert otm['representations'][0]['type'] == 'diagram'
-        assert otm['representations'][0]['size']['width'] == 1000
-        assert otm['representations'][0]['size']['height'] == 1000
-        assert len(otm['trustZones']) == 2
-        assert otm['trustZones'][0]['id'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-        assert otm['trustZones'][0]['name'] == 'Public Cloud'
-        assert len(otm['trustZones'][0]['risk']) == 1
-        assert otm['trustZones'][0]['risk']['trustRating'] == 10
-        assert otm['trustZones'][1]['id'] == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
-        assert otm['trustZones'][1]['name'] == 'Private Secured'
-        assert len(otm['trustZones'][1]['risk']) == 1
-        assert otm['trustZones'][1]['risk']['trustRating'] == 10
-        assert len(otm['components']) == 6
-        assert otm['components'][0]['id'] == '49'
-        assert otm['components'][0]['name'] == 'Custom VPC'
-        assert otm['components'][0]['type'] == 'empty-component'
-        assert len(otm['components'][0]['parent']) == 1
-        assert otm['components'][0]['parent']['trustZone'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-        assert otm['components'][1]['id'] == '1'
-        assert otm['components'][1]['name'] == 'Amazon EC2'
-        assert otm['components'][1]['type'] == 'ec2'
-        assert len(otm['components'][1]['parent']) == 1
-        assert otm['components'][1]['parent']['component'] == '49'
-        assert otm['components'][2]['id'] == '12'
-        assert otm['components'][2]['name'] == 'Custom machine'
-        assert otm['components'][2]['type'] == 'ec2'
-        assert len(otm['components'][2]['parent']) == 1
-        assert otm['components'][2]['parent']['component'] == '49'
-        assert otm['components'][3]['id'] == '30'
-        assert otm['components'][3]['name'] == 'Private Database'
-        assert otm['components'][3]['type'] == 'rds'
-        assert len(otm['components'][3]['parent']) == 1
-        assert otm['components'][3]['parent']['trustZone'] == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
-        assert otm['components'][4]['id'] == '35'
-        assert otm['components'][4]['name'] == 'Amazon CloudWatch'
-        assert otm['components'][4]['type'] == 'cloudwatch'
-        assert len(otm['components'][4]['parent']) == 1
-        assert otm['components'][4]['parent']['trustZone'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-        assert otm['components'][5]['id'] == '41'
-        assert otm['components'][5]['name'] == 'Custom log system'
-        assert otm['components'][5]['type'] == 'cloudwatch'
-        assert len(otm['components'][5]['parent']) == 1
-        assert otm['components'][5]['parent']['trustZone'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-        assert len(otm['dataflows']) == 4
-        assert otm['dataflows'][0]['id'] == '17'
-        assert len(otm['dataflows'][0]['name']) == 36
-        assert otm['dataflows'][0]['source'] == '1'
-        assert otm['dataflows'][0]['destination'] == '12'
-        assert otm['dataflows'][1]['id'] == '34'
-        assert len(otm['dataflows'][1]['name']) == 36
-        assert otm['dataflows'][1]['source'] == '12'
-        assert otm['dataflows'][1]['destination'] == '30'
-        assert otm['dataflows'][2]['id'] == '40'
-        assert len(otm['dataflows'][2]['name']) == 36
-        assert otm['dataflows'][2]['source'] == '1'
-        assert otm['dataflows'][2]['destination'] == '35'
-        assert otm['dataflows'][3]['id'] == '46'
-        assert len(otm['dataflows'][3]['name']) == 36
-        assert otm['dataflows'][3]['source'] == '12'
-        assert otm['dataflows'][3]['destination'] == '41'
+        assert validate_and_diff(otm, visio_create_otm_ok_both_mapping_files, VALIDATION_EXCLUDED_REGEX) == {}
 
     @responses.activate
     @patch('slp_visio.slp_visio.validate.visio_validator.VisioValidator.validate')

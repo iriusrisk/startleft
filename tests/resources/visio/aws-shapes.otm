@@ -13,6 +13,15 @@
         "width": 1000,
         "height": 1000
       }
+    },
+    {
+      "name": "test_parse_diagram_file_ok Diagram Representation",
+      "id": "test_parse_diagram_file_ok-diagram",
+      "type": "diagram",
+      "size": {
+        "width": 1076,
+        "height": 1200
+      }
     }
   ],
   "trustZones": [
@@ -69,25 +78,25 @@
   "dataflows": [
     {
       "id": "17",
-      "name": "67f78c2e-c73c-4e67-bf36-22c2a39410ce",
+      "name": "917b7c44-440b-4c12-9ba3-d9aeaa0d7192",
       "source": "1",
       "destination": "12"
     },
     {
       "id": "34",
-      "name": "91789f03-2daf-4958-8bc5-384e3dc20139",
+      "name": "23cc71be-a22a-412b-9dc2-58c2df3530f4",
       "source": "12",
       "destination": "30"
     },
     {
       "id": "40",
-      "name": "bcc40afc-be11-4cd0-8172-530068b44a5b",
+      "name": "8fb967be-c4ef-46bf-a0e8-784c6640ae19",
       "source": "1",
       "destination": "35"
     },
     {
       "id": "46",
-      "name": "b20c3bdb-a776-4b43-9488-9bbed604c848",
+      "name": "f464ceff-715e-4639-9dda-4fa2131c5fc1",
       "source": "12",
       "destination": "41"
     }
