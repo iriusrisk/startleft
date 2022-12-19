@@ -151,7 +151,7 @@ class TestVisioProcessor:
             "project-id",
             "project-name",
             visio_file,
-            [get_data(test_resource_paths.default_visio_mapping)],
+            [get_data(test_resource_paths.default_visio_mapping), get_data(test_resource_paths.custom_vpc_mapping)],
         ).process()
 
         assert validate_and_diff(otm, expected_complex_diagram, VALIDATION_EXCLUDED_REGEX) == {}

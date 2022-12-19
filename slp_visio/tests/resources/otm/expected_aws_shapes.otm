@@ -13,6 +13,15 @@
         "width": 1000,
         "height": 1000
       }
+    },
+    {
+      "name": "project-id Diagram Representation",
+      "id": "project-id-diagram",
+      "type": "diagram",
+      "size": {
+        "width": 1076,
+        "height": 1200
+      }
     }
   ],
   "trustZones": [
@@ -69,25 +78,25 @@
   "dataflows": [
     {
       "id": "17",
-      "name": "93d0cad5-38a6-444b-946f-bfb828ea1688",
+      "name": "51792065-9665-4f6e-b17b-fff942b46f13",
       "source": "1",
       "destination": "12"
     },
     {
       "id": "34",
-      "name": "d848459e-3ac0-4f7d-b5eb-ce160c608a06",
+      "name": "0a0742e9-a47d-4d48-a09c-355b941d2396",
       "source": "12",
       "destination": "30"
     },
     {
       "id": "40",
-      "name": "9f8f0f70-df20-444b-8899-27c8cff7c184",
+      "name": "3ca70fac-842a-4b63-9a29-9cab98bcc6e3",
       "source": "1",
       "destination": "35"
     },
     {
       "id": "46",
-      "name": "80d1eb32-cb37-4327-ad96-f6d2b3f7cfa6",
+      "name": "4cdf8214-29be-4709-9777-22cebcedad84",
       "source": "12",
       "destination": "41"
     }

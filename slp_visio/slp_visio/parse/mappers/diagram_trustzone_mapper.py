@@ -1,12 +1,18 @@
+from slp_visio.slp_visio.parse.representation.representation_calculator import RepresentationCalculator
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
 from otm.otm.entity.trustzone import OtmTrustzone
 
 
 class DiagramTrustzoneMapper:
 
-    def __init__(self, components: [DiagramComponent], trustzone_mappings: dict):
+    def __init__(self,
+                 components: [DiagramComponent],
+                 trustzone_mappings: dict,
+                 representation_calculator: RepresentationCalculator):
         self.components = components
         self.trustzone_mappings = trustzone_mappings
+
+        self.representation_calculator = representation_calculator
 
     def to_otm(self) -> [OtmTrustzone]:
         return self.__map_to_otm(self.__filter_trustzones())
@@ -34,7 +40,10 @@ class DiagramTrustzoneMapper:
 
     def __build_otm_trustzone(self, trustzone: DiagramComponent) -> OtmTrustzone:
         trustzone_mapping = self.trustzone_mappings[trustzone.name]
+
+        representation = self.representation_calculator.calculate_representation(trustzone)
         return OtmTrustzone(
             trustzone_id=trustzone_mapping['id'],
-            name=trustzone_mapping['type']
+            name=trustzone_mapping['type'],
+            representations=[representation] if representation else None
         )

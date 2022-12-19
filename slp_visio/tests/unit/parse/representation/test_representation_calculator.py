@@ -1,19 +1,19 @@
 from pytest import mark
 from shapely.geometry import Polygon, box
 
-from otm.otm.otm import RepresentationElement
+from otm.otm.entity.representation import RepresentationElement
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramLimits, DiagramComponent, DiagramComponentOrigin
 from slp_visio.slp_visio.parse.representation.representation_calculator import RepresentationCalculator
 
 DIAGRAM_REPRESENTATION_ID = 'diagram_representation_id'
-DIAGRAM_LIMITS = DiagramLimits([(0, 0), (15, 15)])
+DIAGRAM_LIMITS = DiagramLimits([(0, 0), (1.5, 1.5)])
 
 COMPONENT_ID = 'component-id'
 COMPONENT_NAME = 'component-name'
 
-FIRST_LEVEL_POLYGON = box(1, 4, 12, 14)
-SECOND_LEVEL_POLYGON = box(4, 6, 11, 11)
-THIRD_LEVEL_POLYGON = box(5, 7, 9, 9)
+LARGER_SHAPE = box(0.1, 0.4, 1.2, 1.4)
+MEDIUM_SHAPE = box(0.4, 0.6, 1.1, 1.1)
+SMALL_SHAPE = box(0.5, 0.7, 0.9, 0.9)
 
 representation_calculator = RepresentationCalculator(DIAGRAM_REPRESENTATION_ID, DIAGRAM_LIMITS)
 
@@ -48,15 +48,15 @@ def create_representation(xy: (), wh: ()) -> RepresentationElement:
 class TestRepresentationCalculator:
 
     @mark.parametrize('parent,expected_representation', [
-        (create_component(representation=FIRST_LEVEL_POLYGON, trustzone=True), create_representation((4, 6), (4, 2))),
-        (create_component(representation=SECOND_LEVEL_POLYGON, trustzone=False), create_representation((1, 2), (4, 2)))
+        (create_component(representation=LARGER_SHAPE, trustzone=True), create_representation((66, 82), (66, 33))),
+        (create_component(representation=MEDIUM_SHAPE, trustzone=False), create_representation((16, 32), (66, 33)))
     ])
     def test_component_with_parent(self, parent, expected_representation):
         # GIVEN a diagram component representing an OTM Component with parent
         component = create_component(
             trustzone=False,
             parent=parent,
-            representation=THIRD_LEVEL_POLYGON
+            representation=SMALL_SHAPE
         )
 
         # WHEN RepresentationCalculator::calculate_representation is called
@@ -70,7 +70,7 @@ class TestRepresentationCalculator:
         component = create_component(
             trustzone=False,
             parent=None,
-            representation=THIRD_LEVEL_POLYGON
+            representation=SMALL_SHAPE
         )
 
         # WHEN RepresentationCalculator::calculate_representation is called
@@ -83,14 +83,14 @@ class TestRepresentationCalculator:
         # GIVEN a boundary TrustZone as parent
         parent = create_component(
             origin=DiagramComponentOrigin.BOUNDARY,
-            representation=FIRST_LEVEL_POLYGON,
+            representation=LARGER_SHAPE,
             trustzone=True)
 
         # AND a diagram component representing an OTM Component with that parent
         component = create_component(
             trustzone=False,
             parent=parent,
-            representation=THIRD_LEVEL_POLYGON
+            representation=SMALL_SHAPE
         )
 
         # WHEN RepresentationCalculator::calculate_representation is called
@@ -100,15 +100,15 @@ class TestRepresentationCalculator:
         assert representation is None
 
     @mark.parametrize('parent,expected_representation', [
-        (create_component(representation=FIRST_LEVEL_POLYGON, trustzone=True), create_representation((3, 3), (7, 5))),
-        (create_component(representation=FIRST_LEVEL_POLYGON, trustzone=False), create_representation((3, 3), (7, 5)))
+        (create_component(representation=LARGER_SHAPE, trustzone=True), create_representation((50, 50), (114, 82))),
+        (create_component(representation=LARGER_SHAPE, trustzone=False), create_representation((50, 50), (114, 82)))
     ])
     def test_trustzone_with_parent(self, parent, expected_representation):
         # GIVEN a diagram component representing an OTM TrustZone with parent
         trustzone = create_component(
             trustzone=True,
             parent=parent,
-            representation=SECOND_LEVEL_POLYGON
+            representation=MEDIUM_SHAPE
         )
 
         # WHEN RepresentationCalculator::calculate_representation is called
@@ -121,14 +121,15 @@ class TestRepresentationCalculator:
         # GIVEN a boundary TrustZone as parent
         parent = create_component(
             origin=DiagramComponentOrigin.BOUNDARY,
-            representation=FIRST_LEVEL_POLYGON,
+            representation=LARGER_SHAPE,
             trustzone=True)
 
         # AND a diagram component representing an OTM TrustZone with that parent
         trustzone = create_component(
             origin=DiagramComponentOrigin.SIMPLE_COMPONENT,
-            representation=SECOND_LEVEL_POLYGON,
-            trustzone=True
+            parent=parent,
+            trustzone=True,
+            representation=MEDIUM_SHAPE
         )
 
         # WHEN RepresentationCalculator::calculate_representation is called
@@ -143,7 +144,7 @@ class TestRepresentationCalculator:
             origin=DiagramComponentOrigin.BOUNDARY,
             trustzone=True,
             parent=None,
-            representation=FIRST_LEVEL_POLYGON
+            representation=LARGER_SHAPE
         )
 
         # WHEN RepresentationCalculator::calculate_representation is called
@@ -158,16 +159,16 @@ class TestRepresentationCalculator:
             origin=DiagramComponentOrigin.SIMPLE_COMPONENT,
             trustzone=True,
             parent=None,
-            representation=FIRST_LEVEL_POLYGON
+            representation=LARGER_SHAPE
         )
 
         # WHEN RepresentationCalculator::calculate_representation is called
         representation = representation_calculator.calculate_representation(trustzone)
 
         # THEN a representation element with ABSOLUTE coordinates and the right size is calculated
-        assert representation == create_representation((1, 1), (11, 10))
+        assert representation == create_representation((16, 16), (181, 164))
 
-    @mark.parametrize('out_of_limits_polygon', [box(0, 0, 20, 15), box(0, 0, 15, 20), box(0, 0, 20, 20)])
+    @mark.parametrize('out_of_limits_polygon', [box(0, 0, 2.0, 1.5), box(0, 0, 1.5, 2.0), box(0, 0, 2.0, 2.0)])
     def test_error_component_out_of_limits(self, out_of_limits_polygon):
         # GIVEN a diagram component whose coordinates are out of the diagram limits
         component = create_component(
@@ -181,7 +182,7 @@ class TestRepresentationCalculator:
         # THEN no representation is returned
         assert representation is None
 
-    @mark.parametrize('negative_coordinates_polygon', [box(-1, 0, 15, 15), box(0, -1, 15, 15)])
+    @mark.parametrize('negative_coordinates_polygon', [box(-0.1, 0, 1.5, 1.5), box(0, -0.1, 1.5, 1.5)])
     def test_error_negative_coordinates(self, negative_coordinates_polygon):
         # GIVEN a diagram component whose coordinates are negative
         component = create_component(
@@ -195,7 +196,7 @@ class TestRepresentationCalculator:
         # THEN no representation is returned
         assert representation is None
 
-    @mark.parametrize('negative_dimensions_polygon', [box(0, 0, -15, 15), box(0, 0, 15, -15)])
+    @mark.parametrize('negative_dimensions_polygon', [box(0, 0, -1.5, 1.5), box(0, 0, 1.5, -1.5)])
     def test_error_negative_width_or_height(self, negative_dimensions_polygon):
         # GIVEN a diagram component whose width or length are negative
         component = create_component(

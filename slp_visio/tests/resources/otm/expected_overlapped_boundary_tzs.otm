@@ -13,6 +13,15 @@
         "width": 1000,
         "height": 1000
       }
+    },
+    {
+      "name": "project-id Diagram Representation",
+      "id": "project-id-diagram",
+      "type": "diagram",
+      "size": {
+        "width": 1433,
+        "height": 1109
+      }
     }
   ],
   "trustZones": [
@@ -52,7 +61,7 @@
   "dataflows": [
     {
       "id": "34",
-      "name": "0d55158d-118e-4502-a7a5-1dd5d6e1bf63",
+      "name": "96a1aa94-2d6b-404b-ba03-1ed1b9a40e01",
       "source": "12",
       "destination": "30"
     }

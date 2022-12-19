@@ -13,6 +13,15 @@
         "width": 1000,
         "height": 1000
       }
+    },
+    {
+      "name": "project-id Diagram Representation",
+      "id": "project-id-diagram",
+      "type": "diagram",
+      "size": {
+        "width": 1967,
+        "height": 1356
+      }
     }
   ],
   "trustZones": [
@@ -21,32 +30,115 @@
       "name": "Public Cloud",
       "risk": {
         "trustRating": 10
-      }
+      },
+      "representations": [
+        {
+          "name": "Public Cloud Representation",
+          "id": "47-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 590,
+            "height": 700
+          },
+          "position": {
+            "x": 328,
+            "y": 328
+          }
+        }
+      ]
     },
     {
       "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
       "name": "Private Secured",
       "risk": {
         "trustRating": 10
-      }
+      },
+      "representations": [
+        {
+          "name": "Private Secured Cloud Representation",
+          "id": "48-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 523,
+            "height": 472
+          },
+          "position": {
+            "x": 1116,
+            "y": 421
+          }
+        }
+      ]
     }
   ],
   "components": [
+    {
+      "id": "49",
+      "name": "Custom VPC",
+      "type": "empty-component",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "representations": [
+        {
+          "name": "Custom VPC Representation",
+          "id": "49-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 295,
+            "height": 406
+          },
+          "position": {
+            "x": 57,
+            "y": 29
+          }
+        }
+      ]
+    },
     {
       "id": "1",
       "name": "Amazon EC2",
       "type": "ec2",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
+        "component": "49"
+      },
+      "representations": [
+        {
+          "name": "Amazon EC2 Representation",
+          "id": "1-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 82,
+            "height": 82
+          },
+          "position": {
+            "x": 82,
+            "y": 24
+          }
+        }
+      ]
     },
     {
       "id": "12",
       "name": "Custom machine",
       "type": "ec2",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
+        "component": "49"
+      },
+      "representations": [
+        {
+          "name": "Custom machine Representation",
+          "id": "12-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 82,
+            "height": 82
+          },
+          "position": {
+            "x": 82,
+            "y": 230
+          }
+        }
+      ]
     },
     {
       "id": "30",
@@ -54,7 +146,22 @@
       "type": "rds",
       "parent": {
         "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
-      }
+      },
+      "representations": [
+        {
+          "name": "Private Database Representation",
+          "id": "30-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 82,
+            "height": 82
+          },
+          "position": {
+            "x": 219,
+            "y": 166
+          }
+        }
+      ]
     },
     {
       "id": "35",
@@ -62,7 +169,22 @@
       "type": "cloudwatch",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
+      },
+      "representations": [
+        {
+          "name": "Amazon CloudWatch Representation",
+          "id": "35-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 82,
+            "height": 82
+          },
+          "position": {
+            "x": 477,
+            "y": 53
+          }
+        }
+      ]
     },
     {
       "id": "41",
@@ -70,31 +192,46 @@
       "type": "cloudwatch",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
+      },
+      "representations": [
+        {
+          "name": "Custom log system Representation",
+          "id": "41-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 82,
+            "height": 82
+          },
+          "position": {
+            "x": 139,
+            "y": 516
+          }
+        }
+      ]
     }
   ],
   "dataflows": [
     {
       "id": "17",
-      "name": "a17fdce5-ec8b-43d1-8dc5-ea83211bfeeb",
+      "name": "a7ee1594-5658-43c8-860c-41ed05cfbe4e",
       "source": "1",
       "destination": "12"
     },
     {
       "id": "34",
-      "name": "d9a1216c-7935-4971-9c36-db31f7913d51",
+      "name": "9807ef05-fcd8-43ee-a4b4-ff961907a6f9",
       "source": "12",
       "destination": "30"
     },
     {
       "id": "40",
-      "name": "6dfa54d3-92e8-4e3b-b4a4-f493b27c1df7",
+      "name": "a462d51e-fa9f-4b5f-86d4-cd7fcfdd48f6",
       "source": "1",
       "destination": "35"
     },
     {
       "id": "46",
-      "name": "c6b32ce6-4d1b-40c5-968b-9c27e7fb5024",
+      "name": "ee3446dd-0426-48b3-9b3a-c0e5bb440ed8",
       "source": "12",
       "destination": "41"
     }

@@ -13,6 +13,15 @@
         "width": 1000,
         "height": 1000
       }
+    },
+    {
+      "name": "project-id Diagram Representation",
+      "id": "project-id-diagram",
+      "type": "diagram",
+      "size": {
+        "width": 1966,
+        "height": 1356
+      }
     }
   ],
   "trustZones": [
@@ -21,14 +30,44 @@
       "name": "Public Cloud",
       "risk": {
         "trustRating": 10
-      }
+      },
+      "representations": [
+        {
+          "name": "Public Cloud Representation",
+          "id": "47-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 590,
+            "height": 700
+          },
+          "position": {
+            "x": 328,
+            "y": 328
+          }
+        }
+      ]
     },
     {
       "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
       "name": "Private Secured",
       "risk": {
         "trustRating": 10
-      }
+      },
+      "representations": [
+        {
+          "name": "Private Secured Cloud Representation",
+          "id": "48-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 522,
+            "height": 473
+          },
+          "position": {
+            "x": 1116,
+            "y": 420
+          }
+        }
+      ]
     }
   ],
   "components": [
@@ -38,7 +77,22 @@
       "type": "ec2",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
+      },
+      "representations": [
+        {
+          "name": "Amazon EC2 Representation",
+          "id": "1-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 82,
+            "height": 82
+          },
+          "position": {
+            "x": 139,
+            "y": 53
+          }
+        }
+      ]
     },
     {
       "id": "12",
@@ -46,7 +100,22 @@
       "type": "ec2",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
+      },
+      "representations": [
+        {
+          "name": "Custom machine Representation",
+          "id": "12-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 82,
+            "height": 82
+          },
+          "position": {
+            "x": 139,
+            "y": 259
+          }
+        }
+      ]
     },
     {
       "id": "30",
@@ -54,7 +123,22 @@
       "type": "rds",
       "parent": {
         "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
-      }
+      },
+      "representations": [
+        {
+          "name": "Private Database Representation",
+          "id": "30-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 82,
+            "height": 82
+          },
+          "position": {
+            "x": 219,
+            "y": 167
+          }
+        }
+      ]
     },
     {
       "id": "35",
@@ -62,7 +146,22 @@
       "type": "cloudwatch",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
+      },
+      "representations": [
+        {
+          "name": "Amazon CloudWatch Representation",
+          "id": "35-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 82,
+            "height": 82
+          },
+          "position": {
+            "x": 477,
+            "y": 53
+          }
+        }
+      ]
     },
     {
       "id": "41",
@@ -70,31 +169,46 @@
       "type": "cloudwatch",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
+      },
+      "representations": [
+        {
+          "name": "Custom log system Representation",
+          "id": "41-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 82,
+            "height": 82
+          },
+          "position": {
+            "x": 139,
+            "y": 515
+          }
+        }
+      ]
     }
   ],
   "dataflows": [
     {
       "id": "17",
-      "name": "7a81df00-9924-470d-89a5-948a15410309",
+      "name": "8fe0838c-1c45-41b0-a650-06dd04d77d0f",
       "source": "1",
       "destination": "12"
     },
     {
       "id": "34",
-      "name": "923ab960-52eb-4528-b363-f32d10003c41",
+      "name": "709ec940-5c71-4c0c-b02a-60835ced55c8",
       "source": "12",
       "destination": "30"
     },
     {
       "id": "40",
-      "name": "b7db024a-de3c-4ad4-9030-f6b0d75c2b44",
+      "name": "b3a6809f-d696-46cf-adb1-157ab0448fbf",
       "source": "1",
       "destination": "35"
     },
     {
       "id": "46",
-      "name": "34d22f6f-e53e-4f5c-9161-bc9bfaf535f2",
+      "name": "0c36a5e1-8faf-4f70-aaa6-e3fe510e5efd",
       "source": "12",
       "destination": "41"
     }

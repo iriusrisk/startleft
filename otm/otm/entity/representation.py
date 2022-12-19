@@ -1,5 +1,7 @@
 from enum import Enum
 
+from sl_util.sl_util.lang_utils import auto_repr, auto_str, auto_eq
+
 
 class RepresentationType(Enum):
     DIAGRAM = 'diagram'
@@ -53,6 +55,9 @@ class DiagramRepresentation(Representation):
         return json
 
 
+@auto_repr
+@auto_str
+@auto_eq
 class RepresentationElement:
     """
     See https://github.com/iriusrisk/OpenThreatModel#representation-element-for-diagram

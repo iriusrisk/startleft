@@ -30,7 +30,11 @@ setup(
         'uvicorn==0.19.0',
         'shapely==1.8.5.post1',
         'vsdx==0.5.11',
-        'python-magic==0.4.27'
+        'python-magic==0.4.27',
+        'tox==3.26.0',
+        'pytest==7.2.0',
+        'responses==0.22.0',
+        'deepdiff==6.2.1'
     ],
     use_scm_version={
         'write_to': 'startleft/version.py',
