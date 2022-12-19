@@ -1,6 +1,6 @@
 import abc
 
-from otm.otm.otm import OTM
+from otm.otm.entity.otm import Otm
 from slp_base.slp_base.mapping import MappingLoader, MappingValidator
 from slp_base.slp_base.otm_validator import OtmValidator
 from slp_base.slp_base.provider_loader import ProviderLoader
@@ -25,7 +25,7 @@ class OtmProcessor(metaclass=abc.ABCMeta):
                 or NotImplemented)
 
     # Do not override this method.
-    def process(self) -> OTM:
+    def process(self) -> Otm:
         """Process all the flow from the input data to the OTM output"""
         self.get_provider_validator().validate()
         self.get_provider_loader().load()

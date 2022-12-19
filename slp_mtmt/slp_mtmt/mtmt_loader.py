@@ -1,7 +1,8 @@
 import collections
 
 from slp_base.slp_base.provider_loader import ProviderLoader
-from slp_mtmt.slp_mtmt.mtmt_entity import MTMT, MTMBorder, MTMLine, MTMThreat, MTMKnowledge
+from slp_mtmt.slp_mtmt.entity.mtmt_entity_threatinstance import MTMThreat
+from slp_mtmt.slp_mtmt.mtmt_entity import MTMT, MTMBorder, MTMLine, MTMKnowledge
 from slp_mtmt.slp_mtmt.tm7_to_json import Tm7ToJson
 
 

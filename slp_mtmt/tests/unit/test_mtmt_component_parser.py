@@ -1,12 +1,18 @@
+from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
 from slp_mtmt.slp_mtmt.mtmt_loader import MTMTLoader
 from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMappingFileLoader
 from slp_mtmt.slp_mtmt.parse.mtmt_component_parser import MTMTComponentParser
 from slp_mtmt.slp_mtmt.parse.mtmt_trustzone_parser import MTMTTrustzoneParser
 from slp_mtmt.tests.resources import test_resource_paths
 
+diagram_representation = DiagramRepresentation(id_='project-test-diagram',
+                                               name='Project Test Diagram Representation',
+                                               type_=str(RepresentationType.DIAGRAM.value),
+                                               size={'width': 2000, 'height': 2000}
+                                               )
+
 
 class TestMTMTComponentParser:
-
     components_expected_added_for_filled_mapping_file = [
         {'id': '53245f54-0656-4ede-a393-357aeaa2e20f',
          'name': 'Accounting PostgreSQL',
@@ -15,6 +21,11 @@ class TestMTMTComponentParser:
                         'Azure Postgres DB TLS Enforced': 'Select',
                         'Name': 'Accounting PostgreSQL',
                         'Out Of Scope': 'false'},
+         'representations': [{'id': '53245f54-0656-4ede-a393-357aeaa2e20f-representation',
+                              'name': 'Accounting PostgreSQL Representation',
+                              'position': {'x': 231, 'y': 40},
+                              'representation': 'project-test-diagram',
+                             'size': {'height': 100, 'width': 100}}],
          'type': 'CD-MICROSOFT-AZURE-DB-POSTGRESQL'},
         {'id': '6183b7fa-eba5-4bf8-a0af-c3e30d144a10',
          'name': 'Mobile Client',
@@ -22,6 +33,11 @@ class TestMTMTComponentParser:
          'properties': {'Mobile Client Technologies': 'Android',
                         'Name': 'Mobile Client',
                         'Out Of Scope': 'false'},
+         'representations': [{'id': '6183b7fa-eba5-4bf8-a0af-c3e30d144a10-representation',
+                              'name': 'Mobile Client Representation',
+                              'position': {'x': 101, 'y': 104},
+                              'representation': 'project-test-diagram',
+                              'size': {'height': 100, 'width': 100}}],
          'type': 'android-device-client'},
         {'id': '5d15323e-3729-4694-87b1-181c90af5045',
          'name': 'Public API v2',
@@ -31,6 +47,11 @@ class TestMTMTComponentParser:
                         'Name': 'Public API v2',
                         'Out Of Scope': 'false',
                         'Web API Technologies': 'Select'},
+         'representations': [{'id': '5d15323e-3729-4694-87b1-181c90af5045-representation',
+                              'name': 'Public API v2 Representation',
+                              'position': {'x': 21, 'y': 101},
+                              'representation': 'project-test-diagram',
+                              'size': {'height': 100, 'width': 100}}],
          'type': 'web-service'},
         {'id': '91882aca-8249-49a7-96f0-164b68411b48',
          'name': 'Azure File Storage',
@@ -41,6 +62,11 @@ class TestMTMTComponentParser:
                         'Network Security': 'Select',
                         'Out Of Scope': 'false',
                         'Storage Type': 'Select'},
+         'representations': [{'id': '91882aca-8249-49a7-96f0-164b68411b48-representation',
+                              'name': 'Azure File Storage Representation',
+                              'position': {'x': 230, 'y': 169},
+                              'representation': 'project-test-diagram',
+                              'size': {'height': 100, 'width': 100}}],
          'type': 'azure-storage'}
     ]
 
@@ -63,9 +89,9 @@ class TestMTMTComponentParser:
         # THEN a MtmtMapping is returned with a trustzone, a component and without dataflows
         mtmt_mapping = mtmt_mapping_file_loader.get_mtmt_mapping()
         mtmt_data = mtmt.get_mtmt()
-        trustzone_parser = MTMTTrustzoneParser(mtmt_data, mtmt_mapping)
-        mtmt_component_parser = MTMTComponentParser(mtmt_data, mtmt_mapping, trustzone_parser)
-        components = mtmt_component_parser.parse()
+        trustzone_parser = MTMTTrustzoneParser(mtmt_data, mtmt_mapping, diagram_representation.id)
+        component_parser = MTMTComponentParser(mtmt_data, mtmt_mapping, trustzone_parser, diagram_representation.id)
+        components = component_parser.parse()
 
         assert len(components) == 0
 
@@ -88,9 +114,9 @@ class TestMTMTComponentParser:
         # THEN a MtmtMapping is returned with a trustzone, a component and without dataflows
         mtmt_mapping = mtmt_mapping_file_loader.get_mtmt_mapping()
         mtmt_data = mtmt.get_mtmt()
-        trustzone_parser = MTMTTrustzoneParser(mtmt_data, mtmt_mapping)
-        mtmt_component_parser = MTMTComponentParser(mtmt_data, mtmt_mapping, trustzone_parser)
-        components = mtmt_component_parser.parse()
+        trustzone_parser = MTMTTrustzoneParser(mtmt_data, mtmt_mapping, diagram_representation.id)
+        component_parser = MTMTComponentParser(mtmt_data, mtmt_mapping, trustzone_parser, diagram_representation.id)
+        components = component_parser.parse()
 
         assert len(components) == 4
 

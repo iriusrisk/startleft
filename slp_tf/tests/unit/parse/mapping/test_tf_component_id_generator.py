@@ -93,16 +93,16 @@ class TestTfComponentIdGenerator:
         name = SAMPLE_NAME
 
         # AND some type
-        type = SAMPLE_TYPE
+        component_type = SAMPLE_TYPE
 
         # AND a parent_id
         parent_id = SAMPLE_PARENT_ID
 
         # WHEN generate_id is called
-        id = TerraformComponentIdGenerator(name=name, parent_id=parent_id, type=type).generate_id()
+        component_id = TerraformComponentIdGenerator(name=name, parent_id=parent_id, type=component_type).generate_id()
 
         # THEN the ID is generated with the right format
-        assert id == f'{parent_id}.{type}-{name}'
+        assert component_id == f'{parent_id}.{component_type}-{name}'
 
     def test_generate_id_module(self):
         # GIVEN a module component name
@@ -112,23 +112,44 @@ class TestTfComponentIdGenerator:
         parent_id = SAMPLE_PARENT_ID
 
         # WHEN generate_id is called
-        id = TerraformComponentIdGenerator(name=name, parent_id=parent_id, is_module=True).generate_id()
+        component_id = TerraformComponentIdGenerator(name=name, parent_id=parent_id, is_module=True).generate_id()
 
         # THEN the ID is generated with the right format
-        assert id == f'{parent_id}.{name}'
+        assert component_id == f'{parent_id}.{name}'
 
     def test_generate_id_altsource(self):
         # GIVEN an altsource component name
         name = SAMPLE_NAME
 
         # AND some type
-        type = SAMPLE_TYPE
+        component_type = SAMPLE_TYPE
 
         # AND a parent_id
         parent_id = SAMPLE_PARENT_ID
 
         # WHEN generate_id is called
-        id = TerraformComponentIdGenerator(name=name, parent_id=parent_id, type=type, is_altsource=True).generate_id()
+        component_id = TerraformComponentIdGenerator(name=name, parent_id=parent_id, type=component_type, is_altsource=True).generate_id()
 
         # THEN the ID is generated with the right format
-        assert id == f'{parent_id}.{type}-{name}-altsource'
+        assert component_id == f'{parent_id}.{component_type}-{name}-altsource'
+
+    @mark.parametrize('name, parent_id, expected_name', [
+        ('0.0.0.0/0', 'tz1', '0_0_0_0_0'),
+        ('52.30.97.44/32', 'tz1', '52_30_97_44_32')])
+    def test_generate_id_components_from_same_resource(self, name, parent_id, expected_name):
+        # GIVEN a component source dictionary of type AWS security group
+        component_source = build_source_sample(name, 'aws_security_group')
+
+        # WHEN from_component_source is called
+        id_generator = TerraformComponentIdGenerator.from_component_source(component_source, parent_id, name)
+
+        # AND an id is generated
+        generated_id = id_generator.generate_id()
+
+        # THEN the ID is generated with the right format
+        assert generated_id == f'{parent_id}.{component_source["Type"]}-{expected_name}.{expected_name}'
+
+        # AND the component information is present
+        assert id_generator.name == expected_name
+        assert id_generator.type == component_source['Type']
+        assert id_generator.parent_id == parent_id

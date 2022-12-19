@@ -10,7 +10,8 @@ From the [official Microsoft Threat Model Tool page](https://learn.microsoft.com
 
 From the point of view of StartLeft, a MTMT file is an external threat model (external because is not OTM) input source
 which has information about:
- - The diagram: With stencils, trust zones and dataflows, their relationships and their visual representation.
+
+ - The diagram: With stencils, TrustZones and dataflows, their relationships and their visual representation.
  - The threats.
  - The mitigations.
 
@@ -23,10 +24,7 @@ The `slp_mtmt` module is the StartLeft Processor responsible for processing MTMT
 on a mapping file that enables the users to define the translations between:
 
 - The source stencils types and the OTM components output.
-- The source trust zones and the OTM trust zones output.
-- The source dataflows and the OTM dataflows output.
-- The source threats and the OTM threats output.
-- The source mitigations and the OTM mitigations output.
+- The source TrustZones and the OTM TrustZones output.
 
 Once you got familiarized with the basics explained in this page, you will need to know more about how to use the
 processor in order to create the mapping file for a successful conversion from MTMT to OTM. 
@@ -96,3 +94,7 @@ curl --location --request POST 'localhost:5000/api/v1/startleft/external-threat-
 --form 'id="my-mtmt-project"' \
 --form 'name="My MTMT project"'
 ```
+
+## Position of the elements
+For details about how we map the position of the elements, please read 
+[MTMT-elements-position.md](MTMT-elements-position.md). 

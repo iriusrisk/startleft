@@ -1,4 +1,6 @@
-from otm.otm.otm import OTM
+from otm.otm.entity.otm import Otm
+from otm.otm.entity.component import OtmComponent
+from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
 from otm.otm.otm_builder import OtmBuilder
 from slp_base.slp_base.provider_parser import ProviderParser
 from slp_base.slp_base.provider_type import EtmType
@@ -6,6 +8,7 @@ from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
 from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMapping
 from slp_mtmt.slp_mtmt.parse.mtmt_component_parser import MTMTComponentParser
 from slp_mtmt.slp_mtmt.parse.mtmt_connector_parser import MTMTConnectorParser
+from slp_mtmt.slp_mtmt.parse.mtmt_threat_parser import MTMThreatParser
 from slp_mtmt.slp_mtmt.parse.mtmt_trustzone_parser import MTMTTrustzoneParser
 
 
@@ -19,23 +22,51 @@ class MTMTParser(ProviderParser):
         self.mtmt_mapping = mtmt_mapping
         self.project_id = project_id
         self.project_name = project_name
-        self.trustzoneParser = MTMTTrustzoneParser(self.source, self.mtmt_mapping)
-        self.component_parser = MTMTComponentParser(self.source, self.mtmt_mapping, self.trustzoneParser)
+        self.representations = [
+            DiagramRepresentation(
+                id_=f'{self.project_id}-diagram',
+                name=f'{self.project_id} Diagram Representation',
+                type_=str(RepresentationType.DIAGRAM.value),
+                size={'width': 2000, 'height': 2000}
+            )
+        ]
+
+        self.trustzone_parser = MTMTTrustzoneParser(self.source, self.mtmt_mapping, self.representations[0].id)
+        self.component_parser = MTMTComponentParser(
+            self.source,
+            self.mtmt_mapping,
+            self.trustzone_parser,
+            self.representations[0].id
+        )
+        self.threat_parser = MTMThreatParser(self.source)
+
+        self.trustzones = self.trustzone_parser.parse()
+        self.components = self.component_parser.parse()
+        self.dataflows = MTMTConnectorParser(self.source, self.component_parser).parse()
 
     def __get_mtmt_components(self):
-        return self.component_parser.parse()
+        return self.components
 
     def __get_mtmt_dataflows(self):
-        return MTMTConnectorParser(self.source, self.component_parser).parse()
+        return self.dataflows
 
     def __get_mtmt_trustzones(self) -> list:
-        return self.trustzoneParser.parse()
+        return self.trustzones
 
-    def build_otm(self) -> OTM:
-        components = self.__get_mtmt_components()
-        trustzones = self.__get_mtmt_trustzones()
+    def __get_mtmt_threats_and_mitigations(self, components: [OtmComponent]):
+        return self.threat_parser.parse(components)
+
+    def __get_mtmt_representations(self) -> list:
+        return self.representations
+
+    def build_otm(self) -> Otm:
+        threats, mitigations = self.__get_mtmt_threats_and_mitigations(self.__get_mtmt_components())
+
         return OtmBuilder(self.project_id, self.project_name, EtmType.MTMT) \
-            .add_trustzones(trustzones) \
-            .add_components(components) \
+            .add_representations(self.__get_mtmt_representations()) \
+            .add_trustzones(self.__get_mtmt_trustzones()) \
+            .add_components(self.__get_mtmt_components()) \
             .add_dataflows(self.__get_mtmt_dataflows()) \
+            .add_threats(threats) \
+            .add_mitigations(mitigations) \
             .build()

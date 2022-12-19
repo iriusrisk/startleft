@@ -46,7 +46,7 @@ wget https://raw.githubusercontent.com/iriusrisk/startleft/main/examples/terrafo
 
 This is a rich example where you can see in action some capabilities of StartLeft. It represents the Threat 
 Model for
-an architecture with two trust zones and several VPCs which contain many types of AWS components.
+an architecture with two TrustZones and several VPCs which contain many types of AWS components.
 
 Now, we need to download the mapping file where the configuration for parsing this source is located. In this case, 
 we will download an example that maps to IriusRisk components. It is placed in the same `examples/terraform` folder:
@@ -153,7 +153,7 @@ For example, let's use the same Terraform file that we have downloaded for the `
 ```shell
 startleft search \
     --iac-type TERRAFORM \
-    --query Resources|squash(@)[?Type=='aws_instance']
+    --query "resource|get(@, 'aws_synthetics_canary')" \
     multinetwork_security_groups_with_lb.tf
 ```
 
