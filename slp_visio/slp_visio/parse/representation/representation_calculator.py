@@ -1,9 +1,10 @@
 from otm.otm.entity.representation import RepresentationElement
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramLimits, DiagramComponent, DiagramComponentOrigin
 
-# This scale factor is the relation between the default size of the Visio stencils (0.5)
-# and the default size of the IriusRisk components (82)
-SCALE_FACTOR: int = 164
+# TODO: Make the scale of the output representations parametrizable
+IRIUSRISK_SMALLEST_COMPONENT_SIZE = 82
+VISIO_STENCILS_DEFAULT_SIZE = 0.5
+SCALE_FACTOR: int = round(IRIUSRISK_SMALLEST_COMPONENT_SIZE / VISIO_STENCILS_DEFAULT_SIZE)
 
 
 def scale_to_int(value: float) -> int:
