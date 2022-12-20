@@ -232,13 +232,13 @@ startleft server -p 8080
 Then, execute the following command to retrieve the OTM file with your EC2 component:
 
 ```shell
-curl --location --request POST 'localhost:5000/api/v1/startleft/diagram' \
---header 'Content-Type: multipart/form-data' \
---header 'Accept: application/json' \
---form 'diag_type="VISIO"' \
---form 'diag_file=@"./visio-basic-example.vsdx"' \
---form 'default_mapping_file=@"./default-mapping.yaml"' \
---form 'custom_mapping_file=@"./custom-mapping.yaml"' \
---form 'id="my-visio-basic-example"' \
---form 'name="My Visio Basic Example"'
+curl --location --request POST localhost:5000/api/v1/startleft/diagram \
+--header "Content-Type: multipart/form-data" \
+--header "Accept: application/json" \
+--form diag_type="VISIO" \
+--form diag_file=@"./visio-basic-example.vsdx" \
+--form default_mapping_file=@"./default-mapping.yaml" \
+--form custom_mapping_file=@"./custom-mapping.yaml" \
+--form id="my-visio-basic-example" \
+--form name="My Visio Basic Example"
 ```
