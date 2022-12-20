@@ -79,7 +79,7 @@ component. Notice that the standard requires that all the components must have a
 Cloud_ TrustZone. This mapping file could be as simple as this:
 ```yaml
 trustzones:
-  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - id:   public-cloud-01
     name: Public Cloud
     type: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
@@ -88,7 +88,7 @@ components:
     type:   ec2
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::Instance']"}
-    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    parent: public-cloud-01
     tags:
       - { $path: "Type" }
 
@@ -115,7 +115,7 @@ threat modeling tool like IriusRisk.
     ],
     "trustZones": [
         {
-            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "id": "public-cloud-01",
             "name": "Public Cloud",
             "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
             "risk": {
@@ -125,11 +125,11 @@ threat modeling tool like IriusRisk.
     ],
     "components": [
         {
-            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.myec2instance",
+            "id": "public-cloud-01.myec2instance",
             "name": "MyEC2Instance",
             "type": "ec2",
             "parent": {
-                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+                "trustZone": "public-cloud-01"
             },
             "tags": [
                 "AWS::EC2::Instance"
