@@ -13,7 +13,7 @@
   ],
   "trustZones": [
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "id": "public-cloud",
       "name": "Public Cloud",
       "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "risk": {
@@ -23,22 +23,22 @@
   ],
   "components": [
     {
-      "id": "2adbe81d-7bf2-49df-b031-743ea13d6781",
+      "id": "public-cloud.aws_instance-e2cinstance",
       "name": "E2CINSTANCE",
       "type": "ec2",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "public-cloud"
       },
       "tags": [
         "aws_instance"
       ]
     },
     {
-      "id": "b1367970-affa-4ab4-b763-c7763673aa18",
+      "id": "public-cloud.aws_internet_gateway-internetegateway",
       "name": "InterneteGateway",
       "type": "empty-component",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "public-cloud"
       },
       "tags": [
         "aws_internet_gateway"

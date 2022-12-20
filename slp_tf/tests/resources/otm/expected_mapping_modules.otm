@@ -13,7 +13,7 @@
   ],
   "trustZones": [
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "id": "public-cloud",
       "name": "Public Cloud",
       "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "risk": {
@@ -23,33 +23,33 @@
   ],
   "components": [
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.db23test",
+      "id": "public-cloud.db23test",
       "name": "db23test",
       "type": "rds",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "public-cloud"
       },
       "tags": [
         "terraform-aws-modules/rds/aws"
       ]
     },
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_acm_certificate-acm_certificate",
+      "id": "public-cloud.aws_acm_certificate-acm_certificate",
       "name": "acm_certificate",
       "type": "CD-ACM",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "public-cloud"
       },
       "tags": [
         "aws_acm_certificate"
       ]
     },
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_cloudwatch_metric_alarm-cloudwatch_metric_alarm_1",
+      "id": "public-cloud.aws_cloudwatch_metric_alarm-cloudwatch_metric_alarm_1",
       "name": "cloudwatch_metric_alarm_1",
       "type": "cloudwatch",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "public-cloud"
       },
       "tags": [
         "aws_cloudwatch_metric_alarm"

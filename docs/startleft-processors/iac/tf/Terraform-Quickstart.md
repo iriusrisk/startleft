@@ -70,7 +70,7 @@ component. Notice that the standard requires that all the components must have a
 Cloud_ TrustZone is mapped as the default component's TrustZone. This mapping file could be as simple as this:
 ```yaml
 trustzones:
-  - id:   public-cloud
+  - id:   public-cloud-01
     name: Public Cloud
     type: b61d6911-338d-46a8-9f39-8dcd24abfe91
     $default: true
@@ -102,7 +102,7 @@ threat modeling tool like IriusRisk.
   ],
   "trustZones": [
     {
-      "id": "public-cloud",
+      "id": "public-cloud-01",
       "name": "Public Cloud",
       "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "risk": {
@@ -112,11 +112,11 @@ threat modeling tool like IriusRisk.
   ],
   "components": [
     {
-      "id": "public-cloud.aws_instance-web",
+      "id": "public-cloud-01.aws_instance-web",
       "name": "web",
       "type": "ec2",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "public-cloud-01"
       },
       "tags": [
         "aws_instance"

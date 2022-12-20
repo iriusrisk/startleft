@@ -158,7 +158,7 @@ The TrustZone is a Threat Modelling concept that will never be present as is in 
 source file. Thus, the `slp_tf` relies on the configuration defined in the `trustzones` section of the Mapping File. 
 ```yaml
 trustzones: # (1)!
-  - id:   public-cloud # (2)!
+  - id:   public-cloud-01 # (2)!
     name: Public Cloud # (3)!
     type: b61d6911-338d-46a8-9f39-8dcd24abfe91 # (5)!
     $default: true # (4)!
@@ -180,7 +180,7 @@ behavior, the `$source` attribute is used.
 
 ```yaml
 trustzones:
-  - id:   internet
+  - id:   internet-01
     name: Internet
     type: f0ba7722-39b6-4c81-8290-a30a248bb8d9
     $source: { # (1)!
@@ -206,12 +206,12 @@ trustzones:
     
         ```yaml
         trustzones:
-          - id:   public-cloud
+          - id:   public-cloud-01
             name: Public Cloud
             type: b61d6911-338d-46a8-9f39-8dcd24abfe91
             $default: true
         
-          - id:   internet
+          - id:   internet-01
             name: Internet
             type: f0ba7722-39b6-4c81-8290-a30a248bb8d9
             $source: {
@@ -242,13 +242,13 @@ trustzones:
     
         ```yaml
         trustZones:
-        - id: public-cloud
+        - id: public-cloud-01
           name: Public Cloud
           type: b61d6911-338d-46a8-9f39-8dcd24abfe91
           risk:
             trustRating: 10
 
-        - id: internet
+        - id: internet-01
           name: Internet
           type: f0ba7722-39b6-4c81-8290-a30a248bb8d9
           risk:
@@ -309,7 +309,7 @@ The easiest way to map a component is to define the output `type` value and the 
             multipleSource: {$format: "{type} (grouped)"}}}
         $source:     {$singleton: {$type: "aws_acm_certificate"}}
         # note: the TZ id is the configured as default
-        parent:      {$parent: public-cloud}
+        parent:      {$parent: public-cloud-01}
         tags:
             - {$numberOfSources: {
                 oneSource: {$path: "resource_type"}, 
@@ -320,7 +320,7 @@ The easiest way to map a component is to define the output `type` value and the 
 
     ```yaml
     trustzones:
-      - id:   public-cloud
+      - id:   public-cloud-01
         name: Public Cloud
         type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
@@ -333,7 +333,7 @@ The easiest way to map a component is to define the output `type` value and the 
 
     ```yaml
     trustzones:
-      - id:   public-cloud
+      - id:   public-cloud-01
         name: Public Cloud
         type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
@@ -344,7 +344,7 @@ The easiest way to map a component is to define the output `type` value and the 
             oneSource: {$path: "resource_name"}, 
             multipleSource: {$format: "{type} (grouped)"}}}
         $source:     {$type: "aws_vpc"}
-        parent:      {$parent: public-cloud}
+        parent:      {$parent: public-cloud-01}
         tags:
             - {$numberOfSources: {
                 oneSource: {$path: "resource_type"}, 
@@ -371,18 +371,18 @@ The easiest way to map a component is to define the output `type` value and the 
       type: code
 
     trustZones:
-    - id: public-cloud
+    - id: public-cloud-01
       name: Public Cloud
       type: b61d6911-338d-46a8-9f39-8dcd24abfe91
       risk:
         trustRating: 10
 
     components:
-    - id: public-cloud.aws_vpc-customvpc
+    - id: public-cloud-01.aws_vpc-customvpc
       name: CustomVPC
       type: vpc
       parent:
-        trustZone: public-cloud
+        trustZone: public-cloud-01
       tags:
       - aws_vpc
 
@@ -446,7 +446,7 @@ This is the minimal configuration needed to configure an $altsource, the followi
 
     ```yaml
     trustzones:
-      - id:   public-cloud
+      - id:   public-cloud-01
         name: Public Cloud
         type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
@@ -465,7 +465,7 @@ This is the minimal configuration needed to configure an $altsource, the followi
 
     ```yaml
     trustzones:
-      - id:   public-cloud
+      - id:   public-cloud-01
         name: Public Cloud
         type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
@@ -489,7 +489,7 @@ This is the minimal configuration needed to configure an $altsource, the followi
                             {$path: "resource_type"}, 
                         multipleSource: 
                             {$format: "{resource_name} ({resource_type})"}}}
-        parent: {$parent: public-cloud}
+        parent: {$parent: public-cloud-01}
         tags:
             - {$numberOfSources: {
                 oneSource: {$path: "resource_type"}, 
@@ -519,17 +519,17 @@ This is the minimal configuration needed to configure an $altsource, the followi
       id: Terraform
       type: code
     trustZones:
-    - id: public-cloud
+    - id: public-cloud-01
       name: Public Cloud
       type: b61d6911-338d-46a8-9f39-8dcd24abfe91
       risk:
         trustRating: 10
     components:
-    - id: public-cloud.aws_vpc_endpoint-s3-altsource
+    - id: public-cloud-01.aws_vpc_endpoint-s3-altsource
       name: S3 from VPCEndpoint
       type: s3
       parent:
-        trustZone: public-cloud
+        trustZone: public-cloud-01
       tags:
       - aws_vpc_endpoint
     dataflows: []
@@ -548,7 +548,7 @@ nevertheless, it can be modified to set other TrustZones or Component with the a
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   public-cloud
+      - id:   public-cloud-01
         name: Public Cloud
         type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
@@ -587,40 +587,40 @@ nevertheless, it can be modified to set other TrustZones or Component with the a
         id: Terraform
         type: code
     trustZones:
-      - id: public-cloud
+      - id: public-cloud-01
         name: Public Cloud
         type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: public-cloud.aws_subnet-privatesubnet1
+      - id: public-cloud-01.aws_subnet-privatesubnet1
         name: PrivateSubnet1
         type: empty-component
         parent:
-          trustZone: public-cloud
+          trustZone: public-cloud-01
         tags:
           - aws_subnet
-      - id: public-cloud.aws_subnet-privatesubnet2
+      - id: public-cloud-01.aws_subnet-privatesubnet2
         name: PrivateSubnet2
         type: empty-component
         parent:
-          trustZone: public-cloud
+          trustZone: public-cloud-01
         tags:
           - aws_subnet
       - id: >-
-          public-cloud.aws_subnet-privatesubnet1.aws_lb-servicelb
+          public-cloud-01.aws_subnet-privatesubnet1.aws_lb-servicelb
         name: ServiceLB
         type: load-balancer
         parent:
-          component: public-cloud.aws_subnet-privatesubnet1
+          component: public-cloud-01.aws_subnet-privatesubnet1
         tags:
           - aws_lb
       - id: >-
-          public-cloud.aws_subnet-privatesubnet2.aws_lb-servicelb
+          public-cloud-01.aws_subnet-privatesubnet2.aws_lb-servicelb
         name: ServiceLB
         type: load-balancer
         parent:
-          component: public-cloud.aws_subnet-privatesubnet2
+          component: public-cloud-01.aws_subnet-privatesubnet2
         tags:
           - aws_lb
     dataflows: []
@@ -639,7 +639,7 @@ parent attribute of those components on the OTM.
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   public-cloud
+      - id:   public-cloud-01
         name: Public Cloud
         type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
@@ -672,24 +672,24 @@ parent attribute of those components on the OTM.
         id: Terraform
         type: code
     trustZones:
-      - id: public-cloud
+      - id: public-cloud-01
         name: Public Cloud
         type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: public-cloud.aws_ecs_service-mongo
+      - id: public-cloud-01.aws_ecs_service-mongo
         name: mongo
         type: elastic-container-service
         parent:
-          trustZone: public-cloud
+          trustZone: public-cloud-01
         tags:
           - aws_ecs_service
-      - id: public-cloud.aws_ecs_service-mongo.aws_ecs_task_definition-service
+      - id: public-cloud-01.aws_ecs_service-mongo.aws_ecs_task_definition-service
         name: service
         type: docker-container
         parent:
-          component: public-cloud.aws_ecs_service-mongo
+          component: public-cloud-01.aws_ecs_service-mongo
         tags:
           - aws_ecs_task_definition
     dataflows: [] 
@@ -704,7 +704,7 @@ The modules imported in a Terraform file can be mapped into OTM components using
 
     ```yaml
     trustzones:
-      - id:   public-cloud
+      - id:   public-cloud-01
         name: Public Cloud
         type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
@@ -746,31 +746,31 @@ The modules imported in a Terraform file can be mapped into OTM components using
         id: Terraform
         type: code
     trustZones:
-      - id: public-cloud
+      - id: public-cloud-01
         name: Public Cloud
         type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: public-cloud.db
+      - id: public-cloud-01.db
         name: db
         type: rds
         parent:
-          trustZone: public-cloud
+          trustZone: public-cloud-01
         tags:
           - terraform-aws-modules/rds/aws
-      - id: public-cloud.vpc
+      - id: public-cloud-01.vpc
         name: vpc
         type: vpc
         parent:
-          trustZone: public-cloud
+          trustZone: public-cloud-01
         tags:
           - terraform-aws-modules/vpc/aws
-      - id: public-cloud.alb
+      - id: public-cloud-01.alb
         name: alb
         type: load-balancer
         parent:
-          trustZone: public-cloud
+          trustZone: public-cloud-01
         tags:
           - terraform-aws-modules/alb/aws
     dataflows: []

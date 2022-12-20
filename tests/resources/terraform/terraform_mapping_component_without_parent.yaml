@@ -1,5 +1,5 @@
 trustzones:
-  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - id:   public-cloud
     name: Public Cloud
     type: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
@@ -9,7 +9,7 @@ components:
     name: { $path: "keys(@)[0]" }
     $source:
       $skip: { $root: "resource|get(@, 'aws_skipped_with_parent')" }
-    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    parent: public-cloud
     tags:
       - { $path: "Type" }
 
@@ -32,7 +32,7 @@ components:
     type: aws_control
     name: { $path: "keys(@)[0]" }
     $source: { $root: "resource|get(@, 'aws_control')" }
-    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    parent: public-cloud
     tags:
       - { $path: "Type" }
 

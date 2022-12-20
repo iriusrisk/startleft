@@ -39,12 +39,12 @@ mapping configuration examples that include these functions with their explanati
 
 ```yaml
 trustzones: # (1)!
-  - id:   public-cloud # (2)!
+  - id:   public-cloud-01 # (2)!
     name: Public Cloud # (3)!
     type: b61d6911-338d-46a8-9f39-8dcd24abfe91 # (16)!
     $default: true # (4)!
     
-  - id:   internet
+  - id:   internet-01
     name: Internet
     type: f0ba7722-39b6-4c81-8290-a30a248bb8d9
     $source: {$singleton: # (5)!
@@ -60,7 +60,7 @@ components: # (8)!
   - type:        generic-client
     $source:     {$type: "aws_security_group",  # (12)!
                   $props: "egress[0].cidr_blocks"} 
-    parent:      internet # (13)!
+    parent:      internet-01 # (13)!
     tags: # (14)!
       - Outbound connection destination IP
 

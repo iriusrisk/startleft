@@ -1,12 +1,12 @@
 trustzones:
-  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - id:   public-cloud
     name: Public Cloud
     type: b61d6911-338d-46a8-9f39-8dcd24abfe91
     $default: true
 
   # SG MAPPING (AUXILIARY SG)
   # type 4
-  - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
+  - id:   internet
     name: Internet
     type: f0ba7722-39b6-4c81-8290-a30a248bb8d9
     $source: {$singleton: {$type: "aws_security_group", $props: "egress[0].cidr_blocks"}}
@@ -181,14 +181,14 @@ components:
   - type:        generic-client
     name:        {$ip: {$path: "resource_properties.egress[0].cidr_blocks"}}
     $source:     {$type: "aws_security_group", $props: "egress[0].cidr_blocks"}
-    parent:      f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    parent:      internet
     tags:
       - Outbound connection destination IP
 
   - type:        generic-client
     name:        {$ip: {$path: "resource_properties.ingress[0].cidr_blocks"}}
     $source:     {$type: "aws_security_group", $props: "ingress[0].cidr_blocks"}
-    parent:      f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    parent:      internet
     tags:
       - Inbound connection source IP
 
