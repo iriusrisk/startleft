@@ -14,10 +14,6 @@ from slp_tf.tests.resources.test_resource_paths import expected_aws_dataflows, e
 from slp_tf.tests.resources.test_resource_paths import expected_orphan_component_is_not_mapped
 from slp_tf.tests.utility import excluded_regex
 
-PUBLIC_CLOUD_TZ_ID = 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-INTERNET_TZ_ID = 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
-DEFAULT_TRUSTZONE_ID = "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-VALIDATION_EXCLUDED_REGEX = r"root\[\'dataflows'\]\[.+?\]\['id'\]"
 
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
@@ -53,7 +49,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff(otm, expected_run_valid_mappings, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_run_valid_mappings, excluded_regex) == {}
 
     @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
     def test_aws_dataflows(self, mapping_file):
@@ -67,7 +63,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff(otm, expected_aws_dataflows, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_aws_dataflows, excluded_regex) == {}
 
     @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
     def test_aws_parent_children_components(self, mapping_file):
@@ -81,7 +77,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff(otm, expected_aws_parent_children_components, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_aws_parent_children_components, excluded_regex) == {}
 
     @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
     def test_aws_singleton_components(self, mapping_file):
@@ -95,7 +91,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff(otm, expected_aws_singleton_components, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_aws_singleton_components, excluded_regex) == {}
 
     @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
     def test_aws_altsource_components(self, mapping_file):
@@ -109,7 +105,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff(otm, expected_aws_altsource_components, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_aws_altsource_components, excluded_regex) == {}
 
     @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
     def test_aws_security_groups_components(self, mapping_file):
@@ -123,7 +119,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff(otm, expected_aws_security_groups_components, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_aws_security_groups_components, excluded_regex) == {}
 
     def test_mapping_component_without_parent(self):
         # GIVEN a valid TF file
@@ -152,7 +148,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff(otm, expected_mapping_skipped_component_without_parent, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_mapping_skipped_component_without_parent, excluded_regex) == {}
 
     @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
     def test_no_resources(self, mapping_file):
@@ -166,7 +162,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff(otm, expected_no_resources, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_no_resources, excluded_regex) == {}
 
     def test_mapping_modules(self):
         # GIVEN a valid TF file with some TF modules
@@ -179,7 +175,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff(otm, expected_mapping_modules, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_mapping_modules, excluded_regex) == {}
 
     def test_extra_modules(self):
         # GIVEN a valid TF file with some special TF modules
@@ -192,7 +188,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff(otm, expected_extra_modules, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_extra_modules, excluded_regex) == {}
 
     @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
     def test_elb_example(self, mapping_file):
@@ -206,7 +202,7 @@ class TestTerraformProcessor:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff(otm, expected_elb_example, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, expected_elb_example, excluded_regex) == {}
 
     @pytest.mark.parametrize('mapping_file', [None, [None]])
     def test_mapping_files_not_provided(self, mapping_file):
@@ -265,10 +261,10 @@ class TestTerraformProcessor:
         ).process()
 
         # THEN both generated OTMs are valid and equal
-        assert validate_and_diff(otm_single, otm_multiple, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm_single, otm_multiple, excluded_regex) == {}
 
         # AND their content is the expected
-        assert validate_and_diff(otm_single, expected_separated_networks_components, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm_single, expected_separated_networks_components, excluded_regex) == {}
 
     def test_process_empty_source_file_array(self):
         # GIVEN an empty array IaC file
@@ -348,3 +344,53 @@ class TestTerraformProcessor:
 
         # THEN a file with the single_tf_file-expected-result.otm contents is returned
         assert validate_and_diff(otm.json(), test_resource_paths.tf_file_referenced_vars_expected_result, excluded_regex) == {}
+
+    def test_trustzone_types(self):
+        # GIVEN a valid TF file
+        terraform_file = get_data(test_resource_paths.terraform_minimal_content)
+
+        # AND a valid TF mapping file that defines two TZs, one with type and the one without type
+        mapping_file = get_data(test_resource_paths.terraform_trustzone_types_mapping)
+
+        # WHEN the TF file is processed
+        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
+
+        # THEN the number of TZs, components and dataflows are right
+        assert len(otm.trustzones) == 2
+        assert len(otm.components) == 0
+        assert len(otm.dataflows) == 0
+
+        # AND the trustzone with a defined type has the correct value
+        assert list(filter(lambda obj: obj.id == 'public-cloud-01'
+                                       and obj.type == 'b61d6911-338d-46a8-9f39-8dcd24abfe91', otm.trustzones))
+
+        # AND the trustzone without a defined type uses the ID value as type
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+                                       and obj.type == obj.id, otm.trustzones))
+
+    def test_components_with_trustzones_of_same_type(self):
+        # GIVEN a valid TF file WITH some components mapped to different TZs of the same type
+        terraform_file = get_data(test_resource_paths.terraform_components_with_trustzones_of_same_type)
+
+        # AND a valid TF mapping file that defines two different TZs of the same type
+        mapping_file = get_data(test_resource_paths.terraform_multiple_trustzones_same_type_mapping)
+
+        # WHEN the TF file is processed
+        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
+
+        # THEN the number of TZs, components and dataflows are right
+        assert len(otm.trustzones) == 2
+        assert len(otm.components) == 2
+        assert len(otm.dataflows) == 0
+
+        # AND both trustzones have the same type, but different ID
+        assert list(filter(lambda obj: obj.id == 'public-cloud-01'
+                                       and obj.type == 'b61d6911-338d-46a8-9f39-8dcd24abfe91', otm.trustzones))
+        assert list(filter(lambda obj: obj.id == 'public-cloud-02'
+                                       and obj.type == 'b61d6911-338d-46a8-9f39-8dcd24abfe91', otm.trustzones))
+
+        # AND each component has the correct trustzone
+        assert otm.components[0].parent_type == 'trustZone'
+        assert otm.components[0].parent == 'public-cloud-01'
+        assert otm.components[1].parent_type == 'trustZone'
+        assert otm.components[1].parent == 'public-cloud-02'

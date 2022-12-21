@@ -10,35 +10,35 @@
         "type": "code"
     }],
     "trustZones": [{
-        "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+        "id": "public-cloud",
         "name": "Public Cloud",
-        "type": null,
+        "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
         "risk": {
             "trustRating": 10
         }
     }],
     "components": [{
-        "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_cloudtrail-foobar",
+        "id": "public-cloud.aws_cloudtrail-foobar",
         "name": "foobar",
         "type": "cloudtrail",
         "parent": {
-            "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            "trustZone": "public-cloud"
         },
         "tags": ["aws_cloudtrail"]
     }, {
-        "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_s3_bucket-foo_s3_bucket",
+        "id": "public-cloud.aws_s3_bucket-foo_s3_bucket",
         "name": "foo_s3_bucket",
         "type": "s3",
         "parent": {
-            "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            "trustZone": "public-cloud"
         },
         "tags": ["aws_s3_bucket"]
     }, {
-        "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_sqs_queue-terraform_queue",
+        "id": "public-cloud.aws_sqs_queue-terraform_queue",
         "name": "terraform_queue",
         "type": "sqs-simple-queue-service",
         "parent": {
-            "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            "trustZone": "public-cloud"
         },
         "tags": ["aws_sqs_queue"]
     }],
