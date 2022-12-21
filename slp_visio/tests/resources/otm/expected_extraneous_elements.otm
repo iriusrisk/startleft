@@ -1,16 +1,16 @@
 {
   "otmVersion": "0.1.0",
   "project": {
-    "name": "test_parse_diagram_file_ok",
-    "id": "test_parse_diagram_file_ok"
+    "name": "project-name",
+    "id": "project-id"
   },
   "representations": [
     {
-      "name": "test_parse_diagram_file_ok Diagram Representation",
-      "id": "test_parse_diagram_file_ok-diagram",
+      "name": "project-id Diagram Representation",
+      "id": "project-id-diagram",
       "type": "diagram",
       "size": {
-        "width": 1967,
+        "width": 1966,
         "height": 1356
       }
     }
@@ -26,7 +26,7 @@
         {
           "name": "Public Cloud Representation",
           "id": "47-representation",
-          "representation": "test_parse_diagram_file_ok-diagram",
+          "representation": "project-id-diagram",
           "size": {
             "width": 590,
             "height": 700
@@ -48,14 +48,14 @@
         {
           "name": "Private Secured Cloud Representation",
           "id": "48-representation",
-          "representation": "test_parse_diagram_file_ok-diagram",
+          "representation": "project-id-diagram",
           "size": {
-            "width": 523,
-            "height": 472
+            "width": 522,
+            "height": 473
           },
           "position": {
             "x": 1116,
-            "y": 421
+            "y": 420
           }
         }
       ]
@@ -63,47 +63,24 @@
   ],
   "components": [
     {
-      "id": "49",
-      "name": "Custom VPC",
-      "type": "empty-component",
+      "id": "1",
+      "name": "Amazon EC2",
+      "type": "ec2",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "representations": [
         {
-          "name": "Custom VPC Representation",
-          "id": "49-representation",
-          "representation": "test_parse_diagram_file_ok-diagram",
-          "size": {
-            "width": 295,
-            "height": 406
-          },
-          "position": {
-            "x": 57,
-            "y": 29
-          }
-        }
-      ]
-    },
-    {
-      "id": "1",
-      "name": "Amazon EC2",
-      "type": "ec2",
-      "parent": {
-        "component": "49"
-      },
-      "representations": [
-        {
           "name": "Amazon EC2 Representation",
           "id": "1-representation",
-          "representation": "test_parse_diagram_file_ok-diagram",
+          "representation": "project-id-diagram",
           "size": {
             "width": 82,
             "height": 82
           },
           "position": {
-            "x": 82,
-            "y": 24
+            "x": 139,
+            "y": 53
           }
         }
       ]
@@ -113,20 +90,20 @@
       "name": "Custom machine",
       "type": "ec2",
       "parent": {
-        "component": "49"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "representations": [
         {
           "name": "Custom machine Representation",
           "id": "12-representation",
-          "representation": "test_parse_diagram_file_ok-diagram",
+          "representation": "project-id-diagram",
           "size": {
             "width": 82,
             "height": 82
           },
           "position": {
-            "x": 82,
-            "y": 230
+            "x": 139,
+            "y": 259
           }
         }
       ]
@@ -142,14 +119,14 @@
         {
           "name": "Private Database Representation",
           "id": "30-representation",
-          "representation": "test_parse_diagram_file_ok-diagram",
+          "representation": "project-id-diagram",
           "size": {
             "width": 82,
             "height": 82
           },
           "position": {
             "x": 219,
-            "y": 166
+            "y": 167
           }
         }
       ]
@@ -165,7 +142,7 @@
         {
           "name": "Amazon CloudWatch Representation",
           "id": "35-representation",
-          "representation": "test_parse_diagram_file_ok-diagram",
+          "representation": "project-id-diagram",
           "size": {
             "width": 82,
             "height": 82
@@ -188,14 +165,14 @@
         {
           "name": "Custom log system Representation",
           "id": "41-representation",
-          "representation": "test_parse_diagram_file_ok-diagram",
+          "representation": "project-id-diagram",
           "size": {
             "width": 82,
             "height": 82
           },
           "position": {
             "x": 139,
-            "y": 516
+            "y": 515
           }
         }
       ]
@@ -204,25 +181,25 @@
   "dataflows": [
     {
       "id": "17",
-      "name": "f5410691-ef24-40ed-998c-de531c3a5729",
+      "name": "8fe0838c-1c45-41b0-a650-06dd04d77d0f",
       "source": "1",
       "destination": "12"
     },
     {
       "id": "34",
-      "name": "464ebc9f-c719-4016-bc68-bc7748a36eb7",
+      "name": "709ec940-5c71-4c0c-b02a-60835ced55c8",
       "source": "12",
       "destination": "30"
     },
     {
       "id": "40",
-      "name": "72342e77-c396-4f33-8906-0fbb99866dcc",
+      "name": "b3a6809f-d696-46cf-adb1-157ab0448fbf",
       "source": "1",
       "destination": "35"
     },
     {
       "id": "46",
-      "name": "ba94a687-6492-4a5d-9256-40b927739ebe",
+      "name": "0c36a5e1-8faf-4f70-aaa6-e3fe510e5efd",
       "source": "12",
       "destination": "41"
     }

@@ -1,0 +1,29 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "project-name",
+    "id": "project-id"
+  },
+  "representations": [
+    {
+      "name": "project-id Diagram Representation",
+      "id": "project-id-diagram",
+      "type": "diagram",
+      "size": {
+        "width": 0,
+        "height": 0
+      }
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [],
+  "dataflows": []
+}

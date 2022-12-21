@@ -1,13 +1,13 @@
 {
   "otmVersion": "0.1.0",
   "project": {
-    "name": "test_parse_diagram_file_ok",
-    "id": "test_parse_diagram_file_ok"
+    "name": "project-name",
+    "id": "project-id"
   },
   "representations": [
     {
-      "name": "test_parse_diagram_file_ok Diagram Representation",
-      "id": "test_parse_diagram_file_ok-diagram",
+      "name": "project-id Diagram Representation",
+      "id": "project-id-diagram",
       "type": "diagram",
       "size": {
         "width": 1967,
@@ -26,7 +26,7 @@
         {
           "name": "Public Cloud Representation",
           "id": "47-representation",
-          "representation": "test_parse_diagram_file_ok-diagram",
+          "representation": "project-id-diagram",
           "size": {
             "width": 590,
             "height": 700
@@ -48,7 +48,7 @@
         {
           "name": "Private Secured Cloud Representation",
           "id": "48-representation",
-          "representation": "test_parse_diagram_file_ok-diagram",
+          "representation": "project-id-diagram",
           "size": {
             "width": 523,
             "height": 472
@@ -73,7 +73,7 @@
         {
           "name": "Custom VPC Representation",
           "id": "49-representation",
-          "representation": "test_parse_diagram_file_ok-diagram",
+          "representation": "project-id-diagram",
           "size": {
             "width": 295,
             "height": 406
@@ -96,7 +96,7 @@
         {
           "name": "Amazon EC2 Representation",
           "id": "1-representation",
-          "representation": "test_parse_diagram_file_ok-diagram",
+          "representation": "project-id-diagram",
           "size": {
             "width": 82,
             "height": 82
@@ -119,7 +119,7 @@
         {
           "name": "Custom machine Representation",
           "id": "12-representation",
-          "representation": "test_parse_diagram_file_ok-diagram",
+          "representation": "project-id-diagram",
           "size": {
             "width": 82,
             "height": 82
@@ -142,7 +142,7 @@
         {
           "name": "Private Database Representation",
           "id": "30-representation",
-          "representation": "test_parse_diagram_file_ok-diagram",
+          "representation": "project-id-diagram",
           "size": {
             "width": 82,
             "height": 82
@@ -165,7 +165,7 @@
         {
           "name": "Amazon CloudWatch Representation",
           "id": "35-representation",
-          "representation": "test_parse_diagram_file_ok-diagram",
+          "representation": "project-id-diagram",
           "size": {
             "width": 82,
             "height": 82
@@ -188,7 +188,7 @@
         {
           "name": "Custom log system Representation",
           "id": "41-representation",
-          "representation": "test_parse_diagram_file_ok-diagram",
+          "representation": "project-id-diagram",
           "size": {
             "width": 82,
             "height": 82
@@ -204,25 +204,25 @@
   "dataflows": [
     {
       "id": "17",
-      "name": "f5410691-ef24-40ed-998c-de531c3a5729",
+      "name": "a7ee1594-5658-43c8-860c-41ed05cfbe4e",
       "source": "1",
       "destination": "12"
     },
     {
       "id": "34",
-      "name": "464ebc9f-c719-4016-bc68-bc7748a36eb7",
+      "name": "9807ef05-fcd8-43ee-a4b4-ff961907a6f9",
       "source": "12",
       "destination": "30"
     },
     {
       "id": "40",
-      "name": "72342e77-c396-4f33-8906-0fbb99866dcc",
+      "name": "a462d51e-fa9f-4b5f-86d4-cd7fcfdd48f6",
       "source": "1",
       "destination": "35"
     },
     {
       "id": "46",
-      "name": "ba94a687-6492-4a5d-9256-40b927739ebe",
+      "name": "ee3446dd-0426-48b3-9b3a-c0e5bb440ed8",
       "source": "12",
       "destination": "41"
     }
