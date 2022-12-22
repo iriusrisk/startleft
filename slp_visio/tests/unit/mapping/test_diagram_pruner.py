@@ -31,7 +31,7 @@ class TestDiagramPruner:
         connectors = []
 
         # AND mapping labels matching all given components
-        mapping_labels = ['Component 1', 'Component 2']
+        mapping_labels = ['Component-1', 'Component-2']
 
         # WHEN calling run
         diagram = Diagram(DiagramType.VISIO, components, connectors)
@@ -49,7 +49,7 @@ class TestDiagramPruner:
         connectors = [DiagramConnector('12', '1', '2')]
 
         # AND mapping labels matching all given components
-        mapping_labels = ['Component 1', 'Component 2']
+        mapping_labels = ['Component-1', 'Component-2']
 
         # WHEN calling run
         diagram = Diagram(DiagramType.VISIO, components, connectors)
@@ -67,7 +67,7 @@ class TestDiagramPruner:
         connectors = [DiagramConnector('12', '1', '2')]
 
         # AND mapping labels with only one component mapped
-        mapping_labels = ['Component 1']
+        mapping_labels = ['Component-1']
 
         # WHEN calling run
         diagram = Diagram(DiagramType.VISIO, components, connectors)
@@ -101,10 +101,10 @@ class TestDiagramPruner:
         # AND mapping labels that does not map an intermediate component
         mapping_labels = [
             # 'Trustzone 1',
-            'Grandparent 1',
+            'Grandparent-1',
             # 'Parent 1',
-            'Grandchild 1',
-            'Child 1'
+            'Grandchild-1',
+            'Child-1'
         ]
 
         # WHEN calling run
@@ -149,10 +149,10 @@ class TestDiagramPruner:
         # AND mapping labels that does not map an intermediate component
         mapping_labels = [
             # 'Trustzone 1',
-            'Grandparent 1',
+            'Grandparent-1',
             # 'Parent 1',
-            'Grandchild 1',
-            'Child 1'
+            'Grandchild-1',
+            'Child-1'
         ]
 
         # WHEN calling run

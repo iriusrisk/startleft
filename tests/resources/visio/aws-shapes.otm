@@ -27,7 +27,7 @@
   "components": [
     {
       "id": "1",
-      "name": "Amazon EC2",
+      "name": "Amazon-EC2",
       "type": "ec2",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
@@ -35,7 +35,7 @@
     },
     {
       "id": "12",
-      "name": "Custom machine",
+      "name": "Custom-machine",
       "type": "ec2",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
@@ -43,7 +43,7 @@
     },
     {
       "id": "30",
-      "name": "Private Database",
+      "name": "Private-Database",
       "type": "rds",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
@@ -51,7 +51,7 @@
     },
     {
       "id": "35",
-      "name": "Amazon CloudWatch",
+      "name": "Amazon-CloudWatch",
       "type": "cloudwatch",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
@@ -59,7 +59,7 @@
     },
     {
       "id": "41",
-      "name": "Custom log system",
+      "name": "Custom-log-system",
       "type": "cloudwatch",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"

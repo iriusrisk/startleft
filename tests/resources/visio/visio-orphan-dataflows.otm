@@ -43,7 +43,7 @@
     },
     {
       "id": "31",
-      "name": "Amazon MQ",
+      "name": "Amazon-MQ",
       "type": "CD-MQ",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
@@ -51,7 +51,7 @@
     },
     {
       "id": "46",
-      "name": "Amazon MQ",
+      "name": "Amazon-MQ",
       "type": "CD-MQ",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
@@ -67,7 +67,7 @@
     },
     {
       "id": "99",
-      "name": "Amazon MQ",
+      "name": "Amazon-MQ",
       "type": "CD-MQ",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"

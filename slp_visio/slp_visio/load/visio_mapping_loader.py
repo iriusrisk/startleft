@@ -4,6 +4,7 @@ from deepmerge import always_merger
 
 from slp_base import MappingLoader
 from slp_base.slp_base.mapping_file_loader import MappingFileLoader
+from slp_visio.slp_visio.util.visio import normalize
 
 
 def load_mappings(mapping_file):
@@ -29,17 +30,17 @@ class VisioMappingFileLoader(MappingLoader):
         self.trustzone_mappings = self.__load_trustzone_mappings()
         self.component_mappings = self.__load_component_mappings()
 
-    def get_all_labels(self) -> [str]:
+    def get_all_labels_normalized(self) -> [str]:
         component_and_tz_mappings = self.mappings['components'] + self.mappings['trustzones']
-        return [c['label'] for c in component_and_tz_mappings]
+        return [normalize(c['label']) for c in component_and_tz_mappings]
 
     def __load_trustzone_mappings(self):
         trustzone_mappings_list = jmespath.search("trustzones", self.mappings)
-        return dict(zip([tz['label'] for tz in trustzone_mappings_list], trustzone_mappings_list))
+        return dict(zip([normalize(tz['label']) for tz in trustzone_mappings_list], trustzone_mappings_list))
 
     def __load_component_mappings(self):
         component_mappings_list = jmespath.search("components", self.mappings)
-        return dict(zip([tz['label'] for tz in component_mappings_list], component_mappings_list))
+        return dict(zip([normalize(cp['label']) for cp in component_mappings_list], component_mappings_list))
 
     def get_trustzone_mappings(self):
         return self.trustzone_mappings

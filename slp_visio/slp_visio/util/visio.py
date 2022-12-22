@@ -1,10 +1,24 @@
+import re
 from math import pi
 
 from vsdx import Shape
 
 
+def normalize(text):
+    result = text
+    if result:
+        # strip any leading or trailing \n or ' '
+        result = result.strip(' \n')
+        # replace by - any middle '\n' or ' ', single or multiple in a row
+        result = result.replace('\n', '-')
+        result = result.replace(' ', '-')
+        result = re.sub('-{2,}', '-', result)
+
+    return result
+
+
 def get_shape_text(shape: Shape) -> str:
-    result = shape.text.replace('\n', '')
+    result = normalize(shape.text)
     if not result:
         result = get_child_shapes_text(shape.child_shapes)
 
@@ -18,7 +32,7 @@ def get_master_shape_text(shape: Shape) -> str:
     if not shape.master_shape:
         return ""
 
-    result = shape.master_shape.text.replace('\n', '')
+    result = normalize(shape.master_shape.text)
     if not result:
         result = get_child_shapes_text(shape.master_shape.child_shapes)
 
@@ -28,7 +42,7 @@ def get_master_shape_text(shape: Shape) -> str:
 def get_child_shapes_text(shapes: [Shape]) -> str:
     if not shapes:
         return ""
-    return "".join(shape.text for shape in shapes).replace('\n', '')
+    return "".join(normalize(shape.text) for shape in shapes)
 
 
 def get_x_center(shape: Shape) -> float:
