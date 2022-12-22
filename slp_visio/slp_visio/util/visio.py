@@ -18,7 +18,7 @@ def normalize(text):
 
 
 def get_shape_text(shape: Shape) -> str:
-    result = normalize(shape.text)
+    result = shape.text.replace('\n', '')
     if not result:
         result = get_child_shapes_text(shape.child_shapes)
 
@@ -32,7 +32,7 @@ def get_master_shape_text(shape: Shape) -> str:
     if not shape.master_shape:
         return ""
 
-    result = normalize(shape.master_shape.text)
+    result = shape.master_shape.text.replace('\n', '')
     if not result:
         result = get_child_shapes_text(shape.master_shape.child_shapes)
 
@@ -42,7 +42,7 @@ def get_master_shape_text(shape: Shape) -> str:
 def get_child_shapes_text(shapes: [Shape]) -> str:
     if not shapes:
         return ""
-    return "".join(normalize(shape.text) for shape in shapes)
+    return "".join(shape.text.replace('\n', '') for shape in shapes)
 
 
 def get_x_center(shape: Shape) -> float:
