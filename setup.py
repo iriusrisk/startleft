@@ -1,8 +1,7 @@
 from setuptools import setup, find_packages
 
-from startleft.startleft._version.version_scheme import guess_startleft_semver
 from startleft.startleft._version.local_scheme import guess_startleft_semver_suffix
-
+from startleft.startleft._version.version_scheme import guess_startleft_semver
 
 setup(
     name='startleft',
@@ -14,7 +13,7 @@ setup(
     keywords=['threat modeling', 'cyber security', 'appsec'],
     packages=find_packages(),
     include_package_data=True,
-    python_requires='>=3.6',
+    python_requires='>=3.8',
     install_requires=[
         'pyyaml==6.0',
         'jsonschema==4.17.0',
@@ -58,8 +57,6 @@ setup(
         'Intended Audience :: Developers',
         'Topic :: Security',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9'
     ]
