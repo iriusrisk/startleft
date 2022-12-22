@@ -1,5 +1,5 @@
-from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
 from otm.otm.entity.trustzone import OtmTrustzone
+from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
 
 
 class DiagramTrustzoneMapper:
@@ -17,7 +17,6 @@ class DiagramTrustzoneMapper:
             default_trustzone_mapping = self.trustzone_mappings['Public Cloud']
             return OtmTrustzone(default_trustzone_mapping['id'], default_trustzone_mapping['type'])
 
-
     def __filter_trustzones(self) -> [DiagramComponent]:
         return list(filter(
             lambda c: c.name in self.trustzone_mappings and not c.parent,
@@ -32,5 +31,5 @@ class DiagramTrustzoneMapper:
         trustzone_mapping = self.trustzone_mappings[trustzone.name]
         return OtmTrustzone(
             trustzone_id=trustzone_mapping['id'],
-            name=trustzone_mapping['type']
+            name=trustzone.name if trustzone.name else trustzone_mapping['type']
         )

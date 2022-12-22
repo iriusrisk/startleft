@@ -2,7 +2,6 @@ from vsdx import Shape, VisioFile
 
 from slp_base import DiagramType
 from slp_visio.slp_visio.load.objects.diagram_objects import Diagram, DiagramComponentOrigin, DiagramLimits
-from slp_visio.slp_visio.load.objects.visio_diagram_factories import VisioComponentFactory, VisioConnectorFactory
 from slp_visio.slp_visio.load.parent_calculator import ParentCalculator
 from slp_visio.slp_visio.load.representation.simple_component_representer import SimpleComponentRepresenter
 from slp_visio.slp_visio.load.representation.zone_component_representer import ZoneComponentRepresenter
@@ -16,46 +15,45 @@ def load_visio_page_from_file(visio_filename: str):
         return vis.pages[0]
 
 
-def is_connector(shape: Shape) -> bool:
-    for connect in shape.connects:
-        if shape.ID == connect.connector_shape_id:
-            return True
-
-    return False
-
-
-def is_component(shape: Shape) -> bool:
-    return get_shape_text(shape) and not is_connector(shape)
-
-
-def is_boundary(shape: Shape) -> bool:
-    return shape.shape_name is not None and 'Curved panel' in shape.shape_name
-
-
 class VsdxParser:
 
-    def __init__(self, component_factory: VisioComponentFactory, connector_factory: VisioConnectorFactory):
+    def __init__(self, component_factory, connector_factory):
         self.component_factory = component_factory
         self.connector_factory = connector_factory
 
         self.__zone_representer = None
-        self.__component_representer = None
+        self._component_representer = None
 
         self.page = None
-        self.__visio_components = []
-        self.__visio_connectors = []
+        self._visio_components = []
+        self._visio_connectors = []
 
     def parse(self, visio_diagram_filename) -> Diagram:
         self.page = load_visio_page_from_file(visio_diagram_filename)
 
         diagram_limits = self.__calculate_diagram_limits()
-        self.__component_representer = SimpleComponentRepresenter()
+        self._component_representer = SimpleComponentRepresenter()
         self.__zone_representer = ZoneComponentRepresenter(diagram_limits)
 
-        self.__load_page_elements()
-        self.__calculate_parents()
+        self._load_page_elements()
+        self._calculate_parents()
 
-        return Diagram(DiagramType.VISIO, self.__visio_components, self.__visio_connectors, diagram_limits)
+        return Diagram(DiagramType.VISIO, self._visio_components, self._visio_connectors, diagram_limits)
+
+    @staticmethod
+    def _is_connector(shape: Shape) -> bool:
+        for connect in shape.connects:
+            if shape.ID == connect.connector_shape_id:
+                return True
+
+        return False
+
+    @staticmethod
+    def _is_boundary(shape: Shape) -> bool:
+        return shape.shape_name is not None and 'Curved panel' in shape.shape_name
+
+    def _is_component(self, shape: Shape) -> bool:
+        return get_shape_text(shape) and not self._is_connector(shape)
 
     def __calculate_diagram_limits(self) -> DiagramLimits:
         floor_coordinates = [None, None]
@@ -76,30 +74,30 @@ class VsdxParser:
 
         return DiagramLimits([floor_coordinates, top_coordinates])
 
-    def __load_page_elements(self):
+    def _load_page_elements(self):
         for shape in self.page.child_shapes:
-            if is_connector(shape):
-                self.__add_connector(shape)
-            elif is_boundary(shape):
-                self.__add_boundary_component(shape)
-            elif is_component(shape):
-                self.__add_simple_component(shape)
+            if self._is_connector(shape):
+                self._add_connector(shape)
+            elif self._is_boundary(shape):
+                self._add_boundary_component(shape)
+            elif self._is_component(shape):
+                self._add_simple_component(shape)
 
-    def __add_simple_component(self, component_shape: Shape):
-        self.__visio_components.append(
+    def _add_simple_component(self, component_shape: Shape):
+        self._visio_components.append(
             self.component_factory.create_component(
-                component_shape, DiagramComponentOrigin.SIMPLE_COMPONENT, self.__component_representer))
+                component_shape, DiagramComponentOrigin.SIMPLE_COMPONENT, self._component_representer))
 
-    def __add_boundary_component(self, component_shape: Shape):
-        self.__visio_components.append(
+    def _add_boundary_component(self, component_shape: Shape):
+        self._visio_components.append(
             self.component_factory.create_component(
                 component_shape, DiagramComponentOrigin.BOUNDARY, self.__zone_representer))
 
-    def __add_connector(self, connector_shape: Shape):
+    def _add_connector(self, connector_shape: Shape):
         visio_connector = self.connector_factory.create_connector(connector_shape)
         if visio_connector:
-            self.__visio_connectors.append(visio_connector)
+            self._visio_connectors.append(visio_connector)
 
-    def __calculate_parents(self):
-        for component in self.__visio_components:
-            component.parent = ParentCalculator(component).calculate_parent(self.__visio_components)
+    def _calculate_parents(self):
+        for component in self._visio_components:
+            component.parent = ParentCalculator(component).calculate_parent(self._visio_components)
