@@ -3,7 +3,7 @@ import logging
 
 import yaml
 
-from slp_base.slp_base.errors import MappingFileNotValidError, LoadingMappingFileError
+from slp_base.slp_base.errors import MappingFileNotValidError
 from slp_base.slp_base.schema import Schema
 
 logger = logging.getLogger(__name__)
@@ -102,8 +102,8 @@ def read_mapping_file(mapping_file: bytes):
     try:
         return yaml.load(mapping_file, Loader=yaml.SafeLoader)
     except Exception as e:
-        raise LoadingMappingFileError('Error loading the mapping file. The mapping files are not valid.',
-                                      e.__class__.__name__, str(e))
+        raise MappingFileNotValidError('Error reading the mapping file. The mapping files are not valid.',
+                                       e.__class__.__name__, str(e))
 
 
 def validate_mapping_file(schema: str, mapping_file: bytes):
