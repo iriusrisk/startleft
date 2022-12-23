@@ -64,11 +64,11 @@ class TestVisioProcessor:
 
         check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
 
-        check_otm_component(otm, 0, 'ec2', 'Amazon-EC2')
-        check_otm_component(otm, 1, 'ec2', 'Custom-machine')
-        check_otm_component(otm, 2, 'rds', 'Private-Database')
-        check_otm_component(otm, 3, 'cloudwatch', 'Amazon-CloudWatch')
-        check_otm_component(otm, 4, 'cloudwatch', 'Custom-log-system')
+        check_otm_component(otm, 0, 'ec2', 'Amazon EC2')
+        check_otm_component(otm, 1, 'ec2', 'Custom machine')
+        check_otm_component(otm, 2, 'rds', 'Private Database')
+        check_otm_component(otm, 3, 'cloudwatch', 'Amazon CloudWatch')
+        check_otm_component(otm, 4, 'cloudwatch', 'Custom log system')
 
         check_otm_dataflow(otm, 0, '1', '12')
         check_otm_dataflow(otm, 1, '12', '30')
@@ -92,8 +92,8 @@ class TestVisioProcessor:
 
         check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
 
-        check_otm_component(otm, 0, 'empty-component', 'Custom-enterprise-GW')
-        check_otm_component(otm, 1, 'empty-component', 'Custom-web-server')
+        check_otm_component(otm, 0, 'empty-component', 'Custom enterprise GW')
+        check_otm_component(otm, 1, 'empty-component', 'Custom web server')
 
     def test_self_pointing_connectors(self):
         visio_file = open(test_resource_paths.visio_self_pointing_connectors, "r")
@@ -112,8 +112,8 @@ class TestVisioProcessor:
 
         check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
 
-        check_otm_component(otm, 0, 'empty-component', 'Custom-enterprise-GW')
-        check_otm_component(otm, 1, 'empty-component', 'Custom-web-server')
+        check_otm_component(otm, 0, 'empty-component', 'Custom enterprise GW')
+        check_otm_component(otm, 1, 'empty-component', 'Custom web server')
 
     def test_extraneous_elements(self):
         visio_file = open(test_resource_paths.visio_extraneous_elements, "r")
@@ -133,11 +133,11 @@ class TestVisioProcessor:
         check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
         check_otm_trustzone(otm, 1, private_secured_id, private_secured_name)
 
-        check_otm_component(otm, 0, 'ec2', 'Amazon-EC2')
-        check_otm_component(otm, 1, 'ec2', 'Custom-machine')
-        check_otm_component(otm, 2, 'rds', 'Private-Database')
-        check_otm_component(otm, 3, 'cloudwatch', 'Amazon-CloudWatch')
-        check_otm_component(otm, 4, 'cloudwatch', 'Custom-log-system')
+        check_otm_component(otm, 0, 'ec2', 'Amazon EC2')
+        check_otm_component(otm, 1, 'ec2', 'Custom machine')
+        check_otm_component(otm, 2, 'rds', 'Private Database')
+        check_otm_component(otm, 3, 'cloudwatch', 'Amazon CloudWatch')
+        check_otm_component(otm, 4, 'cloudwatch', 'Custom log system')
 
         check_otm_dataflow(otm, 0, '1', '12')
         check_otm_dataflow(otm, 1, '12', '30')
@@ -162,8 +162,8 @@ class TestVisioProcessor:
         check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
         check_otm_trustzone(otm, 1, private_secured_id, private_secured_name)
 
-        check_otm_component(otm, 0, 'ec2', 'Custom-machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 1, 'rds', 'Private-Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
+        check_otm_component(otm, 0, 'ec2', 'Custom machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 1, 'rds', 'Private Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
 
         check_otm_dataflow(otm, 0, '12', '30')
 
@@ -185,8 +185,8 @@ class TestVisioProcessor:
         check_otm_trustzone(otm, 0, private_secured_id, private_secured_name)
         check_otm_trustzone(otm, 1, public_cloud_id, public_cloud_name)
 
-        check_otm_component(otm, 0, 'ec2', 'Custom-machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 1, 'rds', 'Private-Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
+        check_otm_component(otm, 0, 'ec2', 'Custom machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 1, 'rds', 'Private Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
 
         check_otm_dataflow(otm, 0, '12', '30')
 
@@ -208,8 +208,8 @@ class TestVisioProcessor:
         check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
         check_otm_trustzone(otm, 1, private_secured_id, private_secured_name)
 
-        check_otm_component(otm, 0, 'ec2', 'Custom-machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 1, 'rds', 'Private-Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
+        check_otm_component(otm, 0, 'ec2', 'Custom machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 1, 'rds', 'Private Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
 
         check_otm_dataflow(otm, 0, '12', '30')
 
@@ -232,8 +232,8 @@ class TestVisioProcessor:
         check_otm_trustzone(otm, 1, private_secured_id, private_secured_name)
         check_otm_trustzone(otm, 2, public_cloud_id, public_cloud_name)
 
-        check_otm_component(otm, 0, 'ec2', 'Custom-machine', 'f0ba7722-39b6-4c81-8290-a30a248bb8d9')
-        check_otm_component(otm, 1, 'rds', 'Private-Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
+        check_otm_component(otm, 0, 'ec2', 'Custom machine', 'f0ba7722-39b6-4c81-8290-a30a248bb8d9')
+        check_otm_component(otm, 1, 'rds', 'Private Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
 
         check_otm_dataflow(otm, 0, '12', '30')
 
@@ -256,9 +256,9 @@ class TestVisioProcessor:
         check_otm_trustzone(otm, 1, private_secured_id, private_secured_name)
         check_otm_trustzone(otm, 2, internet_id, internet_name)
 
-        check_otm_component(otm, 0, 'ec2', 'Custom-machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 1, 'rds', 'Private-Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
-        check_otm_component(otm, 2, 'ec2', 'Internet-Machine', 'f0ba7722-39b6-4c81-8290-a30a248bb8d9')
+        check_otm_component(otm, 0, 'ec2', 'Custom machine', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 1, 'rds', 'Private Database', '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d')
+        check_otm_component(otm, 2, 'ec2', 'Internet Machine', 'f0ba7722-39b6-4c81-8290-a30a248bb8d9')
 
         check_otm_dataflow(otm, 0, '12', '30')
         check_otm_dataflow(otm, 1, '65', '30')
@@ -281,11 +281,11 @@ class TestVisioProcessor:
         check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
         check_otm_trustzone(otm, 1, private_secured_id, private_secured_name)
 
-        check_otm_component(otm, 0, 'ec2', 'Amazon-EC2')
-        check_otm_component(otm, 1, 'ec2', 'Custom-machine')
-        check_otm_component(otm, 2, 'rds', 'Private-Database')
-        check_otm_component(otm, 3, 'cloudwatch', 'Amazon-CloudWatch')
-        check_otm_component(otm, 4, 'cloudwatch', 'Custom-log-system')
+        check_otm_component(otm, 0, 'ec2', 'Amazon EC2')
+        check_otm_component(otm, 1, 'ec2', 'Custom machine')
+        check_otm_component(otm, 2, 'rds', 'Private Database')
+        check_otm_component(otm, 3, 'cloudwatch', 'Amazon CloudWatch')
+        check_otm_component(otm, 4, 'cloudwatch', 'Custom log system')
 
         check_otm_dataflow(otm, 0, '1', '12')
         check_otm_dataflow(otm, 1, '12', '30')
@@ -311,10 +311,10 @@ class TestVisioProcessor:
 
         check_otm_component(otm, 0, 's3', 'Bucket')
         check_otm_component(otm, 1, 's3', 'Bucket')
-        check_otm_component(otm, 2, 'CD-MQ', 'Amazon-MQ')
-        check_otm_component(otm, 3, 'CD-MQ', 'Amazon-MQ')
+        check_otm_component(otm, 2, 'CD-MQ', 'Amazon MQ')
+        check_otm_component(otm, 3, 'CD-MQ', 'Amazon MQ')
         check_otm_component(otm, 4, 'rds', 'Database')
-        check_otm_component(otm, 5, 'CD-MQ', 'Amazon-MQ')
+        check_otm_component(otm, 5, 'CD-MQ', 'Amazon MQ')
 
         check_otm_dataflow(otm, 0, '31', '19')
         check_otm_dataflow(otm, 1, '46', '19')
@@ -339,12 +339,12 @@ class TestVisioProcessor:
 
         check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
 
-        check_otm_component(otm, 0, 'ec2', 'Amazon-EC2', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 1, 'ec2', 'Amazon-EC2', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 2, 'ec2', 'Amazon-EC2', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 3, 'vpc', 'Amazon-VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 4, 'vpc', 'Amazon-VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 5, 'vpc', 'Amazon-VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 0, 'ec2', 'Amazon EC2', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 1, 'ec2', 'Amazon EC2', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 2, 'ec2', 'Amazon EC2', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 3, 'vpc', 'Amazon VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 4, 'vpc', 'Amazon VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 5, 'vpc', 'Amazon VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
 
         check_otm_dataflow(otm, 0, '23', '1', True)
         check_otm_dataflow(otm, 1, '28', '6', True)
@@ -367,8 +367,8 @@ class TestVisioProcessor:
 
         check_otm_trustzone(otm, 0, public_cloud_id, public_cloud_name)
 
-        check_otm_component(otm, 0, 'ec2', 'Amazon-EC2', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
-        check_otm_component(otm, 9, 'vpc', 'Amazon-VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 0, 'ec2', 'Amazon EC2', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
+        check_otm_component(otm, 9, 'vpc', 'Amazon VPC', 'b61d6911-338d-46a8-9f39-8dcd24abfe91')
 
         check_otm_dataflow(otm, 0, '1', '41')
         check_otm_dataflow(otm, 1, '6', '46')

@@ -11,13 +11,13 @@ class TestVisioUtils:
     def test_visio_complex_stencil_text(self):
         with VisioFile(test_resource_paths.visio_complex_stencil_text) as vis:
             shape = vis.pages[0].child_shapes[0]
-        assert get_shape_text(shape) == "Custom-AWS-Step-Functions-workflow-name"
-        assert get_master_shape_text(shape) == "AWS-Step-Functions-workflow"
+        assert get_shape_text(shape) == "Custom AWS Step Functions workflow name"
+        assert get_master_shape_text(shape) == "AWS Step Functions workflow"
 
     def test_get_shape_text_by_text_attribute(self):
         shape = MagicMock(text=' This is the text ')
         result = get_shape_text(shape)
-        assert result == "This-is-the-text"
+        assert result == "This is the text"
 
     def test_get_shape_text_by_child_shapes_text(self):
         shape = MagicMock(
@@ -29,7 +29,7 @@ class TestVisioUtils:
             ]
         )
         result = get_shape_text(shape)
-        assert result == "This-isthe-child-text"
+        assert result == "This isthe child text"
 
     def test_get_shape_text_by_master_shape_text_attribute(self):
         shape = MagicMock(
@@ -38,7 +38,7 @@ class TestVisioUtils:
             master_shape=MagicMock(text=' This is the master shape text ')
         )
         result = get_shape_text(shape)
-        assert result == "This-is-the-master-shape-text"
+        assert result == "This is the master shape text"
 
     def test_get_shape_text_by_master_shape_child_shapes_text(self):
         shape = MagicMock(
@@ -54,7 +54,7 @@ class TestVisioUtils:
             )
         )
         result = get_shape_text(shape)
-        assert result == "This-isthe-master-shape-child-text"
+        assert result == "This isthe master shape child text"
 
     def test_get_shape_text_without_master_shape(self):
         shape = MagicMock(
@@ -83,7 +83,7 @@ class TestVisioUtils:
             )
         )
         result = get_master_shape_text(shape)
-        assert result == 'This-is-the-master-text'
+        assert result == 'This is the master text'
 
     def test_get_master_shape_text_by_child_shapes_text(self):
         shape = MagicMock(
@@ -97,4 +97,4 @@ class TestVisioUtils:
             )
         )
         result = get_master_shape_text(shape)
-        assert result == "This-isthe-master-shape-child-text"
+        assert result == "This isthe master shape child text"
