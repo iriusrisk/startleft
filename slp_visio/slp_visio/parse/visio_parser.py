@@ -29,7 +29,7 @@ class VisioParser(ProviderParser):
         return self.__build_otm(self.__map_trustzones(), self.__map_components(), self.__map_dataflows())
 
     def __prune_diagram(self):
-        DiagramPruner(self.diagram, self.mapping_loader.get_all_labels_normalized()).run()
+        DiagramPruner(self.diagram, self.mapping_loader.get_all_labels()).run()
 
     def __map_trustzones(self):
         trustzone_mapper = DiagramTrustzoneMapper(self.diagram.components, self.__trustzone_mappings)

@@ -1,7 +1,7 @@
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
 from otm.otm.entity.component import OtmComponent
 from otm.otm.entity.trustzone import OtmTrustzone
-from slp_visio.slp_visio.util.visio import normalize
+from slp_visio.slp_visio.util.visio import normalize_label
 
 
 class DiagramComponentMapper:
@@ -19,9 +19,8 @@ class DiagramComponentMapper:
         return self.__map_to_otm(self.__filter_components())
 
     def __filter_components(self) -> [DiagramComponent]:
-        return list(filter(
-            lambda c: normalize(c.name) in self.component_mappings or normalize(c.type) in self.component_mappings,
-            self.components))
+        return list(filter(lambda c: normalize_label(c.name) in self.component_mappings
+                                     or normalize_label(c.type) in self.component_mappings, self.components))
 
     def __map_to_otm(self, component_candidates: [DiagramComponent]) -> [OtmComponent]:
         return list(map(self.__build_otm_component, component_candidates))

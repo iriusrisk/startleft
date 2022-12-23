@@ -1,6 +1,6 @@
 from sl_util.sl_util.iterations_utils import IterationUtils
 from slp_visio.slp_visio.load.objects.diagram_objects import Diagram, DiagramComponent
-from slp_visio.slp_visio.util.visio import normalize
+from slp_visio.slp_visio.util.visio import normalize_label
 
 
 class DiagramPruner:
@@ -42,7 +42,7 @@ class DiagramPruner:
                 diagram_component.parent = removed_parents[diagram_component.parent.id]
 
     def __is_component_mapped(self, component: DiagramComponent):
-        return normalize(component.name) in self.mapped_labels or normalize(component.type) in self.mapped_labels
+        return normalize_label(component.name) in self.mapped_labels or normalize_label(component.type) in self.mapped_labels
 
     def __remove_component(self, component: DiagramComponent):
         self.components.remove(component)

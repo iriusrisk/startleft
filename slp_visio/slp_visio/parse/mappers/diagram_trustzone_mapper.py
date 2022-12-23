@@ -1,6 +1,5 @@
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
 from otm.otm.entity.trustzone import OtmTrustzone
-from slp_visio.slp_visio.util.visio import normalize
 
 
 class DiagramTrustzoneMapper:
