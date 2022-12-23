@@ -4,19 +4,6 @@ from math import pi
 from vsdx import Shape
 
 
-def normalize(text):
-    result = text
-    if result:
-        # strip any leading or trailing \n or ' '
-        result = result.strip(' \n')
-        # replace by - any middle '\n' or ' ', single or multiple in a row
-        result = result.replace('\n', '-')
-        result = result.replace(' ', '-')
-        result = re.sub('-{2,}', '-', result)
-
-    return result
-
-
 def get_shape_text(shape: Shape) -> str:
     result = shape.text.replace('\n', '')
     if not result:
@@ -42,7 +29,7 @@ def get_master_shape_text(shape: Shape) -> str:
 def get_child_shapes_text(shapes: [Shape]) -> str:
     if not shapes:
         return ""
-    return "".join(shape.text for shape in shapes).replace('\n', '')
+    return "".join(shape.text.replace('\n', '') for shape in shapes)
 
 
 def get_x_center(shape: Shape) -> float:
@@ -69,16 +56,16 @@ def get_height(shape: Shape) -> float:
         return float(shape.master_shape.cells['Height'].value)
 
 
+def get_normalized_angle(shape: Shape) -> float:
+    return normalize_angle(get_angle(shape))
+
+
 def get_angle(shape: Shape) -> float:
     return float(shape.cells['Angle'].value)
 
 
 def normalize_angle(angle: float) -> float:
     return angle + 2 * pi if angle < 0 else angle
-
-
-def get_normalized_angle(shape: Shape) -> float:
-    return normalize_angle(get_angle(shape))
 
 
 def get_limits(shape: Shape) -> tuple:
@@ -89,3 +76,18 @@ def get_limits(shape: Shape) -> tuple:
 
     return (center_x - (width / 2), center_y - (height / 2)), \
            (center_x + (width / 2), center_y + (height / 2)) 
+
+
+def normalize_label(label):
+    if not label:
+        return label
+
+    # strip any leading or trailing \n or ' '
+    label_normalized = label.strip(' \n')
+    # replace by - any single middle '\n' or ' '
+    label_normalized = label_normalized.replace('\n', '-')
+    label_normalized = label_normalized.replace(' ', '-')
+    # replace multiple in a row hyphens (2 or more) by a single one -
+    label_normalized = re.sub('-{2,}', '-', label_normalized)
+
+    return label_normalized
