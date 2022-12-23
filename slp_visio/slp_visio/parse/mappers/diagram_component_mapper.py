@@ -47,9 +47,8 @@ class DiagramComponentMapper:
         return otm_type or 'empty-component'
 
     def __find_mapped_component_by_label(self, label: str) -> str:
-        normalized_label = normalize_label(label)
-        return self.normalized_component_mappings[normalized_label]['type']\
-            if normalized_label in self.normalized_component_mappings else None
+        return self.normalized_component_mappings[normalize_label(label)]['type']\
+            if normalize_label(label) in self.normalized_component_mappings else None
 
     def __calculate_parent_id(self, component: DiagramComponent) -> str:
         if not component.parent:
