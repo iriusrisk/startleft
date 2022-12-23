@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 
 from vsdx import VisioFile
 
-from slp_visio.slp_visio.util.visio import get_shape_text, get_master_shape_text
+from slp_visio.slp_visio.util.visio import get_shape_text, get_master_shape_text, normalize_label
 from slp_visio.tests.resources import test_resource_paths
 
 
@@ -28,8 +28,8 @@ class TestVisioUtils:
                 MagicMock(text='the child text')
             ]
         )
-        result = get_shape_text(shape)
-        assert result == "This isthe child text"
+        result = normalize_label(get_shape_text(shape))
+        assert result == "This is the child text"
 
     def test_get_shape_text_by_master_shape_text_attribute(self):
         shape = MagicMock(
@@ -53,8 +53,8 @@ class TestVisioUtils:
                 ]
             )
         )
-        result = get_shape_text(shape)
-        assert result == "This isthe master shape child text"
+        result = normalize_label(get_shape_text(shape))
+        assert result == "This is the master shape child text"
 
     def test_get_shape_text_without_master_shape(self):
         shape = MagicMock(
@@ -96,5 +96,5 @@ class TestVisioUtils:
                 ]
             )
         )
-        result = get_master_shape_text(shape)
-        assert result == "This isthe master shape child text"
+        result = normalize_label(get_master_shape_text(shape))
+        assert result == "This is the master shape child text"

@@ -5,7 +5,7 @@ from vsdx import Shape
 
 
 def get_shape_text(shape: Shape) -> str:
-    result = shape.text.replace('\n', '')
+    result = shape.text
     if not result:
         result = get_child_shapes_text(shape.child_shapes)
 
@@ -19,7 +19,7 @@ def get_master_shape_text(shape: Shape) -> str:
     if not shape.master_shape:
         return ""
 
-    result = shape.master_shape.text.replace('\n', '')
+    result = shape.master_shape.text
     if not result:
         result = get_child_shapes_text(shape.master_shape.child_shapes)
 
@@ -29,7 +29,7 @@ def get_master_shape_text(shape: Shape) -> str:
 def get_child_shapes_text(shapes: [Shape]) -> str:
     if not shapes:
         return ""
-    return "".join(shape.text for shape in shapes).replace('\n', '')
+    return "".join(shape.text for shape in shapes)
 
 
 def get_x_center(shape: Shape) -> float:
@@ -84,10 +84,9 @@ def normalize_label(label):
 
     # strip any leading or trailing \n or ' '
     label_normalized = label.strip(' \n')
-    # replace by - any single middle '\n' or ' '
-    label_normalized = label_normalized.replace('\n', '-')
-    label_normalized = label_normalized.replace(' ', '-')
-    # replace multiple in a row hyphens (2 or more) by a single one -
-    label_normalized = re.sub('-{2,}', '-', label_normalized)
+    # replace by ' ' any single middle '\n'
+    label_normalized = label_normalized.replace('\n', ' ')
+    # replace multiple in a row ' ' (2 or more) by a single one ' '
+    label_normalized = re.sub(' {2,}', ' ', label_normalized)
 
     return label_normalized
