@@ -8,7 +8,7 @@ class DiagramPruner:
     def __init__(self, diagram: Diagram, mapped_labels: [str]):
         self.components = diagram.components
         self.connectors = diagram.connectors
-        self.mapped_labels = mapped_labels
+        self.normalized_mapped_labels = [normalize_label(mapped_label) for mapped_label in mapped_labels]
 
         self.__removed_components = []
 
@@ -42,7 +42,10 @@ class DiagramPruner:
                 diagram_component.parent = removed_parents[diagram_component.parent.id]
 
     def __is_component_mapped(self, component: DiagramComponent):
-        return normalize_label(component.name) in self.mapped_labels or normalize_label(component.type) in self.mapped_labels
+        map_by_name = normalize_label(component.name) in self.normalized_mapped_labels
+        map_by_type = normalize_label(component.type) in self.normalized_mapped_labels
+
+        return map_by_name or map_by_type
 
     def __remove_component(self, component: DiagramComponent):
         self.components.remove(component)
