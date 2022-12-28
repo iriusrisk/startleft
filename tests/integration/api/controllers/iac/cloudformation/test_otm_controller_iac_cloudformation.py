@@ -273,8 +273,7 @@ class TestOtmControllerIaCCloudformation:
     @mark.parametrize('iac_source,detail', [
         (b'', 'CloudFormation file is not valid. Invalid size'),
         (bytearray(4), 'CloudFormation file is not valid. Invalid size'),
-        (bytearray(1024 * 1024 * 20 + 1), 'CloudFormation file is not valid. Invalid size'),
-        (bytearray(1024 * 5 + 1), 'CloudFormation file is not valid. Invalid content type for iac_file')
+        (bytearray(1024 * 1024 * 20 + 1), 'CloudFormation file is not valid. Invalid size')
     ])
     @responses.activate
     def test_response_on_invalid_iac_file(self, iac_source, detail):
