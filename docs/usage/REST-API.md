@@ -34,8 +34,10 @@ For example, to launch the server with a log level of DEBUG for testing purposes
 `startleft --log-level DEBUG server`
 
 ## Endpoints
-This section describes all the available endpoints, their parameters, and example requests and responses. Refer to each 
-specific format section for example files to use.
+This section describes all the available endpoints, their parameters, and example requests and responses. 
+
+!!! tip "Example files"
+    Refer to each specific format section for example files to use.
 
 ### Health
 ```
@@ -81,9 +83,9 @@ the resulting threat modeling content.
         --header "Content-Type: multipart/form-data" \
         --header "Accept: application/json" \
         --form iac_type="CLOUDFORMATION" \
-        --form iac_file=@"./cft-1.json" \
-        --form iac_file=@"./cft-2.json" \
-        --form mapping_file=@"./cft-mapping.yaml" \
+        --form iac_file=@"./resources_cft_file.json" \
+        --form iac_file=@"./networks_cft_file.json" \
+        --form mapping_file=@"./iriusrisk-cft-mapping.yaml" \
         --form id="cft-to-otm-example" \
         --form name="CFT to OTM example"
         ```
@@ -107,6 +109,8 @@ the resulting threat modeling content.
             "dataflows": [...]
         }
         ```
+    === "Files"
+        You can download the example files from the <a href="https://github.com/iriusrisk/startleft/tree/main/examples/terraform" target="_blank">examples</a> directory.
 
 ### Diagram
 ```
@@ -130,9 +134,9 @@ format), a mapping file, and an optional custom mapping file, and generates an O
         --header "Content-Type: multipart/form-data" \
         --header "Accept: application/json" \
         --form diag_type="VISIO" \
-        --form diag_file=@"./diagram.vsdx" \
-        --form default_mapping_file=@"./base-visio-mappings.yaml" \
-        --form custom_mapping_file=@"./additional-visio-mappings.yaml" \
+        --form diag_file=@"./visio-basic-example.vsdx" \
+        --form default_mapping_file=@"./default-mapping.yaml" \
+        --form custom_mapping_file=@"./custom-mapping.yaml" \
         --form id="vsdx-to-otm-example" \
         --form name="VSDX to OTM example"
         ```
@@ -160,6 +164,40 @@ format), a mapping file, and an optional custom mapping file, and generates an O
             "dataflows": [...]
         }
         ```
+    === "visio-basic-example.vsdx"
+        You can download the `visio-basic-example.vsdx` from <a href="https://github.com/iriusrisk/startleft/tree/main/examples/visio/visio-basic-example.vsdx" target="_blank">here</a>.
+    === "default-mapping.yaml"
+        ```yaml
+        trustzones:
+          - label:  Public Cloud
+            type:   Public Cloud
+            id:     b61d6911-338d-46a8-9f39-8dcd24abfe91
+        
+        components:
+          - label:  Amazon EC2
+            type:   ec2
+        
+          - label:  Database
+            type:   rds
+        
+        dataflows: []
+        ```
+    === "custom-mapping.yaml"
+        ```yaml
+        trustzones:
+          - label:  Private Secured Cloud
+            type:   Private Secured
+            id:     2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+        
+        components:
+          - label:  My Custom Machine
+            type:   empty-component
+        
+          - label:  My Custom VPC
+            type:   empty-component
+        
+        dataflows: []
+        ```
 
 ### External threat model
 ```
@@ -183,8 +221,8 @@ file, and generates an OTM with the resulting threat modeling content.
         --header "Content-Type: multipart/form-data" \
         --header "Accept: application/json" \
         --form source_type="MTMT" \
-        --form source_file=@"./source.tm7" \
-        --form default_mapping_file=@"./mtmt-mappings.yaml" \
+        --form source_file=@"./MTMT_example.tm7" \
+        --form default_mapping_file=@"./mtmt_default_mapping_example.yaml" \
         --form id="tm7-to-otm-example" \
         --form name="TM7 to OTM example"
         ```
@@ -219,6 +257,8 @@ file, and generates an OTM with the resulting threat modeling content.
             "mitigations": [...]
         }
         ```
+    === "Files"
+        You can download the example files from the <a href="https://github.com/iriusrisk/startleft/tree/feature/OPT-479/examples/mtmt" target="_blank">examples</a> directory.
 
 ## Error management
 Refer to the [Errors Management](../development/Errors-Management.md) page to learn about the different error responses 
