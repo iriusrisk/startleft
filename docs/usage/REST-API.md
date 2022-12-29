@@ -3,10 +3,13 @@
 ## Usage
 StartLeft can also be deployed as a standalone REST server if you prefer to communicate via API.
 In this operation mode, StartLeft returns the OTM file in the HTTP response.
-If you want to launch the application as a server:
+You can launch the application as a server with the following command:
 
+`startleft server`
+
+The `--help` option provides more details about the usage:
 ```shell
-$ startleft server --help
+startleft server --help
 Usage: startleft server [OPTIONS]...
 
   Launches the REST server to generate OTMs from requests
