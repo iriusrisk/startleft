@@ -238,7 +238,7 @@
       ]
     },
     {
-      "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup",
+      "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup.0_0_0_0_0",
       "name": "0.0.0.0/0",
       "type": "generic-client",
       "parent": {
@@ -249,7 +249,7 @@
       ]
     },
     {
-      "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-outboundsecuritygroup",
+      "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-outboundsecuritygroup.255_255_255_255_32",
       "name": "255.255.255.255/32",
       "type": "generic-client",
       "parent": {
@@ -289,7 +289,7 @@
       "id": "2715d9b8-5000-464e-840d-e4188383b1a0",
       "name": "VPCssm -> VPCssmSecurityGroup",
       "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_vpc_endpoint-vpcssm",
-      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup",
+      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup.0_0_0_0_0",
       "tags": [
         "Allow all outbound traffic by default",
         "-1",
@@ -312,7 +312,7 @@
       "id": "f22f9bc8-b7f2-4037-96b5-5a2bd06a3832",
       "name": "VPCssm -> VPCssmSecurityGroup",
       "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_vpc_endpoint-vpcssm",
-      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup",
+      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup.0_0_0_0_0",
       "tags": [
         "Allow all outbound traffic by default",
         "-1",
@@ -335,7 +335,7 @@
       "id": "cea04b53-9b0e-4346-8bd7-6713fe1fbd47",
       "name": "VPCssmmessages -> VPCssmmessagesSecurityGroup",
       "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_vpc_endpoint-vpcssmmessages",
-      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup",
+      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup.0_0_0_0_0",
       "tags": [
         "Allow all outbound traffic by default",
         "-1",
@@ -358,7 +358,7 @@
       "id": "aefec2da-54d9-447e-b2fd-824a2d40228e",
       "name": "VPCssmmessages -> VPCssmmessagesSecurityGroup",
       "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_vpc_endpoint-vpcssmmessages",
-      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup",
+      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup.0_0_0_0_0",
       "tags": [
         "Allow all outbound traffic by default",
         "-1",
@@ -381,7 +381,7 @@
       "id": "8b6f7e7f-b9b5-4a2f-8cb2-e1241b98bdfa",
       "name": "VPCmonitoring -> VPCmonitoringSecurityGroup",
       "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_vpc_endpoint-vpcmonitoring",
-      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup",
+      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup.0_0_0_0_0",
       "tags": [
         "Allow all outbound traffic by default",
         "-1",
@@ -404,7 +404,7 @@
       "id": "693e6c3a-4d16-4333-b52a-2d6ac724119d",
       "name": "VPCmonitoring -> VPCmonitoringSecurityGroup",
       "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_vpc_endpoint-vpcmonitoring",
-      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup",
+      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-vpcssmsecuritygroup.0_0_0_0_0",
       "tags": [
         "Allow all outbound traffic by default",
         "-1",
@@ -415,7 +415,7 @@
       "id": "c752bf3b-4c5e-4e92-a18c-aa59add042de",
       "name": "Service -> OutboundSecurityGroup",
       "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet1.aws_ecs_service-service",
-      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-outboundsecuritygroup",
+      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-outboundsecuritygroup.255_255_255_255_32",
       "tags": [
         "Disallow all traffic",
         "icmp",
@@ -426,7 +426,7 @@
       "id": "1dd2f2fe-ed15-4210-89d0-f62365cf8137",
       "name": "Service -> OutboundSecurityGroup",
       "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc.aws_subnet-privatesubnet2.aws_ecs_service-service",
-      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-outboundsecuritygroup",
+      "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-outboundsecuritygroup.255_255_255_255_32",
       "tags": [
         "Disallow all traffic",
         "icmp",

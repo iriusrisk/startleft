@@ -35,7 +35,7 @@ class TestMapping(TestCase):
 
     def test_mapping_file_validator_invalid_schema(self):
         mapping_file_schema = 'etm_mapping_schema.json'
-        mapping_file = test_resource_paths.default_terraform_mapping
+        mapping_file = test_resource_paths.tf_mapping
 
         with open(mapping_file) as file:
             mapping_file_data = file.read()
@@ -52,3 +52,19 @@ class TestMapping(TestCase):
 
         with self.assertRaises(MappingFileNotValidError):
             MappingFileValidator(mapping_file_schema, mapping_file_data).validate()
+
+    def test_invalid_mapping_file(self):
+        # Given the iac terraform schema
+        mapping_file_schema = 'iac_tf_mapping_schema.json'
+
+        # And a malformed mapping file
+        mapping_file_data = 'CFT NOT VALID Description: \n' \
+                            '(SO0111) AWS Security Hub, v1.3.1 \n' \
+                            'AWSTemplateFormatVersion: "2010-09-09'
+
+        # And the mapping validator instance
+        validator = MultipleMappingFileValidator(mapping_file_schema, [mapping_file_data])
+
+        # When we validate the mapping file
+        # Then we get a validation error
+        self.assertRaises(MappingFileNotValidError, validator.validate)

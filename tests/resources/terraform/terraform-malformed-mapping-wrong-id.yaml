@@ -5,10 +5,6 @@ trustzones:
 components:
   - id:          {$format: "{type}.{name}.id"}
     type:        ec2
-    $source:     {$root: "resource|get(@, 'aws_instance')"}
-    name:        {$path: "keys(@)[0]"}
-    parent:      {$path: "*.subnet_id[0] | [0] | re_sub('[\\$\\{\\}]', '', @)"}
-    tags:
-      - {$path: "Type"}
+    $source:     {$type: "aws_instance"}
 
 dataflows: []

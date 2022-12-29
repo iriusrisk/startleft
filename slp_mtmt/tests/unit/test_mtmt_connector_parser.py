@@ -1,3 +1,4 @@
+from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
 from sl_util.sl_util.file_utils import get_byte_data
 from slp_mtmt.slp_mtmt.mtmt_loader import MTMTLoader
 from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMappingFileLoader
@@ -21,14 +22,25 @@ class TestMTMTConnectorParser:
 
         # AND a valid MTMT mapping file
         mapping_data = get_byte_data(SAMPLE_VALID_MAPPING_FILE)
-        mapping_loader = MTMTMappingFileLoader(mapping_data)
+        mapping_loader = MTMTMappingFileLoader([mapping_data])
+        mapping_loader.load()
         mtmt_mapping = mapping_loader.get_mtmt_mapping()
 
+        # AND a diagram representation
+        diagram_representation = DiagramRepresentation(id_='project-test-diagram',
+                              name='Project Test Diagram Representation',
+                              type_=str(RepresentationType.DIAGRAM.value),
+                              size={'width': 2000, 'height': 2000}
+                              )
+
         # AND the trustzone parser
-        trustzone_parser = MTMTTrustzoneParser(mtmt, mtmt_mapping)
+        trustzone_parser = MTMTTrustzoneParser(mtmt, mtmt_mapping, diagram_representation.id)
+
+        # AND the OTM trustzones
+        trustzones = trustzone_parser.parse()
 
         # AND the component parser
-        component_parser = MTMTComponentParser(mtmt, mtmt_mapping, trustzone_parser)
+        component_parser = MTMTComponentParser(mtmt, mtmt_mapping, trustzone_parser, diagram_representation.id)
 
         # AND the connector parser
         parser = MTMTConnectorParser(mtmt, component_parser)

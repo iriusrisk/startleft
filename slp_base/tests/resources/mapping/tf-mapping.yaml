@@ -1,0 +1,23 @@
+trustzones:
+  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+
+# The order of the components is important because parent components must be defined before child components
+components:
+  - id:          {$format: "{name}"}
+    type:        CD-ACM
+    name:        {$numberOfSources: {oneSource: {$path: "keys(@)[0]"}, multipleSource: {$format: "CD-ACM (grouped)"}}}
+    $source:     {$singleton: {$root: "resource|get(@, 'aws_acm_certificate')"}}
+    parent:      b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "{_key} ({Type})"}}}
+
+dataflows:
+  #### Security Groups ####
+  #### Type 1 #### - Resource to Security Group
+  - id:           {$format: "{name}"}
+    name:         {$format: "{_key}"}
+    $source:      {$root: "resource|squash_terraform(@)[?contains(keys(Properties), 'security_group_ids')]"}
+    source:       {$path: "_key"}
+    destination:  {$hub: {$path: "Properties.security_group_ids"}}
+    tags:

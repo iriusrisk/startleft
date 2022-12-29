@@ -35,12 +35,10 @@ terraform_orphan_component = path + '/tf/terraform_orphan_component.tf'
 terraform_main_referenced_variables = path + '/tf/terraform_main_referenced_variables.tf'
 terraform_vars_referenced_variables = path + '/tf/terraform_vars_referenced_variables.tf'
 terraform_variables_file_referenced_variables = path + '/tf/terraform_variables_files_referenced_variables.tfvars'
+terraform_components_from_same_resource = path + '/tf/terraform_components_from_same_resource.tf'
 
 # mapping
-default_terraform_mapping = path + '/mapping/default-terraform-mapping.yaml'
-default_terraform_aws_mapping = path + '/mapping/aws_terraform_mapping.yaml'
 terraform_mapping_aws_component_without_parent = path + '/mapping/terraform_mapping_component_without_parent.yaml'
-terraform_malformed_mapping_wrong_id = path + '/mapping/terraform-malformed-mapping-wrong-id.yaml'
 terraform_mapping_specific_functions = path + '/mapping/terraform_mapping_specific_functions.yaml'
 terraform_mapping_modules = path + '/mapping/terraform_mapping_modules.yaml'
 terraform_mapping_extra_modules = path + '/mapping/terraform_mapping_extra_modules.yaml'

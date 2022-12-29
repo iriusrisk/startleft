@@ -1,19 +1,19 @@
-from otm.otm.otm import Component
+from otm.otm.entity.component import OtmComponent
 from slp_cft.slp_cft.parse.mapping.cft_path_ids_calculator import CloudformationPathIdsCalculator
 
 
-def create_otm_component(component_data: {}) -> Component:
-    return Component(**component_data)
+def create_otm_component(component_data: {}) -> OtmComponent:
+    return OtmComponent(**component_data)
 
 
-def to_otm_components(components_data: []) -> [Component]:
+def to_otm_components(components_data: []) -> [OtmComponent]:
     return [create_otm_component(data) for data in components_data]
 
 
 SGS_COMPONENTS = to_otm_components([
     {
         'name': 'PrivateSubnet1',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'source': {
             'Type': 'AWS::EC2::Subnet',
             'Properties': {
@@ -30,12 +30,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::EC2::Subnet'
         ],
-        'id': '04fcb189-09f9-41d2-88f2-20c636b0adfc',
+        'component_id': '04fcb189-09f9-41d2-88f2-20c636b0adfc',
         'parent_type': 'component'
     },
     {
         'name': 'PrivateSubnet2',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'source': {
             'Type': 'AWS::EC2::Subnet',
             'Properties': {
@@ -52,12 +52,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::EC2::Subnet'
         ],
-        'id': '8f2c8747-641a-4a7e-8240-83e8e59d1ea7',
+        'component_id': '8f2c8747-641a-4a7e-8240-83e8e59d1ea7',
         'parent_type': 'component'
     },
     {
         'name': 'PublicSubnet1',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'source': {
             'Type': 'AWS::EC2::Subnet',
             'Properties': {
@@ -74,12 +74,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::EC2::Subnet'
         ],
-        'id': 'b4085343-2934-4c4d-8148-67c1bf4cc070',
+        'component_id': 'b4085343-2934-4c4d-8148-67c1bf4cc070',
         'parent_type': 'component'
     },
     {
         'name': 'PublicSubnet2',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'source': {
             'Type': 'AWS::EC2::Subnet',
             'Properties': {
@@ -96,12 +96,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::EC2::Subnet'
         ],
-        'id': 'f1d093a9-b0e7-4548-8e2f-b6d0f4a3fa26',
+        'component_id': 'f1d093a9-b0e7-4548-8e2f-b6d0f4a3fa26',
         'parent_type': 'component'
     },
     {
         'name': 'VPCssm',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'source': {
             'Type': 'AWS::EC2::VPCEndpoint',
             'Properties': {
@@ -135,12 +135,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::EC2::VPCEndpoint'
         ],
-        'id': '18c59d7c-acb7-4210-b060-4074a0ab012e',
+        'component_id': '18c59d7c-acb7-4210-b060-4074a0ab012e',
         'parent_type': 'component'
     },
     {
         'name': 'VPCssm',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'source': {
             'Type': 'AWS::EC2::VPCEndpoint',
             'Properties': {
@@ -174,12 +174,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::EC2::VPCEndpoint'
         ],
-        'id': 'eed89218-8388-412f-b357-b4240c0e57fe',
+        'component_id': 'eed89218-8388-412f-b357-b4240c0e57fe',
         'parent_type': 'component'
     },
     {
         'name': 'VPCssmmessages',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'source': {
             'Type': 'AWS::EC2::VPCEndpoint',
             'Properties': {
@@ -213,12 +213,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::EC2::VPCEndpoint'
         ],
-        'id': 'ee00a4cf-39c2-4459-8c72-345d89320634',
+        'component_id': 'ee00a4cf-39c2-4459-8c72-345d89320634',
         'parent_type': 'component'
     },
     {
         'name': 'VPCssmmessages',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'source': {
             'Type': 'AWS::EC2::VPCEndpoint',
             'Properties': {
@@ -252,12 +252,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::EC2::VPCEndpoint'
         ],
-        'id': '41aaf28a-2b7e-4c73-b6e7-c347f2006fdd',
+        'component_id': '41aaf28a-2b7e-4c73-b6e7-c347f2006fdd',
         'parent_type': 'component'
     },
     {
         'name': 'VPCmonitoring',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'source': {
             'Type': 'AWS::EC2::VPCEndpoint',
             'Properties': {
@@ -290,12 +290,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::EC2::VPCEndpoint'
         ],
-        'id': 'bda1120b-1e0e-430a-97f2-480d8953a3d7',
+        'component_id': 'bda1120b-1e0e-430a-97f2-480d8953a3d7',
         'parent_type': 'component'
     },
     {
         'name': 'VPCmonitoring',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'source': {
             'Type': 'AWS::EC2::VPCEndpoint',
             'Properties': {
@@ -328,12 +328,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::EC2::VPCEndpoint'
         ],
-        'id': 'cec47d5b-87ff-4a27-8146-53898c5a3c63',
+        'component_id': 'cec47d5b-87ff-4a27-8146-53898c5a3c63',
         'parent_type': 'component'
     },
     {
         'name': 'Service',
-        'type': 'elastic-container-service',
+        'component_type': 'elastic-container-service',
         'source': {
             'Type': 'AWS::ECS::Service',
             'Properties': {
@@ -368,12 +368,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::ECS::Service'
         ],
-        'id': '1120e381-0429-4a56-bfba-0513ba1f5585',
+        'component_id': '1120e381-0429-4a56-bfba-0513ba1f5585',
         'parent_type': 'component'
     },
     {
         'name': 'Service',
-        'type': 'elastic-container-service',
+        'component_type': 'elastic-container-service',
         'source': {
             'Type': 'AWS::ECS::Service',
             'Properties': {
@@ -408,12 +408,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::ECS::Service'
         ],
-        'id': 'a54c938b-8e8c-4e27-90e8-7aae57090c25',
+        'component_id': 'a54c938b-8e8c-4e27-90e8-7aae57090c25',
         'parent_type': 'component'
     },
     {
         'name': 'ServiceTaskDefinition',
-        'type': 'docker-container',
+        'component_type': 'docker-container',
         'source': {
             'Type': 'AWS::ECS::TaskDefinition',
             'Properties': {
@@ -481,12 +481,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::ECS::TaskDefinition'
         ],
-        'id': '3992e9e8-cecb-4894-9e12-c4fa235ac531',
+        'component_id': '3992e9e8-cecb-4894-9e12-c4fa235ac531',
         'parent_type': 'component'
     },
     {
         'name': 'ServiceTaskDefinition',
-        'type': 'docker-container',
+        'component_type': 'docker-container',
         'source': {
             'Type': 'AWS::ECS::TaskDefinition',
             'Properties': {
@@ -554,12 +554,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::ECS::TaskDefinition'
         ],
-        'id': '07c34f7e-ee28-4c3b-9a20-2f0c4875520c',
+        'component_id': '07c34f7e-ee28-4c3b-9a20-2f0c4875520c',
         'parent_type': 'component'
     },
     {
         'name': 'ServiceLB',
-        'type': 'load-balancer',
+        'component_type': 'load-balancer',
         'source': {
             'Type': 'AWS::ElasticLoadBalancingV2::LoadBalancer',
             'Properties': {
@@ -594,12 +594,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::ElasticLoadBalancingV2::LoadBalancer'
         ],
-        'id': 'd7aad912-6382-4f68-a411-2318d5d1325a',
+        'component_id': 'd7aad912-6382-4f68-a411-2318d5d1325a',
         'parent_type': 'component'
     },
     {
         'name': 'ServiceLB',
-        'type': 'load-balancer',
+        'component_type': 'load-balancer',
         'source': {
             'Type': 'AWS::ElasticLoadBalancingV2::LoadBalancer',
             'Properties': {
@@ -634,12 +634,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::ElasticLoadBalancingV2::LoadBalancer'
         ],
-        'id': '190e97cd-3c65-4c49-a420-bf142d323e3d',
+        'component_id': '190e97cd-3c65-4c49-a420-bf142d323e3d',
         'parent_type': 'component'
     },
     {
         'name': 'Canary',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'source': {
             'Type': 'AWS::Synthetics::Canary',
             'Properties': {
@@ -668,12 +668,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::Synthetics::Canary'
         ],
-        'id': 'e82dbb96-3a7e-46c9-afae-f259336a8379',
+        'component_id': 'e82dbb96-3a7e-46c9-afae-f259336a8379',
         'parent_type': 'component'
     },
     {
         'name': 'Canary',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'source': {
             'Type': 'AWS::Synthetics::Canary',
             'Properties': {
@@ -702,12 +702,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::Synthetics::Canary'
         ],
-        'id': '7df85b9d-1e35-4551-a157-b91fe032a182',
+        'component_id': '7df85b9d-1e35-4551-a157-b91fe032a182',
         'parent_type': 'component'
     },
     {
         'name': '0.0.0.0/0',
-        'type': 'generic-client',
+        'component_type': 'generic-client',
         'source': {
             'Type': 'AWS::EC2::SecurityGroup',
             'Properties': {
@@ -763,12 +763,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'Outbound connection destination IP'
         ],
-        'id': '11dd4b56-7033-4a94-875a-4180a0164865',
+        'component_id': '11dd4b56-7033-4a94-875a-4180a0164865',
         'parent_type': 'trustZone'
     },
     {
         'name': '255.255.255.255/32',
-        'type': 'generic-client',
+        'component_type': 'generic-client',
         'source': {
             'Type': 'AWS::EC2::SecurityGroup',
             'Properties': {
@@ -792,12 +792,12 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'Outbound connection destination IP'
         ],
-        'id': 'a0985c4f-4ce3-4cf5-8ac2-5da8027fc2c2',
+        'component_id': 'a0985c4f-4ce3-4cf5-8ac2-5da8027fc2c2',
         'parent_type': 'trustZone'
     },
     {
         'name': 'CustomVPC',
-        'type': 'vpc',
+        'component_type': 'vpc',
         'source': {
             'Type': 'AWS::EC2::VPC',
             'Properties': {
@@ -809,7 +809,7 @@ SGS_COMPONENTS = to_otm_components([
         'tags': [
             'AWS::EC2::VPC'
         ],
-        'id': '31401380-c6c5-41ad-a0d1-65d6ff93ebd9',
+        'component_id': '31401380-c6c5-41ad-a0d1-65d6ff93ebd9',
         'parent_type': 'trustZone'
     }
 ])
@@ -867,6 +867,6 @@ class TestCloudformationPathIdsCalculator:
         assert path_ids[
                    '7df85b9d-1e35-4551-a157-b91fe032a182'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet2.canary'
         assert path_ids[
-                   '11dd4b56-7033-4a94-875a-4180a0164865'] == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup'
+                   '11dd4b56-7033-4a94-875a-4180a0164865'] == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup.0_0_0_0_0'
         assert path_ids[
-                   'a0985c4f-4ce3-4cf5-8ac2-5da8027fc2c2'] == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.outboundsecuritygroup'
+                   'a0985c4f-4ce3-4cf5-8ac2-5da8027fc2c2'] == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9.outboundsecuritygroup.255_255_255_255_32'

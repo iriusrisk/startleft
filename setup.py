@@ -1,7 +1,10 @@
 from setuptools import setup, find_packages
 
+from startleft.startleft._version.local_scheme import guess_startleft_semver_suffix
+from startleft.startleft._version.version_scheme import guess_startleft_semver
+
 setup(
-    name='IriusRisk StartLeft',
+    name='startleft',
     description='Parse Infrastructure as Code files to the Open Threat Model format and upload them to IriusRisk',
     license='Apache2',
     author='Fraser Scott',
@@ -10,7 +13,7 @@ setup(
     keywords=['threat modeling', 'cyber security', 'appsec'],
     packages=find_packages(),
     include_package_data=True,
-    python_requires='>=3.6',
+    python_requires='>=3.8',
     install_requires=[
         'pyyaml==6.0',
         'jsonschema==4.17.0',
@@ -28,7 +31,12 @@ setup(
         'vsdx==0.5.11',
         'python-magic==0.4.27'
     ],
-    use_scm_version=True,
+    use_scm_version={
+        'write_to': 'startleft/version.py',
+        'version_scheme': guess_startleft_semver,
+        'local_scheme': guess_startleft_semver_suffix,
+        'git_describe_command': 'git describe --tags --long --match *[0-9]*'
+    },
     extras_require={
         "setup": [
             "pytest-runner==6.0.0",
@@ -49,8 +57,6 @@ setup(
         'Intended Audience :: Developers',
         'Topic :: Security',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9'
     ]

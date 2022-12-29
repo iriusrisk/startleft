@@ -1,45 +1,18 @@
 trustzones:
   - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
     name: Public Cloud
-
-  # SG MAPPING (AUXILIARY SG)
-  # type 4
-  - id: f0ba7722-39b6-4c81-8290-a30a248bb8d9
-    name: Internet
-    $source: { $singleton: { $root: "resource|squash_terraform(@)[?Type=='aws_security_group' && Properties.egress[0].cidr_blocks]" } }
+    $default: true
 
 # The order of the components is important because parent components must be defined before child components
 components:
-  - id: { $format: "{name}" }
-    type: cloudwatch
-    name: { $numberOfSources: { oneSource: { $path: "keys(@)[0]" }, multipleSource: { $format: "cloudwatch (grouped)" } } }
-    $source: { $singleton: { $root: "resource|get(@, 'aws_cloudwatch_metric_alarm')" } }
-    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - { $numberOfSources: { oneSource: { $path: "Type" }, multipleSource: { $format: "{_key} ({Type})" } } }
 
-  - id: { $format: "{name}" }
-    type: rds
-    name: { $path: "_key" }
-    $source: { $root: "module|get_module_terraform(@, 'terraform-aws-modules/rds/aws')" }
-    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - { $path: "Type" }
+  - type: rds
+    $source: {$module: "terraform-aws-modules/rds/aws"}
 
-  - id: { $format: "{name}" }
-    type: vpc
-    name: { $path: "_key" }
-    $source: { $root: "module|get_module_terraform(@, 'terraform-aws-modules/vpc/aws')" }
-    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - { $path: "Type" }
+  - type: vpc
+    $source: {$module: "terraform-aws-modules/vpc/aws"}
 
-  - id: { $format: "{name}" }
-    type: load-balancer
-    name: { $path: "_key" }
-    $source: { $root: "module|get_module_terraform(@, 'terraform-aws-modules/alb/aws')" }
-    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
-    tags:
-      - { $path: "Type" }
+  - type: load-balancer
+    $source: {$module: "terraform-aws-modules/alb/aws"}
 
 dataflows: [ ]

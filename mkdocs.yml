@@ -1,0 +1,92 @@
+site_name: StartLeft
+site_url: https://iriusrisk.github.io/startleft/
+repo_url: https://github.com/iriusrisk/startleft
+edit_uri: ""
+nav:
+  - Home: index.md
+  - Open Threat Model (OTM): Open-Threat-Model-(OTM).md
+  - Quickstart Guide for Beginners: Quickstart-Guide-for-Beginners.md
+  - About this documentation: About.md
+  - Versioning: Versioning.md
+  - Usage:
+      - Command Line Interface (CLI): usage/Command-Line-Interface.md
+      - REST API: usage/REST-API.md
+  - Guide for Integrations:
+      - Quickstart Guide for Integrations: integration/Quickstart-Guide-for-Integrations.md
+  - Guide for Developers:
+      - Quickstart Guide for Developers: development/Quickstart-Guide-for-Developers.md
+      - Create a new SLP: development/Create-a-new-StartLeft-Processor.md
+      - Architecture: development/Architecture.md
+      - Errors management: development/Errors-Management.md
+      - Run Configurations: development/Run-Configurations.md
+  - StartLeft Processors (SLP):
+      - Microsoft Threat Modelling Tool (MTMT):
+          - MTMT Quickstart: startleft-processors/external-threat-model/mtmt/MTMT-Quickstart.md
+          - MTMT Mapping: startleft-processors/external-threat-model/mtmt/MTMT-Mapping.md
+      - CloudFormation Template:
+          - CloudFormation Quickstart: startleft-processors/iac/cft/CloudFormation-Quickstart.md
+          - CloudFormation Mapping: startleft-processors/iac/cft/CloudFormation-Mapping.md
+          - CloudFormation Examples: startleft-processors/iac/cft/CloudFormation-Examples.md
+      - Terraform:
+          - Terraform Quickstart: startleft-processors/iac/tf/Terraform-Quickstart.md
+          - Terraform Mapping:
+            - How To Create a Basic Mapping File: startleft-processors/iac/tf/Terraform-how-to-create-a-basic-mapping-file.md
+            - How Mapping File works: startleft-processors/iac/tf/Terraform-how-mapping-file-works.md
+            - How Dataflow Mapping File works: startleft-processors/iac/tf/Terraform-how-dataflow-mapping-works.md
+            - Domain-Specific Language: startleft-processors/iac/tf/Terraform-domain-specific-language.md
+            - Additional JMESPath functions: startleft-processors/iac/tf/Terraform-additional-jmespath-functions.md
+          - Terraform Examples: startleft-processors/iac/tf/Terraform-Examples.md
+      - Visio:
+          - Visio Quickstart: startleft-processors/diagram/Visio-Quickstart.md
+          - Visio Mapping: startleft-processors/diagram/Visio-Mapping.md
+          - Visio TrustZones Mapping: startleft-processors/diagram/Visio-TrustZones-Mapping.md
+  - Troubleshooting: Troubleshooting.md
+
+theme:
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - search.suggest
+    - search.highlight
+    - content.code.annotate
+    - content.tabs.link
+plugins:
+  - search
+extra:
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
