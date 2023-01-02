@@ -12,6 +12,25 @@ some commands, set up the REST API and, in summary, familiarize yourself with th
 *During this guide some files will be downloaded or generated, so you can optionally create a folder to keep them
 organized.*
 
+??? "Extra requisites for Windows/OSX users"
+
+    StartLeft uses <a href="https://github.com/ahupp/python-magic" target="_blank">python-magic</a> 
+    interface to the libmagic file type identification library for validating file types.
+    
+    <ins>Prerequisites for Windows</ins>
+
+     *"You'll need DLLs for libmagic usage on Windows. @julian-r maintains a pypi package with the DLLs, you can fetch it with:"*
+    ```shell
+    pip install python-magic-bin
+    ```
+    
+    <ins>Prerequisites for OSX</ins>
+
+     * When using Homebrew: `brew install libmagic`
+     * When using macports: `port install file`
+
+
+
 ## Install StartLeft
 
 ---
