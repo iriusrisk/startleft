@@ -175,14 +175,14 @@ startleft server -p 8080
 
 Then, execute the following command to retrieve the OTM file with your EC2 component:
 ```shell
-curl --location --request POST 'localhost:5000/api/v1/startleft/iac' \
---header 'Content-Type: multipart/form-data' \
---header 'Accept: application/json' \
---form 'iac_type="CLOUDFORMATION"' \
---form 'iac_file=@"./ec2-cft.json"' \
---form 'mapping_file=@"./ec2-mapping.yaml"' \
---form 'id="my-ec2-project"' \
---form 'name="My EC2 project"'
+curl --location --request POST localhost:5000/api/v1/startleft/iac \
+--header "Content-Type: multipart/form-data" \
+--header "Accept: application/json" \
+--form iac_type="CLOUDFORMATION" \
+--form iac_file=@"./ec2-cft.json" \
+--form mapping_file=@"./ec2-mapping.yaml" \
+--form id="my-ec2-project" \
+--form name="My EC2 project"
 ```
 
 ## More examples

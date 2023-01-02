@@ -41,6 +41,7 @@ nav:
           - Visio Mapping: startleft-processors/diagram/Visio-Mapping.md
           - Visio TrustZones Mapping: startleft-processors/diagram/Visio-TrustZones-Mapping.md
           - Visio Representations: startleft-processors/diagram/Visio-Representations.md
+  - Troubleshooting: Troubleshooting.md
 
 theme:
   name: material
