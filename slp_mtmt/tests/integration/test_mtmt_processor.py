@@ -53,15 +53,15 @@ class TestMtmtProcessor:
 
         # AND the representations info is also right
         assert len(otm.representations) == 2
-        diag_representation: DiagramRepresentation = otm.representations[0]
+        tm_representation: Representation = otm.representations[0]
+        assert tm_representation.id == 'Microsoft Threat Modeling Tool'
+        assert tm_representation.name == 'Microsoft Threat Modeling Tool'
+        assert tm_representation.type == 'threat-model'
+        diag_representation: DiagramRepresentation = otm.representations[1]
         assert diag_representation.id == 'example-project-diagram'
         assert diag_representation.name == 'example-project Diagram Representation'
         assert diag_representation.type == 'diagram'
         assert diag_representation.size == {'width': 2000, 'height': 2000}
-        tm_representation: Representation = otm.representations[1]
-        assert tm_representation.id == 'Microsoft Threat Modeling Tool'
-        assert tm_representation.name == 'Microsoft Threat Modeling Tool'
-        assert tm_representation.type == 'threat-model'
 
         # AND the info inside trustzones is also right
         for trustzone in otm.trustzones:
@@ -179,15 +179,15 @@ class TestMtmtProcessor:
 
         # AND the representations info is also right
         assert len(otm.representations) == 2
-        diag_representation: DiagramRepresentation = otm.representations[0]
+        tm_representation: Representation = otm.representations[0]
+        assert tm_representation.id == 'Microsoft Threat Modeling Tool'
+        assert tm_representation.name == 'Microsoft Threat Modeling Tool'
+        assert tm_representation.type == 'threat-model'
+        diag_representation: DiagramRepresentation = otm.representations[1]
         assert diag_representation.id == 'example-project-diagram'
         assert diag_representation.name == 'example-project Diagram Representation'
         assert diag_representation.type == 'diagram'
         assert diag_representation.size == {'width': 2000, 'height': 2000}
-        tm_representation: Representation = otm.representations[1]
-        assert tm_representation.id == 'Microsoft Threat Modeling Tool'
-        assert tm_representation.name == 'Microsoft Threat Modeling Tool'
-        assert tm_representation.type == 'threat-model'
 
         # AND we check the trust zone without representations
         assert otm.trustzones[0].representations is None
