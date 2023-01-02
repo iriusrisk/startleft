@@ -1,7 +1,7 @@
 import abc
 
 from otm.otm.entity.otm import Otm
-from otm_representations_pruner import OtmRepresentationsPruner
+from slp_base.slp_base.otm_representations_pruner import OtmRepresentationsPruner
 from slp_base.slp_base.mapping import MappingLoader, MappingValidator
 from slp_base.slp_base.otm_validator import OtmValidator
 from slp_base.slp_base.provider_loader import ProviderLoader
