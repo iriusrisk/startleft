@@ -6,7 +6,7 @@ from slp_visio.slp_visio.load.vsdx_parser import VsdxParser
 LUCID_LINE = 'com.lucidchart.Line'
 
 
-class VsdxLucidParser(VsdxParser):
+class LucidVsdxParser(VsdxParser):
 
     @staticmethod
     def _is_connector(shape: Shape) -> bool:
