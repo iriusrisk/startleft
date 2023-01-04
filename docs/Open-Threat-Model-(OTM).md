@@ -79,7 +79,7 @@ The OTM object `schema` is as follows:
 | threats          | <a href= "https://github.com/iriusrisk/OpenThreatModel#threats-object" target="_blank">Threats object</a>                 | Threats are the undesirable outcomes that can occur in our system and that we want to prevent.                                                                                             |
 | mitigations      | <a href= "https://github.com/iriusrisk/OpenThreatModel#mitigations-object" target="_blank">Mitigations object</a>         | Mitigations are the actions that we can take (or controls that we can put in place) in order to prevent a threat from taking place.                                                        |
 
-### Open Threat Model Examples
+### Open Threat Model examples
 
 Some examples of `otm` files are shown below, along with the project that each one generates.
 
@@ -2336,9 +2336,21 @@ Some examples of `otm` files are shown below, along with the project that each o
     === "Generated project"
         ![img/otm-mtmt-project.jpeg](img/otm-mtmt-project.jpeg)
 
-### Open Threat Model parser
+### Open Threat Model parsing 
+#### How to create a new StartLeft Processor
+It is possible to use StartLeft for parsing different formats to OTM, or even creating a new StartLeft Processor for
+formats that are not currently supported.
 
-Once the `OTM` is defined, you can develop your own parser to work with it. An example of how to create it is detailed in the following link:
+There is an in depth tutorial explaining what is a StartLeft Processor and how to create one from scratch in the following link:
 
-[https://www.iriusrisk.com/resources-blog/how-to-create-an-open-threat-model-parser](https://www.iriusrisk.com/resources-blog/how-to-create-an-open-threat-model-parser)
+[Create a new StartLeft Processor](./development/Create-a-new-StartLeft-Processor.md)
+
+Creating a StartLeft Processor allows you to focus on the parsing logic, while StartLeft takes care of building and validating 
+the OTM and exposing an API or CLI for ease of operation.
+
+!!! note "How to create an OTM Parser without using StartLeft"
+    Although creating a new StartLeft Processor is the preferred method of supporting new formats, it is also possible to develop your own OTM parser.
+    An example of how to create it is detailed in the following link:
+
+    [https://www.iriusrisk.com/resources-blog/how-to-create-an-open-threat-model-parser](https://www.iriusrisk.com/resources-blog/how-to-create-an-open-threat-model-parser)
 
