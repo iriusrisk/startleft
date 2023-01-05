@@ -13,7 +13,7 @@
     ],
     "trustZones": [
         {
-            "id": "public-cloud",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
             "name": "Public Cloud",
             "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
             "risk": {
@@ -21,7 +21,7 @@
             }
         },
         {
-            "id": "internet",
+            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
             "name": "Internet",
             "type": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
             "risk": {
@@ -31,66 +31,66 @@
     ],
     "components": [
         {
-            "id": "internet.aws_security_group-alb",
+            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-alb",
             "name": "0.0.0.0/0",
             "type": "generic-client",
             "parent": {
-                "trustZone": "internet"
+                "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
             },
             "tags": [
                 "Outbound connection destination IP"
             ]
         },
         {
-            "id": "internet.aws_security_group-webserver",
+            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-webserver",
             "name": "52.30.97.44/32",
             "type": "generic-client",
             "parent": {
-                "trustZone": "internet"
+                "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
             },
             "tags": [
                 "Inbound connection source IP"
             ]
         },
         {
-            "id": "public-cloud.db",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.db",
             "name": "db",
             "type": "rds",
             "parent": {
-                "trustZone": "public-cloud"
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
             },
             "tags": [
                 "terraform-aws-modules/rds/aws"
             ]
         },
         {
-            "id": "public-cloud.vpc",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.vpc",
             "name": "vpc",
             "type": "vpc",
             "parent": {
-                "trustZone": "public-cloud"
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
             },
             "tags": [
                 "terraform-aws-modules/vpc/aws"
             ]
         },
         {
-            "id": "public-cloud.alb",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.alb",
             "name": "alb",
             "type": "load-balancer",
             "parent": {
-                "trustZone": "public-cloud"
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
             },
             "tags": [
                 "terraform-aws-modules/alb/aws"
             ]
         },
         {
-            "id": "public-cloud.aws_cloudwatch_metric_alarm-cloudwatch_alarm_up",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_cloudwatch_metric_alarm-cloudwatch_alarm_up",
             "name": "cloudwatch (grouped)",
             "type": "cloudwatch",
             "parent": {
-                "trustZone": "public-cloud"
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
             },
             "tags": [
                 "cloudwatch_alarm_up (aws_cloudwatch_metric_alarm)",

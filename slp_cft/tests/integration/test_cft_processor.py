@@ -600,9 +600,9 @@ class TestCloudformationProcessor:
 
         # AND both trustzones have the same type, but different ID
         trustzone1 = list(filter(lambda obj: obj.id == 'public-cloud-01'
-                                       and obj.type == 'b61d6911-338d-46a8-9f39-8dcd24abfe91', otm.trustzones))
+                                             and obj.type == 'b61d6911-338d-46a8-9f39-8dcd24abfe91', otm.trustzones))
         trustzone2 = list(filter(lambda obj: obj.id == 'public-cloud-02'
-                                       and obj.type == 'b61d6911-338d-46a8-9f39-8dcd24abfe91', otm.trustzones))
+                                             and obj.type == 'b61d6911-338d-46a8-9f39-8dcd24abfe91', otm.trustzones))
         assert trustzone1[0].type == trustzone2[0].type
 
         # AND each component has the correct trustzone

@@ -13,7 +13,7 @@
   ],
   "trustZones": [
     {
-      "id": "public-cloud",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "name": "Public Cloud",
       "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "risk": {
@@ -23,11 +23,11 @@
   ],
   "components": [
     {
-      "id": "public-cloud.aws_control-control_component",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_control-control_component",
       "name": "Control_component",
       "type": "aws_control",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_control"

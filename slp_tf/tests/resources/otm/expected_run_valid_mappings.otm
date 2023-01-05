@@ -13,7 +13,7 @@
   ],
   "trustZones": [
     {
-      "id": "public-cloud",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "name": "Public Cloud",
       "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "risk": {
@@ -23,44 +23,44 @@
   ],
   "components": [
     {
-      "id": "public-cloud.aws_vpc-vpc",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-vpc",
       "name": "vpc",
       "type": "vpc",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_vpc"
       ]
     },
     {
-      "id": "public-cloud.aws_instance-inst",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_instance-inst",
       "name": "inst",
       "type": "ec2",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_instance"
       ]
     },
     {
-      "id": "public-cloud.aws_vpc-vpc.aws_subnet-subnet_1",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-vpc.aws_subnet-subnet_1",
       "name": "subnet_1",
       "type": "empty-component",
       "parent": {
-        "component": "public-cloud.aws_vpc-vpc"
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-vpc"
       },
       "tags": [
         "aws_subnet"
       ]
     },
     {
-      "id": "public-cloud.aws_vpc-vpc.aws_subnet-subnet_2",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-vpc.aws_subnet-subnet_2",
       "name": "subnet_2",
       "type": "empty-component",
       "parent": {
-        "component": "public-cloud.aws_vpc-vpc"
+        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-vpc"
       },
       "tags": [
         "aws_subnet"
