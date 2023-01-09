@@ -13,10 +13,11 @@ from startleft.startleft.api.controllers.health import health_controller
 from startleft.startleft.api.controllers.iac import iac_create_otm_controller
 from startleft.startleft.api.error_response import ErrorResponse
 from slp_base.slp_base.errors import CommonError
-from startleft.startleft.log import VERBOSE_MESSAGE_FORMAT
+from startleft.startleft.log import VERBOSE_MESSAGE_FORMAT, get_uvicorn_log_level, set_log_level_from_uvicorn
 
 webapp = FastAPI()
 logger = logging.getLogger(__name__)
+set_log_level_from_uvicorn()
 
 webapp.include_router(health_controller.router)
 webapp.include_router(iac_create_otm_controller.router)
@@ -33,6 +34,10 @@ def initialize_webapp():
 
 def get_log_config():
     log_config = uvicorn.config.LOGGING_CONFIG
+    app_log_level = get_uvicorn_log_level()
+    log_config["loggers"]["uvicorn"]["level"] = app_log_level
+    log_config["loggers"]["uvicorn.error"]["level"] = app_log_level
+    log_config["loggers"]["uvicorn.access"]["level"] = app_log_level
     log_config["loggers"]["uvicorn"]["propagate"] = False
     log_config["formatters"]["access"]["fmt"] = VERBOSE_MESSAGE_FORMAT
     log_config["formatters"]["default"]["fmt"] = VERBOSE_MESSAGE_FORMAT
@@ -96,3 +101,4 @@ def common_response_handler(status_code: int, type_: str, title: str, detail: st
     error_response = ErrorResponse(error_type=type_, status=status_code, title=title, detail=detail, messages=messages)
 
     return JSONResponse(status_code=status_code, content=jsonable_encoder(error_response))
+
