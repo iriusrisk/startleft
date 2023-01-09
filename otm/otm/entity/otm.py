@@ -18,8 +18,9 @@ class Otm:
         self.threats = []
         self.mitigations = []
         self.version = "0.1.0"
-
         self.__provider = provider
+
+        self.add_default_representation()
 
 
     def objects_by_type(self, type):
@@ -43,10 +44,8 @@ class Otm:
             "dataflows": []
         }
 
-        self.add_default_representation()
         for representation in self.representations:
             json["representations"].append(representation.json())
-
         for trustzone in self.trustzones:
             json["trustZones"].append(trustzone.json())
         for component in self.components:

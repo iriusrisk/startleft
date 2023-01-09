@@ -71,7 +71,7 @@ class VisioParser(ProviderParser):
 
     def __build_otm(self, trustzones: [OtmTrustzone], components: [OtmComponent], dataflows: [OtmDataflow]):
         otm_builder = OtmBuilder(self.project_id, self.project_name, self.diagram.diagram_type) \
-            .add_representations(self.representations) \
+            .add_representations(self.representations, extend=False) \
             .add_trustzones(trustzones) \
             .add_components(components) \
             .add_dataflows(dataflows)

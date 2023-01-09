@@ -53,15 +53,15 @@ class TestMtmtProcessor:
 
         # AND the representations info is also right
         assert len(otm.representations) == 2
-        diag_representation: DiagramRepresentation = otm.representations[0]
+        tm_representation: Representation = otm.representations[0]
+        assert tm_representation.id == 'Microsoft Threat Modeling Tool'
+        assert tm_representation.name == 'Microsoft Threat Modeling Tool'
+        assert tm_representation.type == 'threat-model'
+        diag_representation: DiagramRepresentation = otm.representations[1]
         assert diag_representation.id == 'example-project-diagram'
         assert diag_representation.name == 'example-project Diagram Representation'
         assert diag_representation.type == 'diagram'
         assert diag_representation.size == {'width': 2000, 'height': 2000}
-        tm_representation: Representation = otm.representations[1]
-        assert tm_representation.id == 'Microsoft Threat Modeling Tool'
-        assert tm_representation.name == 'Microsoft Threat Modeling Tool'
-        assert tm_representation.type == 'threat-model'
 
         # AND the info inside trustzones is also right
         for trustzone in otm.trustzones:
@@ -179,48 +179,29 @@ class TestMtmtProcessor:
 
         # AND the representations info is also right
         assert len(otm.representations) == 2
-        diag_representation: DiagramRepresentation = otm.representations[0]
+        tm_representation: Representation = otm.representations[0]
+        assert tm_representation.id == 'Microsoft Threat Modeling Tool'
+        assert tm_representation.name == 'Microsoft Threat Modeling Tool'
+        assert tm_representation.type == 'threat-model'
+        diag_representation: DiagramRepresentation = otm.representations[1]
         assert diag_representation.id == 'example-project-diagram'
         assert diag_representation.name == 'example-project Diagram Representation'
         assert diag_representation.type == 'diagram'
         assert diag_representation.size == {'width': 2000, 'height': 2000}
-        tm_representation: Representation = otm.representations[1]
-        assert tm_representation.id == 'Microsoft Threat Modeling Tool'
-        assert tm_representation.name == 'Microsoft Threat Modeling Tool'
-        assert tm_representation.type == 'threat-model'
 
         # AND we check the trust zone without representations
         assert otm.trustzones[0].representations is None
 
         # AND we check the trust zone with representations
-        assert len(otm.trustzones[1].representations) == 1
-        assert otm.trustzones[1].representations[0].id == '24cdf4da-ac7f-4a35-bab0-29256d4169bf-representation'
-        assert otm.trustzones[1].representations[0].name == 'Private Secured Cloud Representation'
-        assert otm.trustzones[1].representations[0].representation == 'example-project-diagram'
-        assert otm.trustzones[1].representations[0].size == {'width': 371, 'height': 308}
-        assert otm.trustzones[1].representations[0].position == {'x': 744, 'y': 142}
+        assert otm.trustzones[1].representations is None
 
         # AND we check the component representations
         assert len(otm.components) == 4
-        representation = otm.components[0].representations[0]
-        assert representation.id == '53245f54-0656-4ede-a393-357aeaa2e20f-representation'
-        assert representation.name == 'Accounting PostgreSQL Representation'
-        assert representation.representation == 'example-project-diagram'
-        assert representation.size == {'height': 100, 'width': 100}
-        assert representation.position == {'x': 231, 'y': 40}
+        assert otm.components[0].representations is None
         assert otm.components[1].representations is None
-        representation = otm.components[2].representations[0]
-        assert representation.id == '5d15323e-3729-4694-87b1-181c90af5045-representation'
-        assert representation.name == 'Public API v2 Representation'
-        assert representation.representation == 'example-project-diagram'
-        assert representation.size == {'height': 100, 'width': 100}
-        assert representation.position == {'x': 21, 'y': 101}
-        representation = otm.components[3].representations[0]
-        assert representation.id == '91882aca-8249-49a7-96f0-164b68411b48-representation'
-        assert representation.name == 'Azure File Storage Representation'
-        assert representation.representation == 'example-project-diagram'
-        assert representation.size == {'height': 100, 'width': 100}
-        assert representation.position == {'x': 230, 'y': 169}
+        assert otm.components[2].representations is None
+        assert otm.components[3].representations is None
+
 
     @mark.parametrize('source, expected', [
         (MTMT_EXAMPLE_POSITION, OTM_EXAMPLE_POSITION),

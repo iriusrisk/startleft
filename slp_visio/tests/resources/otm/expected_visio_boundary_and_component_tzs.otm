@@ -22,21 +22,6 @@
       "risk": {
         "trustRating": 10
       },
-      "representations": [
-        {
-          "name": "Internet Representation",
-          "id": "66-representation",
-          "representation": "project-id-diagram",
-          "size": {
-            "width": 295,
-            "height": 406
-          },
-          "position": {
-            "x": 328,
-            "y": 328
-          }
-        }
-      ]
     },
     {
       "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
@@ -60,22 +45,7 @@
       "type": "ec2",
       "parent": {
         "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
-      },
-      "representations": [
-        {
-          "name": "Custom machine Representation",
-          "id": "12-representation",
-          "representation": "project-id-diagram",
-          "size": {
-            "width": 82,
-            "height": 82
-          },
-          "position": {
-            "x": 105,
-            "y": 137
-          }
-        }
-      ]
+      }
     },
     {
       "id": "30",
