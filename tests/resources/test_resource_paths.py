@@ -96,3 +96,13 @@ custom_vpc_mapping = path + '/visio/custom-vpc-mapping.yaml'
 visio_aws_shapes_otm_expected = path + '/visio/aws-shapes.otm'
 visio_aws_with_tz_and_vpc_otm_expected = path + '/visio/aws-with-tz-and-vpc.otm'
 visio_orphan_dataflows_otm_expected = path + '/visio/visio-orphan-dataflows.otm'
+
+# LUCID
+lucid_aws_with_tz = path + '/lucid/lucid-aws-with-tz.vsdx'
+lucid_aws_with_tz_and_vpc = path + '/lucid/lucid-aws-with-tz-and-vpc.vsdx'
+# mapping
+default_lucid_mapping = path + '/lucid/default-lucid-mapping.yaml'
+lucid_aws_with_tz_mapping = path + '/lucid/lucid-aws-with-tz.yaml'
+lucid_aws_with_tz_and_vpc_mapping = path + '/lucid/lucid-aws-with-tz-and-vpc.yaml'
+# expected otm results
+lucid_aws_with_tz_otm = path + '/lucid/lucid-aws-with-tz.otm'
