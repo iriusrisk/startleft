@@ -40,6 +40,7 @@ nav:
           - Visio Quickstart: startleft-processors/diagram/Visio-Quickstart.md
           - Visio Mapping: startleft-processors/diagram/Visio-Mapping.md
           - Visio TrustZones Mapping: startleft-processors/diagram/Visio-TrustZones-Mapping.md
+  - Troubleshooting: Troubleshooting.md
 
 theme:
   name: material

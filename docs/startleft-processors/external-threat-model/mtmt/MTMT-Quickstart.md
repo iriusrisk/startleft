@@ -85,14 +85,14 @@ startleft server -p 8080
 
 Then, execute the following command to retrieve the OTM file with your MTMT file:
 ```shell
-curl --location --request POST 'localhost:5000/api/v1/startleft/external-threat-model' \
---header 'Content-Type: multipart/form-data' \
---header 'Accept: application/json' \
---form 'source_type="MTMT"' \
---form 'source_file=@"./MTMT_example.tm7"' \
---form 'mapping_file=@"./mtmt_default_mapping_example.yaml"' \
---form 'id="my-mtmt-project"' \
---form 'name="My MTMT project"'
+curl --location --request POST localhost:5000/api/v1/startleft/external-threat-model \
+--header "Content-Type: multipart/form-data" \
+--header "Accept: application/json" \
+--form source_type="MTMT" \
+--form source_file=@"./MTMT_example.tm7" \
+--form default_mapping_file=@"./mtmt_default_mapping_example.yaml" \
+--form id="my-mtmt-project" \
+--form name="My MTMT project"
 ```
 
 ## Position of the elements
