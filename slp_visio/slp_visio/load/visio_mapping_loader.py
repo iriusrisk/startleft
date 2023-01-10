@@ -39,11 +39,10 @@ class VisioMappingFileLoader(MappingLoader):
 
     def __load_component_mappings(self):
         component_mappings_list = jmespath.search("components", self.mappings)
-        return dict(zip([tz['label'] for tz in component_mappings_list], component_mappings_list))
+        return dict(zip([cp['label'] for cp in component_mappings_list], component_mappings_list))
 
     def get_trustzone_mappings(self):
         return self.trustzone_mappings
 
     def get_component_mappings(self):
-            return self.component_mappings
-
+        return self.component_mappings
