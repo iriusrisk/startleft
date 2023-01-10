@@ -2,8 +2,11 @@ import logging
 
 import click
 
+from startleft.startleft.filter.log_security_filter import LogSecurityFilter
+
 SIMPLE_MESSAGE_FORMAT = '%(message)s'
 VERBOSE_MESSAGE_FORMAT = '%(asctime)s %(process)d %(levelname)-8s%(module)s - %(message)s'
+MAX_MSG_LOG_SIZE = 99999
 
 uvicorn_levels_map: dict = {
     10: 'DEBUG',
@@ -29,9 +32,15 @@ def __set_verbose_logger(level=None):
         level=level)
 
 
+def __set_filters():
+    for handler in logging.root.handlers:
+        handler.addFilter(LogSecurityFilter(MAX_MSG_LOG_SIZE))
+
+
 def configure_logging(verbose, level=None):
     __clean_root_handlers()
     __set_verbose_logger(level) if verbose else __set_simple_logger(level)
+    __set_filters()
 
 
 def get_log_level(ctx, param, value):
