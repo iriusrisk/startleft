@@ -1,17 +1,17 @@
 {
   "otmVersion": "0.1.0",
   "project": {
-    "name": "test_parse_diagram_file_ok",
-    "id": "test_parse_diagram_file_ok"
+    "name": "project-name",
+    "id": "project-id"
   },
   "representations": [
     {
-      "name": "test_parse_diagram_file_ok Diagram Representation",
-      "id": "test_parse_diagram_file_ok-diagram",
+      "name": "Visio",
+      "id": "Visio",
       "type": "diagram",
       "size": {
-        "width": 1076,
-        "height": 1200
+        "width": 1000,
+        "height": 1000
       }
     }
   ],
@@ -19,6 +19,13 @@
     {
       "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    },
+    {
+      "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+      "name": "Private Secured",
       "risk": {
         "trustRating": 10
       }
@@ -46,7 +53,7 @@
       "name": "Private Database",
       "type": "rds",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
       }
     },
     {
@@ -69,25 +76,25 @@
   "dataflows": [
     {
       "id": "17",
-      "name": "917b7c44-440b-4c12-9ba3-d9aeaa0d7192",
+      "name": "1fcf0f54-2651-4158-82db-d88bf5256000",
       "source": "1",
       "destination": "12"
     },
     {
       "id": "34",
-      "name": "23cc71be-a22a-412b-9dc2-58c2df3530f4",
+      "name": "532041f2-4e74-444d-b2e0-6dc9abf950d9",
       "source": "12",
       "destination": "30"
     },
     {
       "id": "40",
-      "name": "8fb967be-c4ef-46bf-a0e8-784c6640ae19",
+      "name": "9f8c9045-a03c-4039-9efa-498125076678",
       "source": "1",
       "destination": "35"
     },
     {
       "id": "46",
-      "name": "f464ceff-715e-4639-9dda-4fa2131c5fc1",
+      "name": "ecc9945f-bb1a-44ad-a778-9eeec01adb4e",
       "source": "12",
       "destination": "41"
     }

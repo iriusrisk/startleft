@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from enum import Enum
 
 
@@ -53,6 +54,7 @@ class DiagramRepresentation(Representation):
         return json
 
 
+@dataclass
 class RepresentationElement:
     """
     See https://github.com/iriusrisk/OpenThreatModel#representation-element-for-diagram

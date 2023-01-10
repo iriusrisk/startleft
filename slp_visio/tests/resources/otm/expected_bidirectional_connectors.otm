@@ -10,8 +10,8 @@
       "id": "project-id-diagram",
       "type": "diagram",
       "size": {
-        "width": 1691,
-        "height": 1297
+        "width": 1476,
+        "height": 738
       }
     }
   ],
@@ -26,49 +26,49 @@
   ],
   "components": [
     {
-      "id": "13",
-      "name": "Bucket",
-      "type": "s3",
+      "id": "1",
+      "name": "Amazon EC2",
+      "type": "ec2",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       }
     },
     {
-      "id": "19",
-      "name": "Bucket",
-      "type": "s3",
+      "id": "6",
+      "name": "Amazon EC2",
+      "type": "ec2",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       }
     },
     {
-      "id": "31",
-      "name": "Amazon MQ",
-      "type": "CD-MQ",
+      "id": "17",
+      "name": "Amazon EC2",
+      "type": "ec2",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       }
     },
     {
-      "id": "46",
-      "name": "Amazon MQ",
-      "type": "CD-MQ",
+      "id": "23",
+      "name": "Amazon VPC",
+      "type": "vpc",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       }
     },
     {
-      "id": "86",
-      "name": "Database",
-      "type": "rds",
+      "id": "28",
+      "name": "Amazon VPC",
+      "type": "vpc",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       }
     },
     {
-      "id": "99",
-      "name": "Amazon MQ",
-      "type": "CD-MQ",
+      "id": "33",
+      "name": "Amazon VPC",
+      "type": "vpc",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       }
@@ -76,34 +76,25 @@
   ],
   "dataflows": [
     {
-      "id": "94",
-      "name": "69b2bc65-e037-469c-ad66-119e38c16d15",
-      "source": "31",
-      "destination": "19"
+      "id": "38",
+      "name": "dd2408f1-25f6-42d6-9477-c8948c751d47",
+      "source": "23",
+      "destination": "1",
+      "bidirectional": true
     },
     {
-      "id": "114",
-      "name": "ff1ba10c-81ad-4c56-8eee-b732516f778f",
-      "source": "46",
-      "destination": "19"
+      "id": "39",
+      "name": "b130847a-1818-4234-99ee-1ab9411279ba",
+      "source": "28",
+      "destination": "6",
+      "bidirectional": true
     },
     {
-      "id": "115",
-      "name": "33ffdefb-3679-45ae-b34d-abd8a6745a59",
-      "source": "99",
-      "destination": "19"
-    },
-    {
-      "id": "116",
-      "name": "77e5eaf1-2f71-4b70-8fed-dfb2e20ad1db",
-      "source": "99",
-      "destination": "86"
-    },
-    {
-      "id": "117",
-      "name": "b3c3e567-8adf-458e-9913-03810414b601",
-      "source": "46",
-      "destination": "13"
+      "id": "41",
+      "name": "dcf75dec-4a7c-449e-b853-5b5c5fd0a356",
+      "source": "33",
+      "destination": "17",
+      "bidirectional": true
     }
   ]
 }

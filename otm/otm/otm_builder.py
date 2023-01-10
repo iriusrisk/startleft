@@ -37,8 +37,12 @@ class OtmBuilder:
         self.otm.dataflows = dataflows
         return self
 
-    def add_representations(self, representations: [Representation]):
-        self.otm.representations.extend(representations)
+    def add_representations(self, representations: [Representation], extend: bool = True):
+        if extend:
+            self.otm.representations.extend(representations)
+        else:
+            self.otm.representations = representations
+
         return self
 
     def add_threats(self, threats: [OtmThreat]):
