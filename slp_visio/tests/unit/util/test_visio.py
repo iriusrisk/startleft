@@ -105,6 +105,8 @@ class TestVisioUtils:
                        ' Test\n  \nlabel ',
                        '\n Test \n\n \n label \n',
                        ' \nTest\nlabel\n ',
-                       '   Test   label   '])
+                       '   Test   label   ',
+                       u'Test \u00A0\u00A0 \u00A0 label',
+                       u'\u00A0Test label\u00A0'])
     def test_normalize_label(self, source_label):
         assert normalize_label(source_label) == 'Test label'

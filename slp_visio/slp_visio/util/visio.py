@@ -82,11 +82,11 @@ def normalize_label(label):
     if not label:
         return label
 
-    # strip any leading or trailing \n or ' '
-    label_normalized = label.strip(' \n')
-    # replace by ' ' any single middle '\n'
-    label_normalized = label_normalized.replace('\n', ' ')
-    # replace multiple in a row ' ' (2 or more) by a single one ' '
-    label_normalized = re.sub(' {2,}', ' ', label_normalized)
+    # replace by ' ' any '\n'
+    label_normalized = label.replace('\n', ' ')
+    # replace multiple spaces in a row (2 or more) by a single one
+    label_normalized = re.sub(r'\s+', ' ', label_normalized)
+    # strip any leading or trailing space
+    label_normalized = label_normalized.strip()
 
     return label_normalized
