@@ -1,5 +1,5 @@
 trustzones:
-  - id:   public-cloud
+  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
     name: Public Cloud
     type: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
@@ -7,7 +7,7 @@ components:
   - type: aws_skipped_with_parent
     $source:
       $skip: { $type: "aws_skipped_with_parent" }
-    parent: public-cloud
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
   - type: aws_component_without_parent
     $source: { $type: "aws_component_without_parent" }
@@ -18,6 +18,6 @@ components:
 
   - type: aws_control
     $source: { $type: "aws_control" }
-    parent: public-cloud
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
 dataflows: [ ]

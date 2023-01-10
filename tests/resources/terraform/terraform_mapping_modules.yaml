@@ -1,5 +1,5 @@
 trustzones:
-  - id:   public-cloud
+  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
     name: Public Cloud
     type: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
@@ -9,7 +9,7 @@ components:
     type: CD-ACM
     name: { $numberOfSources: { oneSource: { $path: "keys(@)[0]" }, multipleSource: { $format: "CD-ACM (grouped)" } } }
     $source: { $singleton: { $root: "resource|get(@, 'aws_acm_certificate')" } }
-    parent: public-cloud
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - { $numberOfSources: { oneSource: { $path: "Type" }, multipleSource: { $format: "{_key} ({Type})" } } }
 
@@ -17,7 +17,7 @@ components:
     type: cloudwatch
     name: { $numberOfSources: { oneSource: { $path: "keys(@)[0]" }, multipleSource: { $format: "cloudwatch (grouped)" } } }
     $source: { $singleton: { $root: "resource|get(@, 'aws_cloudwatch_metric_alarm')" } }
-    parent: public-cloud
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - { $numberOfSources: { oneSource: { $path: "Type" }, multipleSource: { $format: "{_key} ({Type})" } } }
 
@@ -25,7 +25,7 @@ components:
     type: rds
     name: { $path: "_key" }
     $source: { $root: "module|get_module_terraform(@, 'terraform-aws-modules/rds/aws')" }
-    parent: public-cloud
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - { $path: "Type" }
 

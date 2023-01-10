@@ -13,7 +13,7 @@
   ],
   "trustZones": [
     {
-      "id": "public-cloud",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "name": "Public Cloud",
       "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "risk": {
@@ -23,88 +23,88 @@
   ],
   "components": [
     {
-      "id": "public-cloud.aws_vpc_endpoint-dynamodb-altsource",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-dynamodb-altsource",
       "name": "DynamoDB from VPCEndpoint",
       "type": "dynamodb",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_vpc_endpoint"
       ]
     },
     {
-      "id": "public-cloud.aws_vpc_endpoint-ssm",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-ssm",
       "name": "ssm",
       "type": "empty-component",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_vpc_endpoint"
       ]
     },
     {
-      "id": "public-cloud.aws_vpc_endpoint-ssm_messages",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-ssm_messages",
       "name": "ssm_messages",
       "type": "empty-component",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_vpc_endpoint"
       ]
     },
     {
-      "id": "public-cloud.aws_vpc_endpoint-ecr",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-ecr",
       "name": "ecr",
       "type": "empty-component",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_vpc_endpoint"
       ]
     },
     {
-      "id": "public-cloud.aws_vpc_endpoint-dynamodb",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-dynamodb",
       "name": "dynamodb",
       "type": "empty-component",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_vpc_endpoint"
       ]
     },
     {
-      "id": "public-cloud.aws_vpc_endpoint-s3",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-s3",
       "name": "s3",
       "type": "empty-component",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_vpc_endpoint"
       ]
     },
     {
-      "id": "public-cloud.aws_vpc_endpoint-s3-altsource",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-s3-altsource",
       "name": "S3 from VPCEndpoint",
       "type": "s3",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_vpc_endpoint"
       ]
     },
     {
-      "id": "public-cloud.aws_vpc_endpoint-ssm-altsource",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-ssm-altsource",
       "name": "Systems Manager from VPCEndpoint (grouped)",
       "type": "CD-SYSTEMS-MANAGER",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "ssm (aws_vpc_endpoint)",
@@ -112,11 +112,11 @@
       ]
     },
     {
-      "id": "public-cloud.aws_vpc_endpoint-ecr-altsource",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc_endpoint-ecr-altsource",
       "name": "ECR from VPCEndpoint",
       "type": "elastic-container-registry",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_vpc_endpoint"

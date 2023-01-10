@@ -9,10 +9,8 @@ from slp_cft.tests.resources import test_resource_paths
 from slp_cft.tests.resources.test_resource_paths import expected_orphan_component_is_not_mapped
 from slp_cft.tests.utility import excluded_regex
 
-VALIDATION_EXCLUDED_REGEX = r"root\[\'dataflows'\]\[.+?\]\['id'\]"
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
-DEFAULT_TRUSTZONE_ID = "b61d6911-338d-46a8-9f39-8dcd24abfe91"
 SAMPLE_VALID_CFT_FILE = test_resource_paths.cloudformation_for_mappings_tests_json
 SAMPLE_VALID_MAPPING_FILE = test_resource_paths.default_cloudformation_mapping
 SAMPLE_SINGLE_VALID_CFT_FILE = test_resource_paths.cloudformation_single_file
@@ -39,7 +37,7 @@ class TestCloudformationProcessor:
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cft_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff(otm, ALTSOURCE_COMPONENTS_OTM_EXPECTED, VALIDATION_EXCLUDED_REGEX) == {}
+        assert validate_and_diff(otm, ALTSOURCE_COMPONENTS_OTM_EXPECTED, excluded_regex) == {}
 
     def test_orphan_component_is_not_mapped(self):
         # GIVEN a valid CFT file with a resource (VPCssm) with a parent which is not declared as component itself (CustomVPC)
@@ -578,11 +576,11 @@ class TestCloudformationProcessor:
         assert len(otm.dataflows) == 0
 
         # AND the trustzone with a defined type has the correct value
-        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-                                       and obj.type == 'public-cloud', otm.trustzones))
+        assert list(filter(lambda obj: obj.id == 'public-cloud-01'
+                                       and obj.type == 'b61d6911-338d-46a8-9f39-8dcd24abfe91', otm.trustzones))
 
         # AND the trustzone without a defined type uses the ID value as type
-        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe99'
+        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
                                        and obj.type == obj.id, otm.trustzones))
 
     def test_components_with_trustzones_of_same_type(self):
@@ -601,13 +599,14 @@ class TestCloudformationProcessor:
         assert len(otm.dataflows) == 0
 
         # AND both trustzones have the same type, but different ID
-        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
-                                       and obj.type == 'public-cloud', otm.trustzones))
-        assert list(filter(lambda obj: obj.id == 'b61d6911-338d-46a8-9f39-8dcd24abfe99'
-                                       and obj.type == 'public-cloud', otm.trustzones))
+        trustzone1 = list(filter(lambda obj: obj.id == 'public-cloud-01'
+                                             and obj.type == 'b61d6911-338d-46a8-9f39-8dcd24abfe91', otm.trustzones))
+        trustzone2 = list(filter(lambda obj: obj.id == 'public-cloud-02'
+                                             and obj.type == 'b61d6911-338d-46a8-9f39-8dcd24abfe91', otm.trustzones))
+        assert trustzone1[0].type == trustzone2[0].type
 
         # AND each component has the correct trustzone
         assert otm.components[0].parent_type == 'trustZone'
-        assert otm.components[0].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+        assert otm.components[0].parent == 'public-cloud-01'
         assert otm.components[1].parent_type == 'trustZone'
-        assert otm.components[1].parent == 'b61d6911-338d-46a8-9f39-8dcd24abfe99'
+        assert otm.components[1].parent == 'public-cloud-02'

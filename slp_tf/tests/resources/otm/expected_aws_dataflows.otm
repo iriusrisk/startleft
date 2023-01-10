@@ -13,7 +13,7 @@
   ],
   "trustZones": [
     {
-      "id": "public-cloud",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "name": "Public Cloud",
       "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "risk": {
@@ -23,99 +23,99 @@
   ],
   "components": [
     {
-      "id": "public-cloud.aws_dynamodb_table-basic_dynamodb_table",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_dynamodb_table-basic_dynamodb_table",
       "name": "basic_dynamodb_table",
       "type": "dynamodb",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_dynamodb_table"
       ]
     },
     {
-      "id": "public-cloud.aws_lambda_function-basic_lambda",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_lambda_function-basic_lambda",
       "name": "basic_lambda",
       "type": "aws-lambda-function",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_lambda_function"
       ]
     },
     {
-      "id": "public-cloud.aws_s3_bucket-log_bucket_deprecated",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_s3_bucket-log_bucket_deprecated",
       "name": "log_bucket_deprecated",
       "type": "s3",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_s3_bucket"
       ]
     },
     {
-      "id": "public-cloud.aws_s3_bucket-bucket_deprecated",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_s3_bucket-bucket_deprecated",
       "name": "bucket_deprecated",
       "type": "s3",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_s3_bucket"
       ]
     },
     {
-      "id": "public-cloud.aws_s3_bucket-log_bucket",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_s3_bucket-log_bucket",
       "name": "log_bucket",
       "type": "s3",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_s3_bucket"
       ]
     },
     {
-      "id": "public-cloud.aws_s3_bucket-bucket",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_s3_bucket-bucket",
       "name": "bucket",
       "type": "s3",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_s3_bucket"
       ]
     },
     {
-      "id": "public-cloud.aws_sqs_queue-failure_queue",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_sqs_queue-failure_queue",
       "name": "failure_queue",
       "type": "sqs-simple-queue-service",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_sqs_queue"
       ]
     },
     {
-      "id": "public-cloud.aws_cognito_user_pool-user_pool",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_cognito_user_pool-user_pool",
       "name": "user_pool",
       "type": "cognito",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "aws_cognito_user_pool"
       ]
     },
     {
-      "id": "public-cloud.aws_api_gateway_rest_api-rest_api",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_api_gateway_rest_api-rest_api",
       "name": "api-gateway (grouped)",
       "type": "api-gateway",
       "parent": {
-        "trustZone": "public-cloud"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
         "rest_api (aws_api_gateway_rest_api)",
@@ -127,32 +127,32 @@
     {
       "id": "b200d07b-053d-4226-819e-5c1e22fadbe2",
       "name": "dataflow to Lambda function in basic_dynamodb_event",
-      "source": "public-cloud.aws_dynamodb_table-basic_dynamodb_table",
-      "destination": "public-cloud.aws_lambda_function-basic_lambda"
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_dynamodb_table-basic_dynamodb_table",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_lambda_function-basic_lambda"
     },
     {
       "id": "5b1a2fe9-77dd-4762-9f48-cd922f72bbf0",
       "name": "dataflow from Lambda function on Failure basic_dynamodb_event",
-      "source": "public-cloud.aws_lambda_function-basic_lambda",
-      "destination": "public-cloud.aws_sqs_queue-failure_queue"
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_lambda_function-basic_lambda",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_sqs_queue-failure_queue"
     },
     {
       "id": "c6ce3b2f-1da5-4c82-a77b-e4e0f8e1fe94",
       "name": "S3 dataflow from bucket_deprecated",
-      "source": "public-cloud.aws_s3_bucket-bucket_deprecated",
-      "destination": "public-cloud.aws_s3_bucket-log_bucket_deprecated"
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_s3_bucket-bucket_deprecated",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_s3_bucket-log_bucket_deprecated"
     },
     {
       "id": "dbc57057-054a-42cc-aa89-ad7475c70674",
       "name": "S3 dataflow from aws_s3_bucket_logging",
-      "source": "public-cloud.aws_s3_bucket-bucket",
-      "destination": "public-cloud.aws_s3_bucket-log_bucket"
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_s3_bucket-bucket",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_s3_bucket-log_bucket"
     },
     {
       "id": "0e125f7d-b4ed-4947-8231-c74ed3a47ee2",
       "name": "API gateway data flow from aws_api_gateway_authorizer",
-      "source": "public-cloud.aws_api_gateway_rest_api-rest_api",
-      "destination": "public-cloud.aws_cognito_user_pool-user_pool",
+      "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_api_gateway_rest_api-rest_api",
+      "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_cognito_user_pool-user_pool",
       "tags": [
         "API gateway dataflow"
       ]
