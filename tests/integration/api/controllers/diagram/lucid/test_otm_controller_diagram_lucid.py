@@ -62,11 +62,11 @@ class TestOtmControllerDiagramLucid:
 
         assert len(otm['representations']) == 1
 
-        assert otm['representations'][0]['name'] == 'Visio'
-        assert otm['representations'][0]['id'] == 'Visio'
+        assert otm['representations'][0]['name'] == f'{project_id} Diagram Representation'
+        assert otm['representations'][0]['id'] == f'{project_id}-diagram'
         assert otm['representations'][0]['type'] == 'diagram'
-        assert otm['representations'][0]['size']['width'] == 1000
-        assert otm['representations'][0]['size']['height'] == 1000
+        assert otm['representations'][0]['size']['width'] == 2378
+        assert otm['representations'][0]['size']['height'] == 1558
 
         assert len(otm['trustZones']) == 3
 
@@ -212,11 +212,11 @@ class TestOtmControllerDiagramLucid:
 
         assert len(otm['representations']) == 1
 
-        assert otm['representations'][0]['name'] == 'Visio'
-        assert otm['representations'][0]['id'] == 'Visio'
+        assert otm['representations'][0]['name'] == f'{project_id} Diagram Representation'
+        assert otm['representations'][0]['id'] == f'{project_id}-diagram'
         assert otm['representations'][0]['type'] == 'diagram'
-        assert otm['representations'][0]['size']['width'] == 1000
-        assert otm['representations'][0]['size']['height'] == 1000
+        assert otm['representations'][0]['size']['width'] == 2378
+        assert otm['representations'][0]['size']['height'] == 1558
 
         assert len(otm['trustZones']) == 3
 
@@ -358,11 +358,11 @@ class TestOtmControllerDiagramLucid:
         assert otm['project']['id'] == project_id
         assert otm['project']['name'] == 'project_A_name'
         assert len(otm['representations']) == 1
-        assert otm['representations'][0]['name'] == 'Visio'
-        assert otm['representations'][0]['id'] == 'Visio'
+        assert otm['representations'][0]['name'] == f'{project_id} Diagram Representation'
+        assert otm['representations'][0]['id'] == f'{project_id}-diagram'
         assert otm['representations'][0]['type'] == 'diagram'
-        assert otm['representations'][0]['size']['width'] == 1000
-        assert otm['representations'][0]['size']['height'] == 1000
+        assert otm['representations'][0]['size']['width'] == 1967
+        assert otm['representations'][0]['size']['height'] == 1356
         assert len(otm['trustZones']) == 2
         assert otm['trustZones'][0]['id'] == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
         assert otm['trustZones'][0]['name'] == 'Public Cloud'
