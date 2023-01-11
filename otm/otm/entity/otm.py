@@ -4,6 +4,9 @@ from otm.otm.entity.trustzone import OtmTrustzone
 from otm.otm.entity.representation import Representation, DiagramRepresentation, RepresentationType
 
 
+REPRESENTATIONS_SIZE_DEFAULT_HEIGHT = 1000
+REPRESENTATIONS_SIZE_DEFAULT_WIDTH = 1000
+
 class Otm:
     def __init__(self, project_name, project_id, provider):
         self.project_name = project_name
@@ -15,16 +18,10 @@ class Otm:
         self.threats = []
         self.mitigations = []
         self.version = "0.1.0"
-        self.representations_size_default_height = 1000
-        self.representations_size_default_width = 1000
+        self.__provider = provider
 
-        if provider.provider_type == RepresentationType.DIAGRAM.value:
-            default_size = {"width": self.representations_size_default_width, "height": self.representations_size_default_height}
-            self.add_diagram_representation(id_=provider.provider_name, name=provider.provider_name,
-                                            type_=provider.provider_type, size=default_size)
-        else:
-            self.add_representation(id_=provider.provider_name, name=provider.provider_name,
-                                    type_=provider.provider_type)
+        self.add_default_representation()
+
 
     def objects_by_type(self, type):
         if type == "trustzone":
@@ -86,3 +83,15 @@ class Otm:
 
     def add_diagram_representation(self, id_=None, name=None, type_=None, size=None):
         self.representations.append(DiagramRepresentation(id_=id_, name=name, type_=type_, size=size))
+
+    def add_default_representation(self):
+        if not self.__provider.provider_type == RepresentationType.DIAGRAM.value:
+            self.add_representation(id_=self.__provider.provider_name,
+                                    name=self.__provider.provider_name,
+                                    type_=self.__provider.provider_type)
+        elif not self.representations:
+            default_size = {"width": REPRESENTATIONS_SIZE_DEFAULT_WIDTH, "height": REPRESENTATIONS_SIZE_DEFAULT_HEIGHT}
+            self.add_diagram_representation(id_=self.__provider.provider_name,
+                                            name=self.__provider.provider_name,
+                                            type_=self.__provider.provider_type,
+                                            size=default_size)

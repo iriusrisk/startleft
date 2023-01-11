@@ -17,12 +17,14 @@ class DiagramComponent:
                  type: str = None,
                  origin: DiagramComponentOrigin = None,
                  parent=None,
+                 trustzone: bool = False,
                  representation: Polygon = None):
         self.id = id
         self.name = name
         self.type = type
         self.origin = origin
         self.parent = parent
+        self.trustzone = trustzone
         self.representation = representation
 
     def get_component_category(self):

@@ -8,6 +8,7 @@ from slp_visio.slp_visio.load.representation.zone_component_representer import Z
 from slp_visio.slp_visio.util.visio import get_limits, get_shape_text
 
 DIAGRAM_LIMITS_PADDING = 2
+DEFAULT_DIAGRAM_LIMITS = DiagramLimits(((1000, 1000), (1000, 1000)))
 
 
 def load_visio_page_from_file(visio_filename: str):
@@ -72,7 +73,9 @@ class VsdxParser:
             if shape_limits[1][1] > top_coordinates[1]:
                 top_coordinates[1] = shape_limits[1][1] + DIAGRAM_LIMITS_PADDING
 
-        return DiagramLimits([floor_coordinates, top_coordinates])
+        return DiagramLimits([floor_coordinates, top_coordinates]) \
+            if floor_coordinates[0] and floor_coordinates[1] \
+            else DEFAULT_DIAGRAM_LIMITS
 
     def _load_page_elements(self):
         for shape in self.page.child_shapes:
