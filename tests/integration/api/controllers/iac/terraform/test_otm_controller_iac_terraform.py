@@ -56,7 +56,7 @@ class TestOtmControllerIaCTerraform:
 
         # And the request files
         iac_file = (filename, open(filename, 'rb'), 'application/json')
-        mapping_file = (terraform_iriusrisk_tf_aws_mapping, open(terraform_iriusrisk_tf_aws_mapping, 'r'), 'text/yaml')
+        mapping_file = (terraform_iriusrisk_tf_aws_mapping, open(terraform_iriusrisk_tf_aws_mapping, 'rb'), 'text/yaml')
 
         # And the iac_data with custom line breaks
         iac_data = file_utils.get_byte_data(filename).decode().replace('\n', break_line)
@@ -86,10 +86,11 @@ class TestOtmControllerIaCTerraform:
         body = {'iac_type': TESTING_IAC_TYPE, 'id': project_id, 'name': project_name}
 
         # And the request files
-        cft_file = None if cft_filename is None else (cft_filename, open(cft_filename, 'rb'), cft_mimetype)
-        mapping_file = None if mapping_filename is None else (
-            mapping_filename, open(mapping_filename, 'rb'), 'text/yaml')
-        files = {'iac_file': cft_file, 'mapping_file': mapping_file}
+        files = dict()
+        if cft_filename:
+            files['iac_file'] = (cft_filename, open(cft_filename, 'rb'), cft_mimetype)
+        if mapping_filename:
+            files['mapping_file'] = (mapping_filename, open(mapping_filename, 'rb'), 'text/yaml')
 
         # When I do post on TERRAFORM endpoint
         response = client.post(get_url(), files=files, data=body)
@@ -108,8 +109,8 @@ class TestOtmControllerIaCTerraform:
         project_id: str = 'project_A_id'
 
         # And the request files
-        iac_file = (self.tf_file, open(self.tf_file, 'r'), 'application/json')
-        mapping_file = (self.tf_map, open(self.tf_map, 'r'), 'text/yaml')
+        iac_file = (self.tf_file, open(self.tf_file, 'rb'), 'application/json')
+        mapping_file = (self.tf_map, open(self.tf_map, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingIacFileError
         error = IacFileNotValidError('Invalid size', 'mocked error detail', 'mocked error msg 1')
@@ -138,8 +139,8 @@ class TestOtmControllerIaCTerraform:
         project_id: str = 'project_A_id'
 
         # And the request files
-        iac_file = (self.tf_file, open(self.tf_file, 'r'), 'application/json')
-        mapping_file = (self.tf_map, open(self.tf_map, 'r'), 'text/yaml')
+        iac_file = (self.tf_file, open(self.tf_file, 'rb'), 'application/json')
+        mapping_file = (self.tf_map, open(self.tf_map, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingIacFileError
         error = LoadingIacFileError('mocked error title', 'mocked error detail', 'mocked error msg 1')
@@ -168,8 +169,8 @@ class TestOtmControllerIaCTerraform:
         project_id: str = 'project_A_id'
 
         # And the request files
-        iac_file = (self.tf_file, open(self.tf_file, 'r'), 'application/json')
-        mapping_file = (self.tf_map, open(self.tf_map, 'r'), 'text/yaml')
+        iac_file = (self.tf_file, open(self.tf_file, 'rb'), 'application/json')
+        mapping_file = (self.tf_map, open(self.tf_map, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingIacFileError
         error = MappingFileNotValidError('Mapping file does not comply with the schema', 'Schema error',
@@ -199,8 +200,8 @@ class TestOtmControllerIaCTerraform:
         project_id: str = 'project_A_id'
 
         # And the request files
-        iac_file = (self.tf_file, open(self.tf_file, 'r'), 'application/json')
-        mapping_file = (self.tf_map, open(self.tf_map, 'r'), 'text/yaml')
+        iac_file = (self.tf_file, open(self.tf_file, 'rb'), 'application/json')
+        mapping_file = (self.tf_map, open(self.tf_map, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingIacFileError
         error = LoadingMappingFileError('Error loading the mapping file. The mapping file ins not valid.',
@@ -230,8 +231,8 @@ class TestOtmControllerIaCTerraform:
         project_id: str = 'project_A_id'
 
         # And the request files
-        iac_file = (self.tf_file, open(self.tf_file, 'r'), 'application/json')
-        mapping_file = (self.tf_map, open(self.tf_map, 'r'), 'text/yaml')
+        iac_file = (self.tf_file, open(self.tf_file, 'rb'), 'application/json')
+        mapping_file = (self.tf_map, open(self.tf_map, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingIacFileError
         error = OtmResultError('OTM file does not comply with the schema', 'Schema error', 'mocked error msg')
@@ -260,8 +261,8 @@ class TestOtmControllerIaCTerraform:
         project_id: str = 'project_A_id'
 
         # And the request files
-        iac_file = (self.tf_file, open(self.tf_file, 'r'), 'application/json')
-        mapping_file = (self.tf_map, open(self.tf_map, 'r'), 'text/yaml')
+        iac_file = (self.tf_file, open(self.tf_file, 'rb'), 'application/json')
+        mapping_file = (self.tf_map, open(self.tf_map, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingIacFileError
         error = OtmBuildingError('OTM building error', 'Schema error', 'mocked error msg')
@@ -283,16 +284,19 @@ class TestOtmControllerIaCTerraform:
         assert len(body_response['errors']) == 1
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
-    @mark.parametrize('iac_source',
-                      [b'', bytearray(4), bytearray(1024 * 1024 * 5 + 1), bytearray(1024 * 5 + 1)])
+    @mark.parametrize('iac_source,detail', [
+        (b'', 'Terraform file is not valid. Invalid size'),
+        (bytearray(4), 'Terraform file is not valid. Invalid size'),
+        (bytearray(1024 * 1024 * 20 + 1), 'Terraform file is not valid. Invalid size')])
     @responses.activate
-    def test_response_on_invalid_iac_file(self, iac_source):
+    def test_response_on_invalid_iac_file(self, iac_source, detail):
         # Given a project_id
         project_id: str = 'project_A_id'
 
         # And the request files
-        iac_file = (self.tf_file, self.tf_file, 'application/json')
-        mapping_file = ('mapping_file', open(self.tf_map, 'r'), 'text/yaml')
+        iac_source = bytes(iac_source) if isinstance(iac_source, bytearray) else iac_source
+        iac_file = (self.tf_file, iac_source, 'application/json')
+        mapping_file = ('mapping_file', open(self.tf_map, 'rb'), 'text/yaml')
 
         # When I do post on terraform endpoint
         files = {'iac_file': iac_file, 'mapping_file': mapping_file}
@@ -304,9 +308,11 @@ class TestOtmControllerIaCTerraform:
         assert response.headers.get('content-type') == 'application/json'
         body_response = json.loads(response.text)
         assert body_response['status'] == '400'
-        assert body_response['error_type'] == 'LoadingIacFileError'
-        assert body_response['title'] == 'IaC file is not valid'
+        assert body_response['error_type'] == 'IacFileNotValidError'
+        assert body_response['title'] == 'Terraform file is not valid'
+        assert body_response['detail'] == detail
         assert len(body_response['errors']) == 1
+        assert body_response['errors'][0]['errorMessage'] == detail
 
     @mark.parametrize('mapping_source,msg', [
         (f'small', 'Mapping file does not comply with the schema'),
@@ -321,6 +327,7 @@ class TestOtmControllerIaCTerraform:
 
         # And the request files
         iac_file = (self.tf_file, open(self.tf_file, 'rb'), 'application/json')
+        mapping_source = bytes(mapping_source) if isinstance(mapping_source, bytearray) else mapping_source
         mapping_file = ('mapping_file', mapping_source, 'text/yaml')
 
         # When I do post on terraform endpoint
@@ -344,9 +351,9 @@ class TestOtmControllerIaCTerraform:
         project_id: str = 'project_A_id'
 
         # And the request files, containing a mapping file with all terraform specific functions
-        iac_file = (terraform_specific_functions, open(terraform_specific_functions, 'r'), 'application/json')
+        iac_file = (terraform_specific_functions, open(terraform_specific_functions, 'rb'), 'application/json')
         mapping_file = (
-            terraform_mapping_specific_functions, open(terraform_mapping_specific_functions, 'r'), 'text/yaml')
+            terraform_mapping_specific_functions, open(terraform_mapping_specific_functions, 'rb'), 'text/yaml')
 
         # When I do post on terraform endpoint
         files = {'iac_file': iac_file, 'mapping_file': mapping_file}
@@ -372,12 +379,12 @@ class TestOtmControllerIaCTerraform:
 
         # And the request files, two definition files, and one mapping file
         iac_file_one = (
-            terraform_multiple_files_one, open(terraform_multiple_files_one, 'r'),
+            terraform_multiple_files_one, open(terraform_multiple_files_one, 'rb'),
             'application/json')
         iac_file_two = (
-            terraform_multiple_files_two, open(terraform_multiple_files_two, 'r'),
+            terraform_multiple_files_two, open(terraform_multiple_files_two, 'rb'),
             'application/json')
-        mapping_file = (terraform_iriusrisk_tf_aws_mapping, open(terraform_iriusrisk_tf_aws_mapping, 'r'), 'text/yaml')
+        mapping_file = (terraform_iriusrisk_tf_aws_mapping, open(terraform_iriusrisk_tf_aws_mapping, 'rb'), 'text/yaml')
 
         # When I do post on terraform endpoint
         files = [('iac_file', iac_file_one), ('iac_file', iac_file_two), ('mapping_file', mapping_file)]
@@ -403,10 +410,10 @@ class TestOtmControllerIaCTerraform:
 
         # And the request files, two definition files, and one mapping file
         iac_file_valid = (
-            terraform_multiple_files_one, open(terraform_multiple_files_one, 'r'),
+            terraform_multiple_files_one, open(terraform_multiple_files_one, 'rb'),
             'application/json')
         iac_file_invalid = ''
-        mapping_file = (terraform_iriusrisk_tf_aws_mapping, open(terraform_iriusrisk_tf_aws_mapping, 'r'), 'text/yaml')
+        mapping_file = (terraform_iriusrisk_tf_aws_mapping, open(terraform_iriusrisk_tf_aws_mapping, 'rb'), 'text/yaml')
 
         files = [('iac_file', iac_file_valid), ('iac_file', iac_file_invalid), ('mapping_file', mapping_file)]
         body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
