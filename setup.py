@@ -23,7 +23,7 @@ setup(
         'python-hcl2==4.0.0',
         'requests==2.28.1',
         'xmltodict==0.13.0',
-        'fastapi==0.86.0',
+        'fastapi==0.89.1',
         'python-multipart==0.0.5',
         'click==8.1.3',
         'uvicorn==0.20.0',
@@ -46,7 +46,8 @@ setup(
             'tox==4.0.11',
             'pytest==7.2.0',
             'responses==0.22.0',
-            'deepdiff==6.2.2'
+            'deepdiff==6.2.2',
+            'httpx==0.23.3'
         ]
     },
     entry_points='''
