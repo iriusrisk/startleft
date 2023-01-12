@@ -12,6 +12,25 @@ some commands, set up the REST API and, in summary, familiarize yourself with th
 *During this guide some files will be downloaded or generated, so you can optionally create a folder to keep them
 organized.*
 
+??? "Extra requisites for Windows/OSX users"
+
+    StartLeft uses <a href="https://github.com/ahupp/python-magic" target="_blank">python-magic</a> 
+    interface to the libmagic file type identification library for validating file types.
+    
+    <ins>Prerequisites for Windows</ins>
+
+     *"You'll need DLLs for libmagic usage on Windows. @julian-r maintains a pypi package with the DLLs, you can fetch it with:"*
+    ```shell
+    pip install python-magic-bin
+    ```
+    
+    <ins>Prerequisites for OSX</ins>
+
+     * When using Homebrew: `brew install libmagic`
+     * When using macports: `port install file`
+
+
+
 ## Install StartLeft
 
 ---
@@ -46,7 +65,7 @@ wget https://raw.githubusercontent.com/iriusrisk/startleft/main/examples/terrafo
 
 This is a rich example where you can see in action some capabilities of StartLeft. It represents the Threat 
 Model for
-an architecture with two trust zones and several VPCs which contain many types of AWS components.
+an architecture with two TrustZones and several VPCs which contain many types of AWS components.
 
 Now, we need to download the mapping file where the configuration for parsing this source is located. In this case, 
 we will download an example that maps to IriusRisk components. It is placed in the same `examples/terraform` folder:

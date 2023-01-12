@@ -1,6 +1,6 @@
 import logging
 
-from otm.otm.otm import Trustzone
+from otm.otm.entity.trustzone import OtmTrustzone
 from sl_util.sl_util.str_utls import deterministic_uuid
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
@@ -35,12 +35,13 @@ class MTMTTrustzoneParser:
                     self.trustzones.append(trustzone)
         return self.trustzones
 
-    def create_border_trustzone(self, border: MTMBorder) -> Trustzone:
+    def create_border_trustzone(self, border: MTMBorder) -> OtmTrustzone:
         mtmt_type = self.__calculate_otm_type(border)
         if mtmt_type is not None:
             calculator = TrustzoneRepresentationCalculator(self.diagram_representation, border)
             representations = calculator.calculate_representation()
-            tz = Trustzone(id=border.id,
+            trustzone_id = self.calculate_otm_id(border)
+            tz = OtmTrustzone(trustzone_id=border.id,
                            name=border.name,
                            type=mtmt_type,
                            properties=border.properties)
@@ -79,4 +80,4 @@ class MTMTTrustzoneParser:
         if self.mapping is not None and DEFAULT_LABEL in self.mapping.mapping_trustzones:
             trustzone_type = self.__get_mapping_type(DEFAULT_LABEL)
             trustzone_id = deterministic_uuid(trustzone_type)
-            return Trustzone(id=trustzone_id, type=trustzone_type, name=DEFAULT_NAME)
+            return OtmTrustzone(trustzone_id=trustzone_id, type=trustzone_type, name=DEFAULT_NAME)

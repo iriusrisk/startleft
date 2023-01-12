@@ -14,6 +14,10 @@ from slp_tf.tests.resources.test_resource_paths import expected_aws_dataflows, e
 from slp_tf.tests.resources.test_resource_paths import expected_orphan_component_is_not_mapped
 from slp_tf.tests.utility import excluded_regex
 
+PUBLIC_CLOUD_TZ_ID = 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+INTERNET_TZ_ID = 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
+DEFAULT_TRUSTZONE_ID = "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+VALIDATION_EXCLUDED_REGEX = r"root\[\'dataflows'\]\[.+?\]\['id'\]"
 
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
@@ -344,6 +348,30 @@ class TestTerraformProcessor:
 
         # THEN a file with the single_tf_file-expected-result.otm contents is returned
         assert validate_and_diff(otm.json(), test_resource_paths.tf_file_referenced_vars_expected_result, excluded_regex) == {}
+
+    def test_security_group_components_from_same_resource(self):
+        # GIVEN a valid TF file with a security group containing both an inbound and an outbound rule
+        tf_file = get_data(test_resource_paths.terraform_components_from_same_resource)
+
+        # AND a valid CFT mapping file
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+
+        # WHEN the CFT file is processed
+        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
+
+        # THEN the number of TZs, components and dataflows are right
+        assert len(otm.trustzones) == 2
+        assert len(otm.components) == 2
+        assert len(otm.dataflows) == 0
+
+        #AND the component IDs are differentiated by their IPs
+        ingress_id = list(filter(lambda obj: obj.name == '52.30.97.44/32', otm.components))[0].id
+        egress_id = list(filter(lambda obj: obj.name == '0.0.0.0/0', otm.components))[0].id
+
+        assert ingress_id != egress_id
+        assert '52_30_97_44_32' in ingress_id
+        assert '0_0_0_0_0' in egress_id
+
 
     def test_trustzone_types(self):
         # GIVEN a valid TF file

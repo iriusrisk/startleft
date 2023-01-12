@@ -1,10 +1,19 @@
 from pytest import mark
 
 from sl_util.sl_util.file_utils import get_data
+from slp_base.tests.util.otm import validate_and_diff
 from slp_base.tests.util.otm import check_otm_representations_size, check_otm_trustzone, public_cloud_id, \
     public_cloud_name, check_otm_component, check_otm_dataflow, public_cloud_type, private_secured_type, internet_type
 from slp_visio.slp_visio.visio_processor import VisioProcessor
 from slp_visio.tests.resources import test_resource_paths
+from slp_visio.tests.resources.test_resource_paths import expected_empty_mapping_file, expected_empty_visio_file, \
+    expected_empty_mapping_and_visio_files, expected_aws_shapes, expected_generic_elements, \
+    expected_self_pointing_connectors, expected_extraneous_elements, expected_simple_boundary_tzs, \
+    expected_boundary_tz_and_default_tz, expected_overlapped_boundary_tzs, \
+    expected_visio_boundary_and_component_tzs, expected_multiple_pages_diagram, expected_complex_diagram, \
+    expected_prune_orphan_connectors, expected_bidirectional_connectors, expected_manually_modified_connectors
+
+VALIDATION_EXCLUDED_REGEX = r"root\[\'dataflows'\]\[.+?\]\['name'\]"
 
 
 class TestVisioProcessor:

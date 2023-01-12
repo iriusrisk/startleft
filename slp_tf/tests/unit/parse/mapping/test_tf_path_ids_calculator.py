@@ -2,7 +2,7 @@ from random import shuffle
 
 from pytest import mark
 
-from otm.otm.otm import Component
+from otm.otm.entity.component import OtmComponent
 from slp_tf.slp_tf.parse.mapping.tf_path_ids_calculator import TerraformPathIdsCalculator
 
 
@@ -14,7 +14,7 @@ class MockedComponentIdGenerator:
         self.parent_id = parent_id
 
     @staticmethod
-    def from_component_source(component_source: {}, parent_id: str):
+    def from_component_source(component_source: {}, parent_id: str, component_name: str = ''):
         return MockedComponentIdGenerator(
             name=component_source['_key'],
             type=component_source['Type'],
@@ -24,15 +24,15 @@ class MockedComponentIdGenerator:
         return f'{self.parent_id}.{self.type}-{self.name}'
 
 
-def create_otm_component(component_data: {}) -> Component:
-    return Component(**component_data)
+def create_otm_component(component_data: {}) -> OtmComponent:
+    return OtmComponent(**component_data)
 
 
-def to_otm_components(components_data: []) -> [Component]:
+def to_otm_components(components_data: []) -> [OtmComponent]:
     return [create_otm_component(data) for data in components_data]
 
 
-def shuffle_components(components: [Component]) -> [Component]:
+def shuffle_components(components: [OtmComponent]) -> [OtmComponent]:
     shuffle(components)
     return components
 
@@ -40,7 +40,7 @@ def shuffle_components(components: [Component]) -> [Component]:
 TRUSTZONE_PARENT_COMPONENT = to_otm_components([
     {
         'name': 'grandparent_1',
-        'type': 'vpc',
+        'component_type': 'vpc',
         'parent_type': "trustZone",
         'source': {
             'grandparent_1': {},
@@ -49,7 +49,7 @@ TRUSTZONE_PARENT_COMPONENT = to_otm_components([
         },
         'parent': 'tz-1',
         'tags': [],
-        'id': 'gp1'
+        'component_id': 'gp1'
     }
 ])
 
@@ -58,7 +58,7 @@ TRUSTZONE_PARENT_PATH_IDS = {'gp1': 'tz-1.aws_vpc-grandparent_1'}
 THREE_LEVELS_TWO_LEAFS_COMPONENTS = to_otm_components([
     {
         'name': 'parent_1',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'parent_type': "component",
         'source': {
             'parent_1': {},
@@ -67,10 +67,10 @@ THREE_LEVELS_TWO_LEAFS_COMPONENTS = to_otm_components([
         },
         'parent': 'gp1',
         'tags': [],
-        'id': 'p1'
+        'component_id': 'p1'
     }, {
         'name': 'grandparent_1',
-        'type': 'vpc',
+        'component_type': 'vpc',
         'parent_type': "trustZone",
         'source': {
             'grandparent_1': {},
@@ -79,10 +79,10 @@ THREE_LEVELS_TWO_LEAFS_COMPONENTS = to_otm_components([
         },
         'parent': 'tz-1',
         'tags': [],
-        'id': 'gp1'
+        'component_id': 'gp1'
     }, {
         'name': 'parent_2',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'parent_type': "component",
         'source': {
             'parent_2': {},
@@ -91,10 +91,10 @@ THREE_LEVELS_TWO_LEAFS_COMPONENTS = to_otm_components([
         },
         'parent': 'gp1',
         'tags': [],
-        'id': 'p2'
+        'component_id': 'p2'
     }, {
         'name': 'child',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'parent_type': "component",
         'source': {
             'child': {},
@@ -103,10 +103,10 @@ THREE_LEVELS_TWO_LEAFS_COMPONENTS = to_otm_components([
         },
         'parent': 'p1',
         'tags': [],
-        'id': 'c1'
+        'component_id': 'c1'
     }, {
         'name': 'child',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'parent_type': "component",
         'source': {
             'child': {},
@@ -115,7 +115,7 @@ THREE_LEVELS_TWO_LEAFS_COMPONENTS = to_otm_components([
         },
         'parent': 'p2',
         'tags': [],
-        'id': 'c2'
+        'component_id': 'c2'
     }
 ])
 
@@ -130,7 +130,7 @@ THREE_LEVELS_TWO_LEAFS_PATH_IDS = {
 TWO_TRUSTZONES_TWO_LEVELS_COMPONENTS = to_otm_components([
     {
         'name': 'grandparent_1',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'parent_type': "trustZone",
         'source': {
             'grandparent_1': {},
@@ -139,10 +139,10 @@ TWO_TRUSTZONES_TWO_LEVELS_COMPONENTS = to_otm_components([
         },
         'parent': 'tz1',
         'tags': [],
-        'id': 'gp1'
+        'component_id': 'gp1'
     }, {
         'name': 'parent_1',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'parent_type': "component",
         'source': {
             'parent_1': {},
@@ -151,10 +151,10 @@ TWO_TRUSTZONES_TWO_LEVELS_COMPONENTS = to_otm_components([
         },
         'parent': 'gp1',
         'tags': [],
-        'id': 'p1'
+        'component_id': 'p1'
     }, {
         'name': 'grandparent_2',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'parent_type': "trustZone",
         'source': {
             'grandparent_2': {},
@@ -163,10 +163,10 @@ TWO_TRUSTZONES_TWO_LEVELS_COMPONENTS = to_otm_components([
         },
         'parent': 'tz2',
         'tags': [],
-        'id': 'gp2'
+        'component_id': 'gp2'
     }, {
         'name': 'parent_2',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'parent_type': "component",
         'source': {
             'parent_2': {},
@@ -175,7 +175,7 @@ TWO_TRUSTZONES_TWO_LEVELS_COMPONENTS = to_otm_components([
         },
         'parent': 'gp2',
         'tags': [],
-        'id': 'p2'
+        'component_id': 'p2'
     }
 ])
 
@@ -189,7 +189,7 @@ TWO_TRUSTZONES_TWO_LEVELS_PATH_IDS = {
 BROKEN_PATH_COMPONENTS = to_otm_components([
     {
         'name': 'grandparent',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'parent_type': "trustZone",
         'source': {
             'grandparent': {},
@@ -198,10 +198,10 @@ BROKEN_PATH_COMPONENTS = to_otm_components([
         },
         'parent': 'tz1',
         'tags': [],
-        'id': 'gp1'
+        'component_id': 'gp1'
     }, {
         'name': 'parent',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'parent_type': "component",
         'source': {
             'parent': {},
@@ -210,10 +210,10 @@ BROKEN_PATH_COMPONENTS = to_otm_components([
         },
         'parent': 'unexisting_parent',
         'tags': [],
-        'id': 'p1'
+        'component_id': 'p1'
     }, {
         'name': 'child',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'parent_type': "component",
         'source': {
             'child': {},
@@ -222,7 +222,7 @@ BROKEN_PATH_COMPONENTS = to_otm_components([
         },
         'parent': 'p1',
         'tags': [],
-        'id': 'c1'
+        'component_id': 'c1'
     }
 ])
 
@@ -233,7 +233,7 @@ BROKEN_PATH_PATH_IDS = {
 UNEXISTING_PARENT_COMPONENT = to_otm_components([
     {
         'name': 'some_component',
-        'type': 'empty-component',
+        'component_type': 'empty-component',
         'parent_type': "component",
         'source': {
             'some_component': {},
@@ -242,7 +242,7 @@ UNEXISTING_PARENT_COMPONENT = to_otm_components([
         },
         'parent': 'unexisting_parent',
         'tags': [],
-        'id': 'c1'
+        'component_id': 'c1'
     }
 ])
 

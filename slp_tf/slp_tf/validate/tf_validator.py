@@ -7,7 +7,7 @@ from slp_base.slp_base import ProviderValidator
 
 logger = logging.getLogger(__name__)
 
-VALID_MIME = ('text/plain')
+VALID_MIME = ['text/plain', 'application/octet-stream']
 
 MAX_SIZE = 20 * 1024 * 1024
 MIN_SIZE = 20
