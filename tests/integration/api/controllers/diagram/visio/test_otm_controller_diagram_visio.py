@@ -85,7 +85,7 @@ class TestOtmControllerDiagramVisio:
 
         # And the request files
         diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), octet_stream)
-        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'r'), 'text/yaml')
+        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a DiagramFileNotValidError
         error = DiagramFileNotValidError('Invalid size', 'mocked error detail', 'mocked error msg 1')
@@ -115,7 +115,7 @@ class TestOtmControllerDiagramVisio:
 
         # And the request files
         diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
-        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'r'), 'text/yaml')
+        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
         error = LoadingDiagramFileError('mocked error title', 'mocked error detail', 'mocked error msg 1')
@@ -145,7 +145,7 @@ class TestOtmControllerDiagramVisio:
 
         # And the request files
         diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
-        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'r'), 'text/yaml')
+        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
         error = MappingFileNotValidError('Mapping file does not comply with the schema', 'Schema error',
@@ -176,7 +176,7 @@ class TestOtmControllerDiagramVisio:
 
         # And the request files
         diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
-        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'r'), 'text/yaml')
+        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
         error = LoadingMappingFileError('Error loading the mapping file. The mapping file ins not valid.',
@@ -207,7 +207,7 @@ class TestOtmControllerDiagramVisio:
 
         # And the request files
         diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
-        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'r'), 'text/yaml')
+        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
         error = OtmResultError('OTM file does not comply with the schema', 'Schema error', 'mocked error msg')
@@ -237,7 +237,7 @@ class TestOtmControllerDiagramVisio:
 
         # And the request files
         diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
-        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'r'), 'text/yaml')
+        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
         error = OtmBuildingError('OTM building error', 'Schema error', 'mocked error msg')
@@ -263,7 +263,7 @@ class TestOtmControllerDiagramVisio:
         (b'', 'Provided visio file is not valid. Invalid size'),
         (bytearray(4), 'Provided visio file is not valid. Invalid size'),
         (bytearray(1024 * 1024 * 10 + 1), 'Provided visio file is not valid. Invalid size'),
-        (open(default_visio_mapping, 'r'), 'Invalid content type for diag_file')
+        (open(default_visio_mapping, 'rb'), 'Invalid content type for diag_file')
     ])
     @responses.activate
     def test_response_on_invalid_diagram_file(self, diagram_source, detail):
@@ -271,8 +271,9 @@ class TestOtmControllerDiagramVisio:
         project_id: str = 'project_A_id'
 
         # And the request files
+        diagram_source = bytes(diagram_source) if isinstance(diagram_source, bytearray) else diagram_source
         diagram_file = (visio_aws_with_tz_and_vpc, diagram_source, 'application/json')
-        mapping_file = ('default_mapping_file', open(default_visio_mapping, 'r'), 'text/yaml')
+        mapping_file = ('default_mapping_file', open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # When I do post on diagram endpoint
         files = {'diag_file': diagram_file, 'default_mapping_file': mapping_file}
@@ -303,6 +304,7 @@ class TestOtmControllerDiagramVisio:
 
         # And the request files
         diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
+        mapping_source = bytes(mapping_source) if isinstance(mapping_source, bytearray) else mapping_source
         mapping_file = ('default_mapping_file', mapping_source, 'text/yaml')
 
         # When I do post on diagram endpoint
