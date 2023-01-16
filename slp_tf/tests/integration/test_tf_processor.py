@@ -316,3 +316,21 @@ class TestTerraformProcessor:
         #    AND both components are mapped with the same name
         assert len(otm.components) == 2
         assert otm.components[0].name == otm.components[1].name
+
+    def test_backward_compatibility(self):
+        """
+        Test backward compatibility of aws_security_groups_components.tf
+        against iriusrisk-tf-aws-mapping-1.8.0 mapping file (release 1.8.0)
+        """
+        # GIVEN the TF file of aws security groups
+        terraform_file = get_data(test_resource_paths.terraform_aws_security_groups_components)
+
+        # AND a mapping file of release 1.8.0
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping_v180)
+
+        # WHEN the TF file is processed
+        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
+
+        # THEN the resulting OTM match the expected one
+        #   AND backward compatibility works correctly
+        assert validate_and_diff(otm, expected_aws_security_groups_components, VALIDATION_EXCLUDED_REGEX) == {}

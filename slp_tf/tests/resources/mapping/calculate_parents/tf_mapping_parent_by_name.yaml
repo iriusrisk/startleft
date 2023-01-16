@@ -1,0 +1,11 @@
+trustzones:
+  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+    $default: true
+components:
+  - type:        empty-component
+    $source:     {$type: "aws_resource_a"}
+  - type:        empty-component
+    $source:     {$type: "aws_resource_b"}
+    parent:      {$path: "*.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('aws_[\\w-]+\\.', '', @) | re_sub('\\.id', '', @)"}
+dataflows: []

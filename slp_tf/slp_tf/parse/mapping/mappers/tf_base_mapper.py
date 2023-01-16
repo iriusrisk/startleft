@@ -3,6 +3,8 @@ import re
 import uuid
 from abc import ABC, abstractmethod
 
+from slp_tf.slp_tf.parse.mapping.mappers.tf_backward_compatibility import TfIdMapDictionary
+
 
 def is_terraform_resource_reference(value: str):
     return value is not None and isinstance(value, str) and re.match(
@@ -22,7 +24,7 @@ class TerraformBaseMapper(ABC):
 
     def __init__(self, mapping):
         self.mapping = mapping
-        self.id_map = {}
+        self.id_map = TfIdMapDictionary()
 
     @abstractmethod
     def run(self, source, ids):
