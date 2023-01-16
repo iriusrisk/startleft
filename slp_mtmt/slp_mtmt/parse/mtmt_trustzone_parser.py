@@ -40,11 +40,10 @@ class MTMTTrustzoneParser:
         if mtmt_type is not None:
             calculator = TrustzoneRepresentationCalculator(self.diagram_representation, border)
             representations = calculator.calculate_representation()
-            trustzone_id = self.calculate_otm_id(border)
             tz = OtmTrustzone(trustzone_id=border.id,
-                           name=border.name,
-                           type=mtmt_type,
-                           properties=border.properties)
+                              name=border.name,
+                              type=mtmt_type,
+                              properties=border.properties)
             if representations:
                 tz.representations = [representations]
             return tz

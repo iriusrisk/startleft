@@ -560,7 +560,7 @@ class TestCloudformationProcessor:
         assert validate_and_diff_otm(otm.json(), test_resource_paths.minimal_otm_expected_result,
                                      excluded_regex) == {}
 
-        def test_security_group_components_from_same_resource(self):
+    def test_security_group_components_from_same_resource(self):
         # GIVEN a valid CFT file with a security group containing both an inbound and an outbound rule
         cloudformation_file = get_data(test_resource_paths.cloudformation_components_from_same_resource)
 

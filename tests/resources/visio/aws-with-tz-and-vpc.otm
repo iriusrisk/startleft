@@ -69,7 +69,7 @@
       "name": "Custom VPC",
       "type": "empty-component",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "47"
       },
       "representations": [
         {
@@ -138,7 +138,7 @@
       "name": "Private Database",
       "type": "rds",
       "parent": {
-        "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+        "trustZone": "48"
       },
       "representations": [
         {
@@ -161,7 +161,7 @@
       "name": "Amazon CloudWatch",
       "type": "cloudwatch",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "47"
       },
       "representations": [
         {
@@ -184,7 +184,7 @@
       "name": "Custom log system",
       "type": "cloudwatch",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "47"
       },
       "representations": [
         {
@@ -206,25 +206,25 @@
   "dataflows": [
     {
       "id": "17",
-      "name": "f5410691-ef24-40ed-998c-de531c3a5729",
+      "name": "21830dc6-840d-4254-bb35-f4b2c68561e5",
       "source": "1",
       "destination": "12"
     },
     {
       "id": "34",
-      "name": "464ebc9f-c719-4016-bc68-bc7748a36eb7",
+      "name": "89ab351c-6ae7-4afb-ad90-0eb045fd801a",
       "source": "12",
       "destination": "30"
     },
     {
       "id": "40",
-      "name": "72342e77-c396-4f33-8906-0fbb99866dcc",
+      "name": "7aecb32c-e39f-4dc2-ad6e-7f5793161a6d",
       "source": "1",
       "destination": "35"
     },
     {
       "id": "46",
-      "name": "ba94a687-6492-4a5d-9256-40b927739ebe",
+      "name": "6ceb010f-8390-4dc5-943b-62d268c34e78",
       "source": "12",
       "destination": "41"
     }
