@@ -23,7 +23,7 @@ deploying its documentation. To do that, first we need to select the right branc
 * `feature/{feature-number}` (i.e: `feature/600`) are the branches for specific developments.
 
 So, suppose for example you want to check the documentation for the developments delivered in the next version. You 
-will need to clone the `dev branch:
+will need to clone the `dev` branch:
 
 ```shell
 git clone -b dev https://github.com/iriusrisk/startleft.git
