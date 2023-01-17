@@ -59,10 +59,7 @@ class TerraformComponentMapper(TerraformBaseMapper):
                                                                               singleton_multiple_tags)
 
                     # Special case related with support components for Security Groups
-                    # To avoid repeated components generated from AWS Cidr IP fields
-                    # Or Use case B.1 Security Group Ingress inside the own Security Group resource.
-                    if self.repeated_type4_hub_definition_component(self.mapping, component_resource_id)\
-                            or self.exists_vpc_with_cidr_block_in_id_map(source_model, component_resource_id):
+                    if self.repeated_type4_hub_definition_component(source_model, self.mapping, component_resource_id):
                         continue
 
                     component_ids = self.__generate_id(
