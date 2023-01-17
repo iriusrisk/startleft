@@ -1,17 +1,18 @@
-from slp_visio.slp_visio.parse.representation.representation_calculator import RepresentationCalculator, \
-    build_size_object, calculate_diagram_size
+from otm.otm.entity.component import OtmComponent
+from otm.otm.entity.dataflow import OtmDataflow
+from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
+from otm.otm.entity.trustzone import OtmTrustzone
+from otm.otm.otm_builder import OtmBuilder
+from otm.otm.otm_pruner import OtmPruner
+from slp_base import ProviderParser
 from slp_visio.slp_visio.load.objects.diagram_objects import Diagram
 from slp_visio.slp_visio.load.visio_mapping_loader import VisioMappingFileLoader
 from slp_visio.slp_visio.parse.diagram_pruner import DiagramPruner
 from slp_visio.slp_visio.parse.mappers.diagram_component_mapper import DiagramComponentMapper
 from slp_visio.slp_visio.parse.mappers.diagram_connector_mapper import DiagramConnectorMapper
 from slp_visio.slp_visio.parse.mappers.diagram_trustzone_mapper import DiagramTrustzoneMapper
-from otm.otm.entity.dataflow import OtmDataflow
-from otm.otm.entity.component import OtmComponent
-from otm.otm.entity.trustzone import OtmTrustzone
-from otm.otm.otm_builder import OtmBuilder
-from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
-from slp_base import ProviderParser
+from slp_visio.slp_visio.parse.representation.representation_calculator import RepresentationCalculator, \
+    build_size_object, calculate_diagram_size
 
 
 class VisioParser(ProviderParser):
@@ -37,12 +38,11 @@ class VisioParser(ProviderParser):
         self.__component_mappings = self.mapping_loader.get_component_mappings()
         self.__default_trustzone = None
 
-
-
     def build_otm(self):
         self.__prune_diagram()
-
-        return self.__build_otm(self.__map_trustzones(), self.__map_components(), self.__map_dataflows())
+        otm = self.__build_otm(self.__map_trustzones(), self.__map_components(), self.__map_dataflows())
+        OtmPruner(otm).prune_orphan_dataflows()
+        return otm
 
     def __prune_diagram(self):
         DiagramPruner(self.diagram, self.mapping_loader.get_all_labels()).run()

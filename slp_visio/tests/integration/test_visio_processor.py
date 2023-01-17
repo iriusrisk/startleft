@@ -1,3 +1,5 @@
+from pytest import mark
+
 from sl_util.sl_util.file_utils import get_data
 from slp_base.tests.util.otm import validate_and_diff
 from slp_visio.slp_visio.visio_processor import VisioProcessor
@@ -188,3 +190,21 @@ class TestVisioProcessor:
         ).process()
 
         assert validate_and_diff(otm, expected_manually_modified_connectors, VALIDATION_EXCLUDED_REGEX) == {}
+
+    @mark.parametrize('vsdx,expected', [
+        (test_resource_paths.visio_origin_target_trustzone, test_resource_paths.expected_origin_target_trustzone),
+        (test_resource_paths.visio_origin_trustzone, test_resource_paths.expected_origin_trustzone),
+        (test_resource_paths.visio_target_trustzone, test_resource_paths.expected_origin_trustzone),
+    ])
+    def test_dataflows_connecting_trust_zones(self, vsdx, expected):
+        # Given the visio file
+        visio_file = open(vsdx, "r")
+
+        otm = VisioProcessor(
+            "project-id",
+            "project-name",
+            visio_file,
+            [get_data(test_resource_paths.default_visio_mapping)],
+        ).process()
+
+        assert validate_and_diff(otm, expected, None) == {}

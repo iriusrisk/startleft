@@ -32,6 +32,9 @@ visio_modified_single_connectors = f'{path}/visio/modified-single-connectors.vsd
 visio_bidirectional_connectors = f'{path}/visio/bidirectional-connectors.vsdx'
 visio_complex_stencil_text = f'{path}/visio/standalone-with-custom-name-AWS-complex-stencils-shapes.vsdx'
 visio_empty = f'{path}/visio/empty-diagram.vsdx'
+visio_origin_target_trustzone = f'{path}/visio/origin-target-trustzone.vsdx'
+visio_origin_trustzone = f'{path}/visio/origin-trustzone.vsdx'
+visio_target_trustzone = f'{path}/visio/target-trustzone.vsdx'
 
 # otm
 expected_aws_shapes = f'{path}/otm/expected_aws_shapes.otm'
@@ -50,3 +53,5 @@ expected_prune_orphan_connectors = f'{path}/otm/expected_prune_orphan_connectors
 expected_self_pointing_connectors = f'{path}/otm/expected_self_pointing_connectors.otm'
 expected_simple_boundary_tzs = f'{path}/otm/expected_simple_boundary_tzs.otm'
 expected_visio_boundary_and_component_tzs = f'{path}/otm/expected_visio_boundary_and_component_tzs.otm'
+expected_origin_target_trustzone = f'{path}/otm/expected_origin_target_trustzone.otm'
+expected_origin_trustzone = f'{path}/otm/expected_origin_trustzone.otm'
