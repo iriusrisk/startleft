@@ -1,9 +1,9 @@
-# This workflow will install Python 3.8, Starleft dependencies and then run Starleft tests.
+# This workflow will install Python, Starleft dependencies and then run Starleft tests.
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: Startleft automated testing
+name: Fast Startleft automated testing
 
-on: [workflow_dispatch,push,pull_request]
+on: [workflow_dispatch,push]
 
 permissions:
   contents: read
@@ -14,8 +14,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest ]
-        python-version: [ "3.8", "3.9", "3.10", "3.11" ]
+        os: [ ubuntu-latest ]
+        python-version: [ "3.8" ]
 
     steps:
       - name: Checkout the project from Git
