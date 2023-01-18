@@ -1,6 +1,7 @@
 import logging
 import uuid
 
+from slp_tf.slp_tf.parse.mapping.mappers.tf_backward_compatibility import TfIdMapDictionary, TfDataflowNodeId
 from slp_tf.slp_tf.parse.mapping.mappers.tf_component_mapper import TerraformComponentMapper
 from slp_tf.slp_tf.parse.mapping.mappers.tf_dataflow_mapper import TerraformDataflowMapper
 from slp_tf.slp_tf.parse.mapping.mappers.tf_trustzone_mapper import TerraformTrustzoneMapper
@@ -37,7 +38,7 @@ class TerraformTransformer:
         self.source_model = source_model
         self.threat_model = threat_model
         self.iac_mapping = {}
-        self.id_map = {}
+        self.id_map = TfIdMapDictionary()
         self.id_parents = {}
         self.id_dataflows = {}
         self.tree = {}
@@ -357,7 +358,7 @@ class TerraformTransformer:
         if "type3-hub-" in node_id:
             hub_type = TYPE3
             node_id = node_id[10:]
-        return hub_type, node_id
+        return hub_type, TfDataflowNodeId(node_id)
 
     def __is_case_1_dataflow(self, dataflow, cursor_dataflow):
         """ Look for 1 to 1 dataflows like in VPCEndpoints - Security Group - IP

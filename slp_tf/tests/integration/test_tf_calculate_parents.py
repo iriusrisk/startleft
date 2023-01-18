@@ -8,7 +8,7 @@ from slp_tf.tests.integration.test_tf_processor import VALIDATION_EXCLUDED_REGEX
 from slp_tf.tests.resources import test_resource_paths
 from slp_tf.tests.resources.test_resource_paths import expected_orphan_component_is_not_mapped, \
     expected_mapping_skipped_component_without_parent, tf_mapping_parent_by_full_path_attribute, \
-    tf_mapping_parent_by_type_name
+    tf_mapping_parent_by_type_name, tf_mapping_parent_by_name
 from slp_tf.tests.resources.test_resource_paths import terraform_iriusrisk_tf_aws_mapping
 from slp_tf.tests.utility import excluded_regex
 
@@ -64,11 +64,9 @@ class TestTerraformCalculateParents:
                                  VALIDATION_EXCLUDED_REGEX) == {}
 
     @pytest.mark.parametrize('mapping_file', [
-        get_data(tf_mapping_parent_by_type_name),
-        get_data(tf_mapping_parent_by_full_path_attribute)]
-        , ids=[
-            "by {type}.{name}",
-            "by full path attribute"])
+        pytest.param(get_data(tf_mapping_parent_by_type_name), id="by {type}.{name}"),
+        pytest.param(get_data(tf_mapping_parent_by_full_path_attribute), id="by full path attribute"),
+        pytest.param(get_data(tf_mapping_parent_by_name), id="by {name}")])
     def test_define_parent_relationship(self, mapping_file):
         """
         Generate an OTM for TF file with parent definition

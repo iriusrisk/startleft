@@ -6,7 +6,7 @@ from slp_tf import TerraformProcessor
 from slp_tf.tests.integration.test_tf_processor import VALIDATION_EXCLUDED_REGEX
 from slp_tf.tests.resources import test_resource_paths
 from slp_tf.tests.resources.test_resource_paths import expected_aws_parent_children_components, \
-    tf_mapping_children_by_full_path_attribute, tf_mapping_children_by_type_name
+    tf_mapping_children_by_full_path_attribute, tf_mapping_children_by_type_name, tf_mapping_children_by_name
 from slp_tf.tests.resources.test_resource_paths import terraform_iriusrisk_tf_aws_mapping
 
 SAMPLE_ID = 'id'
@@ -30,12 +30,9 @@ class TestTerraformCalculateChildren:
         assert validate_and_diff(otm, expected_aws_parent_children_components, VALIDATION_EXCLUDED_REGEX) == {}
 
     @pytest.mark.parametrize('mapping_file', [
-        get_data(tf_mapping_children_by_type_name),
-        get_data(tf_mapping_children_by_full_path_attribute)
-        ]
-        , ids=[
-            "by {type}.{name}",
-            "by full path attribute"])
+        pytest.param(get_data(tf_mapping_children_by_type_name), id="by {type}.{name}"),
+        pytest.param(get_data(tf_mapping_children_by_full_path_attribute), id="by full path attribute"),
+        pytest.param(get_data(tf_mapping_children_by_name), id="by {name}")])
     def test_define_children_relationship(self, mapping_file):
         """
         Generate an OTM for TF file with children definition

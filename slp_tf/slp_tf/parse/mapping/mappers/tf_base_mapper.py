@@ -3,6 +3,8 @@ import re
 import uuid
 from abc import ABC, abstractmethod
 
+from slp_tf.slp_tf.parse.mapping.mappers.tf_backward_compatibility import TfIdMapDictionary
+
 
 def is_terraform_resource_reference(value: str):
     return value is not None and isinstance(value, str) and re.match(
@@ -22,7 +24,7 @@ class TerraformBaseMapper(ABC):
 
     def __init__(self, mapping):
         self.mapping = mapping
-        self.id_map = {}
+        self.id_map = TfIdMapDictionary()
 
     @abstractmethod
     def run(self, source, ids):
@@ -115,9 +117,12 @@ class TerraformBaseMapper(ABC):
 
         return value
 
-    def repeated_type4_hub_definition_component(self, mapping, component_resource_id):
+    # To avoid repeated components generated from AWS Cidr IP fields
+    # Or Use case B.1 Security Group Ingress inside the own Security Group resource.
+    def repeated_type4_hub_definition_component(self, source_model, mapping, component_resource_id):
         if "$ip" in str(mapping["name"]) or "$ip" in str(mapping["type"]):
-            return component_resource_id in self.id_map
+            return component_resource_id in self.id_map or \
+                   self.exists_vpc_with_cidr_block_in_id_map(source_model, component_resource_id)
 
     # if exists an aws_vpc which cidr_block value is the component["id"]
     # Prevent to generate component and map on id_map the component["id"] to the aws_vpc uuid
