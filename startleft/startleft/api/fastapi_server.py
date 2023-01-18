@@ -6,6 +6,7 @@ from fastapi import FastAPI, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException
 
 from startleft.startleft.api.controllers.diagram import diag_create_otm_controller
 from startleft.startleft.api.controllers.etm import etm_create_otm_controller
@@ -27,6 +28,7 @@ webapp.include_router(etm_create_otm_controller.router)
 
 def initialize_webapp():
     webapp.exception_handler(handle_common_error)
+    webapp.exception_handler(handle_http_exception)
     webapp.exception_handler(handle_unexpected_exceptions)
 
     return webapp
@@ -47,6 +49,13 @@ def get_log_config():
 
 def run_webapp(port: int):
     uvicorn.run(webapp, host="127.0.0.1", port=port, log_config=get_log_config())
+
+
+@webapp.exception_handler(HTTPException)
+async def handle_http_exception(request: Request, httpe: HTTPException):
+    logger.exception(httpe)
+    title = httpe.detail if (hasattr(httpe, 'detail') and httpe.detail is not None) else 'Something went wrong handling the request'
+    return common_response_handler(httpe.status_code, httpe.__class__.__name__, title, str(request.url), [])
 
 
 @webapp.exception_handler(CommonError)
