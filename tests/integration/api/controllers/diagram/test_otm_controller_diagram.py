@@ -9,7 +9,7 @@ from tests.resources import test_resource_paths
 
 IRIUSRISK_URL = ''
 
-webapp = fastapi_server.initialize_webapp()
+webapp = fastapi_server.webapp
 
 client = TestClient(webapp)
 

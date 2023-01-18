@@ -16,7 +16,7 @@ from tests.resources.test_resource_paths import visio_aws_with_tz_and_vpc, defau
 
 IRIUSRISK_URL = ''
 
-webapp = fastapi_server.initialize_webapp()
+webapp = fastapi_server.webapp
 
 client = TestClient(webapp)
 

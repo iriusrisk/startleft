@@ -26,14 +26,6 @@ webapp.include_router(diag_create_otm_controller.router)
 webapp.include_router(etm_create_otm_controller.router)
 
 
-def initialize_webapp():
-    webapp.exception_handler(handle_common_error)
-    webapp.exception_handler(handle_http_exception)
-    webapp.exception_handler(handle_unexpected_exceptions)
-
-    return webapp
-
-
 def get_log_config():
     log_config = uvicorn.config.LOGGING_CONFIG
     app_log_level = get_uvicorn_log_level()
