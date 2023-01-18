@@ -1,4 +1,4 @@
-# This workflow will install Python, Starleft dependencies and then run Starleft tests.
+# This workflow will install Python, StarLeft dependencies and then run StarLeft tests.
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
 name: Fast Startleft automated testing
