@@ -44,6 +44,7 @@ terraform_mapping_modules = path + '/mapping/terraform_mapping_modules.yaml'
 terraform_mapping_extra_modules = path + '/mapping/terraform_mapping_extra_modules.yaml'
 terraform_iriusrisk_tf_aws_mapping = path + '/mapping/iriusrisk-tf-aws-mapping.yaml'
 empty_terraform_mapping = path + '/mapping/empty_terraform_mapping.yaml'
+invalid_no_dataflows = path + '/mapping/invalid-mapping-without-dataflows.yaml'
 
 # otm
 tf_file_expected_result = path + '/otm/tf-file-expected-result.otm'

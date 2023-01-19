@@ -9,6 +9,7 @@ invalid_yaml = f'{path}/generic/invalid-yaml.yaml'
 default_visio_mapping = f'/{path}/mapping/aws-visio-mapping.yaml'
 custom_vpc_mapping = f'/{path}/mapping/custom-vpc-mapping.yaml'
 empty_mapping = f'/{path}/mapping/empty-mapping.yaml'
+invalid_no_dataflows = f'/{path}/mapping/invalid-mapping-without-dataflows.yaml'
 
 # visio
 visio_aws_with_tz_and_vpc = f'{path}/visio/aws-with-tz-and-vpc.vsdx'
