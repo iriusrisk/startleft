@@ -44,6 +44,7 @@ class MTMTComponentParser:
                                 properties=border.properties,
                                 source=border)
             if representation:
+                calculator.scale_representation(representation)
                 component.representations = [representation]
             return component
 
