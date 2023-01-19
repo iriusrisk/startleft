@@ -7,9 +7,10 @@ logger = logging.getLogger(__name__)
 
 
 class OtmValidator:
+    schema_filename = 'otm_schema.json'
 
     def __init__(self):
-        self.schema: Schema = Schema('otm_schema.json')
+        self.schema: Schema = Schema.from_package('otm', self.schema_filename)
 
     def validate(self, otm):
         self.__validate_otm_schema(otm)
