@@ -34,6 +34,11 @@ DIAGRAM_TYPE_SHORTNAME = '-g'
 DIAGRAM_TYPE_DESC = 'The diagram file type.'
 DIAGRAM_TYPE_SUPPORTED = ['VISIO']
 
+ETM_TYPE_NAME = '--etm-type'
+ETM_TYPE_SHORTNAME = '-e'
+ETM_TYPE_DESC = 'The etm file type.'
+ETM_TYPE_SUPPORTED = ['MTMT']
+
 MAPPING_FILE_NAME = '--mapping-file'
 MAPPING_FILE_SHORTNAME = '-m'
 MAPPING_FILE_DESC = 'Mapping file to parse the IaC file.'
