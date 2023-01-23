@@ -34,12 +34,19 @@ And then launch the StartLeft documentation
 
 ## Launch StartLeft documentation by Dockerfile
 
-Deploy the documentation using the provided `docker-compose` file inside the `deployment` folder:
+Deploy the documentation using the provided `docker-compose.yml` file inside the `deployment` folder:
+
+- With docker installed from debian/ubuntu packages (docker.io) and the docker-compose plugin
 ```shell
 cd deployment
-
 docker-compose up -d docs
 ```
+- With docker installed from docker.com packages
+```shell
+cd deployment
+docker compose up -d docs
+```
+
 
 Now you can access the docs in [http://localhost:8000](http://localhost:8000).
 
