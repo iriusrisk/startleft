@@ -1,6 +1,6 @@
 import abc
 
-from otm.otm.otm import RepresentationElement
+from otm.otm.entity.representation import RepresentationElement
 from slp_mtmt.slp_mtmt.entity.mtmt_entity import MTMEntity
 
 

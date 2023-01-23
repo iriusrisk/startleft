@@ -6,12 +6,12 @@
   },
   "representations": [
     {
-      "name": "Visio",
-      "id": "Visio",
+      "name": "project-id Diagram Representation",
+      "id": "project-id-diagram",
       "type": "diagram",
       "size": {
-        "width": 1000,
-        "height": 1000
+        "width": 1691,
+        "height": 1297
       }
     }
   ],

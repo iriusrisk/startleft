@@ -1,5 +1,6 @@
 from pytest import mark
 
+from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
 from sl_util.sl_util.file_utils import get_byte_data
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_line import MTMLine
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT

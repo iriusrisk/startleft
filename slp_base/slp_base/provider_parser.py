@@ -1,6 +1,6 @@
 import abc
 
-from otm.otm.otm import OTM
+from otm.otm.entity.otm import Otm
 
 
 class ProviderParser(metaclass=abc.ABCMeta):
@@ -15,6 +15,6 @@ class ProviderParser(metaclass=abc.ABCMeta):
                 NotImplemented)
 
     @abc.abstractmethod
-    def build_otm(self) -> OTM:
+    def build_otm(self) -> Otm:
         """Build a OTM from provider source data and mapping data"""
         raise NotImplementedError

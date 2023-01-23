@@ -22,8 +22,8 @@ The following examples, which are located in the `examples/cloudformation` and `
 directories, show you how to carry out the different stages of the process separately or in a single step.
 
 ### Security Groups on multinetwork with Load Balancer
-This is a rich example when you can see in action some of the capabilities of StartLeft. It represents the threat model for
-an architecture with two trust zones and several _Virtual Private Networks_ which contain elements such as:
+This is a rich example when you can see in action some the capabilities of StartLeft. It represents the threat model for
+an architecture with two TrustZones and several _Virtual Private Networks_ which contain elements such as:
 
 * [Elastic Load Balancer](https://aws.amazon.com/elasticloadbalancing/).
 * [Elastic Container Service](https://aws.amazon.com/ecs/).

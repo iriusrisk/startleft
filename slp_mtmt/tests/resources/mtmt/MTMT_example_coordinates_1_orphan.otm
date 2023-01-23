@@ -31,22 +31,7 @@
       "properties": {
         "Name": "Internet",
         "Dataflow Order": "0"
-      },
-      "representations": [
-        {
-          "name": "Internet Representation",
-          "id": "13ffd9d9-53ea-4b63-afab-07b730697ddd-representation",
-          "representation": "example-project-diagram",
-          "size": {
-            "width": 327,
-            "height": 497
-          },
-          "position": {
-            "x": 342,
-            "y": 83
-          }
-        }
-      ]
+      }
     },
     {
       "id": "acafa4b0-f94d-4077-8a42-74b959bd0796",
@@ -58,22 +43,7 @@
       "properties": {
         "Name": "Cloud",
         "Dataflow Order": "0"
-      },
-      "representations": [
-        {
-          "name": "Cloud Representation",
-          "id": "acafa4b0-f94d-4077-8a42-74b959bd0796-representation",
-          "representation": "example-project-diagram",
-          "size": {
-            "width": 535,
-            "height": 488
-          },
-          "position": {
-            "x": 734,
-            "y": 88
-          }
-        }
-      ]
+      }
     },
     {
       "id": "185f1c6f-3879-464c-89c9-dc6f0b0c2b21",
@@ -97,22 +67,7 @@
         "Out Of Scope": "false",
         "Azure Postgres DB Firewall Settings": "Select",
         "Azure Postgres DB TLS Enforced": "Select"
-      },
-      "representations": [
-        {
-          "name": "Accounting PostgreSQL Representation",
-          "id": "53245f54-0656-4ede-a393-357aeaa2e20f-representation",
-          "representation": "example-project-diagram",
-          "size": {
-            "width": 100,
-            "height": 100
-          },
-          "position": {
-            "x": 334,
-            "y": 45
-          }
-        }
-      ]
+      }
     },
     {
       "id": "6183b7fa-eba5-4bf8-a0af-c3e30d144a10",
@@ -125,22 +80,7 @@
         "Name": "Android",
         "Out Of Scope": "false",
         "Mobile Client Technologies": "Android"
-      },
-      "representations": [
-        {
-          "name": "Android Representation",
-          "id": "6183b7fa-eba5-4bf8-a0af-c3e30d144a10-representation",
-          "representation": "example-project-diagram",
-          "size": {
-            "width": 100,
-            "height": 100
-          },
-          "position": {
-            "x": 64,
-            "y": 56
-          }
-        }
-      ]
+      }
     },
     {
       "id": "5d15323e-3729-4694-87b1-181c90af5045",
@@ -155,22 +95,7 @@
         "Web API Technologies": "Select",
         "Hosting environment": "Select",
         "Identity Provider": "Select"
-      },
-      "representations": [
-        {
-          "name": "Public API v2 Representation",
-          "id": "5d15323e-3729-4694-87b1-181c90af5045-representation",
-          "representation": "example-project-diagram",
-          "size": {
-            "width": 100,
-            "height": 100
-          },
-          "position": {
-            "x": 31,
-            "y": 155
-          }
-        }
-      ]
+      }
     },
     {
       "id": "91882aca-8249-49a7-96f0-164b68411b48",
@@ -186,22 +111,7 @@
         "HTTPS Enforced": "Select",
         "Network Security": "Select",
         "CORS Enabled": "Select"
-      },
-      "representations": [
-        {
-          "name": "Azure File Storage Representation",
-          "id": "91882aca-8249-49a7-96f0-164b68411b48-representation",
-          "representation": "example-project-diagram",
-          "size": {
-            "width": 100,
-            "height": 100
-          },
-          "position": {
-            "x": 300,
-            "y": 161
-          }
-        }
-      ]
+      }
     },
     {
       "id": "91c41c08-87c3-4740-a9fa-a37975717e93",
@@ -226,22 +136,7 @@
       "properties": {
         "Name": "Browser",
         "Out Of Scope": "false"
-      },
-      "representations": [
-        {
-          "name": "Browser Representation",
-          "id": "40560275-0a84-4e52-b67f-f9008519e608-representation",
-          "representation": "example-project-diagram",
-          "size": {
-            "width": 100,
-            "height": 100
-          },
-          "position": {
-            "x": 57,
-            "y": 359
-          }
-        }
-      ]
+      }
     },
     {
       "id": "b56070fb-682d-4af7-8262-a31064d85ba1",
@@ -256,22 +151,7 @@
         "Web API Technologies": "Select",
         "Hosting environment": "Select",
         "Identity Provider": "Select"
-      },
-      "representations": [
-        {
-          "name": "Web API Representation",
-          "id": "b56070fb-682d-4af7-8262-a31064d85ba1-representation",
-          "representation": "example-project-diagram",
-          "size": {
-            "width": 100,
-            "height": 100
-          },
-          "position": {
-            "x": 155,
-            "y": 297
-          }
-        }
-      ]
+      }
     },
     {
       "id": "07d453bf-8157-4623-a0e9-5107cc3ca0a5",
@@ -287,22 +167,7 @@
         "HTTPS Enforced": "Select",
         "Network Security": "Select",
         "CORS Enabled": "Select"
-      },
-      "representations": [
-        {
-          "name": "Azure Storage Representation",
-          "id": "07d453bf-8157-4623-a0e9-5107cc3ca0a5-representation",
-          "representation": "example-project-diagram",
-          "size": {
-            "width": 100,
-            "height": 100
-          },
-          "position": {
-            "x": 341,
-            "y": 293
-          }
-        }
-      ]
+      }
     }
   ],
   "dataflows": [

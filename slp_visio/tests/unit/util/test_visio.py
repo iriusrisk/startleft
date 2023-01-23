@@ -1,8 +1,9 @@
 from unittest.mock import MagicMock
 
+from pytest import mark
 from vsdx import VisioFile
 
-from slp_visio.slp_visio.util.visio import get_shape_text, get_master_shape_text
+from slp_visio.slp_visio.util.visio import get_shape_text, get_master_shape_text, normalize_label
 from slp_visio.tests.resources import test_resource_paths
 
 
@@ -28,8 +29,8 @@ class TestVisioUtils:
                 MagicMock(text='the child text')
             ]
         )
-        result = get_shape_text(shape)
-        assert result == "This isthe child text"
+        result = normalize_label(get_shape_text(shape))
+        assert result == "This is the child text"
 
     def test_get_shape_text_by_master_shape_text_attribute(self):
         shape = MagicMock(
@@ -53,8 +54,8 @@ class TestVisioUtils:
                 ]
             )
         )
-        result = get_shape_text(shape)
-        assert result == "This isthe master shape child text"
+        result = normalize_label(get_shape_text(shape))
+        assert result == "This is the master shape child text"
 
     def test_get_shape_text_without_master_shape(self):
         shape = MagicMock(
@@ -96,5 +97,16 @@ class TestVisioUtils:
                 ]
             )
         )
-        result = get_master_shape_text(shape)
-        assert result == "This isthe master shape child text"
+        result = normalize_label(get_master_shape_text(shape))
+        assert result == "This is the master shape child text"
+
+    @mark.parametrize('source_label',
+                      ['\nTest label\n',
+                       ' Test\n  \nlabel ',
+                       '\n Test \n\n \n label \n',
+                       ' \nTest\nlabel\n ',
+                       '   Test   label   ',
+                       u'Test \u00A0\u00A0 \u00A0 label',
+                       u'\u00A0Test label\u00A0'])
+    def test_normalize_label(self, source_label):
+        assert normalize_label(source_label) == 'Test label'

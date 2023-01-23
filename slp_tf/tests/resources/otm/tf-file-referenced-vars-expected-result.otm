@@ -31,7 +31,7 @@
     ],
     "components": [
         {
-            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-alb",
+            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-alb.0_0_0_0_0",
             "name": "0.0.0.0/0",
             "type": "generic-client",
             "parent": {
@@ -42,7 +42,7 @@
             ]
         },
         {
-            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-webserver",
+            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-webserver.52_30_97_44_32",
             "name": "52.30.97.44/32",
             "type": "generic-client",
             "parent": {

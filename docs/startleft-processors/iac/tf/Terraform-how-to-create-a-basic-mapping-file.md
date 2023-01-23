@@ -26,12 +26,12 @@ for more details.
 ---
 This section is a Getting Started Guide for a basic mapping file for Terraform.
 
-For a more in-deep explanation, there is available a [How Terraform Mapping File works](Terraform-how-mapping-file-works.md) page
-and a complete guide about the [Terraform Domain-Specific language](Terraform-domain-specific-language.md).
+For a more in-deep explanation, there is available a [How Mapping File works](Terraform-how-mapping-file-works.md) page
+and a complete guide about the [Domain-Specific language](Terraform-domain-specific-language.md).
 
 #### Minimal mapping file configuration
 > :material-information-outline: Some boilerplate mapping configuration is included out-of-the-box,
-> take a look to [How Terraform Mapping File works](Terraform-how-mapping-file-works.md) to more details
+> take a look to [How Mapping File works](Terraform-how-mapping-file-works.md) to more details
 
 There is a set of easy-to-use functions that fulfill the most common mapping requirements. Here appear the minimal 
 mapping configuration examples that include these functions with their explanation:

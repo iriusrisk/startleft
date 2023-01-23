@@ -270,7 +270,7 @@ For this example, almost trivial logic for processing our imaginary format is in
 you would need to actually implement your custom conversion process.
    
 ```python
-from otm.otm.otm import OTM, Trustzone, Component
+from otm.otm.entity import Otm, OtmTrustzone, OtmComponent
 from otm.otm.otm_builder import OtmBuilder
 from slp_base.slp_base.provider_parser import ProviderParser
 from slp_base.slp_base.provider_type import IacType
@@ -284,17 +284,17 @@ class MAISParser(ProviderParser):
         self.source = source
         self.mais_mapping = mais_mapping
 
-    def build_otm(self) -> OTM:
+    def build_otm(self) -> Otm:
         return OtmBuilder(self.project_id, self.project_name, IacType.MAIS) \
             .add_components(self.__parse_components()) \
             .add_trustzones(self.__parse_trustzones()) \
             .build()
 
-    def __parse_trustzones(self) -> [Trustzone]:
+    def __parse_trustzones(self) -> [OtmTrustzone]:
         default_trustzone = self.__get_default_trustzone()
-        return [Trustzone(default_trustzone['id'], default_trustzone['name'])]
+        return [OtmTrustzone(default_trustzone['id'], default_trustzone['name'])]
 
-    def __parse_components(self) -> [Component]:
+    def __parse_components(self) -> [OtmComponent]:
         component_mappings = self.mais_mapping['components']
         types_mappings = dict(zip(
             [cm['source_type'] for cm in component_mappings],
@@ -306,7 +306,7 @@ class MAISParser(ProviderParser):
             if source_type not in types_mappings:
                 continue
 
-            otm_components.append(Component(
+            otm_components.append(OtmComponent(
                 id=str(mais_component['id']),
                 name=mais_component['name'],
                 type=types_mappings[source_type]['otm_type'],

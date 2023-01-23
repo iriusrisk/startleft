@@ -178,16 +178,13 @@
                         "items": {"type": "string"}
                     },
                     "risk": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "required": ["likelihood", "impact"],
-                            "properties": {
-                                "likelihood": {"type": "number"},
-                                "likelihoodComment": {"type": "string"},
-                                "impact": {"type": "number"},
-                                "impactComment": {"type": "string"}
-                            }
+                        "type": "object",
+                        "required": ["likelihood", "impact"],
+                        "properties": {
+                            "likelihood": {"type": "number"},
+                            "likelihoodComment": {"type": "string"},
+                            "impact": {"type": "number"},
+                            "impactComment": {"type": "string"}
                         }
                     },
                     "tags": {

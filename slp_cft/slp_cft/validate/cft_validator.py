@@ -7,7 +7,7 @@ from slp_base.slp_base.errors import IacFileNotValidError
 
 logger = logging.getLogger(__name__)
 
-VALID_MIME = ('application/json', 'text/yaml', 'text/plain')
+VALID_MIME = ('application/json', 'text/yaml', 'text/plain', 'application/octet-stream')
 
 MAX_SIZE = 20 * 1024 * 1024
 MIN_SIZE = 13

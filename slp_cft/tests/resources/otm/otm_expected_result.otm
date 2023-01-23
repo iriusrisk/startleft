@@ -240,7 +240,7 @@
             ]
         },
         {
-            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup",
+            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup.0_0_0_0_0",
             "name": "0.0.0.0/0",
             "type": "generic-client",
             "parent": {
@@ -251,7 +251,7 @@
             ]
         },
         {
-            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.outboundsecuritygroup",
+            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.outboundsecuritygroup.255_255_255_255_32",
             "name": "255.255.255.255/32",
             "type": "generic-client",
             "parent": {
@@ -291,7 +291,7 @@
             "id": "daaa27b3-cc4b-45d1-8b09-11cb2bee6e30",
             "name": "VPCssm -> VPCssmSecurityGroup",
             "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcssm",
-            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup",
+            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup.0_0_0_0_0",
             "tags": [
                 "Allow all outbound traffic by default",
                 "-1",
@@ -314,7 +314,7 @@
             "id": "ec633fa1-e55b-4f48-8c11-37121c32fc0b",
             "name": "VPCssm -> VPCssmSecurityGroup",
             "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcssm",
-            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup",
+            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup.0_0_0_0_0",
             "tags": [
                 "Allow all outbound traffic by default",
                 "-1",
@@ -337,7 +337,7 @@
             "id": "9f92295a-21c1-49b4-9ee2-1a7e6e82c570",
             "name": "VPCssmmessages -> VPCssmmessagesSecurityGroup",
             "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcssmmessages",
-            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup",
+            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup.0_0_0_0_0",
             "tags": [
                 "Allow all outbound traffic by default",
                 "-1",
@@ -360,7 +360,7 @@
             "id": "1294fe59-4a2c-4447-8944-a730ddd564cc",
             "name": "VPCssmmessages -> VPCssmmessagesSecurityGroup",
             "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcssmmessages",
-            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup",
+            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup.0_0_0_0_0",
             "tags": [
                 "Allow all outbound traffic by default",
                 "-1",
@@ -383,7 +383,7 @@
             "id": "a180f121-9cbd-4fe3-9aad-28069fddd257",
             "name": "VPCmonitoring -> VPCmonitoringSecurityGroup",
             "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcmonitoring",
-            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup",
+            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup.0_0_0_0_0",
             "tags": [
                 "Allow all outbound traffic by default",
                 "-1",
@@ -406,7 +406,7 @@
             "id": "e4249fde-d373-4c68-a78b-89d66f1dde04",
             "name": "VPCmonitoring -> VPCmonitoringSecurityGroup",
             "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcmonitoring",
-            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup",
+            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup.0_0_0_0_0",
             "tags": [
                 "Allow all outbound traffic by default",
                 "-1",
@@ -417,7 +417,7 @@
             "id": "cef14b62-37fe-460a-a615-8fa93f44d3cb",
             "name": "Service -> OutboundSecurityGroup",
             "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.service",
-            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.outboundsecuritygroup",
+            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.outboundsecuritygroup.255_255_255_255_32",
             "tags": [
                 "Disallow all traffic",
                 "icmp",
@@ -428,7 +428,7 @@
             "id": "a72f645c-e34b-4eeb-a81e-573a9686205a",
             "name": "Service -> OutboundSecurityGroup",
             "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.service",
-            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.outboundsecuritygroup",
+            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.outboundsecuritygroup.255_255_255_255_32",
             "tags": [
                 "Disallow all traffic",
                 "icmp",

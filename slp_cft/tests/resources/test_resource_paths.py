@@ -46,7 +46,8 @@ cloudformation_with_ref_function_and_without_default_property_json = \
     path + '/cft/cloudformation_with_ref_and_without_default.json'
 cloudformation_with_ref_function_and_default_property_yaml = path + '/cft/cloudformation_with_ref_and_default.yaml'
 cloudformation_with_ref_function_and_without_parameters = path + \
-                                                          '/cft/cloudformation_with_ref_and_without_parameters.json'
+                                                       '/cft/cloudformation_with_ref_and_without_parameters.json'
+cloudformation_components_from_same_resource = path + '/cft/cloudformation_components_from_same_resource.json'
 cloudformation_components_with_trustzones_of_same_type = \
     path + '/cft/cloudformation_components_with_trustzones_of_same_type.json'
 

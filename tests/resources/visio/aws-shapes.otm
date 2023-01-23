@@ -6,12 +6,12 @@
   },
   "representations": [
     {
-      "name": "Visio",
-      "id": "Visio",
+      "name": "test_parse_diagram_file_ok Diagram Representation",
+      "id": "test_parse_diagram_file_ok-diagram",
       "type": "diagram",
       "size": {
-        "width": 1000,
-        "height": 1000
+        "width": 1076,
+        "height": 1200
       }
     }
   ],
