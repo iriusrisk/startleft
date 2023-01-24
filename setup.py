@@ -20,7 +20,7 @@ setup(
         'deepmerge==1.1.0',
         'jmespath==1.0.1',
         'lxml==4.9.2',
-        'python-hcl2==4.0.0',
+        'python-hcl2==4.2.0',
         'requests==2.28.1',
         'xmltodict==0.13.0',
         'fastapi==0.89.1',
