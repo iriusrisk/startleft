@@ -6,9 +6,9 @@ path = os.path.dirname(__file__)
 invalid_yaml = f'{path}/generic/invalid-yaml.yaml'
 
 # mapping
-default_visio_mapping = f'/{path}/mapping/aws-visio-mapping.yaml'
-custom_vpc_mapping = f'/{path}/mapping/custom-vpc-mapping.yaml'
-empty_mapping = f'/{path}/mapping/empty-mapping.yaml'
+default_visio_mapping = f'{path}/mapping/aws-visio-mapping.yaml'
+custom_vpc_mapping = f'{path}/mapping/custom-vpc-mapping.yaml'
+empty_mapping = f'{path}/mapping/empty-mapping.yaml'
 
 # legacy mapping
 default_visio_mapping_legacy = path + '/mapping/legacy/aws-visio-mapping.yaml'

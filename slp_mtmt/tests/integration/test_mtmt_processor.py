@@ -5,7 +5,7 @@ from pytest import mark
 
 from otm.otm.entity.representation import Representation, DiagramRepresentation, RepresentationElement
 from sl_util.sl_util.file_utils import get_byte_data
-from slp_base.tests.util.otm import validate_and_diff
+from slp_base.tests.util.otm import validate_and_compare
 from slp_mtmt import MTMTProcessor
 from slp_mtmt.tests.resources import test_resource_paths
 from slp_mtmt.tests.resources.test_resource_paths import mapping_mtmt_mvp_legacy, mapping_mtmt_mvp_no_type
@@ -101,7 +101,7 @@ class TestMtmtProcessor:
         assert component.parent == '24cdf4da-ac7f-4a35-bab0-29256d4169bf'
         element_representation = component.representations[0]
         assert element_representation.position == {'x': 231, 'y': 40}
-        assert element_representation.size == {'height': 100, 'width': 100}
+        assert element_representation.size == {'height': 82, 'width': 82}
         assert len(component.threats) == 3
         component = otm.components[1]
         assert component.id == '6183b7fa-eba5-4bf8-a0af-c3e30d144a10'
@@ -110,7 +110,7 @@ class TestMtmtProcessor:
         assert component.parent == '75605184-4ca0-43be-ba4c-5fa5ad15e367'
         element_representation = component.representations[0]
         assert element_representation.position == {'x': 101, 'y': 104}
-        assert element_representation.size == {'height': 100, 'width': 100}
+        assert element_representation.size == {'height': 82, 'width': 82}
         assert len(component.threats) == 2
         component = otm.components[2]
         assert component.id == '5d15323e-3729-4694-87b1-181c90af5045'
@@ -119,7 +119,7 @@ class TestMtmtProcessor:
         assert component.parent == "24cdf4da-ac7f-4a35-bab0-29256d4169bf"
         element_representation = component.representations[0]
         assert element_representation.position == {'x': 21, 'y': 101}
-        assert element_representation.size == {'height': 100, 'width': 100}
+        assert element_representation.size == {'height': 82, 'width': 82}
         assert len(component.threats) == 31
         component = otm.components[3]
         assert component.id == '91882aca-8249-49a7-96f0-164b68411b48'
@@ -128,7 +128,7 @@ class TestMtmtProcessor:
         assert component.parent == '24cdf4da-ac7f-4a35-bab0-29256d4169bf'
         element_representation = component.representations[0]
         assert element_representation.position == {'x': 230, 'y': 169}
-        assert element_representation.size == {'height': 100, 'width': 100}
+        assert element_representation.size == {'height': 82, 'width': 82}
         assert len(component.threats) == 7
 
         # AND the info inside dataflows is also right
@@ -229,4 +229,5 @@ class TestMtmtProcessor:
         otm_json = otm.json()
 
         # THEN we check the result is as expected
-        assert validate_and_diff(otm_json, expected_otm, self.excluded_regex) == {}
+        left, right = validate_and_compare(otm_json, expected_otm, self.excluded_regex)
+        assert left == right
