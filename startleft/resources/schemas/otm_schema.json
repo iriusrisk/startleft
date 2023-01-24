@@ -65,7 +65,7 @@
             "type": "array",
             "items": {
                 "type": "object",
-                "required": ["id", "name", "type","risk"],
+                "required": ["id", "name", "risk"],
                 "properties": {
                     "id": {"$ref": "#/definitions/uuid"},
                     "name": {"type": "string"},

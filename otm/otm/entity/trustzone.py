@@ -22,7 +22,7 @@ class OtmTrustzone:
         json = {
             "id": self.id,
             "name": self.name,
-            "type": self.type,
+            # "type": self.type,
             "risk": {
                 "trustRating": self.trustrating
             }
