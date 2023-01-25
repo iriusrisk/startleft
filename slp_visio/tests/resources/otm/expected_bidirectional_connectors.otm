@@ -1,0 +1,100 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "project-name",
+    "id": "project-id"
+  },
+  "representations": [
+    {
+      "name": "project-id Diagram Representation",
+      "id": "project-id-diagram",
+      "type": "diagram",
+      "size": {
+        "width": 1476,
+        "height": 738
+      }
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "1",
+      "name": "Amazon EC2",
+      "type": "ec2",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "6",
+      "name": "Amazon EC2",
+      "type": "ec2",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "17",
+      "name": "Amazon EC2",
+      "type": "ec2",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "23",
+      "name": "Amazon VPC",
+      "type": "vpc",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "28",
+      "name": "Amazon VPC",
+      "type": "vpc",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "33",
+      "name": "Amazon VPC",
+      "type": "vpc",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    }
+  ],
+  "dataflows": [
+    {
+      "id": "38",
+      "name": "dd2408f1-25f6-42d6-9477-c8948c751d47",
+      "source": "23",
+      "destination": "1",
+      "bidirectional": true
+    },
+    {
+      "id": "39",
+      "name": "b130847a-1818-4234-99ee-1ab9411279ba",
+      "source": "28",
+      "destination": "6",
+      "bidirectional": true
+    },
+    {
+      "id": "41",
+      "name": "dcf75dec-4a7c-449e-b853-5b5c5fd0a356",
+      "source": "33",
+      "destination": "17",
+      "bidirectional": true
+    }
+  ]
+}
