@@ -13,7 +13,7 @@ from startleft.startleft.api.controllers.iac import iac_create_otm_controller
 from tests.resources.test_resource_paths import default_cloudformation_mapping, example_json, \
     cloudformation_malformed_mapping_wrong_id, invalid_yaml, cloudformation_all_functions, \
     cloudformation_mapping_all_functions, cloudformation_gz, visio_aws_shapes, cloudformation_multiple_files_networks, \
-    cloudformation_multiple_files_resources
+    cloudformation_multiple_files_resources, cloudformation_ref_full_syntax, cloudformation_ref_short_syntax
 
 TESTING_IAC_TYPE = IacType.CLOUDFORMATION.value
 
@@ -414,3 +414,54 @@ class TestOtmControllerIaCCloudformation:
         res_body = json.loads(response.content.decode('utf-8'))
         assert res_body['status'] == '400'
         assert res_body['error_type'] == 'IacFileNotValidError'
+
+    @responses.activate
+    def test_yaml_ref_full_form_success(self):
+        # Given a project_id and project_name
+        project_id: str = 'project_A_id'
+        project_name: str = 'project_A_name'
+
+        # And the request files
+        iac_file = (cloudformation_ref_full_syntax, open(cloudformation_ref_full_syntax, 'rb'), 'text/yaml')
+        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'rb'), 'text/yaml')
+
+        # When I do post on cloudformation endpoint
+        files = {'iac_file': iac_file, 'mapping_file': mapping_file}
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': project_name}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then the OTM is returned inside the response as JSON
+        assert response.status_code == iac_create_otm_controller.RESPONSE_STATUS_CODE
+        assert response.headers.get('content-type') == 'application/json'
+        assert '"otmVersion": "0.1.0"' in response.text
+        assert '"project": ' in response.text
+        assert f'"name": "{project_name}"' in response.text
+        assert '"trustZones": ' in response.text
+        assert '"components": ' in response.text
+        assert '"name": "0.0.0.0/0"' in response.text
+
+    @responses.activate
+    def test_yaml_ref_short_form_success(self):
+        # Given a project_id
+        project_id: str = 'project_A_id'
+        project_name: str = 'project_A_name'
+
+        # And the request files
+        iac_file = (cloudformation_ref_short_syntax, open(cloudformation_ref_short_syntax, 'rb'), 'text/yaml')
+        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'rb'), 'text/yaml')
+
+        # When I do post on cloudformation endpoint
+        files = {'iac_file': iac_file, 'mapping_file': mapping_file}
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': project_name}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then the OTM is returned inside the response as JSON
+        assert response.status_code == iac_create_otm_controller.RESPONSE_STATUS_CODE
+        assert response.headers.get('content-type') == 'application/json'
+        assert '"otmVersion": "0.1.0"' in response.text
+        assert '"project": ' in response.text
+        assert f'"name": "{project_name}"' in response.text
+        assert '"trustZones": ' in response.text
+        assert '"components": ' in response.text
+        assert '"name": "0.0.0.0/0"' in response.text
+

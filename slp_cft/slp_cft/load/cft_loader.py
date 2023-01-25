@@ -10,7 +10,18 @@ logger = logging.getLogger(__name__)
 
 
 def yaml_reader(data):
-    return yaml.load(yaml_data_as_str(data), Loader=yaml.BaseLoader)
+    return yaml.load(yaml_data_as_str(data), Loader=get_loader())
+
+
+def get_loader():
+    loader = yaml.BaseLoader
+    loader.add_constructor("!Ref", ref_constructor)
+    loader.add_constructor("!Ref:", ref_constructor)
+    return loader
+
+
+def ref_constructor(loader: yaml.BaseLoader, node: yaml.nodes.MappingNode) -> dict:
+    return {'Ref': loader.construct_scalar(node)}
 
 
 def yaml_data_as_str(data) -> str:
