@@ -191,8 +191,9 @@ def parse_any(iac_type, diagram_type, etm_type, mapping_file, default_mapping_fi
 @cli.command()
 @click.option(IAC_MAPPING_FILE_NAME, IAC_MAPPING_FILE_SHORTNAME, help=IAC_MAPPING_FILE_DESC)
 @click.option(DIAGRAM_MAPPING_FILE_NAME, DIAGRAM_MAPPING_FILE_SHORTNAME, help=DIAGRAM_MAPPING_FILE_DESC)
+@click.option(ETM_MAPPING_FILE_NAME, ETM_TYPE_SHORTNAME, help=ETM_MAPPING_FILE_DESC)
 @click.option(OTM_INPUT_FILE_NAME, OTM_INPUT_FILE_SHORTNAME, help=OTM_INPUT_FILE_DESC)
-def validate(iac_mapping_file, diagram_mapping_file, otm_file):
+def validate(iac_mapping_file, diagram_mapping_file, etm_mapping_file, otm_file):
     """
     Validates a mapping or OTM file
     """
@@ -206,6 +207,10 @@ def validate(iac_mapping_file, diagram_mapping_file, otm_file):
         # TODO Cannot assume all diagram/iac mapping file will have the same validation type, so we need to request the type in the command
         logger.info("Validating Diagram mapping files")
         provider_resolver.get_mapping_validator(DiagramType.VISIO, [get_data(diagram_mapping_file)]).validate()
+
+    if etm_mapping_file:
+        logger.info("Validating External Threat Model mapping files")
+        provider_resolver.get_mapping_validator(EtmType.MTMT, [get_data(etm_mapping_file)]).validate()
 
     if otm_file:
         logger.info("Validating OTM file")

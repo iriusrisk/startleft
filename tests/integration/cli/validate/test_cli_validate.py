@@ -10,6 +10,8 @@ SAMPLE_OTM_YAML_FILENAME = test_resource_paths.otm_yaml_file_example
 IAC_VALID_MAPPING_FILENAME = test_resource_paths.default_cloudformation_mapping
 INVALID_YAML_FILENAME = test_resource_paths.invalid_yaml
 CUSTOM_YAML_VISIO_MAPPING_FILENAME = test_resource_paths.custom_vpc_mapping
+MTMT_MAPPING_FILENAME_VALID = test_resource_paths.mtmt_mapping_file_valid
+MTMT_MAPPING_FILENAME_INVALID = test_resource_paths.mtmt_mapping_file_invalid
 
 
 class TestCliValidate:
@@ -75,6 +77,37 @@ class TestCliValidate:
         assert 'Validating Diagram mapping files' in caplog.text
         #   and validation Diagram finish successfully
         assert 'Mapping files are valid' in caplog.text
+
+    def test_validate_valid_etm_file(self, caplog):
+        # Given a info level of logging
+        caplog.set_level(logging.INFO)
+        runner = CliRunner()
+
+        # When validating an External Threat Model mapping file
+        result = runner.invoke(validate, ['--etm-mapping-file', MTMT_MAPPING_FILENAME_VALID])
+
+        # Then validator returns OK
+        assert result.exit_code == 0
+        #   and validation ETM is performed
+        assert 'Validating External Threat Model mapping files' in caplog.text
+        #   and validation ETM finish successfully
+        assert 'Mapping files are valid' in caplog.text
+
+    def test_validate_invalid_etm_file(self, caplog):
+        # Given a info level of logging
+        caplog.set_level(logging.INFO)
+        runner = CliRunner()
+
+        # When validating an External Threat Model mapping file
+        result = runner.invoke(validate, ['--etm-mapping-file', MTMT_MAPPING_FILENAME_INVALID])
+
+        # Then validator returns not OK
+        assert result.exit_code == 1
+        #   and validation ETM is performed
+        assert 'Validating External Threat Model mapping files' in caplog.text
+        #   and validation ETM finish unsuccessfully
+        assert 'Mapping file is not valid' in caplog.text
+        assert '\'label\' is a required property' in caplog.text
 
     def test_validate_multiple_files(self, caplog):
         # Given a info level of logging
