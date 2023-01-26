@@ -1,13 +1,13 @@
 import uuid
 
-from slp_visio.slp_visio.load.objects.diagram_objects import DiagramConnector
 from otm.otm.entity.dataflow import OtmDataflow
+from slp_visio.slp_visio.load.objects.diagram_objects import DiagramConnector
 
 
 def build_otm_dataflow(diagram_connector: DiagramConnector) -> OtmDataflow:
     return OtmDataflow(
         dataflow_id=diagram_connector.id,
-        name=str(uuid.uuid4()),
+        name=diagram_connector.name if diagram_connector.name else str(uuid.uuid4()),
         source_node=diagram_connector.from_id,
         destination_node=diagram_connector.to_id,
         bidirectional=diagram_connector.bidirectional if diagram_connector.bidirectional else None
