@@ -25,7 +25,7 @@ class TestMTMTComponentParser:
                               'name': 'Accounting PostgreSQL Representation',
                               'position': {'x': 231, 'y': 40},
                               'representation': 'project-test-diagram',
-                             'size': {'height': 100, 'width': 100}}],
+                             'size': {'height': 82, 'width': 82}}],
          'type': 'CD-MICROSOFT-AZURE-DB-POSTGRESQL'},
         {'id': '6183b7fa-eba5-4bf8-a0af-c3e30d144a10',
          'name': 'Mobile Client',
@@ -37,7 +37,7 @@ class TestMTMTComponentParser:
                               'name': 'Mobile Client Representation',
                               'position': {'x': 101, 'y': 104},
                               'representation': 'project-test-diagram',
-                              'size': {'height': 100, 'width': 100}}],
+                              'size': {'height': 82, 'width': 82}}],
          'type': 'android-device-client'},
         {'id': '5d15323e-3729-4694-87b1-181c90af5045',
          'name': 'Public API v2',
@@ -51,7 +51,7 @@ class TestMTMTComponentParser:
                               'name': 'Public API v2 Representation',
                               'position': {'x': 21, 'y': 101},
                               'representation': 'project-test-diagram',
-                              'size': {'height': 100, 'width': 100}}],
+                              'size': {'height': 82, 'width': 82}}],
          'type': 'web-service'},
         {'id': '91882aca-8249-49a7-96f0-164b68411b48',
          'name': 'Azure File Storage',
@@ -66,7 +66,7 @@ class TestMTMTComponentParser:
                               'name': 'Azure File Storage Representation',
                               'position': {'x': 230, 'y': 169},
                               'representation': 'project-test-diagram',
-                              'size': {'height': 100, 'width': 100}}],
+                              'size': {'height': 82, 'width': 82}}],
          'type': 'azure-storage'}
     ]
 
