@@ -11,7 +11,7 @@ public_cloud_id = 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
 public_cloud_name = 'Public Cloud'
 
 private_secured_id = '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
-private_secured_name = 'Private Secured'
+private_secured_name = 'Private Secured Cloud'
 
 internet_id = 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
 internet_name = 'Internet'

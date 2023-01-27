@@ -1,4 +1,3 @@
-# Visio TrustZones Mapping
 ## Visio shapes context
 
 ---
