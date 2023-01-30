@@ -1,5 +1,6 @@
 from collections import defaultdict
-from xml.etree import ElementTree as ET
+
+from defusedxml import ElementTree as ET
 
 
 def get_attrs(attrs):
