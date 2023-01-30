@@ -109,7 +109,7 @@ def parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, outpu
     if custom_mapping_file:
         mapping_data_list.append(get_data(custom_mapping_file))
 
-    processor = provider_resolver.get_processor(type_, project_id, project_name, file, mapping_data_list)
+    processor = provider_resolver.get_processor(type_, project_id, project_name, file, mapping_data_list, diag_type=type_)
     otm = processor.process()
     get_otm_as_file(otm, output_file)
 
