@@ -3,6 +3,8 @@
 import json
 import logging
 
+import yaml
+
 from otm.otm.entity.otm import Otm
 
 logger = logging.getLogger(__name__)
@@ -13,4 +15,9 @@ def get_otm_as_json(otm: Otm):
     return json.dumps(otm.json(), indent=2)
 
 
+def yaml_data_as_str(data) -> str:
+    return data if isinstance(data, str) else data.decode()
 
+
+def yaml_reader(data):
+    return yaml.load(yaml_data_as_str(data), Loader=yaml.BaseLoader)
