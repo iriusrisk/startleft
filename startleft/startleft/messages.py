@@ -38,6 +38,8 @@ ETM_TYPE_NAME = '--etm-type'
 ETM_TYPE_SHORTNAME = '-e'
 ETM_TYPE_DESC = 'The etm file type.'
 ETM_TYPE_SUPPORTED = ['MTMT']
+ETM_MAPPING_FILE_NAME = '--etm-mapping-file'
+ETM_MAPPING_FILE_DESC = 'External Threat Model mapping file to validate.'
 
 MAPPING_FILE_NAME = '--mapping-file'
 MAPPING_FILE_SHORTNAME = '-m'

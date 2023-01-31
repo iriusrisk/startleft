@@ -1,0 +1,17 @@
+trustzones:
+
+  - label: Internet Boundary
+    type: Internet
+    id: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+
+components:
+
+  - type: active-directory
+
+  - label: Authorization Provider
+    type: oauth2-authorization-server
+
+  - label: Azure AD Microsoft
+    type: microsoft-azure-environment
+
+dataflows: []

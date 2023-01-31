@@ -98,3 +98,7 @@ visio_aws_with_tz_and_vpc_otm_expected = path + '/visio/aws-with-tz-and-vpc.otm'
 visio_orphan_dataflows_otm_expected = path + '/visio/visio-orphan-dataflows.otm'
 visio_create_otm_ok_only_default_mapping = path + '/visio/visio_create_otm_ok_only_default_mapping.otm'
 visio_create_otm_ok_both_mapping_files = path + '/visio/visio_create_otm_ok_both_mapping_files.otm'
+
+# MTMT
+mtmt_mapping_file_valid = path + '/mtmt/mapping_example.yaml'
+mtmt_mapping_file_invalid = path + '/mtmt/mapping_example_invalid.yaml'
