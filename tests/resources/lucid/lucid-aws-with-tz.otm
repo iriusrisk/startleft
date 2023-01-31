@@ -1,0 +1,165 @@
+{
+    "otmVersion": "0.1.0",
+    "project": {
+        "name": "Optimvs Test",
+        "id": "optimvs-test"
+    },
+    "representations": [
+        {
+            "name": "Visio",
+            "id": "Visio",
+            "type": "diagram",
+            "size": {
+                "width": 1000,
+                "height": 1000
+            }
+        }
+    ],
+    "trustZones": [
+        {
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "name": "Public Cloud",
+            "risk": {
+                "trustRating": 10
+            }
+        },
+        {
+            "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+            "name": "Private Secured Cloud",
+            "risk": {
+                "trustRating": 10
+            }
+        },
+        {
+            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
+            "name": "Internet",
+            "risk": {
+                "trustRating": 10
+            }
+        }
+    ],
+    "components": [
+        {
+            "id": "7",
+            "name": "My EC2",
+            "type": "ec2",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            }
+        },
+        {
+            "id": "10",
+            "name": "My CloudWatch",
+            "type": "cloudwatch",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            }
+        },
+        {
+            "id": "15",
+            "name": "My API Gateway",
+            "type": "api-gateway",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            }
+        },
+        {
+            "id": "24",
+            "name": "My CloudTrail",
+            "type": "cloudtrail",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            }
+        },
+        {
+            "id": "27",
+            "name": "My Simple Storage Service (S3)",
+            "type": "s3",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            }
+        },
+        {
+            "id": "36",
+            "name": "Web browser",
+            "type": "generic-client",
+            "parent": {
+                "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
+            }
+        },
+        {
+            "id": "42",
+            "name": "Android",
+            "type": "android-device-client",
+            "parent": {
+                "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
+            }
+        },
+        {
+            "id": "45",
+            "name": "SQL Database",
+            "type": "CD-MICROSOFT-AZURE-SQL-DB",
+            "parent": {
+                "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+            }
+        },
+        {
+            "id": "51",
+            "name": "My DynamoDB",
+            "type": "dynamodb",
+            "parent": {
+                "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+            }
+        }
+    ],
+    "dataflows": [
+        {
+            "id": "30",
+            "name": "EC2 Logs",
+            "source": "7",
+            "destination": "10"
+        },
+        {
+            "id": "31",
+            "name": "GW/EC2",
+            "source": "15",
+            "destination": "7"
+        },
+        {
+            "id": "32",
+            "name": "Log trace",
+            "source": "15",
+            "destination": "24"
+        },
+        {
+            "id": "33",
+            "name": "Customer data",
+            "source": "15",
+            "destination": "27"
+        },
+        {
+            "id": "41",
+            "name": "fe1160db-33ed-435d-ba03-4918ef5e3728",
+            "source": "36",
+            "destination": "15"
+        },
+        {
+            "id": "44",
+            "name": "9ca55f98-da56-45dc-abd3-72abd9a44dbd",
+            "source": "42",
+            "destination": "15"
+        },
+        {
+            "id": "54",
+            "name": "User data",
+            "source": "15",
+            "destination": "51"
+        },
+        {
+            "id": "55",
+            "name": "App data",
+            "source": "15",
+            "destination": "45"
+        }
+    ]
+}

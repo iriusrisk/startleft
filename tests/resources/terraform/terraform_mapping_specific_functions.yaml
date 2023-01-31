@@ -3,24 +3,21 @@ trustzones:
     name: Public Cloud
 
 components:
-  - id: { $format: "{type}.{name}.id" }
-    type: test_squash_terraform
+  - type: test_squash_terraform
     name: { $path: "keys(@)[0]" }
     $source: { $root: "resource|squash_terraform(@)[?Type=='test_squash_terraform']" }
     parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - { $path: "Type" }
 
-  - id: { $format: "{type}.{name}.id" }
-    type: test_get
+  - type: test_get
     name: { $path: "keys(@)[0]" }
     $source: { $root: "resource|get(@, 'test_get')" }
     parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - { $path: "Type" }
 
-  - id: { $format: "{type}.{name}.id" }
-    type: test_get_starts_with
+  - type: test_get_starts_with
     name: { $path: "keys(@)[0]" }
     $source: { $root: "resource|get_starts_with(@, 'test_get_starts_with')" }
     parent: b61d6911-338d-46a8-9f39-8dcd24abfe91

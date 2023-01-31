@@ -260,24 +260,22 @@ The easiest way to map a component is to define the output `type` value and the 
     To reduce the minimal amount of data needed for mapping files, a template pattern is used to set the common 
     attributes.
     ```yaml
-    id:     {$format: "{name}"}  # (1)!
-    name:   # (2)!
-            {$numberOfSources: { # (3)! 
-                oneSource: {$path: "resource_name"}, 
-                multipleSource: {$format: "{type} (grouped)"}}} # 
-    parent: {$parent: $default_tz} # (4)!
-    tags: # (5)!
-      - {$numberOfSources: { # (6)!
+    name:   # (1)!
+        {$numberOfSources: { # (2)! 
+            oneSource: {$path: "resource_name"}, 
+            multipleSource: {$format: "{type} (grouped)"}}} # 
+    parent: {$parent: $default_tz} # (3)!
+    tags: # (4)!
+      - {$numberOfSources: { # (5)!
             oneSource: {$path: "resource_type"},
             multipleSource: {$format: "{resource_name} ({resource_type})"}}}
     ```
 
-    1. set the internal component identifier for `slp_tf` mapping behaviour as the value in **component[name]**
-    2. set the **component[name]** value
-    3. returns the value `multipleSource` in case (`$singleton` && exists more than 1 resource), returns `oneSource` otherwise.
-    4. set the **component[parent]** as the default configured TrustZone
-    5. set the **component[tags]** value
-    6. returns the value `multipleSource` in case (`$singleton` && exists more than 1 resource), returns `oneSource` otherwise.
+    1. set the **component[name]** value
+    2. returns the value `multipleSource` in case (`$singleton` && exists more than 1 resource), returns `oneSource` otherwise.
+    3. set the **component[parent]** as the default configured TrustZone
+    4. set the **component[tags]** value
+    5. returns the value `multipleSource` in case (`$singleton` && exists more than 1 resource), returns `oneSource` otherwise.
 
     > :octicons-light-bulb-16: The values provided in the mapping file have always priority over the template’s ones.
 
@@ -290,8 +288,7 @@ The easiest way to map a component is to define the output `type` value and the 
     ```
     would be internally converted to:
     ```yaml
-      - id:          {$format: "{name}"}
-        type:        CD-ACM
+      - type:        CD-ACM
         name:        {$numberOfSources: {
             oneSource: {$path: "resource_name"}, 
             multipleSource: {$format: "{type} (grouped)"}}}
@@ -324,8 +321,7 @@ The easiest way to map a component is to define the output `type` value and the 
         name: Public Cloud
         $default: true
     components:
-      - id:          {$format: "{name}"}
-        type:        vpc
+      - type:        vpc
         name:        {$numberOfSources: {
             oneSource: {$path: "resource_name"}, 
             multipleSource: {$format: "{type} (grouped)"}}}
@@ -453,8 +449,7 @@ This is the minimal configuration needed to configure an $altsource, the followi
         name: Public Cloud
         $default: true
     components:
-      - id:     {$format: "{name}"}
-        type:   s3
+      - type:   s3
         name:   {$numberOfSources: {
             oneSource: {$path: "resource_name"},
             multipleSource: {$format: "{type} (grouped)"}}}

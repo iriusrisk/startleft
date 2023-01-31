@@ -1,0 +1,87 @@
+trustzones:
+  - label: Public Cloud
+    type: Public Cloud
+    id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - label: Private Secured Cloud
+    type: Private Secured
+    id: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+
+  - label: AWSCloudAWS2021
+    type: Public Cloud
+    id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+components:
+
+  ## Visio Lucid names
+  - label: ClientAWS19
+    type: generic-client
+
+  - label: AmazonCognitoAWS19
+    type: cognito
+
+  - label: AmazonEC2AWS2021
+    type: ec2
+
+  - label: SQLDatabaseAzure2021
+    type: CD-MICROSOFT-AZURE-SQL-DB
+
+  - label: DatabaseBlock
+    type: other-database
+
+  - label: AmazonSimpleStorageServiceS3AWS19
+    type: s3
+
+  - label: AWSIdentityandAccessManagement_IAMAWS19
+    type: iam
+
+  - label: AWSCloudTrailAWS19
+    type: cloudtrail
+
+  - label: AWSCloudTrailAWS2021
+    type: cloudtrail
+
+  - label: AmazonAPIGateway_purpleAWS19
+    type: api-gateway
+
+  - label: AWSGeneral_UserAWS19
+    type: empty-component
+
+  - label: ImageSearchBlock2
+    type: empty-component
+
+  - label: ElasticLoadBalancingELLoadBalancer2017
+    type: empty-component
+
+  - label: AmazonEC2AutoScalingAWS2021
+    type: empty-component
+
+  - label: AWSFargateAWS19
+    type: empty-component
+
+  - label: AmazonDynamoDBAWS19
+    type: empty-component
+
+  - label: AWSCertificateManagerAWS19
+    type: empty-component
+
+  - label: AWSCodePipelineAWS19
+    type: empty-component
+
+  - label: AWSCodeBuildAWS19
+    type: empty-component
+
+  - label: AmazonCloudWatchAWS19
+    type: cloudwatch
+
+  - label: AmazonCloudWatchAWS2021
+    type: cloudwatch
+
+  - label: AWSCodeStarAWS19
+    type: empty-component
+
+  - label: AmazonECR2017
+    type: empty-component
+
+
+dataflows: [ ]
