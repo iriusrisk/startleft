@@ -66,3 +66,5 @@ expected_mapping_skipped_component_without_parent = path + '/otm/expected_mappin
 expected_no_resources = path + '/otm/expected_no_resources.otm'
 expected_run_valid_mappings = path + '/otm/expected_run_valid_mappings.otm'
 tf_file_referenced_vars_expected_result = path + '/otm/tf-file-referenced-vars-expected-result.otm'
+terraform_minimal_content_otm = f'{path}/otm/terraform_minimal_content.otm'
+tf_components_with_trustzones_of_same_type_otm = f'{path}/otm/tf_components_with_trustzones_of_same_type.otm'

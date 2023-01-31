@@ -22,26 +22,26 @@
   ],
   "components": [
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_ecs_service-mongo",
-      "name": "mongo",
-      "type": "elastic-container-service",
+      "id": "public-cloud-01.aws_vpc-customvpc",
+      "name": "CustomVPC",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
-        "aws_ecs_service"
-      ]
+        "aws_vpc"
+      ],
+      "type": "vpc"
     },
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_ecs_service-mongo.aws_ecs_task_definition-service",
-      "name": "service",
-      "type": "docker-container",
+      "id": "public-cloud-02.aws_rds_cluster-rdscluster",
+      "name": "RDSCluster",
       "parent": {
-        "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_ecs_service-mongo"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "tags": [
-        "aws_ecs_task_definition"
-      ]
+        "aws_rds_cluster"
+      ],
+      "type": "rds"
     }
   ],
   "dataflows": []

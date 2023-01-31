@@ -1,5 +1,4 @@
 import json
-from collections import namedtuple
 
 from otm.otm.entity.component import OtmComponent
 from otm.otm.entity.trustzone import OtmTrustzone
@@ -7,8 +6,7 @@ from otm.otm.otm_builder import OtmBuilder
 from otm.otm.provider import Provider
 from sl_util.sl_util.file_utils import get_data
 from slp_base.slp_base.otm_trustzone_unifier import OtmTrustZoneUnifier
-from tests.resources.test_resource_paths import MTMT_multiple_trustzones_same_type_TYPE, \
-    MTMT_multiple_trustzones_same_type_ID
+from tests.resources.test_resource_paths import MTMT_multiple_trustzones_same_type_ID
 
 
 class DummyType(str, Provider):
@@ -47,30 +45,3 @@ class TestOtmUnifier:
         # THEN we check the expected result
         assert origin.json() == expected
 
-    def test_jjssoonn(self):
-        # Assume you received this JSON response
-        studentJsonData = '{"rollNumber": 1, "name": "Emma"}'
-
-        # Parse JSON into an object with attributes corresponding to dict keys.
-        student = json.loads(studentJsonData, object_hook=custom_student_decoder)
-
-        print("After Converting JSON Data into Custom Python Object")
-        print(student.rollNumber, student.name)
-
-    def test_jjssoonn_otm(self):
-        # Assume you received this JSON response
-        json_otm = json.loads(get_data(MTMT_multiple_trustzones_same_type_TYPE))
-
-        # Parse JSON into an object with attributes corresponding to dict keys.
-        otm = json.loads(json_otm, object_hook=custom_otm_decoder)
-
-        print("After Converting JSON Data into Custom Python Object")
-        print(otm.trustzones, otm.dataflows)
-
-
-def custom_student_decoder(student_dict):
-    return namedtuple('X', student_dict.keys())(*student_dict.values())
-
-
-def custom_otm_decoder(student_dict):
-    return namedtuple('X', student_dict.keys())(*student_dict.values())

@@ -4,10 +4,10 @@ from unittest.mock import patch
 import responses
 from fastapi.testclient import TestClient
 from pytest import mark
-from slp_base.tests.util.otm import validate_and_diff
 
 from slp_base.slp_base.errors import DiagramFileNotValidError, MappingFileNotValidError, LoadingMappingFileError, \
     OtmResultError, OtmBuildingError, LoadingDiagramFileError
+from slp_base.tests.util.otm import validate_and_compare_otm, validate_and_compare
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.diagram import diag_create_otm_controller
 from tests.resources import test_resource_paths
@@ -50,7 +50,8 @@ class TestOtmControllerDiagramVisio:
         assert response.headers.get('content-type') == 'application/json'
         otm = json.loads(response.text)
 
-        assert validate_and_diff(otm, visio_create_otm_ok_only_default_mapping, VALIDATION_EXCLUDED_REGEX) == {}
+        result, expected = validate_and_compare_otm(otm, visio_create_otm_ok_only_default_mapping, VALIDATION_EXCLUDED_REGEX)
+        assert result == expected
 
     @mark.parametrize('default_mapping,custom_mapping', [
         (default_visio_mapping, custom_vpc_mapping),
@@ -75,7 +76,8 @@ class TestOtmControllerDiagramVisio:
         assert response.headers.get('content-type') == 'application/json'
         otm = json.loads(response.text)
 
-        assert validate_and_diff(otm, visio_create_otm_ok_both_mapping_files, VALIDATION_EXCLUDED_REGEX) == {}
+        result, expected = validate_and_compare(otm, visio_create_otm_ok_both_mapping_files, VALIDATION_EXCLUDED_REGEX)
+        assert result == expected
 
     @responses.activate
     @patch('slp_visio.slp_visio.validate.visio_validator.VisioValidator.validate')

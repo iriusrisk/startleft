@@ -6,15 +6,15 @@
   },
   "representations": [
     {
-      "name": "Terraform",
-      "id": "Terraform",
+      "name": "CloudFormation",
+      "id": "CloudFormation",
       "type": "code"
     }
   ],
   "trustZones": [
     {
       "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
-      "name": "Public Cloud",
+      "name": "Public Cloud 01",
       "risk": {
         "trustRating": 10
       }

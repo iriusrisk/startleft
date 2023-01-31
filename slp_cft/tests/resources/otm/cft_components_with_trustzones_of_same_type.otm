@@ -1,0 +1,48 @@
+{
+  "components": [
+    {
+      "id": "public-cloud-01.customvpc",
+      "name": "CustomVPC",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "AWS::EC2::VPC"
+      ],
+      "type": "vpc"
+    },
+    {
+      "id": "public-cloud-02.rdscluster",
+      "name": "RDSCluster",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "AWS::RDS::DBCluster"
+      ],
+      "type": "rds"
+    }
+  ],
+  "dataflows": [],
+  "otmVersion": "0.1.0",
+  "project": {
+    "id": "id",
+    "name": "name"
+  },
+  "representations": [
+    {
+      "id": "CloudFormation",
+      "name": "CloudFormation",
+      "type": "code"
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ]
+}
