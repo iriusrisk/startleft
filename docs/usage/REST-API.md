@@ -120,14 +120,15 @@ the resulting threat modeling content.
 POST /api/v1/startleft/diagram
 Request Body:
     diag_file:                  Required. File that contains the diagram
-    diag_type:                  Required. Type of the diagram file: VISIO
+    diag_type:                  Required. Type of the diagram file: [VISIO, LUCID]
     id                          Required. ID of the new project
     name                        Required. Name of the new project
     default_mapping_file        Required. File that contains the default mapping file between the diagram resources and threat model resources
     custom_mapping_file         Optional. File that contains the custom user mapping file between the diagram resources and threat model resources
 ```
 This endpoint accepts one diagram source file (currently only in [Visio](../startleft-processors/diagram/Visio-Quickstart.md) 
-format), a mapping file, and an optional custom mapping file, and generates an OTM with the resulting threat modeling content.
+format, including diagrams exported from [Lucidchart](../startleft-processors/diagram/Lucidchart-support.md)), 
+a mapping file, and an optional custom mapping file, and generates an OTM with the resulting threat modeling content.
 
 ??? example "Example"
     === "Request"

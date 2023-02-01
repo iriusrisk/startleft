@@ -315,9 +315,6 @@ That imported in a tool like IriusRisk looks like this:
 ![img_2.png](img/lucid-iriusrisk-example.png)
 
 ### cURL
-> :warning: Lucidchart parsing is only supported currently through the REST API. CLI parsing will be probably 
-> available in the medium term.
-
 To try this example on your machine, first, you need to put in place the necessary files:
 
 * Download the Lucidchart example above from
@@ -337,4 +334,21 @@ curl --location --request POST localhost:5000/api/v1/startleft/diagram \
 --form custom_mapping_file=@"./custom-mapping.yaml" \
 --form id="my-lucidchart-example" \
 --form name="My Lucidchart Example"
+```
+
+### Command line usage
+You can also use the Command Line option for this example, with the files downloaded in the previous section.
+
+Make sure StartLeft is [properly installed](../../../Quickstart-Guide-for-Beginners/#install-startleft) 
+and execute the following command:
+
+```shell
+startleft parse \
+--diagram-type LUCID \
+--default-mapping-file ./default-mapping.yaml \
+--custom-mapping-file ./custom-mapping.yaml \
+--output-file my-lucidchart-cli-example.otm \
+--project-name "My Lucidchart CLI Example" \
+--project-id "my-lucidchart-cli-example" \
+./lucid-aws-with-tz-and-vpc.vsdx
 ```
