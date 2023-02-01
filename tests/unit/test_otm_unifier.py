@@ -15,7 +15,7 @@ class DummyType(str, Provider):
 
 class TestOtmUnifier:
 
-    def test_api_diagram_controller_happy_path(self):
+    def test_multiple_trustzones_same_type(self):
         # GIVEN an otm with multiple trust zones with the same type
         trustzones: [OtmTrustzone] = [
             OtmTrustzone(trustzone_id='60e82972', type='6376d53e', name='Internet'),
