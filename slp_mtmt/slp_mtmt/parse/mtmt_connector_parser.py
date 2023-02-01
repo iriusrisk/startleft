@@ -23,7 +23,7 @@ class MTMTConnectorParser:
         target_node_id = line.target_guid
         return OtmDataflow(dataflow_id=line.id,
                            name=line.name,
-                           properties=line.properties,
+                           attributes=line.properties,
                            source_node=source_node_id,
                            destination_node=target_node_id,
                            bidirectional=False

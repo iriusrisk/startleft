@@ -42,7 +42,7 @@ class MTMTTrustzoneParser:
             trustzone_id = self.calculate_otm_id(border)
             tz = OtmTrustzone(trustzone_id=trustzone_id,
                            name=border.name,
-                           properties=border.properties)
+                           attributes=border.properties)
             if representations:
                 tz.representations = [representations]
             return tz

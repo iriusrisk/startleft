@@ -1,8 +1,7 @@
-from otm.otm.entity.component import OtmComponent
-from otm.otm.entity.dataflow import OtmDataflow
-from otm.otm.entity.trustzone import OtmTrustzone
-from otm.otm.entity.representation import Representation, DiagramRepresentation, RepresentationType
-
+from .component import OtmComponent
+from .dataflow import OtmDataflow
+from .representation import Representation, DiagramRepresentation, RepresentationType
+from .trustzone import OtmTrustzone
 
 REPRESENTATIONS_SIZE_DEFAULT_HEIGHT = 1000
 REPRESENTATIONS_SIZE_DEFAULT_WIDTH = 1000
@@ -63,19 +62,19 @@ class Otm:
 
         return json
 
-    def add_trustzone(self, id, name, source=None, properties=None):
-        self.trustzones.append(OtmTrustzone(trustzone_id=id, name=name, source=source, properties=properties))
+    def add_trustzone(self, id, name, source=None, attributes=None):
+        self.trustzones.append(OtmTrustzone(trustzone_id=id, name=name, source=source, attributes=attributes))
 
     def add_component(self, id, name, type, parent, parent_type, source=None,
-                      properties=None, tags=None):
+                      attributes=None, tags=None):
         self.components.append(
             OtmComponent(component_id=id, name=name, component_type=type, parent=parent, parent_type=parent_type,
-                         source=source, properties=properties, tags=tags))
+                         source=source, attributes=attributes, tags=tags))
 
     def add_dataflow(self, id, name, source_node, destination_node, bidirectional=None,
-                     source=None, properties=None, tags=None):
+                     source=None, attributes=None, tags=None):
         self.dataflows.append(OtmDataflow(dataflow_id=id, name=name, bidirectional=bidirectional, source_node=source_node,
-                                          destination_node=destination_node, source=source, properties=properties,
+                                          destination_node=destination_node, source=source, attributes=attributes,
                                           tags=tags))
 
     def add_representation(self, id_=None, name=None, type_=None):

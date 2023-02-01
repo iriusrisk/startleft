@@ -1,9 +1,9 @@
 class OtmTrustzone:
-    def __init__(self, trustzone_id, name, source=None, properties=None, representations=None):
+    def __init__(self, trustzone_id, name, source=None, attributes=None, representations=None):
         self.id = trustzone_id
         self.name = name
         self.source = source
-        self.properties = properties
+        self.attributes = attributes
         self.trustrating = 10
         self.representations = representations
 
@@ -11,7 +11,7 @@ class OtmTrustzone:
         return type(other) == OtmTrustzone and self.id == other.id
 
     def __repr__(self) -> str:
-        return f'Trustzone(id="{self.id}", name="{self.name}", source="{self.source}", properties="{self.properties}, trustrating="{self.trustrating}")'
+        return f'Trustzone(id="{self.id}", name="{self.name}", source="{self.source}", attributes="{self.attributes}, trustrating="{self.trustrating}")'
 
     def __hash__(self):
         return hash(self.id)
@@ -25,8 +25,8 @@ class OtmTrustzone:
             }
         }
 
-        if self.properties:
-            json["properties"] = self.properties
+        if self.attributes:
+            json["attributes"] = self.attributes
         if self.representations:
             json["representations"] = [r.json() for r in self.representations]
 

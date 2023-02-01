@@ -1,8 +1,8 @@
 import pytest
 
+from otm.otm.entity.component import OtmComponent
 from otm.otm.entity.mitigation import OtmMitigation, OtmMitigationInstance
 from otm.otm.entity.threat import OtmThreat, OtmThreatInstance
-from otm.otm.entity.component import OtmComponent
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_threatinstance import MTMThreat
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT, MTMKnowledge
 from slp_mtmt.slp_mtmt.parse.mtmt_threat_parser import MTMThreatParser, get_threat_description, \
@@ -183,7 +183,7 @@ class TestMTMThreatParser:
             component_type="web-application-server-side",
             parent="2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
             parent_type="trustZone",
-            properties={
+            attributes={
                 "Name": "Micro-Batch (Managed App)",
                 "Out Of Scope": "false",
                 "Isolation Level": "Not Selected",
@@ -198,7 +198,7 @@ class TestMTMThreatParser:
         "parent": {
             "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
         },
-        "properties": {
+        "attributes": {
             "Name": "Micro-Batch (Managed App)",
             "Out Of Scope": "false",
             "Isolation Level": "Not Selected",
@@ -275,7 +275,7 @@ class TestMTMThreatParser:
                 component_type="web-application-server-side",
                 parent="2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
                 parent_type="trustZone",
-                properties={
+                attributes={
                     "Name": "Micro-Batch (Managed App)",
                     "Out Of Scope": "false",
                     "Isolation Level": "Not Selected",

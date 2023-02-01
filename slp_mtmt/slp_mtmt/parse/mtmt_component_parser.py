@@ -41,7 +41,7 @@ class MTMTComponentParser:
                                 component_type=mtmt_type,
                                 parent_type="trustZone",
                                 parent=trustzone_id,
-                                properties=border.properties,
+                                attributes=border.properties,
                                 source=border)
             if representation:
                 calculator.scale_representation(representation)
