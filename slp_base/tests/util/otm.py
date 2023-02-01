@@ -1,4 +1,3 @@
-import warnings
 from typing import Union
 
 from deepdiff import DeepDiff
@@ -41,35 +40,13 @@ def __validate_otm_schema(otm) -> Schema:
     return schema
 
 
-def validate_and_diff(actual: Union[dict, str, Otm], expected: Union[dict, str, Otm], excluded_regex):
-    warnings.warn("This method is deprecated, use 'validate_and_compare' instead", DeprecationWarning)
-    """
-    Utils for validating otm has a correct Schema
-    and OTM contains expected data
-    """
-    actual_otm = __load_otm(actual)
-    expected_otm = __load_otm(expected)
-
-    schema = __validate_otm_schema(actual_otm)
-    if not schema.valid:
-        return {'schema_errors': schema.errors}
-    diff = __compare_otm_files(expected_otm, actual_otm, excluded_regex)
-    if diff:
-        return diff
-    return {}
-
-
-def validate_and_diff_otm(actual: dict, expected_filename: str, excluded_regex):
-    warnings.warn("This method is deprecated, use 'validate_and_compare_otm' instead", DeprecationWarning)
-    expected = OtmFileLoader().load(expected_filename)
-    return validate_and_diff(actual, expected, excluded_regex)
-
 def validate_and_compare_otm(actual: dict, expected_filename: str, excluded_regex):
     expected = OtmFileLoader().load(expected_filename)
     return validate_and_compare(actual, expected, excluded_regex)
 
 
-def validate_and_compare(actual: Union[dict, str, Otm], expected: Union[dict, str, Otm], excluded_regex):
+def validate_and_compare(actual: Union[dict, str, Otm], expected: Union[dict, str, Otm], excluded_regex,
+                         validate_schema=True):
     """
     Utils for validating otm has a correct Schema
     and OTM contains expected data that returns
@@ -78,10 +55,11 @@ def validate_and_compare(actual: Union[dict, str, Otm], expected: Union[dict, st
     actual_otm = __load_otm(actual)
     expected_otm = __load_otm(expected)
 
-    schema = __validate_otm_schema(actual_otm)
-    if not schema.valid:
-        return {'schema_errors': schema.errors}
-    diff = __compare_otm_files(expected_otm, actual_otm, excluded_regex)
+    if validate_schema:
+        schema = __validate_otm_schema(actual_otm)
+        if not schema.valid:
+            return {'schema_errors': schema.errors}, {}
+    diff = __compare_otm_files(actual_otm, expected_otm, excluded_regex)
     if diff:
         return diff.t1, diff.t2
     return {}, {}

@@ -39,4 +39,6 @@ position_1orphan_tm7 = path + '/mtmt/MTMT_example_coordinates_1_orphan.tm7'
 example_position_otm = path + '/mtmt/MTMT_example_coordinates.otm'
 position_1line_tz_otm = path + '/mtmt/MTMT_example_coordinates_1_line_trustzone.otm'
 position_1orphan_otm = path + '/mtmt/MTMT_example_coordinates_1_orphan.otm'
+model_mtmt_mvp_otm = f'{path}/otm/MTMT_MVP.otm'
+missing_position_otm = f'{path}/otm/missing_coordinates.otm'
 

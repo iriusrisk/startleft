@@ -17,9 +17,8 @@
   ],
   "trustZones": [
     {
-      "id": "47",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "name": "Public Cloud",
-      "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "risk": {
         "trustRating": 10
       },
@@ -40,9 +39,8 @@
       ]
     },
     {
-      "id": "48",
+      "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
       "name": "Private Secured Cloud",
-      "type": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
       "risk": {
         "trustRating": 10
       },
@@ -69,7 +67,7 @@
       "name": "Custom VPC",
       "type": "empty-component",
       "parent": {
-        "trustZone": "47"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "representations": [
         {
@@ -138,7 +136,7 @@
       "name": "Private Database",
       "type": "rds",
       "parent": {
-        "trustZone": "48"
+        "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
       },
       "representations": [
         {
@@ -161,7 +159,7 @@
       "name": "Amazon CloudWatch",
       "type": "cloudwatch",
       "parent": {
-        "trustZone": "47"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "representations": [
         {
@@ -184,7 +182,7 @@
       "name": "Custom log system",
       "type": "cloudwatch",
       "parent": {
-        "trustZone": "47"
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
       "representations": [
         {

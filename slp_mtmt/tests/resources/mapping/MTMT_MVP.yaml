@@ -5,6 +5,9 @@ trustzones:
   - label: Azure Trust Boundary
     type: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
 
+  - label: default
+    type: b61d6911-338d-46a8-9f39-8dcd24abfe91
+
 components:
   - label: Mobile Client
     key: Mobile Client Technologies

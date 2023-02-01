@@ -56,3 +56,6 @@ otm_expected_result = path + '/otm/otm_expected_result.otm'
 expected_orphan_component_is_not_mapped = path + '/otm/expected_orphan_component_is_not_mapped.otm'
 otm_with_only_default_trustzone_expected_result = path + '/otm/otm_with_only_default_trustzone_expected_result.otm'
 minimal_otm_expected_result = path + '/otm/minimal_otm_expected_result.otm'
+cft_components_with_trustzones_of_same_type_otm = f'{path}/otm/cft_components_with_trustzones_of_same_type.otm'
+cloudformation_minimal_content_otm = f'{path}/otm/cloudformation_minimal_content.otm'
+
