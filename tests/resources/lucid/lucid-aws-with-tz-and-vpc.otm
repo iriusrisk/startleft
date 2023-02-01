@@ -69,7 +69,7 @@
             "representations": [
                 {
                     "name": "Internet Representation",
-                    "id": "34-representation",
+                    "id": "36-representation",
                     "representation": "test_parse_diagram_file_ok-diagram",
                     "size": {
                         "width": 288,
@@ -86,29 +86,52 @@
     "components": [
         {
             "id": "7",
-            "name": "My EC2",
-            "type": "ec2",
+            "name": "Custom VPC",
+            "type": "empty-component",
             "parent": {
                 "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
             },
             "representations": [
                 {
-                    "name": "My EC2 Representation",
+                    "name": "Custom VPC Representation",
                     "id": "7-representation",
+                    "representation": "test_parse_diagram_file_ok-diagram",
+                    "size": {
+                        "width": 246,
+                        "height": 226
+                    },
+                    "position": {
+                        "x": 287,
+                        "y": 30
+                    }
+                }
+            ]
+        },
+        {
+            "id": "9",
+            "name": "My EC2",
+            "type": "ec2",
+            "parent": {
+                "component": "7"
+            },
+            "representations": [
+                {
+                    "name": "My EC2 Representation",
+                    "id": "9-representation",
                     "representation": "test_parse_diagram_file_ok-diagram",
                     "size": {
                         "width": 82,
                         "height": 82
                     },
                     "position": {
-                        "x": 349,
-                        "y": 123
+                        "x": 62,
+                        "y": 93
                     }
                 }
             ]
         },
         {
-            "id": "10",
+            "id": "12",
             "name": "My CloudWatch",
             "type": "cloudwatch",
             "parent": {
@@ -117,7 +140,7 @@
             "representations": [
                 {
                     "name": "My CloudWatch Representation",
-                    "id": "10-representation",
+                    "id": "12-representation",
                     "representation": "test_parse_diagram_file_ok-diagram",
                     "size": {
                         "width": 75,
@@ -131,7 +154,7 @@
             ]
         },
         {
-            "id": "15",
+            "id": "17",
             "name": "My API Gateway",
             "type": "api-gateway",
             "parent": {
@@ -140,7 +163,7 @@
             "representations": [
                 {
                     "name": "My API Gateway Representation",
-                    "id": "15-representation",
+                    "id": "17-representation",
                     "representation": "test_parse_diagram_file_ok-diagram",
                     "size": {
                         "width": 82,
@@ -154,7 +177,7 @@
             ]
         },
         {
-            "id": "24",
+            "id": "26",
             "name": "My CloudTrail",
             "type": "cloudtrail",
             "parent": {
@@ -163,7 +186,7 @@
             "representations": [
                 {
                     "name": "My CloudTrail Representation",
-                    "id": "24-representation",
+                    "id": "26-representation",
                     "representation": "test_parse_diagram_file_ok-diagram",
                     "size": {
                         "width": 82,
@@ -177,7 +200,7 @@
             ]
         },
         {
-            "id": "27",
+            "id": "29",
             "name": "My Simple Storage Service (S3)",
             "type": "s3",
             "parent": {
@@ -186,7 +209,7 @@
             "representations": [
                 {
                     "name": "My Simple Storage Service (S3) Representation",
-                    "id": "27-representation",
+                    "id": "29-representation",
                     "representation": "test_parse_diagram_file_ok-diagram",
                     "size": {
                         "width": 82,
@@ -200,7 +223,7 @@
             ]
         },
         {
-            "id": "36",
+            "id": "38",
             "name": "Web browser",
             "type": "generic-client",
             "parent": {
@@ -209,7 +232,7 @@
             "representations": [
                 {
                     "name": "Web browser Representation",
-                    "id": "36-representation",
+                    "id": "38-representation",
                     "representation": "test_parse_diagram_file_ok-diagram",
                     "size": {
                         "width": 82,
@@ -223,7 +246,7 @@
             ]
         },
         {
-            "id": "42",
+            "id": "44",
             "name": "Android",
             "type": "android-device-client",
             "parent": {
@@ -232,7 +255,7 @@
             "representations": [
                 {
                     "name": "Android Representation",
-                    "id": "42-representation",
+                    "id": "44-representation",
                     "representation": "test_parse_diagram_file_ok-diagram",
                     "size": {
                         "width": 67,
@@ -246,7 +269,7 @@
             ]
         },
         {
-            "id": "45",
+            "id": "47",
             "name": "SQL Database",
             "type": "CD-MICROSOFT-AZURE-SQL-DB",
             "parent": {
@@ -255,7 +278,7 @@
             "representations": [
                 {
                     "name": "SQL Database Representation",
-                    "id": "45-representation",
+                    "id": "47-representation",
                     "representation": "test_parse_diagram_file_ok-diagram",
                     "size": {
                         "width": 61,
@@ -269,7 +292,7 @@
             ]
         },
         {
-            "id": "51",
+            "id": "53",
             "name": "My DynamoDB",
             "type": "dynamodb",
             "parent": {
@@ -278,7 +301,7 @@
             "representations": [
                 {
                     "name": "My DynamoDB Representation",
-                    "id": "51-representation",
+                    "id": "53-representation",
                     "representation": "test_parse_diagram_file_ok-diagram",
                     "size": {
                         "width": 82,
@@ -294,52 +317,52 @@
     ],
     "dataflows": [
         {
-            "id": "30",
-            "name": "EC2 Logs",
-            "source": "7",
-            "destination": "10"
-        },
-        {
-            "id": "31",
-            "name": "GW/EC2",
-            "source": "15",
-            "destination": "7"
-        },
-        {
             "id": "32",
-            "name": "Log trace",
-            "source": "15",
-            "destination": "24"
+            "name": "EC2 Logs",
+            "source": "9",
+            "destination": "12"
         },
         {
             "id": "33",
+            "name": "GW/EC2",
+            "source": "17",
+            "destination": "9"
+        },
+        {
+            "id": "34",
+            "name": "Log trace",
+            "source": "17",
+            "destination": "26"
+        },
+        {
+            "id": "35",
             "name": "Customer data",
-            "source": "15",
-            "destination": "27"
+            "source": "17",
+            "destination": "29"
         },
         {
-            "id": "41",
-            "name": "b0059921-bdba-4a1d-bdd5-f672636e9af3",
-            "source": "36",
-            "destination": "15"
+            "id": "43",
+            "name": "2114ddb1-f677-4275-a9a2-0b2ac8e11073",
+            "source": "38",
+            "destination": "17"
         },
         {
-            "id": "44",
-            "name": "637b85b3-1a0f-4648-a519-ada47d7192ef",
-            "source": "42",
-            "destination": "15"
+            "id": "46",
+            "name": "f58ee066-de2c-4464-9ceb-117b5dfa2703",
+            "source": "44",
+            "destination": "17"
         },
         {
-            "id": "54",
+            "id": "56",
             "name": "User data",
-            "source": "15",
-            "destination": "51"
+            "source": "17",
+            "destination": "53"
         },
         {
-            "id": "55",
+            "id": "57",
             "name": "App data",
-            "source": "15",
-            "destination": "45"
+            "source": "17",
+            "destination": "47"
         }
     ]
 }
