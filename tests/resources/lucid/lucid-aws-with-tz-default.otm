@@ -1,0 +1,144 @@
+{
+    "otmVersion": "0.1.0",
+    "project": {
+        "name": "test_parse_diagram_file_ok",
+        "id": "test_parse_diagram_file_ok"
+    },
+    "representations": [
+        {
+            "name": "test_parse_diagram_file_ok Diagram Representation",
+            "id": "test_parse_diagram_file_ok-diagram",
+            "type": "diagram",
+            "size": {
+                "width": 2378,
+                "height": 1558
+            }
+        }
+    ],
+    "trustZones": [
+        {
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "name": "Public Cloud",
+            "risk": {
+                "trustRating": 10
+            }
+        },
+        {
+            "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+            "name": "Private Secured Cloud",
+            "risk": {
+                "trustRating": 10
+            }
+        }
+    ],
+    "components": [
+        {
+            "id": "7",
+            "name": "My EC2",
+            "type": "ec2",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            }
+        },
+        {
+            "id": "10",
+            "name": "My CloudWatch",
+            "type": "cloudwatch",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            }
+        },
+        {
+            "id": "15",
+            "name": "My API Gateway",
+            "type": "api-gateway",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            }
+        },
+        {
+            "id": "24",
+            "name": "My CloudTrail",
+            "type": "cloudtrail",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            }
+        },
+        {
+            "id": "27",
+            "name": "My Simple Storage Service (S3)",
+            "type": "s3",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            }
+        },
+        {
+            "id": "36",
+            "name": "Web browser",
+            "type": "generic-client",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            }
+        },
+        {
+            "id": "45",
+            "name": "SQL Database",
+            "type": "CD-MICROSOFT-AZURE-SQL-DB",
+            "parent": {
+                "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+            }
+        },
+        {
+            "id": "51",
+            "name": "My DynamoDB",
+            "type": "other-database",
+            "parent": {
+                "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+            }
+        }
+    ],
+    "dataflows": [
+        {
+            "id": "30",
+            "name": "EC2 Logs",
+            "source": "7",
+            "destination": "10"
+        },
+        {
+            "id": "31",
+            "name": "GW/EC2",
+            "source": "15",
+            "destination": "7"
+        },
+        {
+            "id": "32",
+            "name": "Log trace",
+            "source": "15",
+            "destination": "24"
+        },
+        {
+            "id": "33",
+            "name": "Customer data",
+            "source": "15",
+            "destination": "27"
+        },
+        {
+            "id": "41",
+            "name": "175b872d-7f4c-4d29-af6d-7c9e76a0238f",
+            "source": "36",
+            "destination": "15"
+        },
+        {
+            "id": "54",
+            "name": "User data",
+            "source": "15",
+            "destination": "51"
+        },
+        {
+            "id": "55",
+            "name": "App data",
+            "source": "15",
+            "destination": "45"
+        }
+    ]
+}

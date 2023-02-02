@@ -52,7 +52,8 @@ You can also get help for specific commands.
                                           [custom_mapping_file,
                                           default_mapping_file, diagram_type].
                                           [required]
-          -g, --diagram-type [VISIO]      The diagram file type. NOTE: This
+          -g, --diagram-type [VISIO|LUCID]      
+                                          The diagram file type. NOTE: This
                                           argument is mutually exclusive with
                                           arguments: [mapping_file, iac_type].
                                           [required]
@@ -93,7 +94,7 @@ The list of commands that can be used to work in CLI mode is detailed as follows
 This command is used for parsing source files into the Open Threat Model format. 
 
 ??? Warning
-    Currently it is only possible to parse both diagram (Visio) and IaC (Cloudformation and Terraform) files. 
+    Currently it is only possible to parse both diagram (Visio and Lucidchart) and IaC (Cloudformation and Terraform) files. 
     Microsoft Threat Modelling Tool (MTMT) files are not supported yet.
 
 The options that it supports are:
@@ -105,7 +106,8 @@ The options that it supports are:
                                   [custom_mapping_file,
                                   default_mapping_file, diagram_type].
                                   [required]
-  -g, --diagram-type [VISIO]      The diagram file type. NOTE: This
+  -g, --diagram-type [VISIO|LUCID]      
+                                  The diagram file type. NOTE: This
                                   argument is mutually exclusive with
                                   arguments: [mapping_file, iac_type].
                                   [required]
