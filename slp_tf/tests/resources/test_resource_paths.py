@@ -36,6 +36,11 @@ terraform_main_referenced_variables = path + '/tf/terraform_main_referenced_vari
 terraform_vars_referenced_variables = path + '/tf/terraform_vars_referenced_variables.tf'
 terraform_variables_file_referenced_variables = path + '/tf/terraform_variables_files_referenced_variables.tfvars'
 terraform_components_from_same_resource = path + '/tf/terraform_components_from_same_resource.tf'
+terraform_resources_with_same_name = path + '/tf/terraform_resources_with_same_name.tf'
+terraform_define_parent_relationship = path + '/tf/calculate_parents/terraform_define_parent_relationship.tf'
+terraform_aws_security_group_in_and_eg_gress \
+    = path + '/tf/mapping_functions/terraform_aws_security_group_in_and_eg_gress.tf'
+terraform_multiple_aws_security_group = path + '/tf/mapping_functions/terraform_multiple_aws_security_group.tf'
 
 # mapping
 terraform_mapping_aws_component_without_parent = path + '/mapping/terraform_mapping_component_without_parent.yaml'
@@ -43,7 +48,20 @@ terraform_mapping_specific_functions = path + '/mapping/terraform_mapping_specif
 terraform_mapping_modules = path + '/mapping/terraform_mapping_modules.yaml'
 terraform_mapping_extra_modules = path + '/mapping/terraform_mapping_extra_modules.yaml'
 terraform_iriusrisk_tf_aws_mapping = path + '/mapping/iriusrisk-tf-aws-mapping.yaml'
+terraform_iriusrisk_tf_aws_mapping_v180 = path + '/mapping/iriusrisk-tf-aws-mapping-1.8.0.yaml'
 empty_terraform_mapping = path + '/mapping/empty_terraform_mapping.yaml'
+tf_mapping_parent_by_full_path_attribute = path + \
+                                           '/mapping/calculate_parents/tf_mapping_parent_by_full_path_attribute.yaml'
+tf_mapping_parent_by_type_name = path + \
+                                 '/mapping/calculate_parents/tf_mapping_parent_by_type_name.yaml'
+tf_mapping_parent_by_name = path + \
+                                 '/mapping/calculate_parents/tf_mapping_parent_by_name.yaml'
+tf_mapping_children_by_full_path_attribute = path + \
+                                           '/mapping/calculate_children/tf_mapping_children_by_full_path_attribute.yaml'
+tf_mapping_children_by_type_name = path + \
+                                 '/mapping/calculate_children/tf_mapping_children_by_type_name.yaml'
+tf_mapping_children_by_name = path + \
+                                 '/mapping/calculate_children/tf_mapping_children_by_name.yaml'
 invalid_no_dataflows = path + '/mapping/invalid-mapping-without-dataflows.yaml'
 
 # otm

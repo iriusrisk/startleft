@@ -1,4 +1,3 @@
-# Visio Mapping
 The greatest challenge when mapping Microsoft Visio files is that it is a completely open format where the user can
 place whatever they want. For that reason, the `slp_visio` works with some premises in order to build an OTM file
 with only the necessary information:

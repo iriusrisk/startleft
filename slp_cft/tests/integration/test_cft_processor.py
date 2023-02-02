@@ -3,7 +3,7 @@ import pytest
 from sl_util.sl_util.file_utils import get_data
 from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError, \
     LoadingIacFileError
-from slp_base.tests.util.otm import validate_and_diff, validate_and_diff_otm
+from slp_base.tests.util.otm import validate_and_diff, validate_and_compare_otm
 from slp_cft import CloudformationProcessor
 from slp_cft.tests.resources import test_resource_paths
 from slp_cft.tests.resources.test_resource_paths import expected_orphan_component_is_not_mapped
@@ -431,7 +431,8 @@ class TestCloudformationProcessor:
                                       [mapping_file]).process()
 
         # THEN a file with the expected otm is returned
-        assert validate_and_diff_otm(otm.json(), OTM_EXPECTED_RESULT, excluded_regex) == {}
+        left, right = validate_and_compare_otm(otm.json(), OTM_EXPECTED_RESULT, excluded_regex)
+        assert left == right
 
     def test_run_valid_multiple_iac_mapping_files(self):
         # GIVEN the valid CFT file
@@ -444,7 +445,8 @@ class TestCloudformationProcessor:
         otm = CloudformationProcessor('multiple-files', 'multiple-files', [networks_cft_file, resources_cft_file],
                                       [mapping_file]).process()
         # THEN a file with the expected otm is returned
-        assert validate_and_diff_otm(otm.json(), OTM_EXPECTED_RESULT, excluded_regex) == {}
+        left, right = validate_and_compare_otm(otm.json(), OTM_EXPECTED_RESULT, excluded_regex)
+        assert left == right
 
     def test_run_empty_multiple_iac_files(self):
         # GIVEN a request without any iac_file key
@@ -545,8 +547,11 @@ class TestCloudformationProcessor:
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cft_minimal_file], [mapping_file]).process()
 
         # Then an empty OTM containing only the default trustzone is generated
-        assert validate_and_diff_otm(otm.json(), test_resource_paths.otm_with_only_default_trustzone_expected_result,
-                                     excluded_regex) == {}
+        left, right = validate_and_compare_otm(otm.json(),
+                                               test_resource_paths.otm_with_only_default_trustzone_expected_result,
+                                               excluded_regex)
+        assert left == right
+
 
     def test_generate_empty_otm_with_empty_mapping_file(self):
         # Given an empty mapping file
@@ -559,8 +564,9 @@ class TestCloudformationProcessor:
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
 
         # Then an empty OTM, without any threat modeling content, is generated
-        assert validate_and_diff_otm(otm.json(), test_resource_paths.minimal_otm_expected_result,
-                                     excluded_regex) == {}
+        left, right = validate_and_compare_otm(otm.json(), test_resource_paths.minimal_otm_expected_result,
+                                               excluded_regex)
+        assert left == right
 
     def test_security_group_components_from_same_resource(self):
         # GIVEN a valid CFT file with a security group containing both an inbound and an outbound rule
