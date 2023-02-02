@@ -16,7 +16,7 @@ inside the `slp_tf`, providing a set of `$functions` containing the logic around
 are used.
 
 Take a look at the
-<a href="https://github.com/iriusrisk/startleft/blob/main/startleft/resources/schemas/iac_mapping_schema.json" target="_blank">JSONSchema</a>
+<a href="https://github.com/iriusrisk/startleft/blob/main/slp_tf/resources/schemas/iac_tf_mapping_schema.json" target="_blank">JSONSchema</a>
 file and the
 <a href="https://github.com/iriusrisk/OpenThreatModel" target="_blank">Open Threat Model</a> specification
 for more details.

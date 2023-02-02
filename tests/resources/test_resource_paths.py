@@ -107,4 +107,6 @@ default_lucid_mapping = path + '/lucid/default-lucid-mapping.yaml'
 lucid_aws_with_tz_mapping = path + '/lucid/lucid-aws-with-tz.yaml'
 lucid_aws_with_tz_and_vpc_mapping = path + '/lucid/lucid-aws-with-tz-and-vpc.yaml'
 # expected otm results
+lucid_aws_with_tz_default_otm = path + '/lucid/lucid-aws-with-tz-default.otm'
 lucid_aws_with_tz_otm = path + '/lucid/lucid-aws-with-tz.otm'
+lucid_aws_with_tz_and_vpc_otm = path + '/lucid/lucid-aws-with-tz-and-vpc.otm'

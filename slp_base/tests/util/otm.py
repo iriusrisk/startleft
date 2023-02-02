@@ -5,7 +5,10 @@ from deepdiff import DeepDiff
 
 from otm.otm.entity.otm import Otm
 from slp_base.slp_base.otm_file_loader import OtmFileLoader
+from slp_base.slp_base.otm_validator import OtmValidator
 from slp_base.slp_base.schema import Schema
+
+OTM_SCHEMA_FILENAME = OtmValidator.schema_filename
 
 public_cloud_id = 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
 public_cloud_name = 'Public Cloud'
@@ -35,7 +38,7 @@ def __compare_otm_files(expected: dict,
 
 
 def __validate_otm_schema(otm) -> Schema:
-    schema: Schema = Schema('otm_schema.json')
+    schema: Schema = Schema.from_package('otm', OTM_SCHEMA_FILENAME)
     schema.validate(otm)
     return schema
 
