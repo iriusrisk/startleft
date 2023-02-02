@@ -20,8 +20,8 @@ setup(
         'deepmerge==1.1.0',
         'jmespath==1.0.1',
         'lxml==4.9.2',
-        'python-hcl2==4.2.0',
-        'requests==2.28.1',
+        'python-hcl2==4.3.0',
+        'requests==2.28.2',
         'xmltodict==0.13.0',
         'fastapi==0.89.1',
         'python-multipart==0.0.5',
@@ -43,10 +43,10 @@ setup(
             "pytest-runner==6.0.0",
         ],
         "test": [
-            'tox==4.0.11',
-            'pytest==7.2.0',
+            'tox==4.4.3',
+            'pytest==7.2.1',
             'responses==0.22.0',
-            'deepdiff==6.2.2',
+            'deepdiff==6.2.3',
             'httpx==0.23.3'
         ],
         "doc": [

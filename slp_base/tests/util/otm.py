@@ -1,3 +1,4 @@
+import warnings
 from typing import Union
 
 from deepdiff import DeepDiff
@@ -10,7 +11,7 @@ public_cloud_id = 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
 public_cloud_name = 'Public Cloud'
 
 private_secured_id = '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
-private_secured_name = 'Private Secured'
+private_secured_name = 'Private Secured Cloud'
 
 internet_id = 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
 internet_name = 'Internet'
@@ -40,6 +41,7 @@ def __validate_otm_schema(otm) -> Schema:
 
 
 def validate_and_diff(actual: Union[dict, str, Otm], expected: Union[dict, str, Otm], excluded_regex):
+    warnings.warn("This method is deprecated, use 'validate_and_compare' instead", DeprecationWarning)
     """
     Utils for validating otm has a correct Schema
     and OTM contains expected data
@@ -57,8 +59,32 @@ def validate_and_diff(actual: Union[dict, str, Otm], expected: Union[dict, str, 
 
 
 def validate_and_diff_otm(actual: dict, expected_filename: str, excluded_regex):
+    warnings.warn("This method is deprecated, use 'validate_and_compare_otm' instead", DeprecationWarning)
     expected = OtmFileLoader().load(expected_filename)
     return validate_and_diff(actual, expected, excluded_regex)
+
+
+def validate_and_compare_otm(actual: dict, expected_filename: str, excluded_regex):
+    expected = OtmFileLoader().load(expected_filename)
+    return validate_and_compare(actual, expected, excluded_regex)
+
+
+def validate_and_compare(actual: Union[dict, str, Otm], expected: Union[dict, str, Otm], excluded_regex):
+    """
+    Utils for validating otm has a correct Schema
+    and OTM contains expected data that returns
+    both sides to compare in case of diff
+    """
+    actual_otm = __load_otm(actual)
+    expected_otm = __load_otm(expected)
+
+    schema = __validate_otm_schema(actual_otm)
+    if not schema.valid:
+        return {'schema_errors': schema.errors}
+    diff = __compare_otm_files(expected_otm, actual_otm, excluded_regex)
+    if diff:
+        return diff.t1, diff.t2
+    return {}, {}
 
 
 def check_otm_trustzone(otm, position, trustzone_id, name):
