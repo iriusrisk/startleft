@@ -19,6 +19,8 @@ class ErrorCode(Enum):
     OTM_RESULT_ERROR = (42, 400)
     OTM_GENERATION_ERROR = (45, 500)
 
+    PROVIDER_NOT_FOUND_ERROR = (60, 400)
+
     def __init__(self, system_exit_status, http_status):
         self.http_status = http_status
         self.system_exit_status = system_exit_status
@@ -89,3 +91,8 @@ class OtmResultError(CommonError):
 class OtmGenerationError(CommonError):
     """ Provided files were processed successfully but an error occurred while generating the OTM file. """
     error_code = ErrorCode.OTM_GENERATION_ERROR
+
+
+class ProviderNotFoundError(CommonError):
+    """ Provider resolver could not find a provider for the given type. """
+    error_code = ErrorCode.PROVIDER_NOT_FOUND_ERROR
