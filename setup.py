@@ -19,8 +19,8 @@ setup(
         'jsonschema==4.17.3',
         'deepmerge==1.1.0',
         'jmespath==1.0.1',
-        'python-hcl2==4.2.0',
-        'requests==2.28.1',
+        'python-hcl2==4.3.0',
+        'requests==2.28.2',
         'fastapi==0.89.1',
         'python-multipart==0.0.5',
         'click==8.1.3',
@@ -42,11 +42,15 @@ setup(
             "pytest-runner==6.0.0",
         ],
         "test": [
-            'tox==4.0.11',
-            'pytest==7.2.0',
+            'tox==4.4.3',
+            'pytest==7.2.1',
             'responses==0.22.0',
-            'deepdiff==6.2.2',
+            'deepdiff==6.2.3',
             'httpx==0.23.3'
+        ],
+        "doc": [
+            'mkdocs-material==9.0.5',
+            'pymdown-extensions==9.9.1'
         ]
     },
     entry_points='''
