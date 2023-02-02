@@ -1,0 +1,258 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Mapping File",
+    "type": "object",
+    "required": ["trustzones", "components", "dataflows"],
+    "properties": {
+        "lookup": {
+            "type": "object"
+        },
+        "trustzones": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["id", "name"],
+                "properties": {
+                    "id": {"$ref": "#/definitions/query"},
+                    "name": {"$ref": "#/definitions/query"},
+                    "$source": {"$ref": "#/definitions/query"}
+                }
+            }
+        },
+        "components": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["id", "name", "type"],
+                "properties": {
+                    "id": {"$ref": "#/definitions/query"},
+                    "name": {"$ref": "#/definitions/query"},
+                    "type": {"$ref": "#/definitions/query"},
+                    "$source": {"$ref": "#/definitions/query"},
+                    "parent": {"$ref": "#/definitions/query"}
+                }
+            }        
+        },
+        "dataflows": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["id", "name", "source", "destination"],
+                "properties": {
+                    "id": {"$ref": "#/definitions/query"},
+                    "name": {"$ref": "#/definitions/query"},
+                    "$source": {"$ref": "#/definitions/query"},
+                    "source": {"$ref": "#/definitions/query"},
+                    "destination": {"$ref": "#/definitions/query"}
+                }
+            }    
+        }
+    },
+    "definitions": {
+        "query": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "anyOf": [
+                        {
+                            "type": "object",
+                            "required": ["$lookup"],
+                            "properties": {
+                                "$lookup": {
+                                    "anyOf": [
+                                        {"type": "string"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["$skip"],
+                            "properties": {
+                                "$skip": {
+                                    "anyOf": [
+                                        {"type": "string"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["$singleton"],
+                            "properties": {
+                                "$singleton": {
+                                    "anyOf": [
+                                        {"type": "string"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["$root"],
+                            "properties": {
+                                "$root": {
+                                    "anyOf": [
+                                        {"type": "string"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["$path"],
+                            "properties": {
+                                "$path": {
+                                    "anyOf": [
+                                        {"type": "string"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["$format"],
+                            "properties": {
+                                "$format": {
+                                    "anyOf": [
+                                        {"type": "string"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["$catchall"],
+                            "properties": {
+                                "$catchall": {
+                                    "anyOf": [
+                                        {"type": "string"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["$children"],
+                            "properties": {
+                                "$children": {
+                                    "anyOf": [
+                                        {"type": "string"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["$parent"],
+                            "properties": {
+                                "$parent": {
+                                    "anyOf": [
+                                        {"type": "string"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["$search"],
+                            "properties": {
+                                "$search": {
+                                    "anyOf": [
+                                        {"type": "string"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["$findFirst"],
+                            "properties": {
+                                "$findFirst": {
+                                    "anyOf": [
+                                        {"type": "array"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "object",
+                            "required": ["$ip"],
+                            "properties": {
+                                "$ip": {
+                                    "anyOf": [
+                                        {"type": "string"},
+                                        {"$ref": "#/definitions/query"}
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "object",
+                    "required": ["$searchParams"],
+                    "properties": {
+                        "searchPath": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },{
+                                    "type": "array"
+                                }
+                            ]
+                        },
+                        "defaultValue": {
+                            "type": "string"
+                        }
+                    }
+
+                },
+                {
+                    "type": "object",
+                    "required": ["$numberOfSources"],
+                    "properties": {
+                        "oneSource": {
+                            "anyOf": [
+                                {"type": "string"},
+                                {"$ref": "#/definitions/query"}
+                            ]
+                        },
+                        "multipleSource": {
+                            "anyOf": [
+                                {"type": "string"},
+                                {"$ref": "#/definitions/query"}
+                            ]
+                        }
+                    }
+
+                },
+                {
+                    "type": "object",
+                    "required": ["$hub"],
+                    "properties": {
+                        "$hub": {
+                            "anyOf": [
+                                {"type": "string"},
+                                {"$ref": "#/definitions/query"}
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

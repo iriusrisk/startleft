@@ -240,7 +240,7 @@ You can also parse more than one IaC file as in this other example:
     Parsing IaC source files into OTM
     Validating CloudFormation file
     Mapping file size is valid
-    Loading schema file 'iac_mapping_schema.json'
+    Loading schema file 'iac_cft_mapping_schema.json'
     Mapping files are valid
     Mapping files are valid
     Mapping file size is valid
@@ -583,7 +583,7 @@ there are different options for each of them. The full set of options are:
 === "Output"
     ```shell
     Validating OTM file
-    Loading schema file '/startleft/resources/schemas/otm_schema.json'
+    Loading schema file '/otm/resources/schemas/otm_schema.json'
     OTM file schema is valid
     OTM file has consistent IDs
     OTM file validated successfully
@@ -599,7 +599,7 @@ An example with a mapping file:
     ```shell
     Validating Diagram mapping files
     Mapping file size is valid
-    Loading schema file '/startleft/resources/schemas/diagram_mapping_schema.json'
+    Loading schema file '/slp_visio/resources/schemas/diagram_mapping_schema.json'
     Mapping files are valid
     Mapping files are valid
     ```
