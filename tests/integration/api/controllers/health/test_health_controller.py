@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 import startleft.startleft.api.controllers.health.health_controller
 from startleft.startleft.api import fastapi_server
 
-webapp = fastapi_server.initialize_webapp()
+webapp = fastapi_server.webapp
 
 
 client = TestClient(webapp)
