@@ -7,7 +7,7 @@ from slp_base import ProviderValidator, DiagramFileNotValidError
 
 logger = logging.getLogger(__name__)
 
-VALID_MIME = ['application/vnd.ms-visio.drawing.main+xml', 'application/octet-stream']
+VALID_MIME = ['application/vnd.ms-visio.drawing.main+xml', 'application/octet-stream', 'application/zip']
 
 MAX_SIZE = 10 * 1024 * 1024
 MIN_SIZE = 10

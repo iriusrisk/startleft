@@ -1,6 +1,7 @@
 import logging
 import uuid
 
+from slp_tf.slp_tf.parse.mapping.mappers.tf_backward_compatibility import TfIdMapDictionary, TfDataflowNodeId
 from slp_tf.slp_tf.parse.mapping.mappers.tf_component_mapper import TerraformComponentMapper
 from slp_tf.slp_tf.parse.mapping.mappers.tf_dataflow_mapper import TerraformDataflowMapper
 from slp_tf.slp_tf.parse.mapping.mappers.tf_trustzone_mapper import TerraformTrustzoneMapper
@@ -27,8 +28,8 @@ class ComponentLists:
 
 def _default_dataflow_mapping_template():
     return {
-        "id":   {"$format": "{name}"},
-        "name": {"$format": "{_key}"}
+        "id": {"$path": "resource_id"},
+        "name": {"$format": "{resource_name}"}
     }
 
 
@@ -37,7 +38,7 @@ class TerraformTransformer:
         self.source_model = source_model
         self.threat_model = threat_model
         self.iac_mapping = {}
-        self.id_map = {}
+        self.id_map = TfIdMapDictionary()
         self.id_parents = {}
         self.id_dataflows = {}
         self.tree = {}
@@ -87,7 +88,6 @@ class TerraformTransformer:
 
     def __default_component_mapping_template(self):
         default_component_mapping_template = {
-            "id": {"$format": "{name}"},
             "name": {"$numberOfSources":
                 {
                     "oneSource": {"$path": "resource_name"},
@@ -105,17 +105,22 @@ class TerraformTransformer:
 
         return default_component_mapping_template
 
+    def __build_component_mapping(self, mapping):
+        component_mapping_id = {"id": mapping.get("name", {}).get("$ip", {"$path": "resource_id"})}
+        default_component_mapping_template = self.__default_component_mapping_template()
+        return {**default_component_mapping_template, **mapping, **component_mapping_id}
+
     def __find_components(self):
         logger.debug("Finding components")
 
         found_components = ComponentLists()
 
-        default_component_mapping_template = self.__default_component_mapping_template()
-
         for mapping in self.iac_mapping["components"]:
             mapper = TerraformComponentMapper(
-                {**default_component_mapping_template, **mapping}, self.__find_trustzone_parent_by_default())
-            mapper.id_map = self.id_map
+                self.__build_component_mapping(mapping),
+                self.__find_trustzone_parent_by_default(),
+                self.id_map
+            )
             for component in mapper.run(self.source_model, self.id_parents):
                 if isinstance(mapping["$source"], dict):
                     if "$skip" in mapping["$source"]:
@@ -216,9 +221,13 @@ class TerraformTransformer:
                     # b)with a new tag with data from this source component
                     for result in results:
                         if result["type"] == component["type"]:
+                            # Modify uuid of the given component
+                            for key in self.id_map:
+                                if self.id_map[key] == component["id"]:
+                                    self.id_map[key] = result["id"]
+
                             if "singleton_multiple_name" in component:
                                 result["name"] = component["singleton_multiple_name"]
-                                self.id_map[component["name"]] = result["id"]
 
                             # update "result" component with its multiple tags before adding tags from "component"
                             if "singleton_multiple_tags" in result:
@@ -349,7 +358,7 @@ class TerraformTransformer:
         if "type3-hub-" in node_id:
             hub_type = TYPE3
             node_id = node_id[10:]
-        return hub_type, node_id
+        return hub_type, TfDataflowNodeId(node_id)
 
     def __is_case_1_dataflow(self, dataflow, cursor_dataflow):
         """ Look for 1 to 1 dataflows like in VPCEndpoints - Security Group - IP
