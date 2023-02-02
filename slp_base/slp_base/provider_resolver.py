@@ -1,6 +1,6 @@
 from enum import Enum
 
-from slp_base import OtmProcessor, MappingValidator, LoadingSourceFileError
+from slp_base import OtmProcessor, MappingValidator, ProviderNotFoundError
 
 
 def _find_provider_classes(processor_name):
@@ -35,7 +35,7 @@ class ProviderResolver:
         str_source_type = source_type.value if isinstance(source_type, Enum) else str(source_type)
 
         if str_source_type not in self.provider_classes:
-            raise LoadingSourceFileError(f'{source_type} is not a supported type for source data')
+            raise ProviderNotFoundError(f'{source_type} is not a supported type for source data')
 
         return str_source_type
 

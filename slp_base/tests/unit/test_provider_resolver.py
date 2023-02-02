@@ -5,7 +5,7 @@ from unittest.mock import patch, Mock
 import pytest
 
 from slp_base import OtmProcessor, ProviderParser, MappingLoader, MappingValidator, ProviderLoader, ProviderValidator, \
-    LoadingSourceFileError
+    ProviderNotFoundError
 from slp_base.slp_base.provider_resolver import ProviderResolver
 
 MOCKED_PROCESSORS = [
@@ -94,8 +94,8 @@ class TestProviderResolver(TestCase):
         # WHEN get_processor is called in ProviderResolver
         with patch('slp_base.slp_base.provider_resolver._find_provider_classes'):
 
-            # THEN a LoadingSourceFileError is raised
-            with pytest.raises(LoadingSourceFileError) as error_info:
+            # THEN a ProviderNotFoundError is raised
+            with pytest.raises(ProviderNotFoundError) as error_info:
                 processor = ProviderResolver(mocked_processors).get_processor(provider_type)
 
         # AND the error message is right
@@ -111,8 +111,8 @@ class TestProviderResolver(TestCase):
         # WHEN get_processor is called in ProviderResolver
         with patch('slp_base.slp_base.provider_resolver._find_provider_classes'):
 
-            # THEN a LoadingSourceFileError is raised
-            with pytest.raises(LoadingSourceFileError) as error_info:
+            # THEN a ProviderNotFoundError is raised
+            with pytest.raises(ProviderNotFoundError) as error_info:
                 ProviderResolver(mocked_processors).get_processor(provider_type)
 
         # AND the error message is right
@@ -127,8 +127,8 @@ class TestProviderResolver(TestCase):
 
         # WHEN get_processor is called in ProviderResolver
         with patch('slp_base.slp_base.provider_resolver._find_provider_classes'):
-            # THEN a LoadingSourceFileError is raised
-            with pytest.raises(LoadingSourceFileError) as error_info:
+            # THEN a ProviderNotFoundError is raised
+            with pytest.raises(ProviderNotFoundError) as error_info:
                 ProviderResolver(mocked_processors).get_processor(provider_type)
 
         # AND the error message is right
