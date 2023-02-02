@@ -8,6 +8,7 @@ from slp_base.tests.util.otm import validate_and_diff
 
 from slp_base.slp_base.errors import DiagramFileNotValidError, MappingFileNotValidError, LoadingMappingFileError, \
     OtmResultError, OtmBuildingError, LoadingDiagramFileError
+from slp_visio.tests.unit.util.test_uuid import is_valid_uuid
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.diagram import diag_create_otm_controller
 from tests.resources import test_resource_paths
@@ -16,7 +17,7 @@ from tests.resources.test_resource_paths import visio_aws_with_tz_and_vpc, defau
 
 IRIUSRISK_URL = ''
 
-webapp = fastapi_server.initialize_webapp()
+webapp = fastapi_server.webapp
 
 client = TestClient(webapp)
 

@@ -1,11 +1,11 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from startleft.version import version
+from startleft.startleft._version.version_loader import load_startleft_version
 
 PREFIX = ''
 URL = '/health'
-RESPONSE_BODY_STARTLEFT_OK = {"status": "OK", "version": version, "components": {"StartLeft": "OK"}}
+RESPONSE_BODY_STARTLEFT_OK = {"status": "OK", "version": load_startleft_version(), "components": {"StartLeft": "OK"}}
 
 router = APIRouter(prefix=PREFIX)
 

@@ -10,10 +10,12 @@ Threat Modelling tools.
 
 ---
 
-Automation and integration are the core goals of StartLeft. It was born as an internal project of [IriusRisk](https://www.iriusrisk.com/), whose leading threat 
+Automation and integration are the core goals of StartLeft. It was born as an internal project of 
+<a href="https://www.iriusrisk.com/" target="_blank">IriusRisk</a>, whose leading threat 
 modelling tool allows the users to build a complete Threat Model of an application only by depicting its architecture in a diagram.
-However, there is a bunch of formats in which the architecture (or directly the TM) can be defined. This led [IriusRisk](https://www.iriusrisk.com/) to create
-and share with the community two key resources:
+However, there is a bunch of formats in which the architecture (or directly the TM) can be defined. This led
+<a href="https://www.iriusrisk.com/" target="_blank">IriusRisk</a> to create and share with the community two key 
+resources:
 
 * **[Open Threat Model (OTM)](Open-Threat-Model-(OTM).md)**, a standardized and vendor-agnostic way to represent Threat Models 
     to make them easily portable between platforms.
@@ -25,8 +27,9 @@ brings a great advantage reducing the necessary knowledge and manual work requir
 into TM, as well as enabling the users to make amazing things like integrating the generation of the TM in a CI/CD 
 pipeline of the actual IaC file.
 
-StartLeft is currently an Open Source application powered by [IriusRisk](https://www.iriusrisk.com/), that is already using it 
-as an intermediate service for all the imports of new projects from external sources.
+StartLeft is currently an Open Source application powered by
+<a href="https://www.iriusrisk.com/" target="_blank">IriusRisk</a>, that is already using it as an intermediate 
+service for all the imports of new projects from external sources.
 
 
 ## What input sources are supported?
@@ -36,10 +39,11 @@ as an intermediate service for all the imports of new projects from external sou
 Split by type, the currently supported input formats are:
 
 * **Infrastructure as Code (IaC)**:
-    * [CloudFormation (CFT)](https://aws.amazon.com/cloudformation/resources/templates/).
-    * [Terraform (TF)](https://www.terraform.io/).
+  
+    * <a href="https://aws.amazon.com/cloudformation/resources/templates/" target="_blank">CloudFormation (CFT)</a>.
+    * <a href="https://www.terraform.io/" target="_blank">Terraform (TF)</a>.
 * **Diagram**:
-    * Microsoft Visio.
+    * Microsoft Visio (including diagrams exported from Lucidchart).
 * **Threat Model**:
     * Microsoft Threat Modelling Tool (MTMT).
 
@@ -66,5 +70,7 @@ Threat Models. **The different ways of integrating StartLeft are described in th
 
 StartLeft is an Open Source application whose modularized architecture based on processors is specially focused
 on simplifying the collaboration for any developer. **If you want to contribute, check out the 
-[Quickstart guide for developers](development/Quickstart-Guide-for-Developers.md)**. A _Contributing file_ summarizing 
-the basics will also be available soon. 
+[Quickstart guide for developers](development/Quickstart-Guide-for-Developers.md) and the 
+<a href="https://github.com/iriusrisk/startleft/blob/main/CONTRIBUTING.md" target="_blank">CONTRIBUTING.md</a> file**.
+
+

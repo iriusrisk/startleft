@@ -1,4 +1,3 @@
-# Visio Mapping
 The greatest challenge when mapping Microsoft Visio files is that it is a completely open format where the user can
 place whatever they want. For that reason, the `slp_visio` works with some premises in order to build an OTM file
 with only the necessary information:
@@ -42,7 +41,7 @@ mapping appears in both mapping files, the one in the custom file takes preferen
 
 ---
 The Visio mapping file is expected to be a YAML file whose structure is exactly defined by its
-[json schema](https://github.com/iriusrisk/startleft/blob/main/startleft/resources/schemas/diagram_mapping_schema.json). 
+[json schema](https://github.com/iriusrisk/startleft/blob/main/slp_visio/resources/schemas/diagram_mapping_schema.json). 
 It is divided in three great blocks described in depth below. So, the root structure of the file is composed by three 
 arrays for the mappings of each type of element:
 
