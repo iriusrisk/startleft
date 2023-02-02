@@ -19,10 +19,8 @@ setup(
         'jsonschema==4.17.3',
         'deepmerge==1.1.0',
         'jmespath==1.0.1',
-        'lxml==4.9.2',
         'python-hcl2==4.3.0',
         'requests==2.28.2',
-        'xmltodict==0.13.0',
         'fastapi==0.89.1',
         'python-multipart==0.0.5',
         'click==8.1.3',
@@ -30,7 +28,8 @@ setup(
         'shapely==1.8.5',
         'vsdx==0.5.13',
         'python-magic==0.4.27',
-        'setuptools==65.5.1'
+        'setuptools==65.5.1',
+        'defusedxml==0.7.1'
     ],
     use_scm_version={
         'write_to': 'startleft/version.py',
