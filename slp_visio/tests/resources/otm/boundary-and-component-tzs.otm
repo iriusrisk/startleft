@@ -29,6 +29,13 @@
       "risk": {
         "trustRating": 10
       }
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
     }
   ],
   "components": [

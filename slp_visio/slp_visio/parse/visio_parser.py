@@ -32,17 +32,18 @@ class VisioParser(ProviderParser):
             )
         ]
 
-        self.__representation_calculator = RepresentationCalculator(self.representation_id, self.diagram.limits)
-        self.__trustzone_mappings = self.mapping_loader.get_trustzone_mappings()
-        self.__component_mappings = self.mapping_loader.get_component_mappings()
-        self.__default_trustzone = self.mapping_loader.get_default_otm_trustzone()
+        self._representation_calculator = RepresentationCalculator(self.representation_id, self.diagram.limits)
+        self._trustzone_mappings = self.mapping_loader.get_trustzone_mappings()
+        self._component_mappings = self.mapping_loader.get_component_mappings()
+        self._default_trustzone = self.mapping_loader.get_default_otm_trustzone()
 
     def build_otm(self):
         self.__prune_diagram()
 
         components = self.__map_components()
         trustzones = self.__map_trustzones()
-        return self.__build_otm(trustzones, components, self.__map_dataflows())
+        dataflows = self.__map_dataflows()
+        return self.__build_otm(trustzones, components, dataflows)
 
     def __prune_diagram(self):
         DiagramPruner(self.diagram, self.mapping_loader.get_all_labels()).run()
@@ -50,18 +51,18 @@ class VisioParser(ProviderParser):
     def __map_trustzones(self):
         trustzone_mapper = DiagramTrustzoneMapper(
             self.diagram.components,
-            self.__trustzone_mappings,
-            self.__representation_calculator
+            self._trustzone_mappings,
+            self._representation_calculator
         )
         return trustzone_mapper.to_otm()
 
     def __map_components(self):
         return DiagramComponentMapper(
             self.diagram.components,
-            self.__component_mappings,
-            self.__trustzone_mappings,
-            self.__default_trustzone,
-            self.__representation_calculator
+            self._component_mappings,
+            self._trustzone_mappings,
+            self._default_trustzone,
+            self._representation_calculator,
         ).to_otm()
 
     def __map_dataflows(self):

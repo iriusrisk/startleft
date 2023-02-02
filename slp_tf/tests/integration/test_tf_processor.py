@@ -365,7 +365,8 @@ class TestTerraformProcessor:
         ).process()
 
         # THEN a file with the single_tf_file-expected-result.otm contents is returned
-        result, expected = validate_and_compare(otm.json(), tf_file_referenced_vars_expected_result, excluded_regex)
+        result, expected = validate_and_compare(otm.json(), tf_file_referenced_vars_expected_result,
+                                 excluded_regex)
         assert result == expected
 
     def test_security_group_components_from_same_resource(self):
@@ -390,6 +391,42 @@ class TestTerraformProcessor:
         assert ingress_id != egress_id
         assert '52_30_97_44_32' in ingress_id
         assert '0_0_0_0_0' in egress_id
+
+    def test_resources_with_same_name(self):
+        """
+        Generate an OTM for TF file with resources with the same name
+        """
+
+        # GIVEN a TF file with two resources of different types and the same name id
+        #    AND the default mapping file
+        tf_file = get_data(test_resource_paths.terraform_resources_with_same_name)
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+
+        # WHEN processing
+        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
+
+        # THEN a valid OTM is returned without errors
+        #    AND both components are mapped with the same name
+        assert len(otm.components) == 2
+        assert otm.components[0].name == otm.components[1].name
+
+    def test_backward_compatibility(self):
+        """
+        Test backward compatibility of aws_security_groups_components.tf
+        against iriusrisk-tf-aws-mapping-1.8.0 mapping file (release 1.8.0)
+        """
+        # GIVEN the TF file of aws security groups
+        terraform_file = get_data(test_resource_paths.terraform_aws_security_groups_components)
+
+        # AND a mapping file of release 1.8.0
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping_v180)
+
+        # WHEN the TF file is processed
+        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
+
+        # THEN the resulting OTM match the expected one
+        #   AND backward compatibility works correctly
+        assert validate_and_diff(otm, expected_aws_security_groups_components, VALIDATION_EXCLUDED_REGEX) == {}
 
     def test_trustzone_types(self):
         # GIVEN a valid TF file

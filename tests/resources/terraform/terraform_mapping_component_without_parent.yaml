@@ -4,8 +4,7 @@ trustzones:
     type: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
 components:
-  - id: { $format: "{type}.{name}.id" }
-    type: aws_skipped_with_parent
+  - type: aws_skipped_with_parent
     name: { $path: "keys(@)[0]" }
     $source:
       $skip: { $root: "resource|get(@, 'aws_skipped_with_parent')" }
@@ -13,23 +12,20 @@ components:
     tags:
       - { $path: "Type" }
 
-  - id: { $format: "{type}.{name}.id" }
-    type: aws_component_without_parent
+  - type: aws_component_without_parent
     name: { $path: "keys(@)[0]" }
     $source: { $root: "resource|get(@, 'aws_component_without_parent')" }
     tags:
       - { $path: "Type" }
 
-  - id: { $format: "{type}.{name}.id" }
-    type: aws_skipped_no_parent
+  - type: aws_skipped_no_parent
     name: { $path: "keys(@)[0]" }
     $source:
       $skip: { $root: "resource|get(@, 'aws_skipped_no_parent')" }
     tags:
       - { $path: "Type" }
 
-  - id: { $format: "{type}.{name}.id" }
-    type: aws_control
+  - type: aws_control
     name: { $path: "keys(@)[0]" }
     $source: { $root: "resource|get(@, 'aws_control')" }
     parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
