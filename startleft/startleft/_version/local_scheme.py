@@ -1,5 +1,6 @@
 DEFAULT_LOCAL_PART = ''
 
+
 def choose_strategy_by_branch(branch_name: str) -> callable:
     """
     This function chooses the right strategy for calculating the version of the application based on the given branch name.
