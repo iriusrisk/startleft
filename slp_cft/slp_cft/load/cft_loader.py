@@ -1,20 +1,12 @@
 import logging
 
-import yaml
 from deepmerge import always_merger
 
+from sl_util.sl_util.json_utils import yaml_reader
 from slp_base.slp_base.errors import LoadingIacFileError
 from slp_base.slp_base.provider_loader import ProviderLoader
 
 logger = logging.getLogger(__name__)
-
-
-def yaml_reader(data):
-    return yaml.load(yaml_data_as_str(data), Loader=yaml.BaseLoader)
-
-
-def yaml_data_as_str(data) -> str:
-    return data if isinstance(data, str) else data.decode()
 
 
 def raise_empty_sources_error():
