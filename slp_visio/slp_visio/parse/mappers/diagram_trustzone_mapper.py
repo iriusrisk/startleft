@@ -42,7 +42,7 @@ class DiagramTrustzoneMapper:
 
         representation = self.representation_calculator.calculate_representation(trustzone)
         return OtmTrustzone(
-            trustzone_id=trustzone_mapping['id'],
+            trustzone_id=trustzone.id,
             name=trustzone.name if trustzone.name else trustzone_mapping['type'],
             type=find_type(trustzone_mapping),
             representations=[representation] if representation else None

@@ -35,7 +35,7 @@ class VisioParser(ProviderParser):
         self._representation_calculator = RepresentationCalculator(self.representation_id, self.diagram.limits)
         self._trustzone_mappings = self.mapping_loader.get_trustzone_mappings()
         self._component_mappings = self.mapping_loader.get_component_mappings()
-        self._default_trustzone = self.mapping_loader.get_default_otm_trustzone()
+        self.__default_trustzone = self.mapping_loader.get_default_otm_trustzone()
 
     def build_otm(self):
         self.__prune_diagram()
@@ -61,7 +61,7 @@ class VisioParser(ProviderParser):
             self.diagram.components,
             self._component_mappings,
             self._trustzone_mappings,
-            self._default_trustzone,
+            self.__default_trustzone,
             self._representation_calculator,
         ).to_otm()
 

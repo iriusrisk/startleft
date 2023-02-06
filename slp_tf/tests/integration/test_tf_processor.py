@@ -426,7 +426,8 @@ class TestTerraformProcessor:
 
         # THEN the resulting OTM match the expected one
         #   AND backward compatibility works correctly
-        assert validate_and_diff(otm, expected_aws_security_groups_components, VALIDATION_EXCLUDED_REGEX) == {}
+        result, expected = validate_and_compare(otm, expected_aws_security_groups_components, VALIDATION_EXCLUDED_REGEX)
+        assert result == expected
 
     def test_trustzone_types(self):
         # GIVEN a valid TF file
