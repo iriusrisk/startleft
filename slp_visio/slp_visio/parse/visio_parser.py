@@ -3,6 +3,7 @@ from otm.otm.entity.dataflow import OtmDataflow
 from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
 from otm.otm.entity.trustzone import OtmTrustzone
 from otm.otm.otm_builder import OtmBuilder
+from otm.otm.otm_pruner import OtmPruner
 from slp_base import ProviderParser
 from slp_visio.slp_visio.load.objects.diagram_objects import Diagram
 from slp_visio.slp_visio.load.visio_mapping_loader import VisioMappingFileLoader
@@ -43,7 +44,12 @@ class VisioParser(ProviderParser):
         components = self.__map_components()
         trustzones = self.__map_trustzones()
         dataflows = self.__map_dataflows()
-        return self.__build_otm(trustzones, components, dataflows)
+
+        otm = self.__build_otm(trustzones, components, dataflows)
+
+        OtmPruner(otm).prune_orphan_dataflows()
+
+        return otm
 
     def __prune_diagram(self):
         DiagramPruner(self.diagram, self.mapping_loader.get_all_labels()).run()

@@ -65,6 +65,7 @@ tf_mapping_children_by_name = path + \
                                  '/mapping/calculate_children/tf_mapping_children_by_name.yaml'
 terraform_trustzone_types_mapping = path + '/mapping/terraform_trustzone_types_mapping.yaml'
 terraform_multiple_trustzones_same_type_mapping = path + '/mapping/terraform_multiple_trustzones_same_type_mapping.yaml'
+invalid_no_dataflows = path + '/mapping/invalid-mapping-without-dataflows.yaml'
 
 # otm
 tf_file_expected_result = path + '/otm/tf-file-expected-result.otm'

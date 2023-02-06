@@ -168,3 +168,21 @@ class TestVisioProcessor:
         otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
         result, expected = validate_and_compare_otm(otm.json(), expected_visio_modified_single_connectors, None)
         assert result == expected
+
+    @mark.parametrize('vsdx,expected', [
+        (test_resource_paths.visio_origin_target_trustzone, test_resource_paths.expected_origin_target_trustzone),
+        (test_resource_paths.visio_origin_trustzone, test_resource_paths.expected_origin_trustzone),
+        (test_resource_paths.visio_target_trustzone, test_resource_paths.expected_origin_trustzone),
+    ])
+    def test_dataflows_connecting_trust_zones(self, vsdx, expected):
+        # Given the visio file
+        visio_file = open(vsdx, "r")
+
+        otm = VisioProcessor(
+            "project-id",
+            "project-name",
+            visio_file,
+            [get_data(test_resource_paths.default_visio_mapping)],
+        ).process()
+
+        assert validate_and_diff(otm, expected, None) == {}

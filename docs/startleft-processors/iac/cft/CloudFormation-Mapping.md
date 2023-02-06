@@ -13,7 +13,7 @@ Source mapping files are made up of three main sections corresponding to the mai
 
 Each contains a list of 0 or more objects that describe how to find the respective object in the source file, and each object has a number of required and optional fields. 
 
-Take a look at the [JSONSchema](https://github.com/iriusrisk/startleft/blob/main/startleft/resources/schemas/iac_mapping_schema.json) file for more details.
+Take a look at the [JSONSchema](https://github.com/iriusrisk/startleft/blob/main/slp_cft/resources/schemas/iac_cft_mapping_schema.json) file for more details.
 
 ## JMESPath Queries
 

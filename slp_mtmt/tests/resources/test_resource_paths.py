@@ -17,6 +17,7 @@ mtmt_empty_mapping_file = path + '/mapping/mtmt-empty-mapping.yaml'
 mtmt_mapping_filled_file = path + '/mapping/mtmt-mapping-filled.yaml'
 mapping_mtmt_mvp = path + '/mapping/MTMT_MVP.yaml'
 mtmt_default_mapping = path + '/mapping/mtmt_default_mapping.yaml'
+mtmt_mapping_invalid_no_dataflows = path + '/mapping/invalid-mapping-without-dataflows.yaml'
 
 # legacy mapping
 mapping_mtmt_mvp_legacy = path + '/mapping/MTMT_MVP_legacy.yaml'
