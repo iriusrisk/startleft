@@ -42,6 +42,9 @@ terraform_aws_security_group_in_and_eg_gress \
     = path + '/tf/mapping_functions/terraform_aws_security_group_in_and_eg_gress.tf'
 terraform_multiple_aws_security_group = path + '/tf/mapping_functions/terraform_multiple_aws_security_group.tf'
 
+# tfplan
+tfplan_elb = path + '/tfplan/elb-tfplan.json'
+
 # mapping
 terraform_mapping_aws_component_without_parent = path + '/mapping/terraform_mapping_component_without_parent.yaml'
 terraform_mapping_specific_functions = path + '/mapping/terraform_mapping_specific_functions.yaml'
@@ -81,3 +84,4 @@ expected_mapping_skipped_component_without_parent = path + '/otm/expected_mappin
 expected_no_resources = path + '/otm/expected_no_resources.otm'
 expected_run_valid_mappings = path + '/otm/expected_run_valid_mappings.otm'
 tf_file_referenced_vars_expected_result = path + '/otm/tf-file-referenced-vars-expected-result.otm'
+expected_elb_tfplan = path + '/otm/expected_elb_tfplan.otm'

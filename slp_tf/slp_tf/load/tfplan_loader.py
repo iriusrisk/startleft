@@ -90,16 +90,15 @@ def apply_resource_retro_compatibility(resource: {}):
     return dict(reversed(resource.items()))
 
 
-
-
 def map_resource_properties(resource: {}) -> {}:
     return {
         'resource_mode': resource['mode'],
         'resource_provider_name': resource['provider_name'],
         'resource_schema_version': resource['schema_version'],
         'resource_address': resource['address'],
-        **resource['values'],
-        **resource['sensitive_values']
+        # Sensitive and usual values may be overlapped
+        **resource['sensitive_values'],
+        **resource['values']
     }
 
 
