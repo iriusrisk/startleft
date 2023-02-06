@@ -1,17 +1,17 @@
 {
     "otmVersion": "0.1.0",
     "project": {
-        "name": "Optimvs Test",
-        "id": "optimvs-test"
+        "name": "test_parse_diagram_file_ok",
+        "id": "test_parse_diagram_file_ok"
     },
     "representations": [
         {
-            "name": "Visio",
-            "id": "Visio",
+            "name": "test_parse_diagram_file_ok Diagram Representation",
+            "id": "test_parse_diagram_file_ok-diagram",
             "type": "diagram",
             "size": {
-                "width": 1000,
-                "height": 1000
+                "width": 2378,
+                "height": 1558
             }
         }
     ],
@@ -21,21 +21,66 @@
             "name": "Public Cloud",
             "risk": {
                 "trustRating": 10
-            }
+            },
+            "representations": [
+                {
+                    "name": "Public Cloud Representation",
+                    "id": "1-representation",
+                    "representation": "test_parse_diagram_file_ok-diagram",
+                    "size": {
+                        "width": 779,
+                        "height": 902
+                    },
+                    "position": {
+                        "x": 759,
+                        "y": 328
+                    }
+                }
+            ]
         },
         {
             "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
             "name": "Private Secured Cloud",
             "risk": {
                 "trustRating": 10
-            }
+            },
+            "representations": [
+                {
+                    "name": "Private Secured Cloud Representation",
+                    "id": "5-representation",
+                    "representation": "test_parse_diagram_file_ok-diagram",
+                    "size": {
+                        "width": 450,
+                        "height": 512
+                    },
+                    "position": {
+                        "x": 1600,
+                        "y": 328
+                    }
+                }
+            ]
         },
         {
             "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
             "name": "Internet",
             "risk": {
                 "trustRating": 10
-            }
+            },
+            "representations": [
+                {
+                    "name": "Internet Representation",
+                    "id": "34-representation",
+                    "representation": "test_parse_diagram_file_ok-diagram",
+                    "size": {
+                        "width": 288,
+                        "height": 492
+                    },
+                    "position": {
+                        "x": 328,
+                        "y": 574
+                    }
+                }
+            ]
         }
     ],
     "components": [
@@ -45,7 +90,22 @@
             "type": "ec2",
             "parent": {
                 "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-            }
+            },
+            "representations": [
+                {
+                    "name": "My EC2 Representation",
+                    "id": "7-representation",
+                    "representation": "test_parse_diagram_file_ok-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 349,
+                        "y": 123
+                    }
+                }
+            ]
         },
         {
             "id": "10",
@@ -53,7 +113,22 @@
             "type": "cloudwatch",
             "parent": {
                 "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-            }
+            },
+            "representations": [
+                {
+                    "name": "My CloudWatch Representation",
+                    "id": "10-representation",
+                    "representation": "test_parse_diagram_file_ok-diagram",
+                    "size": {
+                        "width": 75,
+                        "height": 75
+                    },
+                    "position": {
+                        "x": 103,
+                        "y": 102
+                    }
+                }
+            ]
         },
         {
             "id": "15",
@@ -61,7 +136,22 @@
             "type": "api-gateway",
             "parent": {
                 "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-            }
+            },
+            "representations": [
+                {
+                    "name": "My API Gateway Representation",
+                    "id": "15-representation",
+                    "representation": "test_parse_diagram_file_ok-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 287,
+                        "y": 369
+                    }
+                }
+            ]
         },
         {
             "id": "24",
@@ -69,7 +159,22 @@
             "type": "cloudtrail",
             "parent": {
                 "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-            }
+            },
+            "representations": [
+                {
+                    "name": "My CloudTrail Representation",
+                    "id": "24-representation",
+                    "representation": "test_parse_diagram_file_ok-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 553,
+                        "y": 594
+                    }
+                }
+            ]
         },
         {
             "id": "27",
@@ -77,7 +182,22 @@
             "type": "s3",
             "parent": {
                 "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-            }
+            },
+            "representations": [
+                {
+                    "name": "My Simple Storage Service (S3) Representation",
+                    "id": "27-representation",
+                    "representation": "test_parse_diagram_file_ok-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 61,
+                        "y": 594
+                    }
+                }
+            ]
         },
         {
             "id": "36",
@@ -85,7 +205,22 @@
             "type": "generic-client",
             "parent": {
                 "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
-            }
+            },
+            "representations": [
+                {
+                    "name": "Web browser Representation",
+                    "id": "36-representation",
+                    "representation": "test_parse_diagram_file_ok-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 80
+                    },
+                    "position": {
+                        "x": 96,
+                        "y": 82
+                    }
+                }
+            ]
         },
         {
             "id": "42",
@@ -93,7 +228,22 @@
             "type": "android-device-client",
             "parent": {
                 "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
-            }
+            },
+            "representations": [
+                {
+                    "name": "Android Representation",
+                    "id": "42-representation",
+                    "representation": "test_parse_diagram_file_ok-diagram",
+                    "size": {
+                        "width": 67,
+                        "height": 123
+                    },
+                    "position": {
+                        "x": 96,
+                        "y": 246
+                    }
+                }
+            ]
         },
         {
             "id": "45",
@@ -101,7 +251,22 @@
             "type": "CD-MICROSOFT-AZURE-SQL-DB",
             "parent": {
                 "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
-            }
+            },
+            "representations": [
+                {
+                    "name": "SQL Database Representation",
+                    "id": "45-representation",
+                    "representation": "test_parse_diagram_file_ok-diagram",
+                    "size": {
+                        "width": 61,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 164,
+                        "y": 75
+                    }
+                }
+            ]
         },
         {
             "id": "51",
@@ -109,7 +274,22 @@
             "type": "dynamodb",
             "parent": {
                 "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
-            }
+            },
+            "representations": [
+                {
+                    "name": "My DynamoDB Representation",
+                    "id": "51-representation",
+                    "representation": "test_parse_diagram_file_ok-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 103
+                    },
+                    "position": {
+                        "x": 143,
+                        "y": 266
+                    }
+                }
+            ]
         }
     ],
     "dataflows": [
@@ -139,13 +319,13 @@
         },
         {
             "id": "41",
-            "name": "fe1160db-33ed-435d-ba03-4918ef5e3728",
+            "name": "b0059921-bdba-4a1d-bdd5-f672636e9af3",
             "source": "36",
             "destination": "15"
         },
         {
             "id": "44",
-            "name": "9ca55f98-da56-45dc-abd3-72abd9a44dbd",
+            "name": "637b85b3-1a0f-4648-a519-ada47d7192ef",
             "source": "42",
             "destination": "15"
         },
