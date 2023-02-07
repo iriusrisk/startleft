@@ -15,6 +15,7 @@
     {
       "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "name": "Public Cloud",
+      "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "risk": {
         "trustRating": 10
       }
@@ -22,7 +23,7 @@
   ],
   "components": [
     {
-      "id": "6a8f388f-f81b-40bc-abd5-8d6affc7e1ac",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.dummyvpcdynamodb-altsource",
       "name": "DynamoDB from VPCEndpoint",
       "type": "dynamodb",
       "parent": {
@@ -33,7 +34,7 @@
       ]
     },
     {
-      "id": "64687893-5570-4b49-91eb-b0713029c7c7",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.dummyvpcssm-altsource",
       "name": "CustomVPC",
       "type": "vpc",
       "parent": {

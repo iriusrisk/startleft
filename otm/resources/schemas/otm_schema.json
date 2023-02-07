@@ -69,6 +69,7 @@
                 "properties": {
                     "id": {"$ref": "#/definitions/uuid"},
                     "name": {"type": "string"},
+                    "type": {"type": "string"},
                     "description": {"type": "string"},
                     "risk": {
                         "type": "object",

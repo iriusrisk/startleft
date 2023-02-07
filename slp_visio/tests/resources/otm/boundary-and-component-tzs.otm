@@ -1,31 +1,31 @@
 {
   "otmVersion": "0.1.0",
   "project": {
-    "name": "project-name",
-    "id": "project-id"
+    "id": "project-id",
+    "name": "project-name"
   },
   "representations": [
     {
-      "name": "Visio",
-      "id": "Visio",
+      "id": "project-id-diagram",
+      "name": "project-id Diagram Representation",
       "type": "diagram",
       "size": {
-        "width": 1000,
-        "height": 1000
+        "height": 1062,
+        "width": 1618
       }
     }
   ],
   "trustZones": [
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
-      "name": "Public Cloud",
+      "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
+      "name": "Internet",
       "risk": {
         "trustRating": 10
       }
     },
     {
       "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
-      "name": "Private Secured",
+      "name": "Private Secured Cloud",
       "risk": {
         "trustRating": 10
       }
@@ -37,7 +37,7 @@
       "name": "Custom machine",
       "type": "ec2",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
       }
     },
     {
@@ -52,9 +52,10 @@
   "dataflows": [
     {
       "id": "34",
-      "name": "1620bec7-5538-44b6-ad0d-4a548a624c54",
+      "name": "89ab351c-6ae7-4afb-ad90-0eb045fd801a",
       "source": "12",
       "destination": "30"
     }
   ]
+
 }

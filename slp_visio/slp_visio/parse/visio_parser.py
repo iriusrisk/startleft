@@ -1,4 +1,7 @@
+from otm.otm.entity.component import OtmComponent
+from otm.otm.entity.dataflow import OtmDataflow
 from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
+from otm.otm.entity.trustzone import OtmTrustzone
 from otm.otm.otm_builder import OtmBuilder
 from otm.otm.otm_pruner import OtmPruner
 from slp_base import ProviderParser
@@ -33,21 +36,16 @@ class VisioParser(ProviderParser):
         self._representation_calculator = RepresentationCalculator(self.representation_id, self.diagram.limits)
         self._trustzone_mappings = self.mapping_loader.get_trustzone_mappings()
         self._component_mappings = self.mapping_loader.get_component_mappings()
-        self._default_trustzone = None
+        self.__default_trustzone = self.mapping_loader.get_default_otm_trustzone()
 
     def build_otm(self):
         self.__prune_diagram()
 
-        otm_builder = OtmBuilder(self.project_id, self.project_name, self.diagram.diagram_type) \
-            .add_representations(self.representations, extend=False) \
-            .add_trustzones(self._map_trustzones()) \
-            .add_components(self._map_components()) \
-            .add_dataflows(self._map_dataflows())
+        components = self.__map_components()
+        trustzones = self.__map_trustzones()
+        dataflows = self.__map_dataflows()
 
-        if self._default_trustzone:
-            otm_builder.add_default_trustzone(self._default_trustzone)
-
-        otm = otm_builder.build()
+        otm = self.__build_otm(trustzones, components, dataflows)
 
         OtmPruner(otm).prune_orphan_dataflows()
 
@@ -56,24 +54,41 @@ class VisioParser(ProviderParser):
     def __prune_diagram(self):
         DiagramPruner(self.diagram, self.mapping_loader.get_all_labels()).run()
 
-    def _map_trustzones(self):
+    def __map_trustzones(self):
         trustzone_mapper = DiagramTrustzoneMapper(
             self.diagram.components,
             self._trustzone_mappings,
             self._representation_calculator
         )
-
-        self._default_trustzone = trustzone_mapper.get_default_trustzone()
         return trustzone_mapper.to_otm()
 
-    def _map_components(self):
+    def __map_components(self):
         return DiagramComponentMapper(
             self.diagram.components,
             self._component_mappings,
             self._trustzone_mappings,
-            self._default_trustzone,
+            self.__default_trustzone,
             self._representation_calculator,
         ).to_otm()
 
-    def _map_dataflows(self):
+    def __map_dataflows(self):
         return DiagramConnectorMapper(self.diagram.connectors).to_otm()
+
+    def __build_otm(self, trustzones: [OtmTrustzone], components: [OtmComponent], dataflows: [OtmDataflow]):
+        otm_builder = OtmBuilder(self.project_id, self.project_name, self.diagram.diagram_type) \
+            .add_representations(self.representations, extend=False) \
+            .add_trustzones(trustzones) \
+            .add_components(components) \
+            .add_dataflows(dataflows)
+
+        if self.__default_trustzone and self.__any_default_tz(components):
+            otm_builder.add_default_trustzone(self.__default_trustzone)
+
+        return otm_builder.build()
+
+    def __any_default_tz(self, components):
+        for component in components:
+            if self.__default_trustzone and component.parent \
+                    and component.parent == self.__default_trustzone.id:
+                return True
+        return False

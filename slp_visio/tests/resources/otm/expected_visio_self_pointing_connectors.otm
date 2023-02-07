@@ -1,0 +1,49 @@
+{
+  "components": [
+    {
+      "id": "52",
+      "name": "Custom enterprise GW",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "type": "empty-component"
+    },
+    {
+      "id": "56",
+      "name": "Custom web server",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "type": "empty-component"
+    }
+  ],
+  "dataflows": [],
+  "otmVersion": "0.1.0",
+  "project": {
+    "id": "project-id",
+    "name": "project-name"
+  },
+  "representations": [
+    {
+      "id": "project-id-diagram",
+      "name": "project-id Diagram Representation",
+      "size": {
+        "height": 902,
+        "width": 1382
+      },
+      "type": "diagram"
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "properties": {
+        "default": true
+      },
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ]
+}
