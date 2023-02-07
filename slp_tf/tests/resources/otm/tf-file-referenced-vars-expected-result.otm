@@ -29,7 +29,7 @@
     ],
     "components": [
         {
-            "id": "085b159d-59b3-4365-a1af-4e3c600ce9a2",
+            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-alb.0_0_0_0_0",
             "name": "0.0.0.0/0",
             "type": "generic-client",
             "parent": {
@@ -40,7 +40,7 @@
             ]
         },
         {
-            "id": "bac026c7-bb9d-4286-b0a9-4c9080630abc",
+            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.aws_security_group-webserver.52_30_97_44_32",
             "name": "52.30.97.44/32",
             "type": "generic-client",
             "parent": {
@@ -51,7 +51,7 @@
             ]
         },
         {
-            "id": "4578c178-76df-4217-8e4d-a19fd26ae828",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.db",
             "name": "db",
             "type": "rds",
             "parent": {
@@ -62,7 +62,7 @@
             ]
         },
         {
-            "id": "d2640b6d-59f4-456c-a075-a4b5d14a365a",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.vpc",
             "name": "vpc",
             "type": "vpc",
             "parent": {
@@ -73,7 +73,7 @@
             ]
         },
         {
-            "id": "d3b35d78-e709-4e79-bff9-bc58fa0e1ec1",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.alb",
             "name": "alb",
             "type": "load-balancer",
             "parent": {
@@ -84,7 +84,7 @@
             ]
         },
         {
-            "id": "07f63bbb-ccb4-4f87-addc-435f43e9ee24",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_cloudwatch_metric_alarm-cloudwatch_alarm_up",
             "name": "cloudwatch (grouped)",
             "type": "cloudwatch",
             "parent": {
