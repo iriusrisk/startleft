@@ -1,0 +1,27 @@
+trustzones:
+  - id:   public-cloud-01
+    name: Public Cloud
+    type: b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - id:   public-cloud-02
+    name: Public Cloud
+    type: b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+components:
+  - id: { $format: "{name}" }
+    type: vpc
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::EC2::VPC']" }
+    parent: public-cloud-01
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: rds
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::RDS::DBCluster']" }
+    parent: public-cloud-02
+    tags:
+      - { $path: "Type" }
+
+dataflows: []

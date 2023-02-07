@@ -4,16 +4,16 @@ from unittest.mock import patch
 import responses
 from fastapi.testclient import TestClient
 from pytest import mark
-from slp_base.tests.util.otm import validate_and_diff
 
 from slp_base.slp_base.errors import DiagramFileNotValidError, MappingFileNotValidError, LoadingMappingFileError, \
     OtmResultError, OtmBuildingError, LoadingDiagramFileError
-from slp_visio.tests.unit.util.test_uuid import is_valid_uuid
+from slp_base.tests.util.otm import validate_and_compare_otm, validate_and_compare
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.diagram import diag_create_otm_controller
 from tests.resources import test_resource_paths
 from tests.resources.test_resource_paths import visio_aws_with_tz_and_vpc, default_visio_mapping, \
-    custom_vpc_mapping, visio_create_otm_ok_only_default_mapping, visio_create_otm_ok_both_mapping_files
+    default_visio_mapping_legacy, custom_vpc_mapping, custom_vpc_mapping_legacy, \
+    visio_create_otm_ok_only_default_mapping, visio_create_otm_ok_both_mapping_files
 
 IRIUSRISK_URL = ''
 
@@ -33,14 +33,15 @@ octet_stream = 'application/octet-stream'
 
 class TestOtmControllerDiagramVisio:
 
+    @mark.parametrize('mapping', [default_visio_mapping, default_visio_mapping_legacy])
     @responses.activate
-    def test_create_otm_ok_only_default_mapping(self):
+    def test_create_otm_ok_only_default_mapping(self, mapping):
         # Given a project_id
         project_id: str = 'project_A_id'
 
         # When I do post on diagram endpoint
         files = {'diag_file': open(test_resource_paths.visio_aws_with_tz_and_vpc, 'rb'),
-                 'default_mapping_file': open(test_resource_paths.default_visio_mapping, 'rb')}
+                 'default_mapping_file': open(mapping, 'rb')}
         body = {'diag_type': 'VISIO', 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
@@ -49,17 +50,24 @@ class TestOtmControllerDiagramVisio:
         assert response.headers.get('content-type') == 'application/json'
         otm = json.loads(response.text)
 
-        assert validate_and_diff(otm, visio_create_otm_ok_only_default_mapping, VALIDATION_EXCLUDED_REGEX) == {}
+        result, expected = validate_and_compare_otm(otm, visio_create_otm_ok_only_default_mapping, VALIDATION_EXCLUDED_REGEX)
+        assert result == expected
 
+    @mark.parametrize('default_mapping,custom_mapping', [
+        (default_visio_mapping, custom_vpc_mapping),
+        (default_visio_mapping_legacy, custom_vpc_mapping_legacy),
+        (default_visio_mapping, custom_vpc_mapping_legacy),
+        (default_visio_mapping_legacy, custom_vpc_mapping),
+    ])
     @responses.activate
-    def test_create_otm_ok_both_mapping_files(self):
+    def test_create_otm_ok_both_mapping_files(self, default_mapping, custom_mapping):
         # Given a project_id
         project_id: str = 'project_A_id'
 
         # When I do post on diagram endpoint
         files = {'diag_file': open(visio_aws_with_tz_and_vpc, 'rb'),
-                 'default_mapping_file': open(default_visio_mapping, 'rb'),
-                 'custom_mapping_file': open(custom_vpc_mapping, 'rb')}
+                 'default_mapping_file': open(default_mapping, 'rb'),
+                 'custom_mapping_file': open(custom_mapping, 'rb')}
         body = {'diag_type': 'VISIO', 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
@@ -68,7 +76,8 @@ class TestOtmControllerDiagramVisio:
         assert response.headers.get('content-type') == 'application/json'
         otm = json.loads(response.text)
 
-        assert validate_and_diff(otm, visio_create_otm_ok_both_mapping_files, VALIDATION_EXCLUDED_REGEX) == {}
+        result, expected = validate_and_compare(otm, visio_create_otm_ok_both_mapping_files, VALIDATION_EXCLUDED_REGEX)
+        assert result == expected
 
     @responses.activate
     @patch('slp_visio.slp_visio.validate.visio_validator.VisioValidator.validate')

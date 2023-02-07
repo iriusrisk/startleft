@@ -31,8 +31,8 @@ class TestTerraformCalculateParents:
 
         # THEN the VPCsmm components without parents are omitted
         # AND the rest of the OTM details match the expected
-        expected, actual = validate_and_compare(otm, expected_orphan_component_is_not_mapped, excluded_regex)
-        assert expected == actual
+        result, expected = validate_and_compare(otm.json(), expected_orphan_component_is_not_mapped, excluded_regex)
+        assert result == expected
 
     def test_mapping_component_without_parent(self):
         # GIVEN a valid TF file
@@ -61,8 +61,9 @@ class TestTerraformCalculateParents:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        expected, actual = validate_and_compare(otm, expected_mapping_skipped_component_without_parent, excluded_regex)
-        assert expected == actual
+        result, expected = validate_and_compare(otm, expected_mapping_skipped_component_without_parent,
+                                 excluded_regex)
+        assert result == expected
 
     @pytest.mark.parametrize('mapping_file', [
         pytest.param(get_data(tf_mapping_parent_by_type_name), id="by {type}.{name}"),

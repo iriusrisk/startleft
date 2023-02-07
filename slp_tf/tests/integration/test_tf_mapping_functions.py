@@ -26,8 +26,8 @@ class TestTerraformMappingFunctions:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        expected, actual = validate_and_compare(otm, expected_aws_singleton_components, excluded_regex)
-        assert expected == actual
+        result, expected = validate_and_compare(otm, expected_aws_singleton_components, excluded_regex)
+        assert result == expected
 
     def test_aws_ip_unified_components(self):
         """

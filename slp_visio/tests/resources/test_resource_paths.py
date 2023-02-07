@@ -11,6 +11,10 @@ custom_vpc_mapping = f'{path}/mapping/custom-vpc-mapping.yaml'
 empty_mapping = f'{path}/mapping/empty-mapping.yaml'
 invalid_no_dataflows = f'{path}/mapping/invalid-mapping-without-dataflows.yaml'
 
+# legacy mapping
+default_visio_mapping_legacy = path + '/mapping/legacy/aws-visio-mapping.yaml'
+custom_vpc_mapping_legacy = path + '/mapping/legacy/custom-vpc-mapping.yaml'
+
 # visio
 visio_aws_with_tz_and_vpc = f'{path}/visio/aws-with-tz-and-vpc.vsdx'
 visio_aws_shapes = f'{path}/visio/aws-shapes.vsdx'
@@ -53,6 +57,15 @@ expected_overlapped_boundary_tzs = f'{path}/otm/expected_overlapped_boundary_tzs
 expected_prune_orphan_connectors = f'{path}/otm/expected_prune_orphan_connectors.otm'
 expected_self_pointing_connectors = f'{path}/otm/expected_self_pointing_connectors.otm'
 expected_simple_boundary_tzs = f'{path}/otm/expected_simple_boundary_tzs.otm'
-expected_visio_boundary_and_component_tzs = f'{path}/otm/expected_visio_boundary_and_component_tzs.otm'
+expected_visio_generic_shapes = f'{path}/otm/expected_generic_shapes.otm'
+expected_visio_self_pointing_connectors = f'{path}/otm/expected_visio_self_pointing_connectors.otm'
+expected_visio_extraneous_elements = f'{path}/otm/expected_visio_extraneous_elements.otm'
+expected_visio_boundary_tz_and_default_tz = f'{path}/otm/boundary-tz-and-default-tz.otm'
+expected_visio_boundary_and_component_tzs = f'{path}/otm/boundary-and-component-tzs.otm'
+expected_visio_multiple_pages_diagram = f'{path}/otm/multiple-pages-diagram.otm'
+expected_visio_aws_with_tz_and_vpc = f'{path}/otm/aws-with-tz-and-vpc.otm'
+expected_visio_orphan_dataflows = f'{path}/otm/visio-orphan-dataflows.otm'
+expected_visio_bidirectional_connectors = f'{path}/otm/bidirectional-connectors.otm'
+expected_visio_modified_single_connectors = f'{path}/otm/modified-single-connectors.otm'
 expected_origin_target_trustzone = f'{path}/otm/expected_origin_target_trustzone.otm'
 expected_origin_trustzone = f'{path}/otm/expected_origin_trustzone.otm'

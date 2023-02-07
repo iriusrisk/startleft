@@ -17,6 +17,10 @@ cloudformation_mapping_without_ref = path + '/mapping/iriusrisk-cft-mapping_with
 
 empty_cloudformation_mapping = path + '/mapping/empty_cloudformation_mapping.yaml'
 
+cloudformation_trustzone_types_mapping = path + '/mapping/cloudformation_trustzone_types_mapping.yaml'
+cloudformation_multiple_trustzones_same_type_mapping = \
+    path + '/mapping/cloudformation_multiple_trustzones_same_type_mapping.yaml'
+
 # cft
 cloudformation_for_mappings_tests_json = path + '/cft/cloudformation_for_mappings_tests.json'
 cloudformation_for_security_group_tests_json = path + '/cft/cloudformation_for_security_group_tests.json'
@@ -42,11 +46,16 @@ cloudformation_with_ref_function_and_without_default_property_json = \
     path + '/cft/cloudformation_with_ref_and_without_default.json'
 cloudformation_with_ref_function_and_default_property_yaml = path + '/cft/cloudformation_with_ref_and_default.yaml'
 cloudformation_with_ref_function_and_without_parameters = path + \
-                                                          '/cft/cloudformation_with_ref_and_without_parameters.json'
+                                                       '/cft/cloudformation_with_ref_and_without_parameters.json'
 cloudformation_components_from_same_resource = path + '/cft/cloudformation_components_from_same_resource.json'
+cloudformation_components_with_trustzones_of_same_type = \
+    path + '/cft/cloudformation_components_with_trustzones_of_same_type.json'
 
 # otm
 otm_expected_result = path + '/otm/otm_expected_result.otm'
 expected_orphan_component_is_not_mapped = path + '/otm/expected_orphan_component_is_not_mapped.otm'
 otm_with_only_default_trustzone_expected_result = path + '/otm/otm_with_only_default_trustzone_expected_result.otm'
 minimal_otm_expected_result = path + '/otm/minimal_otm_expected_result.otm'
+cft_components_with_trustzones_of_same_type_otm = f'{path}/otm/cft_components_with_trustzones_of_same_type.otm'
+cloudformation_minimal_content_otm = f'{path}/otm/cloudformation_minimal_content.otm'
+

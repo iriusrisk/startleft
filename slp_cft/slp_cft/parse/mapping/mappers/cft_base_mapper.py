@@ -6,8 +6,6 @@ from abc import ABC, abstractmethod
 class CloudformationBaseMapper(ABC):
     logger = logging.getLogger(__name__)
 
-    DEFAULT_TRUSTZONE = "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-
     def __init__(self, mapping):
         self.mapping = mapping
         self.id_map = {}
@@ -107,8 +105,6 @@ class CloudformationBaseMapper(ABC):
                 for e in mapping_path_value["Fn::Join"][1]:
                     if isinstance(e, str):
                         value.append(e)
-                    else:
-                        pass
 
                 value = separator.join(value)
             elif "Fn::Sub" in mapping_path_value:

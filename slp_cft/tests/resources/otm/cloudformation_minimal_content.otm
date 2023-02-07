@@ -1,24 +1,20 @@
 {
   "otmVersion": "0.1.0",
   "project": {
-    "name": "project-name",
-    "id": "project-id"
+    "name": "name",
+    "id": "id"
   },
   "representations": [
     {
-      "name": "Visio",
-      "id": "Visio",
-      "type": "diagram",
-      "size": {
-        "width": 1000,
-        "height": 1000
-      }
+      "name": "CloudFormation",
+      "id": "CloudFormation",
+      "type": "code"
     }
   ],
   "trustZones": [
     {
       "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
-      "name": "Public Cloud",
+      "name": "Public Cloud 01",
       "risk": {
         "trustRating": 10
       }
