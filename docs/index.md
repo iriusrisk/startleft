@@ -43,7 +43,7 @@ Split by type, the currently supported input formats are:
     * <a href="https://aws.amazon.com/cloudformation/resources/templates/" target="_blank">CloudFormation (CFT)</a>.
     * <a href="https://www.terraform.io/" target="_blank">Terraform (TF)</a>.
 * **Diagram**:
-    * Microsoft Visio.
+    * Microsoft Visio (including diagrams exported from Lucidchart).
 * **Threat Model**:
     * Microsoft Threat Modelling Tool (MTMT).
 

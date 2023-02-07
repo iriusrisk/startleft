@@ -87,6 +87,7 @@ tf_mapping_children_by_type_name = path + \
                                    '/mapping/calculate_children/tf_mapping_children_by_type_name.yaml'
 tf_mapping_children_by_name = path + \
                               '/mapping/calculate_children/tf_mapping_children_by_name.yaml'
+invalid_no_dataflows = path + '/mapping/invalid-mapping-without-dataflows.yaml'
 
 # otm
 tf_file_expected_result = path + '/otm/tf-file-expected-result.otm'

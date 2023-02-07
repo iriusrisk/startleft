@@ -10,3 +10,7 @@ empty_mapping_file = path + "/mapping/empty_mapping_file.yaml"
 
 # otm
 otm_without_version = path + '/otm/otm_without_version.otm'
+
+# schema
+iac_cft_mapping_schema = path + '/schemas/iac_cft_mapping_schema.json'
+etm_mapping_schema = path + '/schemas/etm_mapping_schema.json'

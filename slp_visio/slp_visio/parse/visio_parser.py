@@ -1,14 +1,15 @@
-from slp_visio.slp_visio.parse.representation.representation_calculator import RepresentationCalculator, \
-    build_size_object, calculate_diagram_size
+from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
+from otm.otm.otm_builder import OtmBuilder
+from otm.otm.otm_pruner import OtmPruner
+from slp_base import ProviderParser
 from slp_visio.slp_visio.load.objects.diagram_objects import Diagram
 from slp_visio.slp_visio.load.visio_mapping_loader import VisioMappingFileLoader
 from slp_visio.slp_visio.parse.diagram_pruner import DiagramPruner
 from slp_visio.slp_visio.parse.mappers.diagram_component_mapper import DiagramComponentMapper
 from slp_visio.slp_visio.parse.mappers.diagram_connector_mapper import DiagramConnectorMapper
 from slp_visio.slp_visio.parse.mappers.diagram_trustzone_mapper import DiagramTrustzoneMapper
-from otm.otm.otm_builder import OtmBuilder
-from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
-from slp_base import ProviderParser
+from slp_visio.slp_visio.parse.representation.representation_calculator import RepresentationCalculator, \
+    build_size_object, calculate_diagram_size
 
 
 class VisioParser(ProviderParser):
@@ -46,7 +47,11 @@ class VisioParser(ProviderParser):
         if self._default_trustzone:
             otm_builder.add_default_trustzone(self._default_trustzone)
 
-        return otm_builder.build()
+        otm = otm_builder.build()
+
+        OtmPruner(otm).prune_orphan_dataflows()
+
+        return otm
 
     def __prune_diagram(self):
         DiagramPruner(self.diagram, self.mapping_loader.get_all_labels()).run()

@@ -17,7 +17,7 @@ from tests.resources.test_resource_paths import default_cloudformation_mapping, 
 
 TESTING_IAC_TYPE = IacType.CLOUDFORMATION.value
 
-webapp = fastapi_server.initialize_webapp()
+webapp = fastapi_server.webapp
 client = TestClient(webapp)
 
 
