@@ -303,7 +303,7 @@ class TestTerraformProcessor:
     @pytest.mark.parametrize('mapping_file', [
         pytest.param(get_data(terraform_iriusrisk_tf_aws_mapping), id="with actual mapping file"),
         pytest.param(get_data(terraform_iriusrisk_tf_aws_mapping_v180), id="with backwards mapping_file")])
-    def test_backward_compatibility(self, mapping_file):
+    def test_aws_security_groups_components_full_example(self, mapping_file):
         """
         Test backward compatibility of aws_security_groups_components.tf
         against iriusrisk-tf-aws-mapping-1.8.0 mapping file (release 1.8.0)
