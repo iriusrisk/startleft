@@ -3,31 +3,49 @@
 ## Steps
 
 ---
-The management of errors on StartLeft is handled on three separated steps:
+The management of errors on StartLeft is handled on four separated steps:
 
-1. Reading the source file IaC/diagram
-2. Reading the mapping file/s
-3. Generating the OTM
+1. Select a processor
+2. Reading the source file
+3. Reading the mapping file/s
+4. Generating the OTM
 
-![img/conversion-stages.png](img/conversion-stages.png)
+![img/errors_management](img/conversion-steps.svg)
 
 ## Error types
 
 ---
 On steps 1 and 2 we have two error groups:
 
-* **Validation error**: The file is not valid due to wrong mime type, maxsize, etc.
+**Step 1:**
+
+* **Provider error:** Provider resolver could not find a provider for the given type.
+    * `ProviderNotFoundError`.
+
+**Step 2:**
+
+* **Validation error:** The file is not valid due to wrong mime type, maxsize, etc.
     * `IacNotValidFileError`.
     * `DiagramNotValidFileError`.
-    * `MappingFileNotValidError`.
+    * `SourceFileNotValidError`.
 
-* **Loading error**: We are unable to load the file due to the wrong type being specified or any error inside the file that 
-does not permit loading its content.
+* **Loading error:** We are unable to load the file due to the wrong type being specified or any error inside the file that
+  does not permit loading its content.
     * `LoadingIacFileError`.
     * `LoadingDiagramFileError`.
+    * `LoadingSourceFileError`.
+
+**Step 3:**
+
+* **Validation error:** The file is not valid due to wrong mime type, maxsize, etc.
+    * `MappingFileNotValidError`.
+* **Loading error:** We are unable to load the file due to the wrong type being specified or any error inside the file that
+  does not permit loading its content.
     * `LoadingMappingFileError`.
 
-* **OTM generation related errors**:
+**Step 4:**
+
+* **OTM generation related errors:**
     * `OtmBuildingError`. We are unable to generate the OTM with the given files.
     * `OtmResultError`. We are able to generate the OTM but the OTM is invalid (e.g: inconsistent IDs).
     * `OtmGenerationError`. There was any unexpected error.
@@ -42,11 +60,14 @@ does not permit loading its content.
 | `IacFileNotValidError`     |     400     |             2 |
 | `LoadingDiagramFileError`  |     400     |            11 |
 | `DiagramNotValidFileError` |     400     |            12 |
+| `LoadingSourceFileError`   |     400     |            51 |
+| `SourceFileNotValidError`  |     400     |            52 |
 | `LoadingMappingFileError`  |     400     |            21 |
 | `MappingFileNotValidError` |     400     |            22 |
 | `OtmBuildingError`         |     400     |            41 |
 | `OtmResultError`           |     400     |            42 |
 | `OtmGenerationError`       |     500     |            45 |
+| `ProviderNotFoundError`    |     400     |            60 |
 
 
 ## Http response body
