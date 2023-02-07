@@ -1,7 +1,7 @@
 from pytest import mark
 
 from sl_util.sl_util.file_utils import get_data
-from slp_base.tests.util.otm import validate_and_compare_otm
+from slp_base.tests.util.otm import validate_and_compare_otm, validate_and_compare
 from slp_visio.slp_visio.visio_processor import VisioProcessor
 from slp_visio.tests.resources import test_resource_paths
 from slp_visio.tests.resources.test_resource_paths import expected_aws_shapes, expected_simple_boundary_tzs, \
@@ -185,4 +185,5 @@ class TestVisioProcessor:
             [get_data(test_resource_paths.default_visio_mapping)],
         ).process()
 
-        assert validate_and_diff(otm, expected, None) == {}
+        result, expected = validate_and_compare(otm, expected, None)
+        assert result == expected
