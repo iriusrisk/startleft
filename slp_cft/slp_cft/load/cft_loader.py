@@ -16,7 +16,6 @@ def yaml_reader(data):
 def get_loader():
     loader = yaml.BaseLoader
     loader.add_constructor("!Ref", ref_constructor)
-    loader.add_constructor("!Ref:", ref_constructor)
     return loader
 
 
