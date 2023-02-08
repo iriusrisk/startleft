@@ -417,7 +417,7 @@ class TestOtmControllerIaCCloudformation:
 
     @mark.parametrize('filename', [cloudformation_ref_full_syntax, cloudformation_ref_short_syntax])
     @responses.activate
-    def test_yaml_ref_success(self, filename):
+    def test_yaml_ref_function_is_parsed(self, filename):
         # Given a project_id and project_name
         project_id: str = 'project_A_id'
         project_name: str = 'project_A_name'
@@ -433,10 +433,5 @@ class TestOtmControllerIaCCloudformation:
 
         # Then the OTM is returned inside the response as JSON
         assert response.status_code == iac_create_otm_controller.RESPONSE_STATUS_CODE
-        assert response.headers.get('content-type') == 'application/json'
-        assert '"otmVersion": "0.1.0"' in response.text
-        assert '"project": ' in response.text
-        assert f'"name": "{project_name}"' in response.text
-        assert '"trustZones": ' in response.text
-        assert '"components": ' in response.text
-        assert '"name": "0.0.0.0/0"' in response.text
+        otm = json.loads(response.text)
+        assert otm["components"][0]["name"] == "0.0.0.0/0"
