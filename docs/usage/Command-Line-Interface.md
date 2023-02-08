@@ -39,41 +39,44 @@ Commands:
 You can also get help for specific commands.
 
 ??? example "Example for `parse` command help"
-  
+    
+    ```shell
         $ startleft parse --help
-        Usage: startleft parse [OPTIONS] SOURCE_FILE_1 SOURCE_FILE_2 ... SOURCE_FILE_N
-        
-          Parses source files into Open Threat Model
+        Usage: startleft parse [OPTIONS] SOURCE_FILE...
+        Parses source files into Open Threat Model
         
         Options:
           -t, --iac-type [CLOUDFORMATION|TERRAFORM]
-                                          The IaC file type. NOTE: This argument
-                                          is mutually exclusive with  arguments:
-                                          [custom_mapping_file,
-                                          default_mapping_file, diagram_type].
-                                          [required]
+                                          The IaC file type. NOTE: This argument is
+                                          mutually exclusive with  arguments:
+                                          [custom_mapping_file, etm_type,
+                                          diagram_type, default_mapping_file].
           -g, --diagram-type [VISIO|LUCID]      
                                           The diagram file type. NOTE: This
                                           argument is mutually exclusive with
                                           arguments: [mapping_file, iac_type].
-                                          [required]
-          -m, --mapping-file TEXT         Mapping file to parse the IaC file.
-                                          NOTE: This argument is mutually
-                                          exclusive with  arguments:
-                                          [custom_mapping_file,
-                                          default_mapping_file, diagram_type].
-                                          [required]
-          -d, --default-mapping-file TEXT
-                                          Default mapping file to parse the
-                                          diagram file. NOTE: This argument is
+          -e, --etm-type [MTMT]           
+                                          The etm file type. NOTE: This argument is
                                           mutually exclusive with  arguments:
-                                          [mapping_file, iac_type]. [required]
-          -c, --custom-mapping-file TEXT  Custom mapping file to parse the
-                                          diagram file.
+                                          [mapping_file, diagram_type, iac_type].
+          -m, --mapping-file TEXT         
+                                          Mapping file to parse the IaC file. NOTE:
+                                          This argument is mutually exclusive with
+                                          arguments: [etm_type, default_mapping_file,
+                                          diagram_type, custom_mapping_file].
+          -d, --default-mapping-file TEXT
+                                          Default mapping file to parse the diagram
+                                          file. NOTE: This argument is mutually
+                                          exclusive with  arguments: [mapping_file,
+                                          iac_type]. 
+          -c, --custom-mapping-file TEXT  
+                                          Custom mapping file to parse the diagram
+                                          file.
           -o, --output-file TEXT          OTM output file.
           -n, --project-name TEXT         Project name.  [required]
           -i, --project-id TEXT           Project id.  [required]
           --help                          Show this message and exit.
+    ```
 
 ## Command Summary
 
@@ -91,11 +94,7 @@ The list of commands that can be used to work in CLI mode is detailed as follows
 
 ### Parse
 
-This command is used for parsing source files into the Open Threat Model format. 
-
-??? Warning
-    Currently it is only possible to parse both diagram (Visio and Lucidchart) and IaC (Cloudformation and Terraform) files. 
-    Microsoft Threat Modelling Tool (MTMT) files are not supported yet.
+This command is used for parsing source files into the Open Threat Model format.
 
 The options that it supports are:
 
@@ -105,25 +104,24 @@ The options that it supports are:
                                   is mutually exclusive with  arguments:
                                   [custom_mapping_file,
                                   default_mapping_file, diagram_type].
-                                  [required]
   -g, --diagram-type [VISIO|LUCID]      
                                   The diagram file type. NOTE: This
                                   argument is mutually exclusive with
                                   arguments: [mapping_file, iac_type].
-                                  [required]
-  -m, --mapping-file TEXT         Mapping file to parse the IaC file.
+  -m, --mapping-file TEXT         
+                                  Mapping file to parse the IaC file.
                                   NOTE: This argument is mutually
                                   exclusive with  arguments:
                                   [custom_mapping_file,
                                   default_mapping_file, diagram_type].
-                                  [required]
   -d, --default-mapping-file TEXT
                                   Default mapping file to parse the
-                                  diagram file. NOTE: This argument is
+                                  diagram or ETM file. NOTE: This argument is
                                   mutually exclusive with  arguments:
-                                  [mapping_file, iac_type]. [required]
-  -c, --custom-mapping-file TEXT  Custom mapping file to parse the
-                                  diagram file.
+                                  [mapping_file, iac_type].
+  -c, --custom-mapping-file TEXT  
+                                  Custom mapping file to parse the
+                                  diagram or ETM file.
   -o, --output-file TEXT          OTM output file.
   -n, --project-name TEXT         Project name.  [required]
   -i, --project-id TEXT           Project id.  [required]
@@ -567,9 +565,16 @@ As the mapping files are different for IaC and diagram,
 there are different options for each of them. The full set of options are:
 
 ```shell
+Usage: startleft validate [OPTIONS]
+
+  Validates a mapping or OTM file
+
+Options:
   -i, --iac-mapping-file TEXT     IaC mapping file to validate.
   -d, --diagram-mapping-file TEXT
                                   Diagram mapping file to validate.
+  -e, --etm-mapping-file TEXT     External Threat Model mapping file to
+                                  validate.
   -o, --otm-file TEXT             OTM input file.
   --help                          Show this message and exit.
 ```
