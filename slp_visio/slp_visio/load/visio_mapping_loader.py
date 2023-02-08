@@ -9,7 +9,7 @@ from slp_base.slp_base.mapping_file_loader import MappingFileLoader
 
 PUBLIC_CLOUD_NAME = 'Public Cloud'
 PUBLIC_CLOUD = OtmTrustzone(trustzone_id=deterministic_uuid(PUBLIC_CLOUD_NAME), name=PUBLIC_CLOUD_NAME,
-                         type='b61d6911-338d-46a8-9f39-8dcd24abfe91', properties={"default": True})
+                         type='b61d6911-338d-46a8-9f39-8dcd24abfe91', attributes={"default": True})
 
 def load_mappings(mapping_file):
     if isinstance(mapping_file, dict):
@@ -47,7 +47,7 @@ class VisioMappingFileLoader(MappingLoader):
         if default_otm_trustzone:
             name = default_otm_trustzone['label']
             return OtmTrustzone(trustzone_id=deterministic_uuid(name), name=name, type=default_otm_trustzone['type'],
-                             properties={"default": True})
+                             attributes={"default": True})
         else:
             return PUBLIC_CLOUD
 
