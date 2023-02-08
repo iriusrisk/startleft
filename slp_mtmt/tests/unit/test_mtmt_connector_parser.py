@@ -1,10 +1,11 @@
+from pytest import mark
+
 from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
 from sl_util.sl_util.file_utils import get_byte_data
+from slp_mtmt.slp_mtmt.entity.mtmt_entity_line import MTMLine
+from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
 from slp_mtmt.slp_mtmt.mtmt_loader import MTMTLoader
-from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMappingFileLoader
-from slp_mtmt.slp_mtmt.parse.mtmt_component_parser import MTMTComponentParser
 from slp_mtmt.slp_mtmt.parse.mtmt_connector_parser import MTMTConnectorParser
-from slp_mtmt.slp_mtmt.parse.mtmt_trustzone_parser import MTMTTrustzoneParser
 from slp_mtmt.tests.resources import test_resource_paths
 
 SAMPLE_VALID_MTMT_FILE = test_resource_paths.model_mtmt_mvp
@@ -20,35 +21,14 @@ class TestMTMTConnectorParser:
         mtmt_loader.load()
         mtmt = mtmt_loader.get_mtmt()
 
-        # AND a valid MTMT mapping file
-        mapping_data = get_byte_data(SAMPLE_VALID_MAPPING_FILE)
-        mapping_loader = MTMTMappingFileLoader([mapping_data])
-        mapping_loader.load()
-        mtmt_mapping = mapping_loader.get_mtmt_mapping()
-
-        # AND a diagram representation
-        diagram_representation = DiagramRepresentation(id_='project-test-diagram',
-                              name='Project Test Diagram Representation',
-                              type_=str(RepresentationType.DIAGRAM.value),
-                              size={'width': 2000, 'height': 2000}
-                              )
-
-        # AND the trustzone parser
-        trustzone_parser = MTMTTrustzoneParser(mtmt, mtmt_mapping, diagram_representation.id)
-
-        # AND the OTM trustzones
-        trustzones = trustzone_parser.parse()
-
-        # AND the component parser
-        component_parser = MTMTComponentParser(mtmt, mtmt_mapping, trustzone_parser, diagram_representation.id)
-
         # AND the connector parser
-        parser = MTMTConnectorParser(mtmt, component_parser)
+        parser = MTMTConnectorParser(mtmt)
 
         # WHEN the parse method is called
         dataflows = parser.parse()
 
         # THEN the response is the expected
+        assert len(dataflows) == 6
         dataflow = dataflows[0]
         assert dataflow.id == 'eb072144-af37-4b75-b46b-b78111850d3e'
         assert dataflow.source_node == '5d15323e-3729-4694-87b1-181c90af5045'
@@ -74,3 +54,44 @@ class TestMTMTConnectorParser:
         assert dataflow.id == '5861370d-b333-4d4b-9420-95425026e9c9'
         assert dataflow.source_node == '5d15323e-3729-4694-87b1-181c90af5045'
         assert dataflow.destination_node == '6183b7fa-eba5-4bf8-a0af-c3e30d144a10'
+
+    @mark.parametrize('source,target,expected', [
+        ('ad9a677a-6a4a-11ed-b01f-6bc89d9a4150', 'b6596e2e-6a4a-11ed-b8d3-237d9695ac03', 1),
+        ('00000000-0000-0000-0000-000000000001', 'b6596e2e-6a4a-11ed-b8d3-237d9695ac03', 1),
+        ('b6596e2e-6a4a-11ed-b8d3-237d9695ac03', '00000000-0000-0000-0000-000000000001', 1),
+        ('00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', 1),
+        ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000', 0),
+        ('00000000-0000-0000-0000-000000000000', 'b6596e2e-6a4a-11ed-b8d3-237d9695ac03', 0),
+        ('ad9a677a-6a4a-11ed-b01f-6bc89d9a4150', '00000000-0000-0000-0000-000000000000', 0),
+        ('', '', 0),
+        ('', 'b6596e2e-6a4a-11ed-b8d3-237d9695ac03', 0),
+        ('b6596e2e-6a4a-11ed-b8d3-237d9695ac03', '', 0),
+        ('abc', '', 0),
+        ('b6596e2e-6a4a-11ed-b8d3-237d9695ac0', '', 0),
+    ])
+    def test_parse_orphan_connectors(self, source, target, expected):
+        # Given the line
+        line_source = {'Key': 'eb072144-af37-4b75-b46b-b78111850d3e', 'Value': {
+            'Properties': {
+                'anyType': [{'DisplayName': 'Request', 'Value': {}},
+                            {'DisplayName': 'Name', 'Value': {'text': 'PSQL Request'}},
+                            ], },
+            'HandleX': '892', 'HandleY': '210',
+            'SourceGuid': f'{source}',
+            'SourceX': '846', 'SourceY': '261',
+            'TargetGuid': f'{target}',
+            'TargetX': '980', 'TargetY': '232'},
+                       'attrib': {'type': 'Connector'}}
+        line = MTMLine(line_source)
+
+        # And the mtmt source with the line
+        mtmt = MTMT(None, [line], None, None)
+
+        # And the parser
+        parser = MTMTConnectorParser(mtmt)
+
+        # When we call the parser
+        dataflows = parser.parse()
+
+        # Then we check the otm dataflows created
+        assert len(dataflows) == expected

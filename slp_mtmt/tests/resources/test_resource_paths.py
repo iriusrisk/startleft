@@ -17,6 +17,13 @@ mtmt_empty_mapping_file = path + '/mapping/mtmt-empty-mapping.yaml'
 mtmt_mapping_filled_file = path + '/mapping/mtmt-mapping-filled.yaml'
 mapping_mtmt_mvp = path + '/mapping/MTMT_MVP.yaml'
 mtmt_default_mapping = path + '/mapping/mtmt_default_mapping.yaml'
+mtmt_mapping_invalid_no_dataflows = path + '/mapping/invalid-mapping-without-dataflows.yaml'
+
+# legacy mapping
+mapping_mtmt_mvp_legacy = path + '/mapping/MTMT_MVP_legacy.yaml'
+mtmt_default_mapping_legacy = path + '/mapping/mtmt_default_mapping_legacy.yaml'
+mapping_mtmt_mvp_no_type = path + '/mapping/MTMT_MVP_no_type.yaml'
+mtmt_default_mapping_no_type = path + '/mapping/mtmt_default_mapping_no_type.yaml'
 
 # mtmt
 model_mtmt_source_file = path + '/mtmt/test_model.tm7'
@@ -33,4 +40,6 @@ position_1orphan_tm7 = path + '/mtmt/MTMT_example_coordinates_1_orphan.tm7'
 example_position_otm = path + '/mtmt/MTMT_example_coordinates.otm'
 position_1line_tz_otm = path + '/mtmt/MTMT_example_coordinates_1_line_trustzone.otm'
 position_1orphan_otm = path + '/mtmt/MTMT_example_coordinates_1_orphan.otm'
+model_mtmt_mvp_otm = f'{path}/otm/MTMT_MVP.otm'
+missing_position_otm = f'{path}/otm/missing_coordinates.otm'
 

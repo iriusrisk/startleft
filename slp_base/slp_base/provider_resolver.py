@@ -23,9 +23,9 @@ class ProviderResolver:
         self.provider_classes = {processor['provider_type']: _find_provider_classes(processor['name'])
                                  for processor in processor_implementations if 'provider_type' in processor}
 
-    def get_processor(self, source_type, *args) -> OtmProcessor:
+    def get_processor(self, source_type, *args, **kwargs) -> OtmProcessor:
         source_type = self.__check_and_normalize_source_type(source_type)
-        return self.provider_classes[source_type]['processor'](*args)
+        return self.provider_classes[source_type]['processor'](*args, **kwargs)
 
     def get_mapping_validator(self, source_type, *args) -> MappingValidator:
         source_type = self.__check_and_normalize_source_type(source_type)

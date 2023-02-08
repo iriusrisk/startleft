@@ -1,27 +1,25 @@
 trustzones:
-  - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
     name: Public Cloud
+    type: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
 # The order of the components is important because parent components must be defined before child components
 components:
-  - id: { $format: "{name}" }
-    type: CD-ACM
+  - type: CD-ACM
     name: { $numberOfSources: { oneSource: { $path: "keys(@)[0]" }, multipleSource: { $format: "CD-ACM (grouped)" } } }
     $source: { $singleton: { $root: "resource|get(@, 'aws_acm_certificate')" } }
     parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - { $numberOfSources: { oneSource: { $path: "Type" }, multipleSource: { $format: "{_key} ({Type})" } } }
 
-  - id: { $format: "{name}" }
-    type: cloudwatch
+  - type: cloudwatch
     name: { $numberOfSources: { oneSource: { $path: "keys(@)[0]" }, multipleSource: { $format: "cloudwatch (grouped)" } } }
     $source: { $singleton: { $root: "resource|get(@, 'aws_cloudwatch_metric_alarm')" } }
     parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - { $numberOfSources: { oneSource: { $path: "Type" }, multipleSource: { $format: "{_key} ({Type})" } } }
 
-  - id: { $format: "{name}" }
-    type: rds
+  - type: rds
     name: { $path: "_key" }
     $source: { $root: "module|get_module_terraform(@, 'terraform-aws-modules/rds/aws')" }
     parent: b61d6911-338d-46a8-9f39-8dcd24abfe91

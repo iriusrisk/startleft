@@ -51,11 +51,10 @@ You can also get help for specific commands.
                                           mutually exclusive with  arguments:
                                           [custom_mapping_file, etm_type,
                                           diagram_type, default_mapping_file].
-                                          [required]
-          -g, --diagram-type [VISIO]      The diagram file type. NOTE: This argument
-                                          is mutually exclusive with  arguments:
-                                          [etm_type, mapping_file, iac_type].
-                                          [required]
+          -g, --diagram-type [VISIO|LUCID]      
+                                          The diagram file type. NOTE: This
+                                          argument is mutually exclusive with
+                                          arguments: [mapping_file, iac_type].
           -e, --etm-type [MTMT]           The etm file type. NOTE: This argument is
                                           mutually exclusive with  arguments:
                                           [mapping_file, diagram_type, iac_type].
@@ -77,6 +76,7 @@ You can also get help for specific commands.
           -i, --project-id TEXT           Project id.  [required]
           --help                          Show this message and exit.
     ```
+
 ## Command Summary
 
 The list of commands that can be used to work in CLI mode is detailed as follows:
@@ -93,11 +93,7 @@ The list of commands that can be used to work in CLI mode is detailed as follows
 
 ### Parse
 
-This command is used for parsing source files into the Open Threat Model format. 
-
-??? Warning
-    Currently it is only possible to parse both diagram (Visio) and IaC (Cloudformation and Terraform) files. 
-    Microsoft Threat Modelling Tool (MTMT) files are not supported yet.
+This command is used for parsing source files into the Open Threat Model format.
 
 The options that it supports are:
 
@@ -108,7 +104,8 @@ The options that it supports are:
                                   [custom_mapping_file,
                                   default_mapping_file, diagram_type].
                                   [required]
-  -g, --diagram-type [VISIO]      The diagram file type. NOTE: This
+  -g, --diagram-type [VISIO|LUCID]      
+                                  The diagram file type. NOTE: This
                                   argument is mutually exclusive with
                                   arguments: [mapping_file, iac_type].
                                   [required]
@@ -241,7 +238,7 @@ You can also parse more than one IaC file as in this other example:
     Parsing IaC source files into OTM
     Validating CloudFormation file
     Mapping file size is valid
-    Loading schema file 'iac_mapping_schema.json'
+    Loading schema file 'iac_cft_mapping_schema.json'
     Mapping files are valid
     Mapping files are valid
     Mapping file size is valid
@@ -591,7 +588,7 @@ Options:
 === "Output"
     ```shell
     Validating OTM file
-    Loading schema file '/startleft/resources/schemas/otm_schema.json'
+    Loading schema file '/otm/resources/schemas/otm_schema.json'
     OTM file schema is valid
     OTM file has consistent IDs
     OTM file validated successfully
@@ -607,7 +604,7 @@ An example with a mapping file:
     ```shell
     Validating Diagram mapping files
     Mapping file size is valid
-    Loading schema file '/startleft/resources/schemas/diagram_mapping_schema.json'
+    Loading schema file '/slp_visio/resources/schemas/diagram_mapping_schema.json'
     Mapping files are valid
     Mapping files are valid
     ```

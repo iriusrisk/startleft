@@ -2,15 +2,18 @@ from unittest import TestCase
 
 from slp_base import MappingFileNotValidError
 from slp_base import MultipleMappingFileValidator, MappingFileValidator
+from slp_base.slp_base.schema import Schema
 from slp_base.tests.resources import test_resource_paths
 
 SAMPLE_MAPPING_FILE = test_resource_paths.mtmt_mapping_file
+ETM_MAPPING_SCHEMA = test_resource_paths.etm_mapping_schema
+IAC_CFT_MAPPING_SCHEMA = test_resource_paths.iac_cft_mapping_schema
 
 
 class TestMapping(TestCase):
 
     def test_multiple_mapping_file_validator(self):
-        mapping_file_schema = 'etm_mapping_schema.json'
+        mapping_file_schema = Schema(ETM_MAPPING_SCHEMA)
         mapping_file = SAMPLE_MAPPING_FILE
 
         with open(mapping_file) as file:
@@ -22,7 +25,7 @@ class TestMapping(TestCase):
             self.fail(e)
 
     def test_mapping_file_validator(self):
-        mapping_file_schema = 'etm_mapping_schema.json'
+        mapping_file_schema = Schema(ETM_MAPPING_SCHEMA)
         mapping_file = SAMPLE_MAPPING_FILE
 
         with open(mapping_file) as file:
@@ -34,7 +37,7 @@ class TestMapping(TestCase):
             self.fail("Unexpected exception " + e.__str__())
 
     def test_mapping_file_validator_invalid_schema(self):
-        mapping_file_schema = 'etm_mapping_schema.json'
+        mapping_file_schema = Schema(ETM_MAPPING_SCHEMA)
         mapping_file = test_resource_paths.tf_mapping
 
         with open(mapping_file) as file:
@@ -44,7 +47,7 @@ class TestMapping(TestCase):
             MappingFileValidator(mapping_file_schema, mapping_file_data).validate()
 
     def test_mapping_file_validator_invalid_size(self):
-        mapping_file_schema = 'etm_mapping_schema.json'
+        mapping_file_schema = Schema(ETM_MAPPING_SCHEMA)
         mapping_file = test_resource_paths.empty_mapping_file
 
         with open(mapping_file) as file:
@@ -55,7 +58,7 @@ class TestMapping(TestCase):
 
     def test_invalid_mapping_file(self):
         # Given the iac terraform schema
-        mapping_file_schema = 'iac_tf_mapping_schema.json'
+        mapping_file_schema = Schema(IAC_CFT_MAPPING_SCHEMA)
 
         # And a malformed mapping file
         mapping_file_data = 'CFT NOT VALID Description: \n' \

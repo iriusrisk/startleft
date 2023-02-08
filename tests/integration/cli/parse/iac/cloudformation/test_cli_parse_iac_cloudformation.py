@@ -3,7 +3,7 @@ from pytest import mark
 
 from slp_base import IacFileNotValidError, MappingFileNotValidError
 from slp_base.slp_base.otm_file_loader import OtmFileLoader
-from slp_base.tests.util.otm import validate_and_diff
+from slp_base.tests.util.otm import validate_and_compare_otm
 from startleft.startleft.cli.cli import parse_any
 from tests.integration.cli.parse.iac.test_cli_parse_iac import excluded_regex
 from tests.resources import test_resource_paths
@@ -54,12 +54,9 @@ class TestCliParseIaCCloudformation:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            assert validate_and_diff(output_file_name, OTM_CFT_FOR_MAPPING_TESTS, excluded_regex) == {}
-
-            # The validate_and_diff regexp ignores ids, so the dataflow has to be manually checked
             otm = OtmFileLoader().load(output_file_name)
-            assert otm.get('dataflows')[0]['source'] == otm.get('components')[17]['id']
-            assert otm.get('dataflows')[0]['destination'] == otm.get('components')[12]['id']
+            result, expected = validate_and_compare_otm(otm, OTM_CFT_FOR_MAPPING_TESTS, excluded_regex)
+            assert result == expected
 
     def test_parse_cloudformation_unknown_resources(self):
         """
@@ -90,7 +87,9 @@ class TestCliParseIaCCloudformation:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            assert validate_and_diff(output_file_name, OTM_EMPTY_FILE, excluded_regex) == {}
+            otm = OtmFileLoader().load(output_file_name)
+            result, expected = validate_and_compare_otm(otm, OTM_EMPTY_FILE, None)
+            assert result == expected
 
     @mark.parametrize('filename', [CLOUDFORMATION_INVALID_FILE_SIZE])
     def test_parse_cloudformation_invalid_file(self, filename):

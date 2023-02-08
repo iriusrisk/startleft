@@ -8,6 +8,7 @@ class IacType(str, Provider):
 
 class DiagramType(str, Provider):
     VISIO = ("VISIO", "Visio", "diagram")
+    LUCID = ("LUCID", "Lucidchart", "diagram")
 
 
 class EtmType(str, Provider):

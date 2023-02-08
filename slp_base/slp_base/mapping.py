@@ -47,7 +47,7 @@ class MappingValidator(metaclass=abc.ABCMeta):
 
 
 class MappingFileValidator(MappingValidator):
-    def __init__(self, schema: str, mapping_file: bytes):
+    def __init__(self, schema: Schema, mapping_file: bytes):
         self.schema = schema
         self.mapping_file = mapping_file
 
@@ -57,7 +57,7 @@ class MappingFileValidator(MappingValidator):
 
 
 class MultipleMappingFileValidator(MappingValidator):
-    def __init__(self, schema: str, mapping_files: [bytes]):
+    def __init__(self, schema: Schema, mapping_files: [bytes]):
         self.schema = schema
         self.mapping_files = mapping_files
 
@@ -70,7 +70,7 @@ class MultipleMappingFileValidator(MappingValidator):
 def validate_size(mapping_file_data: bytes):
     size = len(mapping_file_data)
 
-    if size is None or size > MAX_SIZE or size < MIN_SIZE:
+    if size > MAX_SIZE or size < MIN_SIZE:
         logger.error('Mapping files are not valid')
         msg = 'Mapping files are not valid. Invalid size'
         raise MappingFileNotValidError('Mapping files are not valid', msg, msg)
@@ -87,8 +87,7 @@ def validate_type(mapping_file_data: bytes):
         raise MappingFileNotValidError("The mapping file is unreadable", msg, msg)
 
 
-def validate_schema(schema: str, mapping_file: bytes):
-    schema: Schema = Schema(schema)
+def validate_schema(schema: Schema, mapping_file: bytes):
     schema.validate(read_mapping_file(mapping_file))
     if not schema.valid:
         logger.error('Mapping file is not valid')
@@ -105,7 +104,7 @@ def read_mapping_file(mapping_file: bytes):
                                        e.__class__.__name__, str(e))
 
 
-def validate_mapping_file(schema: str, mapping_file: bytes):
+def validate_mapping_file(schema: Schema, mapping_file: bytes):
     validate_size(mapping_file)
     validate_type(mapping_file)
     validate_schema(schema, mapping_file)

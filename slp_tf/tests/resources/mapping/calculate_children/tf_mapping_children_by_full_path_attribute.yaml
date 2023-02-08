@@ -1,0 +1,11 @@
+trustzones:
+  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+    $default: true
+components:
+  - type:        elastic-container-service
+    $source:     {$type: "aws_ecs_service"}
+    $children:   {$path:  "resource_properties.task_definition"}
+  - type:        docker-container
+    $source:     {$type: "aws_ecs_task_definition"}
+dataflows: []

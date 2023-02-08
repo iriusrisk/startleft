@@ -1,8 +1,9 @@
 import abc
 
 from otm.otm.entity.otm import Otm
-from slp_base.slp_base.otm_representations_pruner import OtmRepresentationsPruner
 from slp_base.slp_base.mapping import MappingLoader, MappingValidator
+from slp_base.slp_base.otm_representations_pruner import OtmRepresentationsPruner
+from slp_base.slp_base.otm_trustzone_unifier import OtmTrustZoneUnifier
 from slp_base.slp_base.otm_validator import OtmValidator
 from slp_base.slp_base.provider_loader import ProviderLoader
 from slp_base.slp_base.provider_parser import ProviderParser
@@ -37,6 +38,7 @@ class OtmProcessor(metaclass=abc.ABCMeta):
         otm = self.get_provider_parser().build_otm()
 
         OtmRepresentationsPruner(otm).prune()
+        OtmTrustZoneUnifier(otm).unify()
         OtmValidator().validate(otm.json())
 
         return otm
