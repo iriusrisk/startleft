@@ -4,6 +4,7 @@ from slp_base.slp_base import ProviderValidator
 from slp_base.slp_base.provider_loader import ProviderLoader
 from slp_base.slp_base.provider_parser import ProviderParser
 from slp_tf.slp_tf.load.tf_loader import TerraformLoader
+from slp_tf.slp_tf.load.tfplan_loader import TfplanLoader, is_tfplan
 from slp_tf.slp_tf.load.tf_mapping_file_loader import TerraformMappingFileLoader
 from slp_tf.slp_tf.parse.tf_parser import TerraformParser
 from slp_tf.slp_tf.validate.tf_mapping_file_validator import TerraformMappingFileValidator
@@ -28,7 +29,8 @@ class TerraformProcessor(OtmProcessor):
         return TerraformValidator(self.sources)
 
     def get_provider_loader(self) -> ProviderLoader:
-        self.terraform_loader = TerraformLoader(self.sources)
+        self.terraform_loader = \
+            TfplanLoader(self.sources[0]) if is_tfplan(self.sources) else TerraformLoader(self.sources)
         return self.terraform_loader
 
     def get_mapping_validator(self) -> MappingValidator:
