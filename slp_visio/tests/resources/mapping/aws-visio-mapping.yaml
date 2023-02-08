@@ -1,15 +1,13 @@
 trustzones:
   - label:  Public Cloud
-    type:   Public Cloud
-    id:     b61d6911-338d-46a8-9f39-8dcd24abfe91
+    type:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+    default: true
 
   - label:  Private Secured Cloud
-    type:   Private Secured
-    id:     2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+    type:   2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
 
   - label: Internet
-    type: Internet
-    id: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    type: f0ba7722-39b6-4c81-8290-a30a248bb8d9
 
 components:
     # Stencil: AWS Analytics

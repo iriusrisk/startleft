@@ -1,0 +1,61 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "id": "project-id",
+    "name": "project-name"
+  },
+  "representations": [
+    {
+      "id": "project-id-diagram",
+      "name": "project-id Diagram Representation",
+      "type": "diagram",
+      "size": {
+        "height": 1062,
+        "width": 1618
+      }
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
+      "name": "Internet",
+      "risk": {
+        "trustRating": 10
+      }
+    },
+    {
+      "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+      "name": "Private Secured Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "12",
+      "name": "Custom machine",
+      "type": "ec2",
+      "parent": {
+        "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
+      }
+    },
+    {
+      "id": "30",
+      "name": "Private Database",
+      "type": "rds",
+      "parent": {
+        "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+      }
+    }
+  ],
+  "dataflows": [
+    {
+      "id": "34",
+      "name": "89ab351c-6ae7-4afb-ad90-0eb045fd801a",
+      "source": "12",
+      "destination": "30"
+    }
+  ]
+
+}

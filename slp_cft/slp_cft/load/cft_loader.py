@@ -2,11 +2,24 @@ import logging
 
 from deepmerge import always_merger
 
+from yaml import BaseLoader
+from yaml.nodes import MappingNode
+
 from sl_util.sl_util.json_utils import yaml_reader
 from slp_base.slp_base.errors import LoadingIacFileError
 from slp_base.slp_base.provider_loader import ProviderLoader
 
 logger = logging.getLogger(__name__)
+
+
+def get_loader():
+    loader = BaseLoader
+    loader.add_constructor("!Ref", ref_constructor)
+    return loader
+
+
+def ref_constructor(loader: BaseLoader, node: MappingNode) -> dict:
+    return {'Ref': loader.construct_scalar(node)}
 
 
 def raise_empty_sources_error():

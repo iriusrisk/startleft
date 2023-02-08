@@ -1,6 +1,7 @@
 trustzones:
-  - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
     name: Public Cloud
+    type: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
 components:
   - type: aws_skipped_with_parent

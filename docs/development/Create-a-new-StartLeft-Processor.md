@@ -389,7 +389,7 @@ create a `test_mais_processor.py` file inside the `slp_mais/slp_mais/tests/integ
 ```python
 import os
 from sl_util.sl_util.file_utils import get_data
-from slp_base.tests.util.otm import validate_and_diff
+from slp_base.tests.util.otm import validate_and_compare
 from slp_mais.slp_mais.mais_processor import MAISProcessor
 
 SAMPLE_PROJECT_ID = 'my-project'
@@ -419,7 +419,8 @@ class TestMAISProcessor:
         ).process()
 
         # THEN a valid OTM file matching expected is generated
-        assert validate_and_diff(otm, expected_otm, []) == {}
+        result, expected = validate_and_compare(otm, expected_otm, [])
+        assert result == expected
 
 ```
 

@@ -30,6 +30,8 @@ cloudformation_unknown_resource = path + '/cloudformation/cloudformation_unknown
 cloudformation_all_functions = path + '/cloudformation/cloudformation_all_functions.json'
 cloudformation_multiple_files_networks = path + '/cloudformation/cloudformation_multiple_files_networks.json'
 cloudformation_multiple_files_resources = path + '/cloudformation/cloudformation_multiple_files_resources.json'
+cloudformation_ref_full_syntax = path + '/cloudformation/cloudformation_ref_full_syntax.yaml'
+cloudformation_ref_short_syntax = path + '/cloudformation/cloudformation_ref_short_syntax.yaml'
 # mapping
 default_cloudformation_mapping = path + '/cloudformation/cloudformation_mapping.yaml'
 cloudformation_mapping_component_without_parent = path + '/cloudformation/cloudformation_mapping_component_without_parent.yaml'
@@ -92,12 +94,19 @@ visio_bidirectional_connectors = path + '/visio/bidirectional-connectors.vsdx'
 # mapping
 default_visio_mapping = path + '/visio/aws-visio-mapping.yaml'
 custom_vpc_mapping = path + '/visio/custom-vpc-mapping.yaml'
+
+# legacy mapping
+default_visio_mapping_legacy = path + '/visio/legacy/aws-visio-mapping.yaml'
+custom_vpc_mapping_legacy = path + '/visio/legacy/custom-vpc-mapping.yaml'
+
 # expected otm results
 visio_aws_shapes_otm_expected = path + '/visio/aws-shapes.otm'
 visio_aws_with_tz_and_vpc_otm_expected = path + '/visio/aws-with-tz-and-vpc.otm'
 visio_orphan_dataflows_otm_expected = path + '/visio/visio-orphan-dataflows.otm'
 visio_create_otm_ok_only_default_mapping = path + '/visio/visio_create_otm_ok_only_default_mapping.otm'
 visio_create_otm_ok_both_mapping_files = path + '/visio/visio_create_otm_ok_both_mapping_files.otm'
+MTMT_multiple_trustzones_same_type_ID = f'{path}/otm/MTMT_multiple_trustzones_same_type_ID.otm'
+MTMT_multiple_trustzones_same_type_TYPE = f'{path}/otm/MTMT_multiple_trustzones_same_type_TYPE.otm'
 
 # LUCID
 lucid_aws_with_tz = path + '/lucid/lucid-aws-with-tz.vsdx'
@@ -107,4 +116,6 @@ default_lucid_mapping = path + '/lucid/default-lucid-mapping.yaml'
 lucid_aws_with_tz_mapping = path + '/lucid/lucid-aws-with-tz.yaml'
 lucid_aws_with_tz_and_vpc_mapping = path + '/lucid/lucid-aws-with-tz-and-vpc.yaml'
 # expected otm results
+lucid_aws_with_tz_default_otm = path + '/lucid/lucid-aws-with-tz-default.otm'
 lucid_aws_with_tz_otm = path + '/lucid/lucid-aws-with-tz.otm'
+lucid_aws_with_tz_and_vpc_otm = path + '/lucid/lucid-aws-with-tz-and-vpc.otm'
