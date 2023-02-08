@@ -41,6 +41,7 @@ terraform_define_parent_relationship = path + '/tf/calculate_parents/terraform_d
 terraform_aws_security_group_in_and_eg_gress \
     = path + '/tf/mapping_functions/terraform_aws_security_group_in_and_eg_gress.tf'
 terraform_multiple_aws_security_group = path + '/tf/mapping_functions/terraform_multiple_aws_security_group.tf'
+terraform_components_with_trustzones_of_same_type = path + '/tf/terraform_components_with_trustzones_of_same_type.tf'
 
 # mapping
 terraform_mapping_aws_component_without_parent = path + '/mapping/terraform_mapping_component_without_parent.yaml'
@@ -62,6 +63,8 @@ tf_mapping_children_by_type_name = path + \
                                  '/mapping/calculate_children/tf_mapping_children_by_type_name.yaml'
 tf_mapping_children_by_name = path + \
                                  '/mapping/calculate_children/tf_mapping_children_by_name.yaml'
+terraform_trustzone_types_mapping = path + '/mapping/terraform_trustzone_types_mapping.yaml'
+terraform_multiple_trustzones_same_type_mapping = path + '/mapping/terraform_multiple_trustzones_same_type_mapping.yaml'
 invalid_no_dataflows = path + '/mapping/invalid-mapping-without-dataflows.yaml'
 
 # otm
@@ -82,3 +85,5 @@ expected_mapping_skipped_component_without_parent = path + '/otm/expected_mappin
 expected_no_resources = path + '/otm/expected_no_resources.otm'
 expected_run_valid_mappings = path + '/otm/expected_run_valid_mappings.otm'
 tf_file_referenced_vars_expected_result = path + '/otm/tf-file-referenced-vars-expected-result.otm'
+terraform_minimal_content_otm = f'{path}/otm/terraform_minimal_content.otm'
+tf_components_with_trustzones_of_same_type_otm = f'{path}/otm/tf_components_with_trustzones_of_same_type.otm'

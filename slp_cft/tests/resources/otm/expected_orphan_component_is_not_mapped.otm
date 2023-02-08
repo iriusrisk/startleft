@@ -22,7 +22,7 @@
   ],
   "components": [
     {
-      "id": "cc05874d-02d0-4a0c-b09b-e12308144211",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.e2cinstance",
       "name": "E2CINSTANCE",
       "type": "ec2",
       "parent": {
@@ -33,7 +33,7 @@
       ]
     },
     {
-      "id": "f7438001-9d67-4cc4-9e00-55c6969d50a5",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.privatesubnet1",
       "name": "PrivateSubnet1",
       "type": "empty-component",
       "parent": {
@@ -44,7 +44,7 @@
       ]
     },
     {
-      "id": "c31dfc2e-c989-4037-b1d3-b9666e5df069",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.internetegateway",
       "name": "InterneteGateway",
       "type": "empty-component",
       "parent": {

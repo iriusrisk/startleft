@@ -1,8 +1,7 @@
 from otm.otm.entity.component import OtmComponent
 from otm.otm.entity.dataflow import OtmDataflow
-from otm.otm.entity.trustzone import OtmTrustzone
 from otm.otm.entity.representation import Representation, DiagramRepresentation, RepresentationType
-
+from otm.otm.entity.trustzone import OtmTrustzone
 
 REPRESENTATIONS_SIZE_DEFAULT_HEIGHT = 1000
 REPRESENTATIONS_SIZE_DEFAULT_WIDTH = 1000
@@ -63,8 +62,8 @@ class Otm:
 
         return json
 
-    def add_trustzone(self, id, name, source=None, properties=None):
-        self.trustzones.append(OtmTrustzone(trustzone_id=id, name=name, source=source, properties=properties))
+    def add_trustzone(self, id=None, name=None, type=None, source=None, properties=None):
+        self.trustzones.append(OtmTrustzone(trustzone_id=id, name=name, type=type, source=source, properties=properties))
 
     def add_component(self, id, name, type, parent, parent_type, source=None,
                       properties=None, tags=None):

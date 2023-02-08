@@ -1,7 +1,6 @@
 import logging
 import uuid
 
-from slp_cft.slp_cft.parse.mapping.mappers.cft_base_mapper import CloudformationBaseMapper
 from slp_cft.slp_cft.parse.mapping.mappers.cft_component_mapper import CloudformationComponentMapper
 from slp_cft.slp_cft.parse.mapping.mappers.cft_dataflow_mapper import CloudformationDataflowMapper
 from slp_cft.slp_cft.parse.mapping.mappers.cft_trustzone_mapper import CloudformationTrustzoneMapper
@@ -80,7 +79,7 @@ class CloudformationTransformer:
         found_components = ComponentLists()
 
         for mapping in self.iac_mapping["components"]:
-            mapper = CloudformationComponentMapper(mapping)
+            mapper = CloudformationComponentMapper(mapping, self.__find_default_trustzone_id())
             mapper.id_map = self.id_map
             for component in mapper.run(self.source_model, self.id_parents):
                 if isinstance(mapping["$source"], dict):
@@ -196,7 +195,6 @@ class CloudformationTransformer:
                                 for tag in component["singleton_multiple_tags"]:
                                     if tag not in result["tags"]:
                                         result["tags"].append(tag)
-                            continue
         return results
 
     def transform_dataflows(self):
@@ -469,9 +467,8 @@ class CloudformationTransformer:
                 child_hub_type, child_hub_name = self.__separate_hub_type_and_hub_dataflow(child)
                 type_2_child_name = TYPE2 + "-hub-" + child_hub_name
 
-                if type_2_child_name == hub_node_as_child:
-                    if parent not in end_components:
-                        end_components.append(parent)
+                if type_2_child_name == hub_node_as_child and parent not in end_components:
+                    end_components.append(parent)
 
         return end_components
 
@@ -503,3 +500,9 @@ class CloudformationTransformer:
                     f"Dataflow added: [{dataflow.name}][{dataflow.id}]{dataflow.tags} from [{dataflow.source_node}] to [{dataflow.destination_node}]")
 
         logger.info(f"Added {num_dataflows} dataflows successfully")
+
+    def __find_default_trustzone_id(self):
+        for trustzone in self.iac_mapping["trustzones"]:
+            if trustzone.get("type") == "b61d6911-338d-46a8-9f39-8dcd24abfe91":
+                return trustzone["id"]
+        return "b61d6911-338d-46a8-9f39-8dcd24abfe91"

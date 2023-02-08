@@ -22,7 +22,7 @@
   ],
   "components": [
     {
-      "id": "2adbe81d-7bf2-49df-b031-743ea13d6781",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_instance-e2cinstance",
       "name": "E2CINSTANCE",
       "type": "ec2",
       "parent": {
@@ -33,7 +33,7 @@
       ]
     },
     {
-      "id": "b1367970-affa-4ab4-b763-c7763673aa18",
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_internet_gateway-internetegateway",
       "name": "InterneteGateway",
       "type": "empty-component",
       "parent": {

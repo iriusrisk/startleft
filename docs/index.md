@@ -4,7 +4,7 @@
 
 **StartLeft** is an automation tool for **generating Threat Models** written in the [Open Threat Model (OTM)](Open-Threat-Model-(OTM).md) 
 format **from a variety of different sources** such as IaC files, diagrams or projects exported from 
-Threat Modelling tools.
+Threat Modeling tools.
 
 ## Why StartLeft?
 
@@ -45,7 +45,7 @@ Split by type, the currently supported input formats are:
 * **Diagram**:
     * Microsoft Visio (including diagrams exported from Lucidchart).
 * **Threat Model**:
-    * Microsoft Threat Modelling Tool (MTMT).
+    * Microsoft Threat Modeling Tool (MTMT).
 
 
 ## How can I try it?

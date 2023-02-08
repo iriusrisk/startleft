@@ -22,7 +22,12 @@ class TerraformTrustzoneMapper(TerraformBaseMapper):
             self.id_map[source_id] = source_id
             trustzone["id"] = source_id
 
-            self.logger.debug(f"Found trustzone: [{trustzone['id']}][{trustzone['name']}]")
+            if "type" in self.mapping:
+                trustzone["type"] = source_model.search(self.mapping["type"], source=source_obj)
+            else:
+                trustzone["type"] = trustzone["id"]
+
+            self.logger.debug(f"Found trustzone: [{trustzone['id']}][{trustzone['name']}][{trustzone['type']}]")
             trustzones.append(trustzone)
 
         return trustzones
