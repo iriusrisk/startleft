@@ -42,6 +42,31 @@ terraform_aws_security_group_in_and_eg_gress \
     = path + '/tf/mapping_functions/terraform_aws_security_group_in_and_eg_gress.tf'
 terraform_multiple_aws_security_group = path + '/tf/mapping_functions/terraform_multiple_aws_security_group.tf'
 terraform_components_with_trustzones_of_same_type = path + '/tf/terraform_components_with_trustzones_of_same_type.tf'
+terraform_lambda_dataflow = path + '/tf/dataflows/terraform_lambda_dataflow.tf'
+terraform_lambda_on_failure_dataflow = path + '/tf/dataflows/terraform_lambda_on_failure_dataflow.tf'
+terraform_s3_dataflow = path + '/tf/dataflows/terraform_s3_dataflow.tf'
+terraform_s3_bucket_logging_dataflow = path + '/tf/dataflows/terraform_s3_bucket_logging.tf'
+terraform_api_gateway_authorizer_one_source_dataflow = path + \
+                                                       '/tf/dataflows/terraform_api_gateway_authorizer_one_source.tf'
+terraform_api_gateway_authorizer_multiple_sources_dataflow = path + \
+                                                       '/tf/dataflows' \
+                                                       '/terraform_api_gateway_authorizer_multiple_sources.tf'
+terraform_security_groups_type1_outbound = path + '/tf/dataflows/security_groups/terraform_sg_type1_outbound.tf'
+terraform_security_groups_type1_outbound_two_subnets = path + '/tf/dataflows/security_groups/' \
+                                                     'terraform_sg_type1_outbound_two_subnets.tf'
+terraform_security_groups_type1_inbound = path + '/tf/dataflows/security_groups/terraform_sg_type1_inbound.tf'
+terraform_security_groups_type1_inbound_with_generic_client = path + \
+                                                            '/tf/dataflows/security_groups/' \
+                                                            'terraform_sg_type1_inbound_with_generic_client.tf'
+terraform_security_groups_type1_inbound_two_subnets = path + '/tf/dataflows/security_groups/' \
+                                                     'terraform_sg_type1_inbound_two_subnets.tf'
+terraform_security_groups_type2_outbound = path + '/tf/dataflows/security_groups/terraform_sg_type2_outbound.tf'
+terraform_security_groups_type2_outbound_two_subnets = path + '/tf/dataflows/security_groups/' \
+                                                     'terraform_sg_type2_outbound_two_subnets.tf'
+terraform_security_groups_type2_inbound = path + '/tf/dataflows/security_groups/terraform_sg_type2_inbound.tf'
+terraform_security_groups_type1_and_type2_mixed = path + '/tf/dataflows/security_groups/' \
+                                                         'terraform_sg_type1_and_type2_mixed.tf'
+
 
 # mapping
 terraform_mapping_aws_component_without_parent = path + '/mapping/terraform_mapping_component_without_parent.yaml'
@@ -56,11 +81,11 @@ tf_mapping_parent_by_full_path_attribute = path + \
 tf_mapping_parent_by_type_name = path + \
                                  '/mapping/calculate_parents/tf_mapping_parent_by_type_name.yaml'
 tf_mapping_parent_by_name = path + \
-                                 '/mapping/calculate_parents/tf_mapping_parent_by_name.yaml'
+                            '/mapping/calculate_parents/tf_mapping_parent_by_name.yaml'
 tf_mapping_children_by_full_path_attribute = path + \
-                                           '/mapping/calculate_children/tf_mapping_children_by_full_path_attribute.yaml'
+                                             '/mapping/calculate_children/tf_mapping_children_by_full_path_attribute.yaml'
 tf_mapping_children_by_type_name = path + \
-                                 '/mapping/calculate_children/tf_mapping_children_by_type_name.yaml'
+                                   '/mapping/calculate_children/tf_mapping_children_by_type_name.yaml'
 tf_mapping_children_by_name = path + \
                                  '/mapping/calculate_children/tf_mapping_children_by_name.yaml'
 terraform_trustzone_types_mapping = path + '/mapping/terraform_trustzone_types_mapping.yaml'
