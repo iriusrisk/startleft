@@ -41,6 +41,7 @@ terraform_define_parent_relationship = path + '/tf/calculate_parents/terraform_d
 terraform_aws_security_group_in_and_eg_gress \
     = path + '/tf/mapping_functions/terraform_aws_security_group_in_and_eg_gress.tf'
 terraform_multiple_aws_security_group = path + '/tf/mapping_functions/terraform_multiple_aws_security_group.tf'
+terraform_for_catchall_tests = path + '/tf/terraform_for_catchall_tests.tf'
 
 # mapping
 terraform_mapping_aws_component_without_parent = path + '/mapping/terraform_mapping_component_without_parent.yaml'
@@ -63,6 +64,10 @@ tf_mapping_children_by_type_name = path + \
 tf_mapping_children_by_name = path + \
                                  '/mapping/calculate_children/tf_mapping_children_by_name.yaml'
 invalid_no_dataflows = path + '/mapping/invalid-mapping-without-dataflows.yaml'
+tf_only_catchall = path + '/mapping/catchall/tf_only_catchall_mapping.yaml'
+tf_explicit_mapping_and_catchall = path + '/mapping/catchall/tf_explicit_mapping_and_catchall_mapping.yaml'
+tf_skip_and_catchall = path + '/mapping/catchall/tf_skip_and_catchall_mapping.yaml'
+tf_singleton_and_catchall = path + '/mapping/catchall/tf_singleton_and_catchall_mapping.yaml'
 
 # otm
 tf_file_expected_result = path + '/otm/tf-file-expected-result.otm'
@@ -82,3 +87,7 @@ expected_mapping_skipped_component_without_parent = path + '/otm/expected_mappin
 expected_no_resources = path + '/otm/expected_no_resources.otm'
 expected_run_valid_mappings = path + '/otm/expected_run_valid_mappings.otm'
 tf_file_referenced_vars_expected_result = path + '/otm/tf-file-referenced-vars-expected-result.otm'
+tf_expected_only_catchall = path + '/otm/catchall/tf_only_catchall_expected.otm'
+tf_expected_explicit_mapping_and_catchall = path + '/otm/catchall/tf_explicit_mapping_and_catchall_expected.otm'
+tf_expected_skip_and_catchall = path + '/otm/catchall/tf_skip_and_catchall_expected.otm'
+tf_expected_singleton_and_catchall = path + '/otm/catchall/tf_singleton_and_catchall_expected.otm'
