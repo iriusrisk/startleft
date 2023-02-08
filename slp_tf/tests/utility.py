@@ -1,3 +1,2 @@
-excluded_regex = [
-    r"root\[\'dataflows'\]\[.+?\]\['id'\]"
-]
+excluded_regex = r"root\[\'dataflows'\]\[.+?\]\['id'\]"
+
