@@ -17,9 +17,9 @@ def load_mappings(mapping_file):
     else:
         if isinstance(mapping_file, str):
             with open(mapping_file, 'r') as f:
-                return always_merger.merge(mapping_file, yaml.load(f, Loader=yaml.BaseLoader))
+                return always_merger.merge(mapping_file, yaml.safe_load(f))
         else:
-            return always_merger.merge(mapping_file, yaml.load(mapping_file, Loader=yaml.BaseLoader))
+            return always_merger.merge(mapping_file, yaml.safe_load(mapping_file))
 
 
 class VisioMappingFileLoader(MappingLoader):
