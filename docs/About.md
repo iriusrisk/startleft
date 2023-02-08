@@ -29,12 +29,38 @@ will need to clone the `dev` branch:
 git clone -b dev https://github.com/iriusrisk/startleft.git
 ```
 
-And then deploy the documentation using the provided `docker-compose` file inside the `deployment` folder:
+And then launch the StartLeft documentation
+
+
+## Launch StartLeft documentation by Dockerfile
+
+Deploy the documentation using the provided `docker-compose.yml` file inside the `deployment` folder:
+
+- With docker installed from debian/ubuntu packages (docker.io) and the docker-compose plugin
 ```shell
 cd deployment
-
 docker-compose up -d docs
 ```
+- With docker installed from docker.com packages
+```shell
+cd deployment
+docker compose up -d docs
+```
 
-Now you can access the docs for the dev branch in [http://localhost:8000](http://localhost:8000).
 
+Now you can access the docs in [http://localhost:8000](http://localhost:8000).
+
+> :information_source: **_Launch by Dockerfile is recommended in case none modification will be done to the docs_**
+
+
+## Launch StartLeft documentation by mkdocs serve
+Run into StartLeft root folder
+```shell
+pip install -e ".[doc]"
+mkdocs serve
+```
+
+Browse to [http://localhost:8000](http://localhost:8000) to access the documentation.
+
+> :information_source: **_Launch by mkdocs serve is recommended if the docs will be modified, as the changes are 
+> reloaded automatically_**

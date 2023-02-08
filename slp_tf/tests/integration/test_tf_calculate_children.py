@@ -1,7 +1,7 @@
 import pytest
 
 from sl_util.sl_util.file_utils import get_data
-from slp_base.tests.util.otm import validate_and_diff
+from slp_base.tests.util.otm import validate_and_compare
 from slp_tf import TerraformProcessor
 from slp_tf.tests.integration.test_tf_processor import VALIDATION_EXCLUDED_REGEX
 from slp_tf.tests.resources import test_resource_paths
@@ -27,7 +27,8 @@ class TestTerraformCalculateChildren:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff(otm, expected_aws_parent_children_components, VALIDATION_EXCLUDED_REGEX) == {}
+        result, expected = validate_and_compare(otm, expected_aws_parent_children_components, VALIDATION_EXCLUDED_REGEX)
+        assert result == expected
 
     @pytest.mark.parametrize('mapping_file', [
         pytest.param(get_data(tf_mapping_children_by_type_name), id="by {type}.{name}"),

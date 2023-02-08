@@ -70,9 +70,10 @@ component. Notice that the standard requires that all the components must have a
 Cloud_ TrustZone is mapped as the default component's TrustZone. This mapping file could be as simple as this:
 ```yaml
 trustzones:
-  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - id:   public-cloud-01
     name: Public Cloud
-    default: true
+    type: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    $default: true
 
 components:
   - type:        ec2
@@ -83,7 +84,7 @@ dataflows: []
 
 The combination of this TF and mapping file will result in the OTM file below, that contains the mapped TrustZone 
 and component along with all the necessary metadata defined by the standard and that is ready to be imported in a 
-threat modelling tool like IriusRisk.
+threat modeling tool like IriusRisk.
 
 ```json
 {
@@ -101,8 +102,9 @@ threat modelling tool like IriusRisk.
   ],
   "trustZones": [
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "id": "public-cloud-01",
       "name": "Public Cloud",
+      "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "risk": {
         "trustRating": 10
       }
@@ -110,11 +112,11 @@ threat modelling tool like IriusRisk.
   ],
   "components": [
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_instance-web",
+      "id": "public-cloud-01.aws_instance-web",
       "name": "web",
       "type": "ec2",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "public-cloud-01"
       },
       "tags": [
         "aws_instance"

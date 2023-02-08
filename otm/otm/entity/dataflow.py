@@ -26,3 +26,8 @@ class OtmDataflow:
             json["tags"] = self.tags
 
         return json
+
+    def __repr__(self):
+        return f'OtmDataflow(id="{self.id}", name="{self.name}", source="{self.source_node}", ' \
+               f'destination="{self.destination_node}")'
+

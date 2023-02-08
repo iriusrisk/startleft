@@ -62,8 +62,8 @@ class Otm:
 
         return json
 
-    def add_trustzone(self, id, name, source=None, attributes=None):
-        self.trustzones.append(OtmTrustzone(trustzone_id=id, name=name, source=source, attributes=attributes))
+    def add_trustzone(self, id=None, name=None, type=None, source=None, properties=None):
+        self.trustzones.append(OtmTrustzone(trustzone_id=id, name=name, type=type, source=source, attributes=properties))
 
     def add_component(self, id, name, type, parent, parent_type, source=None,
                       attributes=None, tags=None):

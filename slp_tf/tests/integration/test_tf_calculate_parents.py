@@ -2,7 +2,7 @@ import pytest
 
 from sl_util.sl_util.file_utils import get_data
 from slp_base import OtmBuildingError
-from slp_base.tests.util.otm import validate_and_diff
+from slp_base.tests.util.otm import validate_and_compare
 from slp_tf import TerraformProcessor
 from slp_tf.tests.integration.test_tf_processor import VALIDATION_EXCLUDED_REGEX
 from slp_tf.tests.resources import test_resource_paths
@@ -31,7 +31,8 @@ class TestTerraformCalculateParents:
 
         # THEN the VPCsmm components without parents are omitted
         # AND the rest of the OTM details match the expected
-        assert validate_and_diff(otm.json(), expected_orphan_component_is_not_mapped, excluded_regex) == {}
+        result, expected = validate_and_compare(otm.json(), expected_orphan_component_is_not_mapped, excluded_regex)
+        assert result == expected
 
     def test_mapping_component_without_parent(self):
         # GIVEN a valid TF file
@@ -60,8 +61,9 @@ class TestTerraformCalculateParents:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        assert validate_and_diff(otm, expected_mapping_skipped_component_without_parent,
-                                 VALIDATION_EXCLUDED_REGEX) == {}
+        result, expected = validate_and_compare(otm, expected_mapping_skipped_component_without_parent,
+                                 VALIDATION_EXCLUDED_REGEX)
+        assert result == expected
 
     @pytest.mark.parametrize('mapping_file', [
         pytest.param(get_data(tf_mapping_parent_by_type_name), id="by {type}.{name}"),
