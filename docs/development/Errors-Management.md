@@ -5,18 +5,17 @@
 ---
 The management of errors on StartLeft is handled on four separated steps:
 
-1. Select a processor
-2. Reading the source file
-3. Reading the mapping file/s
-4. Generating the OTM
+1. Provider selection.
+2. Source file processing.
+3. Mapping file processing.
+4. OTM generation.
 
-![img/errors_management](img/conversion-steps.svg)
+![img/errors_management](img/conversion-steps.svg){ width="120%" }
+
 
 ## Error types
 
 ---
-On steps 1 and 2 we have two error groups:
-
 **Step 1:**
 
 * **Provider error:** Provider resolver could not find a provider for the given type.
@@ -50,7 +49,7 @@ On steps 1 and 2 we have two error groups:
 	* `OtmResultError`. We are able to generate the OTM but the OTM is invalid (e.g: inconsistent IDs).
 	* `OtmGenerationError`. There was any unexpected error.
 
-## Http statuses and exit codes
+## HTTP statuses and exit codes
 
 ---
 
@@ -70,10 +69,10 @@ On steps 1 and 2 we have two error groups:
 | `ProviderNotFoundError`    |     400     |            60 |
 
 
-## Http response body
+## HTTP response body
 
 ---
-The response body on any of this cases will be a json with this structure:
+The response body on any of this cases will be a JSON with this structure:
 ```json
 {
   "status": "the numeric http status code",
@@ -87,7 +86,3 @@ The response body on any of this cases will be a json with this structure:
   ]
 }
 ```
-
-When calling StartLeft through IriusRisk, the most important field here is error_type because it is the code that the
-IriusRisk core is going to read to match the error type, manage the StartLeft error response and send its own response
-on the core API.

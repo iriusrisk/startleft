@@ -76,8 +76,8 @@ First of all, retrieve all the necessary files:
 
 * Download the `MTMT_example.tm7` and `mtmt_default_mapping_example.yaml files` from [here](https://github.com/iriusrisk/startleft/blob/main/examples/mtmt).
 
-Now we are going to execute StartLeft for these files so that an `basic-mtmt-example.otm` file will be generated in our working
-directory with identical contents to the one above.
+Now we are going to execute StartLeft for these files so that a `basic-mtmt-example.otm` file will be generated in 
+our working directory.
 
 ```shell
 startleft parse \

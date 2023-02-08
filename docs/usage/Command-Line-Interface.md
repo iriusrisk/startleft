@@ -55,21 +55,22 @@ You can also get help for specific commands.
                                           The diagram file type. NOTE: This
                                           argument is mutually exclusive with
                                           arguments: [mapping_file, iac_type].
-          -e, --etm-type [MTMT]           The etm file type. NOTE: This argument is
+          -e, --etm-type [MTMT]           
+                                          The etm file type. NOTE: This argument is
                                           mutually exclusive with  arguments:
                                           [mapping_file, diagram_type, iac_type].
-                                          [required]
-          -m, --mapping-file TEXT         Mapping file to parse the IaC file. NOTE:
+          -m, --mapping-file TEXT         
+                                          Mapping file to parse the IaC file. NOTE:
                                           This argument is mutually exclusive with
                                           arguments: [etm_type, default_mapping_file,
                                           diagram_type, custom_mapping_file].
-                                          [required]
           -d, --default-mapping-file TEXT
                                           Default mapping file to parse the diagram
                                           file. NOTE: This argument is mutually
                                           exclusive with  arguments: [mapping_file,
-                                          iac_type]. [required]
-          -c, --custom-mapping-file TEXT  Custom mapping file to parse the diagram
+                                          iac_type]. 
+          -c, --custom-mapping-file TEXT  
+                                          Custom mapping file to parse the diagram
                                           file.
           -o, --output-file TEXT          OTM output file.
           -n, --project-name TEXT         Project name.  [required]
@@ -103,25 +104,24 @@ The options that it supports are:
                                   is mutually exclusive with  arguments:
                                   [custom_mapping_file,
                                   default_mapping_file, diagram_type].
-                                  [required]
   -g, --diagram-type [VISIO|LUCID]      
                                   The diagram file type. NOTE: This
                                   argument is mutually exclusive with
                                   arguments: [mapping_file, iac_type].
-                                  [required]
-  -m, --mapping-file TEXT         Mapping file to parse the IaC file.
+  -m, --mapping-file TEXT         
+                                  Mapping file to parse the IaC file.
                                   NOTE: This argument is mutually
                                   exclusive with  arguments:
                                   [custom_mapping_file,
                                   default_mapping_file, diagram_type].
-                                  [required]
   -d, --default-mapping-file TEXT
                                   Default mapping file to parse the
-                                  diagram file. NOTE: This argument is
+                                  diagram or ETM file. NOTE: This argument is
                                   mutually exclusive with  arguments:
-                                  [mapping_file, iac_type]. [required]
-  -c, --custom-mapping-file TEXT  Custom mapping file to parse the
-                                  diagram file.
+                                  [mapping_file, iac_type].
+  -c, --custom-mapping-file TEXT  
+                                  Custom mapping file to parse the
+                                  diagram or ETM file.
   -o, --output-file TEXT          OTM output file.
   -n, --project-name TEXT         Project name.  [required]
   -i, --project-id TEXT           Project id.  [required]
