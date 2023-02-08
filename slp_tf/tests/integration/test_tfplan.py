@@ -2,7 +2,7 @@ import pytest
 from pytest import mark, param
 
 from slp_base import LoadingIacFileError
-from slp_tf.tests.integration.test_tf_processor import VALIDATION_EXCLUDED_REGEX
+from slp_tf.tests.utility import excluded_regex
 from sl_util.sl_util.file_utils import get_data
 from slp_tf import TerraformProcessor
 from slp_tf.tests.resources.test_resource_paths import terraform_iriusrisk_tf_aws_mapping, \
@@ -31,7 +31,7 @@ class TestTfplan:
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # THEN the resulting OTM match the expected one
-        left, right = validate_and_compare(otm, expected, VALIDATION_EXCLUDED_REGEX)
+        left, right = validate_and_compare(otm, expected, excluded_regex)
         assert left == right
 
     def test_multiple_tfplan(self):

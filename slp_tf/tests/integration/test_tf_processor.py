@@ -6,7 +6,7 @@ from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError,
 from slp_base.tests.util.otm import validate_and_compare
 from slp_tf import TerraformProcessor
 from slp_tf.tests.resources import test_resource_paths
-from slp_tf.tests.resources.test_resource_paths import expected_aws_dataflows, expected_aws_altsource_components, \
+from slp_tf.tests.resources.test_resource_paths import expected_aws_altsource_components, \
     expected_run_valid_mappings, expected_aws_parent_children_components, expected_aws_singleton_components, \
     expected_aws_security_groups_components, expected_mapping_skipped_component_without_parent, expected_no_resources, \
     expected_mapping_modules, expected_extra_modules, expected_elb_example, terraform_for_mappings_tests_json, \

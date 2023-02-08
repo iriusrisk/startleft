@@ -19,5 +19,5 @@ def yaml_data_as_str(data) -> str:
     return data if isinstance(data, str) else data.decode()
 
 
-def yaml_reader(data):
-    return yaml.load(yaml_data_as_str(data), Loader=yaml.BaseLoader)
+def yaml_reader(data, loader=yaml.BaseLoader):
+    return yaml.load(yaml_data_as_str(data), Loader=loader)
