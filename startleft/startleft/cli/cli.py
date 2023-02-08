@@ -6,6 +6,7 @@ import sys
 import click
 
 from _sl_build.modules import PROCESSORS
+from startleft.startleft._version.version_loader import load_startleft_version
 from otm.otm.entity.otm import Otm
 from sl_util.sl_util.file_utils import get_data, get_byte_data
 from slp_base import CommonError
@@ -20,10 +21,10 @@ from startleft.startleft.api import fastapi_server
 from startleft.startleft.cli.clioptions.exclusion_option import Exclusion
 from startleft.startleft.log import get_log_level, configure_logging
 from startleft.startleft.messages import *
-from startleft.version import version
 
 logger = logging.getLogger(__name__)
 provider_resolver = ProviderResolver(PROCESSORS)
+version = load_startleft_version()
 
 
 def get_otm_as_file(otm: Otm, out_file: str):
@@ -109,7 +110,7 @@ def parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, outpu
     if custom_mapping_file:
         mapping_data_list.append(get_data(custom_mapping_file))
 
-    processor = provider_resolver.get_processor(type_, project_id, project_name, file, mapping_data_list)
+    processor = provider_resolver.get_processor(type_, project_id, project_name, file, mapping_data_list, diag_type=type_)
     otm = processor.process()
     get_otm_as_file(otm, output_file)
 

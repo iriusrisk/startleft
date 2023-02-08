@@ -5,7 +5,7 @@
 A source mapping file (or 'mapping file' for short) describe how to identify components, dataflows, TrustZones, 
 threats and mitigations in source file and how to map them to the OTM equivalent.
 
-Let's see howto identify the different elements:
+Let's see how to identify the different elements:
 
 
 ## Trustzones
@@ -26,19 +26,25 @@ Our TrustZone named ``Internet`` is of ``Generic Trust Border Boundary`` type.
 So we need to put this
 type in the label value.
 
-The id in the mapping file will be the id in the OTM TrustZone output:
+The type in the mapping file will be the type in the OTM trust zone output.
+In this example, the `Generic Trust Border Boundary` source trust zones
+will be mapped to a OTM trust zone which type will be the value of the `type`
+in our mapping file.
 
 ```yaml
   - label: Generic Trust Border Boundary
-    id: 6376d53e-6461-412b-8e04-7b3fe2b397de
+    type:  6376d53e-6461-412b-8e04-7b3fe2b397de
 ```
+
+In the OTM each trust zone will have a unique id and the type will be the type that we put in the mapping file
 
 The TrustZone OTM output will be:
 ```json
   {"trustZones": [
     {
-      "id": "6376d53e-6461-412b-8e04-7b3fe2b397de",
+      "id": "7537441a-1c03-48c0-b9c8-f82d5906c139",
       "name": "Internet",
+      "type": "6376d53e-6461-412b-8e04-7b3fe2b397de",
       "risk": {
         "trustRating": 10
       },
@@ -47,6 +53,46 @@ The TrustZone OTM output will be:
       }
     }]}
 ```
+
+In case we have two trust zones with the same type, the OTM will have two trust zones
+with the same type but different id. In the mapping file is enough having mapped once:
+```yaml
+  - label: Generic Trust Border Boundary
+    type: 6376d53e-6461-412b-8e04-7b3fe2b397de
+```
+
+With two trust zones of the same type the OTM output will be:
+```json
+  {"trustZones": [
+  {
+    "id": "7537441a-1c03-48c0-b9c8-f82d5906c139",
+    "name": "Internet",
+    "type": "6376d53e-6461-412b-8e04-7b3fe2b397de",
+    "risk": {
+      "trustRating": 10
+    },
+    "properties": {
+      "Name": "Internet"
+    }
+  },
+  {
+    "id": "bd837730-6a59-11ed-a798-772dcc832e1d",
+    "name": "Public zone",
+    "type": "6376d53e-6461-412b-8e04-7b3fe2b397de",
+    "risk": {
+      "trustRating": 10
+    },
+    "properties": {
+      "Name": "Public zone"
+    }
+  }
+]}
+```
+The id of the trust zone in the OTM will be the MTMT original component id in the source file
+
+
+>Due to a backward compatibility StartLeft accepts as well the legacy mapping file format.
+>Please read [Legacy-Mapping-File-Format](legacy/Legacy-Mapping-File-Format.md)
 
 
 ## Components

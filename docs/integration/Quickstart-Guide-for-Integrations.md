@@ -5,7 +5,7 @@ of this are:
 
 * A CI/CD pipeline for modifications in IaC files.
 * A process for creating standardized Threat Models from infrastructure diagrams.
-* A process for migrating Threat Models from one threat modelling tool to another.
+* A process for migrating Threat Models from one threat modeling tool to another.
 
 The more common scenario for these use cases is that they are automatized. For that, it is necessary that StartLeft can
 be used by another services or applications in a smooth way. The different ways of doing this are explained along this page.

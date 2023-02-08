@@ -48,8 +48,10 @@ facilitate a future migration to independent repositories.
 
 ![img/module-structure.png](img/module-structure.png)
 
-In the root package of each module, there are only two subpackages. The first one has the same name that the module itself 
-and contains the production code. The other one is called `tests` and contains specific tests for that module.
+In the root package of each module, there are only two subpackages, and a resources folder. The first subpackage has the 
+same name as the module itself and contains the production code. The other one is called `tests` and contains specific 
+tests for that module. The resources folder contains the resources needed by each module, for example, the schemas used 
+for validating mapping files.
 
 The root folder of each module represents its main boundary and may be understood as the main project folder if the modules 
 where migrated to independent repositories. However, instead of being simply folders, they need to be 
@@ -160,7 +162,7 @@ independent modules and imports among them are forbidden. The goal is that they 
 is also completely independent. **In case some duplication appears between two processors, the first option is to duplicate 
 the code** instead of prematurely creating abstractions. Only after these duplications were consolidated, and we could identify 
 a really common casuistic, we may think about creating a common module grouping, for instance, logic related with one provider 
-type (IaC, diagram or threat modelling). Anyway, **this common logic should be placed in a new dedicated module and never in 
+type (IaC, diagram or threat modeling). Anyway, **this common logic should be placed in a new dedicated module and never in 
 the `sl_util` module**.
 
 <u>Current implementations</u>: 
@@ -168,7 +170,7 @@ the `sl_util` module**.
 * `slp_cft` for Cloudformation (IaC).
 * `slp_tf` for Terraform (IaC).
 * `slp_visio` for MS Visio (Diagram).
-* `slp_mtmt` for MS Threat Modelling Tool (Threat model).
+* `slp_mtmt` for MS Threat Modeling Tool (Threat model).
 
 
 <u>Main responsibilities</u>: Implementing the interfaces defined in `slp_base` in order to actually perform the 

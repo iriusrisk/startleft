@@ -18,7 +18,7 @@ from tests.resources.test_resource_paths import terraform_iriusrisk_tf_aws_mappi
 
 TESTING_IAC_TYPE = IacType.TERRAFORM.value
 
-webapp = fastapi_server.initialize_webapp()
+webapp = fastapi_server.webapp
 client = TestClient(webapp)
 
 

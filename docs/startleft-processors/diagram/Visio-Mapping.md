@@ -1,10 +1,9 @@
-# Visio Mapping
 The greatest challenge when mapping Microsoft Visio files is that it is a completely open format where the user can
 place whatever they want. For that reason, the `slp_visio` works with some premises in order to build an OTM file
 with only the necessary information:
 
-* There are different ways of parsing TrustZones, but no TrustZone will be generated if it does not appear in any
-  of the mapping files.
+* There are different ways of parsing TrustZones, but only the default TrustZone will be generated if no Trustzone 
+appears in any of the mapping files.
 * The only shapes that will be parsed into the OTM components are the ones whose name or type matches some label in the 
   mapping file. The rest of them will be ignored.
 * There is no need to create mappings for the DataFlows, they will be generated from those Visio connectors that 
@@ -42,7 +41,7 @@ mapping appears in both mapping files, the one in the custom file takes preferen
 
 ---
 The Visio mapping file is expected to be a YAML file whose structure is exactly defined by its
-[json schema](https://github.com/iriusrisk/startleft/blob/main/startleft/resources/schemas/diagram_mapping_schema.json). 
+[json schema](https://github.com/iriusrisk/startleft/blob/main/slp_visio/resources/schemas/diagram_mapping_schema.json). 
 It is divided in three great blocks described in depth below. So, the root structure of the file is composed by three 
 arrays for the mappings of each type of element:
 
@@ -55,32 +54,36 @@ dataflows: []
 Each of these arrays contains the information for mapping shapes into TrustZones, Components or Dataflows, respectively. 
 Also note that all three are mandatory and have to be included in each mapping file, even if they only contain an empty array.
 
-### Mapping TrustZones
+### Mapping TrustZones 
 The [OTM standard](../../Open-Threat-Model-(OTM).md) defines that every component in the threat model must have a 
 parent, so you must make sure that the mapping file contains a mapping entry for all the TrustZones present in the 
 diagram as well as a default one so, if no parent can be calculated for a component, it can fall into this default 
-TrustZone. 
+TrustZone.
 ```yaml
 trustzones:
-  - label:  Public Cloud
-    type:   My Public Cloud
-    id:     b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - label:    My Public Cloud
+    type:     b61d6911-338d-46a8-9f39-8dcd24abfe91
 ```
+When a shape is found in the Visio file whose **name** matches the mapping's **label**, then a TrustZone is created
+with these OTM Trustzone fields:
+  - **id** is the original id in the Visio file 
+  - **name** is the original name in the Visio file 
+  - **type** is the type in the mapping file 
 
-When a shape is found in the Visio file whose **name** matches the mapping's **label**, then a TrustZone is created 
-in the OTM whose **name** is the mapping's **type** and its **id** is the mapping's **id**. 
 
 For example, for this TrustZone in the Visio file and the previous mapping:
 
 ![trustzone-mapping.png](img/trustzone-mapping.png)
+
 
 The resultant OTM would contain a TrustZone like this:
 ```json
 {
   "trustZones": [
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "id": "47",
       "name": "My Public Cloud",
+      "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "risk": {
         "trustRating": 10
       }
@@ -89,16 +92,109 @@ The resultant OTM would contain a TrustZone like this:
 }
 ```
 
-These are the basics for the TrustZone mapping behavior, but TrustZones may be defined in different and more complex 
-ways that are explained in deep in the 
+
+
+
+#### Default Trustzone
+The components in the Visio file that there aren't inside a trust zone will be assigned to the default trust zone.
+We can define the default trust zone in the mapping file by this way:
+```yaml
+trustzones:
+  - label:    My Public Cloud
+    type:     b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - label:    My Private Secured
+    type:     2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+
+  - label:    Internet
+    type:     f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    default:  true
+```
+Let's see an example
+
+![img/default-trustzone.png](img/default-trustzone.png)
+
+In this example "My EC2" will have "My Public Cloud" as parent, "My DynamoDB" will have "My Private Secured" as parent,
+and the "Android Client" will have the "Internet" parent defined in the mapping file as default trust zone.
+So the OTM would be like this:
+
+```yaml
+{
+    "trustZones": [
+        {
+            "id": "47",
+            "name": "My Public Cloud",
+            "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "risk": {
+                "trustRating": 10
+            }
+        },
+        {
+            "id": "48",
+            "name": "My Private Secured",
+            "type": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+            "risk": {
+                "trustRating": 10
+            }
+        },
+        {
+            "id": "39388080-e23b-4e16-976a-27f2f086dc0e",
+            "name": "Internet",
+            "type": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
+            "risk": {
+                "trustRating": 10
+            },
+            "properties": {
+                "default": true
+            }
+        }
+    ],
+    "components": [
+        {
+            "id": "54",
+            "name": "My EC2",
+            "type": "ec2",
+            "parent": {
+                "trustZone": "47"
+            }
+        },
+        {
+            "id": "59",
+            "name": "My DynamoDB",
+            "type": "dynamodb",
+            "parent": {
+                "trustZone": "48"
+            }
+        },
+        {
+            "id": "66",
+            "name": "Android Client",
+            "type": "android-client",
+            "parent": {
+                "trustZone": "39388080-e23b-4e16-976a-27f2f086dc0e"
+            }
+        }
+    ],
+    "dataflows": []
+}
+```
+Note that the Internet id is autogenerated unlike the other trust zones present in the Visio file, which id comes from
+the id in the Visio file
+
+
+>Due to a backward compatibility StartLeft accepts as well the legacy mapping file format.
+>Please read [Legacy-Mapping-File-Format](legacy/Legacy-Mapping-File-Format.md)
+
+
+#### Default TrustZone not defined
+Since it must necessarily have one trust zone, if any trust zone is defined as default in the mapping file
+<u>the _Public Cloud_ will always be the default one</u>.
+
+---
+
+These are the basics for the TrustZone mapping behavior, but TrustZones may be defined in different and more complex
+ways that are explained in deep in the
 [TrustZones mapping's page](Visio-TrustZones-Mapping.md).
-
-#### Default TrustZone
-Sometimes it may not be possible to calculate a parent for a component. Since it must necessarily have one, we 
-need to define a default TrustZone to be used in these cases. At this point, there is no way to configure which is 
-the default TrustZone and <u>the one whose label is _Public Cloud_ will always be selected as the default one</u>. In the 
-near future, a new attribute will be added to the TrustZone mappings so this could be configurable.  
-
 ### Mapping Components
 Components mappings' structure is similar to the TrustZones. For example, we can have a mapping like this:
 ```yaml

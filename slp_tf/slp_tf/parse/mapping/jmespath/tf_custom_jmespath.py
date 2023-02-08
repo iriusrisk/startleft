@@ -4,6 +4,8 @@ from copy import deepcopy
 
 import jmespath
 
+from slp_tf.slp_tf.parse.mapping.mappers.tf_base_mapper import generate_resource_identifier
+
 logger = logging.getLogger(__name__)
 
 
@@ -33,6 +35,7 @@ def add_type_and_name(obj, component_type, component_name):
     new_obj['Type'] = component_type
     new_obj['_key'] = component_name
     # Included with the purpose of maximize compatibility between mappings
+    new_obj["resource_id"] = generate_resource_identifier(component_type, component_name)
     new_obj["resource_type"] = component_type
     new_obj['resource_name'] = component_name
 
@@ -63,6 +66,7 @@ class TerraformCustomFunctions(jmespath.functions.Functions):
                     source_object["Type"] = component_type
                     source_object["resource_type"] = component_type
                     for component_name, properties in component_name_obj.items():
+                        source_object["resource_id"] = generate_resource_identifier(component_type, component_name)
                         source_object["_key"] = component_name
                         source_object["resource_name"] = component_name
                         source_object["Properties"] = properties

@@ -20,7 +20,7 @@ nav:
       - Errors management: development/Errors-Management.md
       - Run Configurations: development/Run-Configurations.md
   - StartLeft Processors (SLP):
-      - Microsoft Threat Modelling Tool (MTMT):
+      - Microsoft Threat Modeling Tool (MTMT):
           - MTMT Quickstart: startleft-processors/external-threat-model/mtmt/MTMT-Quickstart.md
           - MTMT Mapping: startleft-processors/external-threat-model/mtmt/MTMT-Mapping.md
       - CloudFormation Template:
@@ -41,6 +41,7 @@ nav:
           - Visio Mapping: startleft-processors/diagram/Visio-Mapping.md
           - Visio TrustZones Mapping: startleft-processors/diagram/Visio-TrustZones-Mapping.md
           - Visio Representations: startleft-processors/diagram/Visio-Representations.md
+          - Lucidchart Support: startleft-processors/diagram/Lucidchart-support.md
   - Troubleshooting: Troubleshooting.md
 
 theme:

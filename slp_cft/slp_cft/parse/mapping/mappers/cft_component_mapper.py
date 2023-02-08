@@ -5,6 +5,11 @@ from slp_cft.slp_cft.parse.mapping.mappers.cft_base_mapper import Cloudformation
 
 
 class CloudformationComponentMapper(CloudformationBaseMapper):
+
+    def __init__(self, mapping, default_trustzone):
+        super(CloudformationComponentMapper, self).__init__(mapping)
+        self.default_trustzone = default_trustzone
+
     def run(self, source_model, id_parents):
         """
         Iterates through the source model and returns the parameters to create the components
@@ -125,8 +130,8 @@ class CloudformationComponentMapper(CloudformationBaseMapper):
                     result = re.match(mapping_lookup["regex"], value)
 
                     if result is not None:
-                        if self.DEFAULT_TRUSTZONE not in self.id_map:
-                            self.id_map[self.DEFAULT_TRUSTZONE] = str(uuid.uuid4())
+                        if self.default_trustzone not in self.id_map:
+                            self.id_map[self.default_trustzone] = str(uuid.uuid4())
 
                         mapping_name, mapping_tags = self.get_mappings_for_name_and_tags(mapping_lookup)
                         component_name, singleton_multiple_name = self.__get_component_names(source_model,
@@ -145,7 +150,7 @@ class CloudformationComponentMapper(CloudformationBaseMapper):
                         component = {"id": str(uuid.uuid4()),
                                      "name": component_name,
                                      "type": mapping_lookup["type"],
-                                     "parent": self.id_map[self.DEFAULT_TRUSTZONE],
+                                     "parent": self.id_map[self.default_trustzone],
                                      "source": alt_source_object_copy
                                      }
 
@@ -277,18 +282,17 @@ class CloudformationComponentMapper(CloudformationBaseMapper):
         else:
             parent = ""
 
-        if isinstance(parent, list):
-            if len(parent) == 0:
-                parent = [self.DEFAULT_TRUSTZONE]
+        if isinstance(parent, list) and len(parent) == 0:
+            parent = [self.default_trustzone]
 
         if isinstance(parent, str):
             if parent == "":
-                parent = [self.DEFAULT_TRUSTZONE]
+                parent = [self.default_trustzone]
             else:
                 parent = [parent]
 
         if parent is None:
-            parent = [self.DEFAULT_TRUSTZONE]
+            parent = [self.default_trustzone]
 
         return parent, parents_from_component
 
@@ -331,9 +335,8 @@ class CloudformationComponentMapper(CloudformationBaseMapper):
 
         # make a previous lookup on the list of parent mappings
         c_id = None
-        if source_id is not None and len(self.id_map) > 0:
-            if component_name in self.id_map.keys():
-                c_id = self.id_map[component_name]
+        if source_id is not None and len(self.id_map) > 0 and component_name in self.id_map.keys():
+            c_id = self.id_map[component_name]
         # a new ID can be generated if there is more a parent and this is not the first one
         if c_id is None or parent_number > 0:
             c_id = str(uuid.uuid4())
