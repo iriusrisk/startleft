@@ -1,7 +1,7 @@
-from otm.otm.entity.mitigation import OtmMitigationInstance
+from otm.otm.entity.mitigation import MitigationInstance
 
 
-class OtmThreat:
+class Threat:
     def __init__(self, threat_id, name, category, description=None):
         self.id = threat_id
         self.name = name
@@ -11,7 +11,7 @@ class OtmThreat:
         self.impact = 100
 
     def __eq__(self, other):
-        return other is not None and type(other) is OtmThreat and self.id == other.id
+        return other is not None and type(other) is Threat and self.id == other.id
 
     def __hash__(self):
         return hash(self.id)
@@ -35,19 +35,19 @@ class OtmThreat:
         return json
 
 
-class OtmThreatInstance:
-    def __init__(self, threat_id, state, mitigations: [OtmMitigationInstance] = None):
+class ThreatInstance:
+    def __init__(self, threat_id, state, mitigations: [MitigationInstance] = None):
         self.threat_id = threat_id
         self.state = state
         self.mitigations = mitigations or []
 
     def __eq__(self, other):
-        return other is not None and type(other) is OtmThreatInstance and self.threat_id == other.threat_id
+        return other is not None and type(other) is ThreatInstance and self.threat_id == other.threat_id
 
     def __hash__(self):
         return hash(self.threat_id)
 
-    def add_mitigation(self, mitigation: OtmMitigationInstance):
+    def add_mitigation(self, mitigation: MitigationInstance):
         self.mitigations.append(mitigation)
 
     def json(self):

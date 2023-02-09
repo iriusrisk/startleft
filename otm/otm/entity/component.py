@@ -1,9 +1,9 @@
-from otm.otm.entity.threat import OtmThreatInstance
+from otm.otm.entity.threat import ThreatInstance
 
 
-class OtmComponent:
+class Component:
     def __init__(self, component_id, name, component_type, parent, parent_type: str, source=None,
-                 properties=None, tags=None, threats: [OtmThreatInstance] = None, representations=None):
+                 properties=None, tags=None, threats: [ThreatInstance] = None, representations=None):
         self.id = component_id
         self.name = name
         self.type = component_type
@@ -12,10 +12,10 @@ class OtmComponent:
         self.source = source
         self.properties = properties
         self.tags = tags
-        self.threats: [OtmThreatInstance] = threats or []
+        self.threats: [ThreatInstance] = threats or []
         self.representations = representations
 
-    def add_threat(self, threat: OtmThreatInstance):
+    def add_threat(self, threat: ThreatInstance):
         self.threats.append(threat)
 
     def json(self):

@@ -3,8 +3,8 @@ from unittest.mock import patch
 from click.testing import CliRunner
 
 from slp_base import LoadingMappingFileError, LoadingIacFileError, IacFileNotValidError, \
-    OtmBuildingError, \
-    OtmGenerationError
+    OTMBuildingError, \
+    OTMGenerationError
 from startleft.startleft.cli.cli import parse_any
 from startleft.tests.unit.cli.parse.iac.test_unit_cli_parse_iac import CLOUDFORMATION_MAPPING, \
     CLOUDFORMATION_FOR_MAPPING_TESTS
@@ -16,7 +16,7 @@ TESTING_MAPPING_FILE = CLOUDFORMATION_MAPPING
 
 class TestCliIacErrorCodes:
 
-    @patch('slp_base.slp_base.otm_processor.OtmProcessor.process')
+    @patch('slp_base.slp_base.otm_processor.OTMProcessor.process')
     def test_loadingiacfilerror_code(self, mock_load_source_data):
         runner = CliRunner()
         output_file_name = "output-file.otm"
@@ -47,7 +47,7 @@ class TestCliIacErrorCodes:
             assert result.exit_code == 1
             assert result.exception.error_code.system_exit_status == 1
 
-    @patch('slp_base.slp_base.otm_processor.OtmProcessor.process')
+    @patch('slp_base.slp_base.otm_processor.OTMProcessor.process')
     def test_iacfilenotvaliderror_code(self, mock_load_source_data):
         runner = CliRunner()
         output_file_name = "output-file.otm"
@@ -78,7 +78,7 @@ class TestCliIacErrorCodes:
             assert result.exit_code == 1
             assert result.exception.error_code.system_exit_status == 2
 
-    @patch('slp_base.slp_base.otm_processor.OtmProcessor.process')
+    @patch('slp_base.slp_base.otm_processor.OTMProcessor.process')
     def test_loadingmappingfileerror_code(self, mock_load_source_data):
         runner = CliRunner()
         output_file_name = "output-file.otm"
@@ -109,12 +109,12 @@ class TestCliIacErrorCodes:
             assert result.exit_code == 1
             assert result.exception.error_code.system_exit_status == 21
 
-    @patch('slp_base.slp_base.otm_processor.OtmProcessor.process')
+    @patch('slp_base.slp_base.otm_processor.OTMProcessor.process')
     def test_otmbuildingerror_code(self, mock_load_source_data):
         runner = CliRunner()
         output_file_name = "output-file.otm"
 
-        error = OtmBuildingError('Error during OTM transformation. Eg: bad jmespath expression.', None, None)
+        error = OTMBuildingError('Error during OTM transformation. Eg: bad jmespath expression.', None, None)
 
         mock_load_source_data.side_effect = error
 
@@ -140,12 +140,12 @@ class TestCliIacErrorCodes:
             assert result.exit_code == 1
             assert result.exception.error_code.system_exit_status == 41
 
-    @patch('slp_base.slp_base.otm_processor.OtmProcessor.process')
+    @patch('slp_base.slp_base.otm_processor.OTMProcessor.process')
     def test_otmgenerationerror_code(self, mock_load_source_data):
         runner = CliRunner()
         output_file_name = "output-file.otm"
 
-        error = OtmGenerationError('Provided files were processed successfully but an error occurred while generating'
+        error = OTMGenerationError('Provided files were processed successfully but an error occurred while generating'
                                    ' the OTM file.', None, None)
 
         mock_load_source_data.side_effect = error

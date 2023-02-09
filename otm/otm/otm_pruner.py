@@ -1,13 +1,13 @@
 import logging
 
-from otm.otm.entity.otm import Otm
+from otm.otm.entity.otm import OTM
 
 logger = logging.getLogger(__name__)
 
 
-class OtmPruner:
+class OTMPruner:
 
-    def __init__(self, otm: Otm):
+    def __init__(self, otm: OTM):
         self.otm = otm
         self.otm_component_ids = [c.id for c in self.otm.components]
 

@@ -1,8 +1,8 @@
 import logging
 
-from otm.otm.entity.otm import Otm
-from otm.otm.otm_builder import OtmBuilder
-from slp_base.slp_base.errors import OtmBuildingError
+from otm.otm.entity.otm import OTM
+from otm.otm.otm_builder import OTMBuilder
+from slp_base.slp_base.errors import OTMBuildingError
 from slp_base.slp_base.provider_parser import ProviderParser
 from slp_base.slp_base.provider_type import IacType
 from slp_cft.slp_cft.parse.mapping.cft_path_ids_calculator import CloudformationPathIdsCalculator
@@ -27,7 +27,7 @@ class CloudformationParser(ProviderParser):
         self.source_model = CloudformationSourceModel(self.source, self.otm)
         self.transformer = CloudformationTransformer(source_model=self.source_model, threat_model=self.otm)
 
-    def build_otm(self) -> Otm:
+    def build_otm(self) -> OTM:
         try:
             self.transformer.run(self.mapping)
             self.__set_full_path_in_ids()
@@ -35,12 +35,12 @@ class CloudformationParser(ProviderParser):
             logger.error(f'{e}')
             detail = e.__class__.__name__
             message = e.__str__()
-            raise OtmBuildingError('Error building the threat model with the given files', detail, message)
+            raise OTMBuildingError('Error building the threat model with the given files', detail, message)
 
         return self.otm
 
     def __initialize_otm(self):
-        return OtmBuilder(self.project_id, self.project_name, IacType.CLOUDFORMATION).build()
+        return OTMBuilder(self.project_id, self.project_name, IacType.CLOUDFORMATION).build()
 
     def __set_full_path_in_ids(self):
         path_ids = CloudformationPathIdsCalculator(self.otm.components).calculate_path_ids()

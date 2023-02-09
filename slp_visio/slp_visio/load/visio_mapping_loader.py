@@ -2,13 +2,13 @@ import jmespath
 import yaml
 from deepmerge import always_merger
 
-from otm.otm.entity.trustzone import OtmTrustzone
+from otm.otm.entity.trustzone import Trustzone
 from sl_util.sl_util.str_utils import deterministic_uuid
 from slp_base import MappingLoader
 from slp_base.slp_base.mapping_file_loader import MappingFileLoader
 
 PUBLIC_CLOUD_NAME = 'Public Cloud'
-PUBLIC_CLOUD = OtmTrustzone(trustzone_id=deterministic_uuid(PUBLIC_CLOUD_NAME), name=PUBLIC_CLOUD_NAME,
+PUBLIC_CLOUD = Trustzone(trustzone_id=deterministic_uuid(PUBLIC_CLOUD_NAME), name=PUBLIC_CLOUD_NAME,
                          type='b61d6911-338d-46a8-9f39-8dcd24abfe91', properties={"default": True})
 
 def load_mappings(mapping_file):
@@ -46,7 +46,7 @@ class VisioMappingFileLoader(MappingLoader):
         default_otm_trustzone = default_trustzones[-1] if len(default_trustzones) > 0 else None
         if default_otm_trustzone:
             name = default_otm_trustzone['label']
-            return OtmTrustzone(trustzone_id=deterministic_uuid(name), name=name, type=default_otm_trustzone['type'],
+            return Trustzone(trustzone_id=deterministic_uuid(name), name=name, type=default_otm_trustzone['type'],
                              properties={"default": True})
         else:
             return PUBLIC_CLOUD

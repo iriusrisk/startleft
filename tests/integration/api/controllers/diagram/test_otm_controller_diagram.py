@@ -21,7 +21,7 @@ def get_url():
 octet_stream = 'application/octet-stream'
 
 
-class TestOtmControllerDiagram:
+class TestOTMControllerDiagram:
 
     @pytest.mark.parametrize('project_id,project_name,diag_file,errors_expected, error_type',
                              [(None, 'name', open(test_resource_paths.visio_aws_with_tz_and_vpc, 'rb'), 3,
