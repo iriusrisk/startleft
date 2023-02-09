@@ -43,7 +43,7 @@ class MTMTTrustzoneParser:
             tz = OtmTrustzone(trustzone_id=border.id,
                               name=border.name,
                               type=mtmt_type,
-                              properties=border.properties)
+                              attributes=border.properties)
             if representations:
                 tz.representations = [representations]
             return tz
