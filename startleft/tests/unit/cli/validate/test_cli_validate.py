@@ -30,15 +30,17 @@ class TestCliValidate:
 
             # Then a MappingFileNotValidError is raised
             assert result.exit_code == 1
-
-            assert result.exception.error_code.system_exit_status == 22
             assert result.exception.error_code.name == 'MAPPING_FILE_NOT_VALID'
 
-    @pytest.mark.parametrize('arg_name, file', [
-        pytest.param('--otm-file', invalid_mapping_file_vsdx, id="with invalid diagram vsdx mapping file"),
-        pytest.param('--otm-file', invalid_mapping_zip, id="with invalid diagram zip mapping file"),
-        pytest.param('--otm-file', invalid_mapping_pdf, id="with invalid diagram pdf mapping file")])
-    def test_validate_invalid_otm_file_error(self, arg_name, file):
+            # AND the exit code is 22
+            assert result.exception.error_code.system_exit_status == 22
+
+
+    @pytest.mark.parametrize('file', [
+        pytest.param(invalid_mapping_file_vsdx, id="with invalid diagram vsdx mapping file"),
+        pytest.param(invalid_mapping_zip, id="with invalid diagram zip mapping file"),
+        pytest.param(invalid_mapping_pdf, id="with invalid diagram pdf mapping file")])
+    def test_validate_invalid_otm_file_error(self, file):
         """
         Validating mapping files with invalid files
         """
@@ -47,15 +49,16 @@ class TestCliValidate:
         with runner.isolated_filesystem():
             # Given a list of arguments with
             args = [
-                # the mapping file type and the file to test
-                arg_name, file]
+                # the file type and the file to test
+                '--otm-file', file]
 
             # When validating
             result = runner.invoke(validate, args)
 
-            # Then a MappingFileNotValidError is raised
+            # Then a OtmResultError is raised
             assert result.exit_code == 1
-
-            assert result.exception.error_code.system_exit_status == 42
             assert result.exception.error_code.name == 'OTM_RESULT_ERROR'
+
+            # AND the exit code is 42
+            assert result.exception.error_code.system_exit_status == 42
 
