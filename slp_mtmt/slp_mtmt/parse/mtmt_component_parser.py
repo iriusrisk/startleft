@@ -37,12 +37,12 @@ class MTMTComponentParser:
         representation = calculator.calculate_representation()
         if mtmt_type is not None:
             component = Component(component_id=border.id,
-                                  name=border.name,
-                                  component_type=mtmt_type,
-                                  parent_type="trustZone",
-                                  parent=trustzone_id,
-                                  properties=border.properties,
-                                  source=border)
+                                name=border.name,
+                                component_type=mtmt_type,
+                                parent_type="trustZone",
+                                parent=trustzone_id,
+                                attributes=border.properties,
+                                source=border)
             if representation:
                 calculator.scale_representation(representation)
                 component.representations = [representation]

@@ -63,20 +63,19 @@ class OTM:
         return json
 
     def add_trustzone(self, id=None, name=None, type=None, source=None, properties=None):
-        self.trustzones.append(
-            Trustzone(trustzone_id=id, name=name, type=type, source=source, properties=properties))
+        self.trustzones.append(Trustzone(trustzone_id=id, name=name, type=type, source=source, attributes=properties))
 
     def add_component(self, id, name, type, parent, parent_type, source=None,
-                      properties=None, tags=None):
+                      attributes=None, tags=None):
         self.components.append(
             Component(component_id=id, name=name, component_type=type, parent=parent, parent_type=parent_type,
-                      source=source, properties=properties, tags=tags))
+                         source=source, attributes=attributes, tags=tags))
 
     def add_dataflow(self, id, name, source_node, destination_node, bidirectional=None,
-                     source=None, properties=None, tags=None):
+                     source=None, attributes=None, tags=None):
         self.dataflows.append(Dataflow(dataflow_id=id, name=name, bidirectional=bidirectional, source_node=source_node,
-                                       destination_node=destination_node, source=source, properties=properties,
-                                       tags=tags))
+                                          destination_node=destination_node, source=source, attributes=attributes,
+                                          tags=tags))
 
     def add_representation(self, id_=None, name=None, type_=None):
         self.representations.append(Representation(id_=id_, name=name, type_=type_))

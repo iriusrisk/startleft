@@ -41,9 +41,9 @@ class MTMTTrustzoneParser:
             calculator = TrustzoneRepresentationCalculator(self.diagram_representation, border)
             representations = calculator.calculate_representation()
             tz = Trustzone(trustzone_id=border.id,
-                           name=border.name,
-                           type=mtmt_type,
-                           properties=border.properties)
+                              name=border.name,
+                              type=mtmt_type,
+                              attributes=border.properties)
             if representations:
                 tz.representations = [representations]
             return tz

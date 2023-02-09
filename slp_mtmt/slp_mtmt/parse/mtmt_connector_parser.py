@@ -22,12 +22,12 @@ class MTMTConnectorParser:
         source_node_id = line.source_guid
         target_node_id = line.target_guid
         return Dataflow(dataflow_id=line.id,
-                        name=line.name,
-                        properties=line.properties,
-                        source_node=source_node_id,
-                        destination_node=target_node_id,
-                        bidirectional=False
-                        )
+                           name=line.name,
+                           attributes=line.properties,
+                           source_node=source_node_id,
+                           destination_node=target_node_id,
+                           bidirectional=False
+                           )
 
     def __is_valid(self, line):
         return self.__is_valid_guid(line.source_guid) and self.__is_valid_guid(line.target_guid)
