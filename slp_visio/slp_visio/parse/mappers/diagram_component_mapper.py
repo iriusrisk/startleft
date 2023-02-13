@@ -1,8 +1,7 @@
-from otm.otm.entity.component import OtmComponent
-from otm.otm.entity.trustzone import OtmTrustzone
+from otm.otm.entity.component import Component
+from otm.otm.entity.trustzone import Trustzone
 from slp_base import MappingFileNotValidError
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
-from slp_visio.slp_visio.parse.mappers.diagram_mapper import DiagramMapper
 from slp_visio.slp_visio.parse.representation.representation_calculator import RepresentationCalculator
 from slp_visio.slp_visio.util.visio import normalize_label
 
@@ -13,7 +12,7 @@ class DiagramComponentMapper(DiagramMapper):
                  components: [DiagramComponent],
                  component_mappings: dict,
                  trustzone_mappings: dict,
-                 default_trustzone: OtmTrustzone,
+                 default_trustzone: Trustzone,
                  representation_calculator: RepresentationCalculator):
         self.components = components
         self.normalized_component_mappings = {normalize_label(lb): value for (lb, value) in component_mappings.items()}
@@ -22,7 +21,7 @@ class DiagramComponentMapper(DiagramMapper):
 
         self.representation_calculator = representation_calculator
 
-    def to_otm(self) -> [OtmComponent]:
+    def to_otm(self) -> [Component]:
         return self.__map_to_otm(self.__filter_components())
 
     def __filter_components(self) -> [DiagramComponent]:
@@ -33,13 +32,13 @@ class DiagramComponentMapper(DiagramMapper):
         map_by_type = normalize_label(component.type) in self.normalized_component_mappings
         return map_by_name or map_by_type
 
-    def __map_to_otm(self, component_candidates: [DiagramComponent]) -> [OtmComponent]:
+    def __map_to_otm(self, component_candidates: [DiagramComponent]) -> [Component]:
         return list(map(self.__build_otm_component, component_candidates))
 
-    def __build_otm_component(self, diagram_component: DiagramComponent) -> OtmComponent:
+    def __build_otm_component(self, diagram_component: DiagramComponent) -> Component:
         representation = self.representation_calculator.calculate_representation(diagram_component)
 
-        return OtmComponent(
+        return Component(
             component_id=diagram_component.id,
             name=diagram_component.name,
             component_type=self.__calculate_otm_type(diagram_component.name, diagram_component.type),

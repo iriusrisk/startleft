@@ -1,9 +1,7 @@
 from otm.otm.entity.parent_type import ParentType
 
-
-class OtmTrustzone:
-    def __init__(self, trustzone_id, name,  parent=None, parent_type:ParentType=None, source=None, type=type,
-                 attributes=None, representations=None):
+class Trustzone:
+    def __init__(self, trustzone_id, name, source=None, type=type, attributes=None, representations=None):
         self.id = trustzone_id
         self.name = name
         self.type = type
@@ -15,7 +13,7 @@ class OtmTrustzone:
         self.representations = representations
 
     def __eq__(self, other):
-        return type(other) == OtmTrustzone and self.id == other.id
+        return type(other) == Trustzone and self.id == other.id
 
     def __repr__(self) -> str:
         return f'Trustzone(id="{self.id}", name="{self.name}", type="{self.type}", source="{self.source}", ' \

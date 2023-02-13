@@ -1,12 +1,12 @@
-from otm.otm.entity.component import OtmComponent
+from otm.otm.entity.component import Component
 from slp_cft.slp_cft.parse.mapping.cft_path_ids_calculator import CloudformationPathIdsCalculator
 
 
-def create_otm_component(component_data: {}) -> OtmComponent:
-    return OtmComponent(**component_data)
+def create_otm_component(component_data: {}) -> Component:
+    return Component(**component_data)
 
 
-def to_otm_components(components_data: []) -> [OtmComponent]:
+def to_otm_components(components_data: []) -> [Component]:
     return [create_otm_component(data) for data in components_data]
 
 

@@ -28,9 +28,9 @@ does not permit loading its content.
     * `LoadingMappingFileError`.
 
 * **OTM generation related errors**:
-    * `OtmBuildingError`. We are unable to generate the OTM with the given files.
-    * `OtmResultError`. We are able to generate the OTM but the OTM is invalid (e.g: inconsistent IDs).
-    * `OtmGenerationError`. There was any unexpected error.
+    * `OTMBuildingError`. We are unable to generate the OTM with the given files.
+    * `OTMResultError`. We are able to generate the OTM but the OTM is invalid (e.g: inconsistent IDs).
+    * `OTMGenerationError`. There was any unexpected error.
 
 ## Http statuses and exit codes
 
@@ -44,9 +44,9 @@ does not permit loading its content.
 | `DiagramNotValidFileError` |     400     |            12 |
 | `LoadingMappingFileError`  |     400     |            21 |
 | `MappingFileNotValidError` |     400     |            22 |
-| `OtmBuildingError`         |     400     |            41 |
-| `OtmResultError`           |     400     |            42 |
-| `OtmGenerationError`       |     500     |            45 |
+| `OTMBuildingError`         |     400     |            41 |
+| `OTMResultError`           |     400     |            42 |
+| `OTMGenerationError`       |     500     |            45 |
 
 
 ## Http response body

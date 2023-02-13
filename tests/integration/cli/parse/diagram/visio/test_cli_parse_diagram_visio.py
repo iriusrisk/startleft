@@ -2,7 +2,7 @@ from click.testing import CliRunner
 from pytest import mark
 
 from slp_base.slp_base.errors import MappingFileNotValidError, DiagramFileNotValidError
-from slp_base.slp_base.otm_file_loader import OtmFileLoader
+from slp_base.slp_base.otm_file_loader import OTMFileLoader
 from slp_base.tests.util.otm import validate_and_compare_otm
 from startleft.startleft.cli.cli import parse_any
 from tests.resources import test_resource_paths
@@ -59,7 +59,7 @@ class TestCliParseDiagram:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            otm = OtmFileLoader().load(output_file_name)
+            otm = OTMFileLoader().load(output_file_name)
             result, expected = validate_and_compare_otm(otm, OTM_AWS_SHAPES_EXPECTED, None)
             assert result == expected
 
@@ -100,7 +100,7 @@ class TestCliParseDiagram:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            otm = OtmFileLoader().load(output_file_name)
+            otm = OTMFileLoader().load(output_file_name)
             result, expected = validate_and_compare_otm(otm, OTM_AWS_WITH_TZ_AND_VPC, None)
             assert result == expected
 
@@ -134,7 +134,7 @@ class TestCliParseDiagram:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            otm = OtmFileLoader().load(output_file_name)
+            otm = OTMFileLoader().load(output_file_name)
             result, expected = validate_and_compare_otm(otm, OTM_ORPHAN_DATAFLOWS, None)
             assert result == expected
 

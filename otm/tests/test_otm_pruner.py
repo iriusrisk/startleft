@@ -1,7 +1,7 @@
-from otm.otm.entity.component import OtmComponent
-from otm.otm.entity.dataflow import OtmDataflow
-from otm.otm.entity.otm import Otm
-from otm.otm.otm_pruner import OtmPruner
+from otm.otm.entity.component import Component
+from otm.otm.entity.dataflow import Dataflow
+from otm.otm.entity.otm import OTM
+from otm.otm.otm_pruner import OTMPruner
 from otm.otm.provider import Provider
 
 
@@ -13,15 +13,15 @@ class TestIterationUtils:
 
     def test_prune_orphan_dataflows_with_no_orphan(self):
         # Given an otm with no orphan dataflows
-        otm: Otm = Otm('test', 'test', DummyProvider.DUMMY)
-        otm.dataflows = [OtmDataflow('from-1001-to-2002', None, '1001', '2002')]
+        otm: OTM = OTM('test', 'test', DummyProvider.DUMMY)
+        otm.dataflows = [Dataflow('from-1001-to-2002', None, '1001', '2002')]
         otm.components = [
-            OtmComponent('1001', '', '', '', ''),
-            OtmComponent('2002', '', '', '', '')
+            Component('1001', '', '', '', ''),
+            Component('2002', '', '', '', '')
         ]
 
         # when we call prune_orphan_dataflows
-        OtmPruner(otm).prune_orphan_dataflows()
+        OTMPruner(otm).prune_orphan_dataflows()
 
         # we have the expected dataflows and components
         assert len(otm.dataflows) == 1
@@ -29,25 +29,25 @@ class TestIterationUtils:
 
     def test_prune_orphan_dataflows_with_orphans(self):
         # Given an otm with orphan dataflows
-        otm: Otm = Otm('test', 'test', DummyProvider.DUMMY)
+        otm: OTM = OTM('test', 'test', DummyProvider.DUMMY)
         otm.dataflows = [
-            OtmDataflow('from-1001-to-2002', None, '1001', '2002'),
-            OtmDataflow('from-2001-to-1001', None, '2002', '1001'),
-            OtmDataflow('from-AAA-to-1001', None, 'AAA', '1001'),
-            OtmDataflow('from-1001-to-BBB', None, '1001', 'BBB'),
-            OtmDataflow('from-AAA-to-BBB', None, 'AAA', 'BBB'),
-            OtmDataflow('from-3003-to-ZZZ', None, '3003', 'ZZZ')
+            Dataflow('from-1001-to-2002', None, '1001', '2002'),
+            Dataflow('from-2001-to-1001', None, '2002', '1001'),
+            Dataflow('from-AAA-to-1001', None, 'AAA', '1001'),
+            Dataflow('from-1001-to-BBB', None, '1001', 'BBB'),
+            Dataflow('from-AAA-to-BBB', None, 'AAA', 'BBB'),
+            Dataflow('from-3003-to-ZZZ', None, '3003', 'ZZZ')
         ]
         otm.components = [
-            OtmComponent('1001', '', '', '', ''),
-            OtmComponent('2002', '', '', '', ''),
-            OtmComponent('3003', '', '', '', ''),
-            OtmComponent('ZZZ', '', '', '', ''),
-            OtmComponent('999', '', '', '', '')
+            Component('1001', '', '', '', ''),
+            Component('2002', '', '', '', ''),
+            Component('3003', '', '', '', ''),
+            Component('ZZZ', '', '', '', ''),
+            Component('999', '', '', '', '')
         ]
 
         # when we call prune_orphan_dataflows
-        OtmPruner(otm).prune_orphan_dataflows()
+        OTMPruner(otm).prune_orphan_dataflows()
 
         # we have the expected dataflows and components
         assert len(otm.dataflows) == 3
