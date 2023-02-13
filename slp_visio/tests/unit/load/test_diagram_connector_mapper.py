@@ -1,4 +1,4 @@
-from otm.otm.entity.dataflow import OtmDataflow
+from otm.otm.entity.dataflow import Dataflow
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramConnector
 from slp_visio.slp_visio.parse.mappers.diagram_connector_mapper import DiagramConnectorMapper
 from slp_visio.tests.unit.util.test_uuid import is_valid_uuid
@@ -18,7 +18,7 @@ class TestDiagramConnectorMapper:
         mapper = DiagramConnectorMapper(connectors)
 
         # WHEN calling to_otm
-        otm: [OtmDataflow] = mapper.to_otm()
+        otm: [Dataflow] = mapper.to_otm()
 
         # THEN the number of TZs, components and dataflows are right
         assert len(otm) == 6

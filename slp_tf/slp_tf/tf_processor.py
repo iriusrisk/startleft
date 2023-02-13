@@ -1,5 +1,5 @@
 from slp_base.slp_base import MappingLoader, MappingValidator
-from slp_base.slp_base import OtmProcessor
+from slp_base.slp_base import OTMProcessor
 from slp_base.slp_base import ProviderValidator
 from slp_base.slp_base.provider_loader import ProviderLoader
 from slp_base.slp_base.provider_parser import ProviderParser
@@ -10,9 +10,9 @@ from slp_tf.slp_tf.validate.tf_mapping_file_validator import TerraformMappingFil
 from slp_tf.slp_tf.validate.tf_validator import TerraformValidator
 
 
-class TerraformProcessor(OtmProcessor):
+class TerraformProcessor(OTMProcessor):
     """
-    Terraform implementation of OtmProcessor
+    Terraform implementation of OTMProcessor
     """
 
     def __init__(self, project_id: str, project_name: str, sources: [bytes], mappings: [bytes]):

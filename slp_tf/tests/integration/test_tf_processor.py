@@ -1,12 +1,12 @@
 import pytest
 
 from sl_util.sl_util.file_utils import get_data, get_byte_data
-from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError, \
+from slp_base.slp_base.errors import OTMBuildingError, MappingFileNotValidError, IacFileNotValidError, \
     LoadingIacFileError
 from slp_base.tests.util.otm import validate_and_compare
 from slp_tf import TerraformProcessor
 from slp_tf.tests.resources import test_resource_paths
-from slp_tf.tests.resources.test_resource_paths import expected_aws_dataflows, expected_aws_altsource_components, \
+from slp_tf.tests.resources.test_resource_paths import expected_aws_altsource_components, \
     expected_run_valid_mappings, expected_aws_parent_children_components, expected_aws_singleton_components, \
     expected_aws_security_groups_components, expected_mapping_skipped_component_without_parent, expected_no_resources, \
     expected_mapping_modules, expected_extra_modules, expected_elb_example, terraform_for_mappings_tests_json, \
@@ -112,8 +112,8 @@ class TestTerraformProcessor:
         mapping_file = get_data(test_resource_paths.terraform_mapping_aws_component_without_parent)
 
         # WHEN the TF file is processed
-        # THEN an OtmBuildingError is raised
-        with pytest.raises(OtmBuildingError) as e_info:
+        # THEN an OTMBuildingError is raised
+        with pytest.raises(OTMBuildingError) as e_info:
             TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # AND the error references a parent issue
@@ -222,7 +222,7 @@ class TestTerraformProcessor:
         mapping_file = [get_data(terraform_iriusrisk_tf_aws_mapping)]
 
         # When creating OTM project from IaC file
-        # Then raises OtmBuildingError
+        # Then raises OTMBuildingError
         with pytest.raises(IacFileNotValidError):
             TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], mapping_file).process()
 

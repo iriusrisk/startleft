@@ -1,9 +1,9 @@
 import re
 from enum import Enum
 
-from otm.otm.entity.mitigation import OtmMitigation, OtmMitigationInstance
-from otm.otm.entity.threat import OtmThreat, OtmThreatInstance
-from otm.otm.entity.component import OtmComponent
+from otm.otm.entity.component import Component
+from otm.otm.entity.mitigation import Mitigation, MitigationInstance
+from otm.otm.entity.threat import Threat, ThreatInstance
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_threatinstance import MTMThreat
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
 
@@ -25,8 +25,8 @@ def remove_trailing_dot(message: str):
     return message.rstrip(".") if message else None
 
 
-def add_threat_to_component(threat: MTMThreat, threat_instance: OtmThreatInstance, components: [OtmComponent]):
-    component: OtmComponent = next(
+def add_threat_to_component(threat: MTMThreat, threat_instance: ThreatInstance, components: [Component]):
+    component: Component = next(
         (component for component in components if component.id == threat.destination_component_id), None)
 
     if component is not None:
@@ -37,25 +37,25 @@ class MTMThreatParser:
     def __init__(self, source: MTMT):
         self.__source = source
 
-    def parse(self, components: [OtmComponent]):
-        threats: [OtmThreat] = []
-        mitigations: [OtmMitigation] = []
+    def parse(self, components: [Component]):
+        threats: [Threat] = []
+        mitigations: [Mitigation] = []
 
         for threat in self.__source.threats:
-            otm_threat = OtmThreat(threat.id, threat.title, threat.threat_category, get_threat_description(threat))
+            otm_threat = Threat(threat.id, threat.title, threat.threat_category, get_threat_description(threat))
             threats.append(otm_threat)
 
-            threat_instance: OtmThreatInstance = OtmThreatInstance(threat.id, threat.threat_state)
+            threat_instance: ThreatInstance = ThreatInstance(threat.id, threat.threat_state)
 
             if threat.threat_state != MitigationState.NOT_APPLICABLE.value:
-                mitigation_instance: OtmMitigationInstance = OtmMitigationInstance(
+                mitigation_instance: MitigationInstance = MitigationInstance(
                     threat.id,
                     MitigationState.by_value(threat.threat_state).name
                 )
 
                 if threat.from_azure_template:
                     mitigations.append(
-                        OtmMitigation(
+                        Mitigation(
                             threat.id,
                             get_first_sentence(threat.possible_mitigations),
                             remove_trailing_dot(threat.steps) or remove_trailing_dot(threat.possible_mitigations)
@@ -68,7 +68,7 @@ class MTMThreatParser:
 
                     if mitigation_description:
                         mitigations.append(
-                            OtmMitigation(
+                            Mitigation(
                                 threat.id,
                                 get_first_sentence(mitigation_description),
                                 remove_trailing_dot(mitigation_description)

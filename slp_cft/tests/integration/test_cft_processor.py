@@ -1,7 +1,7 @@
 import pytest
 
 from sl_util.sl_util.file_utils import get_data
-from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError, \
+from slp_base.slp_base.errors import OTMBuildingError, MappingFileNotValidError, IacFileNotValidError, \
     LoadingIacFileError
 from slp_base.tests.util.otm import validate_and_compare_otm, validate_and_compare
 from slp_cft import CloudformationProcessor
@@ -272,8 +272,8 @@ class TestCloudformationProcessor:
         mapping_file = get_data(test_resource_paths.cloudformation_mapping_component_without_parent)
 
         # WHEN the CFT file is processed
-        # THEN an OtmBuildingError is raised
-        with pytest.raises(OtmBuildingError) as e_info:
+        # THEN an OTMBuildingError is raised
+        with pytest.raises(OTMBuildingError) as e_info:
             CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
 
         # AND the error references a parent issue
@@ -486,7 +486,7 @@ class TestCloudformationProcessor:
         mapping_file = [get_data(SAMPLE_VALID_MAPPING_FILE)]
 
         # WHEN creating OTM project from IaC file
-        # THEN raises OtmBuildingError
+        # THEN raises OTMBuildingError
         with pytest.raises(IacFileNotValidError):
             CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, cloudformation_file, mapping_file).process()
 
