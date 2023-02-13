@@ -70,6 +70,9 @@ terraform_security_groups_type1_and_type2_mixed = path + '/tf/dataflows/security
 
 # tfplan
 tfplan_elb = path + '/tfplan/elb-tfplan.json'
+tfplan_graph_elb = path + '/tfplan/elb-tfgraph.dot'
+tfplan_sgs = path + '/tfplan/sgs-tfplan.json'
+tfplan_graph_sgs = path + '/tfplan/sgs-tfgraph.dot'
 
 # mapping
 terraform_mapping_aws_component_without_parent = path + '/mapping/terraform_mapping_component_without_parent.yaml'
@@ -113,6 +116,8 @@ expected_mapping_skipped_component_without_parent = path + '/otm/expected_mappin
 expected_no_resources = path + '/otm/expected_no_resources.otm'
 expected_run_valid_mappings = path + '/otm/expected_run_valid_mappings.otm'
 tf_file_referenced_vars_expected_result = path + '/otm/tf-file-referenced-vars-expected-result.otm'
-expected_elb_tfplan = path + '/otm/expected_elb_tfplan.otm'
 terraform_minimal_content_otm = f'{path}/otm/terraform_minimal_content.otm'
 tf_components_with_trustzones_of_same_type_otm = f'{path}/otm/tf_components_with_trustzones_of_same_type.otm'
+tfplan_elb_expected = f'{path}/otm/expected_elb_tfplan.otm'
+tfplan_graph_elb_expected = f'{path}/otm/expected_tfplan_tfgraph_elb.otm'
+tfplan_graph_sgs_expected = f'{path}/otm/expected_tfplan_tfgraph_sgs.otm'

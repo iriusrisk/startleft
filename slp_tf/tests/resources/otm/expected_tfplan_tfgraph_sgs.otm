@@ -1,0 +1,235 @@
+{
+    "otmVersion": "0.1.0",
+    "project": {
+        "name": "name",
+        "id": "id"
+    },
+    "representations": [
+        {
+            "name": "Terraform",
+            "id": "Terraform",
+            "type": "code"
+        }
+    ],
+    "trustZones": [
+        {
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "name": "Public Cloud",
+            "risk": {
+                "trustRating": 10
+            }
+        }
+    ],
+    "components": [
+        {
+            "id": "aws_ecs_service.Service_0",
+            "name": "Service",
+            "type": "elastic-container-service",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet1"
+            },
+            "tags": [
+                "aws_ecs_service"
+            ]
+        },
+        {
+            "id": "aws_ecs_task_definition.ServiceTaskDefinition_0",
+            "name": "ServiceTaskDefinition",
+            "type": "docker-container",
+            "parent": {
+                "component": "aws_ecs_service.Service_0"
+            },
+            "tags": [
+                "aws_ecs_task_definition"
+            ]
+        },
+        {
+            "id": "aws_lb.ServiceLB_0",
+            "name": "ServiceLB",
+            "type": "load-balancer",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet1"
+            },
+            "tags": [
+                "aws_lb"
+            ]
+        },
+        {
+            "id": "aws_subnet.PrivateSubnet1",
+            "name": "PrivateSubnet1",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_vpc.CustomVPC"
+            },
+            "tags": [
+                "aws_subnet"
+            ]
+        },
+        {
+            "id": "aws_subnet.PrivateSubnet2",
+            "name": "PrivateSubnet2",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_vpc.CustomVPC"
+            },
+            "tags": [
+                "aws_subnet"
+            ]
+        },
+        {
+            "id": "aws_subnet.PublicSubnet1",
+            "name": "PublicSubnet1",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_vpc.CustomVPC"
+            },
+            "tags": [
+                "aws_subnet"
+            ]
+        },
+        {
+            "id": "aws_subnet.PublicSubnet2",
+            "name": "PublicSubnet2",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_vpc.CustomVPC"
+            },
+            "tags": [
+                "aws_subnet"
+            ]
+        },
+        {
+            "id": "aws_synthetics_canary.Canary_0",
+            "name": "Canary",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_subnet.PublicSubnet1"
+            },
+            "tags": [
+                "aws_synthetics_canary"
+            ]
+        },
+        {
+            "id": "aws_vpc.CustomVPC",
+            "name": "CustomVPC",
+            "type": "vpc",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "tags": [
+                "aws_vpc"
+            ]
+        },
+        {
+            "id": "aws_vpc_endpoint.VPCmonitoring_0",
+            "name": "VPCmonitoring",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet1"
+            },
+            "tags": [
+                "aws_vpc_endpoint"
+            ]
+        },
+        {
+            "id": "aws_vpc_endpoint.VPCssm_0",
+            "name": "VPCssm",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet1"
+            },
+            "tags": [
+                "aws_vpc_endpoint"
+            ]
+        },
+        {
+            "id": "aws_vpc_endpoint.VPCssmmessages_0",
+            "name": "VPCssmmessages",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet1"
+            },
+            "tags": [
+                "aws_vpc_endpoint"
+            ]
+        },
+        {
+            "id": "aws_ecs_service.Service_1",
+            "name": "Service",
+            "type": "elastic-container-service",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet2"
+            },
+            "tags": [
+                "aws_ecs_service"
+            ]
+        },
+        {
+            "id": "aws_lb.ServiceLB_1",
+            "name": "ServiceLB",
+            "type": "load-balancer",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet2"
+            },
+            "tags": [
+                "aws_lb"
+            ]
+        },
+        {
+            "id": "aws_synthetics_canary.Canary_1",
+            "name": "Canary",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_subnet.PublicSubnet2"
+            },
+            "tags": [
+                "aws_synthetics_canary"
+            ]
+        },
+        {
+            "id": "aws_vpc_endpoint.VPCmonitoring_1",
+            "name": "VPCmonitoring",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet2"
+            },
+            "tags": [
+                "aws_vpc_endpoint"
+            ]
+        },
+        {
+            "id": "aws_vpc_endpoint.VPCssm_1",
+            "name": "VPCssm",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet2"
+            },
+            "tags": [
+                "aws_vpc_endpoint"
+            ]
+        },
+        {
+            "id": "aws_vpc_endpoint.VPCssmmessages_1",
+            "name": "VPCssmmessages",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet2"
+            },
+            "tags": [
+                "aws_vpc_endpoint"
+            ]
+        },
+        {
+            "id": "aws_ecs_task_definition.ServiceTaskDefinition_1",
+            "name": "ServiceTaskDefinition",
+            "type": "docker-container",
+            "parent": {
+                "component": "aws_ecs_service.Service_1"
+            },
+            "tags": [
+                "aws_ecs_task_definition"
+            ]
+        }
+    ],
+    "dataflows": []
+}

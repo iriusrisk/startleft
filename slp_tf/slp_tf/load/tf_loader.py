@@ -36,7 +36,13 @@ class TerraformLoader(ProviderLoader):
         self.terraform: dict = {}
 
     def load(self):
-        self.__load_source_files()
+        try:
+            self.__load_source_files()
+        except LoadingIacFileError as ex:
+            raise ex
+        except Exception:
+            msg = "Source files could not be parsed"
+            raise LoadingIacFileError("IaC file is not valid", msg, msg)
 
     def get_terraform(self):
         return self.terraform

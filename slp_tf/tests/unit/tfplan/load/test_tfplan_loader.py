@@ -2,12 +2,13 @@ from copy import deepcopy
 from json import JSONDecodeError
 from unittest.mock import patch
 
-from pytest import mark, param, raises
+from networkx import DiGraph
+from pytest import raises
 
-from sl_util.sl_util.file_utils import get_data
+from slp_tf.slp_tf.tfplan.load.tfplan_loader import TfplanLoader
+from sl_util.sl_util.file_utils import get_byte_data
 from slp_tf.tests.resources import test_resource_paths
 from slp_base import LoadingIacFileError
-from slp_tf.slp_tf.load.tfplan_loader import is_tfplan, TfplanLoader
 
 INVALID_YAML = test_resource_paths.invalid_yaml
 TFPLAN_MINIMUM_STRUCTURE = {'planned_values': {'root_module': {}}}
@@ -47,7 +48,7 @@ def generate_resources(resource_count: int, module_child: bool = False) -> [{}]:
         }
 
         if module_child:
-            resource['index'] = 0
+            resource['index'] = '0'
 
         resources.append(resource)
 
@@ -81,7 +82,7 @@ def assert_common_properties(properties: {}):
 
 
 def assert_resource_id(resource: {}):
-    assert resource['resource_id'] == f'{resource["resource_type"]}.{resource["resource_name"]}'
+    assert resource['resource_id'] == resource['properties']['resource_address']
 
 
 def assert_retro_compatibility_fields(resource: {}):
@@ -94,53 +95,25 @@ def assert_retro_compatibility_fields(resource: {}):
 
 class TestTfplanLoader:
 
-    @mark.parametrize('yaml_side_effect,expected', [
-        param(TFPLAN_MINIMUM_STRUCTURE, True, id='TFPLAN'),
-        param(TF_FILE_YAML_EXCEPTION, False, id='TF')
-    ])
-    def test_is_tf_plan_single_file(self, yaml_side_effect, expected: bool):
-        # GIVEN a single valid terraform source file (TF or TFPLAN)
-        # WHEN TfplanLoader::is_tfplan is invoked
-        # THEN return true if the source is a TFPLAN or false otherwise
-        with patch('json.loads', side_effect=[yaml_side_effect]):
-            assert is_tfplan(sources=['MOCKED']) == expected
+    @patch('slp_tf.slp_tf.tfplan.load.tfplan_loader.load_tfgraph')
+    @patch('yaml.load')
+    def test_load_tfplan_and_graph(self, yaml_mock, from_agraph_mock):
+        # GIVEN a valid plain Terraform Plan file with no modules
+        yaml_mock.side_effect = [build_tfplan(resources=generate_resources(2))]
 
-    @patch('json.loads')
-    def test_is_tf_plan_multiple_tf_files(self, yaml_mock):
-        # GIVEN multiple valid TF source files
-        yaml_mock.side_effect = [TF_FILE_YAML_EXCEPTION, TF_FILE_YAML_EXCEPTION]
+        # AND a mocked graph load result
+        graph_label = 'Mocked Graph'
+        from_agraph_mock.side_effect = [DiGraph(label=graph_label)]
 
-        # WHEN TfplanLoader::is_tfplan is invoked
-        # THEN return false
-        assert not is_tfplan(sources=['MOCKED', 'MOCKED'])
+        # WHEN TfplanLoader::load is invoked
+        tfplan_loader = TfplanLoader(tfplan_source=b'MOCKED', tfgraph_source=b'MOCKED')
+        tfplan_loader.load()
 
-    @patch('json.loads')
-    def test_is_tf_plan_multiple_tfplan_files(self, yaml_mock):
-        # GIVEN multiple valid TFPLAN source files
-        yaml_mock.side_effect = [TFPLAN_MINIMUM_STRUCTURE, TFPLAN_MINIMUM_STRUCTURE]
+        # THEN the TFPLAN is loaded
+        assert tfplan_loader.get_terraform() is not None
 
-        # WHEN TfplanLoader::is_tfplan is invoked
-        # THEN a LoadingIacFileError exception is raised
-        with raises(LoadingIacFileError) as loading_error:
-            is_tfplan(sources=['MOCKED', 'MOCKED'])
-
-        # AND the message says that no multiple tfplan files can be processed at the same time
-        assert str(loading_error.value.title) == 'Multiple Terraform plan files'
-        assert str(loading_error.value.message) == 'Multiple Terraform plan files cannot be loaded at the same time.'
-
-    @patch('json.loads')
-    def test_is_tf_plan_multiple_files_mixed(self, yaml_mock):
-        # GIVEN multiple valid TFPLAN and TF source files
-        yaml_mock.side_effect = [TF_FILE_YAML_EXCEPTION, TFPLAN_MINIMUM_STRUCTURE]
-
-        # WHEN TfplanLoader::is_tfplan is invoked
-        # THEN a LoadingIacFileError exception is raised
-        with raises(LoadingIacFileError) as error:
-            is_tfplan(sources=['MOCKED', 'MOCKED'])
-
-        # AND the message says that TF and TFPLAN files cannot be loaded at the same time
-        assert str(error.value.title) == 'Mixed Terraform files'
-        assert str(error.value.message) == 'Terraform Config and Plan files cannot be loaded at the same time.'
+        # AND the TFGRAPH is also loaded
+        assert tfplan_loader.get_tfgraph().graph['label'] == graph_label
 
     @patch('yaml.load')
     def test_load_no_modules(self, yaml_mock):
@@ -148,7 +121,7 @@ class TestTfplanLoader:
         yaml_mock.side_effect = [build_tfplan(resources=generate_resources(2))]
 
         # WHEN TfplanLoader::load is invoked
-        tfplan_loader = TfplanLoader(source='MOCKED')
+        tfplan_loader = TfplanLoader(tfplan_source=b'MOCKED')
         tfplan_loader.load()
 
         # THEN TF contents are loaded in TfplanLoader.terraform
@@ -160,7 +133,7 @@ class TestTfplanLoader:
 
         for i, resource in enumerate(resources):
             i += 1
-            assert_resource_id(resource)
+            assert resource['resource_id'] == f'r{i}-addr'
             assert resource['resource_type'] == f'r{i}-type'
             assert resource['resource_name'] == f'r{i}-name'
 
@@ -176,7 +149,7 @@ class TestTfplanLoader:
             child_modules=generate_child_modules(module_count=2, resource_count=2))]
 
         # WHEN TfplanLoader::load is invoked
-        tfplan_loader = TfplanLoader(source='MOCKED')
+        tfplan_loader = TfplanLoader(tfplan_source=b'MOCKED')
         tfplan_loader.load()
 
         # THEN TF contents are loaded in TfplanLoader.terraform
@@ -192,9 +165,9 @@ class TestTfplanLoader:
             for child_index in range(1, 3):
                 resource = resources[resource_index]
 
-                assert_resource_id(resource)
+                assert resource['resource_id'] == f'r{child_index}-addr'
                 assert resource['resource_type'] == f'r{child_index}-type'
-                assert resource['resource_name'] == f'{module_address}.r{child_index}-name_0'
+                assert resource['resource_name'] == f'{module_address}.r{child_index}-name'
 
                 properties = resource['resource_properties']
                 assert properties['resource_address'] == f'r{child_index}-addr'
@@ -212,7 +185,7 @@ class TestTfplanLoader:
                 child_modules=generate_child_modules(module_count=1, resource_count=1)))]
 
         # WHEN TfplanLoader::load is invoked
-        tfplan_loader = TfplanLoader(source='MOCKED')
+        tfplan_loader = TfplanLoader(tfplan_source=b'MOCKED')
         tfplan_loader.load()
 
         # THEN TF contents are loaded in TfplanLoader.terraform
@@ -223,9 +196,9 @@ class TestTfplanLoader:
         # AND resource_id, resource_type, resource_name and resource_properties are right
         assert len(resources) == 1
 
-        assert_resource_id(resource)
+        assert resource['resource_id'] == 'r1-addr'
         assert resource['resource_type'] == 'r1-type'
-        assert resource['resource_name'] == 'cm1-addr.cm1-addr.r1-name_0'
+        assert resource['resource_name'] == 'cm1-addr.cm1-addr.r1-name'
 
         properties = resource['resource_properties']
         assert properties['resource_address'] == 'r1-addr'
@@ -240,7 +213,7 @@ class TestTfplanLoader:
             child_modules=generate_child_modules(module_count=1, resource_count=1))]
 
         # WHEN TfplanLoader::load is invoked
-        tfplan_loader = TfplanLoader(source='MOCKED')
+        tfplan_loader = TfplanLoader(tfplan_source=b'MOCKED')
         tfplan_loader.load()
 
         # THEN TF contents are loaded in TfplanLoader.terraform
@@ -251,7 +224,7 @@ class TestTfplanLoader:
         # AND resource_type, resource_name and resource_properties from top level are right
         resource = resources[0]
 
-        assert_resource_id(resource)
+        assert resource['resource_id'] == 'r1-addr'
         assert resource['resource_type'] == 'r1-type'
         assert resource['resource_name'] == 'r1-name'
 
@@ -262,9 +235,9 @@ class TestTfplanLoader:
 
         # AND resource_type, resource_name and resource_properties from child modules are right
         resource = resources[1]
-        assert_resource_id(resource)
+        assert resource['resource_id'] == 'r1-addr'
         assert resource['resource_type'] == 'r1-type'
-        assert resource['resource_name'] == 'cm1-addr.r1-name_0'
+        assert resource['resource_name'] == 'cm1-addr.r1-name'
 
         properties = resource['resource_properties']
         assert properties['resource_address'] == 'r1-addr'
@@ -286,20 +259,17 @@ class TestTfplanLoader:
         yaml_mock.side_effect = [tfplan]
 
         # WHEN TfplanLoader::load is invoked
-        tfplan_loader = TfplanLoader(source='MOCKED')
+        tfplan_loader = TfplanLoader(tfplan_source=b'MOCKED')
         tfplan_loader.load()
 
         # THEN TF contents are loaded in TfplanLoader.terraform
         assert tfplan_loader.terraform
         resources = tfplan_loader.terraform['resource']
-        assert len(resources) == 2
+        assert len(resources) == 1
 
-        # AND The name and resource ids are differentiated by the index suffix
-        assert resources[0]['resource_id'] == 'r1-type.cm1-addr.r1-name_0'
-        assert resources[0]['resource_name'] == 'cm1-addr.r1-name_0'
-
-        assert resources[1]['resource_id'] == 'r1-type.cm1-addr.r1-name_1'
-        assert resources[1]['resource_name'] == 'cm1-addr.r1-name_1'
+        # AND The duplicated resource is unified and the index is no present in name or id
+        assert resources[0]['resource_id'] == 'r1-addr'
+        assert resources[0]['resource_name'] == 'cm1-addr.r1-name'
 
     @patch('yaml.load')
     def test_load_no_resources(self, yaml_mock):
@@ -307,7 +277,7 @@ class TestTfplanLoader:
         yaml_mock.side_effect = [{'planned_values': {'root_module': {}}}]
 
         # WHEN TfplanLoader::load is invoked
-        tfplan_loader = TfplanLoader(source='MOCKED')
+        tfplan_loader = TfplanLoader(tfplan_source=b'MOCKED')
         tfplan_loader.load()
 
         # THEN TfplanLoader.terraform is an empty dictionary
@@ -319,7 +289,7 @@ class TestTfplanLoader:
         yaml_mock.side_effect = [{}]
 
         # WHEN TfplanLoader::load is invoked
-        tfplan_loader = TfplanLoader(source='MOCKED')
+        tfplan_loader = TfplanLoader(tfplan_source=b'MOCKED')
         tfplan_loader.load()
 
         # THEN TfplanLoader.terraform is an empty dictionary
@@ -327,7 +297,7 @@ class TestTfplanLoader:
 
     def test_load_invalid_wrong_json(self):
         # GIVEN an invalid Terraform source file (TF or TFPLAN)
-        sources = get_data(INVALID_YAML)
+        sources = get_byte_data(INVALID_YAML)
 
         # WHEN TfplanLoader::load is invoked
         # THEN a LoadingIacFileError is raised
