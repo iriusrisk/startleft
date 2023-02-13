@@ -2,6 +2,7 @@ from otm.otm.entity.component import Component
 from otm.otm.entity.trustzone import Trustzone
 from slp_base import MappingFileNotValidError
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
+from slp_visio.slp_visio.parse.mappers.diagram_mapper import DiagramMapper
 from slp_visio.slp_visio.parse.representation.representation_calculator import RepresentationCalculator
 from slp_visio.slp_visio.util.visio import normalize_label
 

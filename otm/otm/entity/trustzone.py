@@ -1,7 +1,7 @@
 from otm.otm.entity.parent_type import ParentType
 
 class Trustzone:
-    def __init__(self, trustzone_id, name, source=None, type=type, attributes=None, representations=None):
+    def __init__(self, trustzone_id, name, parent=None, parent_type:ParentType=None, source=None, type=type, attributes=None, representations=None):
         self.id = trustzone_id
         self.name = name
         self.type = type
