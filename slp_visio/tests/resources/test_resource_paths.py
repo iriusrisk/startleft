@@ -10,6 +10,8 @@ default_visio_mapping = f'{path}/mapping/aws-visio-mapping.yaml'
 custom_vpc_mapping = f'{path}/mapping/custom-vpc-mapping.yaml'
 empty_mapping = f'{path}/mapping/empty-mapping.yaml'
 invalid_no_dataflows = f'{path}/mapping/invalid-mapping-without-dataflows.yaml'
+master_unique_id_mapping_without_curly_braces = f'{path}/mapping/master-unique-id-without-curly-braces.yaml'
+master_unique_id_mapping_with_curly_braces = f'{path}/mapping/master-unique-id-with-curly-braces.yaml'
 
 # legacy mapping
 default_visio_mapping_legacy = path + '/mapping/legacy/aws-visio-mapping.yaml'
@@ -40,6 +42,7 @@ visio_empty = f'{path}/visio/empty-diagram.vsdx'
 visio_origin_target_trustzone = f'{path}/visio/origin-target-trustzone.vsdx'
 visio_origin_trustzone = f'{path}/visio/origin-trustzone.vsdx'
 visio_target_trustzone = f'{path}/visio/target-trustzone.vsdx'
+master_unique_id = f'{path}/visio/master_unique_id.vsdx'
 
 # otm
 expected_aws_shapes = f'{path}/otm/expected_aws_shapes.otm'
@@ -69,3 +72,4 @@ expected_visio_bidirectional_connectors = f'{path}/otm/bidirectional-connectors.
 expected_visio_modified_single_connectors = f'{path}/otm/modified-single-connectors.otm'
 expected_origin_target_trustzone = f'{path}/otm/expected_origin_target_trustzone.otm'
 expected_origin_trustzone = f'{path}/otm/expected_origin_trustzone.otm'
+expected_master_unique_id = f'{path}/otm/expected_master_unique_id.otm'
