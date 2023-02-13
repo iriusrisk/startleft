@@ -1,5 +1,6 @@
 from otm.otm.entity.trustzone import OtmTrustzone
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
+from slp_visio.slp_visio.parse.mappers.diagram_mapper import DiagramMapper
 from slp_visio.slp_visio.parse.representation.representation_calculator import RepresentationCalculator
 
 
@@ -9,7 +10,7 @@ def find_type(trustzone_mapping):
     return trustzone_mapping['type']
 
 
-class DiagramTrustzoneMapper:
+class DiagramTrustzoneMapper(DiagramMapper):
 
     def __init__(self,
                  components: [DiagramComponent],
@@ -26,7 +27,7 @@ class DiagramTrustzoneMapper:
         trustzones = []
 
         for c in self.components:
-            if c.name in self.trustzone_mappings and not c.parent:
+            if c.name in self.trustzone_mappings:
                 c.trustzone = True
                 trustzones.append(c)
 
@@ -44,6 +45,15 @@ class DiagramTrustzoneMapper:
         return OtmTrustzone(
             trustzone_id=trustzone.id,
             name=trustzone.name if trustzone.name else trustzone_mapping['type'],
+            parent=self.__calculate_parent_id(trustzone),
+            parent_type=self._calculate_parent_type(trustzone),
             type=find_type(trustzone_mapping),
             representations=[representation] if representation else None
         )
+
+    def __calculate_parent_id(self, component: DiagramComponent) -> str:
+        if component.parent:
+            return component.parent.id
+
+    def _get_trustzone_mappings(self):
+        return self.trustzone_mappings

@@ -10,7 +10,8 @@ from slp_visio.tests.resources.test_resource_paths import expected_aws_shapes, e
     expected_visio_extraneous_elements, \
     expected_visio_boundary_tz_and_default_tz, expected_visio_multiple_pages_diagram, \
     expected_visio_aws_with_tz_and_vpc, expected_visio_orphan_dataflows, expected_visio_bidirectional_connectors, \
-    expected_visio_modified_single_connectors
+    expected_visio_modified_single_connectors, visio_nested_tzs, expected_visio_nested_tzs, default_visio_mapping, \
+    visio_nested_tzs_inside_component, expected_visio_nested_tzs_inside_component
 
 
 class TestVisioProcessor:
@@ -185,5 +186,25 @@ class TestVisioProcessor:
             [get_data(test_resource_paths.default_visio_mapping)],
         ).process()
 
+        result, expected = validate_and_compare(otm, expected, None)
+        assert result == expected
+
+    @mark.parametrize('vsdx,expected', [
+        (visio_nested_tzs, expected_visio_nested_tzs),
+        (visio_nested_tzs_inside_component, expected_visio_nested_tzs_inside_component)
+    ])
+    def test_nested_trust_zones(self, vsdx, expected):
+        # Given the visio file
+        visio_file = open(vsdx, "r")
+
+        # When we process it
+        otm = VisioProcessor(
+            "project-id",
+            "project-name",
+            visio_file,
+            [get_data(default_visio_mapping)],
+        ).process()
+
+        # Then the otm should be the expected
         result, expected = validate_and_compare(otm, expected, None)
         assert result == expected

@@ -21,9 +21,9 @@ class OtmTrustZoneUnifier:
         self.delete_duplicated_tz()
 
     def change_childs(self, old_id, valid_id):
-        for component in self.otm.components:
-            if component.parent == old_id:
-                component.parent = valid_id
+        for child in self.otm.components + self.otm.trustzones:
+            if child.parent == old_id:
+                child.parent = valid_id
 
     def delete_duplicated_tz(self):
         deduplicated = dict()
