@@ -2,7 +2,6 @@ from setuptools import setup, find_packages
 
 from startleft.startleft._version.local_scheme import guess_startleft_semver_suffix
 from startleft.startleft._version.version_scheme import guess_startleft_semver
-
 setup(
     name='startleft',
     description='Parse Infrastructure as Code files to the Open Threat Model format and upload them to IriusRisk',
@@ -50,7 +49,7 @@ setup(
         ],
         "doc": [
             'mkdocs-material==9.0.5',
-            'pymdown-extensions==9.9.1'
+            'mkdocs-glightbox==0.3.1'
         ]
     },
     entry_points='''
