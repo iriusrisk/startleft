@@ -22,7 +22,7 @@
             "risk": {
                 "trustRating": 10
             },
-            "properties": {
+            "attributes": {
                 "default": true
             }
         }
