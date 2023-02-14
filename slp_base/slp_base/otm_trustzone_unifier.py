@@ -12,7 +12,7 @@ class OTMTrustZoneUnifier:
 
     def unify(self):
 
-        for tz  in self.otm.trustzones:
+        for tz in self.otm.trustzones:
             valid_id = tz.type
             old_id = tz.id
             self.change_childs(old_id, valid_id)
