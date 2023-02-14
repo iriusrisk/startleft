@@ -1,5 +1,5 @@
 from slp_base.slp_base import MappingLoader, MappingValidator
-from slp_base.slp_base import OtmProcessor
+from slp_base.slp_base import OTMProcessor
 from slp_base.slp_base import ProviderValidator
 from slp_base.slp_base.provider_loader import ProviderLoader
 from slp_base.slp_base.provider_parser import ProviderParser
@@ -11,9 +11,9 @@ from slp_cft.slp_cft.validate.cft_mapping_file_validator import \
 from slp_cft.slp_cft.validate.cft_validator import CloudformationValidator
 
 
-class CloudformationProcessor(OtmProcessor):
+class CloudformationProcessor(OTMProcessor):
     """
-    Cloudformation implementation of OtmProcessor
+    Cloudformation implementation of OTMProcessor
     """
 
     def __init__(self, project_id: str, project_name: str, sources: [bytes], mappings: [bytes]):

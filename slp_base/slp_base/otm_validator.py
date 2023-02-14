@@ -1,12 +1,12 @@
 import logging
 
-from slp_base.slp_base.errors import OtmResultError
+from slp_base.slp_base.errors import OTMResultError
 from slp_base.slp_base.schema import Schema
 
 logger = logging.getLogger(__name__)
 
 
-class OtmValidator:
+class OTMValidator:
     schema_filename = 'otm_schema.json'
 
     def __init__(self):
@@ -25,7 +25,7 @@ class OtmValidator:
         if not self.schema.valid:
             logger.error('OTM file schema is not valid')
             logger.error(f'--- Schema errors---\n{self.schema.errors}\n--- End of schema errors ---')
-            raise OtmResultError('OTM file does not comply with the schema', 'Schema error',
+            raise OTMResultError('OTM file does not comply with the schema', 'Schema error',
                                  str(self.schema.errors))
 
     def __check_otm_files(self, otm):
@@ -35,7 +35,7 @@ class OtmValidator:
         else:
             msg = 'OTM file has inconsistent IDs'
             logger.error(msg)
-            raise OtmResultError('Schema error', 'Parsing provided files result in an invalid OTM file', msg)
+            raise OTMResultError('Schema error', 'Parsing provided files result in an invalid OTM file', msg)
 
     def __check_otm_ids(self, otm):
         all_valid_ids = set()
