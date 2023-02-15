@@ -4,7 +4,7 @@ from sl_util.sl_util.file_utils import get_data
 from slp_tf import TerraformProcessor
 from slp_tf.tests.resources import test_resource_paths
 from slp_tf.tests.resources.test_resource_paths import terraform_iriusrisk_tf_aws_mapping, \
-    expected_aws_singleton_components
+    expected_aws_singleton_components, expected_aws_altsource_components
 from slp_tf.tests.utility import excluded_regex
 from slp_base.tests.util.otm import validate_and_compare
 
@@ -69,3 +69,18 @@ class TestTerraformMappingFunctions:
 
         assert otm.components[1].name == '0.0.0.0/0'
         assert otm.components[1].type == 'generic-client'
+
+    @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
+    def test_aws_altsource_components(self, mapping_file):
+        # GIVEN a valid TF file with some resources
+        terraform_file = get_data(test_resource_paths.terraform_aws_altsource_components)
+
+        # AND a valid TF mapping file
+        mapping_file = get_data(mapping_file)
+
+        # WHEN the TF file is processed
+        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
+
+        # THEN the resulting OTM match the expected one
+        result, expected = validate_and_compare(otm, expected_aws_altsource_components, excluded_regex)
+        assert result == expected
