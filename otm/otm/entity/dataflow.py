@@ -1,4 +1,4 @@
-class OtmDataflow:
+class Dataflow:
     def __init__(self, dataflow_id, name, source_node, destination_node, bidirectional: bool = None,
                  source=None, attributes=None, tags=None):
         self.id = dataflow_id
@@ -28,6 +28,6 @@ class OtmDataflow:
         return json
 
     def __repr__(self):
-        return f'OtmDataflow(id="{self.id}", name="{self.name}", source="{self.source_node}", ' \
+        return f'Dataflow(id="{self.id}", name="{self.name}", source="{self.source_node}", ' \
                f'destination="{self.destination_node}")'
 

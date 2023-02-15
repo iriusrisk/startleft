@@ -1,7 +1,7 @@
 from starlette.datastructures import UploadFile
 
 from sl_util.sl_util.file_utils import copy_to_disk
-from slp_base import OtmProcessor, ProviderValidator, ProviderLoader, MappingValidator, MappingLoader, ProviderParser, \
+from slp_base import OTMProcessor, ProviderValidator, ProviderLoader, MappingValidator, MappingLoader, ProviderParser, \
     DiagramType
 from slp_visio.slp_visio.load.visio_loader import VisioLoader
 from slp_visio.slp_visio.load.visio_mapping_loader import VisioMappingFileLoader
@@ -12,9 +12,9 @@ from slp_visio.slp_visio.validate.visio_mapping_file_validator import VisioMappi
 from slp_visio.slp_visio.validate.visio_validator import VisioValidator
 
 
-class VisioProcessor(OtmProcessor):
+class VisioProcessor(OTMProcessor):
     """
-    Visio implementation of OtmProcessor
+    Visio implementation of OTMProcessor
     """
 
     def __init__(self, project_id: str, project_name: str, source, mappings: [bytes], diag_type=None):

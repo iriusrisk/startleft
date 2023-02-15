@@ -1,14 +1,14 @@
 import logging
 
-from otm.otm.entity.otm import Otm
+from otm.otm.entity.otm import OTM
 
 logger = logging.getLogger(__name__)
 
 
-class OtmTrustZoneUnifier:
+class OTMTrustZoneUnifier:
 
-    def __init__(self, otm: Otm):
-        self.otm: Otm = otm
+    def __init__(self, otm: OTM):
+        self.otm: OTM = otm
 
     def unify(self):
 
