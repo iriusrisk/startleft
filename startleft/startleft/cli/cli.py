@@ -7,7 +7,7 @@ import click
 
 from _sl_build.modules import PROCESSORS
 from otm.otm.entity.otm import OTM
-from sl_util.sl_util.file_utils import get_data
+from sl_util.sl_util.file_utils import get_data, get_byte_data
 from slp_base import CommonError
 from slp_base import DiagramType, OTMGenerationError
 from slp_base import IacType
@@ -173,12 +173,12 @@ def validate(iac_mapping_file, diagram_mapping_file, otm_file):
     if iac_mapping_file:
         # TODO Cannot assume all diagram/iac mapping file will have the same validation type, so we need to request the type in the command
         logger.info("Validating IaC mapping files")
-        provider_resolver.get_mapping_validator(IacType.CLOUDFORMATION, [get_data(iac_mapping_file)]).validate()
+        provider_resolver.get_mapping_validator(IacType.CLOUDFORMATION, [get_byte_data(iac_mapping_file)]).validate()
 
     if diagram_mapping_file:
         # TODO Cannot assume all diagram/iac mapping file will have the same validation type, so we need to request the type in the command
         logger.info("Validating Diagram mapping files")
-        provider_resolver.get_mapping_validator(DiagramType.VISIO, [get_data(diagram_mapping_file)]).validate()
+        provider_resolver.get_mapping_validator(DiagramType.VISIO, [get_byte_data(diagram_mapping_file)]).validate()
 
     if otm_file:
         logger.info("Validating OTM file")
