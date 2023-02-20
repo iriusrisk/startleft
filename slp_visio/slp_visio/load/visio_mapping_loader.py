@@ -6,10 +6,12 @@ from otm.otm.entity.trustzone import Trustzone
 from sl_util.sl_util.str_utils import deterministic_uuid
 from slp_base import MappingLoader
 from slp_base.slp_base.mapping_file_loader import MappingFileLoader
+from slp_visio.slp_visio.util.visio import normalize_unique_id
 
 PUBLIC_CLOUD_NAME = 'Public Cloud'
 PUBLIC_CLOUD = Trustzone(trustzone_id=deterministic_uuid(PUBLIC_CLOUD_NAME), name=PUBLIC_CLOUD_NAME,
                          type='b61d6911-338d-46a8-9f39-8dcd24abfe91', attributes={"default": True})
+
 
 def load_mappings(mapping_file):
     if isinstance(mapping_file, dict):
@@ -57,7 +59,12 @@ class VisioMappingFileLoader(MappingLoader):
 
     def __load_component_mappings(self):
         component_mappings_list = jmespath.search("components", self.mappings)
-        return dict(zip([cp['label'] for cp in component_mappings_list], component_mappings_list))
+        return dict(zip([self.__get_component_identifier(cp) for cp in component_mappings_list],
+                        component_mappings_list))
+
+    def __get_component_identifier(self, component: dict) -> str:
+        identifier = component.get('id', component['label'])
+        return normalize_unique_id(identifier)
 
     def get_trustzone_mappings(self):
         return self.trustzone_mappings
