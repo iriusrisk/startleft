@@ -1,0 +1,14 @@
+trustzones:
+  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+    $default: true
+
+components:
+
+  - type:       rds
+    $source:    {$singleton: {$type: ["aws_db_instance"]}}
+
+  - type:       empty-component
+    $source:    {$catchall: {$root: "resource|squash_terraform(@)"}}
+
+dataflows: []
