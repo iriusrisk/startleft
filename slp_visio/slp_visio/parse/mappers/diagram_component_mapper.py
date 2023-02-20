@@ -31,7 +31,8 @@ class DiagramComponentMapper(DiagramMapper):
     def __filter_component(self, component):
         map_by_name = normalize_label(component.name) in self.normalized_component_mappings
         map_by_type = normalize_label(component.type) in self.normalized_component_mappings
-        return map_by_name or map_by_type
+        map_by_unique_id = component.unique_id in self.normalized_component_mappings
+        return map_by_name or map_by_type or map_by_unique_id
 
     def __map_to_otm(self, component_candidates: [DiagramComponent]) -> [Component]:
         return list(map(self.__build_otm_component, component_candidates))
@@ -42,14 +43,19 @@ class DiagramComponentMapper(DiagramMapper):
         return Component(
             component_id=diagram_component.id,
             name=diagram_component.name,
-            component_type=self.__calculate_otm_type(diagram_component.name, diagram_component.type),
+            component_type=self.__calculate_otm_type(diagram_component.name,
+                                                     diagram_component.type,
+                                                     diagram_component.unique_id),
             parent=self.__calculate_parent_id(diagram_component),
             parent_type=self._calculate_parent_type(diagram_component),
             representations=[representation] if representation else None
         )
 
-    def __calculate_otm_type(self, component_name: str, component_type: str) -> str:
-        otm_type = self.__find_mapped_component_by_label(component_name)
+    def __calculate_otm_type(self, component_name: str, component_type: str, component_unique_id: str) -> str:
+        otm_type = self.__find_mapped_component_by_label(component_unique_id)
+
+        if not otm_type:
+            otm_type = self.__find_mapped_component_by_label(component_name)
 
         if not otm_type:
             otm_type = self.__find_mapped_component_by_label(component_type)

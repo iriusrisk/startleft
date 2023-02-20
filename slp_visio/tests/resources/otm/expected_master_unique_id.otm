@@ -1,0 +1,49 @@
+{
+    "otmVersion": "0.1.0",
+    "project": {
+        "name": "project-name",
+        "id": "project-id"
+    },
+    "representations": [
+        {
+            "name": "project-id Diagram Representation",
+            "id": "project-id-diagram",
+            "type": "diagram",
+            "size": {
+                "width": 738,
+                "height": 738
+            }
+        }
+    ],
+    "trustZones": [
+        {
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "name": "Public Cloud",
+            "risk": {
+                "trustRating": 10
+            },
+            "attributes": {
+                "default": true
+            }
+        }
+    ],
+    "components": [
+        {
+            "id": "1",
+            "name": "Amazon Redshift from AWS Analytics",
+            "type": "empty-component",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            }
+        },
+        {
+            "id": "13",
+            "name": "Amazon Redshift from AWS Database",
+            "type": "redshift",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            }
+        }
+    ],
+    "dataflows": []
+}

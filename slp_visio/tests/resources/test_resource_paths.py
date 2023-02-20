@@ -12,6 +12,8 @@ empty_mapping = f'{path}/mapping/empty-mapping.yaml'
 invalid_no_dataflows = f'{path}/mapping/invalid-mapping-without-dataflows.yaml'
 nested_tzs_mapping = f'{path}/mapping/nested-tzs.yaml'
 nested_tzs_inside_component_mapping = f'{path}/mapping/nested-tz-inside-component.yaml'
+master_unique_id_mapping_without_curly_braces = f'{path}/mapping/master-unique-id-without-curly-braces.yaml'
+master_unique_id_mapping_with_curly_braces = f'{path}/mapping/master-unique-id-with-curly-braces.yaml'
 
 # legacy mapping
 default_visio_mapping_legacy = path + '/mapping/legacy/aws-visio-mapping.yaml'
@@ -43,6 +45,7 @@ visio_empty = f'{path}/visio/empty-diagram.vsdx'
 visio_origin_target_trustzone = f'{path}/visio/origin-target-trustzone.vsdx'
 visio_origin_trustzone = f'{path}/visio/origin-trustzone.vsdx'
 visio_target_trustzone = f'{path}/visio/target-trustzone.vsdx'
+master_unique_id = f'{path}/visio/master_unique_id.vsdx'
 
 # otm
 expected_aws_shapes = f'{path}/otm/expected_aws_shapes.otm'
@@ -72,5 +75,6 @@ expected_visio_bidirectional_connectors = f'{path}/otm/bidirectional-connectors.
 expected_visio_modified_single_connectors = f'{path}/otm/modified-single-connectors.otm'
 expected_origin_target_trustzone = f'{path}/otm/expected_origin_target_trustzone.otm'
 expected_origin_trustzone = f'{path}/otm/expected_origin_trustzone.otm'
+expected_master_unique_id = f'{path}/otm/expected_master_unique_id.otm'
 expected_visio_nested_tzs = f'{path}/otm/expected_visio_nested_tzs.otm'
 expected_visio_nested_tzs_inside_component = f'{path}/otm/expected_visio_nested_tzs_inside_component.otm'

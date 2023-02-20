@@ -208,3 +208,13 @@ class TestVisioProcessor:
         # Then the otm should be the expected
         result, expected = validate_and_compare(otm, expected, None)
         assert result == expected
+
+    @mark.parametrize('mapping', [
+        test_resource_paths.master_unique_id_mapping_without_curly_braces,
+        test_resource_paths.master_unique_id_mapping_with_curly_braces,
+    ])
+    def test_master_unique_id(self, mapping):
+        visio_file = open(test_resource_paths.master_unique_id, "r")
+        otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
+        result, expected = validate_and_compare_otm(otm.json(), test_resource_paths.expected_master_unique_id, None)
+        assert result == expected
