@@ -30,6 +30,8 @@ cloudformation_unknown_resource = path + '/cloudformation/cloudformation_unknown
 cloudformation_all_functions = path + '/cloudformation/cloudformation_all_functions.json'
 cloudformation_multiple_files_networks = path + '/cloudformation/cloudformation_multiple_files_networks.json'
 cloudformation_multiple_files_resources = path + '/cloudformation/cloudformation_multiple_files_resources.json'
+cloudformation_ref_full_syntax = path + '/cloudformation/cloudformation_ref_full_syntax.yaml'
+cloudformation_ref_short_syntax = path + '/cloudformation/cloudformation_ref_short_syntax.yaml'
 # mapping
 default_cloudformation_mapping = path + '/cloudformation/cloudformation_mapping.yaml'
 cloudformation_mapping_component_without_parent = path + '/cloudformation/cloudformation_mapping_component_without_parent.yaml'

@@ -6,17 +6,17 @@ import sys
 import click
 
 from _sl_build.modules import PROCESSORS
-from startleft.startleft._version.version_loader import load_startleft_version
-from otm.otm.entity.otm import Otm
+from otm.otm.entity.otm import OTM
 from sl_util.sl_util.file_utils import get_data, get_byte_data
 from slp_base import CommonError
-from slp_base import DiagramType, OtmGenerationError, EtmType
+from slp_base import DiagramType, OTMGenerationError, EtmType
 from slp_base import IacType
-from slp_base.slp_base.otm_file_loader import OtmFileLoader
-from slp_base.slp_base.otm_validator import OtmValidator
+from slp_base.slp_base.otm_file_loader import OTMFileLoader
+from slp_base.slp_base.otm_validator import OTMValidator
 from slp_base.slp_base.provider_resolver import ProviderResolver
 from slp_cft.slp_cft.cft_searcher import CloudformationSearcher
 from slp_tf.slp_tf.tf_searcher import TerraformSearcher
+from startleft.startleft._version.version_loader import load_startleft_version
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.cli.clioptions.exclusion_option import Exclusion
 from startleft.startleft.log import get_log_level, configure_logging
@@ -27,14 +27,14 @@ provider_resolver = ProviderResolver(PROCESSORS)
 version = load_startleft_version()
 
 
-def get_otm_as_file(otm: Otm, out_file: str):
+def get_otm_as_file(otm: OTM, out_file: str):
     logger.info(f"Writing OTM file to '{out_file}'")
     try:
         with open(out_file, "w") as f:
             json.dump(otm.json(), f, indent=2)
     except Exception as e:
         logger.error(f"Unable to create the threat model: {e}")
-        raise OtmGenerationError("Unable to create the OTM", e.__class__.__name__, str(e.__cause__))
+        raise OTMGenerationError("Unable to create the OTM", e.__class__.__name__, str(e.__cause__))
 
 
 def validate_server(ctx, param, value):
@@ -215,7 +215,7 @@ def validate(iac_mapping_file, diagram_mapping_file, etm_mapping_file, otm_file)
 
     if otm_file:
         logger.info("Validating OTM file")
-        OtmValidator().validate(OtmFileLoader().load(otm_file))
+        OTMValidator().validate(OTMFileLoader().load(otm_file))
 
 
 @cli.command()

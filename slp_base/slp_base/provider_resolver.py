@@ -1,6 +1,6 @@
 from enum import Enum
 
-from slp_base import OtmProcessor, MappingValidator, ProviderNotFoundError
+from slp_base import OTMProcessor, MappingValidator, LoadingSourceFileError, ProviderNotFoundError
 
 
 def _find_provider_classes(processor_name):
@@ -9,7 +9,7 @@ def _find_provider_classes(processor_name):
     processor_classes = {}
     for attr in dir(processor_module):
         cls = getattr(processor_module, attr)
-        if isinstance(cls, type) and issubclass(cls, OtmProcessor):
+        if isinstance(cls, type) and issubclass(cls, OTMProcessor):
             processor_classes['processor'] = cls
         elif isinstance(cls, type) and issubclass(cls, MappingValidator):
             processor_classes['mapping_validator'] = cls
@@ -23,7 +23,7 @@ class ProviderResolver:
         self.provider_classes = {processor['provider_type']: _find_provider_classes(processor['name'])
                                  for processor in processor_implementations if 'provider_type' in processor}
 
-    def get_processor(self, source_type, *args, **kwargs) -> OtmProcessor:
+    def get_processor(self, source_type, *args, **kwargs) -> OTMProcessor:
         source_type = self.__check_and_normalize_source_type(source_type)
         return self.provider_classes[source_type]['processor'](*args, **kwargs)
 

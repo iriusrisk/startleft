@@ -45,9 +45,9 @@ The management of errors on StartLeft is handled on four separated steps:
 **Step 4:**
 
 * **OTM generation related errors:**
-	* `OtmBuildingError`. We are unable to generate the OTM with the given files.
-	* `OtmResultError`. We are able to generate the OTM but the OTM is invalid (e.g: inconsistent IDs).
-	* `OtmGenerationError`. There was any unexpected error.
+	* `OTMBuildingError`. We are unable to generate the OTM with the given files.
+	* `OTMResultError`. We are able to generate the OTM but the OTM is invalid (e.g: inconsistent IDs).
+	* `OTMGenerationError`. There was any unexpected error.
 
 ## HTTP statuses and exit codes
 
@@ -63,9 +63,9 @@ The management of errors on StartLeft is handled on four separated steps:
 | `SourceFileNotValidError`  |     400     |            52 |
 | `LoadingMappingFileError`  |     400     |            21 |
 | `MappingFileNotValidError` |     400     |            22 |
-| `OtmBuildingError`         |     400     |            41 |
-| `OtmResultError`           |     400     |            42 |
-| `OtmGenerationError`       |     500     |            45 |
+| `OTMBuildingError`         |     400     |            41 |
+| `OTMResultError`           |     400     |            42 |
+| `OTMGenerationError`       |     500     |            45 |
 | `ProviderNotFoundError`    |     400     |            60 |
 
 
@@ -75,14 +75,18 @@ The management of errors on StartLeft is handled on four separated steps:
 The response body on any of this cases will be a JSON with this structure:
 ```json
 {
-  "status": "the numeric http status code",
-  "error_type": "<The error type>",
-  "title": "<The error on human readable form>",
-  "detail": "<The detail of the error>",
-  "errors": [
-    {
-      "errorMessage": "<The reason of the error>"
-    }
-  ]
+    "status": "the numeric http status code",
+    "error_type": "<The error type>",
+    "title": "<The error on human readable form>",
+    "detail": "<The detail of the error>",
+    "errors": [
+        {
+            "errorMessage": "<The reason of the error>"
+        }
+    ]
 }
 ```
+
+When calling StartLeft through IriusRisk, the most important field here is error_type because it is the code that the 
+IriusRisk core is going to read to match the error type, manage the StartLeft error response and send its own response 
+on the core API.

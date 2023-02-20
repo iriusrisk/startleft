@@ -1,11 +1,11 @@
-from .errors import DiagramFileNotValidError, LoadingIacFileError, LoadingMappingFileError, OtmBuildingError, \
-    IacFileNotValidError, MappingFileNotValidError, OtmResultError, CommonError, LoadingSourceFileError,\
-    ProviderNotFoundError, OtmGenerationError, LoadingDiagramFileError
+from .errors import DiagramFileNotValidError, LoadingIacFileError, LoadingMappingFileError, OTMBuildingError, \
+    IacFileNotValidError, MappingFileNotValidError, OTMResultError, CommonError, LoadingSourceFileError, \
+    ProviderNotFoundError, OTMGenerationError, LoadingDiagramFileError
 from .mapping import MappingFileValidator
 from .mapping import MappingLoader
 from .mapping import MappingValidator
 from .mapping import MultipleMappingFileValidator
-from .otm_processor import OtmProcessor
+from .otm_processor import OTMProcessor
 from .provider_loader import ProviderLoader
 from .provider_parser import ProviderParser
 from .provider_type import IacType, DiagramType, EtmType
