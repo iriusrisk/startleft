@@ -1,16 +1,16 @@
 import logging
 
-from otm.otm.entity.otm import Otm
+from otm.otm.entity.otm import OTM
 
 logger = logging.getLogger(__name__)
 
 PERMIT_ANY_REPRESENTATIONS_VOID = False
 
 
-class OtmRepresentationsPruner:
+class OTMRepresentationsPruner:
 
-    def __init__(self, otm: Otm):
-        self.otm: Otm = otm
+    def __init__(self, otm: OTM):
+        self.otm: OTM = otm
 
     def prune(self):
         if PERMIT_ANY_REPRESENTATIONS_VOID:

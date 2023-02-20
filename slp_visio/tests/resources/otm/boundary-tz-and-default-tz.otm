@@ -1,0 +1,63 @@
+{
+  "components": [
+    {
+      "id": "12",
+      "name": "Custom machine",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "type": "ec2"
+    },
+    {
+      "id": "30",
+      "name": "Private Database",
+      "parent": {
+        "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+      },
+      "type": "rds"
+    }
+  ],
+  "dataflows": [
+    {
+      "destination": "30",
+      "id": "34",
+      "name": "89ab351c-6ae7-4afb-ad90-0eb045fd801a",
+      "source": "12"
+    }
+  ],
+  "otmVersion": "0.1.0",
+  "project": {
+    "id": "project-id",
+    "name": "project-name"
+  },
+  "representations": [
+    {
+      "id": "project-id-diagram",
+      "name": "project-id Diagram Representation",
+      "size": {
+        "height": 738,
+        "width": 1433
+      },
+      "type": "diagram"
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+      "name": "Private Secured Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    },
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "attributes": {
+        "default": true
+      },
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ]
+}

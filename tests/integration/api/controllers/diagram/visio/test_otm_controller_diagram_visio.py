@@ -4,16 +4,16 @@ from unittest.mock import patch
 import responses
 from fastapi.testclient import TestClient
 from pytest import mark
-from slp_base.tests.util.otm import validate_and_diff
 
 from slp_base.slp_base.errors import DiagramFileNotValidError, MappingFileNotValidError, LoadingMappingFileError, \
-    OtmResultError, OtmBuildingError, LoadingDiagramFileError
-from slp_visio.tests.unit.util.test_uuid import is_valid_uuid
+    OTMResultError, OTMBuildingError, LoadingDiagramFileError
+from slp_base.tests.util.otm import validate_and_compare_otm, validate_and_compare
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.diagram import diag_create_otm_controller
 from tests.resources import test_resource_paths
 from tests.resources.test_resource_paths import visio_aws_with_tz_and_vpc, default_visio_mapping, \
-    custom_vpc_mapping, visio_create_otm_ok_only_default_mapping, visio_create_otm_ok_both_mapping_files
+    default_visio_mapping_legacy, custom_vpc_mapping, custom_vpc_mapping_legacy, \
+    visio_create_otm_ok_only_default_mapping, visio_create_otm_ok_both_mapping_files
 
 IRIUSRISK_URL = ''
 
@@ -31,16 +31,17 @@ def get_url():
 octet_stream = 'application/octet-stream'
 
 
-class TestOtmControllerDiagramVisio:
+class TestOTMControllerDiagramVisio:
 
+    @mark.parametrize('mapping', [default_visio_mapping, default_visio_mapping_legacy])
     @responses.activate
-    def test_create_otm_ok_only_default_mapping(self):
+    def test_create_otm_ok_only_default_mapping(self, mapping):
         # Given a project_id
         project_id: str = 'project_A_id'
 
         # When I do post on diagram endpoint
         files = {'diag_file': open(test_resource_paths.visio_aws_with_tz_and_vpc, 'rb'),
-                 'default_mapping_file': open(test_resource_paths.default_visio_mapping, 'rb')}
+                 'default_mapping_file': open(mapping, 'rb')}
         body = {'diag_type': 'VISIO', 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
@@ -49,17 +50,24 @@ class TestOtmControllerDiagramVisio:
         assert response.headers.get('content-type') == 'application/json'
         otm = json.loads(response.text)
 
-        assert validate_and_diff(otm, visio_create_otm_ok_only_default_mapping, VALIDATION_EXCLUDED_REGEX) == {}
+        result, expected = validate_and_compare_otm(otm, visio_create_otm_ok_only_default_mapping, VALIDATION_EXCLUDED_REGEX)
+        assert result == expected
 
+    @mark.parametrize('default_mapping,custom_mapping', [
+        (default_visio_mapping, custom_vpc_mapping),
+        (default_visio_mapping_legacy, custom_vpc_mapping_legacy),
+        (default_visio_mapping, custom_vpc_mapping_legacy),
+        (default_visio_mapping_legacy, custom_vpc_mapping),
+    ])
     @responses.activate
-    def test_create_otm_ok_both_mapping_files(self):
+    def test_create_otm_ok_both_mapping_files(self, default_mapping, custom_mapping):
         # Given a project_id
         project_id: str = 'project_A_id'
 
         # When I do post on diagram endpoint
         files = {'diag_file': open(visio_aws_with_tz_and_vpc, 'rb'),
-                 'default_mapping_file': open(default_visio_mapping, 'rb'),
-                 'custom_mapping_file': open(custom_vpc_mapping, 'rb')}
+                 'default_mapping_file': open(default_mapping, 'rb'),
+                 'custom_mapping_file': open(custom_mapping, 'rb')}
         body = {'diag_type': 'VISIO', 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
@@ -68,7 +76,8 @@ class TestOtmControllerDiagramVisio:
         assert response.headers.get('content-type') == 'application/json'
         otm = json.loads(response.text)
 
-        assert validate_and_diff(otm, visio_create_otm_ok_both_mapping_files, VALIDATION_EXCLUDED_REGEX) == {}
+        result, expected = validate_and_compare(otm, visio_create_otm_ok_both_mapping_files, VALIDATION_EXCLUDED_REGEX)
+        assert result == expected
 
     @responses.activate
     @patch('slp_visio.slp_visio.validate.visio_validator.VisioValidator.validate')
@@ -193,7 +202,7 @@ class TestOtmControllerDiagramVisio:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @responses.activate
-    @patch('slp_base.slp_base.otm_validator.OtmValidator.validate')
+    @patch('slp_base.slp_base.otm_validator.OTMValidator.validate')
     def test_response_on_otm_result_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -203,7 +212,7 @@ class TestOtmControllerDiagramVisio:
         mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
-        error = OtmResultError('OTM file does not comply with the schema', 'Schema error', 'mocked error msg')
+        error = OTMResultError('OTM file does not comply with the schema', 'Schema error', 'mocked error msg')
         mock_load_source_data.side_effect = error
 
         # When I do post on diagram endpoint
@@ -216,7 +225,7 @@ class TestOtmControllerDiagramVisio:
         assert response.headers.get('content-type') == 'application/json'
         body_response = json.loads(response.text)
         assert body_response['status'] == '400'
-        assert body_response['error_type'] == 'OtmResultError'
+        assert body_response['error_type'] == 'OTMResultError'
         assert body_response['title'] == 'OTM file does not comply with the schema'
         assert body_response['detail'] == 'Schema error'
         assert len(body_response['errors']) == 1
@@ -233,7 +242,7 @@ class TestOtmControllerDiagramVisio:
         mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
-        error = OtmBuildingError('OTM building error', 'Schema error', 'mocked error msg')
+        error = OTMBuildingError('OTM building error', 'Schema error', 'mocked error msg')
         mock_load_source_data.side_effect = error
 
         # When I do post on diagram endpoint
@@ -246,7 +255,7 @@ class TestOtmControllerDiagramVisio:
         assert response.headers.get('content-type') == 'application/json'
         body_response = json.loads(response.text)
         assert body_response['status'] == '400'
-        assert body_response['error_type'] == 'OtmBuildingError'
+        assert body_response['error_type'] == 'OTMBuildingError'
         assert body_response['title'] == 'OTM building error'
         assert body_response['detail'] == 'Schema error'
         assert len(body_response['errors']) == 1

@@ -2,8 +2,8 @@ The greatest challenge when mapping Microsoft Visio files is that it is a comple
 place whatever they want. For that reason, the `slp_visio` works with some premises in order to build an OTM file
 with only the necessary information:
 
-* There are different ways of parsing TrustZones, but no TrustZone will be generated if it does not appear in any
-  of the mapping files.
+* There are different ways of parsing TrustZones, but only the default TrustZone will be generated if no Trustzone 
+appears in any of the mapping files.
 * The only shapes that will be parsed into the OTM components are the ones whose name or type matches some label in the 
   mapping file. The rest of them will be ignored.
 * There is no need to create mappings for the DataFlows, they will be generated from those Visio connectors that 
@@ -54,32 +54,36 @@ dataflows: []
 Each of these arrays contains the information for mapping shapes into TrustZones, Components or Dataflows, respectively. 
 Also note that all three are mandatory and have to be included in each mapping file, even if they only contain an empty array.
 
-### Mapping TrustZones
+### Mapping TrustZones 
 The [OTM standard](../../Open-Threat-Model-(OTM).md) defines that every component in the threat model must have a 
 parent, so you must make sure that the mapping file contains a mapping entry for all the TrustZones present in the 
 diagram as well as a default one so, if no parent can be calculated for a component, it can fall into this default 
-TrustZone. 
+TrustZone.
 ```yaml
 trustzones:
-  - label:  Public Cloud
-    type:   My Public Cloud
-    id:     b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - label:    My Public Cloud
+    type:     b61d6911-338d-46a8-9f39-8dcd24abfe91
 ```
+When a shape is found in the Visio file whose **name** matches the mapping's **label**, then a TrustZone is created
+with these OTM Trustzone fields:
+  - **id** is the original id in the Visio file 
+  - **name** is the original name in the Visio file 
+  - **type** is the type in the mapping file 
 
-When a shape is found in the Visio file whose **name** matches the mapping's **label**, then a TrustZone is created 
-in the OTM whose **name** is the mapping's **type** and its **id** is the mapping's **id**. 
 
 For example, for this TrustZone in the Visio file and the previous mapping:
 
 ![trustzone-mapping.png](img/trustzone-mapping.png)
+
 
 The resultant OTM would contain a TrustZone like this:
 ```json
 {
   "trustZones": [
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "id": "47",
       "name": "My Public Cloud",
+      "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "risk": {
         "trustRating": 10
       }
@@ -88,16 +92,109 @@ The resultant OTM would contain a TrustZone like this:
 }
 ```
 
-These are the basics for the TrustZone mapping behavior, but TrustZones may be defined in different and more complex 
-ways that are explained in deep in the 
+
+
+
+#### Default Trustzone
+The components in the Visio file that there aren't inside a trust zone will be assigned to the default trust zone.
+We can define the default trust zone in the mapping file by this way:
+```yaml
+trustzones:
+  - label:    My Public Cloud
+    type:     b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - label:    My Private Secured
+    type:     2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+
+  - label:    Internet
+    type:     f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    default:  true
+```
+Let's see an example
+
+![img/default-trustzone.png](img/default-trustzone.png)
+
+In this example "My EC2" will have "My Public Cloud" as parent, "My DynamoDB" will have "My Private Secured" as parent,
+and the "Android Client" will have the "Internet" parent defined in the mapping file as default trust zone.
+So the OTM would be like this:
+
+```yaml
+{
+    "trustZones": [
+        {
+            "id": "47",
+            "name": "My Public Cloud",
+            "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "risk": {
+                "trustRating": 10
+            }
+        },
+        {
+            "id": "48",
+            "name": "My Private Secured",
+            "type": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+            "risk": {
+                "trustRating": 10
+            }
+        },
+        {
+            "id": "39388080-e23b-4e16-976a-27f2f086dc0e",
+            "name": "Internet",
+            "type": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
+            "risk": {
+                "trustRating": 10
+            },
+            "properties": {
+                "default": true
+            }
+        }
+    ],
+    "components": [
+        {
+            "id": "54",
+            "name": "My EC2",
+            "type": "ec2",
+            "parent": {
+                "trustZone": "47"
+            }
+        },
+        {
+            "id": "59",
+            "name": "My DynamoDB",
+            "type": "dynamodb",
+            "parent": {
+                "trustZone": "48"
+            }
+        },
+        {
+            "id": "66",
+            "name": "Android Client",
+            "type": "android-client",
+            "parent": {
+                "trustZone": "39388080-e23b-4e16-976a-27f2f086dc0e"
+            }
+        }
+    ],
+    "dataflows": []
+}
+```
+Note that the Internet id is autogenerated unlike the other trust zones present in the Visio file, which id comes from
+the id in the Visio file
+
+
+>Due to a backward compatibility StartLeft accepts as well the legacy mapping file format.
+>Please read [Legacy-Mapping-File-Format](legacy/Legacy-Mapping-File-Format.md)
+
+
+#### Default TrustZone not defined
+Since it must necessarily have one trust zone, if any trust zone is defined as default in the mapping file
+<u>the _Public Cloud_ will always be the default one</u>.
+
+---
+
+These are the basics for the TrustZone mapping behavior, but TrustZones may be defined in different and more complex
+ways that are explained in deep in the
 [TrustZones mapping's page](Visio-TrustZones-Mapping.md).
-
-#### Default TrustZone
-Sometimes it may not be possible to calculate a parent for a component. Since it must necessarily have one, we 
-need to define a default TrustZone to be used in these cases. At this point, there is no way to configure which is 
-the default TrustZone and <u>the one whose label is _Public Cloud_ will always be selected as the default one</u>. In the 
-near future, a new attribute will be added to the TrustZone mappings so this could be configurable.  
-
 ### Mapping Components
 Components mappings' structure is similar to the TrustZones. For example, we can have a mapping like this:
 ```yaml
@@ -159,7 +256,7 @@ The resulting OTM would be:
 }
 ```
 
-Finally, it is important to notice that <u>mapping by name has priority over mapping by type</u>. So if you 
+It is important to notice that <u>mapping by name has priority over mapping by type</u>. So if you 
 include mappings in both mapping files for the _My EC2_ component like this:
 ```yaml
 // In the default mapping file
@@ -186,6 +283,67 @@ It would result in a OTM like this:
   }
 }
 ```
+
+Finally, as seen in the following picture, there are certain stencils that, despite representing different components, 
+share the same type. In this example, one is Amazon Redshift for AWS Analytics, and the other one for AWS Databases.
+
+![img/redshift-same-name.png](img/redshift-same-name.png)
+
+In case both stencils appear in the diagram, an internal identifier called **UniqueID** 
+can optionally be used to differentiate them.
+
+This way, they can be mapped to different components in the following manner:
+```yaml
+components:
+  - label:  Amazon Redshift
+    id:     0508F4C7-001F-0000-8E40-00608CF305B2
+    type:   redshift
+
+  - label:  Amazon Redshift
+    id:     0509DF75-001B-0000-8E40-00608CF305B2
+    type:   empty-component
+```
+
+!!! note
+        Note that mapping by UniqueID has priority over both, mapping by name and mapping by type, but the label must 
+        still be correct.
+
+The resulting OTM will be as follows:
+```json
+{
+  "components": [
+    {
+      "id": "1",
+      "name": "Amazon Redshift",
+      "type": "empty-component",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "13",
+      "name": "Amazon Redshift",
+      "type": "redshift",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    }
+  ]
+}
+```
+
+??? abstract "How to find the UniqueID of a stencil"
+    Being **UniqueID** an internal property, finding the value for a specific component is not straightforward.
+    
+    The easiest way is creating a diagram with only the desired stencil, and extracting the contents of the .vsdx file
+    with any file archiver that supports the ZIP format.
+    
+    From the root of the extracted files and folders, it is possible to navigate to the visio/masters subfolders and 
+    open the masters.xml file, where the name of the stencil and its UniqueID appears.
+
+    ![img/example-unique-id.png](img/example-unique-id.png)
+
+    More info in the <a href="https://learn.microsoft.com/en-us/openspecs/sharepoint_protocols/ms-vsdx/e58f5f25-76d8-4f65-ae24-d286b10168d7" target="_blank">official Microsoft documentation</a>.
 
 ### Mapping DataFlows
 Despite the fact that a `dataflows` tag is already defined in the mapping file structure, and it is required by the schema,

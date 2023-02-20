@@ -31,8 +31,9 @@ those components don't define their parent.
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id:   public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
     components:
       - type:        empty-component
@@ -56,16 +57,17 @@ those components don't define their parent.
         id: Terraform
         type: code
     trustZones:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id: public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_internet_gateway-internetegateway
+      - id: public-cloud-01.aws_internet_gateway-internetegateway
         name: InterneteGateway
         type: empty-component
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - aws_internet_gateway
     dataflows: []
@@ -83,8 +85,9 @@ by the Terraform-DSL mapping functions to go through all the Terraform Resource 
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id:   public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
     components:
       - type:        empty-component
@@ -108,16 +111,17 @@ by the Terraform-DSL mapping functions to go through all the Terraform Resource 
         id: Terraform
         type: code
     trustZones:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id: public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_internet_gateway-internetegateway
+      - id: public-cloud-01.aws_internet_gateway-internetegateway
         name: InterneteGateway
         type: empty-component
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - aws_internet_gateway
     dataflows: []
@@ -177,8 +181,9 @@ This function can be used combined with `$name` and `$props` to create a more co
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id:   public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
     components:
       - type:       rds
@@ -203,23 +208,24 @@ This function can be used combined with `$name` and `$props` to create a more co
         id: Terraform
         type: code
     trustZones:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id: public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_db_instance-mysql
+      - id: public-cloud-01.aws_db_instance-mysql
         name: mysql
         type: rds
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - aws_db_instance
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_rds_cluster-aurora_cluster_demo
+      - id: public-cloud-01.aws_rds_cluster-aurora_cluster_demo
         name: aurora-cluster-demo
         type: rds
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - aws_rds_cluster
     dataflows: []
@@ -239,8 +245,9 @@ This function can be used combined with `$type` and `$props` to create a more co
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id:   public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
     components:
       - type:       rds
@@ -265,16 +272,17 @@ This function can be used combined with `$type` and `$props` to create a more co
         id: Terraform
         type: code
     trustZones:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id: public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_db_instance-mysql
+      - id: public-cloud-01.aws_db_instance-mysql
         name: mysql
         type: rds
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - aws_db_instance
     dataflows: []
@@ -295,8 +303,9 @@ This function can be used combined with $type and $name to create a more complet
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id:   public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
     components:
       - type:        generic-client
@@ -324,16 +333,17 @@ This function can be used combined with $type and $name to create a more complet
         id: Terraform
         type: code
     trustZones:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id: public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_security_group-webserver
+      - id: public-cloud-01.aws_security_group-webserver
         name: webserver
         type: generic-client
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - aws_security_group
     dataflows: []
@@ -353,8 +363,9 @@ This function can be used as a parameter for `$type`, `$name` and `$props`.
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id:   public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
     components:
       - type:        api-gateway
@@ -379,23 +390,24 @@ This function can be used as a parameter for `$type`, `$name` and `$props`.
         id: Terraform
         type: code
     trustZones:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id: public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_api_gateway_rest_api-rest_api
+      - id: public-cloud-01.aws_api_gateway_rest_api-rest_api
         name: rest_api
         type: api-gateway
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - aws_api_gateway_rest_api
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_api_gateway_authorizer-api_authorizer
+      - id: public-cloud-01.aws_api_gateway_authorizer-api_authorizer
         name: api_authorizer
         type: api-gateway
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - aws_api_gateway_authorizer
     dataflows: []
@@ -416,8 +428,9 @@ This **mapping function** *root* allows to search through the entire source file
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id:   public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
     components:
       - type:        vpc
@@ -444,16 +457,17 @@ This **mapping function** *root* allows to search through the entire source file
         id: Terraform
         type: code
     trustZones:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id: public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_vpc-customvpc
+      - id: public-cloud-01.aws_vpc-customvpc
         name: CustomVPC
         type: vpc
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - aws_vpc
     dataflows: []
@@ -474,8 +488,9 @@ This **mapping function** *path* allows getting the values from the object ident
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id:   public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
     components:
       - type:        empty-component
@@ -503,16 +518,17 @@ This **mapping function** *path* allows getting the values from the object ident
         id: Terraform
         type: code
     trustZones:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id: public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_subnet-privatesubnet1
+      - id: public-cloud-01.aws_subnet-privatesubnet1
         name: 10.0.2.0/24
         type: empty-component
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - aws_subnet
     dataflows: []
@@ -531,8 +547,9 @@ and returns the first successful match. A default value is optional by using the
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id:   public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
     components:
       - type:        empty-component
@@ -557,16 +574,17 @@ and returns the first successful match. A default value is optional by using the
         id: Terraform
         type: code
     trustZones:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id: public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_subnet-privatesubnet1
+      - id: public-cloud-01.aws_subnet-privatesubnet1
         name: PrivateSubnet1
         type: empty-component
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - aws_subnet
     dataflows: []
@@ -586,8 +604,9 @@ This **mapping function** *searchParams* specifies a default value for `$path` o
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id:   public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
     components:
       - type:       rds
@@ -618,23 +637,24 @@ This **mapping function** *searchParams* specifies a default value for `$path` o
         id: Terraform
         type: code
     trustZones:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id: public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_db_instance-mysql
+      - id: public-cloud-01.aws_db_instance-mysql
         name: mysql
         type: rds
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - mysql
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_rds_cluster-aurora_cluster_demo
+      - id: public-cloud-01.aws_rds_cluster-aurora_cluster_demo
         name: aurora-cluster-demo
         type: rds
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - rds
     dataflows: []
@@ -656,8 +676,9 @@ So is done, for example, in the default configuration described in the
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id:   public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
     components:
       - type:        CD-SYSTEMS-MANAGER
@@ -682,16 +703,17 @@ So is done, for example, in the default configuration described in the
         id: Terraform
         type: code
     trustZones:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id: public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_ssm_parameter-ssm_parameter
+      - id: public-cloud-01.aws_ssm_parameter-ssm_parameter
         name: CD-SYSTEMS-MANAGER (grouped)
         type: CD-SYSTEMS-MANAGER
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - ssm_parameter (aws_ssm_parameter)
           - ssm_document (aws_ssm_document)
@@ -717,8 +739,9 @@ multipleSource if $singleton && (numberOfSources > 1) else oneSource
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id:   public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
     components:
       - type:        CD-SYSTEMS-MANAGER
@@ -746,16 +769,17 @@ multipleSource if $singleton && (numberOfSources > 1) else oneSource
         id: Terraform
         type: code
     trustZones:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id: public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_ssm_parameter-ssm_parameter
+      - id: public-cloud-01.aws_ssm_parameter-ssm_parameter
         name: CD-SYSTEMS-MANAGER (grouped)
         type: CD-SYSTEMS-MANAGER
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - ssm_parameter (aws_ssm_parameter)
           - ssm_document (aws_ssm_document)
@@ -775,8 +799,9 @@ and the `name` or `type` mapper attributes. These substitutions are identified b
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id:   public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
     components:
       - type:       rds
@@ -801,16 +826,17 @@ and the `name` or `type` mapper attributes. These substitutions are identified b
         id: Terraform
         type: code
     trustZones:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id: public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_db_instance-mysql
+      - id: public-cloud-01.aws_db_instance-mysql
         name: rds created by resource mysql of type aws_db_instance
         type: rds
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - aws_db_instance
     dataflows: []
@@ -830,8 +856,9 @@ matching by the `source`'s attribute.
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id:   public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
     components:
       - type: rds
@@ -857,16 +884,17 @@ matching by the `source`'s attribute.
         id: Terraform
         type: code
     trustZones:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id: public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.db
+      - id: public-cloud-01.db
         name: db
         type: rds
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - terraform-aws-modules/rds/aws
     dataflows: []
@@ -885,8 +913,9 @@ This **mapping function** *skip* specifying specific objects to skip if not expl
 === "Mapping file"
     ```yaml
     trustzones:
-      - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id:   public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         $default: true
     components:
       - type:       rds
@@ -914,23 +943,24 @@ This **mapping function** *skip* specifying specific objects to skip if not expl
         id: Terraform
         type: code
     trustZones:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+      - id: public-cloud-01
         name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
         risk:
           trustRating: 10
     components:
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_db_instance-mysql
+      - id: public-cloud-01.aws_db_instance-mysql
         name: mysql
         type: rds
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - aws_db_instance
-      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_rds_cluster-aurora_cluster_demo
+      - id: public-cloud-01.aws_rds_cluster-aurora_cluster_demo
         name: aurora-cluster-demo
         type: rds
         parent:
-          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+          trustZone: public-cloud-01
         tags:
           - aws_rds_cluster
     dataflows: []

@@ -1,4 +1,4 @@
-from otm.otm.entity.component import OtmComponent
+from otm.otm.entity.component import Component
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
 from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMapping
@@ -27,21 +27,21 @@ class MTMTComponentParser:
                     components.append(self.__create_component(mtmt_border))
         return components
 
-    def __create_component(self, border: MTMBorder) -> OtmComponent:
+    def __create_component(self, border: MTMBorder) -> Component:
         trustzone = self.__get_trustzone(border)
-        trustzone_id = self.trustzone_parser.calculate_otm_id(trustzone) if trustzone else None
+        trustzone_id = trustzone.id if trustzone else None
         if trustzone_id is None:
             trustzone_id = self.manage_orphaned()
         mtmt_type = self.__calculate_otm_type(border)
         calculator = ComponentRepresentationCalculator(self.diagram_representation, border, trustzone)
         representation = calculator.calculate_representation()
         if mtmt_type is not None:
-            component = OtmComponent(component_id=border.id,
+            component = Component(component_id=border.id,
                                 name=border.name,
                                 component_type=mtmt_type,
                                 parent_type="trustZone",
                                 parent=trustzone_id,
-                                properties=border.properties,
+                                attributes=border.properties,
                                 source=border)
             if representation:
                 calculator.scale_representation(representation)

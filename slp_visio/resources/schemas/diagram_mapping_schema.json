@@ -8,11 +8,10 @@
             "type": "array",
             "items": {
                 "type": "object",
-                "required": ["label", "id", "type"],
+                "required": ["label", "type"],
                 "properties": {
                     "label": {"$ref": "#/definitions/query"},
-                    "type": {"$ref": "#/definitions/query"},
-                    "id": {"$ref": "#/definitions/query"}
+                    "type": {"$ref": "#/definitions/query"}
                 }
             }
         },
@@ -23,6 +22,7 @@
                 "required": ["label", "type"],
                 "properties": {
                     "label": {"$ref": "#/definitions/query"},
+                    "id": {"$ref": "#/definitions/query"},
                     "type": {"$ref": "#/definitions/query"}
                 }
             }        

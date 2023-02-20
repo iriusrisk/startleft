@@ -76,16 +76,16 @@ class LoadingMappingFileError(CommonError):
     error_code = ErrorCode.MAPPING_LOADING_ERROR
 
 
-class OtmBuildingError(CommonError):
+class OTMBuildingError(CommonError):
     """ Error during OTM transformation. Eg: bad jmespath expression. """
     error_code = ErrorCode.OTM_BUILDING_ERROR
 
 
-class OtmResultError(CommonError):
+class OTMResultError(CommonError):
     """ Parsing provided given IaC/diagram file with the mapping file provided result in an invalid OTM file. """
     error_code = ErrorCode.OTM_RESULT_ERROR
 
 
-class OtmGenerationError(CommonError):
+class OTMGenerationError(CommonError):
     """ Provided files were processed successfully but an error occurred while generating the OTM file. """
     error_code = ErrorCode.OTM_GENERATION_ERROR

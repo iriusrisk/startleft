@@ -1,6 +1,7 @@
 import logging
 
-from otm.otm.entity.trustzone import OtmTrustzone
+from otm.otm.entity.trustzone import Trustzone
+from sl_util.sl_util.str_utls import deterministic_uuid
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
 from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMapping
@@ -34,24 +35,27 @@ class MTMTTrustzoneParser:
                     self.trustzones.append(trustzone)
         return self.trustzones
 
-    def create_border_trustzone(self, border: MTMBorder) -> OtmTrustzone:
+    def create_border_trustzone(self, border: MTMBorder) -> Trustzone:
         mtmt_type = self.__calculate_otm_type(border)
         if mtmt_type is not None:
             calculator = TrustzoneRepresentationCalculator(self.diagram_representation, border)
             representations = calculator.calculate_representation()
-            trustzone_id = self.calculate_otm_id(border)
-            tz = OtmTrustzone(trustzone_id=trustzone_id,
-                           name=border.name,
-                           properties=border.properties)
+            tz = Trustzone(trustzone_id=border.id,
+                              name=border.name,
+                              type=mtmt_type,
+                              attributes=border.properties)
             if representations:
                 tz.representations = [representations]
             return tz
 
     def __calculate_otm_type(self, border: MTMBorder) -> str:
-        return self.__get_label_value(border.stencil_name, 'type')
+        return self.__get_mapping_type(border.stencil_name)
 
-    def calculate_otm_id(self, border: MTMBorder) -> str:
-        return self.__get_label_value(border.stencil_name, 'id')
+    def __get_mapping_type(self, label) -> str:
+        id = self.__get_label_value(label, 'id')
+        if id:
+            return id
+        return self.__get_label_value(label, 'type')
 
     def __get_label_value(self, label, key):
         try:
@@ -73,5 +77,6 @@ class MTMTTrustzoneParser:
 
     def create_default_trustzone(self):
         if self.mapping is not None and DEFAULT_LABEL in self.mapping.mapping_trustzones:
-            trustzone_id = self.mapping.mapping_trustzones[DEFAULT_LABEL]['id']
-            return OtmTrustzone(trustzone_id=trustzone_id, name=DEFAULT_NAME)
+            trustzone_type = self.__get_mapping_type(DEFAULT_LABEL)
+            trustzone_id = deterministic_uuid(trustzone_type)
+            return Trustzone(trustzone_id=trustzone_id, type=trustzone_type, name=DEFAULT_NAME)

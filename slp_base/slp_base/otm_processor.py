@@ -1,15 +1,16 @@
 import abc
 
-from otm.otm.entity.otm import Otm
-from slp_base.slp_base.otm_representations_pruner import OtmRepresentationsPruner
+from otm.otm.entity.otm import OTM
 from slp_base.slp_base.mapping import MappingLoader, MappingValidator
-from slp_base.slp_base.otm_validator import OtmValidator
+from slp_base.slp_base.otm_representations_pruner import OTMRepresentationsPruner
+from slp_base.slp_base.otm_trustzone_unifier import OTMTrustZoneUnifier
+from slp_base.slp_base.otm_validator import OTMValidator
 from slp_base.slp_base.provider_loader import ProviderLoader
 from slp_base.slp_base.provider_parser import ProviderParser
 from slp_base.slp_base.provider_validator import ProviderValidator
 
 
-class OtmProcessor(metaclass=abc.ABCMeta):
+class OTMProcessor(metaclass=abc.ABCMeta):
     """
     Formal Interface to manage all the flow from the input data to the OTM output
     """
@@ -26,7 +27,7 @@ class OtmProcessor(metaclass=abc.ABCMeta):
                 or NotImplemented)
 
     # Do not override this method.
-    def process(self) -> Otm:
+    def process(self) -> OTM:
         """Process all the flow from the input data to the OTM output"""
         self.get_provider_validator().validate()
         self.get_provider_loader().load()
@@ -36,8 +37,9 @@ class OtmProcessor(metaclass=abc.ABCMeta):
 
         otm = self.get_provider_parser().build_otm()
 
-        OtmRepresentationsPruner(otm).prune()
-        OtmValidator().validate(otm.json())
+        OTMRepresentationsPruner(otm).prune()
+        OTMTrustZoneUnifier(otm).unify()
+        OTMValidator().validate(otm.json())
 
         return otm
 

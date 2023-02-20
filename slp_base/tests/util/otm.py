@@ -1,34 +1,34 @@
-import warnings
 from typing import Union
 
 from deepdiff import DeepDiff
 
-from otm.otm.entity.otm import Otm
-from slp_base.slp_base.otm_file_loader import OtmFileLoader
-from slp_base.slp_base.otm_validator import OtmValidator
+from otm.otm.entity.otm import OTM
+from slp_base.slp_base.otm_file_loader import OTMFileLoader
+from slp_base.slp_base.otm_validator import OTMValidator
 from slp_base.slp_base.schema import Schema
 
-OTM_SCHEMA_FILENAME = OtmValidator.schema_filename
+OTM_SCHEMA_FILENAME = OTMValidator.schema_filename
 
-public_cloud_id = 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+public_cloud_id = '804b664a-7129-4a9e-a08c-16a99669f605'
+public_cloud_type = 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
 public_cloud_name = 'Public Cloud'
 
-private_secured_id = '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
+private_secured_type = '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
 private_secured_name = 'Private Secured Cloud'
 
-internet_id = 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
+internet_type = 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
 internet_name = 'Internet'
 
 
-def __load_otm(otm: Union[dict, str, Otm]):
+def __load_otm(otm: Union[dict, str, OTM]):
     if isinstance(otm, dict):
         return otm
 
-    if isinstance(otm, Otm):
+    if isinstance(otm, OTM):
         return otm.json()
 
     if isinstance(otm, str):
-        return OtmFileLoader().load(otm)
+        return OTMFileLoader().load(otm)
 
 
 def __compare_otm_files(expected: dict,
@@ -43,36 +43,13 @@ def __validate_otm_schema(otm) -> Schema:
     return schema
 
 
-def validate_and_diff(actual: Union[dict, str, Otm], expected: Union[dict, str, Otm], excluded_regex):
-    warnings.warn("This method is deprecated, use 'validate_and_compare' instead", DeprecationWarning)
-    """
-    Utils for validating otm has a correct Schema
-    and OTM contains expected data
-    """
-    actual_otm = __load_otm(actual)
-    expected_otm = __load_otm(expected)
-
-    schema = __validate_otm_schema(actual_otm)
-    if not schema.valid:
-        return {'schema_errors': schema.errors}
-    diff = __compare_otm_files(expected_otm, actual_otm, excluded_regex)
-    if diff:
-        return diff
-    return {}
-
-
-def validate_and_diff_otm(actual: dict, expected_filename: str, excluded_regex):
-    warnings.warn("This method is deprecated, use 'validate_and_compare_otm' instead", DeprecationWarning)
-    expected = OtmFileLoader().load(expected_filename)
-    return validate_and_diff(actual, expected, excluded_regex)
-
-
 def validate_and_compare_otm(actual: dict, expected_filename: str, excluded_regex):
-    expected = OtmFileLoader().load(expected_filename)
+    expected = OTMFileLoader().load(expected_filename)
     return validate_and_compare(actual, expected, excluded_regex)
 
 
-def validate_and_compare(actual: Union[dict, str, Otm], expected: Union[dict, str, Otm], excluded_regex):
+def validate_and_compare(actual: Union[dict, str, OTM], expected: Union[dict, str, OTM], excluded_regex,
+                         validate_schema=True):
     """
     Utils for validating otm has a correct Schema
     and OTM contains expected data that returns
@@ -81,18 +58,20 @@ def validate_and_compare(actual: Union[dict, str, Otm], expected: Union[dict, st
     actual_otm = __load_otm(actual)
     expected_otm = __load_otm(expected)
 
-    schema = __validate_otm_schema(actual_otm)
-    if not schema.valid:
-        return {'schema_errors': schema.errors}
-    diff = __compare_otm_files(expected_otm, actual_otm, excluded_regex)
+    if validate_schema:
+        schema = __validate_otm_schema(actual_otm)
+        if not schema.valid:
+            return {'schema_errors': schema.errors}, {}
+    diff = __compare_otm_files(actual_otm, expected_otm, excluded_regex)
     if diff:
         return diff.t1, diff.t2
     return {}, {}
 
 
-def check_otm_trustzone(otm, position, trustzone_id, name):
+def check_otm_trustzone(otm, position, trustzone_id, trustzone_type, name):
     assert otm.trustzones[position].id == trustzone_id
     assert otm.trustzones[position].name == name
+    assert otm.trustzones[position].type == trustzone_type
 
 
 def check_otm_component(otm, position, component_type, name, parent_id=None, tags=()):

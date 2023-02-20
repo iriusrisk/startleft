@@ -21,6 +21,9 @@
       "name": "Public Cloud",
       "risk": {
         "trustRating": 10
+      },
+      "attributes": {
+        "default": true
       }
     }
   ],
@@ -77,31 +80,31 @@
   "dataflows": [
     {
       "id": "94",
-      "name": "69b2bc65-e037-469c-ad66-119e38c16d15",
+      "name": "4d18cdd9-ab7a-425e-a01a-57cf2d6ad0f0",
       "source": "31",
       "destination": "19"
     },
     {
       "id": "114",
-      "name": "ff1ba10c-81ad-4c56-8eee-b732516f778f",
+      "name": "25370304-37ba-42d4-a700-2df1ebd01d4e",
       "source": "46",
       "destination": "19"
     },
     {
       "id": "115",
-      "name": "33ffdefb-3679-45ae-b34d-abd8a6745a59",
+      "name": "5c9fbba6-a1c4-40d9-81a5-2cbac8ac6e88",
       "source": "99",
       "destination": "19"
     },
     {
       "id": "116",
-      "name": "77e5eaf1-2f71-4b70-8fed-dfb2e20ad1db",
+      "name": "3bb77afb-222c-413d-bbff-357866250dde",
       "source": "99",
       "destination": "86"
     },
     {
       "id": "117",
-      "name": "b3c3e567-8adf-458e-9913-03810414b601",
+      "name": "37593e2d-399e-454a-9964-5d98065b2ec5",
       "source": "46",
       "destination": "13"
     }
