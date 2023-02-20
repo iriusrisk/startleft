@@ -2,11 +2,13 @@ from otm.otm.entity.component import Component
 from otm.otm.entity.trustzone import Trustzone
 from slp_base import MappingFileNotValidError
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
+from slp_visio.slp_visio.parse.mappers.diagram_mapper import DiagramMapper
 from slp_visio.slp_visio.parse.representation.representation_calculator import RepresentationCalculator
 from slp_visio.slp_visio.util.visio import normalize_label
 
 
-class DiagramComponentMapper:
+class DiagramComponentMapper(DiagramMapper):
+
     def __init__(self,
                  components: [DiagramComponent],
                  component_mappings: dict,
@@ -29,7 +31,8 @@ class DiagramComponentMapper:
     def __filter_component(self, component):
         map_by_name = normalize_label(component.name) in self.normalized_component_mappings
         map_by_type = normalize_label(component.type) in self.normalized_component_mappings
-        return map_by_name or map_by_type
+        map_by_unique_id = component.unique_id in self.normalized_component_mappings
+        return map_by_name or map_by_type or map_by_unique_id
 
     def __map_to_otm(self, component_candidates: [DiagramComponent]) -> [Component]:
         return list(map(self.__build_otm_component, component_candidates))
@@ -40,14 +43,19 @@ class DiagramComponentMapper:
         return Component(
             component_id=diagram_component.id,
             name=diagram_component.name,
-            component_type=self.__calculate_otm_type(diagram_component.name, diagram_component.type),
+            component_type=self.__calculate_otm_type(diagram_component.name,
+                                                     diagram_component.type,
+                                                     diagram_component.unique_id),
             parent=self.__calculate_parent_id(diagram_component),
-            parent_type=self.__calculate_parent_type(diagram_component),
+            parent_type=self._calculate_parent_type(diagram_component),
             representations=[representation] if representation else None
         )
 
-    def __calculate_otm_type(self, component_name: str, component_type: str) -> str:
-        otm_type = self.__find_mapped_component_by_label(component_name)
+    def __calculate_otm_type(self, component_name: str, component_type: str, component_unique_id: str) -> str:
+        otm_type = self.__find_mapped_component_by_label(component_unique_id)
+
+        if not otm_type:
+            otm_type = self.__find_mapped_component_by_label(component_name)
 
         if not otm_type:
             otm_type = self.__find_mapped_component_by_label(component_type)
@@ -55,7 +63,7 @@ class DiagramComponentMapper:
         return otm_type or 'empty-component'
 
     def __find_mapped_component_by_label(self, label: str) -> str:
-        return self.normalized_component_mappings[normalize_label(label)]['type']\
+        return self.normalized_component_mappings[normalize_label(label)]['type'] \
             if normalize_label(label) in self.normalized_component_mappings else None
 
     def __calculate_parent_id(self, component: DiagramComponent) -> str:
@@ -69,8 +77,5 @@ class DiagramComponentMapper:
                                        'No default trust zone has been defined in the mapping file',
                                        'Please, add a default trust zone')
 
-    def __calculate_parent_type(self, component: DiagramComponent) -> str:
-        if not component.parent or component.parent.name in self.trustzone_mappings.keys():
-            return 'trustZone'
-        else:
-            return 'component'
+    def _get_trustzone_mappings(self):
+        return self.trustzone_mappings

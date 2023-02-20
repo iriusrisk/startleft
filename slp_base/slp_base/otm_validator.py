@@ -1,5 +1,6 @@
 import logging
 
+from otm.otm.entity.parent_type import ParentType
 from slp_base.slp_base.errors import OTMResultError
 from slp_base.slp_base.schema import Schema
 
@@ -57,8 +58,8 @@ class OTMValidator:
             elif component['id'] not in all_valid_ids:
                 all_valid_ids.add(component['id'])
 
-            trustzone_id = self.__get_trustzone_id(component)
-            parent_ids.add(trustzone_id)
+            component_parent_id = self.__get_parent_id(component)
+            parent_ids.add(component_parent_id)
 
         for parent_id in parent_ids:
             if parent_id not in all_valid_ids:
@@ -93,8 +94,7 @@ class OTMValidator:
                 not wrong_dataflow_to_ids and
                 not repeated_ids)
 
-    def __get_trustzone_id(self, trustzone: dict):
-        if 'trustZone' in trustzone['parent']:
-            return trustzone['parent']['trustZone']
-        else:
-            return trustzone['parent']['component']
+    @staticmethod
+    def __get_parent_id(trustzone: dict):
+        parent = ParentType.TRUST_ZONE if ParentType.TRUST_ZONE in trustzone['parent'] else ParentType.COMPONENT
+        return trustzone['parent'][str(parent)]

@@ -18,7 +18,8 @@ class DiagramComponent:
                  origin: DiagramComponentOrigin = None,
                  parent=None,
                  trustzone: bool = False,
-                 representation: Polygon = None):
+                 representation: Polygon = None,
+                 unique_id: str = None):
         self.id = id
         self.name = name
         self.type = type
@@ -26,6 +27,7 @@ class DiagramComponent:
         self.parent = parent
         self.trustzone = trustzone
         self.representation = representation
+        self.unique_id = unique_id
 
     def get_component_category(self):
         return 'trustZone' if not self.parent else 'component'
