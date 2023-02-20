@@ -47,7 +47,7 @@ class TestMtmtProcessor:
         assert result == expected
 
 
-    @patch('slp_base.slp_base.otm_validator.OtmValidator.validate')
+    @patch('slp_base.slp_base.otm_validator.OTMValidator.validate')
     def test_run_some_missing_source_coordinates(self, validate):
         # GIVEN a valid MTMT file with some resources
         source_file = get_byte_data(MTMT_MISSING_POSITION)

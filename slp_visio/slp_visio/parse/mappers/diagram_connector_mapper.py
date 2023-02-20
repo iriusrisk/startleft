@@ -1,10 +1,10 @@
-from otm.otm.entity.dataflow import OtmDataflow
+from otm.otm.entity.dataflow import Dataflow
 from sl_util.sl_util.str_utils import deterministic_uuid
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramConnector
 
 
-def build_otm_dataflow(diagram_connector: DiagramConnector) -> OtmDataflow:
-    return OtmDataflow(
+def build_otm_dataflow(diagram_connector: DiagramConnector) -> Dataflow:
+    return Dataflow(
         dataflow_id=diagram_connector.id,
         name=diagram_connector.name if diagram_connector.name else deterministic_uuid(diagram_connector.id),
         source_node=diagram_connector.from_id,

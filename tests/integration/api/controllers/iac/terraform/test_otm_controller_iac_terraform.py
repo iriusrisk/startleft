@@ -8,7 +8,7 @@ from pytest import mark
 
 from sl_util.sl_util import file_utils
 from slp_base import IacFileNotValidError, LoadingIacFileError, MappingFileNotValidError, \
-    LoadingMappingFileError, OtmResultError, OtmBuildingError, IacType
+    LoadingMappingFileError, OTMResultError, OTMBuildingError, IacType
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.iac import iac_create_otm_controller
 from tests.resources.test_resource_paths import terraform_iriusrisk_tf_aws_mapping, \
@@ -26,7 +26,7 @@ def get_url():
     return iac_create_otm_controller.PREFIX + iac_create_otm_controller.URL
 
 
-class TestOtmControllerIaCTerraform:
+class TestOTMControllerIaCTerraform:
     tf_file = terraform_aws_simple_components
     tf_map = terraform_iriusrisk_tf_aws_mapping
     wrong_id = terraform_malformed_mapping_wrong_id
@@ -225,7 +225,7 @@ class TestOtmControllerIaCTerraform:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @responses.activate
-    @patch('slp_base.slp_base.otm_validator.OtmValidator.validate')
+    @patch('slp_base.slp_base.otm_validator.OTMValidator.validate')
     def test_response_on_otm_result_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -235,7 +235,7 @@ class TestOtmControllerIaCTerraform:
         mapping_file = (self.tf_map, open(self.tf_map, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingIacFileError
-        error = OtmResultError('OTM file does not comply with the schema', 'Schema error', 'mocked error msg')
+        error = OTMResultError('OTM file does not comply with the schema', 'Schema error', 'mocked error msg')
         mock_load_source_data.side_effect = error
 
         # When I do post on terraform endpoint
@@ -248,7 +248,7 @@ class TestOtmControllerIaCTerraform:
         assert response.headers.get('content-type') == 'application/json'
         body_response = json.loads(response.text)
         assert body_response['status'] == '400'
-        assert body_response['error_type'] == 'OtmResultError'
+        assert body_response['error_type'] == 'OTMResultError'
         assert body_response['title'] == 'OTM file does not comply with the schema'
         assert body_response['detail'] == 'Schema error'
         assert len(body_response['errors']) == 1
@@ -265,7 +265,7 @@ class TestOtmControllerIaCTerraform:
         mapping_file = (self.tf_map, open(self.tf_map, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingIacFileError
-        error = OtmBuildingError('OTM building error', 'Schema error', 'mocked error msg')
+        error = OTMBuildingError('OTM building error', 'Schema error', 'mocked error msg')
         mock_load_source_data.side_effect = error
 
         # When I do post on terraform endpoint
@@ -278,7 +278,7 @@ class TestOtmControllerIaCTerraform:
         assert response.headers.get('content-type') == 'application/json'
         body_response = json.loads(response.text)
         assert body_response['status'] == '400'
-        assert body_response['error_type'] == 'OtmBuildingError'
+        assert body_response['error_type'] == 'OTMBuildingError'
         assert body_response['title'] == 'OTM building error'
         assert body_response['detail'] == 'Schema error'
         assert len(body_response['errors']) == 1
