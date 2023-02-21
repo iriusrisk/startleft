@@ -1,19 +1,19 @@
 import pytest
 
-from otm.otm.entity.mitigation import OtmMitigation, OtmMitigationInstance
-from otm.otm.entity.threat import OtmThreat, OtmThreatInstance
-from otm.otm.entity.component import OtmComponent
+from otm.otm.entity.component import Component
+from otm.otm.entity.mitigation import Mitigation, MitigationInstance
+from otm.otm.entity.threat import Threat, ThreatInstance
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_threatinstance import MTMThreat
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT, MTMKnowledge
 from slp_mtmt.slp_mtmt.parse.mtmt_threat_parser import MTMThreatParser, get_threat_description, \
     get_mitigation_description, remove_trailing_dot
 
 
-def assert_threat(threat: OtmThreat, json: dict):
+def assert_threat(threat: Threat, json: dict):
     assert threat.json() == json
 
 
-def assert_mitigation(mitigation: OtmMitigation, json: dict):
+def assert_mitigation(mitigation: Mitigation, json: dict):
     assert mitigation.json() == json
 
 
@@ -177,13 +177,13 @@ class TestMTMThreatParser:
         "riskReduction": 100
     }
     components = [
-        OtmComponent(
+        Component(
             component_id="ff5f3e59-caa6-464c-8b3e-528d6a3dbfbb",
             name="Micro-Batch (Managed App)",
             component_type="web-application-server-side",
             parent="2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
             parent_type="trustZone",
-            properties={
+            attributes={
                 "Name": "Micro-Batch (Managed App)",
                 "Out Of Scope": "false",
                 "Isolation Level": "Not Selected",
@@ -198,13 +198,13 @@ class TestMTMThreatParser:
         "parent": {
             "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
         },
-        "properties": {
+        "attributes": {
             "Name": "Micro-Batch (Managed App)",
             "Out Of Scope": "false",
             "Isolation Level": "Not Selected",
             "Show Generic Process Threat": "Yes"
         },
-        "threats": [OtmThreatInstance(30, "Mitigated", [OtmMitigationInstance(30, "IMPLEMENTED")]).json()]
+        "threats": [ThreatInstance(30, "Mitigated", [MitigationInstance(30, "IMPLEMENTED")]).json()]
     }
     threat_description_consider = {
         "Value": {
@@ -269,13 +269,13 @@ class TestMTMThreatParser:
     ])
     def test_parse_mtmt_azure(self, mtmt_threat, expected_mitigation):
         components = [
-            OtmComponent(
+            Component(
                 component_id="ff5f3e59-caa6-464c-8b3e-528d6a3dbfbb",
                 name="Micro-Batch (Managed App)",
                 component_type="web-application-server-side",
                 parent="2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
                 parent_type="trustZone",
-                properties={
+                attributes={
                     "Name": "Micro-Batch (Managed App)",
                     "Out Of Scope": "false",
                     "Isolation Level": "Not Selected",

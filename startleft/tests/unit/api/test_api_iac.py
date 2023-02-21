@@ -5,15 +5,15 @@ from unittest.mock import patch
 import pytest
 
 import startleft.startleft.api.controllers.iac.iac_create_otm_controller as controller
-from otm.otm.otm_builder import OtmBuilder
-from slp_base import LoadingIacFileError, IacFileNotValidError, LoadingMappingFileError, OtmBuildingError, \
-    OtmGenerationError
+from otm.otm.otm_builder import OTMBuilder
+from slp_base import LoadingIacFileError, IacFileNotValidError, LoadingMappingFileError, OTMBuildingError, \
+    OTMGenerationError
 from slp_base.slp_base.provider_type import IacType
 
 PROJECT_ID = 'id'
 PROJECT_NAME = 'name'
 TESTING_IAC_TYPE = IacType.CLOUDFORMATION
-OTM_SAMPLE = OtmBuilder(PROJECT_ID, PROJECT_NAME, TESTING_IAC_TYPE).build()
+OTM_SAMPLE = OTMBuilder(PROJECT_ID, PROJECT_NAME, TESTING_IAC_TYPE).build()
 
 
 def mock_provider_processor_result(mock_otm_processor, mock_get_processor, result):
@@ -28,7 +28,7 @@ def mock_provider_processor_error(mock_otm_processor, mock_get_processor, error)
 
 class TestApiIac:
 
-    @patch('slp_base.slp_base.otm_processor.OtmProcessor')
+    @patch('slp_base.slp_base.otm_processor.OTMProcessor')
     @patch('slp_base.slp_base.provider_resolver.ProviderResolver.get_processor')
     def test_api_iac_controller_happy_path(self, mock_get_processor, mock_otm_processor):
         # GIVEN a mocked valid file of any provider
@@ -47,7 +47,7 @@ class TestApiIac:
         # THEN a response with HTTP status 201 is returned
         assert response.status_code == 201
 
-    @patch('slp_base.slp_base.otm_processor.OtmProcessor')
+    @patch('slp_base.slp_base.otm_processor.OTMProcessor')
     @patch('slp_base.slp_base.provider_resolver.ProviderResolver.get_processor')
     def test_api_iac_controller_on_loading_iac_error(self, mock_get_processor, mock_otm_processor):
         # GIVEN a mocked invalid file of any provider
@@ -72,7 +72,7 @@ class TestApiIac:
         assert error.value.error_code.http_status == 400
         assert error.value.error_code.name == 'IAC_LOADING_ERROR'
 
-    @patch('slp_base.slp_base.otm_processor.OtmProcessor')
+    @patch('slp_base.slp_base.otm_processor.OTMProcessor')
     @patch('slp_base.slp_base.provider_resolver.ProviderResolver.get_processor')
     def test_api_iac_controller_on_iac_file_not_valid_error(self, mock_get_processor, mock_otm_processor):
         # GIVEN a mocked invalid file of any provider
@@ -96,7 +96,7 @@ class TestApiIac:
         assert error.value.error_code.http_status == 400
         assert error.value.error_code.name == 'IAC_NOT_VALID'
 
-    @patch('slp_base.slp_base.otm_processor.OtmProcessor')
+    @patch('slp_base.slp_base.otm_processor.OTMProcessor')
     @patch('slp_base.slp_base.provider_resolver.ProviderResolver.get_processor')
     def test_api_iac_controller_on_loading_mapping_file_error(self, mock_get_processor, mock_otm_processor):
         # GIVEN a mocked invalid file of any provider
@@ -121,7 +121,7 @@ class TestApiIac:
         assert error.value.error_code.http_status == 400
         assert error.value.error_code.name == 'MAPPING_LOADING_ERROR'
 
-    @patch('slp_base.slp_base.otm_processor.OtmProcessor')
+    @patch('slp_base.slp_base.otm_processor.OTMProcessor')
     @patch('slp_base.slp_base.provider_resolver.ProviderResolver.get_processor')
     def test_api_iac_controller_on_otm_building_error(self, mock_get_processor, mock_otm_processor):
         # GIVEN a mocked invalid file of any provider
@@ -132,10 +132,10 @@ class TestApiIac:
         valid_mapping_file = MagicMock(filename='valid_mapping_file', content_type='application/json',
                                        file=MagicMock(spec=typing.BinaryIO))
 
-        # AND the mocked method throwing a OtmBuildingError
-        with pytest.raises(OtmBuildingError) as error:
+        # AND the mocked method throwing a OTMBuildingError
+        with pytest.raises(OTMBuildingError) as error:
             # WHEN the POST /iac endpoint is called with iac params AND an error is raised
-            mock_error = OtmBuildingError('mocked error OTM_BUILDING_ERROR', 'mocked error detail',
+            mock_error = OTMBuildingError('mocked error OTM_BUILDING_ERROR', 'mocked error detail',
                                           'mocked error msg 4')
             mock_provider_processor_error(mock_otm_processor, mock_get_processor, mock_error)
             controller.iac(invalid_iac_file, TESTING_IAC_TYPE, 'iac_controller_on_otm_building_error_id',
@@ -146,7 +146,7 @@ class TestApiIac:
         assert error.value.error_code.http_status == 400
         assert error.value.error_code.name == 'OTM_BUILDING_ERROR'
 
-    @patch('slp_base.slp_base.otm_processor.OtmProcessor')
+    @patch('slp_base.slp_base.otm_processor.OTMProcessor')
     @patch('slp_base.slp_base.provider_resolver.ProviderResolver.get_processor')
     def test_api_iac_controller_on_otm_generation_error(self, mock_get_processor, mock_otm_processor):
         # GIVEN a mocked invalid file of any provider
@@ -157,10 +157,10 @@ class TestApiIac:
         valid_mapping_file = MagicMock(filename='valid_mapping_file', content_type='application/json',
                                        file=MagicMock(spec=typing.BinaryIO))
 
-        # AND mocked method throwing a OtmGenerationError
-        with pytest.raises(OtmGenerationError) as error:
+        # AND mocked method throwing a OTMGenerationError
+        with pytest.raises(OTMGenerationError) as error:
             # WHEN the POST /iac endpoint is called with iac params AND an error is raised
-            mock_error = OtmGenerationError('mocked error OTM_GENERATION_ERROR', 'mocked error detail',
+            mock_error = OTMGenerationError('mocked error OTM_GENERATION_ERROR', 'mocked error detail',
                                             'mocked error msg 5')
             mock_provider_processor_error(mock_otm_processor, mock_get_processor, mock_error)
             controller.iac(invalid_iac_file, TESTING_IAC_TYPE, 'iac_controller_on_otm_generation_error_id',
@@ -171,7 +171,7 @@ class TestApiIac:
         assert error.value.error_code.http_status == 500
         assert error.value.error_code.name == 'OTM_GENERATION_ERROR'
 
-    @patch('slp_base.slp_base.otm_processor.OtmProcessor')
+    @patch('slp_base.slp_base.otm_processor.OTMProcessor')
     @patch('slp_base.slp_base.provider_resolver.ProviderResolver.get_processor')
     def test_api_iac_controller_multiple_files_happy_path(self, mock_get_processor, mock_otm_processor):
         # GIVEN at least two mocked valid files of any provider
@@ -193,7 +193,7 @@ class TestApiIac:
         assert response.media_type == 'application/json'
         assert response.body is not None
 
-    @patch('slp_base.slp_base.otm_processor.OtmProcessor')
+    @patch('slp_base.slp_base.otm_processor.OTMProcessor')
     @patch('slp_base.slp_base.provider_resolver.ProviderResolver.get_processor')
     def test_api_iac_controller_multiple_files_on_iac_loading_error(self, mock_get_processor, mock_otm_processor):
         # GIVEN one mocked valid file of any provider, and one invalid
@@ -219,7 +219,7 @@ class TestApiIac:
         assert error.value.error_code.http_status == 400
         assert error.value.error_code.name == 'IAC_LOADING_ERROR'
 
-    @patch('slp_base.slp_base.otm_processor.OtmProcessor')
+    @patch('slp_base.slp_base.otm_processor.OTMProcessor')
     @patch('slp_base.slp_base.provider_resolver.ProviderResolver.get_processor')
     def test_api_iac_controller_multiple_files_on_file_not_valid_error(self, mock_get_processor, mock_otm_processor):
         # GIVEN one mocked valid file of any provider, and one invalid

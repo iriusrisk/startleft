@@ -1,9 +1,9 @@
-from otm.otm.entity.component import OtmComponent
-from otm.otm.entity.dataflow import OtmDataflow
+from otm.otm.entity.component import Component
+from otm.otm.entity.dataflow import Dataflow
 from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
-from otm.otm.entity.trustzone import OtmTrustzone
-from otm.otm.otm_builder import OtmBuilder
-from otm.otm.otm_pruner import OtmPruner
+from otm.otm.entity.trustzone import Trustzone
+from otm.otm.otm_builder import OTMBuilder
+from otm.otm.otm_pruner import OTMPruner
 from slp_base import ProviderParser
 from slp_visio.slp_visio.load.objects.diagram_objects import Diagram
 from slp_visio.slp_visio.load.visio_mapping_loader import VisioMappingFileLoader
@@ -47,7 +47,7 @@ class VisioParser(ProviderParser):
 
         otm = self.__build_otm(trustzones, components, dataflows)
 
-        OtmPruner(otm).prune_orphan_dataflows()
+        OTMPruner(otm).prune_orphan_dataflows()
 
         return otm
 
@@ -74,8 +74,8 @@ class VisioParser(ProviderParser):
     def __map_dataflows(self):
         return DiagramConnectorMapper(self.diagram.connectors).to_otm()
 
-    def __build_otm(self, trustzones: [OtmTrustzone], components: [OtmComponent], dataflows: [OtmDataflow]):
-        otm_builder = OtmBuilder(self.project_id, self.project_name, self.diagram.diagram_type) \
+    def __build_otm(self, trustzones: [Trustzone], components: [Component], dataflows: [Dataflow]):
+        otm_builder = OTMBuilder(self.project_id, self.project_name, self.diagram.diagram_type) \
             .add_representations(self.representations, extend=False) \
             .add_trustzones(trustzones) \
             .add_components(components) \

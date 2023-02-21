@@ -27,7 +27,7 @@
       "risk": {
         "trustRating": 10
       },
-      "properties": {
+      "attributes": {
         "Name": "Internet",
         "Dataflow Order": "0"
       },
@@ -53,7 +53,7 @@
       "risk": {
         "trustRating": 10
       },
-      "properties": {
+      "attributes": {
         "Name": "Cloud",
         "Dataflow Order": "0"
       },
@@ -82,7 +82,7 @@
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
-      "properties": {
+      "attributes": {
         "Name": "Accounting PostgreSQL",
         "Out Of Scope": "false",
         "Azure Postgres DB Firewall Settings": "Select",
@@ -143,7 +143,7 @@
       "parent": {
         "trustZone": "6376d53e-6461-412b-8e04-7b3fe2b397de"
       },
-      "properties": {
+      "attributes": {
         "Name": "Android",
         "Out Of Scope": "false",
         "Mobile Client Technologies": "Android"
@@ -193,7 +193,7 @@
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
-      "properties": {
+      "attributes": {
         "Name": "Public API v2",
         "Out Of Scope": "false",
         "Web API Technologies": "Select",
@@ -885,7 +885,7 @@
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
-      "properties": {
+      "attributes": {
         "Name": "Azure File Storage",
         "Out Of Scope": "false",
         "Storage Type": "Select",
@@ -988,7 +988,7 @@
       "parent": {
         "trustZone": "6376d53e-6461-412b-8e04-7b3fe2b397de"
       },
-      "properties": {
+      "attributes": {
         "Name": "iOS",
         "Out Of Scope": "false",
         "Mobile Client Technologies": "iOS"
@@ -1038,7 +1038,7 @@
       "parent": {
         "trustZone": "6376d53e-6461-412b-8e04-7b3fe2b397de"
       },
-      "properties": {
+      "attributes": {
         "Name": "Browser",
         "Out Of Scope": "false"
       },
@@ -1087,7 +1087,7 @@
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
-      "properties": {
+      "attributes": {
         "Name": "Web API",
         "Out Of Scope": "false",
         "Web API Technologies": "Select",
@@ -1279,7 +1279,7 @@
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
       },
-      "properties": {
+      "attributes": {
         "Name": "Azure Storage",
         "Out Of Scope": "false",
         "Storage Type": "Select",
@@ -1383,7 +1383,7 @@
       "source": "5d15323e-3729-4694-87b1-181c90af5045",
       "destination": "53245f54-0656-4ede-a393-357aeaa2e20f",
       "bidirectional": false,
-      "properties": {
+      "attributes": {
         "Request": {},
         "Name": "PSQL Request",
         "Dataflow Order": "0",
@@ -1400,7 +1400,7 @@
       "source": "53245f54-0656-4ede-a393-357aeaa2e20f",
       "destination": "5d15323e-3729-4694-87b1-181c90af5045",
       "bidirectional": false,
-      "properties": {
+      "attributes": {
         "Response": {},
         "Name": "PSQL Response",
         "Dataflow Order": "0",
@@ -1417,7 +1417,7 @@
       "source": "5d15323e-3729-4694-87b1-181c90af5045",
       "destination": "91882aca-8249-49a7-96f0-164b68411b48",
       "bidirectional": false,
-      "properties": {
+      "attributes": {
         "Request": {},
         "Name": "File Request",
         "Dataflow Order": "0",
@@ -1434,7 +1434,7 @@
       "source": "91882aca-8249-49a7-96f0-164b68411b48",
       "destination": "5d15323e-3729-4694-87b1-181c90af5045",
       "bidirectional": false,
-      "properties": {
+      "attributes": {
         "Response": {},
         "Name": "File Response",
         "Dataflow Order": "0",
@@ -1451,7 +1451,7 @@
       "source": "6183b7fa-eba5-4bf8-a0af-c3e30d144a10",
       "destination": "5d15323e-3729-4694-87b1-181c90af5045",
       "bidirectional": false,
-      "properties": {
+      "attributes": {
         "Request": {},
         "Name": "API Request",
         "Dataflow Order": "0",
@@ -1468,7 +1468,7 @@
       "source": "5d15323e-3729-4694-87b1-181c90af5045",
       "destination": "6183b7fa-eba5-4bf8-a0af-c3e30d144a10",
       "bidirectional": false,
-      "properties": {
+      "attributes": {
         "Response": {},
         "Name": "API Response",
         "Dataflow Order": "0",
@@ -1485,7 +1485,7 @@
       "source": "5d15323e-3729-4694-87b1-181c90af5045",
       "destination": "91c41c08-87c3-4740-a9fa-a37975717e93",
       "bidirectional": false,
-      "properties": {
+      "attributes": {
         "Response": {},
         "Name": "API Response",
         "Dataflow Order": "0",
@@ -1502,7 +1502,7 @@
       "source": "91c41c08-87c3-4740-a9fa-a37975717e93",
       "destination": "5d15323e-3729-4694-87b1-181c90af5045",
       "bidirectional": false,
-      "properties": {
+      "attributes": {
         "Request": {},
         "Name": "API Request",
         "Dataflow Order": "0",
@@ -1519,7 +1519,7 @@
       "source": "5d15323e-3729-4694-87b1-181c90af5045",
       "destination": "40560275-0a84-4e52-b67f-f9008519e608",
       "bidirectional": false,
-      "properties": {
+      "attributes": {
         "Response": {},
         "Name": "API Response",
         "Dataflow Order": "0",
@@ -1536,7 +1536,7 @@
       "source": "40560275-0a84-4e52-b67f-f9008519e608",
       "destination": "5d15323e-3729-4694-87b1-181c90af5045",
       "bidirectional": false,
-      "properties": {
+      "attributes": {
         "Request": {},
         "Name": "API Request",
         "Dataflow Order": "0",
@@ -1553,7 +1553,7 @@
       "source": "b56070fb-682d-4af7-8262-a31064d85ba1",
       "destination": "5d15323e-3729-4694-87b1-181c90af5045",
       "bidirectional": false,
-      "properties": {
+      "attributes": {
         "Response": {},
         "Name": "API Response",
         "Dataflow Order": "0",
@@ -1570,7 +1570,7 @@
       "source": "5d15323e-3729-4694-87b1-181c90af5045",
       "destination": "b56070fb-682d-4af7-8262-a31064d85ba1",
       "bidirectional": false,
-      "properties": {
+      "attributes": {
         "Request": {},
         "Name": "API Request",
         "Dataflow Order": "0",
@@ -1587,7 +1587,7 @@
       "source": "b56070fb-682d-4af7-8262-a31064d85ba1",
       "destination": "07d453bf-8157-4623-a0e9-5107cc3ca0a5",
       "bidirectional": false,
-      "properties": {
+      "attributes": {
         "Request": {},
         "Name": "File Request",
         "Dataflow Order": "0",
@@ -1604,7 +1604,7 @@
       "source": "07d453bf-8157-4623-a0e9-5107cc3ca0a5",
       "destination": "b56070fb-682d-4af7-8262-a31064d85ba1",
       "bidirectional": false,
-      "properties": {
+      "attributes": {
         "Response": {},
         "Name": "File Response",
         "Dataflow Order": "0",

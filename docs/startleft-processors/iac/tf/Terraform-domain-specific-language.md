@@ -161,7 +161,7 @@ These functions are used as parameters of the mapping attributes for configuring
 | *$*format          | formatter | A named format string based on the output of other `$special` fields.                                                                                                                                                                                                                              |
 | *$*module          | filter    | Search through the module section matching by source's attribute                                                                                                                                                                                                                                   |
 | *$*skip            | filter    | A sub-field of `$source`, specifying specific objects to skip if not explicitly defined                                                                                                                                                                                                            |
-| *$*catchall        | filter    | A sub-field of `$source`, specifying a default search for all other objects not explicitly defined                                                                                                                                                                                                 |
+| *$*catchall        | filter    | A sub-field of `$source`, including any matching resource unless it is already found (as a more specific one) or if it has been skipped                                                                                                                                                            |
 | *$*lookup          | selector  | Allows you to look up the output of a $special field against a key-value lookup table                                                                                                                                                                                                              |
 | *$*hub             | connector | Only for dataflow's "source" and "destination" fields. Specially created for building dataflows from Security Group structures without generating components from them. Allows defining abstract contact points for larger end-to-end final dataflows                                              |
 | *$*ip              | grouper   | When defining a component's "name" field as `$ip`, will generate a singleton component for representing an external IP but without limitations of singleton for this case, so the "type" for the defined mapping definition with `$ip` (i.e. generic-terminal) will not be catalogued as singleton |
@@ -968,43 +968,197 @@ This **mapping function** *skip* specifying specific objects to skip if not expl
  
 ### *$*catchall
 
-This **mapping function** *catchall* is used to create a component for each resource that matches a certain query. 
+This **mapping function** *catchall* is used to create a component for each resource that matches a certain query.
+It will include any matching resource unless it is already found as a more specific resource or if it has been skipped.
 
-> A section explaining how to use *$*catchall will be available soon.
+| Type   | Consumes            | Produces                                        | Configuration params           | 
+|--------|---------------------|-------------------------------------------------|--------------------------------|
+ | filter | A list of resources | A list of resources matching the provided query | Mapping Function configuration |
 
-[//]: # (| Type   | Consumes            | Produces                              | Configuration params           | )
-[//]: # (|--------|---------------------|---------------------------------------|--------------------------------|)
-[//]: # ( | filter | A list of resources | A resources list of resources to skip | Mapping Function configuration |)
-[//]: # ()
-[//]: # ()
-[//]: # (> :octicons-light-bulb-16: This mapping specifies the component rds by the resources of type in  &#40; aws_db_instance, aws_rds_cluster&#41;)
-[//]: # (> but skipping the resource with name `mysql-secret`)
-[//]: # (=== "Mapping file")
-[//]: # ()
-[//]: # (    ```yaml)
-[//]: # (    trustzones:)
-[//]: # (      - id:   public-cloud-01)
-[//]: # (        name: Public Cloud)
-[//]: # (        type: b61d6911-338d-46a8-9f39-8dcd24abfe91)
-[//]: # (        $default: true)
-[//]: # (    components:)
-[//]: # (      - type:       rds)
-[//]: # (        $source:    {$type: ["aws_db_instance"]})
-[//]: # (      - type:       empty-component)
-[//]: # (        $source:    {$catchall: {$root: "resource|squash_terraform&#40;@&#41;"}})
-[//]: # (    dataflows: [])
-[//]: # (    ```)
-[//]: # (=== "Resource File")
-[//]: # ()
-[//]: # (    ```terraform)
-[//]: # (    resource "aws_db_instance" "mysql" {})
-[//]: # (    resource "aws_rds_cluster" "aurora-cluster-demo" {})
-[//]: # (    ```)
-[//]: # ()
-[//]: # (=== "OTM")
-[//]: # ()
-[//]: # (    ```yaml)
-[//]: # (    ```)
+??? tip "Example #1: only catchall"
+
+    > :octicons-light-bulb-16: This mapping matches all previously not matched components, regardless theirs specific types or names.
+    > It is used along with [$root](http://localhost:8000/startleft/startleft-processors/iac/tf/Terraform-domain-specific-language/#root)
+    > mapping function seen before, and with [$squash_terraform](http://localhost:8000/startleft/startleft-processors/iac/tf/Terraform-additional-jmespath-functions/#squash_terraform)
+    > explained in the next section
+
+    === "Mapping file"
+        ```yaml
+        trustzones:
+          - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+            name: Public Cloud
+            $default: true
+        components:
+          - type:       empty-component
+            $source:    {$catchall: {$root: "resource|squash_terraform(@)"}}
+        dataflows: []
+        ```
+    === "Resource File"
+        ```terraform
+        resource "aws_db_instance" "mysql" {}
+        resource "aws_db_instance" "mysql-secret" {}
+        resource "aws_rds_cluster" "aurora-cluster-demo" {}
+        ```
+    === "OTM"
+        ```yaml
+        otmVersion: 0.1.0
+        project:
+          name: name
+          id: id
+        representations:
+          - name: Terraform
+            id: Terraform
+            type: code
+        trustZones:
+          - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+            name: Public Cloud
+            risk:
+              trustRating: 10
+        components:
+          - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_db_instance-mysql
+            name: mysql
+            type: empty-component
+            parent:
+              trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+            tags:
+              - aws_db_instance
+          - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_db_instance-mysql_secret
+            name: mysql-secret
+            type: empty-component
+            parent:
+              trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+            tags:
+              - aws_db_instance
+          - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_db_instance-aurora_cluster_demo
+            name: aurora-cluster-demo
+            type: empty-component
+            parent:
+              trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+            tags:
+              - aws_rds_cluster
+        dataflows: []
+        ```
+
+??? tip "Example #2: explicit mapping and catchall"
+
+    > :octicons-light-bulb-16: This mapping matches all resources, except for those ones already mapped by a more specific case
+
+    === "Mapping file"
+        ```yaml
+        trustzones:
+          - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+            name: Public Cloud
+            $default: true
+        components:
+          - type:       rds
+            $source:    {$type: ["aws_db_instance", "aws_rds_cluster"]}
+          - type:       empty-component
+            $source:    {$catchall: {$root: "resource|squash_terraform(@)"}}
+        dataflows: []
+        ```
+    === "Resource File"
+        ```terraform
+        resource "aws_db_instance" "mysql" {}
+        resource "aws_db_instance" "mysql-secret" {}
+        resource "aws_rds_cluster" "aurora-cluster-demo" {}
+        ```
+    === "OTM"
+        ```yaml
+        otmVersion: 0.1.0
+        project:
+          name: name
+          id: id
+        representations:
+          - name: Terraform
+            id: Terraform
+            type: code
+        trustZones:
+          - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+            name: Public Cloud
+            risk:
+              trustRating: 10
+        components:
+          - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_db_instance-mysql
+            name: mysql
+            type: rds
+            parent:
+              trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+            tags:
+              - aws_db_instance
+          - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_db_instance-mysql_secret
+            name: mysql-secret
+            type: rds
+            parent:
+              trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+            tags:
+              - aws_db_instance
+          - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_db_instance-aurora_cluster_demo
+            name: aurora-cluster-demo
+            type: empty-component
+            parent:
+              trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+            tags:
+              - aws_rds_cluster
+        dataflows: []
+        ```
+
+??? tip "Example #3: skip and catchall"
+
+    > :octicons-light-bulb-16: This mapping matches all resources, except for those explicitly skipped
+
+    === "Mapping file"
+        ```yaml
+        trustzones:
+          - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+            name: Public Cloud
+            $default: true
+        components:
+          - type:       skip_mysql-secret
+            $source:    {$skip: {$name: "mysql-secret"}}
+          - type:       empty-component
+            $source:    {$catchall: {$root: "resource|squash_terraform(@)"}}
+        dataflows: []
+        ```
+    === "Resource File"
+    
+        ```terraform
+        resource "aws_db_instance" "mysql" {}
+        resource "aws_db_instance" "mysql-secret" {}
+        resource "aws_rds_cluster" "aurora-cluster-demo" {}
+        ```
+    === "OTM"
+    
+        ```yaml
+        otmVersion: 0.1.0
+        project:
+          name: name
+          id: id
+        representations:
+          - name: Terraform
+            id: Terraform
+            type: code
+        trustZones:
+          - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+            name: Public Cloud
+            risk:
+              trustRating: 10
+        components:
+          - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_db_instance-mysql
+            name: mysql
+            type: empty-component
+            parent:
+              trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+            tags:
+              - aws_db_instance
+          - id: b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_db_instance-aurora_cluster_demo
+            name: aurora-cluster-demo
+            type: empty-component
+            parent:
+              trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+            tags:
+              - aws_rds_cluster
+        dataflows: []
+        ```
 
 ### *$*lookup
 This **mapping function** *lookup* allows you to look up the output of a special field against a key-value lookup table.
@@ -1035,11 +1189,13 @@ This **special mapping field** *hub* allows defining abstract contact points for
 Only for dataflow's "source" and "destination" fields. Specially created for building dataflows from 
 Security Group structures without generating components from them.
 
-> A section explaining how to use *$*hub will be available soon.
+> Reference to [Security Groups as dataflows](Terraform-how-dataflow-mapping-works.md#security-groups-as-dataflows) 
+for usage examples.
 
 ### *$*ip
 When defining a component's "name" field as `$ip`, will generate a singleton component for representing an external 
 IP but without limitations of singleton for this case, so the "type" for the defined mapping definition with `$ip` 
 (i.e. `generic-terminal`) will not be catalogued as singleton.
 
-> A section explaining how to use *$*ip will be available soon.
+> Reference to [Security Groups as dataflows](Terraform-how-dataflow-mapping-works.md#security-groups-as-dataflows) 
+for usage examples.
