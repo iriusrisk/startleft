@@ -1189,11 +1189,13 @@ This **special mapping field** *hub* allows defining abstract contact points for
 Only for dataflow's "source" and "destination" fields. Specially created for building dataflows from 
 Security Group structures without generating components from them.
 
-> A section explaining how to use *$*hub will be available soon.
+> Reference to [Security Groups as dataflows](Terraform-how-dataflow-mapping-works.md#security-groups-as-dataflows) 
+for usage examples.
 
 ### *$*ip
 When defining a component's "name" field as `$ip`, will generate a singleton component for representing an external 
 IP but without limitations of singleton for this case, so the "type" for the defined mapping definition with `$ip` 
 (i.e. `generic-terminal`) will not be catalogued as singleton.
 
-> A section explaining how to use *$*ip will be available soon.
+> Reference to [Security Groups as dataflows](Terraform-how-dataflow-mapping-works.md#security-groups-as-dataflows) 
+for usage examples.

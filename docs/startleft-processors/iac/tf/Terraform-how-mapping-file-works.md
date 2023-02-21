@@ -772,4 +772,100 @@ The modules imported in a Terraform file can be mapped into OTM components using
     ```
 
 ### How To Map Dataflows
-This section is still *Work In Progress*.
+The Dataflows is a Threat Modelling concept that will never be present as is in the Terraform
+source file. Thus, the `slp_tf` relies on the configuration defined in the `dataflows` section of the Mapping File. 
+```yaml
+dataflows: # (1)!
+  - name:         {$format: "S3 dataflow from {resource_type}"} # (2)!
+    $source:      {$type: "aws_s3_bucket_logging"} # (3)!
+    source:       {$path: "resource_properties.bucket" } # (4)!
+    destination:  {$path: "resource_properties.target_bucket"} # (5)!
+    tags: # (6)!
+      - $format: "Dataflow created by {resource_type}-{resource_name}"
+```
+
+1. **dataflows section** defines the Dataflows mapping behavior.
+2. set **dataflow[name]** value
+3. **special mapping fields** `$source` this attribute is used to configure the mapping behavior which will create a dataflow
+4. set **dataflow[source]** value using any attribute available at the **$source**
+5. set **dataflow[destination]** value using any attribute available at the **$source**
+6. *Optional:* set **component[tag]** value
+
+>  :material-information-outline: The mapping name attribute is optional, resource_name will use as default
+
+The creation of some dataflow may depend on the existence of some resources in the original file. To configure this 
+behavior, the `$source` attribute is used.
+
+=== "Mapping file"
+
+    ```yaml
+    trustzones:
+      - id:   public-cloud-01
+        name: Public Cloud
+        type: b61d6911-338d-46a8-9f39-8dcd24abfe91
+        $default: true
+    components:
+      - type:        s3
+        $source:     {$type: "aws_s3_bucket"}
+    dataflows:
+      - name:         {$format: "S3 dataflow from {resource_type}"}
+        $source:      {$type: "aws_s3_bucket_logging"}
+        source:       {$path: "resource_properties.bucket" }
+        destination:  {$path: "resource_properties.target_bucket"}
+        tags:
+          - $format: "Dataflow created by {resource_type}-{resource_name}"
+    ```
+=== "Resource File"
+
+    ```terraform
+    resource "aws_s3_bucket_logging" "logging" {
+      bucket = aws_s3_bucket.bucket.id 
+      target_bucket = aws_s3_bucket.log_bucket.id
+    }
+    resource "aws_s3_bucket" "bucket" { }
+    resource "aws_s3_bucket" "log_bucket" { }
+    ```
+=== "OTM"
+
+    ```yaml
+    otmVersion: 0.1.0
+    project:
+      name: name
+      id: id
+    representations:
+      - name: Terraform
+        id: Terraform
+        type: code
+    trustZones:
+      - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+        name: Public Cloud
+        risk:
+          trustRating: 10
+    components:
+      - id: public-cloud-01.aws_s3_bucket-bucket
+        name: bucket
+        type: s3
+        parent:
+          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+        tags:
+          - aws_s3_bucket
+      - id: public-cloud-01.aws_s3_bucket-log_bucket
+        name: log_bucket
+        type: s3
+        parent:
+          trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+        tags:
+          - aws_s3_bucket
+    dataflows:
+      - id: 591089c3-9dc1-42c0-a574-3674f2d9deaf
+        name: S3 dataflow from aws_s3_bucket_logging
+        source: public-cloud-01.aws_s3_bucket-bucket
+        destination: public-cloud-01.aws_s3_bucket-log_bucket
+        tags:
+          - Dataflow created by aws_s3_bucket_logging-logging
+    ```
+
+>  :octicons-light-bulb-16: The dataflow identifier is generated internally by the `slp_tf`.
+
+As Terraform Dataflows may be a complicated concept, refer to the 
+[How Dataflow Mapping works](Terraform-how-dataflow-mapping-works.md) section for deeper explanation.
