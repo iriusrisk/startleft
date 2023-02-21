@@ -28,6 +28,10 @@ class OTMFileLoader:
                 logger.error('Cannot find OTM file')
                 msg = 'Unable to find the OTM file'
                 raise OTMResultError('OTM file not exists', msg, msg)
+            except UnicodeDecodeError:
+                logger.error('Cannot decode OTM file')
+                msg = 'Unable to decode the OTM file'
+                raise OTMResultError('OTM file cannot be read', msg, msg)
 
             logger.debug('OTM file loaded successfully')
         return otm
