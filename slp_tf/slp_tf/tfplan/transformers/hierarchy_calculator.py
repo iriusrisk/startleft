@@ -5,7 +5,7 @@ from networkx import DiGraph
 
 from otm.otm.entity.otm import Otm
 from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
-from tfplan.graph.relationships_extractor import RelationshipsExtractor
+from slp_tf.slp_tf.tfplan.graph.relationships_extractor import RelationshipsExtractor
 from slp_tf.slp_tf.tfplan.transformers.tfplan_transformer import TfplanTransformer
 
 
