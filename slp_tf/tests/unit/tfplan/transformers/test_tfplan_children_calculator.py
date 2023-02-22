@@ -1,4 +1,4 @@
-from tfplan.transformers.tfplan_children_calculator import TfplanChildrenCalculator
+from slp_tf.slp_tf.tfplan.transformers.tfplan_children_calculator import TfplanChildrenCalculator
 from slp_tf.tests.unit.tfplan.otm_graph_util import build_component_id, build_mocked_otm, build_graph, \
     assert_parents
 
