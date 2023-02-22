@@ -1,18 +1,18 @@
 import logging
 
-from otm.otm.entity.otm import Otm
+from otm.otm.entity.otm import OTM
 
 logger = logging.getLogger(__name__)
 
 
-class OtmTrustZoneUnifier:
+class OTMTrustZoneUnifier:
 
-    def __init__(self, otm: Otm):
-        self.otm: Otm = otm
+    def __init__(self, otm: OTM):
+        self.otm: OTM = otm
 
     def unify(self):
 
-        for tz  in self.otm.trustzones:
+        for tz in self.otm.trustzones:
             valid_id = tz.type
             old_id = tz.id
             self.change_childs(old_id, valid_id)
@@ -21,9 +21,9 @@ class OtmTrustZoneUnifier:
         self.delete_duplicated_tz()
 
     def change_childs(self, old_id, valid_id):
-        for component in self.otm.components:
-            if component.parent == old_id:
-                component.parent = valid_id
+        for child in self.otm.components + self.otm.trustzones:
+            if child.parent == old_id:
+                child.parent = valid_id
 
     def delete_duplicated_tz(self):
         deduplicated = dict()

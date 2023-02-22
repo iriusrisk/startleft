@@ -147,7 +147,7 @@ potentially arise.
 
 <u>Main responsibilities</u>: 
 
-* Defining the main conversion process using a template pattern in the class `OtmProcessor`.
+* Defining the main conversion process using a template pattern in the class `OTMProcessor`.
 * Defining a set of interfaces for each step of the process (source and mapping files loading and validating, OTM conversion process and OTM validation) that must be implemented by the specific SLPs.
 * Defining all the [possible errors](Errors-Management.md) that may arise through the conversion process.
 * Defining a `ProviderResolver` class to dynamically retrieve the right SLP based on the source type (CFT, TF, etc.).

@@ -2,14 +2,14 @@ from unittest import TestCase
 
 import yaml
 
-from slp_base.slp_base.otm_validator import OtmValidator
+from slp_base.slp_base.otm_validator import OTMValidator
 from slp_base.slp_base.schema import Schema
 from slp_base.tests.resources import test_resource_paths
 
 SAMPLE_MAPPING_FILE = test_resource_paths.cft_mapping_no_dataflows
 OTM_WITHOUT_VERSION = test_resource_paths.otm_without_version
 CFT_MAPPING_SCHEMA = test_resource_paths.iac_cft_mapping_schema
-OTM_SCHEMA_FILENAME = OtmValidator.schema_filename
+OTM_SCHEMA_FILENAME = OTMValidator.schema_filename
 
 
 class TestSchema(TestCase):

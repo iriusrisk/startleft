@@ -1,5 +1,5 @@
 from slp_base import MappingLoader, MappingValidator
-from slp_base import OtmProcessor
+from slp_base import OTMProcessor
 from slp_base import ProviderValidator
 from slp_base.slp_base.provider_loader import ProviderLoader
 from slp_base.slp_base.provider_parser import ProviderParser
@@ -10,9 +10,9 @@ from slp_mtmt.slp_mtmt.mtmt_parser import MTMTParser
 from slp_mtmt.slp_mtmt.mtmt_validator import MTMTValidator
 
 
-class MTMTProcessor(OtmProcessor):
+class MTMTProcessor(OTMProcessor):
     """
-    Mtmt implementation of OtmProcessor
+    Mtmt implementation of OTMProcessor
     """
 
     def __init__(self, project_id: str, project_name: str, source: [bytes], mappings: [bytes]):

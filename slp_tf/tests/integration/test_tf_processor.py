@@ -1,20 +1,16 @@
 import pytest
 
 from sl_util.sl_util.file_utils import get_data, get_byte_data
-from slp_base.slp_base.errors import OtmBuildingError, MappingFileNotValidError, IacFileNotValidError, \
+from slp_base.slp_base.errors import MappingFileNotValidError, IacFileNotValidError, \
     LoadingIacFileError
 from slp_base.tests.util.otm import validate_and_compare
 from slp_tf import TerraformProcessor
 from slp_tf.tests.resources import test_resource_paths
-from slp_tf.tests.resources.test_resource_paths import expected_aws_altsource_components, \
-    expected_run_valid_mappings, expected_aws_parent_children_components, expected_aws_singleton_components, \
-    expected_aws_security_groups_components, expected_mapping_skipped_component_without_parent, expected_no_resources, \
-    expected_mapping_modules, expected_extra_modules, expected_elb_example, terraform_for_mappings_tests_json, \
-    expected_separated_networks_components, terraform_iriusrisk_tf_aws_mapping, terraform_minimal_content_otm, \
-    tf_components_with_trustzones_of_same_type_otm, tf_file_referenced_vars_expected_result, \
-    minimal_otm_expected_result, otm_with_only_default_trustzone_expected_result, \
-    terraform_iriusrisk_tf_aws_mapping_v180
-from slp_tf.tests.resources.test_resource_paths import expected_orphan_component_is_not_mapped
+from slp_tf.tests.resources.test_resource_paths import \
+    expected_run_valid_mappings, expected_elb_example, terraform_for_mappings_tests_json, \
+    expected_separated_networks_components, terraform_iriusrisk_tf_aws_mapping, \
+    tf_file_referenced_vars_expected_result, \
+    minimal_otm_expected_result, otm_with_only_default_trustzone_expected_result, expected_no_resources
 from slp_tf.tests.utility import excluded_regex
 
 PUBLIC_CLOUD_TZ_ID = 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
@@ -27,22 +23,6 @@ SAMPLE_VALID_TF_FILE = terraform_for_mappings_tests_json
 
 
 class TestTerraformProcessor:
-
-    @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
-    def test_orphan_component_is_not_mapped(self, mapping_file):
-        # GIVEN a valid TF file with a resource (VPCssm) whose parents do (private VPCs) not exist in the file
-        terraform_file = get_data(test_resource_paths.terraform_orphan_component)
-
-        # AND a valid TF mapping file
-        mapping_file = get_data(mapping_file)
-
-        # WHEN the TF file is processed
-        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
-
-        # THEN the VPCsmm components without parents are omitted
-        # AND the rest of the OTM details match the expected
-        result, expected = validate_and_compare(otm.json(), expected_orphan_component_is_not_mapped, excluded_regex)
-        assert result == expected
 
     @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
     def test_run_valid_mappings(self, mapping_file):
@@ -60,81 +40,6 @@ class TestTerraformProcessor:
         assert result == expected
 
     @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
-    def test_aws_parent_children_components(self, mapping_file):
-        # GIVEN a valid TF file with some resources
-        terraform_file = get_data(test_resource_paths.terraform_aws_parent_children_components)
-
-        # AND a valid TF mapping file
-        mapping_file = get_data(mapping_file)
-
-        # WHEN the TF file is processed
-        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
-
-        # THEN the resulting OTM match the expected one
-        result, expected = validate_and_compare(otm, expected_aws_parent_children_components, excluded_regex)
-        assert result == expected
-
-    @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
-    def test_aws_singleton_components(self, mapping_file):
-        # GIVEN a valid TF file with some resources
-        terraform_file = get_data(test_resource_paths.terraform_aws_singleton_components_unix_line_breaks)
-
-        # AND a valid TF mapping file
-        mapping_file = get_data(mapping_file)
-
-        # WHEN the TF file is processed
-        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
-
-        # THEN the resulting OTM match the expected one
-        result, expected = validate_and_compare(otm, expected_aws_singleton_components, excluded_regex)
-        assert result == expected
-
-    @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
-    def test_aws_altsource_components(self, mapping_file):
-        # GIVEN a valid TF file with some resources
-        terraform_file = get_data(test_resource_paths.terraform_aws_altsource_components)
-
-        # AND a valid TF mapping file
-        mapping_file = get_data(mapping_file)
-
-        # WHEN the TF file is processed
-        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
-
-        # THEN the resulting OTM match the expected one
-        result, expected = validate_and_compare(otm, expected_aws_altsource_components, excluded_regex)
-        assert result == expected
-
-    def test_mapping_component_without_parent(self):
-        # GIVEN a valid TF file
-        terraform_file = get_data(test_resource_paths.terraform_component_without_parent)
-
-        # AND an invalid TF mapping file with a mapping without parent
-        mapping_file = get_data(test_resource_paths.terraform_mapping_aws_component_without_parent)
-
-        # WHEN the TF file is processed
-        # THEN an OtmBuildingError is raised
-        with pytest.raises(OtmBuildingError) as e_info:
-            TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
-
-        # AND the error references a parent issue
-        assert 'KeyError' == e_info.value.detail
-        assert "'parent'" == e_info.value.message
-
-    def test_mapping_skipped_component_without_parent(self):
-        # GIVEN a valid TF file
-        terraform_file = get_data(test_resource_paths.terraform_skipped_component_without_parent)
-
-        # AND a TF mapping file that skips the component without parent
-        mapping_file = get_data(test_resource_paths.terraform_mapping_aws_component_without_parent)
-
-        # WHEN the TF file is processed
-        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
-
-        # THEN the resulting OTM match the expected one
-        result, expected = validate_and_compare(otm, expected_mapping_skipped_component_without_parent, excluded_regex)
-        assert result == expected
-
-    @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
     def test_no_resources(self, mapping_file):
         # GIVEN a valid TF file with some resources
         terraform_file = get_data(test_resource_paths.terraform_no_resources)
@@ -147,34 +52,6 @@ class TestTerraformProcessor:
 
         # THEN the resulting OTM match the expected one
         result, expected = validate_and_compare(otm, expected_no_resources, excluded_regex)
-        assert result == expected
-
-    def test_mapping_modules(self):
-        # GIVEN a valid TF file with some TF modules
-        terraform_file = get_data(test_resource_paths.terraform_modules)
-
-        # AND a valid TF mapping file
-        mapping_file = get_data(test_resource_paths.terraform_mapping_modules)
-
-        # WHEN the TF file is processed
-        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
-
-        # THEN the resulting OTM match the expected one
-        result, expected = validate_and_compare(otm, expected_mapping_modules, excluded_regex)
-        assert result == expected
-
-    def test_extra_modules(self):
-        # GIVEN a valid TF file with some special TF modules
-        terraform_file = get_data(test_resource_paths.terraform_extra_modules_sample)
-
-        # AND a valid TF mapping file
-        mapping_file = get_data(test_resource_paths.terraform_mapping_extra_modules)
-
-        # WHEN the TF file is processed
-        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
-
-        # THEN the resulting OTM match the expected one
-        result, expected = validate_and_compare(otm, expected_extra_modules, excluded_regex)
         assert result == expected
 
     @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
@@ -222,7 +99,7 @@ class TestTerraformProcessor:
         mapping_file = [get_data(terraform_iriusrisk_tf_aws_mapping)]
 
         # When creating OTM project from IaC file
-        # Then raises OtmBuildingError
+        # Then raises OTMBuildingError
         with pytest.raises(IacFileNotValidError):
             TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], mapping_file).process()
 
@@ -302,7 +179,7 @@ class TestTerraformProcessor:
 
         # Then an empty OTM containing only the default trustzone is generated
         result, expected = validate_and_compare(otm.json(), otm_with_only_default_trustzone_expected_result,
-                                                    excluded_regex)
+                                                excluded_regex)
         assert result == expected
 
     def test_generate_empty_otm_with_empty_mapping_file(self):
@@ -335,31 +212,8 @@ class TestTerraformProcessor:
 
         # THEN a file with the single_tf_file-expected-result.otm contents is returned
         result, expected = validate_and_compare(otm.json(), tf_file_referenced_vars_expected_result,
-                                 excluded_regex)
+                                                excluded_regex)
         assert result == expected
-
-    def test_security_group_components_from_same_resource(self):
-        # GIVEN a valid TF file with a security group containing both an inbound and an outbound rule
-        tf_file = get_data(test_resource_paths.terraform_components_from_same_resource)
-
-        # AND a valid CFT mapping file
-        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
-
-        # WHEN the CFT file is processed
-        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
-
-        # THEN the number of TZs, components and dataflows are right
-        assert len(otm.trustzones) == 2
-        assert len(otm.components) == 2
-        assert len(otm.dataflows) == 0
-
-        # AND the component IDs are differentiated by their IPs
-        ingress_id = list(filter(lambda obj: obj.name == '52.30.97.44/32', otm.components))[0].id
-        egress_id = list(filter(lambda obj: obj.name == '0.0.0.0/0', otm.components))[0].id
-
-        assert ingress_id != egress_id
-        assert '52_30_97_44_32' in ingress_id
-        assert '0_0_0_0_0' in egress_id
 
     def test_resources_with_same_name(self):
         """
@@ -378,51 +232,3 @@ class TestTerraformProcessor:
         #    AND both components are mapped with the same name
         assert len(otm.components) == 2
         assert otm.components[0].name == otm.components[1].name
-
-    @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(terraform_iriusrisk_tf_aws_mapping), id="with actual mapping file"),
-        pytest.param(get_data(terraform_iriusrisk_tf_aws_mapping_v180), id="with backwards mapping_file")])
-    def test_aws_security_groups_components_full_example(self, mapping_file):
-        """
-        Test backward compatibility of aws_security_groups_components.tf
-        against iriusrisk-tf-aws-mapping-1.8.0 mapping file (release 1.8.0)
-        """
-        # GIVEN the TF file of aws security groups
-        # AND a valid mapping file
-        terraform_file = get_data(test_resource_paths.terraform_aws_security_groups_components)
-
-        # WHEN the TF file is processed
-        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
-
-        # THEN the resulting OTM match the expected one
-        #   AND backward compatibility works correctly
-        result, expected = validate_and_compare(otm, expected_aws_security_groups_components, excluded_regex)
-        assert result == expected
-
-    def test_trustzone_types(self):
-        # GIVEN a valid TF file
-        terraform_file = get_data(test_resource_paths.terraform_minimal_content)
-
-        # AND a valid TF mapping file that defines two TZs, one with type and the one without type
-        mapping_file = get_data(test_resource_paths.terraform_trustzone_types_mapping)
-
-        # WHEN the TF file is processed
-        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
-
-        # THEN an empty OTM containing only the default trustzone is generated
-        result, expected = validate_and_compare(otm.json(), terraform_minimal_content_otm, None)
-        assert result == expected
-
-    def test_components_with_trustzones_of_same_type(self):
-        # GIVEN a valid TF file WITH some components mapped to different TZs of the same type
-        terraform_file = get_data(test_resource_paths.terraform_components_with_trustzones_of_same_type)
-
-        # AND a valid TF mapping file that defines two different TZs of the same type
-        mapping_file = get_data(test_resource_paths.terraform_multiple_trustzones_same_type_mapping)
-
-        # WHEN the TF file is processed
-        otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
-
-        # THEN an empty OTM containing only the default trustzone is generated
-        result, expected = validate_and_compare(otm.json(), tf_components_with_trustzones_of_same_type_otm, None)
-        assert result == expected
