@@ -3,12 +3,12 @@ import logging
 import yaml
 from deepmerge import always_merger
 
-from slp_base.slp_base.errors import OtmResultError
+from slp_base.slp_base.errors import OTMResultError
 
 logger = logging.getLogger(__name__)
 
 
-class OtmFileLoader:
+class OTMFileLoader:
 
     def __init__(self):
         self.map = {}
@@ -27,7 +27,11 @@ class OtmFileLoader:
             except FileNotFoundError:
                 logger.error('Cannot find OTM file')
                 msg = 'Unable to find the OTM file'
-                raise OtmResultError('OTM file not exists', msg, msg)
+                raise OTMResultError('OTM file not exists', msg, msg)
+            except UnicodeDecodeError:
+                logger.error('Cannot decode OTM file')
+                msg = 'Unable to decode the OTM file'
+                raise OTMResultError('OTM file cannot be read', msg, msg)
 
             logger.debug('OTM file loaded successfully')
         return otm

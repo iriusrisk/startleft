@@ -6,13 +6,13 @@ import pytest
 from pytest import mark
 
 import startleft.startleft.api.controllers.diagram.diag_create_otm_controller as diagram_controller
-from otm.otm.entity.otm import Otm
+from otm.otm.entity.otm import OTM
 from slp_base import DiagramType
-from slp_base import OtmGenerationError, LoadingDiagramFileError, DiagramFileNotValidError, \
-    MappingFileNotValidError, OtmResultError
+from slp_base import OTMGenerationError, LoadingDiagramFileError, DiagramFileNotValidError, \
+    MappingFileNotValidError, OTMResultError
 
-DUMMY_OTM_VISIO = Otm("otm-mock", "otm mock", DiagramType.VISIO)
-DUMMY_OTM_LUCID = Otm("otm-mock", "otm mock", DiagramType.LUCID)
+DUMMY_OTM_VISIO = OTM("otm-mock", "otm mock", DiagramType.VISIO)
+DUMMY_OTM_LUCID = OTM("otm-mock", "otm mock", DiagramType.LUCID)
 
 
 class TestApiDiagram:
@@ -127,12 +127,12 @@ class TestApiDiagram:
         valid_default_mapping_file = MagicMock(filename='valid_mapping_file', content_type='application/json',
                                                file=MagicMock(spec=typing.BinaryIO))
 
-        # And the mocked method throwing a OtmResultError
-        with pytest.raises(OtmResultError) as e_info:
+        # And the mocked method throwing a OTMResultError
+        with pytest.raises(OTMResultError) as e_info:
             # WHEN the POST /diagram endpoint is called with_diagram params
             # AND an error is raised
             with patch('slp_visio.slp_visio.visio_processor.VisioProcessor.process',
-                       side_effect=OtmResultError('mocked error OTM_RESULT_ERROR', 'mocked error detail',
+                       side_effect=OTMResultError('mocked error OTM_RESULT_ERROR', 'mocked error detail',
                                                   'mocked error msg 4')):
                 # THEN a response HTTP Status that matches the error is returned
                 diagram_controller.diagram(invalid_diagram_file, diag_type, 'diagram_controller_on_otm_result_error_id',
@@ -153,12 +153,12 @@ class TestApiDiagram:
         valid_default_mapping_file = MagicMock(filename='valid_mapping_file', content_type='application/json',
                                                file=MagicMock(spec=typing.BinaryIO))
 
-        # And the mocked method throwing a OtmGenerationError
-        with pytest.raises(OtmGenerationError) as e_info:
+        # And the mocked method throwing a OTMGenerationError
+        with pytest.raises(OTMGenerationError) as e_info:
             # WHEN the POST /diagram endpoint is called with_diagram params
             # AND an error is raised
             with patch('slp_visio.slp_visio.visio_processor.VisioProcessor.process',
-                       side_effect=OtmGenerationError('mocked error OTM_GENERATION_ERROR', 'mocked error detail',
+                       side_effect=OTMGenerationError('mocked error OTM_GENERATION_ERROR', 'mocked error detail',
                                                       'mocked error msg 5')):
                 # THEN a response HTTP Status that matches the error is returned
                 diagram_controller.diagram(invalid_diagram_file, diag_type,

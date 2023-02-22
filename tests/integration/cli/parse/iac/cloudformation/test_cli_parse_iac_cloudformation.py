@@ -2,7 +2,7 @@ from click.testing import CliRunner
 from pytest import mark
 
 from slp_base import IacFileNotValidError, MappingFileNotValidError
-from slp_base.slp_base.otm_file_loader import OtmFileLoader
+from slp_base.slp_base.otm_file_loader import OTMFileLoader
 from slp_base.tests.util.otm import validate_and_compare_otm
 from startleft.startleft.cli.cli import parse_any
 from tests.integration.cli.parse.iac.test_cli_parse_iac import excluded_regex
@@ -54,7 +54,7 @@ class TestCliParseIaCCloudformation:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            otm = OtmFileLoader().load(output_file_name)
+            otm = OTMFileLoader().load(output_file_name)
             result, expected = validate_and_compare_otm(otm, OTM_CFT_FOR_MAPPING_TESTS, excluded_regex)
             assert result == expected
 
@@ -87,7 +87,7 @@ class TestCliParseIaCCloudformation:
             # Then validator OTM file is generated
             assert result.exit_code == 0
             # and validate and compare otm files
-            otm = OtmFileLoader().load(output_file_name)
+            otm = OTMFileLoader().load(output_file_name)
             result, expected = validate_and_compare_otm(otm, OTM_EMPTY_FILE, None)
             assert result == expected
 

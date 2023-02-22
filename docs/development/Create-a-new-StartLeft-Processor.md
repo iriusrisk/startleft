@@ -85,7 +85,7 @@ So the resulting OTM for this example should be something like:
 ```
 
 ## Understanding the `slp_base` interfaces
-The `OtmProcessor` class inside the `slp_base` module defines the conversion process using a template method, whose behavior depends on the implementations
+The `OTMProcessor` class inside the `slp_base` module defines the conversion process using a template method, whose behavior depends on the implementations
 of the rest of the interfaces in the module.
 
 ![img/conversion-process.png](img/conversion-process.png)
@@ -268,10 +268,12 @@ Create `mais_parser.py` file with the `MAISParser` class implementing `ProviderP
 
 For this example, almost trivial logic for processing our imaginary format is included, but this is the class where
 you would need to actually implement your custom conversion process.
-   
+
 ```python
-from otm.otm.entity import Otm, OtmTrustzone, OtmComponent
-from otm.otm.otm_builder import OtmBuilder
+from otm.otm.entity.component import Component
+from otm.otm.entity.otm import OTM
+from otm.otm.entity.trustzone import Trustzone
+from otm.otm.otm_builder import OTMBuilder
 from slp_base.slp_base.provider_parser import ProviderParser
 from slp_base.slp_base.provider_type import IacType
 
@@ -284,17 +286,17 @@ class MAISParser(ProviderParser):
         self.source = source
         self.mais_mapping = mais_mapping
 
-    def build_otm(self) -> Otm:
-        return OtmBuilder(self.project_id, self.project_name, IacType.MAIS) \
-            .add_components(self.__parse_components()) \
-            .add_trustzones(self.__parse_trustzones()) \
+    def build_otm(self) -> OTM:
+        return OTMBuilder(self.project_id, self.project_name, IacType.MAIS)
+            .add_components(self.__parse_components())
+            .add_trustzones(self.__parse_trustzones())
             .build()
 
-    def __parse_trustzones(self) -> [OtmTrustzone]:
+    def __parse_trustzones(self) -> [Trustzone]:
         default_trustzone = self.__get_default_trustzone()
-        return [OtmTrustzone(default_trustzone['id'], default_trustzone['name'])]
+        return [Trustzone(default_trustzone['id'], default_trustzone['name'])]
 
-    def __parse_components(self) -> [OtmComponent]:
+    def __parse_components(self) -> [Component]:
         component_mappings = self.mais_mapping['components']
         types_mappings = dict(zip(
             [cm['source_type'] for cm in component_mappings],
@@ -306,7 +308,7 @@ class MAISParser(ProviderParser):
             if source_type not in types_mappings:
                 continue
 
-            otm_components.append(OtmComponent(
+            otm_components.append(Component(
                 id=str(mais_component['id']),
                 name=mais_component['name'],
                 type=types_mappings[source_type]['otm_type'],
@@ -317,15 +319,16 @@ class MAISParser(ProviderParser):
         return otm_components
 
     def __get_default_trustzone(self) -> dict:
-        return next(filter(lambda tz: 'default' in  tz and tz['default'], self.mais_mapping['trustZones']))
-    
+        return next(filter(lambda tz: 'default' in tz and tz['default'], self.mais_mapping['trustZones']))
+
 ```
-#### MAISProcessor (OtmProcessor)
+#### MAISProcessor (OTMProcessor)
 Finally, we are going to create the main class, the `MAISProcessor`, in a `mais_processor.py` file for implementing the 
-`OtmProcessor` interface. This class must implement methods for retrieving instances of all the other classes created above:
+`OTMProcessor` interface. This class must implement methods for retrieving instances of all the other classes created above:
+
 ```python
 from slp_base import MappingLoader, MappingValidator
-from slp_base import OtmProcessor
+from slp_base import OTMProcessor
 from slp_base import ProviderValidator
 from slp_base.slp_base.provider_loader import ProviderLoader
 from slp_base.slp_base.provider_parser import ProviderParser
@@ -336,7 +339,7 @@ from slp_mais.slp_mais.mais_parser import MAISParser
 from slp_mais.slp_mais.mais_validator import MAISValidator
 
 
-class MAISProcessor(OtmProcessor):
+class MAISProcessor(OTMProcessor):
 
     def __init__(self, project_id: str, project_name: str, sources: [bytes], mappings: [bytes]):
         self.project_id = project_id

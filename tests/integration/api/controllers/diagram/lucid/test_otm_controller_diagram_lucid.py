@@ -7,7 +7,7 @@ from pytest import mark
 
 from sl_util.sl_util.file_utils import get_byte_data
 from slp_base.slp_base.errors import DiagramFileNotValidError, MappingFileNotValidError, LoadingMappingFileError, \
-    OtmResultError, OtmBuildingError, LoadingDiagramFileError
+    OTMResultError, OTMBuildingError, LoadingDiagramFileError
 from slp_visio.tests.unit.util.test_uuid import is_valid_uuid
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.diagram import diag_create_otm_controller
@@ -29,7 +29,7 @@ def get_url():
 octet_stream = 'application/octet-stream'
 
 
-class TestOtmControllerDiagramLucid:
+class TestOTMControllerDiagramLucid:
 
     @responses.activate
     def test_create_otm_ok_lucid_aws_with_tz(self):
@@ -544,7 +544,7 @@ class TestOtmControllerDiagramLucid:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @responses.activate
-    @patch('slp_base.slp_base.otm_validator.OtmValidator.validate')
+    @patch('slp_base.slp_base.otm_validator.OTMValidator.validate')
     def test_response_on_otm_result_error(self, mock_load_source_data):
         # Given a project_id
         project_id: str = 'project_A_id'
@@ -554,7 +554,7 @@ class TestOtmControllerDiagramLucid:
         mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
-        error = OtmResultError('OTM file does not comply with the schema', 'Schema error', 'mocked error msg')
+        error = OTMResultError('OTM file does not comply with the schema', 'Schema error', 'mocked error msg')
         mock_load_source_data.side_effect = error
 
         # When I do post on diagram endpoint
@@ -567,7 +567,7 @@ class TestOtmControllerDiagramLucid:
         assert response.headers.get('content-type') == 'application/json'
         body_response = json.loads(response.text)
         assert body_response['status'] == '400'
-        assert body_response['error_type'] == 'OtmResultError'
+        assert body_response['error_type'] == 'OTMResultError'
         assert body_response['title'] == 'OTM file does not comply with the schema'
         assert body_response['detail'] == 'Schema error'
         assert len(body_response['errors']) == 1
@@ -584,7 +584,7 @@ class TestOtmControllerDiagramLucid:
         mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
-        error = OtmBuildingError('OTM building error', 'Schema error', 'mocked error msg')
+        error = OTMBuildingError('OTM building error', 'Schema error', 'mocked error msg')
         mock_load_source_data.side_effect = error
 
         # When I do post on diagram endpoint
@@ -597,7 +597,7 @@ class TestOtmControllerDiagramLucid:
         assert response.headers.get('content-type') == 'application/json'
         body_response = json.loads(response.text)
         assert body_response['status'] == '400'
-        assert body_response['error_type'] == 'OtmBuildingError'
+        assert body_response['error_type'] == 'OTMBuildingError'
         assert body_response['title'] == 'OTM building error'
         assert body_response['detail'] == 'Schema error'
         assert len(body_response['errors']) == 1

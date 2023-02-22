@@ -2,8 +2,8 @@ from unittest.mock import patch
 
 from click.testing import CliRunner
 
-from slp_base import OtmGenerationError, LoadingDiagramFileError, DiagramFileNotValidError, \
-    MappingFileNotValidError, OtmResultError
+from slp_base import OTMGenerationError, LoadingDiagramFileError, DiagramFileNotValidError, \
+    MappingFileNotValidError, OTMResultError
 from startleft.startleft.cli.cli import parse_any
 # mappings
 from startleft.tests.unit.cli.parse.diagram.test_unit_cli_parse_diagram import TESTING_DEFAULT_VALID_MAPPING_FILENAME, \
@@ -114,7 +114,7 @@ class TestCliDiagramErrorCodes:
         runner = CliRunner()
         output_file_name = "output-file.otm"
 
-        error = OtmResultError('Parsing provided given IaC/diagram file with the mapping file provided result in an '
+        error = OTMResultError('Parsing provided given IaC/diagram file with the mapping file provided result in an '
                                'invalid OTM file.', None, None)
 
         mock_load_source_data.side_effect = error
@@ -146,7 +146,7 @@ class TestCliDiagramErrorCodes:
         runner = CliRunner()
         output_file_name = "output-file.otm"
 
-        error = OtmGenerationError('Provided files were processed successfully but an error occurred while generating '
+        error = OTMGenerationError('Provided files were processed successfully but an error occurred while generating '
                                    'the OTM file.', None, None)
 
         mock_load_source_data.side_effect = error

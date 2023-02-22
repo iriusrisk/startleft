@@ -1,8 +1,8 @@
 import logging
 
-from otm.otm.entity.otm import Otm
-from otm.otm.otm_builder import OtmBuilder
-from slp_base import OtmBuildingError
+from otm.otm.entity.otm import OTM
+from otm.otm.otm_builder import OTMBuilder
+from slp_base import OTMBuildingError
 from slp_base.slp_base.provider_parser import ProviderParser
 from slp_base.slp_base.provider_type import IacType
 from slp_tf.slp_tf.parse.mapping.tf_component_id_generator import TerraformComponentIdGenerator
@@ -30,7 +30,7 @@ class TerraformParser(ProviderParser):
         self.source_model.otm = self.otm
         self.transformer = TerraformTransformer(source_model=self.source_model, threat_model=self.otm)
 
-    def build_otm(self) -> Otm:
+    def build_otm(self) -> OTM:
         try:
             self.transformer.run(self.mapping)
 
@@ -39,12 +39,12 @@ class TerraformParser(ProviderParser):
             logger.error(f'{e}')
             detail = e.__class__.__name__
             message = e.__str__()
-            raise OtmBuildingError('Error building the threat model with the given files', detail, message)
+            raise OTMBuildingError('Error building the threat model with the given files', detail, message)
 
         return self.otm
 
     def __initialize_otm(self):
-        return OtmBuilder(self.project_id, self.project_name, IacType.TERRAFORM).build()
+        return OTMBuilder(self.project_id, self.project_name, IacType.TERRAFORM).build()
 
     def __set_path_ids(self):
         path_ids = TerraformPathIdsCalculator(self.otm.components, TerraformComponentIdGenerator).calculate_path_ids()
