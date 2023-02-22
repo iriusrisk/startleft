@@ -1,4 +1,4 @@
-from mapping_file_loader import MappingFileLoader
+from slp_base.slp_base.mapping_file_loader import MappingFileLoader
 from slp_base import MappingFileNotValidError
 
 
