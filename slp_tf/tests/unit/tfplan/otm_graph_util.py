@@ -1,7 +1,7 @@
 from networkx import DiGraph
 
 from otm.otm.entity.trustzone import OtmTrustzone
-from otm_builder import OtmBuilder
+from otm.otm.otm_builder import OtmBuilder
 from slp_base import IacType
 from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
 
