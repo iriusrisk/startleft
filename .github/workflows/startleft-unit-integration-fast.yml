@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install .
+          pip install . --global-option="-IC:C:\Program Files\Graphviz\include/graphviz" --global-option="-LC:C:\Program Files\Graphviz\include/graphviz"
           pip install -e ".[setup,test]"
 
       - name: Test with pytest
