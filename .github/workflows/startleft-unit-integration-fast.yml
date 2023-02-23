@@ -28,7 +28,7 @@ jobs:
           python-version: "3.8"
 
       - name: Setup Graphviz
-        uses: tlylt/install-graphviz@v1
+        uses: ts-graphviz/setup-graphviz@v1
 
       - name: Install dependencies
         run: |
