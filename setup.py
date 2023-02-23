@@ -31,6 +31,7 @@ setup(
         'setuptools==65.5.1',
         'defusedxml==0.7.1',
         'networkx==3.0',
+        'graphviz==0.20.1',
         'pygraphviz==1.10'
     ],
     use_scm_version={
