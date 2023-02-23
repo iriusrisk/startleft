@@ -213,11 +213,8 @@ def validate(mapping_file, mapping_type, otm_file):
     """
 
     if mapping_file:
-        if mapping_type is not None:
-            logger.info(f'Validating: {mapping_type} mapping files')
-            provider_resolver.get_mapping_validator(mapping_type, [get_byte_data(mapping_file)]).validate()
-        else:
-            logger.warning('Unable to determine the mapping file type.')
+        logger.info(f'Validating: {mapping_type} mapping files')
+        provider_resolver.get_mapping_validator(mapping_type, [get_byte_data(mapping_file)]).validate()
 
     if otm_file:
         logger.info("Validating OTM file")

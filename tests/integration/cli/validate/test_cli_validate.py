@@ -14,6 +14,7 @@ CUSTOM_YAML_VISIO_MAPPING_FILENAME = test_resource_paths.custom_vpc_mapping
 MTMT_MAPPING_FILENAME_VALID = test_resource_paths.mtmt_mapping_file_valid
 MTMT_MAPPING_FILENAME_INVALID = test_resource_paths.mtmt_mapping_file_invalid
 VISIO_VALID_MAPPING_FILE = test_resource_paths.default_visio_mapping
+LUCID_VALID_MAPPING_FILE = test_resource_paths.default_lucid_mapping
 TF_VALID_MAPPING_FILE = test_resource_paths.terraform_iriusrisk_tf_aws_mapping
 TF_INVALID_MAPPING_FILE = test_resource_paths.terraform_malformed_mapping_wrong_id
 
@@ -78,6 +79,7 @@ class TestCliValidate:
         pytest.param(VISIO_VALID_MAPPING_FILE, 'VISIO', id="with a valid VISIO mapping file"),
         pytest.param(MTMT_MAPPING_FILENAME_VALID, 'MTMT', id="with a valid MTMT mapping file"),
         pytest.param(CFT_VALID_MAPPING_FILENAME, 'CLOUDFORMATION', id="with a valid CLOUDFORMATION mapping file"),
+        pytest.param(LUCID_VALID_MAPPING_FILE, 'LUCID', id="with a valid LUCID mapping file"),
         pytest.param(TF_VALID_MAPPING_FILE, 'TERRAFORM', id="with a valid TERRAFORM mapping file")])
     def test_validate_valid_mapping_files(self, mapping_file, mapping_file_type, caplog):
         """
@@ -108,6 +110,7 @@ class TestCliValidate:
         pytest.param(MTMT_MAPPING_FILENAME_INVALID, 'MTMT', id="with an invalid MTMT mapping file"),
         pytest.param(INVALID_YAML_FILENAME, 'CLOUDFORMATION', id="with an invalid CLOUDFORMATION mapping file"),
         pytest.param(INVALID_YAML_FILENAME, 'VISIO', id="with an invalid VISIO mapping file"),
+        pytest.param(TF_INVALID_MAPPING_FILE, 'LUCID', id="with an invalid LUCID mapping file"),
         pytest.param(TF_INVALID_MAPPING_FILE, 'TERRAFORM', id="with an invalid TERRAFORM mapping file")])
     def test_validate_invalid_mapping_files(self, mapping_file, mapping_file_type, caplog):
         # Given a info level of logging
@@ -162,7 +165,7 @@ class TestCliValidate:
 
             # Then the exit code is 2
             assert result.exit_code == 2
-            assert result.stdout.__contains__("Error: Missing one of this arguments: {")
+            assert result.stdout.__contains__("Error: Missing one of this arguments: ")
             assert result.stdout.__contains__("mapping_file")
             assert result.stdout.__contains__("otm_file")
 
@@ -181,7 +184,7 @@ class TestCliValidate:
 
             # Then the exit code is 2
             assert result.exit_code == 2
-            assert result.stdout.__contains__("Error: Missing one of this arguments: {")
+            assert result.stdout.__contains__("Error: Missing one of this arguments: ")
             assert result.stdout.__contains__("mapping_type")
             assert result.stdout.__contains__("otm_file")
 
@@ -192,6 +195,8 @@ class TestCliValidate:
                                                                "TERRAFORM type"),
         pytest.param(CFT_VALID_MAPPING_FILENAME, 'VISIO',
                      id="with a valid CLOUDFORMATION mapping file and an invalid VISIO type"),
+        pytest.param(LUCID_VALID_MAPPING_FILE, 'TERRAFORM',
+                     id="with a valid LUCID mapping file and an invalid TERRAFORM type"),
         pytest.param(TF_VALID_MAPPING_FILE, 'MTMT', id="with a valid TERRAFORM mapping file and an invalid MTMT type")])
     def test_validate_valid_mapping_file_and_invalid_type(self, mapping_file, mapping_file_type):
         """
@@ -215,3 +220,22 @@ class TestCliValidate:
             # AND the error code is 22
             assert result.exception.error_code.system_exit_status == 22
             assert result.exception.args[0] == 'Mapping files are not valid'
+
+    @pytest.mark.parametrize('mapping_file_type', ['PDF', 'ZIP'])
+    def test_validate_valid_mapping_file_and_wrong_type(self, mapping_file_type):
+        runner = CliRunner()
+
+        with runner.isolated_filesystem():
+            # Given a list of arguments with
+            args = [
+                # a valid CFT mapping file
+                '--mapping-file', CFT_VALID_MAPPING_FILENAME,
+                #   and a wrong mapping file type
+                '--mapping-type', mapping_file_type]
+
+            # When validating
+            result = runner.invoke(validate, args)
+            # Then the exit code is 2
+            assert result.exit_code == 2
+            assert result.stdout.__contains__("Error: Invalid value for '--mapping-type' / '-t'")
+            assert result.stdout.__contains__(mapping_file_type)
