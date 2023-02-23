@@ -25,7 +25,7 @@
     },
     {
       "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
-      "name": "Private Secured",
+      "name": "Private Secured Cloud",
       "risk": {
         "trustRating": 10
       }
@@ -52,7 +52,7 @@
   "dataflows": [
     {
       "id": "34",
-      "name": "b929975f-df29-4fdd-a953-60c551af963e",
+      "name": "89ab351c-6ae7-4afb-ad90-0eb045fd801a",
       "source": "12",
       "destination": "30"
     }

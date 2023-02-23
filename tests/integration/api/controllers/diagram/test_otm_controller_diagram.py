@@ -9,7 +9,7 @@ from tests.resources import test_resource_paths
 
 IRIUSRISK_URL = ''
 
-webapp = fastapi_server.initialize_webapp()
+webapp = fastapi_server.webapp
 
 client = TestClient(webapp)
 
@@ -39,7 +39,7 @@ class TestOtmControllerDiagram:
         body = {'id': project_id, 'name': project_name}
 
         # When I do post on diagram endpoint
-        files = {'diag_file': diag_file}
+        files = {'diag_file': diag_file} if diag_file else None
         response = client.post(get_url(), files=files, data=body)
 
         # Then

@@ -6,6 +6,7 @@ from deepmerge import always_merger
 
 from slp_base import LoadingIacFileError
 from slp_base import ProviderLoader
+from slp_tf.slp_tf.parse.mapping.mappers.tf_base_mapper import generate_resource_identifier
 
 logger = logging.getLogger(__name__)
 
@@ -62,6 +63,7 @@ class TerraformLoader(ProviderLoader):
                             component_name, properties = list(component_name_obj.items())[0]
                             resource_key = component_name
                             resource_properties = properties
+                    component_type_obj["resource_id"] = generate_resource_identifier(resource_type, resource_key)
                     component_type_obj["resource_type"] = resource_type
                     component_type_obj["resource_name"] = resource_key
                     component_type_obj["resource_properties"] = resource_properties

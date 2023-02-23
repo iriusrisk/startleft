@@ -1,0 +1,81 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "Test 1",
+    "id": "test1"
+  },
+  "representations": [
+    {
+      "name": "Dummy",
+      "id": "Dummy",
+      "type": "diagram",
+      "size": {
+        "width": 1000,
+        "height": 1000
+      }
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "6376d53e",
+      "name": "Internet",
+      "risk": {"trustRating": 10}
+    },
+    {
+      "id": "b61d6911",
+      "name": "Public Cloud Zone",
+      "risk": {"trustRating": 10}
+    }
+  ],
+  "components": [
+    {
+      "id": "de588d55",
+      "name": "Public Web App",
+      "type": "",
+      "parent": {
+        "trustZone": "6376d53e"
+      }
+    },
+    {
+      "id": "6460a14f",
+      "name": "Browser",
+      "type": "",
+      "parent": {
+        "trustZone": "6376d53e"
+      }
+    },
+    {
+      "id": "348d1acd",
+      "name": "Web API",
+      "type": "",
+      "parent": {
+        "trustZone": "6376d53e"
+      }
+    },
+    {
+      "id": "9c7e2caa",
+      "name": "Intranet Web App",
+      "type": "",
+      "parent": {
+        "trustZone": "6376d53e"
+      }
+    },
+    {
+      "id": "104c3e42",
+      "name": "PostgreSQL",
+      "type": "",
+      "parent": {
+        "trustZone": "6376d53e"
+      }
+    },
+    {
+      "id": "a2986e26",
+      "name": "DynamoDB",
+      "type": "",
+      "parent": {
+        "trustZone": "b61d6911"
+      }
+    }
+  ],
+  "dataflows": []
+}

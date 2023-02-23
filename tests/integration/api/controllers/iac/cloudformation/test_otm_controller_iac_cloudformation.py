@@ -13,11 +13,11 @@ from startleft.startleft.api.controllers.iac import iac_create_otm_controller
 from tests.resources.test_resource_paths import default_cloudformation_mapping, example_json, \
     cloudformation_malformed_mapping_wrong_id, invalid_yaml, cloudformation_all_functions, \
     cloudformation_mapping_all_functions, cloudformation_gz, visio_aws_shapes, cloudformation_multiple_files_networks, \
-    cloudformation_multiple_files_resources
+    cloudformation_multiple_files_resources, cloudformation_ref_full_syntax, cloudformation_ref_short_syntax
 
 TESTING_IAC_TYPE = IacType.CLOUDFORMATION.value
 
-webapp = fastapi_server.initialize_webapp()
+webapp = fastapi_server.webapp
 client = TestClient(webapp)
 
 
@@ -48,8 +48,8 @@ class TestOtmControllerIaCCloudformation:
         project_id: str = 'project_A_id'
 
         # And the request files
-        iac_file = (example_json, open(example_json, 'r'), 'application/json')
-        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'r'), 'text/yaml')
+        iac_file = (example_json, open(example_json, 'rb'), 'application/json')
+        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'rb'), 'text/yaml')
 
         # When I do post on cloudformation endpoint
         files = {'iac_file': iac_file, 'mapping_file': mapping_file}
@@ -73,10 +73,11 @@ class TestOtmControllerIaCCloudformation:
         body = {'iac_type': TESTING_IAC_TYPE, 'id': project_id, 'name': project_name}
 
         # And the request files
-        cft_file = None if cft_filename is None else (cft_filename, open(cft_filename, 'rb'), cft_mimetype)
-        mapping_file = None if mapping_filename is None else (
-            mapping_filename, open(mapping_filename, 'rb'), 'text/yaml')
-        files = {'iac_file': cft_file, 'mapping_file': mapping_file}
+        files = dict()
+        if cft_filename:
+            files['iac_file'] = (cft_filename, open(cft_filename, 'rb'), cft_mimetype)
+        if mapping_filename:
+            files['mapping_file'] = (mapping_filename, open(mapping_filename, 'rb'), 'text/yaml')
 
         # When I do post on cloudformation endpoint
         response = client.post(get_url(), files=files, data=body)
@@ -95,8 +96,8 @@ class TestOtmControllerIaCCloudformation:
         project_id: str = 'project_A_id'
 
         # And the request files
-        iac_file = (example_json, open(example_json, 'r'), 'application/json')
-        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'r'), 'text/yaml')
+        iac_file = (example_json, open(example_json, 'rb'), 'application/json')
+        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingIacFileError
         error = IacFileNotValidError('Invalid size', 'mocked error detail', 'mocked error msg 1')
@@ -125,8 +126,8 @@ class TestOtmControllerIaCCloudformation:
         project_id: str = 'project_A_id'
 
         # And the request files
-        iac_file = (example_json, open(example_json, 'r'), 'application/json')
-        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'r'), 'text/yaml')
+        iac_file = (example_json, open(example_json, 'rb'), 'application/json')
+        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingIacFileError
         error = LoadingIacFileError('mocked error title', 'mocked error detail', 'mocked error msg 1')
@@ -155,8 +156,8 @@ class TestOtmControllerIaCCloudformation:
         project_id: str = 'project_A_id'
 
         # And the request files
-        iac_file = (example_json, open(example_json, 'r'), 'application/json')
-        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'r'), 'text/yaml')
+        iac_file = (example_json, open(example_json, 'rb'), 'application/json')
+        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingIacFileError
         error = MappingFileNotValidError('Mapping file does not comply with the schema', 'Schema error',
@@ -186,8 +187,8 @@ class TestOtmControllerIaCCloudformation:
         project_id: str = 'project_A_id'
 
         # And the request files
-        iac_file = (example_json, open(example_json, 'r'), 'application/json')
-        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'r'), 'text/yaml')
+        iac_file = (example_json, open(example_json, 'rb'), 'application/json')
+        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingIacFileError
         error = LoadingMappingFileError('Error loading the mapping file. The mapping file ins not valid.',
@@ -217,8 +218,8 @@ class TestOtmControllerIaCCloudformation:
         project_id: str = 'project_A_id'
 
         # And the request files
-        iac_file = (example_json, open(example_json, 'r'), 'application/json')
-        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'r'), 'text/yaml')
+        iac_file = (example_json, open(example_json, 'rb'), 'application/json')
+        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingIacFileError
         error = OtmResultError('OTM file does not comply with the schema', 'Schema error', 'mocked error msg')
@@ -247,8 +248,8 @@ class TestOtmControllerIaCCloudformation:
         project_id: str = 'project_A_id'
 
         # And the request files
-        iac_file = (example_json, open(example_json, 'r'), 'application/json')
-        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'r'), 'text/yaml')
+        iac_file = (example_json, open(example_json, 'rb'), 'application/json')
+        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingIacFileError
         error = OtmBuildingError('OTM building error', 'Schema error', 'mocked error msg')
@@ -281,8 +282,9 @@ class TestOtmControllerIaCCloudformation:
         project_id: str = 'project_A_id'
 
         # And the request files
+        iac_source = bytes(iac_source) if isinstance(iac_source, bytearray) else iac_source
         iac_file = (example_json, iac_source, 'application/json')
-        mapping_file = ('mapping_file', open(default_cloudformation_mapping, 'r'), 'text/yaml')
+        mapping_file = ('mapping_file', open(default_cloudformation_mapping, 'rb'), 'text/yaml')
 
         # When I do post on cloudformation endpoint
         files = {'iac_file': iac_file, 'mapping_file': mapping_file}
@@ -313,6 +315,7 @@ class TestOtmControllerIaCCloudformation:
 
         # And the request files
         iac_file = (example_json, example_json, 'application/json')
+        mapping_source = bytes(mapping_source) if isinstance(mapping_source, bytearray) else mapping_source
         mapping_file = ('mapping_file', mapping_source, 'text/yaml')
 
         # When I do post on cloudformation endpoint
@@ -336,9 +339,9 @@ class TestOtmControllerIaCCloudformation:
         project_id: str = 'project_A_id'
 
         # And the request files, containing a mapping file with all cloudformation functions
-        iac_file = (cloudformation_all_functions, open(cloudformation_all_functions, 'r'), 'application/json')
+        iac_file = (cloudformation_all_functions, open(cloudformation_all_functions, 'rb'), 'application/json')
         mapping_file = (
-            cloudformation_mapping_all_functions, open(cloudformation_mapping_all_functions, 'r'), 'text/yaml')
+            cloudformation_mapping_all_functions, open(cloudformation_mapping_all_functions, 'rb'), 'text/yaml')
 
         # When I do post on cloudformation endpoint
         files = {'iac_file': iac_file, 'mapping_file': mapping_file}
@@ -364,12 +367,12 @@ class TestOtmControllerIaCCloudformation:
 
         # And the request files, two definition files, and one mapping file
         iac_file_networks = (
-            cloudformation_multiple_files_networks, open(cloudformation_multiple_files_networks, 'r'),
+            cloudformation_multiple_files_networks, open(cloudformation_multiple_files_networks, 'rb'),
             'application/json')
         iac_file_resources = (
-            cloudformation_multiple_files_resources, open(cloudformation_multiple_files_resources, 'r'),
+            cloudformation_multiple_files_resources, open(cloudformation_multiple_files_resources, 'rb'),
             'application/json')
-        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'r'), 'text/yaml')
+        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'rb'), 'text/yaml')
 
         # When I do post on cloudformation endpoint
         files = [('iac_file', iac_file_networks), ('iac_file', iac_file_resources), ('mapping_file', mapping_file)]
@@ -395,10 +398,10 @@ class TestOtmControllerIaCCloudformation:
 
         # And the request files, two definition files, and one mapping file
         iac_file_valid = (
-            cloudformation_multiple_files_networks, open(cloudformation_multiple_files_networks, 'r'),
+            cloudformation_multiple_files_networks, open(cloudformation_multiple_files_networks, 'rb'),
             'application/json')
         iac_file_invalid = ''
-        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'r'), 'text/yaml')
+        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'rb'), 'text/yaml')
 
         # When I do post on cloudformation endpoint
         files = [('iac_file', iac_file_valid), ('iac_file', iac_file_invalid), ('mapping_file', mapping_file)]
@@ -411,3 +414,24 @@ class TestOtmControllerIaCCloudformation:
         res_body = json.loads(response.content.decode('utf-8'))
         assert res_body['status'] == '400'
         assert res_body['error_type'] == 'IacFileNotValidError'
+
+    @mark.parametrize('filename', [cloudformation_ref_full_syntax, cloudformation_ref_short_syntax])
+    @responses.activate
+    def test_yaml_ref_function_is_parsed(self, filename):
+        # Given a project_id and project_name
+        project_id: str = 'project_A_id'
+        project_name: str = 'project_A_name'
+
+        # And the request files
+        iac_file = (filename, open(filename, 'rb'), 'text/yaml')
+        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'rb'), 'text/yaml')
+
+        # When I do post on cloudformation endpoint
+        files = {'iac_file': iac_file, 'mapping_file': mapping_file}
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': project_name}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then the OTM is returned inside the response as JSON
+        assert response.status_code == iac_create_otm_controller.RESPONSE_STATUS_CODE
+        otm = json.loads(response.text)
+        assert otm["components"][0]["name"] == "0.0.0.0/0"

@@ -4,19 +4,20 @@ from unittest.mock import patch
 import responses
 from fastapi.testclient import TestClient
 from pytest import mark
-from slp_base.tests.util.otm import validate_and_diff
 
 from slp_base.slp_base.errors import DiagramFileNotValidError, MappingFileNotValidError, LoadingMappingFileError, \
     OtmResultError, OtmBuildingError, LoadingDiagramFileError
+from slp_base.tests.util.otm import validate_and_compare_otm, validate_and_compare
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.diagram import diag_create_otm_controller
 from tests.resources import test_resource_paths
 from tests.resources.test_resource_paths import visio_aws_with_tz_and_vpc, default_visio_mapping, \
-    custom_vpc_mapping, visio_create_otm_ok_only_default_mapping, visio_create_otm_ok_both_mapping_files
+    default_visio_mapping_legacy, custom_vpc_mapping, custom_vpc_mapping_legacy, \
+    visio_create_otm_ok_only_default_mapping, visio_create_otm_ok_both_mapping_files
 
 IRIUSRISK_URL = ''
 
-webapp = fastapi_server.initialize_webapp()
+webapp = fastapi_server.webapp
 
 client = TestClient(webapp)
 
@@ -32,14 +33,15 @@ octet_stream = 'application/octet-stream'
 
 class TestOtmControllerDiagramVisio:
 
+    @mark.parametrize('mapping', [default_visio_mapping, default_visio_mapping_legacy])
     @responses.activate
-    def test_create_otm_ok_only_default_mapping(self):
+    def test_create_otm_ok_only_default_mapping(self, mapping):
         # Given a project_id
         project_id: str = 'project_A_id'
 
         # When I do post on diagram endpoint
         files = {'diag_file': open(test_resource_paths.visio_aws_with_tz_and_vpc, 'rb'),
-                 'default_mapping_file': open(test_resource_paths.default_visio_mapping, 'rb')}
+                 'default_mapping_file': open(mapping, 'rb')}
         body = {'diag_type': 'VISIO', 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
@@ -48,17 +50,24 @@ class TestOtmControllerDiagramVisio:
         assert response.headers.get('content-type') == 'application/json'
         otm = json.loads(response.text)
 
-        assert validate_and_diff(otm, visio_create_otm_ok_only_default_mapping, VALIDATION_EXCLUDED_REGEX) == {}
+        result, expected = validate_and_compare_otm(otm, visio_create_otm_ok_only_default_mapping, VALIDATION_EXCLUDED_REGEX)
+        assert result == expected
 
+    @mark.parametrize('default_mapping,custom_mapping', [
+        (default_visio_mapping, custom_vpc_mapping),
+        (default_visio_mapping_legacy, custom_vpc_mapping_legacy),
+        (default_visio_mapping, custom_vpc_mapping_legacy),
+        (default_visio_mapping_legacy, custom_vpc_mapping),
+    ])
     @responses.activate
-    def test_create_otm_ok_both_mapping_files(self):
+    def test_create_otm_ok_both_mapping_files(self, default_mapping, custom_mapping):
         # Given a project_id
         project_id: str = 'project_A_id'
 
         # When I do post on diagram endpoint
         files = {'diag_file': open(visio_aws_with_tz_and_vpc, 'rb'),
-                 'default_mapping_file': open(default_visio_mapping, 'rb'),
-                 'custom_mapping_file': open(custom_vpc_mapping, 'rb')}
+                 'default_mapping_file': open(default_mapping, 'rb'),
+                 'custom_mapping_file': open(custom_mapping, 'rb')}
         body = {'diag_type': 'VISIO', 'id': f'{project_id}', 'name': 'project_A_name'}
         response = client.post(get_url(), files=files, data=body)
 
@@ -67,7 +76,8 @@ class TestOtmControllerDiagramVisio:
         assert response.headers.get('content-type') == 'application/json'
         otm = json.loads(response.text)
 
-        assert validate_and_diff(otm, visio_create_otm_ok_both_mapping_files, VALIDATION_EXCLUDED_REGEX) == {}
+        result, expected = validate_and_compare(otm, visio_create_otm_ok_both_mapping_files, VALIDATION_EXCLUDED_REGEX)
+        assert result == expected
 
     @responses.activate
     @patch('slp_visio.slp_visio.validate.visio_validator.VisioValidator.validate')
@@ -77,7 +87,7 @@ class TestOtmControllerDiagramVisio:
 
         # And the request files
         diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), octet_stream)
-        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'r'), 'text/yaml')
+        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a DiagramFileNotValidError
         error = DiagramFileNotValidError('Invalid size', 'mocked error detail', 'mocked error msg 1')
@@ -107,7 +117,7 @@ class TestOtmControllerDiagramVisio:
 
         # And the request files
         diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
-        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'r'), 'text/yaml')
+        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
         error = LoadingDiagramFileError('mocked error title', 'mocked error detail', 'mocked error msg 1')
@@ -137,7 +147,7 @@ class TestOtmControllerDiagramVisio:
 
         # And the request files
         diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
-        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'r'), 'text/yaml')
+        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
         error = MappingFileNotValidError('Mapping file does not comply with the schema', 'Schema error',
@@ -168,7 +178,7 @@ class TestOtmControllerDiagramVisio:
 
         # And the request files
         diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
-        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'r'), 'text/yaml')
+        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
         error = LoadingMappingFileError('Error loading the mapping file. The mapping file ins not valid.',
@@ -199,7 +209,7 @@ class TestOtmControllerDiagramVisio:
 
         # And the request files
         diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
-        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'r'), 'text/yaml')
+        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
         error = OtmResultError('OTM file does not comply with the schema', 'Schema error', 'mocked error msg')
@@ -229,7 +239,7 @@ class TestOtmControllerDiagramVisio:
 
         # And the request files
         diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
-        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'r'), 'text/yaml')
+        mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
         error = OtmBuildingError('OTM building error', 'Schema error', 'mocked error msg')
@@ -255,7 +265,7 @@ class TestOtmControllerDiagramVisio:
         (b'', 'Provided visio file is not valid. Invalid size'),
         (bytearray(4), 'Provided visio file is not valid. Invalid size'),
         (bytearray(1024 * 1024 * 10 + 1), 'Provided visio file is not valid. Invalid size'),
-        (open(default_visio_mapping, 'r'), 'Invalid content type for diag_file')
+        (open(default_visio_mapping, 'rb'), 'Invalid content type for diag_file')
     ])
     @responses.activate
     def test_response_on_invalid_diagram_file(self, diagram_source, detail):
@@ -263,8 +273,9 @@ class TestOtmControllerDiagramVisio:
         project_id: str = 'project_A_id'
 
         # And the request files
+        diagram_source = bytes(diagram_source) if isinstance(diagram_source, bytearray) else diagram_source
         diagram_file = (visio_aws_with_tz_and_vpc, diagram_source, 'application/json')
-        mapping_file = ('default_mapping_file', open(default_visio_mapping, 'r'), 'text/yaml')
+        mapping_file = ('default_mapping_file', open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # When I do post on diagram endpoint
         files = {'diag_file': diagram_file, 'default_mapping_file': mapping_file}
@@ -295,6 +306,7 @@ class TestOtmControllerDiagramVisio:
 
         # And the request files
         diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
+        mapping_source = bytes(mapping_source) if isinstance(mapping_source, bytearray) else mapping_source
         mapping_file = ('default_mapping_file', mapping_source, 'text/yaml')
 
         # When I do post on diagram endpoint

@@ -1,0 +1,48 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "name",
+    "id": "id"
+  },
+  "representations": [
+    {
+      "name": "Terraform",
+      "id": "Terraform",
+      "type": "code"
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "public-cloud-01.aws_vpc-customvpc",
+      "name": "CustomVPC",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_vpc"
+      ],
+      "type": "vpc"
+    },
+    {
+      "id": "public-cloud-02.aws_rds_cluster-rdscluster",
+      "name": "RDSCluster",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_rds_cluster"
+      ],
+      "type": "rds"
+    }
+  ],
+  "dataflows": []
+}

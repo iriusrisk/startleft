@@ -33,20 +33,21 @@ class DiagramComponent:
     def __str__(self) -> str:
         return '{id: ' + str(self.id) + ', ' \
                + 'name: ' + self.name + ', ' \
-               + 'parent_id: ' + self.name + '}'
+               + 'parent_id: ' + str(self.parent.id if self.parent else None) + '}'
 
     def __repr__(self) -> str:
         return '{id: ' + str(self.id) + ', ' \
                + 'name: ' + self.name + ', ' \
-               + 'parent_id: ' + self.name + '}'
+               + 'parent_id: ' + str(self.parent.id if self.parent else None) + '}'
 
 
 class DiagramConnector:
-    def __init__(self, id, from_id, to_id, bidirectional=False):
+    def __init__(self, id, from_id, to_id, bidirectional=False, name=None):
         self.id = id
         self.from_id = from_id
         self.to_id = to_id
         self.bidirectional = bidirectional
+        self.name = name
 
     def __str__(self) -> str:
         return super().__str__()

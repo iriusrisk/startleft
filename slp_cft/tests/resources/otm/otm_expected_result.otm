@@ -29,7 +29,7 @@
     ],
     "components": [
         {
-            "id": "74748147-9229-4244-ab48-6c0459e07e6b",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc",
             "name": "CustomVPC",
             "type": "vpc",
             "parent": {
@@ -40,205 +40,205 @@
             ]
         },
         {
-            "id": "65e09bb6-9f35-4d1f-b6a5-e86732da2f08",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1",
             "name": "PrivateSubnet1",
             "type": "empty-component",
             "parent": {
-                "component": "74748147-9229-4244-ab48-6c0459e07e6b"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc"
             },
             "tags": [
                 "AWS::EC2::Subnet"
             ]
         },
         {
-            "id": "23682b3e-2914-4bee-8f7c-e49a772f6c93",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2",
             "name": "PrivateSubnet2",
             "type": "empty-component",
             "parent": {
-                "component": "74748147-9229-4244-ab48-6c0459e07e6b"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc"
             },
             "tags": [
                 "AWS::EC2::Subnet"
             ]
         },
         {
-            "id": "0d8dbd88-918d-425a-a259-41681eae969f",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet1",
             "name": "PublicSubnet1",
             "type": "empty-component",
             "parent": {
-                "component": "74748147-9229-4244-ab48-6c0459e07e6b"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc"
             },
             "tags": [
                 "AWS::EC2::Subnet"
             ]
         },
         {
-            "id": "6541bb81-ac7a-4159-8f55-8e99f4a9fcb0",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet2",
             "name": "PublicSubnet2",
             "type": "empty-component",
             "parent": {
-                "component": "74748147-9229-4244-ab48-6c0459e07e6b"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc"
             },
             "tags": [
                 "AWS::EC2::Subnet"
             ]
         },
         {
-            "id": "e1cf586f-888e-453a-9f79-eaca182af9f7",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcssm",
             "name": "VPCssm",
             "type": "empty-component",
             "parent": {
-                "component": "65e09bb6-9f35-4d1f-b6a5-e86732da2f08"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1"
             },
             "tags": [
                 "AWS::EC2::VPCEndpoint"
             ]
         },
         {
-            "id": "631a2027-b575-4b9d-b671-74a34835a290",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcssm",
             "name": "VPCssm",
             "type": "empty-component",
             "parent": {
-                "component": "23682b3e-2914-4bee-8f7c-e49a772f6c93"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2"
             },
             "tags": [
                 "AWS::EC2::VPCEndpoint"
             ]
         },
         {
-            "id": "e6f71d06-6d88-4be6-8c0e-24b2e88a8e90",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcssmmessages",
             "name": "VPCssmmessages",
             "type": "empty-component",
             "parent": {
-                "component": "65e09bb6-9f35-4d1f-b6a5-e86732da2f08"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1"
             },
             "tags": [
                 "AWS::EC2::VPCEndpoint"
             ]
         },
         {
-            "id": "bee3428a-8f4e-4f8e-a5c8-6ce80adf506d",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcssmmessages",
             "name": "VPCssmmessages",
             "type": "empty-component",
             "parent": {
-                "component": "23682b3e-2914-4bee-8f7c-e49a772f6c93"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2"
             },
             "tags": [
                 "AWS::EC2::VPCEndpoint"
             ]
         },
         {
-            "id": "8e3e004f-dc7f-4c62-ae39-d995efd742f7",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcmonitoring",
             "name": "VPCmonitoring",
             "type": "empty-component",
             "parent": {
-                "component": "65e09bb6-9f35-4d1f-b6a5-e86732da2f08"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1"
             },
             "tags": [
                 "AWS::EC2::VPCEndpoint"
             ]
         },
         {
-            "id": "4c864db2-52fc-4a7a-bb67-416da2dd4c18",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcmonitoring",
             "name": "VPCmonitoring",
             "type": "empty-component",
             "parent": {
-                "component": "23682b3e-2914-4bee-8f7c-e49a772f6c93"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2"
             },
             "tags": [
                 "AWS::EC2::VPCEndpoint"
             ]
         },
         {
-            "id": "84045398-5836-4a60-b7bb-424fb5e80c40",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.service",
             "name": "Service",
             "type": "elastic-container-service",
             "parent": {
-                "component": "65e09bb6-9f35-4d1f-b6a5-e86732da2f08"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1"
             },
             "tags": [
                 "AWS::ECS::Service"
             ]
         },
         {
-            "id": "e970306e-22d0-445e-9044-1e4bba481cf5",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.service",
             "name": "Service",
             "type": "elastic-container-service",
             "parent": {
-                "component": "23682b3e-2914-4bee-8f7c-e49a772f6c93"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2"
             },
             "tags": [
                 "AWS::ECS::Service"
             ]
         },
         {
-            "id": "28722251-0f44-48e0-94fd-38cb18affb48",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.service.servicetaskdefinition",
             "name": "ServiceTaskDefinition",
             "type": "docker-container",
             "parent": {
-                "component": "84045398-5836-4a60-b7bb-424fb5e80c40"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.service"
             },
             "tags": [
                 "AWS::ECS::TaskDefinition"
             ]
         },
         {
-            "id": "edfbddec-e949-4ad6-85bf-c48169a0263a",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.service.servicetaskdefinition",
             "name": "ServiceTaskDefinition",
             "type": "docker-container",
             "parent": {
-                "component": "e970306e-22d0-445e-9044-1e4bba481cf5"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.service"
             },
             "tags": [
                 "AWS::ECS::TaskDefinition"
             ]
         },
         {
-            "id": "c828b90c-2150-4f84-be9d-6a66ee446e95",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.servicelb",
             "name": "ServiceLB",
             "type": "load-balancer",
             "parent": {
-                "component": "65e09bb6-9f35-4d1f-b6a5-e86732da2f08"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1"
             },
             "tags": [
                 "AWS::ElasticLoadBalancingV2::LoadBalancer"
             ]
         },
         {
-            "id": "0fe91d06-cd8e-43a0-8d30-e5a994425a5e",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.servicelb",
             "name": "ServiceLB",
             "type": "load-balancer",
             "parent": {
-                "component": "23682b3e-2914-4bee-8f7c-e49a772f6c93"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2"
             },
             "tags": [
                 "AWS::ElasticLoadBalancingV2::LoadBalancer"
             ]
         },
         {
-            "id": "d752b1eb-f292-407b-91bd-9e1baaccc583",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet1.canary",
             "name": "Canary",
             "type": "empty-component",
             "parent": {
-                "component": "0d8dbd88-918d-425a-a259-41681eae969f"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet1"
             },
             "tags": [
                 "AWS::Synthetics::Canary"
             ]
         },
         {
-            "id": "88224933-1c58-41b2-90f1-b3d58b1d6731",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet2.canary",
             "name": "Canary",
             "type": "empty-component",
             "parent": {
-                "component": "6541bb81-ac7a-4159-8f55-8e99f4a9fcb0"
+                "component": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet2"
             },
             "tags": [
                 "AWS::Synthetics::Canary"
             ]
         },
         {
-            "id": "8e3f2136-f976-4657-bc7f-a3db1084752a",
+            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup.0_0_0_0_0",
             "name": "0.0.0.0/0",
             "type": "generic-client",
             "parent": {
@@ -249,7 +249,7 @@
             ]
         },
         {
-            "id": "a0c4de12-d5f0-4eb3-afb4-d32068d86c27",
+            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.outboundsecuritygroup.255_255_255_255_32",
             "name": "255.255.255.255/32",
             "type": "generic-client",
             "parent": {
@@ -260,7 +260,7 @@
             ]
         },
         {
-            "id": "abc90a7f-2cf9-44de-b656-06e56c74e240",
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.vpcssm-altsource",
             "name": "Systems Manager from VPCEndpoint (grouped)",
             "type": "CD-SYSTEMS-MANAGER",
             "parent": {
@@ -276,8 +276,8 @@
         {
             "id": "2c8f75c7-0ffc-4ed5-811a-5bd2386a6e50",
             "name": "VPCssmSecurityGroup -> VPCssm",
-            "source": "74748147-9229-4244-ab48-6c0459e07e6b",
-            "destination": "e1cf586f-888e-453a-9f79-eaca182af9f7",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc",
+            "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcssm",
             "tags": [
                 "Allow all outbound traffic by default",
                 "tcp",
@@ -288,8 +288,8 @@
         {
             "id": "daaa27b3-cc4b-45d1-8b09-11cb2bee6e30",
             "name": "VPCssm -> VPCssmSecurityGroup",
-            "source": "e1cf586f-888e-453a-9f79-eaca182af9f7",
-            "destination": "8e3f2136-f976-4657-bc7f-a3db1084752a",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcssm",
+            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup.0_0_0_0_0",
             "tags": [
                 "Allow all outbound traffic by default",
                 "-1",
@@ -299,8 +299,8 @@
         {
             "id": "60911c01-8932-4200-8ee2-a80179608a80",
             "name": "VPCssmSecurityGroup -> VPCssm",
-            "source": "74748147-9229-4244-ab48-6c0459e07e6b",
-            "destination": "631a2027-b575-4b9d-b671-74a34835a290",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc",
+            "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcssm",
             "tags": [
                 "Allow all outbound traffic by default",
                 "tcp",
@@ -311,8 +311,8 @@
         {
             "id": "ec633fa1-e55b-4f48-8c11-37121c32fc0b",
             "name": "VPCssm -> VPCssmSecurityGroup",
-            "source": "631a2027-b575-4b9d-b671-74a34835a290",
-            "destination": "8e3f2136-f976-4657-bc7f-a3db1084752a",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcssm",
+            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup.0_0_0_0_0",
             "tags": [
                 "Allow all outbound traffic by default",
                 "-1",
@@ -322,8 +322,8 @@
         {
             "id": "96cd5813-548e-4d1d-b3a5-152d3cdd546d",
             "name": "VPCssmmessagesSecurityGroup -> VPCssmmessages",
-            "source": "74748147-9229-4244-ab48-6c0459e07e6b",
-            "destination": "e6f71d06-6d88-4be6-8c0e-24b2e88a8e90",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc",
+            "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcssmmessages",
             "tags": [
                 "Allow all outbound traffic by default",
                 "tcp",
@@ -334,8 +334,8 @@
         {
             "id": "9f92295a-21c1-49b4-9ee2-1a7e6e82c570",
             "name": "VPCssmmessages -> VPCssmmessagesSecurityGroup",
-            "source": "e6f71d06-6d88-4be6-8c0e-24b2e88a8e90",
-            "destination": "8e3f2136-f976-4657-bc7f-a3db1084752a",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcssmmessages",
+            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup.0_0_0_0_0",
             "tags": [
                 "Allow all outbound traffic by default",
                 "-1",
@@ -345,8 +345,8 @@
         {
             "id": "406f5256-1032-4073-be33-5ad85c206f66",
             "name": "VPCssmmessagesSecurityGroup -> VPCssmmessages",
-            "source": "74748147-9229-4244-ab48-6c0459e07e6b",
-            "destination": "bee3428a-8f4e-4f8e-a5c8-6ce80adf506d",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc",
+            "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcssmmessages",
             "tags": [
                 "Allow all outbound traffic by default",
                 "tcp",
@@ -357,8 +357,8 @@
         {
             "id": "1294fe59-4a2c-4447-8944-a730ddd564cc",
             "name": "VPCssmmessages -> VPCssmmessagesSecurityGroup",
-            "source": "bee3428a-8f4e-4f8e-a5c8-6ce80adf506d",
-            "destination": "8e3f2136-f976-4657-bc7f-a3db1084752a",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcssmmessages",
+            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup.0_0_0_0_0",
             "tags": [
                 "Allow all outbound traffic by default",
                 "-1",
@@ -368,8 +368,8 @@
         {
             "id": "c3b000fd-6108-403c-adee-282422171840",
             "name": "VPCmonitoringSecurityGroup -> VPCmonitoring",
-            "source": "74748147-9229-4244-ab48-6c0459e07e6b",
-            "destination": "8e3e004f-dc7f-4c62-ae39-d995efd742f7",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc",
+            "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcmonitoring",
             "tags": [
                 "Allow all outbound traffic by default",
                 "tcp",
@@ -380,8 +380,8 @@
         {
             "id": "a180f121-9cbd-4fe3-9aad-28069fddd257",
             "name": "VPCmonitoring -> VPCmonitoringSecurityGroup",
-            "source": "8e3e004f-dc7f-4c62-ae39-d995efd742f7",
-            "destination": "8e3f2136-f976-4657-bc7f-a3db1084752a",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcmonitoring",
+            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup.0_0_0_0_0",
             "tags": [
                 "Allow all outbound traffic by default",
                 "-1",
@@ -391,8 +391,8 @@
         {
             "id": "47618f71-8ea2-429e-9a93-363b5ff595e7",
             "name": "VPCmonitoringSecurityGroup -> VPCmonitoring",
-            "source": "74748147-9229-4244-ab48-6c0459e07e6b",
-            "destination": "4c864db2-52fc-4a7a-bb67-416da2dd4c18",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc",
+            "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcmonitoring",
             "tags": [
                 "Allow all outbound traffic by default",
                 "tcp",
@@ -403,8 +403,8 @@
         {
             "id": "e4249fde-d373-4c68-a78b-89d66f1dde04",
             "name": "VPCmonitoring -> VPCmonitoringSecurityGroup",
-            "source": "4c864db2-52fc-4a7a-bb67-416da2dd4c18",
-            "destination": "8e3f2136-f976-4657-bc7f-a3db1084752a",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.vpcmonitoring",
+            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.vpcssmsecuritygroup.0_0_0_0_0",
             "tags": [
                 "Allow all outbound traffic by default",
                 "-1",
@@ -414,8 +414,8 @@
         {
             "id": "cef14b62-37fe-460a-a615-8fa93f44d3cb",
             "name": "Service -> OutboundSecurityGroup",
-            "source": "84045398-5836-4a60-b7bb-424fb5e80c40",
-            "destination": "a0c4de12-d5f0-4eb3-afb4-d32068d86c27",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.service",
+            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.outboundsecuritygroup.255_255_255_255_32",
             "tags": [
                 "Disallow all traffic",
                 "icmp",
@@ -425,8 +425,8 @@
         {
             "id": "a72f645c-e34b-4eeb-a81e-573a9686205a",
             "name": "Service -> OutboundSecurityGroup",
-            "source": "e970306e-22d0-445e-9044-1e4bba481cf5",
-            "destination": "a0c4de12-d5f0-4eb3-afb4-d32068d86c27",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.service",
+            "destination": "f0ba7722-39b6-4c81-8290-a30a248bb8d9.outboundsecuritygroup.255_255_255_255_32",
             "tags": [
                 "Disallow all traffic",
                 "icmp",
@@ -436,8 +436,8 @@
         {
             "id": "8f7a9661-7aeb-465c-b5ca-c4c69b883c8f",
             "name": "ServiceLB -> Service",
-            "source": "c828b90c-2150-4f84-be9d-6a66ee446e95",
-            "destination": "84045398-5836-4a60-b7bb-424fb5e80c40",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.servicelb",
+            "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.service",
             "tags": [
                 "Load balancer to target",
                 "tcp",
@@ -452,8 +452,8 @@
         {
             "id": "25da3ad8-10b3-438e-91b2-1c5cfbd67ae2",
             "name": "ServiceLB -> Service",
-            "source": "c828b90c-2150-4f84-be9d-6a66ee446e95",
-            "destination": "e970306e-22d0-445e-9044-1e4bba481cf5",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.servicelb",
+            "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.service",
             "tags": [
                 "Load balancer to target",
                 "tcp",
@@ -468,8 +468,8 @@
         {
             "id": "8886be8b-08ab-477c-a02b-b48ce3547538",
             "name": "Canary -> ServiceLB",
-            "source": "d752b1eb-f292-407b-91bd-9e1baaccc583",
-            "destination": "c828b90c-2150-4f84-be9d-6a66ee446e95",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet1.canary",
+            "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.servicelb",
             "tags": [
                 "from ECSFargateGoCanaryStackCanarySecurityGroup:443",
                 "tcp",
@@ -480,8 +480,8 @@
         {
             "id": "299dab6b-a0c9-4a21-a756-85c995847a97",
             "name": "Canary -> ServiceLB",
-            "source": "88224933-1c58-41b2-90f1-b3d58b1d6731",
-            "destination": "c828b90c-2150-4f84-be9d-6a66ee446e95",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet2.canary",
+            "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.servicelb",
             "tags": [
                 "from ECSFargateGoCanaryStackCanarySecurityGroup:443",
                 "tcp",
@@ -492,8 +492,8 @@
         {
             "id": "7c1efcb5-71fa-41fc-b81b-7742ea9d5669",
             "name": "ServiceLB -> Service",
-            "source": "0fe91d06-cd8e-43a0-8d30-e5a994425a5e",
-            "destination": "84045398-5836-4a60-b7bb-424fb5e80c40",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.servicelb",
+            "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.service",
             "tags": [
                 "Load balancer to target",
                 "tcp",
@@ -508,8 +508,8 @@
         {
             "id": "a381106f-9058-4410-85eb-c474a20a12a3",
             "name": "ServiceLB -> Service",
-            "source": "0fe91d06-cd8e-43a0-8d30-e5a994425a5e",
-            "destination": "e970306e-22d0-445e-9044-1e4bba481cf5",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.servicelb",
+            "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.service",
             "tags": [
                 "Load balancer to target",
                 "tcp",
@@ -524,8 +524,8 @@
         {
             "id": "79567728-400b-4dfe-b73d-0e38bf8d243d",
             "name": "Canary -> ServiceLB",
-            "source": "d752b1eb-f292-407b-91bd-9e1baaccc583",
-            "destination": "0fe91d06-cd8e-43a0-8d30-e5a994425a5e",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet1.canary",
+            "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.servicelb",
             "tags": [
                 "from ECSFargateGoCanaryStackCanarySecurityGroup:443",
                 "tcp",
@@ -536,8 +536,8 @@
         {
             "id": "1d6de179-e170-4667-9419-e0062c4355d0",
             "name": "Canary -> ServiceLB",
-            "source": "88224933-1c58-41b2-90f1-b3d58b1d6731",
-            "destination": "0fe91d06-cd8e-43a0-8d30-e5a994425a5e",
+            "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.publicsubnet2.canary",
+            "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet2.servicelb",
             "tags": [
                 "from ECSFargateGoCanaryStackCanarySecurityGroup:443",
                 "tcp",

@@ -1,0 +1,28 @@
+{
+  "Resources": {
+    "CustomVPC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16"
+      }
+    },
+    "RDSCluster": {
+      "Type": "AWS::RDS::DBCluster",
+      "Properties": {
+        "MasterUsername": {
+          "Ref": "username"
+        },
+        "MasterUserPassword": {
+          "Ref": "password"
+        },
+        "Engine": "aurora",
+        "DBSubnetGroupName": {
+          "Ref": "DBSubnetGroup"
+        },
+        "DBClusterParameterGroupName": {
+          "Ref": "RDSDBClusterParameterGroup"
+        }
+      }
+    }
+  }
+}
