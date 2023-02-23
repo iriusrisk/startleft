@@ -48,7 +48,20 @@ jobs:
         run: |
           pip install python-magic-bin
 
+      - name: Add to PATH
+        shell: bash
+        run: |
+          echo $GITHUB_PATH
+          echo "C:\Program Files\Graphviz\bin" >> $GITHUB_PATH
+
+      - name: Read PATH
+        shell: bash
+        run: |
+          echo $GITHUB_PATH
+
       - name: Test with pytest
+        shell: bash
         run: |
           echo "C:\Program Files\Graphviz\bin" >> $GITHUB_PATH
+          echo $GITHUB_PATH
           python run_tests.py --log-level debug
