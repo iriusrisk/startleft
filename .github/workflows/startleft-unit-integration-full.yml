@@ -35,8 +35,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - if: runner.os == 'Windows'
+        shell: bash
         run: |
           pip install --global-option=build_ext --global-option="-IC:\Program files\Graphviz\include" --global-option="-LC:\Program files\Graphviz\lib" pygraphviz
+          echo "C:\Program Files\Graphviz\bin" >> $GITHUB_PATH
 
       - name: Install dependencies
         run: |
@@ -44,24 +46,11 @@ jobs:
           pip install .
           pip install -e ".[setup,test]" 
 
+        # This step MUST be after the general installation of StartLeft
       - if: runner.os == 'Windows'
         run: |
           pip install python-magic-bin
 
-      - name: Add to PATH
-        shell: bash
-        run: |
-          echo $GITHUB_PATH
-          echo "C:\Program Files\Graphviz\bin" >> $GITHUB_PATH
-
-      - name: Read PATH
-        shell: bash
-        run: |
-          echo $GITHUB_PATH
-
       - name: Test with pytest
-        shell: bash
         run: |
-          echo "C:\Program Files\Graphviz\bin" >> $GITHUB_PATH
-          echo $GITHUB_PATH
           python run_tests.py --log-level debug
