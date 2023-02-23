@@ -110,7 +110,8 @@ def parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, outpu
     if custom_mapping_file:
         mapping_data_list.append(get_data(custom_mapping_file))
 
-    processor = provider_resolver.get_processor(type_, project_id, project_name, file, mapping_data_list, diag_type=type_)
+    processor = provider_resolver.get_processor(type_, project_id, project_name, file, mapping_data_list,
+                                                diag_type=type_)
     otm = processor.process()
     get_otm_as_file(otm, output_file)
 
@@ -189,29 +190,31 @@ def parse_any(iac_type, diagram_type, etm_type, mapping_file, default_mapping_fi
         logger.warning('Unable to determine the parser type. Not diagram either iaC.')
 
 
-@cli.command()
-@click.option(IAC_MAPPING_FILE_NAME, IAC_MAPPING_FILE_SHORTNAME, help=IAC_MAPPING_FILE_DESC)
-@click.option(DIAGRAM_MAPPING_FILE_NAME, DIAGRAM_MAPPING_FILE_SHORTNAME, help=DIAGRAM_MAPPING_FILE_DESC)
-@click.option(ETM_MAPPING_FILE_NAME, ETM_TYPE_SHORTNAME, help=ETM_MAPPING_FILE_DESC)
-@click.option(OTM_INPUT_FILE_NAME, OTM_INPUT_FILE_SHORTNAME, help=OTM_INPUT_FILE_DESC)
-def validate(iac_mapping_file, diagram_mapping_file, etm_mapping_file, otm_file):
+@cli.command(name='validate')
+@click.option(VALIDATE_MAPPING_FILE_NAME, VALIDATE_MAPPING_FILE_SHORTNAME,
+              help=VALIDATE_MAPPING_FILE_DESC,
+              cls=Exclusion,
+              mandatory=True,
+              mutually_exclusion=['otm_file'])
+@click.option(VALIDATE_MAPPING_FILE_TYPE_NAME, VALIDATE_MAPPING_FILE_TYPE_SHORTNAME,
+              help=VALIDATE_MAPPING_FILE_TYPE_DESC,
+              cls=Exclusion,
+              mandatory=True,
+              mutually_exclusion=['otm_file'],
+              type=click.Choice(MAPPING_FILE_TYPE_SUPPORTED, case_sensitive=False), )
+@click.option(OTM_INPUT_FILE_NAME, OTM_INPUT_FILE_SHORTNAME,
+              help=OTM_INPUT_FILE_DESC,
+              cls=Exclusion,
+              mandatory=True,
+              mutually_exclusion=['mapping_file'])
+def validate(mapping_file, mapping_type, otm_file):
     """
     Validates a mapping or OTM file
     """
 
-    if iac_mapping_file:
-        # TODO Cannot assume all diagram/iac mapping file will have the same validation type, so we need to request the type in the command
-        logger.info("Validating IaC mapping files")
-        provider_resolver.get_mapping_validator(IacType.CLOUDFORMATION, [get_data(iac_mapping_file)]).validate()
-
-    if diagram_mapping_file:
-        # TODO Cannot assume all diagram/iac mapping file will have the same validation type, so we need to request the type in the command
-        logger.info("Validating Diagram mapping files")
-        provider_resolver.get_mapping_validator(DiagramType.VISIO, [get_data(diagram_mapping_file)]).validate()
-
-    if etm_mapping_file:
-        logger.info("Validating External Threat Model mapping files")
-        provider_resolver.get_mapping_validator(EtmType.MTMT, [get_data(etm_mapping_file)]).validate()
+    if mapping_file:
+        logger.info(f'Validating: {mapping_type} mapping files')
+        provider_resolver.get_mapping_validator(mapping_type, [get_byte_data(mapping_file)]).validate()
 
     if otm_file:
         logger.info("Validating OTM file")
