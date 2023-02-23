@@ -37,7 +37,6 @@ jobs:
       - if: runner.os == 'Windows'
         run: |
           pip install --global-option=build_ext --global-option="-IC:\Program files\Graphviz\include" --global-option="-LC:\Program files\Graphviz\lib" pygraphviz
-          echo "C:\Program Files\Graphviz\bin" >> $GITHUB_PATH
 
       - name: Install dependencies
         run: |
@@ -51,4 +50,5 @@ jobs:
 
       - name: Test with pytest
         run: |
+          echo "C:\Program Files\Graphviz\bin" >> $GITHUB_PATH
           python run_tests.py --log-level debug
