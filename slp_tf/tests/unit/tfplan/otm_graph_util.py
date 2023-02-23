@@ -1,18 +1,18 @@
 from networkx import DiGraph
 
-from otm.otm.entity.trustzone import OtmTrustzone
-from otm.otm.otm_builder import OtmBuilder
+from otm.otm.entity.trustzone import Trustzone
+from otm.otm.otm_builder import OTMBuilder
 from slp_base import IacType
 from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
 
-DEFAULT_TRUSTZONE = OtmTrustzone(
+DEFAULT_TRUSTZONE = Trustzone(
     trustzone_id='default-trustzone-id',
     name='default-trustzone-name',
     type='default-trustzone-type')
 
 
-def build_base_otm(default_trustzone: OtmTrustzone = None):
-    otm_builder = OtmBuilder('project_id', 'project_name', IacType.TERRAFORM)
+def build_base_otm(default_trustzone: Trustzone = None):
+    otm_builder = OTMBuilder('project_id', 'project_name', IacType.TERRAFORM)
     if default_trustzone:
         otm_builder.add_default_trustzone(default_trustzone)
 

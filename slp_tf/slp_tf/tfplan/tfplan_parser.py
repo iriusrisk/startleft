@@ -2,13 +2,13 @@ import logging
 
 from networkx import DiGraph
 
-from otm.otm.entity.otm import Otm
-from otm.otm.otm_builder import OtmBuilder
+from otm.otm.entity.otm import OTM
+from otm.otm.otm_builder import OTMBuilder
 from slp_tf.slp_tf.tfplan.transformers.tfplan_parent_calculator import TfplanParentCalculator
 
 from slp_tf.slp_tf.tfplan.transformers.tfplan_children_calculator import TfplanChildrenCalculator
 from slp_tf.slp_tf.tfplan.mapping.tfplan_mapper import TfplanMapper
-from slp_base import ProviderParser, IacType, OtmBuildingError
+from slp_base import ProviderParser, IacType, OTMBuildingError
 from slp_tf.slp_tf.tfplan.transformers.tfplan_dataflow_creator import TfplanDataflowCreator
 from slp_tf.slp_tf.tfplan.transformers.tfplan_singleton_transformer import TfplanSingletonTransformer
 
@@ -24,7 +24,7 @@ class TfplanParser(ProviderParser):
         self.project_id = project_id
         self.project_name = project_name
 
-        self.otm: Otm = self.__initialize_otm()
+        self.otm: OTM = self.__initialize_otm()
 
     def build_otm(self):
         try:
@@ -39,12 +39,12 @@ class TfplanParser(ProviderParser):
             logger.error(f'{e}')
             detail = e.__class__.__name__
             message = e.__str__()
-            raise OtmBuildingError('Error building the threat model with the given files', detail, message)
+            raise OTMBuildingError('Error building the threat model with the given files', detail, message)
 
         return self.otm
 
     def __initialize_otm(self):
-        return OtmBuilder(self.project_id, self.project_name, IacType.TERRAFORM).build()
+        return OTMBuilder(self.project_id, self.project_name, IacType.TERRAFORM).build()
 
     def __map_tfplan_resources(self):
         TfplanMapper(self.otm, self.tfplan, self.mapping).map()

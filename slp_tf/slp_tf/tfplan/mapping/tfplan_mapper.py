@@ -1,11 +1,11 @@
 import re
 
-from otm.otm.entity.otm import Otm
-from otm.otm.entity.trustzone import OtmTrustzone
+from otm.otm.entity.otm import OTM
+from otm.otm.entity.trustzone import Trustzone
 from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
 
-def trustzone_to_otm(trustzone: {}) -> OtmTrustzone:
-    return OtmTrustzone(
+def trustzone_to_otm(trustzone: {}) -> Trustzone:
+    return Trustzone(
         trustzone_id=trustzone['id'],
         name=trustzone['name'],
         type=trustzone['type'] if 'type' in trustzone else trustzone['id'],
@@ -22,12 +22,12 @@ def get_mappings_by_regex(mappings: []) -> {}:
 
 class TfplanMapper:
 
-    def __init__(self, otm: Otm, tfplan: {}, mappings: {}):
+    def __init__(self, otm: OTM, tfplan: {}, mappings: {}):
         self.otm = otm
         self.resources = tfplan['resource']
         self.mappings = mappings
 
-        self.default_trustzone: OtmTrustzone = trustzone_to_otm(self.mappings['default_trustzone'])
+        self.default_trustzone: Trustzone = trustzone_to_otm(self.mappings['default_trustzone'])
         self.mappings_by_type: {} = get_mappings_by_type(self.mappings['components'])
         self.mappings_by_regex: {} = get_mappings_by_regex(self.mappings['components'])
 

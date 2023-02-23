@@ -7,7 +7,7 @@ RUN apk update && \
     apk add git && \
     apk add geos
 
-RUN apk --no-cache add lapack libstdc++ libmagic graphviz && \
+RUN apk --no-cache add lapack libstdc++ libmagic && \
     apk --no-cache add --virtual .builddeps g++ gcc gfortran musl-dev lapack-dev
 
 

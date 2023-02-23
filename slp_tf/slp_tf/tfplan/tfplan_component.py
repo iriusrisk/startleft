@@ -1,7 +1,8 @@
-from otm.otm.entity.component import OtmComponent
+from otm.otm.entity.parent_type import ParentType
+from otm.otm.entity.component import Component
 
 
-class TfplanComponent(OtmComponent):
+class TfplanComponent(Component):
 
     def __init__(self,
                  component_id: str,
@@ -16,7 +17,7 @@ class TfplanComponent(OtmComponent):
             component_id=component_id,
             name=name, component_type=component_type,
             parent=parent,
-            parent_type=parent_type,
+            parent_type=ParentType.COMPONENT if parent == 'component' else ParentType.TRUST_ZONE,
             tags=tags
         )
         self.tf_resource_id: str = tf_resource_id

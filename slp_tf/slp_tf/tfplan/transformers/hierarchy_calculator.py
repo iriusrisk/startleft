@@ -3,7 +3,7 @@ from copy import deepcopy
 
 from networkx import DiGraph
 
-from otm.otm.entity.otm import Otm
+from otm.otm.entity.otm import OTM
 from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
 from slp_tf.slp_tf.tfplan.graph.relationships_extractor import RelationshipsExtractor
 from slp_tf.slp_tf.tfplan.transformers.tfplan_transformer import TfplanTransformer
@@ -41,7 +41,7 @@ def __extract_type(component_address: str) -> str:
 
 
 class HierarchyCalculator(TfplanTransformer):
-    def __init__(self, otm: Otm, graph: DiGraph):
+    def __init__(self, otm: OTM, graph: DiGraph):
         super().__init__(otm, graph)
 
         self.relationships_extractor = RelationshipsExtractor(
