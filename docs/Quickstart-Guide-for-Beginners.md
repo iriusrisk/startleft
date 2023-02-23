@@ -124,18 +124,27 @@ startleft parse --help
 ```
 
 ### validate
-This command is able to perform validations over three types of files:
+This command is able to perform validations over several types of files:
 #### **IaC mapping files**
 Described in depth in each processor's docs, they are used to create relationships between types in the source
 and their expected equivalent in the OTM (i.e: an `aws_instance` type in Terraform matches the `ec2` type in IriusRisk).
 If we take the same mapping file we have downloaded for the `parse` command, we can execute:
-```shell
-startleft validate --iac-mapping-file iriusrisk-tf-aws-mapping.yaml
-```
+
+??? example "Terraform example"
+
+    ```shell
+    startleft validate --mapping-file iriusrisk-tf-aws-mapping.yaml --mapping-type TERRAFORM
+    ```
+
+??? example "Cloudformation example"
+
+    ```shell
+    startleft validate --mapping-file iriusrisk-cft-mapping.yaml --mapping-type CLOUDFORMATION
+    ```
 
 #### **Diagram mapping files**
 Also described in the processors' documentation, allows you to validate the format of mapping
-files used for diagram conversions. 
+files used for diagram conversions as Visio and Lucidchart. 
     
 Let's download the IriusRisk's Visio mapping file located in the `examples/visio` folder:
 ```shell
@@ -143,7 +152,7 @@ wget https://raw.githubusercontent.com/iriusrisk/startleft/main/examples/visio/i
 ```
 Now we can validate it using the following StartLeft command:
 ```shell
-startleft validate --diagram-mapping-file iriusrisk-visio-aws-mapping.yaml
+startleft validate --mapping-file iriusrisk-visio-aws-mapping.yaml --mapping-type VISIO
 ```
 
 #### **OTM** 
@@ -158,14 +167,10 @@ And then validate it by executing:
 startleft validate --otm-file manual.otm
 ```
 
-#### All at once
-Finally, the command is also able to execute multiple validations at the same time:
-```shell
-startleft validate \
-    --otm-file manual.otm \
-    --iac-mapping-file iriusrisk-tf-aws-mapping.yaml \
-    --diagram-mapping-file iriusrisk-visio-aws-mapping.yaml
-```
+???+ warning "Mapping file and otm validation"
+
+    Notice that parameters `--mapping-file` and `--otm-file` are mutually exclusive, so we can only validate
+    one file at once.
 
 ### search
 This is an auxiliary utility only supported currently for IaC mapping files. Due to the complexity of these files, 

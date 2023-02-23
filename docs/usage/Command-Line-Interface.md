@@ -561,8 +561,7 @@ to validate OTM files generated in any way, including manually.
         <p align="center"><img src="https://user-images.githubusercontent.com/78788891/154971033-5480f0b7-0d2f-4f53-83ef-b29c569fec86.png"></p>
 
 
-As the mapping files are different for IaC and diagram, 
-there are different options for each of them. The full set of options are:
+The full set of options are:
 
 ```shell
 Usage: startleft validate [OPTIONS]
@@ -570,14 +569,27 @@ Usage: startleft validate [OPTIONS]
   Validates a mapping or OTM file
 
 Options:
-  -i, --iac-mapping-file TEXT     IaC mapping file to validate.
-  -d, --diagram-mapping-file TEXT
-                                  Diagram mapping file to validate.
-  -e, --etm-mapping-file TEXT     External Threat Model mapping file to
-                                  validate.
-  -o, --otm-file TEXT             OTM input file.
+  -m, --mapping-file TEXT         Mapping file to validate. NOTE: This
+                                  argument is mutually exclusive with
+                                  arguments: [otm_file]. [required]
+  -t, --mapping-type [CLOUDFORMATION|TERRAFORM|VISIO|MTMT|LUCID]
+                                  Mapping file type to validate. NOTE: This
+                                  argument is mutually exclusive with
+                                  arguments: [otm_file]. [required]
+  -o, --otm-file TEXT             OTM input file. NOTE: This argument is
+                                  mutually exclusive with  arguments:
+                                  [mapping_file]. [required]
   --help                          Show this message and exit.
 ```
+
+???+ warning "Validating `Mapping files` and `OTM files`"
+    If we want to validate a mapping file, we should indicate its type. So if we use the `--mapping-file` option with the file we want to check, 
+    we should use the mandatory `--mapping-type` parameter which indicates the specific type of the given mapping file.
+
+    On the other hand, if we want to validate an otm file, we should use the `--otm-file` option without `--mapping-type`.
+
+    Both `--mapping-file` and `--otm-file` are mutually exclusive.
+
 > :material-information-outline: We can use this command only to validate one file at once
 
 === "CLI execution"
@@ -598,14 +610,14 @@ An example with a mapping file:
 === "CLI execution"
     ```shell
     startleft validate \
-    --diagram-mapping-file iriusrisk-visio-aws-mapping.yaml
+    --mapping-file iriusrisk-visio-aws-mapping.yaml \ 
+    --mapping-type VISIO
     ```
 === "Output"
     ```shell
-    Validating Diagram mapping files
-    Mapping file size is valid
+    Validating: VISIO mapping files
     Loading schema file '/slp_visio/resources/schemas/diagram_mapping_schema.json'
-    Mapping files are valid
+    Mapping file size is valid
     Mapping files are valid
     ```
 
