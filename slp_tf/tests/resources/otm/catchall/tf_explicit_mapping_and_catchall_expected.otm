@@ -1,0 +1,59 @@
+{
+    "otmVersion": "0.1.0",
+    "project": {
+        "name": "name",
+        "id": "id"
+    },
+    "representations": [
+        {
+            "name": "Terraform",
+            "id": "Terraform",
+            "type": "code"
+        }
+    ],
+    "trustZones": [
+        {
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "name": "Public Cloud",
+            "risk": {
+                "trustRating": 10
+            }
+        }
+    ],
+    "components": [
+        {
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_db_instance-mysql",
+            "name": "mysql",
+            "type": "rds",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "tags": [
+                "aws_db_instance"
+            ]
+        },
+        {
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_db_instance-mysql_secret",
+            "name": "mysql-secret",
+            "type": "rds",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "tags": [
+                "aws_db_instance"
+            ]
+        },
+        {
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91.aws_rds_cluster-aurora_cluster_demo",
+            "name": "aurora-cluster-demo",
+            "type": "empty-component",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "tags": [
+                "aws_rds_cluster"
+            ]
+        }
+    ],
+    "dataflows": []
+}

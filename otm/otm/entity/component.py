@@ -1,14 +1,15 @@
+from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.threat import ThreatInstance
 
 
 class Component:
-    def __init__(self, component_id, name, component_type, parent, parent_type: str, source=None,
+    def __init__(self, component_id, name, component_type, parent, parent_type: ParentType, source=None,
                  attributes=None, tags=None, threats: [ThreatInstance] = None, representations=None):
         self.id = component_id
         self.name = name
         self.type = component_type
         self.parent = parent
-        self.parent_type: str = parent_type
+        self.parent_type: ParentType = parent_type
         self.source = source
         self.attributes = attributes
         self.tags = tags
@@ -24,7 +25,7 @@ class Component:
             "name": self.name,
             "type": self.type,
             "parent": {
-                self.parent_type: self.parent
+                str(self.parent_type): self.parent
             }
         }
 
