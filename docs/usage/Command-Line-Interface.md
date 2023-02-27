@@ -524,8 +524,6 @@ Options:
 OTM validation is a special feature of StartLeft, as it does not apply to any format and instead allows users 
 to validate OTM files generated in any way, including manually. 
 
-The following short OTM file, can create this threat model in IriusRisk and generates 
-the following threats 
 === "CLI execution"
     ```shell
     startleft validate \
@@ -594,12 +592,6 @@ the following threats
           source:   web-server
           destination:     database
     ```
-    
-=== "IriusRisk Threat Model"
-    <p align="center"><img src="https://user-images.githubusercontent.com/78788891/154970903-61442af4-6792-4cd1-8dad-70fb347f5f4d.png"></p>
-    
-=== "Threats"
-    <p align="center"><img src="https://user-images.githubusercontent.com/78788891/154971033-5480f0b7-0d2f-4f53-83ef-b29c569fec86.png"></p>
 
 An example with a mapping file:
 
