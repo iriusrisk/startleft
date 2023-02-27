@@ -490,77 +490,6 @@ On the other hand, if we want to parse a `diagram` file, we should specify the f
 
 Validation is a CLI-specific feature and is used to validate both OTM and mapping files.  
 
-OTM validation is a special feature of StartLeft, as it does not apply to any format and instead allows users 
-to validate OTM files generated in any way, including manually. 
-
-!!! example
-    The following short OTM file, can create this threat model in IriusRisk and generates 
-    the following threats
-
-    === "OTM file"
-        ```yaml
-        otmVersion: 0.1.0
-    
-        project:
-        name: Manual ThreatModel
-        id:   manual-threatmodel
-    
-        trustZones:
-        - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
-        name: Internet
-        risk:
-          trustRating: 1
-    
-        - id:   6376d53e-6461-412b-8e04-7b3fe2b397de
-          name: Public
-          risk:
-            trustRating: 1
-    
-        - id:   2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
-          name: Private Secured
-          risk:
-            trustRating: 100
-    
-        components:
-        - id:     user
-        name:   User
-        type:   generic-client
-        parent:
-          trustZone: f0ba7722-39b6-4c81-8290-a30a248bb8d9
-    
-        - id:     web-server
-          name:   Web server
-          type:   web-application-server-side
-          parent:
-            trustZone: 6376d53e-6461-412b-8e04-7b3fe2b397de
-    
-        - id:     database
-          name:   Database
-          type:   postgresql
-          parent:
-            trustZone: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
-    
-        dataflows:
-        - id:     client-connection
-        name:   Client connection
-        source:   user
-        destination:   web-server
-    
-        - id:     database-connection
-          name:   Database connection
-          source:   web-server
-          destination:     database
-        ```
-
-    === "IriusRisk Threat Model"
-
-        <p align="center"><img src="https://user-images.githubusercontent.com/78788891/154970903-61442af4-6792-4cd1-8dad-70fb347f5f4d.png"></p>
-
-    === "Threats"
-
-        <p align="center"><img src="https://user-images.githubusercontent.com/78788891/154971033-5480f0b7-0d2f-4f53-83ef-b29c569fec86.png"></p>
-
-
 The full set of options are:
 
 ```shell
@@ -592,6 +521,11 @@ Options:
 
 > :material-information-outline: We can use this command only to validate one file at once
 
+OTM validation is a special feature of StartLeft, as it does not apply to any format and instead allows users 
+to validate OTM files generated in any way, including manually. 
+
+The following short OTM file, can create this threat model in IriusRisk and generates 
+the following threats 
 === "CLI execution"
     ```shell
     startleft validate \
@@ -605,6 +539,68 @@ Options:
     OTM file has consistent IDs
     OTM file validated successfully
     ```
+=== "OTM file"
+    ```yaml
+
+        otmVersion: 0.1.0
+        
+        project:
+        name: Manual ThreatModel
+        id:   manual-threatmodel
+    
+        trustZones:
+        - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
+          name: Internet
+          risk:
+          trustRating: 1
+        
+        - id:   6376d53e-6461-412b-8e04-7b3fe2b397de
+          name: Public
+          risk:
+            trustRating: 1
+        
+        - id:   2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+          name: Private Secured
+          risk:
+            trustRating: 100
+        
+        components:
+        - id:     user
+          name:   User
+          type:   generic-client
+          parent:
+            trustZone: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+        
+        - id:     web-server
+          name:   Web server
+          type:   web-application-server-side
+          parent:
+            trustZone: 6376d53e-6461-412b-8e04-7b3fe2b397de
+        
+        - id:     database
+          name:   Database
+          type:   postgresql
+          parent:
+            trustZone: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+      
+        dataflows:
+        - id:     client-connection
+          name:   Client connection
+          source:   user
+          destination:   web-server
+        
+        - id:     database-connection
+          name:   Database connection
+          source:   web-server
+          destination:     database
+    ```
+    
+=== "IriusRisk Threat Model"
+    <p align="center"><img src="https://user-images.githubusercontent.com/78788891/154970903-61442af4-6792-4cd1-8dad-70fb347f5f4d.png"></p>
+    
+=== "Threats"
+    <p align="center"><img src="https://user-images.githubusercontent.com/78788891/154971033-5480f0b7-0d2f-4f53-83ef-b29c569fec86.png"></p>
+
 An example with a mapping file:
 
 === "CLI execution"
