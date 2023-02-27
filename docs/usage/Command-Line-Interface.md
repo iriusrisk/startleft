@@ -490,79 +490,7 @@ On the other hand, if we want to parse a `diagram` file, we should specify the f
 
 Validation is a CLI-specific feature and is used to validate both OTM and mapping files.  
 
-OTM validation is a special feature of StartLeft, as it does not apply to any format and instead allows users 
-to validate OTM files generated in any way, including manually. 
-
-!!! example
-    The following short OTM file, can create this threat model in IriusRisk and generates 
-    the following threats
-
-    === "OTM file"
-        ```yaml
-        otmVersion: 0.1.0
-    
-        project:
-        name: Manual ThreatModel
-        id:   manual-threatmodel
-    
-        trustZones:
-        - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
-        name: Internet
-        risk:
-          trustRating: 1
-    
-        - id:   6376d53e-6461-412b-8e04-7b3fe2b397de
-          name: Public
-          risk:
-            trustRating: 1
-    
-        - id:   2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
-          name: Private Secured
-          risk:
-            trustRating: 100
-    
-        components:
-        - id:     user
-        name:   User
-        type:   generic-client
-        parent:
-          trustZone: f0ba7722-39b6-4c81-8290-a30a248bb8d9
-    
-        - id:     web-server
-          name:   Web server
-          type:   web-application-server-side
-          parent:
-            trustZone: 6376d53e-6461-412b-8e04-7b3fe2b397de
-    
-        - id:     database
-          name:   Database
-          type:   postgresql
-          parent:
-            trustZone: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
-    
-        dataflows:
-        - id:     client-connection
-        name:   Client connection
-        source:   user
-        destination:   web-server
-    
-        - id:     database-connection
-          name:   Database connection
-          source:   web-server
-          destination:     database
-        ```
-
-    === "IriusRisk Threat Model"
-
-        <p align="center"><img src="https://user-images.githubusercontent.com/78788891/154970903-61442af4-6792-4cd1-8dad-70fb347f5f4d.png"></p>
-
-    === "Threats"
-
-        <p align="center"><img src="https://user-images.githubusercontent.com/78788891/154971033-5480f0b7-0d2f-4f53-83ef-b29c569fec86.png"></p>
-
-
-As the mapping files are different for IaC and diagram, 
-there are different options for each of them. The full set of options are:
+The full set of options are:
 
 ```shell
 Usage: startleft validate [OPTIONS]
@@ -570,15 +498,31 @@ Usage: startleft validate [OPTIONS]
   Validates a mapping or OTM file
 
 Options:
-  -i, --iac-mapping-file TEXT     IaC mapping file to validate.
-  -d, --diagram-mapping-file TEXT
-                                  Diagram mapping file to validate.
-  -e, --etm-mapping-file TEXT     External Threat Model mapping file to
-                                  validate.
-  -o, --otm-file TEXT             OTM input file.
+  -m, --mapping-file TEXT         Mapping file to validate. NOTE: This
+                                  argument is mutually exclusive with
+                                  arguments: [otm_file]. [required]
+  -t, --mapping-type [CLOUDFORMATION|TERRAFORM|VISIO|MTMT|LUCID]
+                                  Mapping file type to validate. NOTE: This
+                                  argument is mutually exclusive with
+                                  arguments: [otm_file]. [required]
+  -o, --otm-file TEXT             OTM input file. NOTE: This argument is
+                                  mutually exclusive with  arguments:
+                                  [mapping_file]. [required]
   --help                          Show this message and exit.
 ```
+
+???+ warning "Validating `Mapping files` and `OTM files`"
+    If we want to validate a mapping file, we should indicate its type. So if we use the `--mapping-file` option with the file we want to check, 
+    we should use the mandatory `--mapping-type` parameter which indicates the specific type of the given mapping file.
+
+    On the other hand, if we want to validate an otm file, we should use the `--otm-file` option without `--mapping-type`.
+
+    Both `--mapping-file` and `--otm-file` are mutually exclusive.
+
 > :material-information-outline: We can use this command only to validate one file at once
+
+OTM validation is a special feature of StartLeft, as it does not apply to any format and instead allows users 
+to validate OTM files generated in any way, including manually. 
 
 === "CLI execution"
     ```shell
@@ -593,19 +537,75 @@ Options:
     OTM file has consistent IDs
     OTM file validated successfully
     ```
+=== "OTM file"
+    ```yaml
+
+        otmVersion: 0.1.0
+        
+        project:
+        name: Manual ThreatModel
+        id:   manual-threatmodel
+    
+        trustZones:
+        - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
+          name: Internet
+          risk:
+          trustRating: 1
+        
+        - id:   6376d53e-6461-412b-8e04-7b3fe2b397de
+          name: Public
+          risk:
+            trustRating: 1
+        
+        - id:   2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+          name: Private Secured
+          risk:
+            trustRating: 100
+        
+        components:
+        - id:     user
+          name:   User
+          type:   generic-client
+          parent:
+            trustZone: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+        
+        - id:     web-server
+          name:   Web server
+          type:   web-application-server-side
+          parent:
+            trustZone: 6376d53e-6461-412b-8e04-7b3fe2b397de
+        
+        - id:     database
+          name:   Database
+          type:   postgresql
+          parent:
+            trustZone: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+      
+        dataflows:
+        - id:     client-connection
+          name:   Client connection
+          source:   user
+          destination:   web-server
+        
+        - id:     database-connection
+          name:   Database connection
+          source:   web-server
+          destination:     database
+    ```
+
 An example with a mapping file:
 
 === "CLI execution"
     ```shell
     startleft validate \
-    --diagram-mapping-file iriusrisk-visio-aws-mapping.yaml
+    --mapping-file iriusrisk-visio-aws-mapping.yaml \ 
+    --mapping-type VISIO
     ```
 === "Output"
     ```shell
-    Validating Diagram mapping files
-    Mapping file size is valid
+    Validating: VISIO mapping files
     Loading schema file '/slp_visio/resources/schemas/diagram_mapping_schema.json'
-    Mapping files are valid
+    Mapping file size is valid
     Mapping files are valid
     ```
 
