@@ -74,16 +74,21 @@ def load_tfgraph(source: bytes):
 
 
 def map_modules(modules: [{}], parent: str = None) -> [{}]:
+    mapped_modules = []
     resources = []
 
     for module in modules:
         module_address = get_module_address(module, parent)
+        if module_address in mapped_modules:
+            continue
 
         if 'resources' in module:
             resources.extend(map_resources(module['resources'], module_address))
 
         if 'child_modules' in module:
             resources.extend(map_modules(module['child_modules'], module_address))
+
+        mapped_modules.append(module_address)
 
     return resources
 
@@ -124,22 +129,13 @@ def map_resource_properties(resource: {}) -> {}:
         'resource_schema_version': resource['schema_version'],
         'resource_address': resource['address'],
         # Sensitive and usual values may be overlapped
-        **resource['sensitive_values'],
-        **resource['values']
+        **resource.get('sensitive_values', {}),
+        **resource.get('values', {})
     }
 
 
 def is_resource_duplicated(resource: {}) -> bool:
-    if 'index' in resource and not (resource['index'] == '0' or resource['index'] == 'zero'):
-        return True
-
-    address_indexes = re.findall(r'\[[\"\']?(.*?)[\"\']?]', resource['address'])
-    if not address_indexes:
-        return False
-
-    for index in address_indexes:
-        if not (index == '0' or index == 'zero'):
-            return True
+    return 'index' in resource and not (resource['index'] == '0' or resource['index'] == 'zero')
 
 
 def get_resource_id(resource: {}) -> str:
