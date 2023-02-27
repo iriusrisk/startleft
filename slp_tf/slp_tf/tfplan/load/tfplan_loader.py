@@ -1,6 +1,7 @@
 from typing import Callable
 
 import pygraphviz
+import re
 from networkx import nx_agraph
 import json
 
@@ -129,11 +130,20 @@ def map_resource_properties(resource: {}) -> {}:
 
 
 def is_resource_duplicated(resource: {}) -> bool:
-    return 'index' in resource and not (resource['index'] == '0' or resource['index'] == 'zero')
+    if 'index' in resource and not (resource['index'] == '0' or resource['index'] == 'zero'):
+        return True
+
+    address_indexes = re.findall(r'\[[\"\']?(.*?)[\"\']?]', resource['address'])
+    if not address_indexes:
+        return False
+
+    for index in address_indexes:
+        if not (index == '0' or index == 'zero'):
+            return True
 
 
 def get_resource_id(resource: {}) -> str:
-    return resource['address'].split('[')[0] \
+    return parse_address(resource['address']) \
         if 'index' in resource \
         else resource['address']
 
@@ -144,7 +154,12 @@ def get_resource_name(resource: {}, parent: str) -> str:
 
 def get_module_address(module: {}, parent: str) -> str:
     if 'address' in module:
-        return f'{parent}.{module["address"]}' if parent else module['address']
+        module_address = parse_address(module['address'])
+        return f'{parent}.{module_address}' if parent else module_address
+
+
+def parse_address(address: str) -> str:
+    return re.sub(r'\[.*?]', '', address)
 
 
 class TfplanLoader(ProviderLoader):

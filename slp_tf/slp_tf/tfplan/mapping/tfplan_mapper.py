@@ -4,6 +4,7 @@ from otm.otm.entity.otm import OTM
 from otm.otm.entity.trustzone import Trustzone
 from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
 
+
 def trustzone_to_otm(trustzone: {}) -> Trustzone:
     return Trustzone(
         trustzone_id=trustzone['id'],

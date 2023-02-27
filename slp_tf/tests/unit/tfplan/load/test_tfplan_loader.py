@@ -272,6 +272,41 @@ class TestTfplanLoader:
         assert resources[0]['resource_name'] == 'cm1-addr.r1-name'
 
     @patch('yaml.load')
+    def test_load_modules_same_name(self, yaml_mock):
+        # GIVEN a valid plain Terraform Plan file with only one module
+        tfplan = build_tfplan(
+            child_modules=generate_child_modules(module_count=1, resource_count=1))
+
+        # AND two resources with the same name
+        tfplan_modules = tfplan['planned_values']['root_module']['child_modules']
+
+        original_module = tfplan_modules[0]
+        duplicated_module = deepcopy(tfplan_modules[0])
+
+        original_module['address'] = f'{original_module["address"]}["zero"]'
+        original_module['resources'][0]['address'] = f'{original_module["address"]}.{original_module["resources"][0]["address"]}'
+
+        duplicated_module['address'] = f'{duplicated_module["address"]}["one"]'
+        duplicated_module['resources'][0]['address'] = f'{duplicated_module["address"]}.{duplicated_module["resources"][0]["address"]}'
+
+        tfplan_modules.append(duplicated_module)
+
+        yaml_mock.side_effect = [tfplan]
+
+        # WHEN TfplanLoader::load is invoked
+        tfplan_loader = TfplanLoader(tfplan_source=b'MOCKED')
+        tfplan_loader.load()
+
+        # THEN TF contents are loaded in TfplanLoader.terraform
+        assert tfplan_loader.terraform
+        resources = tfplan_loader.terraform['resource']
+        assert len(resources) == 1
+
+        # AND The duplicated resource is unified and the index is no present in name or id
+        assert resources[0]['resource_id'] == 'cm1-addr.r1-addr'
+        assert resources[0]['resource_name'] == 'cm1-addr.r1-name'
+
+    @patch('yaml.load')
     def test_load_no_resources(self, yaml_mock):
         # GIVEN a valid Terraform Plan file with no resources
         yaml_mock.side_effect = [{'planned_values': {'root_module': {}}}]
