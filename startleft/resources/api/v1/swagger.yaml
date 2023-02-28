@@ -1,0 +1,321 @@
+---
+openapi: 3.0.2
+info:
+  title: FastAPI
+  version: 0.1.0
+paths:
+  "/health":
+    get:
+      tags:
+        - health
+      summary: Health
+      operationId: health_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  "/api/v1/startleft/iac":
+    post:
+      tags:
+        - IaC
+      summary: Iac
+      description: Generates an OTM threat model from an IaC file
+      operationId: iac_api_v1_startleft_iac_post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              "$ref": "#/components/schemas/Body_iac_api_v1_startleft_iac_post"
+        required: true
+      responses:
+        '201':
+          description: Provided source file has been successfully processed and a
+            new OTM file has been created
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '401':
+          description: Authentication information is missing, invalid or not granted
+            to perform this action
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '403':
+          description: Forbidden operation
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        default:
+          description: Unexpected API error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+  "/api/v1/startleft/diagram":
+    post:
+      tags:
+        - Diagram
+      summary: Diagram
+      description: Generates an OTM threat model from an Diagram file
+      operationId: diagram_api_v1_startleft_diagram_post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              "$ref": "#/components/schemas/Body_diagram_api_v1_startleft_diagram_post"
+        required: true
+      responses:
+        '201':
+          description: Provided source file has been successfully processed and a
+            new OTM file has been created
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '401':
+          description: Authentication information is missing, invalid or not granted
+            to perform this action
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '403':
+          description: Forbidden operation
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        default:
+          description: Unexpected API error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+  "/api/v1/startleft/external-threat-model":
+    post:
+      tags:
+        - Threat Model
+      summary: Etm
+      description: Generates an OTM threat model from a Threat Model file
+      operationId: etm_api_v1_startleft_external_threat_model_post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              "$ref": "#/components/schemas/Body_etm_api_v1_startleft_external_threat_model_post"
+        required: true
+      responses:
+        '201':
+          description: Provided source file has been successfully processed and a
+            new OTM file has been created
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '401':
+          description: Authentication information is missing, invalid or not granted
+            to perform this action
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        '403':
+          description: Forbidden operation
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+        default:
+          description: Unexpected API error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    Body_diagram_api_v1_startleft_diagram_post:
+      title: Body_diagram_api_v1_startleft_diagram_post
+      required:
+        - diag_file
+        - diag_type
+        - id
+        - name
+        - default_mapping_file
+      type: object
+      properties:
+        diag_file:
+          title: Diag File
+          type: string
+          description: File that contains the diagram definition
+          format: binary
+        diag_type:
+          allOf:
+            - "$ref": "#/components/schemas/DiagramType"
+          description: 'Type of Diagram File: VISIO, LUCID'
+        id:
+          title: Id
+          type: string
+          description: ID of the new project
+        name:
+          title: Name
+          type: string
+          description: Name of the new project
+        default_mapping_file:
+          title: Default Mapping File
+          type: string
+          description: File that contains the default mapping file
+          format: binary
+        custom_mapping_file:
+          title: Custom Mapping File
+          type: string
+          description: File that contains the user custom mapping file
+          format: binary
+    Body_etm_api_v1_startleft_external_threat_model_post:
+      title: Body_etm_api_v1_startleft_external_threat_model_post
+      required:
+        - source_file
+        - source_type
+        - id
+        - name
+        - default_mapping_file
+      type: object
+      properties:
+        source_file:
+          title: Source File
+          type: string
+          description: File that contains the original Threat model
+          format: binary
+        source_type:
+          allOf:
+            - "$ref": "#/components/schemas/EtmType"
+          description: 'Type of Diagram File: MTMT'
+        id:
+          title: Id
+          type: string
+          description: ID of the new project
+        name:
+          title: Name
+          type: string
+          description: Name of the new project
+        default_mapping_file:
+          title: Default Mapping File
+          type: string
+          description: File that contains the default mapping file
+          format: binary
+        custom_mapping_file:
+          title: Custom Mapping File
+          type: string
+          description: File that contains the user custom mapping file
+          format: binary
+    Body_iac_api_v1_startleft_iac_post:
+      title: Body_iac_api_v1_startleft_iac_post
+      required:
+        - iac_file
+        - iac_type
+        - id
+        - name
+        - mapping_file
+      type: object
+      properties:
+        iac_file:
+          title: Iac File
+          type: array
+          items:
+            type: string
+            format: binary
+          description: Files that contains Iac definitions to be merged into one data
+            structure
+        iac_type:
+          allOf:
+            - "$ref": "#/components/schemas/IacType"
+          description: 'Type of IaC File: CLOUDFORMATION, TERRAFORM'
+        id:
+          title: Id
+          type: string
+          description: ID of the new project
+        name:
+          title: Name
+          type: string
+          description: Name of the new project
+        mapping_file:
+          title: Mapping File
+          type: string
+          description: File that contains the mapping between IaC resources and threat
+            model resources.
+          format: binary
+    DiagramType:
+      title: DiagramType
+      enum:
+        - VISIO
+        - LUCID
+      type: string
+      description: An enumeration.
+    ErrorResponse:
+      title: ErrorResponse
+      required:
+        - status
+        - error_type
+        - title
+        - detail
+      type: object
+      properties:
+        status:
+          title: Status
+          type: string
+        error_type:
+          title: Error Type
+          type: string
+        title:
+          title: Title
+          type: string
+        detail:
+          title: Detail
+          type: string
+        errors:
+          title: Errors
+          type: array
+          items:
+            "$ref": "#/components/schemas/ErrorResponseItem"
+          default: []
+    ErrorResponseItem:
+      title: ErrorResponseItem
+      required:
+        - errorMessage
+      type: object
+      properties:
+        errorMessage:
+          title: Errormessage
+          type: string
+    EtmType:
+      title: EtmType
+      enum:
+        - MTMT
+      type: string
+      description: An enumeration.
+    IacType:
+      title: IacType
+      enum:
+        - CLOUDFORMATION
+        - TERRAFORM
+      type: string
+      description: An enumeration.
