@@ -208,7 +208,7 @@ components:
         source_type:
           allOf:
             - "$ref": "#/components/schemas/EtmType"
-          description: 'Type of Diagram File: MTMT'
+          description: 'Type of ETM File: MTMT'
         id:
           title: Id
           type: string
@@ -269,7 +269,7 @@ components:
         - VISIO
         - LUCID
       type: string
-      description: An enumeration.
+      description: Type of Diagram file
     ErrorResponse:
       title: ErrorResponse
       required:
@@ -311,11 +311,11 @@ components:
       enum:
         - MTMT
       type: string
-      description: An enumeration.
+      description: Type of ETM file
     IacType:
       title: IacType
       enum:
         - CLOUDFORMATION
         - TERRAFORM
       type: string
-      description: An enumeration.
+      description: Type of IaC file
