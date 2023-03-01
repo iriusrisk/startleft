@@ -20,12 +20,13 @@ class RelationshipsExtractor:
 
         min_size = 0
         for target_candidate in target_candidates:
-            path_size = self.__get_shortest_straight_path_size(
+            path = self.__get_shortest_valid_path(
                 source_component.tf_resource_id, target_candidate.tf_resource_id)
 
-            if not path_size:
+            if not path:
                 continue
 
+            path_size = len(path)
             if not liked_resources or path_size < min_size:
                 min_size = path_size
                 liked_resources = [target_candidate.id]
@@ -34,20 +35,25 @@ class RelationshipsExtractor:
 
         return liked_resources
 
-    def __get_shortest_straight_path_size(self, source_label: str, target_label: str) -> Union[int, None]:
-        if source_label == target_label:
-            return
-
+    def __get_shortest_valid_path(self, source_label: str, target_label: str) -> Union[int, None]:
         source_node = self.labels_nodes[source_label]
         target_node = self.labels_nodes[target_label]
 
-        if nx.has_path(self.graph, source_node, target_node):
-            shortest_path = nx.shortest_path(self.graph, source_node, target_node)
-            if self.__is_straight_path(shortest_path):
-                return len(shortest_path)
+        shortest_path = None
+        if self.__has_path(source_node, target_node):
+            for path in nx.all_simple_paths(self.graph, source=source_node, target=target_node):
+                if self.__is_straight_path(path):
+                    if not shortest_path or len(shortest_path) > len(path):
+                        shortest_path = path
+
+        return shortest_path
+
+    def __has_path(self, source_node: str, target_node: str) -> Union[int, None]:
+        return source_node != target_node \
+               and nx.has_path(self.graph, source_node, target_node)
 
     def __is_straight_path(self, path: list) -> bool:
         return len(self.mapped_resources_ids & self.__nodes_to_labels(path[1:-1])) == 0
 
     def __nodes_to_labels(self, path: []) -> set:
-        return set(map(lambda p: self.nodes_labels[p], path))
+        return set(filter(lambda x: x is not None, map(lambda p: self.nodes_labels[p], path)))

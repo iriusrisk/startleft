@@ -4,8 +4,8 @@ from copy import deepcopy
 from networkx import DiGraph
 
 from otm.otm.entity.otm import OTM
-from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
 from slp_tf.slp_tf.tfplan.graph.relationships_extractor import RelationshipsExtractor
+from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
 from slp_tf.slp_tf.tfplan.transformers.tfplan_transformer import TfplanTransformer
 
 
@@ -44,6 +44,7 @@ class HierarchyCalculator(TfplanTransformer):
     def __init__(self, otm: OTM, graph: DiGraph):
         super().__init__(otm, graph)
 
+        # TODO: mapped_resources_ids = otm.components + otm.security_groups
         self.relationships_extractor = RelationshipsExtractor(
             mapped_resources_ids=[component.id for component in self.otm.components],
             graph=self.graph
