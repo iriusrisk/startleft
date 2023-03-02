@@ -2,15 +2,16 @@ import logging
 
 from networkx import DiGraph
 
-from otm.otm.entity.otm import OTM
-from otm.otm.otm_builder import OTMBuilder
 from slp_tf.slp_tf.tfplan.transformers.tfplan_parent_calculator import TfplanParentCalculator
 
 from slp_tf.slp_tf.tfplan.transformers.tfplan_children_calculator import TfplanChildrenCalculator
 from slp_tf.slp_tf.tfplan.mapping.tfplan_mapper import TfplanMapper
-from slp_base import ProviderParser, IacType, OTMBuildingError
+from slp_base import ProviderParser, OTMBuildingError
 from slp_tf.slp_tf.tfplan.transformers.tfplan_dataflow_creator import TfplanDataflowCreator
 from slp_tf.slp_tf.tfplan.transformers.tfplan_singleton_transformer import TfplanSingletonTransformer
+from slp_tf.slp_tf.tfplan.load.tfplan_security_groups_loader import TfplanSecurityGroupsLoader
+from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanOTM
+from slp_tf.slp_tf.tfplan.load.tfplan_launch_templates_loader import TfplanLaunchTemplateLoader
 
 logger = logging.getLogger(__name__)
 
@@ -24,11 +25,19 @@ class TfplanParser(ProviderParser):
         self.project_id = project_id
         self.project_name = project_name
 
-        self.otm: OTM = self.__initialize_otm()
+        self.relationships_extractor = None
+        self.otm = TfplanOTM(
+            project_id,
+            project_name,
+            components=[],
+            security_groups=[],
+            launch_templates=[],
+            dataflows=[])
 
     def build_otm(self):
         try:
             self.__map_tfplan_resources()
+            self.__load_auxiliary_resources()
 
             self.__calculate_parents()
             self.__calculate_children()
@@ -43,11 +52,12 @@ class TfplanParser(ProviderParser):
 
         return self.otm
 
-    def __initialize_otm(self):
-        return OTMBuilder(self.project_id, self.project_name, IacType.TERRAFORM).build()
-
     def __map_tfplan_resources(self):
         TfplanMapper(self.otm, self.tfplan, self.mapping).map()
+
+    def __load_auxiliary_resources(self):
+        TfplanSecurityGroupsLoader(self.otm, self.tfplan).load()
+        TfplanLaunchTemplateLoader(self.otm, self.tfplan).load()
 
     def __calculate_parents(self):
         TfplanParentCalculator(self.otm, self.tfgraph).transform()

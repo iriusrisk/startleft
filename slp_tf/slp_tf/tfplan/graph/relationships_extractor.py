@@ -3,7 +3,7 @@ from typing import Union
 import networkx as nx
 from networkx import DiGraph
 
-from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
+from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanComponent
 
 
 class RelationshipsExtractor:
@@ -16,7 +16,7 @@ class RelationshipsExtractor:
         self.labels_nodes: dict = {v: k for k, v in self.nodes_labels.items()}
 
     def get_closest_resources(self, source_component: TfplanComponent, target_candidates: [TfplanComponent]) -> [str]:
-        liked_resources = []
+        linked_resources = []
 
         min_size = 0
         for target_candidate in target_candidates:
@@ -27,15 +27,18 @@ class RelationshipsExtractor:
                 continue
 
             path_size = len(path)
-            if not liked_resources or path_size < min_size:
+            if not linked_resources or path_size < min_size:
                 min_size = path_size
-                liked_resources = [target_candidate.id]
+                linked_resources = [target_candidate.id]
             elif path_size == min_size:
-                liked_resources.append(target_candidate.id)
+                linked_resources.append(target_candidate.id)
 
-        return liked_resources
+        return linked_resources
 
-    def __get_shortest_valid_path(self, source_label: str, target_label: str) -> Union[int, None]:
+    def exist_valid_path(self, source_label: str, target_label: str) -> bool:
+        return bool(self.__get_shortest_valid_path(source_label, target_label))
+
+    def __get_shortest_valid_path(self, source_label: str, target_label: str) -> list:
         source_node = self.labels_nodes[source_label]
         target_node = self.labels_nodes[target_label]
 

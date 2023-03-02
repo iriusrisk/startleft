@@ -3,7 +3,7 @@ from networkx import DiGraph
 from otm.otm.entity.trustzone import Trustzone
 from otm.otm.otm_builder import OTMBuilder
 from slp_base import IacType
-from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
+from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanComponent
 
 DEFAULT_TRUSTZONE = Trustzone(
     trustzone_id='default-trustzone-id',

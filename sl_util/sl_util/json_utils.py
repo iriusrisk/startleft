@@ -1,5 +1,3 @@
-# TODO this utils file should be renamed to otm_utils
-
 import json
 import logging
 
@@ -8,6 +6,14 @@ import yaml
 from otm.otm.entity.otm import OTM
 
 logger = logging.getLogger(__name__)
+
+
+def is_json(source: bytes):
+    try:
+        json.loads(source)
+        return True
+    except Exception:
+        return False
 
 
 def get_otm_as_json(otm: OTM):

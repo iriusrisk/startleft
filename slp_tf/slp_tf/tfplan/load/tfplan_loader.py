@@ -1,23 +1,14 @@
 from typing import Callable
 
 import pygraphviz
-import re
 from networkx import nx_agraph
-import json
 
 from slp_tf.slp_tf.load.tf_loader import hcl2_reader
 from sl_util.sl_util.file_utils import read_byte_data
-from sl_util.sl_util.json_utils import yaml_reader
+from sl_util.sl_util.json_utils import yaml_reader, is_json
 
 from slp_base import ProviderLoader, LoadingIacFileError
-
-
-def __is_json(source: bytes):
-    try:
-        json.loads(source)
-        return True
-    except Exception:
-        return False
+from slp_tf.slp_tf.tfplan.load.tfplan_to_resource_dict import TfplanToResourceDict
 
 
 def __is_graph(source: bytes):
@@ -62,7 +53,7 @@ def __get_source(sources: [bytes], selector: Callable) -> bytes:
 
 
 def get_tfplan(sources: [bytes]) -> bytes:
-    return __get_source(sources, __is_json)
+    return __get_source(sources, is_json)
 
 
 def get_tfgraph(sources: [bytes]) -> bytes:
@@ -71,91 +62,6 @@ def get_tfgraph(sources: [bytes]) -> bytes:
 
 def load_tfgraph(source: bytes):
     return nx_agraph.from_agraph(pygraphviz.AGraph(read_byte_data(source)))
-
-
-def map_modules(modules: [{}], parent: str = None) -> [{}]:
-    mapped_modules = []
-    resources = []
-
-    for module in modules:
-        module_address = get_module_address(module, parent)
-        if module_address in mapped_modules:
-            continue
-
-        if 'resources' in module:
-            resources.extend(map_resources(module['resources'], module_address))
-
-        if 'child_modules' in module:
-            resources.extend(map_modules(module['child_modules'], module_address))
-
-        mapped_modules.append(module_address)
-
-    return resources
-
-
-def map_resources(resources: [{}], parent: str = None) -> [{}]:
-    mapped_resources = []
-    for resource in resources:
-        if is_resource_duplicated(resource):
-            continue
-
-        mapped_resource = {
-            'resource_id': get_resource_id(resource),
-            'resource_name': get_resource_name(resource, parent),
-            'resource_type': resource['type'],
-            'resource_properties': map_resource_properties(resource)
-        }
-
-        mapped_resource = apply_resource_retro_compatibility(mapped_resource)
-
-        mapped_resources.append(mapped_resource)
-
-    return mapped_resources
-
-
-def apply_resource_retro_compatibility(resource: {}):
-    resource['_key'] = resource['resource_name']
-    resource['Type'] = resource['resource_type']
-    resource['Properties'] = resource['resource_properties']
-    resource[resource['resource_type']] = {resource['resource_name']: resource['resource_properties']}
-    # The order of the resource items matter for further processes
-    return dict(reversed(resource.items()))
-
-
-def map_resource_properties(resource: {}) -> {}:
-    return {
-        'resource_mode': resource['mode'],
-        'resource_provider_name': resource['provider_name'],
-        'resource_schema_version': resource['schema_version'],
-        'resource_address': resource['address'],
-        # Sensitive and usual values may be overlapped
-        **resource.get('sensitive_values', {}),
-        **resource.get('values', {})
-    }
-
-
-def is_resource_duplicated(resource: {}) -> bool:
-    return 'index' in resource and not (resource['index'] == '0' or resource['index'] == 'zero')
-
-
-def get_resource_id(resource: {}) -> str:
-    return parse_address(resource['address']) \
-        if 'index' in resource \
-        else resource['address']
-
-
-def get_resource_name(resource: {}, parent: str) -> str:
-    return resource['name'] if not parent else f'{parent}.{resource["name"]}'
-
-
-def get_module_address(module: {}, parent: str) -> str:
-    if 'address' in module:
-        module_address = parse_address(module['address'])
-        return f'{parent}.{module_address}' if parent else module_address
-
-
-def parse_address(address: str) -> str:
-    return re.sub(r'\[.*?]', '', address)
 
 
 class TfplanLoader(ProviderLoader):
@@ -193,7 +99,8 @@ class TfplanLoader(ProviderLoader):
             )
 
     def __map_tfplan_to_resources(self):
-        resources = map_modules([self.tfplan['planned_values']['root_module']])
+        resources = TfplanToResourceDict(self.tfplan['configuration']['root_module']['resources'])\
+            .map_modules([self.tfplan['planned_values']['root_module']])
 
         if resources:
             self.terraform = {'resource': resources}

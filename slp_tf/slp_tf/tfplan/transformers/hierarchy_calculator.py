@@ -3,9 +3,8 @@ from copy import deepcopy
 
 from networkx import DiGraph
 
-from otm.otm.entity.otm import OTM
 from slp_tf.slp_tf.tfplan.graph.relationships_extractor import RelationshipsExtractor
-from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
+from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanComponent, TfplanOTM
 from slp_tf.slp_tf.tfplan.transformers.tfplan_transformer import TfplanTransformer
 
 
@@ -41,12 +40,14 @@ def __extract_type(component_address: str) -> str:
 
 
 class HierarchyCalculator(TfplanTransformer):
-    def __init__(self, otm: OTM, graph: DiGraph):
+    def __init__(self, otm: TfplanOTM, graph: DiGraph):
         super().__init__(otm, graph)
 
-        # TODO: mapped_resources_ids = otm.components + otm.security_groups
         self.relationships_extractor = RelationshipsExtractor(
-            mapped_resources_ids=[component.id for component in self.otm.components],
+            mapped_resources_ids=
+            [component.id for component in self.otm.components] +
+            [sg.id for sg in self.otm.security_groups] +
+            [lt.id for lt in self.otm.launch_templates],
             graph=self.graph
         )
 
@@ -81,5 +82,3 @@ class HierarchyCalculator(TfplanTransformer):
             parent_candidates.extend(_find_parent_candidates_by_type(self.otm.components, parent_type))
 
         return parent_candidates
-
-

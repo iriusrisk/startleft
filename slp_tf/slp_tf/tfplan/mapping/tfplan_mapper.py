@@ -1,8 +1,7 @@
 import re
 
-from otm.otm.entity.otm import OTM
 from otm.otm.entity.trustzone import Trustzone
-from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
+from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanComponent, TfplanOTM
 
 
 def trustzone_to_otm(trustzone: {}) -> Trustzone:
@@ -23,7 +22,7 @@ def get_mappings_by_regex(mappings: []) -> {}:
 
 class TfplanMapper:
 
-    def __init__(self, otm: OTM, tfplan: {}, mappings: {}):
+    def __init__(self, otm: TfplanOTM, tfplan: {}, mappings: {}):
         self.otm = otm
         self.resources = tfplan['resource']
         self.mappings = mappings
