@@ -25,7 +25,7 @@ setup(
         'python-multipart==0.0.5',
         'click==8.1.3',
         'uvicorn==0.20.0',
-        'shapely==1.8.5',
+        'shapely==2.0.1',
         'vsdx==0.5.13',
         'python-magic==0.4.27',
         'setuptools==67.4.0',
