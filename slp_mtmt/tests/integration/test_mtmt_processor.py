@@ -8,7 +8,8 @@ from slp_base.tests.util.otm import validate_and_compare
 from slp_mtmt import MTMTProcessor
 from slp_mtmt.tests.resources import test_resource_paths
 from slp_mtmt.tests.resources.test_resource_paths import mapping_mtmt_mvp_legacy, mapping_mtmt_mvp_no_type, \
-    model_mtmt_mvp_otm, missing_position_otm, nested_trustzones_tm7, nested_trustzones_otm
+    model_mtmt_mvp_otm, missing_position_otm, nested_trustzones_tm7, nested_trustzones_otm, nested_trustzones_line_otm, \
+    nested_trustzones_line_tm7
 
 SAMPLE_ID = 'example-project'
 SAMPLE_NAME = 'Example Project'
@@ -92,7 +93,8 @@ class TestMtmtProcessor:
         assert result == expected
 
     @mark.parametrize('source,expected', [
-        (nested_trustzones_tm7, nested_trustzones_otm)
+        (nested_trustzones_tm7, nested_trustzones_otm),
+        (nested_trustzones_line_tm7, nested_trustzones_line_otm)
     ])
     def test_nested_trust_zones(self, source, expected):
         # GIVEN a valid MTMT file

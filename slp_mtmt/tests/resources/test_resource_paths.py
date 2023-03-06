@@ -36,7 +36,7 @@ example_position_tm7 = f'{path}/mtmt/MTMT_example_coordinates.tm7'
 position_1line_tz_tm7 = f'{path}/mtmt/MTMT_example_coordinates_1_line_trustzone.tm7'
 position_1orphan_tm7 = f'{path}/mtmt/MTMT_example_coordinates_1_orphan.tm7'
 nested_trustzones_tm7 = f'{path}/mtmt/MTMT_nested_tz.tm7'
-nested_trustzones_line_inside_line_tm7 = f'{path}/mtmt/MTMT_nested_tz_line_inside_line.tm7'
+nested_trustzones_line_tm7 = f'{path}/mtmt/MTMT_nested_tz_line.tm7'
 
 # OTM
 example_position_otm = f'{path}/mtmt/MTMT_example_coordinates.otm'
@@ -45,5 +45,5 @@ position_1orphan_otm = f'{path}/mtmt/MTMT_example_coordinates_1_orphan.otm'
 model_mtmt_mvp_otm = f'{path}/otm/MTMT_MVP.otm'
 missing_position_otm = f'{path}/otm/missing_coordinates.otm'
 nested_trustzones_otm = f'{path}/otm/nested_tz.otm'
-nested_trustzones_line_inside_line_otm = f'{path}/otm/nested_tz_line_inside_line.otm'
+nested_trustzones_line_otm = f'{path}/otm/nested_tz_line.otm'
 
