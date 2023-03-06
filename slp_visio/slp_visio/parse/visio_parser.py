@@ -28,7 +28,7 @@ class VisioParser(ProviderParser):
             DiagramRepresentation(
                 id_=self.representation_id,
                 name=f'{self.project_id} Diagram Representation',
-                type_=str(RepresentationType.DIAGRAM.value),
+                type_=RepresentationType.DIAGRAM,
                 size=build_size_object(calculate_diagram_size(self.diagram.limits))
             )
         ]
