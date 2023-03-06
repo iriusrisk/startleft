@@ -2,6 +2,7 @@ from setuptools import setup, find_packages
 
 from startleft.startleft._version.local_scheme import guess_startleft_semver_suffix
 from startleft.startleft._version.version_scheme import guess_startleft_semver
+
 setup(
     name='startleft',
     description='Parse Infrastructure as Code files to the Open Threat Model format and upload them to IriusRisk',
@@ -20,14 +21,14 @@ setup(
         'jmespath==1.0.1',
         'python-hcl2==4.3.0',
         'requests==2.28.2',
-        'fastapi==0.89.1',
+        'fastapi==0.92.0',
         'python-multipart==0.0.5',
         'click==8.1.3',
         'uvicorn==0.20.0',
         'shapely==1.8.5',
         'vsdx==0.5.13',
         'python-magic==0.4.27',
-        'setuptools==65.5.1',
+        'setuptools==67.4.0',
         'defusedxml==0.7.1'
     ],
     use_scm_version={
@@ -41,14 +42,15 @@ setup(
             "pytest-runner==6.0.0",
         ],
         "test": [
-            'tox==4.4.3',
+            'tox==4.4.6',
             'pytest==7.2.1',
             'responses==0.22.0',
             'deepdiff==6.2.3',
             'httpx==0.23.3'
         ],
         "doc": [
-            'mkdocs-material==9.0.5',
+            'mkdocs-material==9.0.13',
+            'pymdown-extensions==9.9.2',
             'mkdocs-glightbox==0.3.1'
         ]
     },
