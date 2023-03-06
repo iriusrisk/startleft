@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+from otm.otm.entity.parent_type import ParentType
 from slp_tf.slp_tf.tfplan.mapping.tfplan_mapper import TfplanMapper
 from slp_tf.tests.unit.tfplan.otm_graph_util import build_base_otm
 
@@ -66,7 +67,7 @@ class TestTfplanMapper:
 
         # AND the parent of the component is the default TrustZone
         assert component.parent == DEFAULT_TRUSTZONE['id']
-        assert component.parent_type == 'trustZone'
+        assert component.parent_type == ParentType.TRUST_ZONE
 
     def test_mapping_by_regex(self):
         # GIVEN a resource of some TF type
@@ -96,4 +97,4 @@ class TestTfplanMapper:
 
         # AND the parent of the component is the default TrustZone
         assert component.parent == DEFAULT_TRUSTZONE['id']
-        assert component.parent_type == 'trustZone'
+        assert component.parent_type == ParentType.TRUST_ZONE

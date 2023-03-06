@@ -1,6 +1,6 @@
 from slp_tf.slp_tf.tfplan.transformers.tfplan_parent_calculator import TfplanParentCalculator
-from slp_tf.tests.unit.tfplan.otm_graph_util import build_component_id, build_mocked_otm, build_graph, \
-    assert_parents
+from slp_tf.tests.unit.tfplan.otm_graph_util import build_graph, \
+    assert_parents, build_mocked_otm, build_mocked_tfplan_component
 
 CHILD_TYPE = 'aws_instance'
 PARENT_TYPES = ['aws_subnet', 'aws_vpc']
@@ -10,10 +10,13 @@ class TestTfplanParentCalculator:
 
     def test_default_trustzone(self):
         # GIVEN an OTM dict with one component and a default trustZone
-        component_name = 'child'
-        component_type = CHILD_TYPE
-        component_id = build_component_id(component_name, component_type)
-        otm = build_mocked_otm({component_name: component_type})
+        component_a = build_mocked_tfplan_component({
+            'component_name': 'child',
+            'tf_type': CHILD_TYPE,
+        })
+        component_id = component_a.id
+
+        otm = build_mocked_otm([component_a])
 
         # AND a graph with no relationships for the component
         graph = build_graph([(component_id, None)])
@@ -29,17 +32,19 @@ class TestTfplanParentCalculator:
 
     def test_one_straight_path(self):
         # GIVEN an OTM dict with two components and a default trustZone
-        child_component_name = 'child'
-        child_component_type = CHILD_TYPE
-        child_component_id = build_component_id(child_component_name, child_component_type)
+        child_component = build_mocked_tfplan_component({
+            'component_name': 'child',
+            'tf_type': CHILD_TYPE,
+        })
+        child_component_id = child_component.id
 
-        parent_component_name = 'parent'
-        parent_component_type = PARENT_TYPES[0]
-        parent_component_id = build_component_id(parent_component_name, parent_component_type)
+        parent_component = build_mocked_tfplan_component({
+            'component_name': 'parent',
+            'tf_type': PARENT_TYPES[0],
+        })
+        parent_component_id = parent_component.id
 
-        otm = build_mocked_otm({
-            child_component_name: child_component_type,
-            parent_component_name: parent_component_type})
+        otm = build_mocked_otm([child_component, parent_component])
 
         # AND a graph with a straight relationship between the child and the parent
         graph = build_graph([
@@ -58,17 +63,19 @@ class TestTfplanParentCalculator:
 
     def test_one_path_no_mapped_resources(self):
         # GIVEN an OTM dict with two components and a default trustZone
-        child_component_name = 'child'
-        child_component_type = CHILD_TYPE
-        child_component_id = build_component_id(child_component_name, child_component_type)
+        child_component = build_mocked_tfplan_component({
+            'component_name': 'child',
+            'tf_type': CHILD_TYPE,
+        })
+        child_component_id = child_component.id
 
-        parent_component_name = 'parent'
-        parent_component_type = PARENT_TYPES[0]
-        parent_component_id = build_component_id(parent_component_name, parent_component_type)
+        parent_component = build_mocked_tfplan_component({
+            'component_name': 'parent',
+            'tf_type': PARENT_TYPES[0],
+        })
+        parent_component_id = parent_component.id
 
-        otm = build_mocked_otm({
-            child_component_name: child_component_type,
-            parent_component_name: parent_component_type})
+        otm = build_mocked_otm([child_component, parent_component])
 
         # AND a graph with an indirect relationship between the child and the parent
         graph = build_graph([
@@ -88,23 +95,25 @@ class TestTfplanParentCalculator:
 
     def test_two_paths_only_one_straight(self):
         # GIVEN an OTM dict with two components and a default trustZone
-        child_component_name = 'child'
-        child_component_type = CHILD_TYPE
-        child_component_id = build_component_id(child_component_name, child_component_type)
-
-        parent_component_name = 'parent'
-        parent_component_type = PARENT_TYPES[0]
-        parent_component_id = build_component_id(parent_component_name, parent_component_type)
-
-        grandparent_component_name = 'grandparent'
-        grandparent_component_type = PARENT_TYPES[1]
-        grandparent_component_id = build_component_id(grandparent_component_name, grandparent_component_type)
-
-        otm = build_mocked_otm({
-            child_component_name: child_component_type,
-            parent_component_name: parent_component_type,
-            grandparent_component_name: grandparent_component_type,
+        child_component = build_mocked_tfplan_component({
+            'component_name': 'child',
+            'tf_type': CHILD_TYPE,
         })
+        child_component_id = child_component.id
+
+        parent_component = build_mocked_tfplan_component({
+            'component_name': 'parent',
+            'tf_type': PARENT_TYPES[0],
+        })
+        parent_component_id = parent_component.id
+
+        grandparent_component = build_mocked_tfplan_component({
+            'component_name': 'grandparent',
+            'tf_type': PARENT_TYPES[1],
+        })
+        grandparent_component_id = grandparent_component.id
+
+        otm = build_mocked_otm([child_component, parent_component, grandparent_component])
 
         # AND a graph a two overlapped paths between a child and a parent
         graph = build_graph([
@@ -126,18 +135,19 @@ class TestTfplanParentCalculator:
 
     def test_two_straight_paths_different_lengths(self):
         # GIVEN an OTM dict with two components and a default trustZone
-        child_component_name = 'child'
-        child_component_type = CHILD_TYPE
-        child_component_id = build_component_id(child_component_name, child_component_type)
-
-        parent_component_name = 'parent'
-        parent_component_type = PARENT_TYPES[0]
-        parent_component_id = build_component_id(parent_component_name, parent_component_type)
-
-        otm = build_mocked_otm({
-            child_component_name: child_component_type,
-            parent_component_name: parent_component_type,
+        child_component = build_mocked_tfplan_component({
+            'component_name': 'child',
+            'tf_type': CHILD_TYPE,
         })
+        child_component_id = child_component.id
+
+        parent_component = build_mocked_tfplan_component({
+            'component_name': 'parent',
+            'tf_type': PARENT_TYPES[0],
+        })
+        parent_component_id = parent_component.id
+
+        otm = build_mocked_otm([child_component, parent_component])
 
         # AND a graph a two overlapped paths between a child and a parent
         graph = build_graph([
@@ -158,30 +168,32 @@ class TestTfplanParentCalculator:
 
     def test_two_straight_paths_same_lengths(self):
         # GIVEN an OTM dict with two components and a default trustZone
-        child_component_name = 'child'
-        child_component_type = CHILD_TYPE
-        child_component_id = build_component_id(child_component_name, child_component_type)
-
-        parent_component_1_name = 'parent_1'
-        parent_component_1_type = PARENT_TYPES[0]
-        parent_component_1_id = build_component_id(parent_component_1_name, parent_component_1_type)
-
-        parent_component_2_name = 'parent_2'
-        parent_component_2_type = PARENT_TYPES[1]
-        parent_component_2_id = build_component_id(parent_component_2_name, parent_component_2_type)
-
-        otm = build_mocked_otm({
-            child_component_name: child_component_type,
-            parent_component_1_name: parent_component_1_type,
-            parent_component_2_name: parent_component_2_type
+        child_component = build_mocked_tfplan_component({
+            'component_name': 'child',
+            'tf_type': CHILD_TYPE,
         })
+        child_component_id = child_component.id
+
+        parent_component_1 = build_mocked_tfplan_component({
+            'component_name': 'parent_1',
+            'tf_type': PARENT_TYPES[0],
+        })
+        parent_component_1_id = parent_component_1.id
+
+        parent_component_2 = build_mocked_tfplan_component({
+            'component_name': 'parent_2',
+            'tf_type': PARENT_TYPES[1],
+        })
+        parent_component_2_id = parent_component_2.id
+
+        otm = build_mocked_otm([child_component, parent_component_1, parent_component_2])
 
         # AND a graph a two paths from the same child to two parents
         graph = build_graph([
-            (child_component_id, parent_component_1_id),
-            (child_component_id, parent_component_2_id),
-            (parent_component_1_id, None),
-            (parent_component_2_id, None)
+            (child_component.id, parent_component_1.id),
+            (child_component.id, parent_component_2.id),
+            (parent_component_1.id, None),
+            (parent_component_2.id, None)
         ])
 
         # WHEN TfplanParentCalculator::calculate_parents is invoked

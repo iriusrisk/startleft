@@ -1,5 +1,9 @@
+from typing import List
+
 from networkx import DiGraph
 
+from otm.otm.entity.dataflow import Dataflow
+from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.trustzone import Trustzone
 from otm.otm.otm_builder import OTMBuilder
 from slp_base import IacType
@@ -31,24 +35,37 @@ def build_otm_type(component_type: str) -> str:
     return f'{component_type}-otm-type'
 
 
-def build_mocked_otm(component_types_names: {}) -> {}:
+def build_mocked_otm(components: List[TfplanComponent], dataflows: List[Dataflow] = None) -> {}:
     otm = build_base_otm(DEFAULT_TRUSTZONE)
-
-    for component_name, component_type in component_types_names.items():
-        component_id = build_component_id(component_name, component_type)
-
-        otm.components.append(
-            TfplanComponent(
-                component_id=component_id,
-                name=component_name,
-                component_type=build_otm_type(component_name),
-                parent=DEFAULT_TRUSTZONE.id,
-                parent_type='trustZone',
-                tags=[component_type],
-                tf_resource_id=component_id,
-                tf_type=component_type))
-
+    otm.components = components
+    otm.dataflows = dataflows
     return otm
+
+
+def build_mocked_tfplan_component(component: {}) -> TfplanComponent:
+    component_name = component['component_name']
+    tf_type = component['tf_type']
+    component_id = build_component_id(component_name, tf_type)
+    return TfplanComponent(
+        component_id=component_id,
+        name=component_name,
+        component_type=component.get('component_type', build_otm_type(tf_type)),
+        parent=component.get('parent_id', DEFAULT_TRUSTZONE.id),
+        parent_type=component.get('parent_type', ParentType.TRUST_ZONE),
+        tags=component.get('tags', [tf_type]),
+        tf_resource_id=component_id,
+        tf_type=tf_type,
+        configuration=component.get('configuration', {}))
+
+
+def build_mocked_dataflow(
+        component_a: TfplanComponent, component_b: TfplanComponent,
+        bidirectional: bool = False, attributes=None, tags=None):
+    return Dataflow(
+        f"{component_a.id} -> {component_b.id}",
+        f"{component_a.name} to {component_b.name}",
+        component_a.id, component_b.id,
+        bidirectional=bidirectional, attributes=attributes, tags=tags)
 
 
 def build_graph(relationships: [()]):
@@ -72,8 +89,8 @@ def assert_parents(components: [TfplanComponent], relationships: dict = None):
 
 def assert_parent(component: TfplanComponent, parent_id: str = None):
     if parent_id:
-        assert component.parent_type == 'component'
+        assert component.parent_type == ParentType.COMPONENT
         assert component.parent == parent_id
     else:
-        assert component.parent_type == 'trustZone'
+        assert component.parent_type == ParentType.TRUST_ZONE
         assert component.parent == DEFAULT_TRUSTZONE.id

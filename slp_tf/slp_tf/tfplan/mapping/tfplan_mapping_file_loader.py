@@ -1,5 +1,5 @@
-from slp_base.slp_base.mapping_file_loader import MappingFileLoader
 from slp_base import MappingFileNotValidError
+from slp_base.slp_base.mapping_file_loader import MappingFileLoader
 
 
 def simple_type(component: {}) -> []:
@@ -24,7 +24,8 @@ def simple_singleton(component: {}) -> []:
     return [{
         'otm_type': component['type'],
         'tf_type': component['$source']['$singleton']['$type'],
-        'singleton': True
+        'configuration': {'singleton': True}
+
     }]
 
 
@@ -32,7 +33,7 @@ def regex_singleton(component: {}) -> []:
     return [{
         'otm_type': component['type'],
         'tf_type': {'$regex': component['$source']['$singleton']['$type']['$regex']},
-        'singleton': True
+        'configuration': {'singleton': True}
     }]
 
 
