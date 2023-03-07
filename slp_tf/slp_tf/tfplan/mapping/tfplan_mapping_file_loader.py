@@ -37,6 +37,33 @@ def regex_singleton(component: {}) -> []:
     }]
 
 
+def catchall(component: {}) -> []:
+    return [{
+        'otm_type': component['type'],
+        'tf_type': {'$regex': component['$source']['$catchall']['$type']['$regex']},
+        'configuration': {'catchall': True}
+    }]
+
+
+def singleton_catchall(component: {}) -> []:
+    return [{
+        'otm_type': component['type'],
+        'tf_type': {'$regex': component['$source']['$singleton']['$catchall']['$type']['$regex']},
+        'configuration': {'singleton': True, 'catchall': True}
+    }]
+
+
+def skip(component: {}) -> []:
+    terraform_types = component['$source']['$skip']['$type']
+    if type(terraform_types) == str:
+        terraform_types = [terraform_types]
+
+    return list(map(lambda tf_type: {
+        'tf_type': tf_type,
+        'configuration': {'skip': True}
+    }, terraform_types))
+
+
 def get_source_structure(source: {}, structure: list) -> []:
     for key, value in source.items():
         structure.append(key)
@@ -51,6 +78,9 @@ SOURCE_STRUCTURES = {
     ('$type', '$regex'): simple_regex,
     ('$singleton', '$type'): simple_singleton,
     ('$singleton', '$type', '$regex'): regex_singleton,
+    ('$skip', '$type'): skip,
+    ('$catchall', '$type', "$regex"): catchall,
+    ('$singleton', '$catchall', '$type', "$regex"): singleton_catchall,
 }
 
 
