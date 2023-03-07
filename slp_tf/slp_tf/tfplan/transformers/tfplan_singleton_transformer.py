@@ -8,7 +8,7 @@ from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
 from slp_tf.slp_tf.tfplan.transformers.tfplan_transformer import TfplanTransformer
 
 
-def _merge_component_configurations(otm_components: List[TfplanComponent]) -> {}:
+def _merge_component_configurations(otm_components: List[TfplanComponent]) -> Dict:
     merge_configuration = {}
     for component in otm_components:
         merge_configuration = {
@@ -17,27 +17,27 @@ def _merge_component_configurations(otm_components: List[TfplanComponent]) -> {}
     return merge_configuration
 
 
-def _find_equals_dataflows(dataflow, dataflows):
-    equals_dataflows = []
+def _find_equivalent_dataflows(dataflow: Dataflow, dataflows: List[Dataflow]) -> List[Dataflow]:
+    equivalent_dataflows = []
     for df in dataflows:
-        if _is_equals_dataflow(dataflow, df):
-            equals_dataflows.append(df)
+        if _are_equivalent_dataflows(dataflow, df):
+            equivalent_dataflows.append(df)
 
-    return equals_dataflows
+    return equivalent_dataflows
 
 
-def _is_equals_dataflow(dataflow_1, dataflow_2):
-    is_same_flow = (dataflow_1.source_node == dataflow_2.source_node
+def _are_equivalent_dataflows(dataflow_1: Dataflow, dataflow_2: Dataflow) -> bool:
+    is_same_dataflow = (dataflow_1.source_node == dataflow_2.source_node
                     and dataflow_1.destination_node == dataflow_2.destination_node)
 
-    is_reverse_bidirectional_flow = (dataflow_1.bidirectional or dataflow_2.bidirectional) \
+    is_reverse_bidirectional_dataflow = (dataflow_1.bidirectional or dataflow_2.bidirectional) \
                                     and dataflow_1.source_node == dataflow_2.destination_node \
                                     and dataflow_1.destination_node == dataflow_2.source_node
 
-    return is_same_flow or is_reverse_bidirectional_flow
+    return is_same_dataflow or is_reverse_bidirectional_dataflow
 
 
-def _merge_dataflow(origin_dataflow: Dataflow, dataflows: List[Dataflow]):
+def _merge_dataflows(origin_dataflow: Dataflow, dataflows: List[Dataflow]) -> Dataflow:
     if len(dataflows) > 0:
         for df in dataflows:
             if origin_dataflow.tags is None:
@@ -60,22 +60,43 @@ def _merge_dataflow(origin_dataflow: Dataflow, dataflows: List[Dataflow]):
     return origin_dataflow
 
 
+def _build_singleton_component(otm_components: List[TfplanComponent]) -> TfplanComponent:
+    tags = list(set(itertools.chain.from_iterable([c.tags or [] for c in otm_components])))
+    configuration = _merge_component_configurations(otm_components)
+    component_id = otm_components[0].id
+    return TfplanComponent(
+        component_id=component_id,
+        name=f"{otm_components[0].type} (grouped)",
+        component_type=otm_components[0].type,
+        parent=otm_components[0].parent,
+        parent_type=otm_components[0].parent_type,
+        tags=tags,
+        configuration=configuration
+    )
+
+
 class TfplanSingletonTransformer(TfplanTransformer):
 
     def __init__(self, otm: OTM):
         super().__init__(otm)
         self.otm_components = self.otm.components
         self.otm_dataflows = self.otm.dataflows
+
         self.singleton_component_relations: Dict[str, TfplanComponent] = {}
+
+    def transform(self):
         self.__populate_singleton_component_relations()
+        self.__transform_singleton_components()
+        self.__transform_singleton_dataflows()
 
     def __populate_singleton_component_relations(self):
         for component in self.otm_components:
             if component.is_singleton:
                 sibling_components = self.__find_siblings_components(component.type, component.parent)
                 if len(sibling_components) > 1:
-                    singleton_component = self.__get_singleton(sibling_components)
-                    self.singleton_component_relations[component.id] = singleton_component
+                    self.singleton_component_relations[component.id] = \
+                        self.singleton_component_relations.get(sibling_components[0].id) \
+                        or _build_singleton_component(sibling_components)
 
     def __find_siblings_components(self, component_type: str, parent_id: str):
         """
@@ -93,19 +114,14 @@ class TfplanSingletonTransformer(TfplanTransformer):
 
         return found_components
 
-    def __get_singleton(self, otm_components: List[TfplanComponent]):
-        tags = list(set(itertools.chain.from_iterable([c.tags or [] for c in otm_components])))
-        configuration = _merge_component_configurations(otm_components)
-        component_id = otm_components[0].id
-        return self.singleton_component_relations.get(component_id, TfplanComponent(
-            component_id=component_id,
-            name=f"{otm_components[0].type} (grouped)",
-            component_type=otm_components[0].type,
-            parent=otm_components[0].parent,
-            parent_type=otm_components[0].parent_type,
-            tags=tags,
-            configuration=configuration
-        ))
+    def __transform_singleton_components(self):
+        self.__remove_all_singletons()
+        self.otm_components.extend(self.__get_unique_singleton_components())
+
+    def __remove_all_singletons(self):
+        remove_from_list(
+            self.otm_components, filter_function=lambda component: component.id in self.singleton_component_relations
+        )
 
     def __get_unique_singleton_components(self):
         index = []
@@ -115,18 +131,6 @@ class TfplanSingletonTransformer(TfplanTransformer):
                 index.append(value.id)
                 unique_singleton_components.append(value)
         return unique_singleton_components
-
-    def transform(self):
-        self.__transform_singleton_components()
-        self.__transform_singleton_dataflows()
-
-    def __transform_singleton_components(self):
-        # remove all singletons
-        remove_from_list(
-            self.otm_components, lambda component: component.id in self.singleton_component_relations
-        )
-        # add all unique singletons
-        self.otm_components.extend(self.__get_unique_singleton_components())
 
     def __transform_singleton_dataflows(self):
         if self.otm_dataflows:
@@ -153,8 +157,8 @@ class TfplanSingletonTransformer(TfplanTransformer):
                 unique_singleton_dataflows.append(dataflow)
                 continue
 
-            equals_dataflows = _find_equals_dataflows(dataflow, self.otm_dataflows[index + 1:])
-            repeated_dataflows.extend(equals_dataflows)
-            unique_singleton_dataflows.append(_merge_dataflow(dataflow, equals_dataflows))
+            equivalent_dataflows = _find_equivalent_dataflows(dataflow, self.otm_dataflows[index + 1:])
+            repeated_dataflows.extend(equivalent_dataflows)
+            unique_singleton_dataflows.append(_merge_dataflows(dataflow, equivalent_dataflows))
 
         return unique_singleton_dataflows
