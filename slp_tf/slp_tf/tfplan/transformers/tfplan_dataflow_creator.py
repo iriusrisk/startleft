@@ -91,8 +91,6 @@ class TfplanDataflowCreator(TfplanTransformer):
                         self.__are_related_by_launch_template(component, security_group):
                     components_in_sgs[security_group.id].append(component)
 
-            components_in_sgs[security_group.id] = list(set(components_in_sgs[security_group.id]))
-
         return components_in_sgs
 
     def __are_components_related_by_graph(self, component: TfplanComponent, security_group: TfplanSecurityGroup) -> bool:

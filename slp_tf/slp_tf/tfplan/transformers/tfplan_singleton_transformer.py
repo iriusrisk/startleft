@@ -3,7 +3,7 @@ from typing import List, Dict
 
 from otm.otm.entity.dataflow import Dataflow
 from sl_util.sl_util.iterations_utils import remove_from_list
-from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
+from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanComponent
 from slp_tf.slp_tf.tfplan.transformers.tfplan_transformer import TfplanTransformer
 from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanOTM
 
