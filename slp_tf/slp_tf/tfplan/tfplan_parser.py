@@ -8,6 +8,7 @@ from slp_tf.slp_tf.tfplan.transformers.tfplan_children_calculator import TfplanC
 from slp_tf.slp_tf.tfplan.mapping.tfplan_mapper import TfplanMapper
 from slp_base import ProviderParser, OTMBuildingError
 from slp_tf.slp_tf.tfplan.transformers.tfplan_dataflow_creator import TfplanDataflowCreator
+from slp_tf.slp_tf.tfplan.transformers.tfplan_parent_calculator import TfplanParentCalculator
 from slp_tf.slp_tf.tfplan.transformers.tfplan_singleton_transformer import TfplanSingletonTransformer
 from slp_tf.slp_tf.tfplan.load.tfplan_security_groups_loader import TfplanSecurityGroupsLoader
 from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanOTM
@@ -69,4 +70,4 @@ class TfplanParser(ProviderParser):
         TfplanDataflowCreator(self.otm, self.tfgraph).transform()
 
     def __calculate_singletons(self):
-        TfplanSingletonTransformer(self.otm, self.tfgraph).transform()
+        TfplanSingletonTransformer(self.otm).transform()

@@ -11,7 +11,7 @@ class TfplanTransformer(metaclass=abc.ABCMeta):
     def __subclasshook__(cls, subclass):
         return (hasattr(subclass, 'transform') and callable(subclass.transform)) or NotImplemented
 
-    def __init__(self, otm: TfplanOTM, graph: DiGraph):
+    def __init__(self, otm: TfplanOTM, graph: DiGraph = None):
         self.otm: TfplanOTM = otm
         self.graph: DiGraph = graph
 
