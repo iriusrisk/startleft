@@ -5,7 +5,7 @@ from networkx import DiGraph
 from otm.otm.entity.dataflow import Dataflow
 from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.trustzone import Trustzone
-from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanComponent, TfplanOTM
+from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanComponent, TfplanOTM, TfplanSecurityGroup, TfplanLaunchTemplate
 
 DEFAULT_TRUSTZONE = Trustzone(
     trustzone_id='default-trustzone-id',
@@ -40,10 +40,15 @@ def build_otm_type(component_type: str) -> str:
     return f'{component_type}-otm-type'
 
 
-def build_mocked_otm(components: List[TfplanComponent], dataflows: List[Dataflow] = None) -> {}:
+def build_mocked_otm(components: List[TfplanComponent],
+                     dataflows: List[Dataflow] = None,
+                     security_groups: List[TfplanSecurityGroup] = None,
+                     launch_templates: List[TfplanLaunchTemplate] = None) -> {}:
     otm = build_base_otm(DEFAULT_TRUSTZONE)
-    otm.components = components
-    otm.dataflows = dataflows
+    otm.components = components or []
+    otm.security_groups = security_groups or []
+    otm.launch_templates = launch_templates or []
+    otm.dataflows = dataflows or []
     return otm
 
 

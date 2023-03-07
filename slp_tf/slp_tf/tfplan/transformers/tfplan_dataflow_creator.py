@@ -85,11 +85,14 @@ class TfplanDataflowCreator(TfplanTransformer):
         components_in_sgs: Dict[str, List[TfplanComponent]] = {}
 
         for security_group in self.security_groups:
-            components_in_sgs[security_group.id] = []
+            components_in_sg = []
             for component in self.components:
                 if self.__are_components_related_by_graph(component, security_group) or \
                         self.__are_related_by_launch_template(component, security_group):
-                    components_in_sgs[security_group.id].append(component)
+                    components_in_sg.append(component)
+
+            if components_in_sg:
+                components_in_sgs[security_group.id] = components_in_sg
 
         return components_in_sgs
 
@@ -108,16 +111,18 @@ class TfplanDataflowCreator(TfplanTransformer):
         sgs_relationships: Dict[str, List[str]] = {}
 
         for source_sg in self.security_groups:
-            sgs_relationships[source_sg.id] = []
+            sg_relationships = []
+
             for target_sg in self.security_groups:
                 if source_sg.id == target_sg.id:
                     continue
 
                 if self.__are_sgs_related_by_configuration(source_sg, target_sg) or \
                         self.__are_sgs_related_by_graph(source_sg, target_sg):
-                    sgs_relationships[source_sg.id].append(target_sg.id)
+                    sg_relationships.append(target_sg.id)
 
-            sgs_relationships[source_sg.id] = list(set(sgs_relationships[source_sg.id]))
+            if sg_relationships:
+                sgs_relationships[source_sg.id] = list(set(sg_relationships))
 
         return sgs_relationships
 
