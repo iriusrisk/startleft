@@ -99,7 +99,7 @@ class TfplanLoader(ProviderLoader):
             )
 
     def __map_tfplan_to_resources(self):
-        resources = TfplanToResourceDict(self.tfplan['configuration']['root_module']['resources'])\
+        resources = TfplanToResourceDict(self.tfplan.get('configuration', {}).get('root_module', {}).get('resources', {}))\
             .map_modules([self.tfplan['planned_values']['root_module']])
 
         if resources:

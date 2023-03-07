@@ -29,7 +29,7 @@ def create_dataflow(source_component: TfplanComponent, target_component: TfplanC
     return Dataflow(
         # FIXME Generate deterministic ID
         dataflow_id=str(uuid.uuid4()),
-        name=str(uuid.uuid4()),
+        name=f'{source_component.name} to {target_component.name}',
         source_node=source_component.id,
         destination_node=target_component.id,
         bidirectional=bidirectional
@@ -107,7 +107,7 @@ class TfplanDataflowCreator(TfplanTransformer):
                 return True
 
     def __find_sgs_relationships(self) -> Dict[str, List[str]]:
-        sgs_relationships = {}
+        sgs_relationships: Dict[str, List[str]] = {}
 
         for source_sg in self.security_groups:
             sgs_relationships[source_sg.id] = []
