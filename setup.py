@@ -50,7 +50,8 @@ setup(
         ],
         "doc": [
             'mkdocs-material==9.0.13',
-            'pymdown-extensions==9.9.2'
+            'pymdown-extensions==9.9.2',
+            'mkdocs-glightbox==0.3.1'
         ]
     },
     entry_points='''
