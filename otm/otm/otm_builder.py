@@ -6,7 +6,7 @@ from otm.otm.entity.representation import Representation
 from otm.otm.entity.threat import Threat
 from otm.otm.entity.trustzone import Trustzone
 from otm.otm.provider import Provider
-from sl_util.sl_util.iterations_utils import IterationUtils
+from sl_util.sl_util.iterations_utils import remove_duplicates
 
 
 class OTMBuilder:
@@ -26,7 +26,7 @@ class OTMBuilder:
         return self
 
     def add_trustzones(self, trustzones: [Trustzone]):
-        self.otm.trustzones = IterationUtils.remove_duplicates(self.otm.trustzones + trustzones)
+        self.otm.trustzones = remove_duplicates(self.otm.trustzones + trustzones)
         return self
 
     def add_components(self, components: [Component]):

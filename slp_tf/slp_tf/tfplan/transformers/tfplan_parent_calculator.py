@@ -3,7 +3,7 @@ from networkx import DiGraph
 from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
 from slp_tf.slp_tf.tfplan.transformers.hierarchy_calculator import HierarchyCalculator
 
-PARENT_TYPES = ['aws_subnet', 'aws_vpc']
+PARENT_TYPES = ['aws_subnet', 'aws_vpc', 'azurerm_subnet', 'azurerm_virtual_network']
 
 
 class TfplanParentCalculator(HierarchyCalculator):

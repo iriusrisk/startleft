@@ -4,6 +4,7 @@ from copy import deepcopy
 from networkx import DiGraph
 
 from otm.otm.entity.otm import OTM
+from otm.otm.entity.parent_type import ParentType
 from slp_tf.slp_tf.tfplan.graph.relationships_extractor import RelationshipsExtractor
 from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
 from slp_tf.slp_tf.tfplan.transformers.tfplan_transformer import TfplanTransformer
@@ -27,7 +28,7 @@ def set_component_index(component: TfplanComponent, index: int):
 
 
 def set_component_parent(component: TfplanComponent, parent_id: str):
-    component.parent_type = 'component'
+    component.parent_type = ParentType.COMPONENT
     component.parent = parent_id
 
 
