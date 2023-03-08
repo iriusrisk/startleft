@@ -15,18 +15,6 @@ def trustzone_to_otm(trustzone: {}) -> Trustzone:
     )
 
 
-def _is_catchall(mapping: {}) -> bool:
-    return mapping.get('configuration', {'catchall': False}).get('catchall', False)
-
-
-def _is_skip(mapping: {}) -> bool:
-    return mapping.get('configuration', {'skip': False}).get('skip', False)
-
-
-def _is_special_mapping(mapping: {}) -> bool:
-    return _is_catchall(mapping) or _is_skip(mapping)
-
-
 def get_mappings_by_type(mappings: []) -> {}:
     return {m['tf_type']: (m['otm_type'], m.get('configuration', {}))
             for m in filter(lambda m: type(m['tf_type']) == str and not _is_special_mapping(m), mappings)}
@@ -44,6 +32,18 @@ def get_mappings_by_catchall(mappings: []) -> {}:
 
 def get_mappings_by_skip(mappings: []) -> {}:
     return [m['tf_type'] for m in filter(lambda m: type(m['tf_type']) == str and _is_skip(m), mappings)]
+
+
+def _is_catchall(mapping: {}) -> bool:
+    return mapping.get('configuration', {'catchall': False}).get('catchall', False)
+
+
+def _is_skip(mapping: {}) -> bool:
+    return mapping.get('configuration', {'skip': False}).get('skip', False)
+
+
+def _is_special_mapping(mapping: {}) -> bool:
+    return _is_catchall(mapping) or _is_skip(mapping)
 
 
 class TfplanMapper:
@@ -70,13 +70,10 @@ class TfplanMapper:
             if self.__exist_resource_as_skip(resource):
                 continue
 
-            component = self.__map_resource_by_type(resource)
-
-            if not component:
-                component = self.__map_resource_by_regex(resource)
-
-            if not component:
-                component = self.__map_resource_by_catchall(resource)
+            component = \
+                self.__map_resource_by_type(resource) or \
+                self.__map_resource_by_regex(resource) or \
+                self.__map_resource_by_catchall(resource)
 
             if component:
                 components.append(component)

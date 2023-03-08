@@ -37,6 +37,17 @@ def regex_singleton(component: {}) -> []:
     }]
 
 
+def skip(component: {}) -> []:
+    terraform_types = component['$source']['$skip']['$type']
+    if type(terraform_types) == str:
+        terraform_types = [terraform_types]
+
+    return list(map(lambda tf_type: {
+        'tf_type': tf_type,
+        'configuration': {'skip': True}
+    }, terraform_types))
+
+
 def catchall(component: {}) -> []:
     return [{
         'otm_type': component['type'],
@@ -51,17 +62,6 @@ def singleton_catchall(component: {}) -> []:
         'tf_type': {'$regex': component['$source']['$singleton']['$catchall']['$type']['$regex']},
         'configuration': {'singleton': True, 'catchall': True}
     }]
-
-
-def skip(component: {}) -> []:
-    terraform_types = component['$source']['$skip']['$type']
-    if type(terraform_types) == str:
-        terraform_types = [terraform_types]
-
-    return list(map(lambda tf_type: {
-        'tf_type': tf_type,
-        'configuration': {'skip': True}
-    }, terraform_types))
 
 
 def get_source_structure(source: {}, structure: list) -> []:

@@ -89,9 +89,6 @@ class TfplanSingletonTransformer(TfplanTransformer):
         self.__transform_singleton_components()
         self.__transform_singleton_dataflows()
 
-    def __is_not_parent(self, component: TfplanComponent):
-        return not any(c.parent == component.id for c in self.otm_components)
-
     def __populate_singleton_component_relations(self):
         for component in self.otm_components:
             if component.is_singleton and self.__is_not_parent(component):
@@ -100,6 +97,9 @@ class TfplanSingletonTransformer(TfplanTransformer):
                     self.singleton_component_relations[component.id] = \
                         self.singleton_component_relations.get(sibling_components[0].id) \
                         or _build_singleton_component(sibling_components)
+
+    def __is_not_parent(self, component: TfplanComponent):
+        return not any(c.parent == component.id for c in self.otm_components)
 
     def __find_siblings_components(self, component_type: str, parent_id: str):
         """
