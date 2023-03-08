@@ -2,17 +2,15 @@ import logging
 
 from networkx import DiGraph
 
-from slp_tf.slp_tf.tfplan.transformers.tfplan_parent_calculator import TfplanParentCalculator
-
-from slp_tf.slp_tf.tfplan.transformers.tfplan_children_calculator import TfplanChildrenCalculator
-from slp_tf.slp_tf.tfplan.mapping.tfplan_mapper import TfplanMapper
 from slp_base import ProviderParser, OTMBuildingError
+from slp_tf.slp_tf.tfplan.load.tfplan_launch_templates_loader import TfplanLaunchTemplateLoader
+from slp_tf.slp_tf.tfplan.load.tfplan_security_groups_loader import TfplanSecurityGroupsLoader
+from slp_tf.slp_tf.tfplan.mapping.tfplan_mapper import TfplanMapper
+from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanOTM
+from slp_tf.slp_tf.tfplan.transformers.tfplan_children_calculator import TfplanChildrenCalculator
 from slp_tf.slp_tf.tfplan.transformers.tfplan_dataflow_creator import TfplanDataflowCreator
 from slp_tf.slp_tf.tfplan.transformers.tfplan_parent_calculator import TfplanParentCalculator
 from slp_tf.slp_tf.tfplan.transformers.tfplan_singleton_transformer import TfplanSingletonTransformer
-from slp_tf.slp_tf.tfplan.load.tfplan_security_groups_loader import TfplanSecurityGroupsLoader
-from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanOTM
-from slp_tf.slp_tf.tfplan.load.tfplan_launch_templates_loader import TfplanLaunchTemplateLoader
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +24,6 @@ class TfplanParser(ProviderParser):
         self.project_id = project_id
         self.project_name = project_name
 
-        self.relationships_extractor = None
         self.otm = TfplanOTM(
             project_id,
             project_name,

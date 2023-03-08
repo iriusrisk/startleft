@@ -1,12 +1,12 @@
 import uuid
-
-from networkx import DiGraph
 from typing import Dict, List
 
+from networkx import DiGraph
+
 from otm.otm.entity.dataflow import Dataflow
-from slp_tf.slp_tf.tfplan.transformers.tfplan_transformer import TfplanTransformer
-from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanOTM, TfplanComponent, TfplanSecurityGroup
 from slp_tf.slp_tf.tfplan.graph.relationships_extractor import RelationshipsExtractor
+from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanOTM, TfplanComponent, TfplanSecurityGroup
+from slp_tf.slp_tf.tfplan.transformers.tfplan_transformer import TfplanTransformer
 
 
 def have_components_relationship(first: TfplanComponent, second: TfplanComponent):
@@ -46,10 +46,7 @@ class TfplanDataflowCreator(TfplanTransformer):
         self.dataflows: [Dataflow] = otm.dataflows
 
         self.relationships_extractor = RelationshipsExtractor(
-            mapped_resources_ids=
-            [component.id for component in self.otm.components] +
-            [sg.id for sg in self.otm.security_groups] +
-            [lt.id for lt in self.otm.launch_templates],
+            mapped_resources_ids=self.otm.mapped_resources_ids,
             graph=self.graph
         )
 

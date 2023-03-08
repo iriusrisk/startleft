@@ -45,10 +45,7 @@ class HierarchyCalculator(TfplanTransformer):
         super().__init__(otm, graph)
 
         self.relationships_extractor = RelationshipsExtractor(
-            mapped_resources_ids=
-            [component.id for component in self.otm.components] +
-            [sg.id for sg in self.otm.security_groups] +
-            [lt.id for lt in self.otm.launch_templates],
+            mapped_resources_ids=self.otm.mapped_resources_ids,
             graph=self.graph
         )
 

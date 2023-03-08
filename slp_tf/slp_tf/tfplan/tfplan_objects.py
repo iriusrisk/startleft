@@ -1,11 +1,11 @@
 from typing import List
 
-from sl_util.sl_util.lang_utils import auto_repr
-from otm.otm.entity.trustzone import Trustzone
-from otm.otm.entity.otm import OTM
-from otm.otm.entity.dataflow import Dataflow
-from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.component import Component
+from otm.otm.entity.dataflow import Dataflow
+from otm.otm.entity.otm import OTM
+from otm.otm.entity.parent_type import ParentType
+from otm.otm.entity.trustzone import Trustzone
+from sl_util.sl_util.lang_utils import auto_repr
 from slp_base import IacType
 
 
@@ -83,7 +83,13 @@ class TfplanOTM(OTM):
         super().__init__(project_name, project_id, IacType.TERRAFORM)
         self.default_trustzone = default_trustzone
         self.trustzones = [self.default_trustzone]
-        self.components = components
-        self.security_groups = security_groups
-        self.launch_templates = launch_templates
-        self.dataflows = dataflows
+        self.components = components or []
+        self.security_groups = security_groups or []
+        self.launch_templates = launch_templates or []
+        self.dataflows = dataflows or []
+
+    @property
+    def mapped_resources_ids(self):
+        return [component.id for component in self.components] + \
+            [sg.id for sg in self.security_groups] + \
+            [lt.id for lt in self.launch_templates]
