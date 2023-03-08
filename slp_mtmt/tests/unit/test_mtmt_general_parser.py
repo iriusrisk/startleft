@@ -5,7 +5,7 @@ from slp_mtmt.slp_mtmt.parse.mtmt_general_parser import is_parent, which_is_chil
 from slp_mtmt.tests.unit.test_line_parent_calculator import create_line, create_border
 
 
-class TestMTMTComponentParser:
+class TestMTMTGeneralParser:
 
     @mark.parametrize('elements_value, expected', [
         (
