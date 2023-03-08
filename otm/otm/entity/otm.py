@@ -84,7 +84,7 @@ class OTM:
         self.representations.append(DiagramRepresentation(id_=id_, name=name, type_=type_, size=size))
 
     def add_default_representation(self):
-        if not self.__provider.provider_type == RepresentationType.DIAGRAM.value:
+        if not self.__provider.provider_type == RepresentationType.DIAGRAM:
             self.add_representation(id_=self.__provider.provider_name,
                                     name=self.__provider.provider_name,
                                     type_=self.__provider.provider_type)
