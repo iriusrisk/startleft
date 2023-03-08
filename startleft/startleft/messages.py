@@ -34,6 +34,13 @@ DIAGRAM_TYPE_SHORTNAME = '-g'
 DIAGRAM_TYPE_DESC = 'The diagram file type.'
 DIAGRAM_TYPE_SUPPORTED = ['VISIO', 'LUCID']
 
+ETM_TYPE_NAME = '--etm-type'
+ETM_TYPE_SHORTNAME = '-e'
+ETM_TYPE_DESC = 'The etm file type.'
+ETM_TYPE_SUPPORTED = ['MTMT']
+ETM_MAPPING_FILE_NAME = '--etm-mapping-file'
+ETM_MAPPING_FILE_DESC = 'External Threat Model mapping file to validate.'
+
 MAPPING_FILE_NAME = '--mapping-file'
 MAPPING_FILE_SHORTNAME = '-m'
 MAPPING_FILE_DESC = 'Mapping file to parse the IaC file.'
@@ -63,10 +70,12 @@ OTM_INPUT_FILE_NAME = '--otm-file'
 OTM_INPUT_FILE_SHORTNAME = '-o'
 OTM_INPUT_FILE_DESC = 'OTM input file.'
 
-IAC_MAPPING_FILE_NAME = '--iac-mapping-file'
-IAC_MAPPING_FILE_SHORTNAME = '-i'
-IAC_MAPPING_FILE_DESC = 'IaC mapping file to validate.'
+VALIDATE_MAPPING_FILE_NAME = '--mapping-file'
+VALIDATE_MAPPING_FILE_SHORTNAME = '-m'
+VALIDATE_MAPPING_FILE_DESC = 'Mapping file to validate.'
 
-DIAGRAM_MAPPING_FILE_NAME = '--diagram-mapping-file'
-DIAGRAM_MAPPING_FILE_SHORTNAME = '-d'
-DIAGRAM_MAPPING_FILE_DESC = 'Diagram mapping file to validate.'
+VALIDATE_MAPPING_FILE_TYPE_NAME = '--mapping-type'
+VALIDATE_MAPPING_FILE_TYPE_SHORTNAME = '-t'
+VALIDATE_MAPPING_FILE_TYPE_DESC = 'Mapping file type to validate.'
+MAPPING_FILE_TYPE_SUPPORTED = ['CLOUDFORMATION', 'TERRAFORM', 'VISIO', 'MTMT', 'LUCID']
+

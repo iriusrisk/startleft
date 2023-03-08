@@ -26,7 +26,7 @@ class MTMTParser(ProviderParser):
             DiagramRepresentation(
                 id_=f'{self.project_id}-diagram',
                 name=f'{self.project_id} Diagram Representation',
-                type_=str(RepresentationType.DIAGRAM.value),
+                type_=RepresentationType.DIAGRAM,
                 size={'width': 2000, 'height': 2000}
             )
         ]

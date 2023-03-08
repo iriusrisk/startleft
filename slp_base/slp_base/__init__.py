@@ -1,6 +1,6 @@
 from .errors import DiagramFileNotValidError, LoadingIacFileError, LoadingMappingFileError, OTMBuildingError, \
     IacFileNotValidError, MappingFileNotValidError, OTMResultError, CommonError, LoadingSourceFileError, \
-    OTMGenerationError, LoadingDiagramFileError
+    ProviderNotFoundError, OTMGenerationError, LoadingDiagramFileError
 from .mapping import MappingFileValidator
 from .mapping import MappingLoader
 from .mapping import MappingValidator

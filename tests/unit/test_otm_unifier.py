@@ -1,6 +1,7 @@
 import json
 
 from otm.otm.entity.component import Component
+from otm.otm.entity.representation import RepresentationType
 from otm.otm.entity.trustzone import Trustzone
 from otm.otm.otm_builder import OTMBuilder
 from otm.otm.provider import Provider
@@ -10,7 +11,7 @@ from tests.resources.test_resource_paths import MTMT_multiple_trustzones_same_ty
 
 
 class DummyType(str, Provider):
-    DUMMY = ("DUMMY", "Dummy", "diagram")
+    DUMMY = ("DUMMY", "Dummy", RepresentationType.DIAGRAM)
 
 
 class TestOTMUnifier:
