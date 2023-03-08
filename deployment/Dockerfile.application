@@ -8,14 +8,14 @@ RUN apk update && \
     apk add geos && \
     apk add graphviz-dev
 
-RUN apk --no-cache add lapack libstdc++ libmagic && \
+RUN apk --no-cache add lapack libstdc++ libmagic geos-dev && \
     apk --no-cache add --virtual .builddeps g++ gcc gfortran musl-dev lapack-dev
 
 COPY . .
 
 RUN pip install .
 
-# Remove git dependency
-RUN apk del git
+# Remove git and geos-dev dependencies
+RUN apk del git geos-dev
 
 ENTRYPOINT ["uvicorn", "startleft.startleft.api.fastapi_server:webapp", "--host", "0.0.0.0", "--port", "5000"]

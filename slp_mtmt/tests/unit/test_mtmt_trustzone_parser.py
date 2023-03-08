@@ -9,7 +9,7 @@ from slp_mtmt.tests.resources.test_resource_paths import mapping_mtmt_mvp, model
 
 diagram_representation = DiagramRepresentation(id_='project-test-diagram',
                                                name='Project Test Diagram Representation',
-                                               type_=str(RepresentationType.DIAGRAM.value),
+                                               type_=RepresentationType.DIAGRAM,
                                                size={'width': 2000, 'height': 2000}
                                                )
 

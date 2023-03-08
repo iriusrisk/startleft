@@ -119,3 +119,7 @@ lucid_aws_with_tz_and_vpc_mapping = path + '/lucid/lucid-aws-with-tz-and-vpc.yam
 lucid_aws_with_tz_default_otm = path + '/lucid/lucid-aws-with-tz-default.otm'
 lucid_aws_with_tz_otm = path + '/lucid/lucid-aws-with-tz.otm'
 lucid_aws_with_tz_and_vpc_otm = path + '/lucid/lucid-aws-with-tz-and-vpc.otm'
+
+# MTMT
+mtmt_mapping_file_valid = path + '/mtmt/mapping_example.yaml'
+mtmt_mapping_file_invalid = path + '/mtmt/mapping_example_invalid.yaml'

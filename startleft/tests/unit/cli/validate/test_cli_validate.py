@@ -6,14 +6,14 @@ from startleft.startleft.cli.cli import validate
 
 
 class TestCliValidate:
-    @pytest.mark.parametrize('arg_name, file', [
-        pytest.param('--iac-mapping-file', invalid_mapping_file_vsdx, id="with invalid iac vsdx mapping file"),
-        pytest.param('--iac-mapping-file', invalid_mapping_zip, id="with invalid iac zip mapping file"),
-        pytest.param('--iac-mapping-file', invalid_mapping_pdf, id="with invalid iac pdf mapping file"),
-        pytest.param('--diagram-mapping-file', invalid_mapping_file_vsdx, id="with invalid diagram vsdx mapping file"),
-        pytest.param('--diagram-mapping-file', invalid_mapping_zip, id="with invalid diagram zip mapping file"),
-        pytest.param('--diagram-mapping-file', invalid_mapping_pdf, id="with invalid diagram pdf mapping file")])
-    def test_validate_invalid_mapping_file_error(self, arg_name, file):
+    @pytest.mark.parametrize('provider_type, mapping_file', [
+        pytest.param("CLOUDFORMATION", invalid_mapping_file_vsdx, id="with invalid iac vsdx mapping file"),
+        pytest.param("TERRAFORM", invalid_mapping_zip, id="with invalid iac zip mapping file"),
+        pytest.param("CLOUDFORMATION", invalid_mapping_pdf, id="with invalid iac pdf mapping file"),
+        pytest.param("VISIO", invalid_mapping_file_vsdx, id="with invalid diagram vsdx mapping file"),
+        pytest.param("VISIO", invalid_mapping_zip, id="with invalid diagram zip mapping file"),
+        pytest.param("VISIO", invalid_mapping_pdf, id="with invalid diagram pdf mapping file")])
+    def test_validate_invalid_mapping_file_error(self, provider_type, mapping_file):
         """
         Validating mapping files with invalid files
         """
@@ -22,8 +22,11 @@ class TestCliValidate:
         with runner.isolated_filesystem():
             # Given a list of arguments with
             args = [
+                # the provider type
+                '--mapping-type', provider_type,
                 # the mapping file type and the file to test
-                arg_name, file]
+                '--mapping-file', mapping_file
+            ]
 
             # When validating
             result = runner.invoke(validate, args)

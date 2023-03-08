@@ -7,13 +7,20 @@ search:
 This is a list of common pitfalls on using StartLeft, and how to avoid them.
 
 ### `ImportError: failed to find libmagic.`
----
 When using Windows or OSX OS, there is the requirement to manually install the corresponding 
 <a href="https://github.com/ahupp/python-magic" target="_blank">python-magic</a> 
 library as indicated in the [prerequisites section](Quickstart-Guide-for-Beginners.md#prerequisites).
+---
+
+### `"glightbox" package is not installed` 
+When trying to launch StartLeft documentation by `mkdocs serve` using IntelliJ, you may get an 
+error stating that the `glightbox` package is not installed. 
+
+This requires re-running the `pip install -e ".[doc]"` 
+command and restarting the IDE.
+---
 
 ### `Cannot open include file: 'graphviz/cgraph.h'`
----
 When using Windows, it is sometimes required to set up some extra configurations. 
 
 Install Graphviz in your OS using the following command:
@@ -31,6 +38,7 @@ Installing the `pygraphviz` lib setting the OS files location:
 ```shell
 pip install --global-option=build_ext --global-option="-IC:\Program files\Graphviz\include" --global-option="-LC:\Program files\Graphviz\lib" pygraphviz
 ```
+---
 
 ### `pygraphviz/graphviz_wrap.c:154:11: fatal error: Python.h: No such file or directory`
 Looks like you haven't properly installed the header files and static libraries for python dev.
@@ -52,3 +60,4 @@ After you need to install the required library for your python dev version:
 ```shell
 sudo apt install python3.x-dev
 ```
+---
