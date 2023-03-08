@@ -48,6 +48,54 @@ class TestTfplanSingletonTransformer:
         assert len(otm.components) == 1
         assert otm.components[0] == first_component
 
+    def test_singleton_is_parent(self):
+        """
+        Given an otm with three singleton (A,B,C) components with same type and parent
+        But component 'C' is parent of non singleton component 'D'
+        Singleton logic should unify only (A,B)
+        """
+
+        # Given an otm with three singleton (A,B,C) components with same type and parent
+        # But component 'C' is parent of non singleton component 'D'
+
+        component_a = build_mocked_tfplan_component({
+            'component_name': 'component_a',
+            'tf_type': 'aws_type',
+            'configuration': {"singleton": True}
+        })
+
+        component_b = build_mocked_tfplan_component({
+            'component_name': 'component_b',
+            'tf_type': 'aws_type',
+            'configuration': {"singleton": True}
+        })
+
+        component_c = build_mocked_tfplan_component({
+            'component_name': 'component_c',
+            'tf_type': 'aws_type',
+            'configuration': {"singleton": True}
+        })
+
+        component_d = build_mocked_tfplan_component({
+            'component_name': 'component_d',
+            'tf_type': 'aws_type',
+            'parent_id': component_c.id,
+            'parent_type': ParentType.COMPONENT
+        })
+
+        otm = build_mocked_otm([component_a, component_b, component_c, component_d])
+
+        # WHEN TfplanSingletonTransformer::transform is invoked
+        TfplanSingletonTransformer(otm).transform()
+
+        # THEN Singleton logic should unify only (A,B)
+        assert len(otm.components) == 3
+        assert otm.components[0].id == component_c.id
+        assert otm.components[1].id == component_d.id
+        assert otm.components[1].parent == component_c.id
+        assert otm.components[1].parent_type == ParentType.COMPONENT
+        assert otm.components[2].id == component_a.id
+
     def test_two_components_singleton_with_same_parents_and_none_dataflows(self):
         """
         Given an otm with two singleton components with same type and parent
