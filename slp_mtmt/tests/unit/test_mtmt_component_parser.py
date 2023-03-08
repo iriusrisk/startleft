@@ -1,9 +1,12 @@
 from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
+from sl_util.sl_util.file_utils import get_byte_data
 from slp_mtmt.slp_mtmt.mtmt_loader import MTMTLoader
 from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMappingFileLoader
 from slp_mtmt.slp_mtmt.parse.mtmt_component_parser import MTMTComponentParser
 from slp_mtmt.slp_mtmt.parse.mtmt_trustzone_parser import MTMTTrustzoneParser
 from slp_mtmt.tests.resources import test_resource_paths
+from slp_mtmt.tests.resources.test_resource_paths import mtmt_default_mapping, \
+    nested_trustzones_tm7
 
 diagram_representation = DiagramRepresentation(id_='project-test-diagram',
                                                name='Project Test Diagram Representation',
@@ -25,7 +28,7 @@ class TestMTMTComponentParser:
                               'name': 'Accounting PostgreSQL Representation',
                               'position': {'x': 231, 'y': 40},
                               'representation': 'project-test-diagram',
-                             'size': {'height': 82, 'width': 82}}],
+                              'size': {'height': 82, 'width': 82}}],
          'type': 'CD-MICROSOFT-AZURE-DB-POSTGRESQL'},
         {'id': '6183b7fa-eba5-4bf8-a0af-c3e30d144a10',
          'name': 'Mobile Client',
@@ -122,3 +125,42 @@ class TestMTMTComponentParser:
 
         for index in range(0, len(components)):
             assert components[index].json() == self.components_expected_added_for_filled_mapping_file[index]
+
+    def test_nested_trust_zones(self):
+        # GIVEN the provider loader
+        source_file = get_byte_data(nested_trustzones_tm7)
+        mtmt: MTMTLoader = MTMTLoader(source_file)
+        mtmt.load()
+
+        # AND a valid MTMT mapping file
+        mapping_file = get_byte_data(mtmt_default_mapping)
+
+        # AND the mapping file loaded
+        mtmt_mapping_file_loader = MTMTMappingFileLoader([mapping_file])
+        mtmt_mapping_file_loader.load()
+
+        # WHEN we parse the components
+        mtmt_mapping = mtmt_mapping_file_loader.get_mtmt_mapping()
+        mtmt_data = mtmt.get_mtmt()
+        trustzone_parser = MTMTTrustzoneParser(mtmt_data, mtmt_mapping, diagram_representation.id)
+        component_parser = MTMTComponentParser(mtmt_data, mtmt_mapping, trustzone_parser, diagram_representation.id)
+        components = component_parser.parse()
+
+        # THEN we check the result is as expected
+        assert len(components) == 4
+        current = components[0]
+        assert current.id == 'a38c22eb-fee8-4abd-b92c-457d6822ee86'
+        assert current.parent == '26e6fdb8-013f-4d59-bb11-208eec4d6bc9'
+        assert current.parent_type == 'trustZone'
+        current = components[1]
+        assert current.id == 'eef31b72-49b3-4d5f-9452-7ae178344c6b'
+        assert current.parent == '351f4038-244d-4de5-bfa0-00c17f2a1fa2'
+        assert current.parent_type == 'trustZone'
+        current = components[2]
+        assert current.id == '4820ec3a-9841-4baf-a38c-2fa596014274'
+        assert current.parent == '9cbb5581-99cc-463b-a77a-c0dcae3b96d7'
+        assert current.parent_type == 'trustZone'
+        current = components[3]
+        assert current.id == '9668ae2e-403f-4182-8c4c-d83948ffc31b'
+        assert current.parent == '351f4038-244d-4de5-bfa0-00c17f2a1fa2'
+        assert current.parent_type == 'trustZone'
