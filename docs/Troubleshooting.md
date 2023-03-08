@@ -38,6 +38,7 @@ Installing the `pygraphviz` lib setting the OS files location:
 ```shell
 pip install --global-option=build_ext --global-option="-IC:\Program files\Graphviz\include" --global-option="-LC:\Program files\Graphviz\lib" pygraphviz
 ```
+
 ---
 
 ### `pygraphviz/graphviz_wrap.c:154:11: fatal error: Python.h: No such file or directory`
@@ -60,4 +61,3 @@ After you need to install the required library for your python dev version:
 ```shell
 sudo apt install python3.x-dev
 ```
----
