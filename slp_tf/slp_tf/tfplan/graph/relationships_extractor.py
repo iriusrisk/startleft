@@ -1,9 +1,9 @@
-from typing import Union
+from typing import Union, List
 
 import networkx as nx
 from networkx import DiGraph
 
-from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
+from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanComponent
 
 
 class RelationshipsExtractor:
@@ -16,7 +16,7 @@ class RelationshipsExtractor:
         self.labels_nodes: dict = {v: k for k, v in self.nodes_labels.items()}
 
     def get_closest_resources(self, source_component: TfplanComponent, target_candidates: [TfplanComponent]) -> [str]:
-        liked_resources = []
+        linked_resources = []
 
         min_size = 0
         for target_candidate in target_candidates:
@@ -27,20 +27,26 @@ class RelationshipsExtractor:
                 continue
 
             path_size = len(path)
-            if not liked_resources or path_size < min_size:
+            if not linked_resources or path_size < min_size:
                 min_size = path_size
-                liked_resources = [target_candidate.id]
+                linked_resources = [target_candidate.id]
             elif path_size == min_size:
-                liked_resources.append(target_candidate.id)
+                linked_resources.append(target_candidate.id)
 
-        return liked_resources
+        return linked_resources
 
-    def __get_shortest_valid_path(self, source_label: str, target_label: str) -> Union[int, None]:
+    def exist_valid_path(self, source_label: str, target_label: str) -> bool:
+        return bool(self.__get_shortest_valid_path(source_label, target_label))
+
+    def __get_shortest_valid_path(self, source_label: str, target_label: str) -> Union[List[str], None]:
+        if not self.__are_equals_valid_graph_labels(source_label, target_label):
+            return
+
         source_node = self.labels_nodes[source_label]
         target_node = self.labels_nodes[target_label]
 
         shortest_path = None
-        if self.__has_path(source_node, target_node):
+        if nx.has_path(self.graph, source_node, target_node):
             for path in nx.all_simple_paths(self.graph, source=source_node, target=target_node):
                 if self.__is_straight_path(path):
                     if not shortest_path or len(shortest_path) > len(path):
@@ -48,9 +54,10 @@ class RelationshipsExtractor:
 
         return shortest_path
 
-    def __has_path(self, source_node: str, target_node: str) -> Union[int, None]:
-        return source_node != target_node \
-               and nx.has_path(self.graph, source_node, target_node)
+    def __are_equals_valid_graph_labels(self, source_label: str, target_label: str) -> bool:
+        return source_label != target_label \
+                and source_label in self.labels_nodes \
+                and target_label in self.labels_nodes
 
     def __is_straight_path(self, path: list) -> bool:
         return len(self.mapped_resources_ids & self.__nodes_to_labels(path[1:-1])) == 0

@@ -2,10 +2,10 @@ import itertools
 from typing import List, Dict
 
 from otm.otm.entity.dataflow import Dataflow
-from otm.otm.entity.otm import OTM
 from sl_util.sl_util.iterations_utils import remove_from_list
-from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
+from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanComponent
 from slp_tf.slp_tf.tfplan.transformers.tfplan_transformer import TfplanTransformer
+from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanOTM
 
 
 def _merge_component_configurations(otm_components: List[TfplanComponent]) -> Dict:
@@ -77,7 +77,7 @@ def _build_singleton_component(otm_components: List[TfplanComponent]) -> TfplanC
 
 class TfplanSingletonTransformer(TfplanTransformer):
 
-    def __init__(self, otm: OTM):
+    def __init__(self, otm: TfplanOTM):
         super().__init__(otm)
         self.otm_components = self.otm.components
         self.otm_dataflows = self.otm.dataflows

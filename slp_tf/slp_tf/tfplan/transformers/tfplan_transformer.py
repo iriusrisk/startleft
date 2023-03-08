@@ -3,6 +3,7 @@ import abc
 from networkx import DiGraph
 
 from otm.otm.entity.otm import OTM
+from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanOTM
 
 
 class TfplanTransformer(metaclass=abc.ABCMeta):
@@ -10,8 +11,8 @@ class TfplanTransformer(metaclass=abc.ABCMeta):
     def __subclasshook__(cls, subclass):
         return (hasattr(subclass, 'transform') and callable(subclass.transform)) or NotImplemented
 
-    def __init__(self, otm: OTM, graph: DiGraph = None):
-        self.otm: OTM = otm
+    def __init__(self, otm: TfplanOTM, graph: DiGraph = None):
+        self.otm: TfplanOTM = otm
         self.graph: DiGraph = graph
 
     @abc.abstractmethod

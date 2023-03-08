@@ -1,10 +1,9 @@
 import re
 from typing import Tuple
 
-from otm.otm.entity.otm import OTM
 from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.trustzone import Trustzone
-from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
+from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanComponent, TfplanOTM
 
 
 def trustzone_to_otm(trustzone: {}) -> Trustzone:
@@ -48,7 +47,7 @@ def _is_special_mapping(mapping: {}) -> bool:
 
 class TfplanMapper:
 
-    def __init__(self, otm: OTM, tfplan: {}, mappings: {}):
+    def __init__(self, otm: TfplanOTM, tfplan: {}, mappings: {}):
         self.otm = otm
         self.resources = tfplan['resource']
         self.mappings = mappings

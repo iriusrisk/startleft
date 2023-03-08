@@ -2,7 +2,7 @@ import pytest
 from charset_normalizer.md import List
 
 from otm.otm.entity.dataflow import Dataflow
-from slp_tf.slp_tf.tfplan.tfplan_component import TfplanComponent
+from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanComponent
 from slp_tf.slp_tf.tfplan.transformers.tfplan_singleton_transformer import TfplanSingletonTransformer
 from slp_tf.tests.unit.tfplan.otm_graph_util import build_mocked_tfplan_component, \
     build_mocked_dataflow, build_mocked_otm
