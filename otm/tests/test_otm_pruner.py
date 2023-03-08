@@ -1,12 +1,13 @@
 from otm.otm.entity.component import Component
 from otm.otm.entity.dataflow import Dataflow
 from otm.otm.entity.otm import OTM
+from otm.otm.entity.representation import RepresentationType
 from otm.otm.otm_pruner import OTMPruner
 from otm.otm.provider import Provider
 
 
 class DummyProvider(str, Provider):
-    DUMMY = ("DUMMY", "Dummy", "diagram")
+    DUMMY = ("DUMMY", "Dummy", RepresentationType.DIAGRAM)
 
 
 class TestIterationUtils:

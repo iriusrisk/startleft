@@ -13,7 +13,7 @@ class Representation:
     See https://github.com/iriusrisk/OpenThreatModel#representations-object
     """
 
-    def __init__(self, id_: str, name: str, type_: str, description: str = None, attributes: dict = None):
+    def __init__(self, id_: str, name: str, type_: RepresentationType, description: str = None, attributes: dict = None):
         self.id = id_
         self.name = name
         self.type = type_
@@ -24,7 +24,7 @@ class Representation:
         json = {
             "name": self.name,
             "id": self.id,
-            "type": self.type
+            "type": self.type.value
         }
 
         if self.description is not None:
@@ -40,10 +40,10 @@ class DiagramRepresentation(Representation):
     See https://github.com/iriusrisk/OpenThreatModel#diagram
     """
 
-    def __init__(self, id_: str, name: str, type_: str, description: str = None, attributes: dict = None, size=None):
+    def __init__(self, id_: str, name: str, type_: RepresentationType, description: str = None, attributes: dict = None, size=None):
         super(DiagramRepresentation, self).__init__(id_=id_, type_=type_, name=name, description=description,
                                                     attributes=attributes)
-        self.size = size if self.type == RepresentationType.DIAGRAM.value else None
+        self.size = size if self.type == RepresentationType.DIAGRAM else None
 
     def json(self):
         json = Representation.json(self)
