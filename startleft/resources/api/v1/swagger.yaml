@@ -51,9 +51,7 @@ paths:
                   description: Files that contains Iac definitions to be merged into one data
                     structure
                 iac_type:
-                  allOf:
-                    - "$ref": "#/components/schemas/IacType"
-                  description: 'Type of IaC File: CLOUDFORMATION, TERRAFORM'
+                  "$ref": "#/components/schemas/IacType"
                 id:
                   title: Id
                   type: string
@@ -126,9 +124,7 @@ paths:
                   description: File that contains the diagram definition
                   format: binary
                 diag_type:
-                  allOf:
-                    - "$ref": "#/components/schemas/DiagramType"
-                  description: 'Type of Diagram File: VISIO, LUCID'
+                  "$ref": "#/components/schemas/DiagramType"
                 id:
                   title: Id
                   type: string
@@ -205,9 +201,7 @@ paths:
                   description: File that contains the original Threat model
                   format: binary
                 source_type:
-                  allOf:
-                    - "$ref": "#/components/schemas/EtmType"
-                  description: 'Type of ETM File: MTMT'
+                  "$ref": "#/components/schemas/EtmType"
                 id:
                   title: Id
                   type: string
