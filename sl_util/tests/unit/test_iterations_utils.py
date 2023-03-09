@@ -1,4 +1,4 @@
-from sl_util.sl_util.iterations_utils import IterationUtils
+from sl_util.sl_util.iterations_utils import remove_from_list
 
 
 def remove_function(element, original_array, removed_array):
@@ -11,7 +11,7 @@ class TestIterationUtils:
     def test_with_none_colection(self):
         # Given a None list
         # when passed to function
-        IterationUtils.remove_from_list(
+        remove_from_list(
             None,
             lambda number: number % 2 == 0)
         # everything works correctly
@@ -20,7 +20,7 @@ class TestIterationUtils:
     def test_with_empty_colection(self):
         # Given an empty list
         # when passed to function
-        IterationUtils.remove_from_list(
+        remove_from_list(
             [],
             lambda number: number % 2 == 0)
         # everything works correctly
@@ -31,7 +31,7 @@ class TestIterationUtils:
         original_array = [1, 2, 3, 4]
 
         # When removing even numbers
-        IterationUtils.remove_from_list(
+        remove_from_list(
             original_array,
             lambda number: number % 2 == 0
         )
@@ -49,7 +49,7 @@ class TestIterationUtils:
         removed_array = []
 
         # When removing even numbers
-        IterationUtils.remove_from_list(
+        remove_from_list(
             original_array,
             lambda number: number % 2 == 0,
             lambda number: remove_function(number, original_array, removed_array)

@@ -8,6 +8,7 @@ some commands, set up the REST API and, in summary, familiarize yourself with th
 * Install the **[latest version of Python](https://www.python.org/downloads/)**.
 * Install **[pip3](https://pip.pypa.io/en/stable/installation/)**.
 * Install **[git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).**
+* Install **[graphviz and graphviz-dev](https://pygraphviz.github.io/documentation/stable/install.html#ubuntu-and-debian).**
 
 *During this guide some files will be downloaded or generated, so you can optionally create a folder to keep them
 organized.*

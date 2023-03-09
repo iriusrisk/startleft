@@ -1,5 +1,6 @@
 import logging
 from io import StringIO
+from typing import Callable
 
 import hcl2
 from deepmerge import always_merger
@@ -30,12 +31,18 @@ class TerraformLoader(ProviderLoader):
     """
 
     def __init__(self, sources):
-        self.sources = sources
-        self.hcl2_reader = hcl2_reader
-        self.terraform = None
+        self.sources: [bytes] = sources
+        self.hcl2_reader: Callable = hcl2_reader
+        self.terraform: dict = {}
 
     def load(self):
-        self.__load_source_files()
+        try:
+            self.__load_source_files()
+        except LoadingIacFileError as ex:
+            raise ex
+        except Exception:
+            msg = "Source files could not be parsed"
+            raise LoadingIacFileError("IaC file is not valid", msg, msg)
 
     def get_terraform(self):
         return self.terraform

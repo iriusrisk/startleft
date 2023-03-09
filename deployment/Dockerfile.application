@@ -5,7 +5,8 @@ WORKDIR /usr/src/app
 RUN apk update && \
     apk upgrade && \
     apk add git && \
-    apk add geos
+    apk add geos && \
+    apk add graphviz-dev
 
 RUN apk --no-cache add lapack libstdc++ libmagic geos-dev && \
     apk --no-cache add --virtual .builddeps g++ gcc gfortran musl-dev lapack-dev
