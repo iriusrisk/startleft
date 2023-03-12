@@ -215,9 +215,7 @@
     "definitions": {
         "uuid": {
             "type": "string",
-            "minlength": 1,
-            "maxlength": 36,
-            "pattern": "^(?![nN][uU][lL]{2}$)\\s*\\S.*"
+            "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         },
         "size": {
             "type": "object",
