@@ -74,11 +74,11 @@ terraform_security_groups_type1_and_type2_mixed = path + '/tf/dataflows/security
 
 # tfplan
 tfplan_elb = path + '/tfplan/elb-tfplan.json'
-tfplan_graph_elb = path + '/tfplan/elb-tfgraph.dot'
+tfplan_graph_elb = path + '/tfplan/elb-tfgraph.gv'
 tfplan_sgs = path + '/tfplan/sgs-tfplan.json'
-tfplan_graph_sgs = path + '/tfplan/sgs-tfgraph.dot'
+tfplan_graph_sgs = path + '/tfplan/sgs-tfgraph.gv'
 tfplan_official = path + '/tfplan/official-tfplan.json'
-tfplan_graph_official = path + '/tfplan/official-tfgraph.dot'
+tfplan_graph_official = path + '/tfplan/official-tfgraph.gv'
 
 # mapping
 terraform_mapping_aws_component_without_parent = path + '/mapping/terraform_mapping_component_without_parent.yaml'

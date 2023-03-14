@@ -54,9 +54,6 @@ class TfplanDataflowCreator(TfplanTransformer):
                 if self.relationships_extractor.exist_valid_path(component.tf_resource_id,
                                                                  related_component.tf_resource_id):
                     dataflows.append(create_dataflow(component, related_component))
-                elif self.relationships_extractor.exist_valid_path(related_component.tf_resource_id,
-                                                                   component.tf_resource_id):
-                    dataflows.append(create_dataflow(related_component, component))
 
         return dataflows
 
