@@ -4,6 +4,7 @@ import networkx as nx
 from networkx import DiGraph
 
 from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanComponent
+from slp_tf.slp_tf.tfplan.load.tfplan_to_resource_dict import remove_name_prefix
 
 
 class RelationshipsExtractor:
@@ -63,4 +64,4 @@ class RelationshipsExtractor:
         return len(self.mapped_resources_ids & self.__nodes_to_labels(path[1:-1])) == 0
 
     def __nodes_to_labels(self, path: []) -> set:
-        return set(filter(lambda x: x is not None, map(lambda p: self.nodes_labels[p], path)))
+        return set(filter(lambda x: x is not None, map(lambda p: remove_name_prefix(self.nodes_labels[p]), path)))
