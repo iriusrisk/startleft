@@ -22,6 +22,11 @@ def replicate_component_by_parents(component: TfplanComponent, parent_ids: [str]
     return replicated_components
 
 
+def set_component_clones_ids(components: [TfplanComponent]):
+    for component in components:
+        component.clones_ids = [s.id for s in components if s.id != component.id]
+
+
 def set_component_index(component: TfplanComponent, index: int):
     component.id = f'{component.id}_{index}'
 
@@ -63,6 +68,7 @@ class HierarchyCalculator(TfplanTransformer):
             if len(parent_ids) > 1:
                 replicated_components.extend(replicate_component_by_parents(component, parent_ids[1:]))
                 set_component_index(component, 0)
+                set_component_clones_ids([component] + replicated_components)
 
         self.otm.components.extend(replicated_components)
 

@@ -26,6 +26,7 @@ _component_c = build_mocked_tfplan_component({
 
 _dataflow_a_b = build_mocked_dataflow(_component_a, _component_b)
 _dataflow_a_c = build_mocked_dataflow(_component_a, _component_c)
+_dataflow_b_a = build_mocked_dataflow(_component_b, _component_a)
 _dataflow_b_c = build_mocked_dataflow(_component_b, _component_c)
 _dataflow_c_a = build_mocked_dataflow(_component_c, _component_a)
 _dataflow_c_b = build_mocked_dataflow(_component_c, _component_b)
@@ -148,6 +149,31 @@ class TestTfplanSingletonTransformerWithDataflows:
         assert otm.dataflows[0].source_node == _component_c.id
         assert otm.dataflows[0].destination_node == _component_a.id
         assert otm.dataflows[0].bidirectional is True
+
+    @pytest.mark.parametrize('components, dataflows', [
+        pytest.param([_component_a, _component_b],
+                     [_dataflow_a_b], id="[A -> B]"),
+        pytest.param([_component_a, _component_b],
+                     [_dataflow_b_a], id="[A <- B]"),
+        pytest.param([_component_a, _component_b],
+                     [_dataflow_a_b_bidirectional], id="[A <-> B]"),
+        pytest.param([_component_a, _component_b],
+                     [_dataflow_a_b, _dataflow_b_a], id="[A -> B and B -> A]")
+    ])
+    def test_components_same_singleton(
+            self, components: List[TfplanComponent], dataflows: List[Dataflow]):
+        """
+        Two components grouped by singleton (A,B) have dataflows between them
+        """
+
+        # GIVEN components with some dataflows
+        otm = build_mocked_otm(components, dataflows)
+
+        # WHEN TfplanSingletonTransformer::transform is invoked
+        TfplanSingletonTransformer(otm).transform()
+
+        # THEN no dataflow is created
+        assert len(otm.dataflows) == 0
 
     def test_singleton_dataflow_with_tags(self):
         """

@@ -3,26 +3,15 @@ from typing import Dict, List
 
 from networkx import DiGraph
 
+from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.dataflow import Dataflow
 from slp_tf.slp_tf.tfplan.graph.relationships_extractor import RelationshipsExtractor
 from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanOTM, TfplanComponent, TfplanSecurityGroup
 from slp_tf.slp_tf.tfplan.transformers.tfplan_transformer import TfplanTransformer
 
 
-def have_components_relationship(first: TfplanComponent, second: TfplanComponent):
-    return first.id == second.id or first.parent == second.id or second.parent == first.id
-
-
-def create_dataflows_among_components(
-        source_components: List[TfplanComponent], target_components: List[TfplanComponent]):
-    dataflows = []
-
-    for source_component in source_components:
-        for target_component in target_components:
-            if not have_components_relationship(source_component, target_component):
-                dataflows.append(create_dataflow(source_component, target_component))
-
-    return dataflows
+def find_component_by_id(component_id: str, components: List[TfplanComponent]):
+    return next(filter(lambda c: c.id == component_id, components))
 
 
 def create_dataflow(source_component: TfplanComponent, target_component: TfplanComponent, bidirectional: bool = False):
@@ -50,31 +39,42 @@ class TfplanDataflowCreator(TfplanTransformer):
             graph=self.graph
         )
 
-        self.components_sgs: Dict[str, List[TfplanComponent]] = {}
-        self.sgs_relationships: Dict[str, List[str]] = {}
-
     def transform(self):
-        self.components_sgs = self.__match_components_and_sgs()
-        if not self.components_sgs:
-            return
-
-        self.sgs_relationships = self.__find_sgs_relationships()
-        if not self.sgs_relationships:
-            return
-
+        self.dataflows.extend(self.__create_dataflows_from_straight_relationships())
         self.dataflows.extend(self.__create_dataflows_from_sgs())
+
+    def __create_dataflows_from_straight_relationships(self):
+        dataflows = []
+
+        for component in self.components:
+            for related_component in self.components:
+                if component == related_component or self.__are_hierarchically_related(component, related_component):
+                    continue
+
+                if self.relationships_extractor.exist_valid_path(component.tf_resource_id,
+                                                                 related_component.tf_resource_id):
+                    dataflows.append(create_dataflow(component, related_component))
+                elif self.relationships_extractor.exist_valid_path(related_component.tf_resource_id,
+                                                                   component.tf_resource_id):
+                    dataflows.append(create_dataflow(related_component, component))
+
+        return dataflows
 
     def __create_dataflows_from_sgs(self):
         dataflows = []
 
-        for source_sg, target_sgs in self.sgs_relationships.items():
-            if source_sg not in self.components_sgs:
+        components_in_sgs = self.__match_components_and_sgs()
+        if not components_in_sgs:
+            return dataflows
+
+        for source_sg, target_sgs in self.__find_sgs_relationships().items():
+            if source_sg not in components_in_sgs:
                 continue
 
             for target_sg in target_sgs:
-                if target_sg in self.components_sgs:
-                    dataflows.extend(create_dataflows_among_components(
-                        self.components_sgs[source_sg], self.components_sgs[target_sg]))
+                if target_sg in components_in_sgs:
+                    dataflows.extend(self.__create_dataflows_among_components(
+                        components_in_sgs[source_sg], components_in_sgs[target_sg]))
 
         return dataflows
 
@@ -93,9 +93,10 @@ class TfplanDataflowCreator(TfplanTransformer):
 
         return components_in_sgs
 
-    def __are_components_related_by_graph(self, component: TfplanComponent, security_group: TfplanSecurityGroup) -> bool:
+    def __are_components_related_by_graph(self, component: TfplanComponent,
+                                          security_group: TfplanSecurityGroup) -> bool:
         return self.relationships_extractor.exist_valid_path(component.tf_resource_id, security_group.id) or \
-                    self.relationships_extractor.exist_valid_path(security_group.id, component.tf_resource_id)
+            self.relationships_extractor.exist_valid_path(security_group.id, component.tf_resource_id)
 
     def __are_related_by_launch_template(self, component: TfplanComponent, security_group: TfplanSecurityGroup) -> bool:
         for launch_template in self.otm.launch_templates:
@@ -123,10 +124,43 @@ class TfplanDataflowCreator(TfplanTransformer):
 
         return sgs_relationships
 
-    def __are_sgs_related_by_configuration(self, source_sg: TfplanSecurityGroup, target_sg: TfplanSecurityGroup) -> bool:
+    def __are_sgs_related_by_configuration(self, source_sg: TfplanSecurityGroup,
+                                           target_sg: TfplanSecurityGroup) -> bool:
         return source_sg.id in target_sg.ingress_sgs or target_sg.id in source_sg.egress_sgs
 
     def __are_sgs_related_by_graph(self, source_sg: TfplanSecurityGroup, target_sg: TfplanSecurityGroup) -> bool:
         return self.relationships_extractor.exist_valid_path(target_sg.id, source_sg.id)
+
+    def __create_dataflows_among_components(self,
+                                            source_components: List[TfplanComponent],
+                                            target_components: List[TfplanComponent]):
+        dataflows = []
+
+        for source_component in source_components:
+            for target_component in target_components:
+                if not self.__are_hierarchically_related(source_component, target_component):
+                    dataflows.append(create_dataflow(source_component, target_component))
+
+        return dataflows
+
+    def __are_hierarchically_related(self, first: TfplanComponent, second: TfplanComponent) -> bool:
+        return first.id == second.id or \
+                self.__is_ancestor(first, second) or self.__is_ancestor_of_any_clon(first, second)\
+                or self.__is_ancestor(second, first) or self.__is_ancestor_of_any_clon(second, first)
+
+    def __is_ancestor(self, component: TfplanComponent, ancestor: TfplanComponent) -> bool:
+        return component.parent_type == ParentType.COMPONENT and \
+            (component.parent == ancestor.id
+             or self.__is_ancestor(find_component_by_id(component.parent, self.components), ancestor))
+
+    def __is_ancestor_of_any_clon(self, component: TfplanComponent, ancestor: TfplanComponent) -> bool:
+        if not component.clones_ids:
+            return False
+
+        for clon_id in component.clones_ids:
+            if self.__is_ancestor(find_component_by_id(clon_id, self.components), ancestor):
+                return True
+
+        return False
 
 
