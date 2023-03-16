@@ -19,6 +19,7 @@ class TfplanComponent(Component):
                  parent: str,
                  parent_type: ParentType,
                  tags: [str],
+                 clones_ids: [str] = None,
                  tf_resource_id: str = None,
                  tf_type: str = None,
                  configuration: {} = None):
@@ -28,6 +29,7 @@ class TfplanComponent(Component):
             parent=parent, parent_type=parent_type,
             tags=tags
         )
+        self.clones_ids = clones_ids
         self.tf_resource_id: str = tf_resource_id
         self.tf_type: str = tf_type
         self.configuration = configuration or {}
