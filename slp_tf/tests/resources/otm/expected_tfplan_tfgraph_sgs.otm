@@ -234,99 +234,57 @@
     "dataflows": [
         {
             "bidirectional": false,
-            "destination": "aws_vpc.CustomVPC",
-            "id": "79f9834e-6959-4a86-a5a1-5bf99b407299",
-            "name": "Canary to CustomVPC",
-            "source": "aws_synthetics_canary.Canary_0"
+            "destination": "aws_subnet.PublicSubnet1",
+            "id": "8451812c-7b9c-49a7-b703-4cf9fd2ad66e",
+            "name": "Canary to PublicSubnet1",
+            "source": "aws_synthetics_canary.Canary_1"
         }, {
             "bidirectional": false,
             "destination": "aws_lb.ServiceLB_0",
-            "id": "3faff69a-052e-4e78-9814-cab6c6bb3617",
+            "id": "c3051825-312f-4c30-9da2-09940537053c",
             "name": "Canary to ServiceLB",
             "source": "aws_synthetics_canary.Canary_0"
         }, {
             "bidirectional": false,
             "destination": "aws_lb.ServiceLB_1",
-            "id": "ef67f7b4-4599-4314-8b4f-c12484f2f90c",
+            "id": "d1398f26-d96c-4b8d-9db8-afc6ca6215cd",
             "name": "Canary to ServiceLB",
             "source": "aws_synthetics_canary.Canary_0"
         }, {
             "bidirectional": false,
-            "destination": "aws_vpc.CustomVPC",
-            "id": "852b975c-2933-41d8-864c-d458ed0b2ead",
-            "name": "Canary to CustomVPC",
-            "source": "aws_synthetics_canary.Canary_1"
-        }, {
-            "bidirectional": false,
             "destination": "aws_lb.ServiceLB_0",
-            "id": "0353ed8a-c457-4646-b210-34ed79fa28f6",
+            "id": "16ceabaa-f3c4-4373-8441-4b77026c274b",
             "name": "Canary to ServiceLB",
             "source": "aws_synthetics_canary.Canary_1"
         }, {
             "bidirectional": false,
             "destination": "aws_lb.ServiceLB_1",
-            "id": "d3c1ae77-2424-4714-9a56-137de31fa73b",
+            "id": "923abce4-b24f-4a69-9102-08c496c8a489",
             "name": "Canary to ServiceLB",
             "source": "aws_synthetics_canary.Canary_1"
-        }, {
-            "bidirectional": false,
-            "destination": "aws_lb.ServiceLB_0",
-            "id": "d4622f49-77dd-4d35-a8e6-4e99ec047296",
-            "name": "CustomVPC to ServiceLB",
-            "source": "aws_vpc.CustomVPC"
-        }, {
-            "bidirectional": false,
-            "destination": "aws_lb.ServiceLB_1",
-            "id": "26cad0bf-4488-44d5-b717-207955b211c4",
-            "name": "CustomVPC to ServiceLB",
-            "source": "aws_vpc.CustomVPC"
         }, {
             "bidirectional": false,
             "destination": "aws_ecs_service.Service_0",
-            "id": "d12da56f-9c88-4208-82fd-3199a5b7378f",
-            "name": "CustomVPC to Service",
-            "source": "aws_vpc.CustomVPC"
-        }, {
-            "bidirectional": false,
-            "destination": "aws_ecs_service.Service_1",
-            "id": "5b1bd86e-ecf3-4537-8c94-a55fc556676b",
-            "name": "CustomVPC to Service",
-            "source": "aws_vpc.CustomVPC"
-        }, {
-            "bidirectional": false,
-            "destination": "aws_ecs_service.Service_0",
-            "id": "61c51291-3956-4864-af74-e4aa7364140c",
+            "id": "96c23f47-3693-48f9-b3c9-a7fd91692a0b",
             "name": "ServiceLB to Service",
             "source": "aws_lb.ServiceLB_0"
         }, {
             "bidirectional": false,
             "destination": "aws_ecs_service.Service_1",
-            "id": "dd8ecc18-1824-4e0d-8deb-cfd8a5fa0b2a",
+            "id": "caed94a1-a466-4dd0-850c-eceb3e80389f",
             "name": "ServiceLB to Service",
             "source": "aws_lb.ServiceLB_0"
         }, {
             "bidirectional": false,
-            "destination": "aws_vpc.CustomVPC",
-            "id": "2cc05aa6-586d-469c-922d-d127f4a13c83",
-            "name": "ServiceLB to CustomVPC",
-            "source": "aws_lb.ServiceLB_0"
-        }, {
-            "bidirectional": false,
             "destination": "aws_ecs_service.Service_0",
-            "id": "4c0b44bf-4002-4268-9ce1-29c3e3e3a1b9",
+            "id": "e37e35a2-0930-426a-938c-a89f7d316a04",
             "name": "ServiceLB to Service",
             "source": "aws_lb.ServiceLB_1"
         }, {
             "bidirectional": false,
             "destination": "aws_ecs_service.Service_1",
-            "id": "5e057f89-86c2-4c85-b699-f9b6b4fdc68f",
+            "id": "cd6e07e6-f120-4df3-bc17-b87f0748d2ab",
             "name": "ServiceLB to Service",
-            "source": "aws_lb.ServiceLB_1"
-        }, {
-            "bidirectional": false,
-            "destination": "aws_vpc.CustomVPC",
-            "id": "cfc649f1-f72c-4c03-94dd-e9d1f8a27d96",
-            "name": "ServiceLB to CustomVPC",
             "source": "aws_lb.ServiceLB_1"
         }
     ]
