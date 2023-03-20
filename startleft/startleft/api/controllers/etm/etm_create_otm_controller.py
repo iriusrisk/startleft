@@ -6,6 +6,7 @@ from _sl_build.modules import PROCESSORS
 from sl_util.sl_util import json_utils
 from slp_base.slp_base.provider_resolver import ProviderResolver
 from slp_base.slp_base.provider_type import EtmType
+from startleft.startleft.api.check_mime_type import check_mime_type
 from startleft.startleft.api.controllers.otm_controller import RESPONSE_STATUS_CODE, PREFIX, controller_responses
 
 URL = '/external-threat-model'
@@ -23,6 +24,7 @@ provider_resolver = ProviderResolver(PROCESSORS)
 @router.post(URL, status_code=RESPONSE_STATUS_CODE,
              description="Generates an OTM threat model from a Threat Model file",
              tags=['Threat Model'])
+@check_mime_type('source_file', 'source_type')
 def etm(source_file: UploadFile = File(..., description="File that contains the original Threat model"),
         source_type: EtmType = Form(..., description="Type of Diagram File: MTMT"),
         id: str = Form(..., description="ID of the new project"),

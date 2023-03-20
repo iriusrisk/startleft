@@ -2,12 +2,10 @@ import logging
 
 import magic
 
-from slp_base import IacFileNotValidError
+from slp_base import IacFileNotValidError, IacType
 from slp_base.slp_base import ProviderValidator
 
 logger = logging.getLogger(__name__)
-
-VALID_MIME = ['text/plain', 'application/octet-stream', 'application/json']
 
 MAX_SIZE = 20 * 1024 * 1024
 MIN_SIZE = 20
@@ -35,6 +33,6 @@ class TerraformValidator(ProviderValidator):
         for tf_data in self.terraform_data_list:
             magik = magic.Magic(mime=True)
             mime = magik.from_buffer(tf_data)
-            if mime not in VALID_MIME:
+            if mime not in IacType.TERRAFORM.valid_mime:
                 msg = 'Invalid content type for Terraform file'
                 raise IacFileNotValidError('Terraform file is not valid', msg, msg)

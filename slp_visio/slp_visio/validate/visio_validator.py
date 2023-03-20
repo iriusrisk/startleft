@@ -4,11 +4,9 @@ from zipfile import ZipFile
 
 import magic as magik
 
-from slp_base import ProviderValidator, DiagramFileNotValidError
+from slp_base import ProviderValidator, DiagramFileNotValidError, DiagramType
 
 logger = logging.getLogger(__name__)
-
-VALID_MIME = ['application/vnd.ms-visio.drawing.main+xml', 'application/octet-stream']
 
 MAX_SIZE = 10 * 1024 * 1024
 MIN_SIZE = 10
@@ -18,7 +16,7 @@ class VisioValidator(ProviderValidator):
 
     def __init__(self, file, valid_mime=None):
         if valid_mime is None:
-            valid_mime = VALID_MIME
+            valid_mime = DiagramType.VISIO.valid_mime
 
         self.file = file
         self.valid_mime = valid_mime

@@ -458,7 +458,7 @@ class TestOTMControllerDiagramLucid:
         project_id: str = 'project_A_id'
 
         # And the request files
-        diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
+        diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/octet-stream')
         mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
@@ -488,7 +488,7 @@ class TestOTMControllerDiagramLucid:
         project_id: str = 'project_A_id'
 
         # And the request files
-        diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
+        diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/octet-stream')
         mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
@@ -519,7 +519,7 @@ class TestOTMControllerDiagramLucid:
         project_id: str = 'project_A_id'
 
         # And the request files
-        diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
+        diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/octet-stream')
         mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
@@ -550,7 +550,7 @@ class TestOTMControllerDiagramLucid:
         project_id: str = 'project_A_id'
 
         # And the request files
-        diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
+        diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/octet-stream')
         mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
@@ -580,7 +580,7 @@ class TestOTMControllerDiagramLucid:
         project_id: str = 'project_A_id'
 
         # And the request files
-        diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
+        diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/octet-stream')
         mapping_file = (default_visio_mapping, open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # And the mocked method throwing a LoadingDiagramFileError
@@ -616,7 +616,7 @@ class TestOTMControllerDiagramLucid:
 
         # And the request files
         diagram_source = bytes(diagram_source) if isinstance(diagram_source, bytearray) else diagram_source
-        diagram_file = (visio_aws_with_tz_and_vpc, diagram_source, 'application/json')
+        diagram_file = (visio_aws_with_tz_and_vpc, diagram_source, 'application/octet-stream')
         mapping_file = ('default_mapping_file', open(default_visio_mapping, 'rb'), 'text/yaml')
 
         # When I do post on diagram endpoint
@@ -648,7 +648,7 @@ class TestOTMControllerDiagramLucid:
 
         # And the request files
         mapping_source = bytes(mapping_source) if isinstance(mapping_source, bytearray) else mapping_source
-        diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/json')
+        diagram_file = (visio_aws_with_tz_and_vpc, open(visio_aws_with_tz_and_vpc, 'rb'), 'application/octet-stream')
         mapping_file = ('default_mapping_file', mapping_source, 'text/yaml')
 
         # When I do post on diagram endpoint

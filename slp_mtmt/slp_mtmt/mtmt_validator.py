@@ -2,12 +2,10 @@ import logging
 
 import magic as magik
 
-from slp_base import ProviderValidator
+from slp_base import ProviderValidator, EtmType
 from slp_base.slp_base.errors import SourceFileNotValidError
 
 logger = logging.getLogger(__name__)
-
-VALID_MIME = ['application/xml', 'text/plain']
 
 MAX_SIZE = 20 * 1024 * 1024
 MIN_SIZE = 20
@@ -33,6 +31,6 @@ class MTMTValidator(ProviderValidator):
     def __validate_content_type(self):
         magic = magik.Magic(mime=True)
         mime = magic.from_buffer(self.mt_data)
-        if mime not in VALID_MIME:
+        if mime not in EtmType.MTMT.valid_mime:
             msg = 'Invalid content type for diag_file'
             raise SourceFileNotValidError('TM file is not valid', msg, msg)
