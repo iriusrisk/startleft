@@ -1,0 +1,30 @@
+digraph {
+	compound = "true"
+	newrank = "true"
+	subgraph "root" {
+		"[root] aws_alb.qux (expand)" [label = "aws_alb.qux", shape = "box"]
+		"[root] aws_subnet.bar (expand)" [label = "aws_subnet.bar", shape = "box"]
+		"[root] aws_subnet.baz (expand)" [label = "aws_subnet.baz", shape = "box"]
+		"[root] aws_vpc.foo (expand)" [label = "aws_vpc.foo", shape = "box"]
+		"[root] aws_wafregional_ipset.ipset (expand)" [label = "aws_wafregional_ipset.ipset", shape = "box"]
+		"[root] aws_wafregional_rule.foo (expand)" [label = "aws_wafregional_rule.foo", shape = "box"]
+		"[root] aws_wafregional_web_acl.foo (expand)" [label = "aws_wafregional_web_acl.foo", shape = "box"]
+		"[root] data.aws_availability_zones.available (expand)" [label = "data.aws_availability_zones.available", shape = "box"]
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"]" [label = "provider[\"registry.terraform.io/hashicorp/aws\"]", shape = "diamond"]
+		"[root] aws_alb.qux (expand)" -> "[root] aws_subnet.bar (expand)"
+		"[root] aws_alb.qux (expand)" -> "[root] aws_subnet.baz (expand)"
+		"[root] aws_subnet.bar (expand)" -> "[root] aws_vpc.foo (expand)"
+		"[root] aws_subnet.bar (expand)" -> "[root] data.aws_availability_zones.available (expand)"
+		"[root] aws_subnet.baz (expand)" -> "[root] aws_vpc.foo (expand)"
+		"[root] aws_subnet.baz (expand)" -> "[root] data.aws_availability_zones.available (expand)"
+		"[root] aws_vpc.foo (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_wafregional_ipset.ipset (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_wafregional_rule.foo (expand)" -> "[root] aws_wafregional_ipset.ipset (expand)"
+		"[root] aws_wafregional_web_acl.foo (expand)" -> "[root] aws_wafregional_rule.foo (expand)"
+		"[root] data.aws_availability_zones.available (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_alb.qux (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_wafregional_web_acl.foo (expand)"
+		"[root] root" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)"
+	}
+}
+

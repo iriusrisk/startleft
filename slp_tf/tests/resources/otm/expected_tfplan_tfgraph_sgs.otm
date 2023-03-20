@@ -1,0 +1,291 @@
+{
+    "otmVersion": "0.1.0",
+    "project": {
+        "name": "name",
+        "id": "id"
+    },
+    "representations": [
+        {
+            "name": "Terraform",
+            "id": "Terraform",
+            "type": "code"
+        }
+    ],
+    "trustZones": [
+        {
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "name": "Public Cloud",
+            "risk": {
+                "trustRating": 10
+            }
+        }
+    ],
+    "components": [
+        {
+            "id": "aws_ecs_service.Service_0",
+            "name": "Service",
+            "type": "elastic-container-service",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet1"
+            },
+            "tags": [
+                "aws_ecs_service"
+            ]
+        },
+        {
+            "id": "aws_ecs_task_definition.ServiceTaskDefinition_0",
+            "name": "ServiceTaskDefinition",
+            "type": "docker-container",
+            "parent": {
+                "component": "aws_ecs_service.Service_0"
+            },
+            "tags": [
+                "aws_ecs_task_definition"
+            ]
+        },
+        {
+            "id": "aws_lb.ServiceLB_0",
+            "name": "ServiceLB",
+            "type": "load-balancer",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet1"
+            },
+            "tags": [
+                "aws_lb"
+            ]
+        },
+        {
+            "id": "aws_subnet.PrivateSubnet1",
+            "name": "PrivateSubnet1",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_vpc.CustomVPC"
+            },
+            "tags": [
+                "aws_subnet"
+            ]
+        },
+        {
+            "id": "aws_subnet.PrivateSubnet2",
+            "name": "PrivateSubnet2",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_vpc.CustomVPC"
+            },
+            "tags": [
+                "aws_subnet"
+            ]
+        },
+        {
+            "id": "aws_subnet.PublicSubnet1",
+            "name": "PublicSubnet1",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_vpc.CustomVPC"
+            },
+            "tags": [
+                "aws_subnet"
+            ]
+        },
+        {
+            "id": "aws_subnet.PublicSubnet2",
+            "name": "PublicSubnet2",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_vpc.CustomVPC"
+            },
+            "tags": [
+                "aws_subnet"
+            ]
+        },
+        {
+            "id": "aws_synthetics_canary.Canary_0",
+            "name": "Canary",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_subnet.PublicSubnet1"
+            },
+            "tags": [
+                "aws_synthetics_canary"
+            ]
+        },
+        {
+            "id": "aws_vpc.CustomVPC",
+            "name": "CustomVPC",
+            "type": "vpc",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "tags": [
+                "aws_vpc"
+            ]
+        },
+        {
+            "id": "aws_vpc_endpoint.VPCmonitoring_0",
+            "name": "VPCmonitoring",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet1"
+            },
+            "tags": [
+                "aws_vpc_endpoint"
+            ]
+        },
+        {
+            "id": "aws_vpc_endpoint.VPCssm_0",
+            "name": "VPCssm",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet1"
+            },
+            "tags": [
+                "aws_vpc_endpoint"
+            ]
+        },
+        {
+            "id": "aws_vpc_endpoint.VPCssmmessages_0",
+            "name": "VPCssmmessages",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet1"
+            },
+            "tags": [
+                "aws_vpc_endpoint"
+            ]
+        },
+        {
+            "id": "aws_ecs_service.Service_1",
+            "name": "Service",
+            "type": "elastic-container-service",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet2"
+            },
+            "tags": [
+                "aws_ecs_service"
+            ]
+        },
+        {
+            "id": "aws_lb.ServiceLB_1",
+            "name": "ServiceLB",
+            "type": "load-balancer",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet2"
+            },
+            "tags": [
+                "aws_lb"
+            ]
+        },
+        {
+            "id": "aws_synthetics_canary.Canary_1",
+            "name": "Canary",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_subnet.PublicSubnet2"
+            },
+            "tags": [
+                "aws_synthetics_canary"
+            ]
+        },
+        {
+            "id": "aws_vpc_endpoint.VPCmonitoring_1",
+            "name": "VPCmonitoring",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet2"
+            },
+            "tags": [
+                "aws_vpc_endpoint"
+            ]
+        },
+        {
+            "id": "aws_vpc_endpoint.VPCssm_1",
+            "name": "VPCssm",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet2"
+            },
+            "tags": [
+                "aws_vpc_endpoint"
+            ]
+        },
+        {
+            "id": "aws_vpc_endpoint.VPCssmmessages_1",
+            "name": "VPCssmmessages",
+            "type": "empty-component",
+            "parent": {
+                "component": "aws_subnet.PrivateSubnet2"
+            },
+            "tags": [
+                "aws_vpc_endpoint"
+            ]
+        },
+        {
+            "id": "aws_ecs_task_definition.ServiceTaskDefinition_1",
+            "name": "ServiceTaskDefinition",
+            "type": "docker-container",
+            "parent": {
+                "component": "aws_ecs_service.Service_1"
+            },
+            "tags": [
+                "aws_ecs_task_definition"
+            ]
+        }
+    ],
+    "dataflows": [
+        {
+            "bidirectional": false,
+            "destination": "aws_subnet.PublicSubnet1",
+            "id": "8451812c-7b9c-49a7-b703-4cf9fd2ad66e",
+            "name": "Canary to PublicSubnet1",
+            "source": "aws_synthetics_canary.Canary_1"
+        }, {
+            "bidirectional": false,
+            "destination": "aws_lb.ServiceLB_0",
+            "id": "c3051825-312f-4c30-9da2-09940537053c",
+            "name": "Canary to ServiceLB",
+            "source": "aws_synthetics_canary.Canary_0"
+        }, {
+            "bidirectional": false,
+            "destination": "aws_lb.ServiceLB_1",
+            "id": "d1398f26-d96c-4b8d-9db8-afc6ca6215cd",
+            "name": "Canary to ServiceLB",
+            "source": "aws_synthetics_canary.Canary_0"
+        }, {
+            "bidirectional": false,
+            "destination": "aws_lb.ServiceLB_0",
+            "id": "16ceabaa-f3c4-4373-8441-4b77026c274b",
+            "name": "Canary to ServiceLB",
+            "source": "aws_synthetics_canary.Canary_1"
+        }, {
+            "bidirectional": false,
+            "destination": "aws_lb.ServiceLB_1",
+            "id": "923abce4-b24f-4a69-9102-08c496c8a489",
+            "name": "Canary to ServiceLB",
+            "source": "aws_synthetics_canary.Canary_1"
+        }, {
+            "bidirectional": false,
+            "destination": "aws_ecs_service.Service_0",
+            "id": "96c23f47-3693-48f9-b3c9-a7fd91692a0b",
+            "name": "ServiceLB to Service",
+            "source": "aws_lb.ServiceLB_0"
+        }, {
+            "bidirectional": false,
+            "destination": "aws_ecs_service.Service_1",
+            "id": "caed94a1-a466-4dd0-850c-eceb3e80389f",
+            "name": "ServiceLB to Service",
+            "source": "aws_lb.ServiceLB_0"
+        }, {
+            "bidirectional": false,
+            "destination": "aws_ecs_service.Service_0",
+            "id": "e37e35a2-0930-426a-938c-a89f7d316a04",
+            "name": "ServiceLB to Service",
+            "source": "aws_lb.ServiceLB_1"
+        }, {
+            "bidirectional": false,
+            "destination": "aws_ecs_service.Service_1",
+            "id": "cd6e07e6-f120-4df3-bc17-b87f0748d2ab",
+            "name": "ServiceLB to Service",
+            "source": "aws_lb.ServiceLB_1"
+        }
+    ]
+}

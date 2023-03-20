@@ -1,30 +1,24 @@
 import logging
 
-import yaml
 from deepmerge import always_merger
 
+from yaml import BaseLoader, ScalarNode
+
+from sl_util.sl_util.json_utils import yaml_reader
 from slp_base.slp_base.errors import LoadingIacFileError
 from slp_base.slp_base.provider_loader import ProviderLoader
 
 logger = logging.getLogger(__name__)
 
 
-def yaml_reader(data):
-    return yaml.load(yaml_data_as_str(data), Loader=get_loader())
-
-
 def get_loader():
-    loader = yaml.BaseLoader
+    loader = BaseLoader
     loader.add_constructor("!Ref", ref_constructor)
     return loader
 
 
-def ref_constructor(loader: yaml.BaseLoader, node: yaml.nodes.MappingNode) -> dict:
+def ref_constructor(loader: BaseLoader, node: ScalarNode) -> dict:
     return {'Ref': loader.construct_scalar(node)}
-
-
-def yaml_data_as_str(data) -> str:
-    return data if isinstance(data, str) else data.decode()
 
 
 def raise_empty_sources_error():
@@ -65,7 +59,7 @@ class CloudformationLoader(ProviderLoader):
         try:
             logger.debug(f"Loading iac data and reading as string")
 
-            cft_data = self.yaml_reader(source)
+            cft_data = self.yaml_reader(source, loader=get_loader())
 
             logger.debug("Source data loaded successfully")
 

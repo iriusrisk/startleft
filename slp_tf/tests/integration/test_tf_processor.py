@@ -6,10 +6,11 @@ from slp_base.slp_base.errors import MappingFileNotValidError, IacFileNotValidEr
 from slp_base.tests.util.otm import validate_and_compare
 from slp_tf import TerraformProcessor
 from slp_tf.tests.resources import test_resource_paths
-from slp_tf.tests.resources.test_resource_paths import expected_run_valid_mappings, \
-    expected_no_resources, expected_elb_example, otm_with_only_default_trustzone_expected_result, \
-    terraform_for_mappings_tests_json, expected_separated_networks_components, terraform_iriusrisk_tf_aws_mapping, \
-    tf_file_referenced_vars_expected_result, minimal_otm_expected_result
+from slp_tf.tests.resources.test_resource_paths import \
+    expected_run_valid_mappings, expected_elb_example, terraform_for_mappings_tests_json, \
+    expected_separated_networks_components, terraform_iriusrisk_tf_aws_mapping, \
+    tf_file_referenced_vars_expected_result, \
+    minimal_otm_expected_result, otm_with_only_default_trustzone_expected_result, expected_no_resources
 from slp_tf.tests.utility import excluded_regex
 
 PUBLIC_CLOUD_TZ_ID = 'b61d6911-338d-46a8-9f39-8dcd24abfe91'

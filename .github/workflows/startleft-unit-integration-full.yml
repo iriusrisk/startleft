@@ -26,15 +26,27 @@ jobs:
           git fetch --prune --unshallow
           git fetch --depth=1 origin +refs/tags/*:refs/tags/*
 
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v1
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
+
+      - if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          pip install --global-option=build_ext --global-option="-IC:\Program files\Graphviz\include" --global-option="-LC:\Program files\Graphviz\lib" pygraphviz
+          echo "C:\Program Files\Graphviz\bin" >> $GITHUB_PATH
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install .
-          pip install -e ".[setup,test]"
+          pip install -e ".[setup,test]" 
+
+        # This step MUST be after the general installation of StartLeft
       - if: runner.os == 'Windows'
         run: |
           pip install python-magic-bin
