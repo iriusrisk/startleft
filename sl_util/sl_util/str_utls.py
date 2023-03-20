@@ -1,8 +1,10 @@
 import random
 import uuid
+from cryptography.hazmat.primitives.asymmetric import dsa
 
 
-def deterministic_uuid(source):
+def build_uuid(source):
+    key = dsa.generate_private_key(2047)
     if source:
         random.seed(source)
     return str(uuid.UUID(int=random.getrandbits(128), version=4))
