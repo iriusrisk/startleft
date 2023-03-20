@@ -12,3 +12,5 @@ All you need to know about StartLeft is available in our [documentation](http://
 ## Change Log
 
 All release notes are documented in [Releases Section](https://github.com/iriusrisk/startleft/releases).
+
+secretPassword=admin
