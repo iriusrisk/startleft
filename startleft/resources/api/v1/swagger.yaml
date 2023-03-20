@@ -43,7 +43,6 @@ paths:
               type: object
               properties:
                 iac_file:
-                  title: Iac File
                   type: array
                   items:
                     type: string
@@ -53,15 +52,12 @@ paths:
                 iac_type:
                   "$ref": "#/components/schemas/IacType"
                 id:
-                  title: Id
                   type: string
                   description: ID of the new project
                 name:
-                  title: Name
                   type: string
                   description: Name of the new project
                 mapping_file:
-                  title: Mapping File
                   type: string
                   description: File that contains the mapping between IaC resources and threat
                     model resources
@@ -119,27 +115,22 @@ paths:
               type: object
               properties:
                 diag_file:
-                  title: Diag File
                   type: string
                   description: File that contains the diagram definition
                   format: binary
                 diag_type:
                   "$ref": "#/components/schemas/DiagramType"
                 id:
-                  title: Id
                   type: string
                   description: ID of the new project
                 name:
-                  title: Name
                   type: string
                   description: Name of the new project
                 default_mapping_file:
-                  title: Default Mapping File
                   type: string
                   description: File that contains the default mapping file
                   format: binary
                 custom_mapping_file:
-                  title: Custom Mapping File
                   type: string
                   description: File that contains the user custom mapping file
                   format: binary
@@ -196,27 +187,22 @@ paths:
               type: object
               properties:
                 source_file:
-                  title: Source File
                   type: string
                   description: File that contains the original Threat model
                   format: binary
                 source_type:
                   "$ref": "#/components/schemas/EtmType"
                 id:
-                  title: Id
                   type: string
                   description: ID of the new project
                 name:
-                  title: Name
                   type: string
                   description: Name of the new project
                 default_mapping_file:
-                  title: Default Mapping File
                   type: string
                   description: File that contains the default mapping file
                   format: binary
                 custom_mapping_file:
-                  title: Custom Mapping File
                   type: string
                   description: File that contains the user custom mapping file
                   format: binary
@@ -256,58 +242,73 @@ paths:
 components:
   schemas:
     ErrorResponse:
-      title: ErrorResponse
       required:
         - status
         - error_type
         - title
         - detail
       type: object
+      description: Object containing all the information about an error
       properties:
         status:
-          title: Status
           type: string
+          description: The HTTP status code
         error_type:
-          title: Error Type
           type: string
+          description: The error type
         title:
-          title: Title
           type: string
+          description: The error in human readable format
         detail:
-          title: Detail
           type: string
+          description: Detailed description of the error and its cause
         errors:
-          title: Errors
           type: array
+          description: An array listing all the errors
           items:
             "$ref": "#/components/schemas/ErrorResponseItem"
           default: []
+      externalDocs:
+        url: https://iriusrisk.github.io/startleft/development/Errors-Management/
     ErrorResponseItem:
-      title: ErrorResponseItem
       required:
         - errorMessage
       type: object
       properties:
         errorMessage:
-          title: Errormessage
           type: string
+          description: The reason of the error
     EtmType:
-      title: EtmType
       enum:
         - MTMT
       type: string
       description: Type of ETM file
     IacType:
-      title: IacType
       enum:
         - CLOUDFORMATION
         - TERRAFORM
       type: string
       description: Type of IaC file
     DiagramType:
-      title: DiagramType
       enum:
         - VISIO
         - LUCID
       type: string
       description: Type of Diagram file
+tags:
+  - name: health
+    description: Check the service status
+    externalDocs:
+      url: https://iriusrisk.github.io/startleft/usage/REST-API/#health
+  - name: IaC
+    description: Parse Infraestructure as Code formats like Terraform or Cloudformation
+    externalDocs:
+      url: https://iriusrisk.github.io/startleft/usage/REST-API/#iac
+  - name: Diagram
+    description: Parse diagram formats like Visio or Lucidchart
+    externalDocs:
+      url: https://iriusrisk.github.io/startleft/usage/REST-API/#diagram
+  - name: Threat Model
+    description: Parse threat modeling formats like MTMT
+    externalDocs:
+      url: https://iriusrisk.github.io/startleft/usage/REST-API/#external-threat-model
