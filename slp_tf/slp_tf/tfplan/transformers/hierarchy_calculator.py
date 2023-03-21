@@ -9,17 +9,22 @@ from slp_tf.slp_tf.tfplan.tfplan_objects import TfplanComponent, TfplanOTM
 from slp_tf.slp_tf.tfplan.transformers.tfplan_transformer import TfplanTransformer
 
 
-def replicate_component_by_parents(component: TfplanComponent, parent_ids: [str]) -> [{}]:
-    replicated_components = []
+def clone_component_by_parents(component: TfplanComponent, parent_ids: [str]) -> [{}]:
+    clones = []
 
     for index, parent_id in enumerate(parent_ids):
-        replicated_component = deepcopy(component)
-        set_component_index(replicated_component, index + 1)
-        set_component_parent(replicated_component, parent_id)
+        clone = deepcopy(component)
+        set_component_index(clone, index + 1)
+        set_component_parent(clone, parent_id)
 
-        replicated_components.append(replicated_component)
+        clones.append(clone)
 
-    return replicated_components
+    return clones
+
+
+def set_component_clones_ids(components: [TfplanComponent]):
+    for component in components:
+        component.clones_ids = [s.id for s in components if s.id != component.id]
 
 
 def set_component_index(component: TfplanComponent, index: int):
@@ -50,7 +55,7 @@ class HierarchyCalculator(TfplanTransformer):
         )
 
     def transform(self):
-        replicated_components = []
+        clones = []
 
         for component in self.otm.components:
             parent_ids = self._calculate_component_parents(component)
@@ -61,10 +66,11 @@ class HierarchyCalculator(TfplanTransformer):
             set_component_parent(component, parent_ids[0])
 
             if len(parent_ids) > 1:
-                replicated_components.extend(replicate_component_by_parents(component, parent_ids[1:]))
+                clones.extend(clone_component_by_parents(component, parent_ids[1:]))
                 set_component_index(component, 0)
+                set_component_clones_ids([component] + clones)
 
-        self.otm.components.extend(replicated_components)
+        self.otm.components.extend(clones)
 
     @abc.abstractmethod
     def _calculate_component_parents(self, component: TfplanComponent) -> [str]:
