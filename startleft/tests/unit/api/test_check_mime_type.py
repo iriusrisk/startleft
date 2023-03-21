@@ -3,13 +3,18 @@ from unittest.mock import MagicMock
 import pytest
 
 from otm.otm.provider import Provider
-from slp_base import IacType, DiagramType, EtmType
+from slp_base import IacType, DiagramType, EtmType, IacFileNotValidError
 from slp_base.slp_base.errors import SourceFileNotValidError
 from startleft.startleft.api.check_mime_type import check_mime_type
 
 
 @check_mime_type('file', 'provider')
 def mock_definition(**kwargs):
+    return True
+
+
+@check_mime_type('file', 'provider', IacFileNotValidError)
+def mock_definition_with_custom_error(**kwargs):
     return True
 
 
@@ -44,3 +49,11 @@ class TestCheckMimeType:
         assert error.value.detail == 'Invalid content type for file filename'
         assert error.value.message == f'filename with content-type {content_type} is not valid,' \
                                       f' the valid types are {provider.valid_mime}'
+
+    def test_custom_error(self):
+        mocked_file = MagicMock(content_type='application/json')
+        with pytest.raises(IacFileNotValidError) as error:
+            mock_definition_with_custom_error(file=mocked_file, provider=EtmType.MTMT)
+
+        assert error.value.error_code.http_status == 400
+        assert error.typename == 'IacFileNotValidError'

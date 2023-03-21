@@ -7,7 +7,7 @@ from otm.otm.provider import Provider
 from slp_base.slp_base.errors import SourceFileNotValidError
 
 
-def check_mime_type(file_name: str, file_type_name: str):
+def check_mime_type(file_name: str, file_type_name: str, exception=SourceFileNotValidError):
     """
     Check the mime type of the input file.
     Get the current file and provider by the arguments values
@@ -20,7 +20,7 @@ def check_mime_type(file_name: str, file_type_name: str):
             details = f'Invalid content type for file {file.filename}'
             msg = f'{file.filename} with content-type {content_type} is not valid,' \
                   f' the valid types are {source_mime_type.valid_mime}'
-            raise SourceFileNotValidError(title, details, msg)
+            raise exception(title, details, msg)
 
     def decorator(func):
         @wraps(func)

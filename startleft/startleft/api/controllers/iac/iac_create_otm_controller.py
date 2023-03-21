@@ -5,6 +5,7 @@ from fastapi import APIRouter, File, UploadFile, Form, Response
 
 from _sl_build.modules import PROCESSORS
 from sl_util.sl_util.json_utils import get_otm_as_json
+from slp_base import IacFileNotValidError
 from slp_base.slp_base.provider_resolver import ProviderResolver
 from slp_base.slp_base.provider_type import IacType
 from startleft.startleft.api.check_mime_type import check_mime_type
@@ -24,7 +25,7 @@ provider_resolver = ProviderResolver(PROCESSORS)
 
 
 @router.post(URL, status_code=RESPONSE_STATUS_CODE, description="Generates an OTM threat model from an IaC file")
-@check_mime_type('iac_file', 'iac_type')
+@check_mime_type('iac_file', 'iac_type', IacFileNotValidError)
 def iac(iac_file: List[UploadFile]
         = File(..., description="Files that contains Iac definitions to be merged into one data structure"),
         iac_type: IacType = Form(..., description="Type of IaC File: CLOUDFORMATION, TERRAFORM"),
