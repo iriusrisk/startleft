@@ -36,7 +36,7 @@ class TestOTMControllerIaCCloudformation:
     uc_d = ('proj_D', 'proj D', example_json, app_json, None, 'RequestValidationError')
     uc_e = ('proj_E', 'proj E', example_json, app_json, wrong_id, 'MappingFileNotValidError')
     uc_f = ('proj_F', 'proj F', None, None, None, 'RequestValidationError')
-    uc_h = ('proj_H', 'proj H', invalid_yaml, '', cft_map, 'SourceFileNotValidError')
+    uc_h = ('proj_H', 'proj H', invalid_yaml, '', cft_map, 'IacFileNotValidError')
     uc_i = ('proj_I', 'proj I', invalid_yaml, text_yaml, cft_map, 'OTMBuildingError')
     uc_j = ('proj_J', 'proj J', invalid_yaml, None, cft_map, 'OTMBuildingError')
     uc_k = ('proj_K', 'proj K', cloudformation_gz, None, cft_map, 'IacFileNotValidError')
