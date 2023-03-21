@@ -23,6 +23,7 @@ paths:
           content:
             application/json:
               schema: {}
+              example: {"status":"OK","version":"1.12.0","components":{"StartLeft":"OK"}}
   "/api/v1/startleft/iac":
     post:
       tags:
@@ -49,19 +50,25 @@ paths:
                     format: binary
                   description: Files that contains Iac definitions to be merged into one data
                     structure
+                  example:
+                    externalValue: https://github.com/iriusrisk/startleft/raw/main/examples/terraform/multinetwork_security_groups_with_lb.tf
                 iac_type:
                   "$ref": "#/components/schemas/IacType"
                 id:
                   type: string
                   description: ID of the new project
+                  example: example-project
                 name:
                   type: string
                   description: Name of the new project
+                  example: Example project
                 mapping_file:
                   type: string
                   description: File that contains the mapping between IaC resources and threat
                     model resources
                   format: binary
+                  example:
+                    externalValue: https://github.com/iriusrisk/startleft/raw/main/examples/terraform/iriusrisk-tf-aws-mapping.yaml
         required: true
       responses:
         '201':
@@ -70,31 +77,27 @@ paths:
           content:
             application/json:
               schema: {}
+              examples:
+                Example:
+                  "$ref": '#/components/examples/201'
         '400':
           description: Bad request
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ErrorResponse"
-        '401':
-          description: Authentication information is missing, invalid or not granted
-            to perform this action
+              examples:
+                Example:
+                  "$ref": '#/components/examples/400'
+        '500':
+          description: Internal server error
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ErrorResponse"
-        '403':
-          description: Forbidden operation
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/ErrorResponse"
-        default:
-          description: Unexpected API error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                Example:
+                  "$ref": '#/components/examples/500'
   "/api/v1/startleft/diagram":
     post:
       tags:
@@ -118,18 +121,24 @@ paths:
                   type: string
                   description: File that contains the diagram definition
                   format: binary
+                  example:
+                    externalValue: https://github.com/iriusrisk/startleft/raw/main/examples/visio/visio-basic-example.vsdx
                 diag_type:
                   "$ref": "#/components/schemas/DiagramType"
                 id:
                   type: string
                   description: ID of the new project
+                  example: example-project
                 name:
                   type: string
                   description: Name of the new project
+                  example: Example project
                 default_mapping_file:
                   type: string
                   description: File that contains the default mapping file
                   format: binary
+                  example:
+                    externalValue: https://github.com/iriusrisk/startleft/raw/main/examples/visio/iriusrisk-visio-aws-mapping.yaml
                 custom_mapping_file:
                   type: string
                   description: File that contains the user custom mapping file
@@ -142,31 +151,27 @@ paths:
           content:
             application/json:
               schema: {}
+              examples:
+                Example:
+                  "$ref": '#/components/examples/201'
         '400':
           description: Bad request
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ErrorResponse"
-        '401':
-          description: Authentication information is missing, invalid or not granted
-            to perform this action
+              examples:
+                Example:
+                  "$ref": '#/components/examples/400'
+        '500':
+          description: Internal server error
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ErrorResponse"
-        '403':
-          description: Forbidden operation
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/ErrorResponse"
-        default:
-          description: Unexpected API error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                Example:
+                  "$ref": '#/components/examples/500'
   "/api/v1/startleft/external-threat-model":
     post:
       tags:
@@ -190,18 +195,24 @@ paths:
                   type: string
                   description: File that contains the original Threat model
                   format: binary
+                  example:
+                    externalValue: https://github.com/iriusrisk/startleft/raw/main/examples/mtmt/MTMT_example.tm7
                 source_type:
                   "$ref": "#/components/schemas/EtmType"
                 id:
                   type: string
                   description: ID of the new project
+                  example: example-project
                 name:
                   type: string
                   description: Name of the new project
+                  example: Example project
                 default_mapping_file:
                   type: string
                   description: File that contains the default mapping file
                   format: binary
+                  example:
+                    externalValue: https://github.com/iriusrisk/startleft/raw/main/examples/mtmt/mtmt_default_mapping_example.yaml
                 custom_mapping_file:
                   type: string
                   description: File that contains the user custom mapping file
@@ -214,31 +225,27 @@ paths:
           content:
             application/json:
               schema: {}
+              examples:
+                Example:
+                  "$ref": '#/components/examples/201'
         '400':
           description: Bad request
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ErrorResponse"
-        '401':
-          description: Authentication information is missing, invalid or not granted
-            to perform this action
+              examples:
+                Example:
+                  "$ref": '#/components/examples/400'
+        '500':
+          description: Internal server error
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ErrorResponse"
-        '403':
-          description: Forbidden operation
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/ErrorResponse"
-        default:
-          description: Unexpected API error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                Example:
+                  "$ref": '#/components/examples/500'
 components:
   schemas:
     ErrorResponse:
@@ -283,18 +290,38 @@ components:
         - MTMT
       type: string
       description: Type of ETM file
+      example: MTMT
     IacType:
       enum:
         - CLOUDFORMATION
         - TERRAFORM
       type: string
       description: Type of IaC file
+      example: TERRAFORM
     DiagramType:
       enum:
         - VISIO
         - LUCID
       type: string
       description: Type of Diagram file
+      example: VISIO
+  examples:
+    201:
+      value: {"otmVersion": "0.1.0", "project": {"name": "Example project", "id": "example-project" }, "representations": [], "trustZones": [], "components": [], "dataflows": []}
+    400:
+      value:
+        status: 400
+        error_type: RequestValidationError
+        title: The request is not valid
+        detail: InvalidRequest
+        errors: ["errorMessage": "Error in field 'field' located in 'body'. field required"]
+    500:
+      value:
+        status: 500
+        error_type: OtmGenerationError
+        title: Internal Server Error
+        detail: OtmGenerationError
+        errors: ["errorMessage": "The server encountered an error and could not process the request"]
 tags:
   - name: health
     description: Check the service status
