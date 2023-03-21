@@ -59,7 +59,7 @@ components:
     $source:     {$type: "aws_ecs_task_definition"}
 
   - type:        load-balancer
-    $source:     {$type: ["aws_lb", "aws_elb"]}
+    $source:     {$type: ["aws_lb", "aws_elb", "aws_alb"]}
     parent:      {$path: "resource_properties.subnets"}
 
   - type:        kms
@@ -76,6 +76,12 @@ components:
 
   - type:        route-53
     $source:     {$type: "aws_route53_zone"}
+
+  - type: CD-EC2-AUTO-SCALING
+    $source: { $type: "aws_autoscaling_group" }
+
+  - type: empty-component
+    $source: { $type: "cloudflare_record" }
 
   - type:        s3
     $source:     {$type: "aws_s3_bucket"}

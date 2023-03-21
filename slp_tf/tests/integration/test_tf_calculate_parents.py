@@ -1,7 +1,8 @@
 import pytest
 
 from sl_util.sl_util.file_utils import get_data
-from slp_base import OtmBuildingError
+from slp_base import OTMBuildingError
+from slp_base.tests.util.otm import validate_and_compare
 from slp_tf import TerraformProcessor
 from slp_tf.tests.resources import test_resource_paths
 from slp_tf.tests.resources.test_resource_paths import expected_orphan_component_is_not_mapped, \
@@ -9,8 +10,6 @@ from slp_tf.tests.resources.test_resource_paths import expected_orphan_component
     tf_mapping_parent_by_type_name, tf_mapping_parent_by_name
 from slp_tf.tests.resources.test_resource_paths import terraform_iriusrisk_tf_aws_mapping
 from slp_tf.tests.utility import excluded_regex
-from slp_base.tests.util.otm import validate_and_compare
-
 
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
@@ -42,8 +41,8 @@ class TestTerraformCalculateParents:
         mapping_file = get_data(test_resource_paths.terraform_mapping_aws_component_without_parent)
 
         # WHEN the TF file is processed
-        # THEN an OtmBuildingError is raised
-        with pytest.raises(OtmBuildingError) as e_info:
+        # THEN an OTMBuildingError is raised
+        with pytest.raises(OTMBuildingError) as e_info:
             TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
 
         # AND the error references a parent issue

@@ -3,7 +3,8 @@ from unittest.mock import MagicMock
 from pytest import mark
 from vsdx import VisioFile
 
-from slp_visio.slp_visio.util.visio import get_shape_text, get_master_shape_text, normalize_label
+from slp_visio.slp_visio.util.visio import get_shape_text, get_master_shape_text, normalize_label, \
+    normalize_unique_id, get_unique_id_text
 from slp_visio.tests.resources import test_resource_paths
 
 
@@ -110,3 +111,32 @@ class TestVisioUtils:
                        u'\u00A0Test label\u00A0'])
     def test_normalize_label(self, source_label):
         assert normalize_label(source_label) == 'Test label'
+
+    def test_get_unique_id_text_present(self):
+        shape = MagicMock(
+            master_page=MagicMock(
+                master_unique_id='{1234-abcd}')
+        )
+        result = get_unique_id_text(shape)
+        assert result == "1234-abcd"
+
+    def test_get_unique_id_text_without_master_page(self):
+        shape = MagicMock(
+            master_page=None
+        )
+        result = get_unique_id_text(shape)
+        assert result == ""
+
+    def test_get_unique_id_text_without_master_unique_id(self):
+        shape = MagicMock(
+            master_page=MagicMock(
+                master_unique_id=None)
+        )
+        result = get_unique_id_text(shape)
+        assert result == ""
+
+    @mark.parametrize('unique_id',
+                      ['1234-abcd',
+                       '{1234-abcd}'])
+    def test_normalize_unique_id(self, unique_id):
+        assert normalize_unique_id(unique_id) == '1234-abcd'

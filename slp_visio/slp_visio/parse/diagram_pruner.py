@@ -1,4 +1,4 @@
-from sl_util.sl_util.iterations_utils import IterationUtils
+from sl_util.sl_util.iterations_utils import remove_from_list
 from slp_visio.slp_visio.load.objects.diagram_objects import Diagram, DiagramComponent
 from slp_visio.slp_visio.util.visio import normalize_label
 
@@ -18,7 +18,7 @@ class DiagramPruner:
         self.__restore_parents()
 
     def __remove_unmapped_components(self):
-        IterationUtils.remove_from_list(
+        remove_from_list(
             self.components,
             lambda component: not self.__is_component_mapped(component),
             self.__remove_component
@@ -26,7 +26,7 @@ class DiagramPruner:
 
     def __prune_orphan_connectors(self):
         removed_components_ids = [removed_component.id for removed_component in self.__removed_components]
-        IterationUtils.remove_from_list(
+        remove_from_list(
             self.connectors,
             lambda connector: connector.from_id in removed_components_ids or connector.to_id in removed_components_ids
         )

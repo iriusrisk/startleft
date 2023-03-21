@@ -1,12 +1,13 @@
-from otm.otm.entity.component import OtmComponent
-from otm.otm.entity.dataflow import OtmDataflow
+from otm.otm.entity.component import Component
+from otm.otm.entity.dataflow import Dataflow
 from otm.otm.entity.representation import Representation, DiagramRepresentation, RepresentationType
-from otm.otm.entity.trustzone import OtmTrustzone
+from otm.otm.entity.trustzone import Trustzone
 
 REPRESENTATIONS_SIZE_DEFAULT_HEIGHT = 1000
 REPRESENTATIONS_SIZE_DEFAULT_WIDTH = 1000
 
-class Otm:
+
+class OTM:
     def __init__(self, project_name, project_id, provider):
         self.project_name = project_name
         self.project_id = project_id
@@ -20,7 +21,6 @@ class Otm:
         self.__provider = provider
 
         self.add_default_representation()
-
 
     def objects_by_type(self, type):
         if type == "trustzone":
@@ -63,18 +63,18 @@ class Otm:
         return json
 
     def add_trustzone(self, id=None, name=None, type=None, source=None, properties=None):
-        self.trustzones.append(OtmTrustzone(trustzone_id=id, name=name, type=type, source=source, properties=properties))
+        self.trustzones.append(Trustzone(trustzone_id=id, name=name, type=type, source=source, attributes=properties))
 
     def add_component(self, id, name, type, parent, parent_type, source=None,
-                      properties=None, tags=None):
+                      attributes=None, tags=None):
         self.components.append(
-            OtmComponent(component_id=id, name=name, component_type=type, parent=parent, parent_type=parent_type,
-                         source=source, properties=properties, tags=tags))
+            Component(component_id=id, name=name, component_type=type, parent=parent, parent_type=parent_type,
+                         source=source, attributes=attributes, tags=tags))
 
     def add_dataflow(self, id, name, source_node, destination_node, bidirectional=None,
-                     source=None, properties=None, tags=None):
-        self.dataflows.append(OtmDataflow(dataflow_id=id, name=name, bidirectional=bidirectional, source_node=source_node,
-                                          destination_node=destination_node, source=source, properties=properties,
+                     source=None, attributes=None, tags=None):
+        self.dataflows.append(Dataflow(dataflow_id=id, name=name, bidirectional=bidirectional, source_node=source_node,
+                                          destination_node=destination_node, source=source, attributes=attributes,
                                           tags=tags))
 
     def add_representation(self, id_=None, name=None, type_=None):
@@ -84,7 +84,7 @@ class Otm:
         self.representations.append(DiagramRepresentation(id_=id_, name=name, type_=type_, size=size))
 
     def add_default_representation(self):
-        if not self.__provider.provider_type == RepresentationType.DIAGRAM.value:
+        if not self.__provider.provider_type == RepresentationType.DIAGRAM:
             self.add_representation(id_=self.__provider.provider_name,
                                     name=self.__provider.provider_name,
                                     type_=self.__provider.provider_type)

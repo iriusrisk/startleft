@@ -69,6 +69,7 @@ theme:
     - content.tabs.link
 plugins:
   - search
+  - glightbox
 extra:
   consent:
     title: Cookie consent
@@ -81,6 +82,7 @@ extra:
 markdown_extensions:
   - admonition
   - attr_list
+  - md_in_html
   - pymdownx.details
   - pymdownx.inlinehilite
   - pymdownx.superfences

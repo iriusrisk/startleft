@@ -1,0 +1,7 @@
+trustzones: []
+
+components:
+  - label: Free Text Annotation
+    type: generic-client
+
+dataflows: []

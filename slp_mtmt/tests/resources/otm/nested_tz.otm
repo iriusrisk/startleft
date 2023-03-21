@@ -1,0 +1,207 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "id": "example-project",
+    "name": "Example Project"
+  },
+  "representations": [
+    {
+      "id": "Microsoft Threat Modeling Tool",
+      "name": "Microsoft Threat Modeling Tool",
+      "type": "threat-model"
+    },
+    {
+      "id": "example-project-diagram",
+      "name": "example-project Diagram Representation",
+      "size": {
+        "height": 2000,
+        "width": 2000
+      },
+      "type": "diagram"
+    }
+  ],
+  "components": [
+    {
+      "attributes": {
+        "Accepts Input From": "Not Selected",
+        "Code Type": "U",
+        "Implements or Uses a Communication Protocol": "No",
+        "Implements or Uses an Authentication Mechanism": "No",
+        "Implements or Uses an Authorization Mechanism": "No",
+        "Isolation Level": "Not Selected",
+        "Name": "Customer web client",
+        "Out Of Scope": "false",
+        "Running As": "Not Selected",
+        "Sanitizes Input": "Not Selected",
+        "Sanitizes Output": "Not Selected"
+      },
+      "id": "a38c22eb-fee8-4abd-b92c-457d6822ee86",
+      "name": "Customer web client",
+      "parent": {
+        "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
+      },
+      "type": "web-client"
+    },
+    {
+      "attributes": {
+        "Accepts Input From": "Not Selected",
+        "Code Type": "M",
+        "Implements or Uses a Communication Protocol": "No",
+        "Implements or Uses an Authentication Mechanism": "No",
+        "Implements or Uses an Authorization Mechanism": "No",
+        "Isolation Level": "Not Selected",
+        "Name": "Main Application",
+        "Out Of Scope": "false",
+        "Running As": "Not Selected",
+        "Sanitizes Input": "Not Selected",
+        "Sanitizes Output": "Not Selected"
+      },
+      "id": "eef31b72-49b3-4d5f-9452-7ae178344c6b",
+      "name": "Main Application",
+      "parent": {
+        "trustZone": "6376d53e-6461-412b-8e04-7b3fe2b397de"
+      },
+      "type": "web-application-server-side"
+    },
+    {
+      "attributes": {
+        "Backup": "No",
+        "Encrypted": "No",
+        "Name": "Sandbox Mongo",
+        "Out Of Scope": "false",
+        "Removable Storage": "No",
+        "Shared": "No",
+        "Signed": "No",
+        "Store Type": "N",
+        "Stores Credentials": "No",
+        "Stores Log Data": "No",
+        "Write Access": "No"
+      },
+      "id": "4820ec3a-9841-4baf-a38c-2fa596014274",
+      "name": "Sandbox Mongo",
+      "parent": {
+        "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+      },
+      "type": "other-nosql-key-value-store"
+    },
+    {
+      "attributes": {
+        "Backup": "No",
+        "Encrypted": "No",
+        "Name": "Production Mongo",
+        "Out Of Scope": "false",
+        "Removable Storage": "No",
+        "Shared": "No",
+        "Signed": "No",
+        "Store Type": "N",
+        "Stores Credentials": "No",
+        "Stores Log Data": "No",
+        "Write Access": "No"
+      },
+      "id": "9668ae2e-403f-4182-8c4c-d83948ffc31b",
+      "name": "Production Mongo",
+      "parent": {
+        "trustZone": "6376d53e-6461-412b-8e04-7b3fe2b397de"
+      },
+      "type": "other-nosql-key-value-store"
+    }
+  ],
+  "trustZones": [
+    {
+      "attributes": {
+        "Dataflow Order": "0",
+        "Name": "Generic Trust Border Boundary"
+      },
+      "id": "6376d53e-6461-412b-8e04-7b3fe2b397de",
+      "name": "Generic Trust Border Boundary",
+      "risk": {
+        "trustRating": 10
+      }
+    },
+    {
+      "attributes": {
+        "Dataflow Order": "0",
+        "Name": "Sandbox environment"
+      },
+      "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+      "name": "Sandbox environment",
+      "risk": {
+        "trustRating": 10
+      },
+      "parent": {
+        "trustZone": "6376d53e-6461-412b-8e04-7b3fe2b397de"
+      }
+    },
+    {
+      "attributes": {
+        "Name": "Internet Boundary",
+        "As Generic Trust Line Boundary": {},
+        "Configurable Attributes": {},
+        "Internet Boundary": {}
+      },
+      "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
+      "name": "Internet Boundary",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "dataflows": [
+    {
+      "attributes": {
+        "As Generic Data Flow": {},
+        "Configurable Attributes": {},
+        "Contains Cookies": "Yes",
+        "Dataflow Order": "0",
+        "Destination Authenticated": "Yes",
+        "Forgery Protection": "Not Selected",
+        "HTTPS": {},
+        "JSON Payload": "No",
+        "Name": "HTTPS",
+        "Out Of Scope": "false",
+        "Physical Network": "Not Selected",
+        "Predefined Static Attributes": {},
+        "Provides Confidentiality": "Yes",
+        "Provides Integrity": "Yes",
+        "REST Payload": "No",
+        "RSS Payload": "No",
+        "Reason For Out Of Scope": {},
+        "SOAP Payload": "No",
+        "Source Authenticated": "Not Selected",
+        "Transmits XML": "No"
+      },
+      "bidirectional": false,
+      "destination": "eef31b72-49b3-4d5f-9452-7ae178344c6b",
+      "id": "282856be-f320-4a98-993f-b95fbf42d809",
+      "name": "HTTPS",
+      "source": "a38c22eb-fee8-4abd-b92c-457d6822ee86"
+    },
+    {
+      "attributes": {
+        "Configurable Attributes": {},
+        "Contains Cookies": "Yes",
+        "Dataflow Order": "0",
+        "Destination Authenticated": "No",
+        "Forgery Protection": "Not Selected",
+        "Generic Data Flow": {},
+        "JSON Payload": "No",
+        "Name": "Sandbox data",
+        "Out Of Scope": "false",
+        "Physical Network": "Not Selected",
+        "Provides Confidentiality": "No",
+        "Provides Integrity": "No",
+        "REST Payload": "No",
+        "RSS Payload": "No",
+        "Reason For Out Of Scope": {},
+        "SOAP Payload": "No",
+        "Source Authenticated": "Not Selected",
+        "Transmits XML": "No"
+      },
+      "bidirectional": false,
+      "destination": "4820ec3a-9841-4baf-a38c-2fa596014274",
+      "id": "95288a80-8458-4058-9fc1-d114bf0ed39d",
+      "name": "Sandbox data",
+      "source": "eef31b72-49b3-4d5f-9452-7ae178344c6b"
+    }
+  ]
+}

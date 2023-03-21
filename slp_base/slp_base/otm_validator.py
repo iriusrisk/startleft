@@ -1,12 +1,13 @@
 import logging
 
-from slp_base.slp_base.errors import OtmResultError
+from otm.otm.entity.parent_type import ParentType
+from slp_base.slp_base.errors import OTMResultError
 from slp_base.slp_base.schema import Schema
 
 logger = logging.getLogger(__name__)
 
 
-class OtmValidator:
+class OTMValidator:
     schema_filename = 'otm_schema.json'
 
     def __init__(self):
@@ -25,7 +26,7 @@ class OtmValidator:
         if not self.schema.valid:
             logger.error('OTM file schema is not valid')
             logger.error(f'--- Schema errors---\n{self.schema.errors}\n--- End of schema errors ---')
-            raise OtmResultError('OTM file does not comply with the schema', 'Schema error',
+            raise OTMResultError('OTM file does not comply with the schema', 'Schema error',
                                  str(self.schema.errors))
 
     def __check_otm_files(self, otm):
@@ -35,7 +36,7 @@ class OtmValidator:
         else:
             msg = 'OTM file has inconsistent IDs'
             logger.error(msg)
-            raise OtmResultError('Schema error', 'Parsing provided files result in an invalid OTM file', msg)
+            raise OTMResultError('Schema error', 'Parsing provided files result in an invalid OTM file', msg)
 
     def __check_otm_ids(self, otm):
         all_valid_ids = set()
@@ -57,8 +58,8 @@ class OtmValidator:
             elif component['id'] not in all_valid_ids:
                 all_valid_ids.add(component['id'])
 
-            trustzone_id = self.__get_trustzone_id(component)
-            parent_ids.add(trustzone_id)
+            component_parent_id = self.__get_parent_id(component)
+            parent_ids.add(component_parent_id)
 
         for parent_id in parent_ids:
             if parent_id not in all_valid_ids:
@@ -93,8 +94,7 @@ class OtmValidator:
                 not wrong_dataflow_to_ids and
                 not repeated_ids)
 
-    def __get_trustzone_id(self, trustzone: dict):
-        if 'trustZone' in trustzone['parent']:
-            return trustzone['parent']['trustZone']
-        else:
-            return trustzone['parent']['component']
+    @staticmethod
+    def __get_parent_id(trustzone: dict):
+        parent = ParentType.TRUST_ZONE if ParentType.TRUST_ZONE in trustzone['parent'] else ParentType.COMPONENT
+        return trustzone['parent'][str(parent)]

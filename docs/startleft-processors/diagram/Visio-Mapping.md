@@ -256,7 +256,7 @@ The resulting OTM would be:
 }
 ```
 
-Finally, it is important to notice that <u>mapping by name has priority over mapping by type</u>. So if you 
+It is important to notice that <u>mapping by name has priority over mapping by type</u>. So if you 
 include mappings in both mapping files for the _My EC2_ component like this:
 ```yaml
 // In the default mapping file
@@ -283,6 +283,67 @@ It would result in a OTM like this:
   }
 }
 ```
+
+Finally, as seen in the following picture, there are certain stencils that, despite representing different components, 
+share the same type. In this example, one is Amazon Redshift for AWS Analytics, and the other one for AWS Databases.
+
+![img/redshift-same-name.png](img/redshift-same-name.png)
+
+In case both stencils appear in the diagram, an internal identifier called **UniqueID** 
+can optionally be used to differentiate them.
+
+This way, they can be mapped to different components in the following manner:
+```yaml
+components:
+  - label:  Amazon Redshift
+    id:     0508F4C7-001F-0000-8E40-00608CF305B2
+    type:   redshift
+
+  - label:  Amazon Redshift
+    id:     0509DF75-001B-0000-8E40-00608CF305B2
+    type:   empty-component
+```
+
+!!! note
+        Note that mapping by UniqueID has priority over both, mapping by name and mapping by type, but the label must 
+        still be correct.
+
+The resulting OTM will be as follows:
+```json
+{
+  "components": [
+    {
+      "id": "1",
+      "name": "Amazon Redshift",
+      "type": "empty-component",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    },
+    {
+      "id": "13",
+      "name": "Amazon Redshift",
+      "type": "redshift",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      }
+    }
+  ]
+}
+```
+
+??? abstract "How to find the UniqueID of a stencil"
+    Being **UniqueID** an internal property, finding the value for a specific component is not straightforward.
+    
+    The easiest way is creating a diagram with only the desired stencil, and extracting the contents of the .vsdx file
+    with any file archiver that supports the ZIP format.
+    
+    From the root of the extracted files and folders, it is possible to navigate to the visio/masters subfolders and 
+    open the masters.xml file, where the name of the stencil and its UniqueID appears.
+
+    ![img/example-unique-id.png](img/example-unique-id.png)
+
+    More info in the <a href="https://learn.microsoft.com/en-us/openspecs/sharepoint_protocols/ms-vsdx/e58f5f25-76d8-4f65-ae24-d286b10168d7" target="_blank">official Microsoft documentation</a>.
 
 ### Mapping DataFlows
 Despite the fact that a `dataflows` tag is already defined in the mapping file structure, and it is required by the schema,

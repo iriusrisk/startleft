@@ -1,7 +1,7 @@
-from otm.otm.entity.otm import Otm
-from otm.otm.entity.component import OtmComponent
+from otm.otm.entity.component import Component
+from otm.otm.entity.otm import OTM
 from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
-from otm.otm.otm_builder import OtmBuilder
+from otm.otm.otm_builder import OTMBuilder
 from slp_base.slp_base.provider_parser import ProviderParser
 from slp_base.slp_base.provider_type import EtmType
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
@@ -26,7 +26,7 @@ class MTMTParser(ProviderParser):
             DiagramRepresentation(
                 id_=f'{self.project_id}-diagram',
                 name=f'{self.project_id} Diagram Representation',
-                type_=str(RepresentationType.DIAGRAM.value),
+                type_=RepresentationType.DIAGRAM,
                 size={'width': 2000, 'height': 2000}
             )
         ]
@@ -53,16 +53,16 @@ class MTMTParser(ProviderParser):
     def __get_mtmt_trustzones(self) -> list:
         return self.trustzones
 
-    def __get_mtmt_threats_and_mitigations(self, components: [OtmComponent]):
+    def __get_mtmt_threats_and_mitigations(self, components: [Component]):
         return self.threat_parser.parse(components)
 
     def __get_mtmt_representations(self) -> list:
         return self.representations
 
-    def build_otm(self) -> Otm:
+    def build_otm(self) -> OTM:
         threats, mitigations = self.__get_mtmt_threats_and_mitigations(self.__get_mtmt_components())
 
-        return OtmBuilder(self.project_id, self.project_name, EtmType.MTMT) \
+        return OTMBuilder(self.project_id, self.project_name, EtmType.MTMT) \
             .add_representations(self.__get_mtmt_representations()) \
             .add_trustzones(self.__get_mtmt_trustzones()) \
             .add_components(self.__get_mtmt_components()) \

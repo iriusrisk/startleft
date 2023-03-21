@@ -1,0 +1,84 @@
+digraph {
+	compound = "true"
+	newrank = "true"
+	subgraph "root" {
+		"[root] aws_ecs_service.Service (expand)" [label = "aws_ecs_service.Service", shape = "box"]
+		"[root] aws_ecs_task_definition.ServiceTaskDefinition (expand)" [label = "aws_ecs_task_definition.ServiceTaskDefinition", shape = "box"]
+		"[root] aws_lb.ServiceLB (expand)" [label = "aws_lb.ServiceLB", shape = "box"]
+		"[root] aws_security_group.CanarySecurityGroup (expand)" [label = "aws_security_group.CanarySecurityGroup", shape = "box"]
+		"[root] aws_security_group.OutboundSecurityGroup (expand)" [label = "aws_security_group.OutboundSecurityGroup", shape = "box"]
+		"[root] aws_security_group.ServiceLBSecurityGroup (expand)" [label = "aws_security_group.ServiceLBSecurityGroup", shape = "box"]
+		"[root] aws_security_group.VPCmonitoringSecurityGroup (expand)" [label = "aws_security_group.VPCmonitoringSecurityGroup", shape = "box"]
+		"[root] aws_security_group.VPCssmSecurityGroup (expand)" [label = "aws_security_group.VPCssmSecurityGroup", shape = "box"]
+		"[root] aws_security_group.VPCssmmessagesSecurityGroup (expand)" [label = "aws_security_group.VPCssmmessagesSecurityGroup", shape = "box"]
+		"[root] aws_security_group_rule.CanarySecurityGroupEgresstoServiceLBSecurityGroup (expand)" [label = "aws_security_group_rule.CanarySecurityGroupEgresstoServiceLBSecurityGroup", shape = "box"]
+		"[root] aws_security_group_rule.OutboundSecurityGroupIngressfromServiceLBSecurityGroup (expand)" [label = "aws_security_group_rule.OutboundSecurityGroupIngressfromServiceLBSecurityGroup", shape = "box"]
+		"[root] aws_security_group_rule.ServiceLBSecurityGroupEgresstoOutboundSecurityGroup (expand)" [label = "aws_security_group_rule.ServiceLBSecurityGroupEgresstoOutboundSecurityGroup", shape = "box"]
+		"[root] aws_security_group_rule.ServiceLBSecurityGroupIngressfromCanarySecurityGroup (expand)" [label = "aws_security_group_rule.ServiceLBSecurityGroupIngressfromCanarySecurityGroup", shape = "box"]
+		"[root] aws_subnet.PrivateSubnet1 (expand)" [label = "aws_subnet.PrivateSubnet1", shape = "box"]
+		"[root] aws_subnet.PrivateSubnet2 (expand)" [label = "aws_subnet.PrivateSubnet2", shape = "box"]
+		"[root] aws_subnet.PublicSubnet1 (expand)" [label = "aws_subnet.PublicSubnet1", shape = "box"]
+		"[root] aws_subnet.PublicSubnet2 (expand)" [label = "aws_subnet.PublicSubnet2", shape = "box"]
+		"[root] aws_synthetics_canary.Canary (expand)" [label = "aws_synthetics_canary.Canary", shape = "box"]
+		"[root] aws_vpc.CustomVPC (expand)" [label = "aws_vpc.CustomVPC", shape = "box"]
+		"[root] aws_vpc_endpoint.VPCmonitoring (expand)" [label = "aws_vpc_endpoint.VPCmonitoring", shape = "box"]
+		"[root] aws_vpc_endpoint.VPCssm (expand)" [label = "aws_vpc_endpoint.VPCssm", shape = "box"]
+		"[root] aws_vpc_endpoint.VPCssmmessages (expand)" [label = "aws_vpc_endpoint.VPCssmmessages", shape = "box"]
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"]" [label = "provider[\"registry.terraform.io/hashicorp/aws\"]", shape = "diamond"]
+		"[root] var.ingressCidrblock" [label = "var.ingressCidrblock", shape = "note"]
+		"[root] var.vpcCidrblock" [label = "var.vpcCidrblock", shape = "note"]
+		"[root] aws_ecs_service.Service (expand)" -> "[root] aws_ecs_task_definition.ServiceTaskDefinition (expand)"
+		"[root] aws_ecs_service.Service (expand)" -> "[root] aws_security_group.OutboundSecurityGroup (expand)"
+		"[root] aws_ecs_service.Service (expand)" -> "[root] aws_subnet.PrivateSubnet1 (expand)"
+		"[root] aws_ecs_service.Service (expand)" -> "[root] aws_subnet.PrivateSubnet2 (expand)"
+		"[root] aws_ecs_task_definition.ServiceTaskDefinition (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_lb.ServiceLB (expand)" -> "[root] aws_security_group.ServiceLBSecurityGroup (expand)"
+		"[root] aws_lb.ServiceLB (expand)" -> "[root] aws_subnet.PrivateSubnet1 (expand)"
+		"[root] aws_lb.ServiceLB (expand)" -> "[root] aws_subnet.PrivateSubnet2 (expand)"
+		"[root] aws_security_group.CanarySecurityGroup (expand)" -> "[root] aws_vpc.CustomVPC (expand)"
+		"[root] aws_security_group.OutboundSecurityGroup (expand)" -> "[root] aws_vpc.CustomVPC (expand)"
+		"[root] aws_security_group.ServiceLBSecurityGroup (expand)" -> "[root] aws_vpc.CustomVPC (expand)"
+		"[root] aws_security_group.VPCmonitoringSecurityGroup (expand)" -> "[root] aws_vpc.CustomVPC (expand)"
+		"[root] aws_security_group.VPCmonitoringSecurityGroup (expand)" -> "[root] var.ingressCidrblock"
+		"[root] aws_security_group.VPCssmSecurityGroup (expand)" -> "[root] aws_vpc.CustomVPC (expand)"
+		"[root] aws_security_group.VPCssmmessagesSecurityGroup (expand)" -> "[root] aws_vpc.CustomVPC (expand)"
+		"[root] aws_security_group_rule.CanarySecurityGroupEgresstoServiceLBSecurityGroup (expand)" -> "[root] aws_security_group.CanarySecurityGroup (expand)"
+		"[root] aws_security_group_rule.CanarySecurityGroupEgresstoServiceLBSecurityGroup (expand)" -> "[root] aws_security_group.ServiceLBSecurityGroup (expand)"
+		"[root] aws_security_group_rule.OutboundSecurityGroupIngressfromServiceLBSecurityGroup (expand)" -> "[root] aws_security_group.OutboundSecurityGroup (expand)"
+		"[root] aws_security_group_rule.OutboundSecurityGroupIngressfromServiceLBSecurityGroup (expand)" -> "[root] aws_security_group.ServiceLBSecurityGroup (expand)"
+		"[root] aws_security_group_rule.ServiceLBSecurityGroupEgresstoOutboundSecurityGroup (expand)" -> "[root] aws_security_group.OutboundSecurityGroup (expand)"
+		"[root] aws_security_group_rule.ServiceLBSecurityGroupEgresstoOutboundSecurityGroup (expand)" -> "[root] aws_security_group.ServiceLBSecurityGroup (expand)"
+		"[root] aws_security_group_rule.ServiceLBSecurityGroupIngressfromCanarySecurityGroup (expand)" -> "[root] aws_security_group.CanarySecurityGroup (expand)"
+		"[root] aws_security_group_rule.ServiceLBSecurityGroupIngressfromCanarySecurityGroup (expand)" -> "[root] aws_security_group.ServiceLBSecurityGroup (expand)"
+		"[root] aws_subnet.PrivateSubnet1 (expand)" -> "[root] aws_vpc.CustomVPC (expand)"
+		"[root] aws_subnet.PrivateSubnet2 (expand)" -> "[root] aws_vpc.CustomVPC (expand)"
+		"[root] aws_subnet.PublicSubnet1 (expand)" -> "[root] aws_vpc.CustomVPC (expand)"
+		"[root] aws_subnet.PublicSubnet2 (expand)" -> "[root] aws_vpc.CustomVPC (expand)"
+		"[root] aws_synthetics_canary.Canary (expand)" -> "[root] aws_security_group.CanarySecurityGroup (expand)"
+		"[root] aws_synthetics_canary.Canary (expand)" -> "[root] aws_subnet.PublicSubnet1 (expand)"
+		"[root] aws_synthetics_canary.Canary (expand)" -> "[root] aws_subnet.PublicSubnet2 (expand)"
+		"[root] aws_vpc.CustomVPC (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_vpc.CustomVPC (expand)" -> "[root] var.vpcCidrblock"
+		"[root] aws_vpc_endpoint.VPCmonitoring (expand)" -> "[root] aws_security_group.VPCmonitoringSecurityGroup (expand)"
+		"[root] aws_vpc_endpoint.VPCmonitoring (expand)" -> "[root] aws_subnet.PrivateSubnet1 (expand)"
+		"[root] aws_vpc_endpoint.VPCmonitoring (expand)" -> "[root] aws_subnet.PrivateSubnet2 (expand)"
+		"[root] aws_vpc_endpoint.VPCssm (expand)" -> "[root] aws_security_group.VPCssmSecurityGroup (expand)"
+		"[root] aws_vpc_endpoint.VPCssm (expand)" -> "[root] aws_subnet.PrivateSubnet1 (expand)"
+		"[root] aws_vpc_endpoint.VPCssm (expand)" -> "[root] aws_subnet.PrivateSubnet2 (expand)"
+		"[root] aws_vpc_endpoint.VPCssmmessages (expand)" -> "[root] aws_security_group.VPCssmmessagesSecurityGroup (expand)"
+		"[root] aws_vpc_endpoint.VPCssmmessages (expand)" -> "[root] aws_subnet.PrivateSubnet1 (expand)"
+		"[root] aws_vpc_endpoint.VPCssmmessages (expand)" -> "[root] aws_subnet.PrivateSubnet2 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_ecs_service.Service (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_lb.ServiceLB (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_security_group_rule.CanarySecurityGroupEgresstoServiceLBSecurityGroup (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_security_group_rule.OutboundSecurityGroupIngressfromServiceLBSecurityGroup (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_security_group_rule.ServiceLBSecurityGroupEgresstoOutboundSecurityGroup (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_security_group_rule.ServiceLBSecurityGroupIngressfromCanarySecurityGroup (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_synthetics_canary.Canary (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_endpoint.VPCmonitoring (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_endpoint.VPCssm (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_vpc_endpoint.VPCssmmessages (expand)"
+		"[root] root" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)"
+	}
+}
+

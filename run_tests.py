@@ -25,7 +25,7 @@ def get_module_tests_dirs() -> []:
 
 
 def get_main_tests_dirs() -> []:
-    return [ROOT_DIR + '/tests/integration']
+    return [ROOT_DIR + '/tests']
 
 
 def run_pytest(test_dirs: []):

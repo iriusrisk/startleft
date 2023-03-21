@@ -1,7 +1,7 @@
 from typing import Optional
 
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent, DiagramConnector
-from slp_visio.slp_visio.util.visio import get_shape_text, get_master_shape_text, normalize_label
+from slp_visio.slp_visio.util.visio import get_shape_text, get_master_shape_text, normalize_label, get_unique_id_text
 
 
 # if it has two shapes connected and is not pointing itself
@@ -40,7 +40,8 @@ class VisioComponentFactory:
             name=normalize_label(get_shape_text(shape)),
             type=normalize_label(get_master_shape_text(shape)),
             origin=origin,
-            representation=representer.build_representation(shape))
+            representation=representer.build_representation(shape),
+            unique_id=get_unique_id_text(shape))
 
 
 class VisioConnectorFactory:

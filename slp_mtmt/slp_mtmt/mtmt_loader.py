@@ -1,10 +1,13 @@
 import collections
+import logging
 
+from slp_base import LoadingSourceFileError
 from slp_base.slp_base.provider_loader import ProviderLoader
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_threatinstance import MTMThreat
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT, MTMBorder, MTMLine, MTMKnowledge
 from slp_mtmt.slp_mtmt.tm7_to_json import Tm7ToJson
 
+logger = logging.getLogger(__name__)
 
 class MTMTLoader(ProviderLoader):
     """
@@ -12,8 +15,14 @@ class MTMTLoader(ProviderLoader):
     """
 
     def load(self):
-        self.__read()
-        self.mtmt = MTMT(borders=self.borders, lines=self.lines, threats=self.threats, know_base=self.know_base)
+        try:
+            self.__read()
+            self.mtmt = MTMT(borders=self.borders, lines=self.lines, threats=self.threats, know_base=self.know_base)
+        except Exception as e:
+            logger.error(f'{e}')
+            detail = e.__class__.__name__
+            message = e.__str__()
+            raise LoadingSourceFileError('Source file cannot be loaded', detail, message)
 
     def __init__(self, source):
         self.source = source

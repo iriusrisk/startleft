@@ -4,8 +4,8 @@ from unittest.mock import patch, Mock
 
 import pytest
 
-from slp_base import OtmProcessor, ProviderParser, MappingLoader, MappingValidator, ProviderLoader, ProviderValidator, \
-    LoadingSourceFileError
+from slp_base import OTMProcessor, ProviderParser, MappingLoader, MappingValidator, ProviderLoader, ProviderValidator, \
+    LoadingSourceFileError, ProviderNotFoundError
 from slp_base.slp_base.provider_resolver import ProviderResolver
 
 MOCKED_PROCESSORS = [
@@ -20,7 +20,7 @@ MOCKED_PROCESSORS = [
 ]
 
 
-class MockedOtmProcessor(OtmProcessor):
+class MockedOTMProcessor(OTMProcessor):
     def get_provider_validator(self) -> ProviderValidator:
         pass
 
@@ -61,13 +61,13 @@ class TestProviderResolver(TestCase):
         provider_type = 'CLOUDFORMATION'
 
         # WHEN get_processor is called in ProviderResolver
-        with patch('slp_base.slp_base.provider_resolver.getattr', return_value=MockedOtmProcessor), \
+        with patch('slp_base.slp_base.provider_resolver.getattr', return_value=MockedOTMProcessor), \
                 patch('slp_base.slp_base.provider_resolver.dir',
-                      return_value=['MockedOtmProcessor', 'MockedMappingValidator', 'Anything']):
+                      return_value=['MockedOTMProcessor', 'MockedMappingValidator', 'Anything']):
             processor = ProviderResolver(mocked_processors).get_processor(provider_type)
 
         # THEN a processor for that provider is returned
-        assert type(processor) == MockedOtmProcessor
+        assert type(processor) == MockedOTMProcessor
 
     def test_get_mapping_validator(self):
         # GIVEN a mocked list of processors
@@ -78,7 +78,7 @@ class TestProviderResolver(TestCase):
 
         # WHEN get_mapping_validator is called in ProviderResolver
         with patch('slp_base.slp_base.provider_resolver.getattr', return_value=MockedMappingValidator), \
-                patch('slp_base.slp_base.provider_resolver.dir', return_value=['MockedOtmProcessor', 'MockedMappingValidator', 'Anything']):
+                patch('slp_base.slp_base.provider_resolver.dir', return_value=['MockedOTMProcessor', 'MockedMappingValidator', 'Anything']):
             validator = ProviderResolver(mocked_processors).get_mapping_validator(provider_type)
 
         # THEN a processor for that provider is returned
@@ -94,8 +94,8 @@ class TestProviderResolver(TestCase):
         # WHEN get_processor is called in ProviderResolver
         with patch('slp_base.slp_base.provider_resolver._find_provider_classes'):
 
-            # THEN a LoadingSourceFileError is raised
-            with pytest.raises(LoadingSourceFileError) as error_info:
+            # THEN a ProviderNotFoundError is raised
+            with pytest.raises(ProviderNotFoundError) as error_info:
                 processor = ProviderResolver(mocked_processors).get_processor(provider_type)
 
         # AND the error message is right
@@ -111,8 +111,8 @@ class TestProviderResolver(TestCase):
         # WHEN get_processor is called in ProviderResolver
         with patch('slp_base.slp_base.provider_resolver._find_provider_classes'):
 
-            # THEN a LoadingSourceFileError is raised
-            with pytest.raises(LoadingSourceFileError) as error_info:
+            # THEN a ProviderNotFoundError is raised
+            with pytest.raises(ProviderNotFoundError) as error_info:
                 ProviderResolver(mocked_processors).get_processor(provider_type)
 
         # AND the error message is right
@@ -127,8 +127,8 @@ class TestProviderResolver(TestCase):
 
         # WHEN get_processor is called in ProviderResolver
         with patch('slp_base.slp_base.provider_resolver._find_provider_classes'):
-            # THEN a LoadingSourceFileError is raised
-            with pytest.raises(LoadingSourceFileError) as error_info:
+            # THEN a ProviderNotFoundError is raised
+            with pytest.raises(ProviderNotFoundError) as error_info:
                 ProviderResolver(mocked_processors).get_processor(provider_type)
 
         # AND the error message is right
