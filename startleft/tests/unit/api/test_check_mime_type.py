@@ -45,10 +45,9 @@ class TestCheckMimeType:
 
         assert error.value.error_code.http_status == 400
         assert error.typename == 'SourceFileNotValidError'
-        assert error.value.title == f'Invalid {provider.provider_name} file'
-        assert error.value.detail == 'Invalid content type for file filename'
-        assert error.value.message == f'filename with content-type {content_type} is not valid,' \
-                                      f' the valid types are {provider.valid_mime}'
+        assert error.value.title == f'{provider.provider_name} file is not valid'
+        assert error.value.detail == 'Invalid content type for file'
+        assert error.value.message == 'Invalid content type for file'
 
     def test_custom_error(self):
         mocked_file = MagicMock(content_type='application/json')

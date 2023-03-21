@@ -35,7 +35,7 @@ class TestLucidValidator:
             self.validator.validate()
 
         assert error_info.typename == 'DiagramFileNotValidError'
-        assert error_info.value.message == 'Provided visio file is not valid. Invalid size'
+        assert error_info.value.message == 'Provided diag_file is not valid. Invalid size'
 
     @patch("magic.Magic.from_file")
     @patch("os.path.getsize")

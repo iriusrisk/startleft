@@ -5,6 +5,7 @@ from fastapi import UploadFile
 
 from otm.otm.provider import Provider
 from slp_base.slp_base.errors import SourceFileNotValidError
+from slp_base.slp_base.provider_validator import generate_content_type_error
 
 
 def check_mime_type(file_name: str, file_type_name: str, exception=SourceFileNotValidError):
@@ -16,11 +17,7 @@ def check_mime_type(file_name: str, file_type_name: str, exception=SourceFileNot
     def _check_mime_type(file: UploadFile, source_mime_type: Provider):
         content_type = file.content_type
         if not content_type or content_type not in source_mime_type.valid_mime:
-            title = f'Invalid {source_mime_type.provider_name} file'
-            details = f'Invalid content type for file {file.filename}'
-            msg = f'{file.filename} with content-type {content_type} is not valid,' \
-                  f' the valid types are {source_mime_type.valid_mime}'
-            raise exception(title, details, msg)
+            raise generate_content_type_error(source_mime_type, file_name, exception)
 
     def decorator(func):
         @wraps(func)

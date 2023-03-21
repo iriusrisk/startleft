@@ -262,9 +262,9 @@ class TestOTMControllerDiagramVisio:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @mark.parametrize('diagram_source,detail', [
-        (b'', 'Provided visio file is not valid. Invalid size'),
-        (bytearray(4), 'Provided visio file is not valid. Invalid size'),
-        (bytearray(1024 * 1024 * 10 + 1), 'Provided visio file is not valid. Invalid size'),
+        (b'', 'Provided diag_file is not valid. Invalid size'),
+        (bytearray(4), 'Provided diag_file is not valid. Invalid size'),
+        (bytearray(1024 * 1024 * 10 + 1), 'Provided diag_file is not valid. Invalid size'),
         (open(default_visio_mapping, 'rb'), 'Invalid content type for diag_file')
     ])
     @responses.activate
@@ -288,7 +288,7 @@ class TestOTMControllerDiagramVisio:
         body_response = json.loads(response.text)
         assert body_response['status'] == '400'
         assert body_response['error_type'] == 'DiagramFileNotValidError'
-        assert body_response['title'] == 'Diagram file is not valid'
+        assert body_response['title'] == 'Visio file is not valid'
         assert body_response['detail'] == detail
         assert len(body_response['errors']) == 1
         assert body_response['errors'][0]['errorMessage'] == detail

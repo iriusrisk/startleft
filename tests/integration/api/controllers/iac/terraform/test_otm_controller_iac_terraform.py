@@ -285,9 +285,9 @@ class TestOTMControllerIaCTerraform:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @mark.parametrize('iac_source,detail', [
-        (b'', 'Terraform file is not valid. Invalid size'),
-        (bytearray(4), 'Terraform file is not valid. Invalid size'),
-        (bytearray(1024 * 1024 * 20 + 1), 'Terraform file is not valid. Invalid size')])
+        (b'', 'Provided iac_file is not valid. Invalid size'),
+        (bytearray(4), 'Provided iac_file is not valid. Invalid size'),
+        (bytearray(1024 * 1024 * 20 + 1), 'Provided iac_file is not valid. Invalid size')])
     @responses.activate
     def test_response_on_invalid_iac_file(self, iac_source, detail):
         # Given a project_id
