@@ -1,0 +1,20 @@
+# This workflow will perform a static code testing with semgrep
+
+name: Static Application Security Testing
+
+on:
+  pull_request: {}
+  push:
+    branches: ["dev", "main"]
+
+jobs:
+  semgrep:
+    name: Run Semgrep scan with owasp-top-ten & cwe-top-25
+    runs-on: ubuntu-latest
+
+    container:
+      image: returntocorp/semgrep
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: semgrep ci --config=p/owasp-top-ten --config=p/cwe-top-25 --config=p/gitleaks -q --exclude="tests" --exclude="*/tests" --skip-unknown-extensions --suppress-errors

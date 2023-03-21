@@ -7,7 +7,8 @@ from sl_util.sl_util.file_utils import get_byte_data
 from slp_tf import TerraformProcessor
 from slp_tf.tests.resources.test_resource_paths import terraform_iriusrisk_tf_aws_mapping, \
     tfplan_elb_expected, tfplan_elb, terraform_elb, tfplan_graph_elb, tfplan_sgs, \
-    tfplan_graph_sgs, tfplan_graph_sgs_expected, tfplan_graph_elb_expected
+    tfplan_graph_sgs, tfplan_graph_sgs_expected, tfplan_graph_elb_expected, tfplan_graph_official_expected, \
+    tfplan_official, tfplan_graph_official
 from slp_base.tests.util.otm import validate_and_compare
 
 DEFAULT_MAPPING_FILE = terraform_iriusrisk_tf_aws_mapping
@@ -37,7 +38,10 @@ class TestTfplan:
                       [param(get_byte_data(tfplan_elb), get_byte_data(tfplan_graph_elb), tfplan_graph_elb_expected,
                              id='elb-example'),
                        param(get_byte_data(tfplan_sgs), get_byte_data(tfplan_graph_sgs), tfplan_graph_sgs_expected,
-                             id='sgs-example')])
+                             id='sgs-example'),
+                       param(get_byte_data(tfplan_official), get_byte_data(tfplan_graph_official),
+                             tfplan_graph_official_expected,
+                            id='official-example')])
     def test_tfplan_tfgraph_examples(self, tfplan: bytes, tfgraph: bytes, expected: str):
         # GIVEN a valid TFPLAN file
         # AND a valid TF mapping file
