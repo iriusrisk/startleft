@@ -9,7 +9,7 @@
             "required": ["name", "id"],
             "properties": {
                 "name": {"type": "string"},
-                "id": {"$ref": "#/definitions/uuid"},
+                "id": {"type": "string"},
                 "description": {"type": "string"},
                 "owner": {"type": "string"},
                 "ownerContact": {"type": "string"},
@@ -27,7 +27,7 @@
             "required": ["name", "id", "type"],
             "properties": {
                 "name": {"type": "string"},
-                "id": {"$ref": "#/definitions/uuid"},
+                "id": {"type": "string"},
                 "type": {"type": "string"},
                 "description": {"type": "string"},
                 "size": {"$ref": "#/definitions/size"},
@@ -46,7 +46,7 @@
             "required": ["name", "id", "risk"],
             "properties": {
                 "name": {"type": "string"},
-                "id": {"$ref": "#/definitions/uuid"},
+                "id": {"type": "string"},
                 "description": {"type": "string"},
                 "risk": {
                     "type": "object",
@@ -67,7 +67,7 @@
                 "type": "object",
                 "required": ["id", "name", "risk"],
                 "properties": {
-                    "id": {"$ref": "#/definitions/uuid"},
+                    "id": {"type": "string"},
                     "name": {"type": "string"},
                     "type": {"type": "string"},
                     "description": {"type": "string"},
@@ -93,7 +93,7 @@
                 "type": "object",
                 "required": ["id", "name", "type", "parent"],
                 "properties": {
-                    "id": {"$ref": "#/definitions/uuid"},
+                    "id": {"type": "string"},
                     "name": {"type": "string"},
                     "type": {"type": "string"},
                     "description": {"type": "string"},
@@ -139,12 +139,12 @@
                 "type": "object",
                 "required": ["id", "name", "source", "destination"],
                 "properties": {
-                    "id": {"$ref": "#/definitions/uuid"},
+                    "id": {"type": "string"},
                     "name": {"type": "string"},
                     "description": {"type": "string"},
                     "bidirectional": {"type": "boolean"},
-                    "source": {"$ref": "#/definitions/uuid"},
-                    "destination": {"$ref": "#/definitions/uuid"},
+                    "source": {"type": "string"},
+                    "destination": {"type": "string"},
                     "assets": {
                         "type": "array",
                         "items": {"type": "string"}
@@ -166,7 +166,7 @@
                 "type": "object",
                 "required": ["id", "name", "risk"],
                 "properties": {
-                    "id": {"$ref": "#/definitions/uuid"},
+                    "id": {"type": "string"},
                     "name": {"type": "string"},
                     "description": {"type": "string"},
                     "categories": {
@@ -203,7 +203,7 @@
                 "type": "object",
                 "required": ["id", "name", "riskReduction"],
                 "properties": {
-                    "id": {"$ref": "#/definitions/uuid"},
+                    "id": {"type": "string"},
                     "name": {"type": "string"},
                     "description": {"type": "string"},
                     "riskReduction": {"type": "number"},
@@ -213,12 +213,6 @@
         }
     },
     "definitions": {
-        "uuid": {
-            "type": "string",
-            "minlength": 1,
-            "maxlength": 36,
-            "pattern": "^(?![nN][uU][lL]{2}$)\\s*\\S.*"
-        },
         "size": {
             "type": "object",
             "required": ["width", "height"],
@@ -252,7 +246,7 @@
             "properties": {
                 "representation": {"type": "string"},
                 "name": {"type": "string"},
-                "id": {"$ref": "#/definitions/uuid"},
+                "id": {"type": "string"},
                 "position": {"$ref": "#/definitions/position"},
                 "size": {"$ref": "#/definitions/size"},
                 "file": {"type": "string"},
@@ -273,7 +267,7 @@
                         "type": "object",
                         "required": ["mitigation", "state"],
                         "properties": {
-                            "mitigation": {"$ref": "#/definitions/uuid"},
+                            "mitigation": {"type": "string"},
                             "state": {"type": "string"}
                         }
                     }
