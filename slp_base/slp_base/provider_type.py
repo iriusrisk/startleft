@@ -19,5 +19,5 @@ class DiagramType(str, Provider):
 
 class EtmType(str, Provider):
     MTMT = ("MTMT", "Microsoft Threat Modeling Tool", RepresentationType.THREAT_MODEL,
-            ['application/xml', 'text/plain'])
+            ['application/octet-stream', 'application/xml', 'text/plain'])
 
