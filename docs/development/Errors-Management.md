@@ -3,36 +3,53 @@
 ## Steps
 
 ---
-The management of errors on StartLeft is handled on three separated steps:
+The management of errors on StartLeft is handled on four separated steps:
 
-1. Reading the source file IaC/diagram
-2. Reading the mapping file/s
-3. Generating the OTM
+1. Provider selection.
+2. Source file processing.
+3. Mapping file processing.
+4. OTM generation.
 
-![img/conversion-stages.png](img/conversion-stages.png)
+![img/errors_management](img/conversion-steps.svg){ width="120%" }
+
 
 ## Error types
 
 ---
-On steps 1 and 2 we have two error groups:
+**Step 1:**
 
-* **Validation error**: The file is not valid due to wrong mime type, maxsize, etc.
-    * `IacNotValidFileError`.
+* **Provider error:** Provider resolver could not find a provider for the given type.
+	* `ProviderNotFoundError`.
+
+**Step 2:**
+
+* **Validation error:** The file is not valid due to wrong mime type, maxsize, etc.
+	* `IacNotValidFileError`.
     * `DiagramNotValidFileError`.
-    * `MappingFileNotValidError`.
+    * `SourceFileNotValidError`.
 
-* **Loading error**: We are unable to load the file due to the wrong type being specified or any error inside the file that 
-does not permit loading its content.
-    * `LoadingIacFileError`.
-    * `LoadingDiagramFileError`.
-    * `LoadingMappingFileError`.
+* **Loading error:** We are unable to load the file due to the wrong type being specified or any error inside the file that
+  does not permit loading its content.
+	* `LoadingIacFileError`.
+	* `LoadingDiagramFileError`.
+	* `LoadingSourceFileError`.
 
-* **OTM generation related errors**:
-    * `OtmBuildingError`. We are unable to generate the OTM with the given files.
-    * `OtmResultError`. We are able to generate the OTM but the OTM is invalid (e.g: inconsistent IDs).
-    * `OtmGenerationError`. There was any unexpected error.
+**Step 3:**
 
-## Http statuses and exit codes
+* **Validation error:** The file is not valid due to wrong mime type, maxsize, etc.
+	* `MappingFileNotValidError`.
+* **Loading error:** We are unable to load the file due to the wrong type being specified or any error inside the file that
+  does not permit loading its content.
+	* `LoadingMappingFileError`.
+
+**Step 4:**
+
+* **OTM generation related errors:**
+	* `OTMBuildingError`. We are unable to generate the OTM with the given files.
+	* `OTMResultError`. We are able to generate the OTM but the OTM is invalid (e.g: inconsistent IDs).
+	* `OTMGenerationError`. There was any unexpected error.
+
+## HTTP statuses and exit codes
 
 ---
 
@@ -42,17 +59,20 @@ does not permit loading its content.
 | `IacFileNotValidError`     |     400     |             2 |
 | `LoadingDiagramFileError`  |     400     |            11 |
 | `DiagramNotValidFileError` |     400     |            12 |
+| `LoadingSourceFileError`   |     400     |            51 |
+| `SourceFileNotValidError`  |     400     |            52 |
 | `LoadingMappingFileError`  |     400     |            21 |
 | `MappingFileNotValidError` |     400     |            22 |
-| `OtmBuildingError`         |     400     |            41 |
-| `OtmResultError`           |     400     |            42 |
-| `OtmGenerationError`       |     500     |            45 |
+| `OTMBuildingError`         |     400     |            41 |
+| `OTMResultError`           |     400     |            42 |
+| `OTMGenerationError`       |     500     |            45 |
+| `ProviderNotFoundError`    |     400     |            60 |
 
 
-## Http response body
+## HTTP response body
 
 ---
-The response body on any of this cases will be a json with this structure:
+The response body on any of this cases will be a JSON with this structure:
 ```json
 {
     "status": "the numeric http status code",

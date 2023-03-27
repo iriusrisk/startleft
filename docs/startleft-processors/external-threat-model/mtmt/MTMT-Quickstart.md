@@ -68,7 +68,26 @@ StartLeft supports only the `tm7` format for Microsoft Threat Modeling Tool.
 The aim of this mapping file is to map the MTMT elements from templates such as the Azure template.
 To know how to build your own mapping-file, please read [MTMT-Mapping](MTMT-Mapping.md)
 
+### CLI
+> **Note**: Before continue, make sure you have
+> [StartLeft properly installed](../../../Quickstart-Guide-for-Beginners.md) in your machine.
 
+First of all, retrieve all the necessary files:
+
+* Download the `MTMT_example.tm7` and `mtmt_default_mapping_example.yaml files` from [here](https://github.com/iriusrisk/startleft/blob/main/examples/mtmt).
+
+Now we are going to execute StartLeft for these files so that a `basic-mtmt-example.otm` file will be generated in 
+our working directory.
+
+```shell
+startleft parse \
+	--etm-type MTMT \
+	--default-mapping-file mtmt_default_mapping_example.yaml \
+	--output-file basic-mtmt-example.otm \
+	--project-id "my-mtmt" \
+	--project-name "My MTMT Basic Example" \
+	MTMT_example.tm7
+```
 #### cURL
 For work with the API, in first place we need to have [StartLeft properly installed](../../../Quickstart-Guide-for-Beginners.md)
 

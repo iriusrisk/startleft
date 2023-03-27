@@ -20,14 +20,22 @@ visio_simple_components = path + '/visio/simple-components.vsdx'
 visio_orphan_dataflows = path + '/visio/visio-orphan-dataflows.vsdx'
 visio_invalid_file_size = path + '/visio/invalid-file-size.vsdx'
 visio_invalid_file_type = path + '/visio/invalid-file-type.pdf'
+
+# MTMT
+mtmt_mobile_api_example = path + '/mtmt/mtmt-mobile-api.tm7'
+mtmt_mobile_custom_api_example = path + '/mtmt/mtmt-mobile-custom-api.tm7'
+mtmt_invalid_file = path + '/mtmt/mtmt-invalid-format-zip.tm7'
+
 # mapping
 default_visio_mapping = path + '/visio/aws-visio-mapping.yaml'
 custom_vpc_mapping = path + '/visio/custom-vpc-mapping.yaml'
+default_mtmt_mapping = path + '/mtmt/default-mtmt-mapping.yaml'
+custom_mtmt_mapping = path + '/mtmt/custom-mtmt-mapping.yaml'
+invalid_mtmt_mapping = path + '/mtmt/invalid-mtmt-mapping.yaml'
 # expected otm results
 visio_aws_shapes_otm_expected = path + '/visio/aws-shapes.otm'
 visio_aws_with_tz_and_vpc_otm_expected = path + '/visio/aws-with-tz-and-vpc.otm'
 visio_orphan_dataflows_otm_expected = path + '/visio/visio-orphan-dataflows.otm'
-
 
 # LUCID
 lucid_aws_with_tz = path + '/lucid/lucid-aws-with-tz.vsdx'
@@ -36,3 +44,8 @@ lucid_aws_with_tz_and_vpc = path + '/lucid/lucid-aws-with-tz-and-vpc.vsdx'
 default_lucid_mapping = path + '/lucid/default-lucidcharts-mappings.yaml'
 custom_lucid_mapping_with_tz = path + '/lucid/lucid-aws-with-tz.yaml'
 custom_lucid_mapping_with_tz_and_vpc = path + '/lucid/lucid-aws-with-tz-and-vpc.yaml'
+
+# mappings
+invalid_mapping_file_vsdx = path + '/invalid-vsdx-mapping.vsdx'
+invalid_mapping_zip = path + '/invalid-zip-mapping.zip'
+invalid_mapping_pdf = path + '/invalid-pdf-mapping.pdf'

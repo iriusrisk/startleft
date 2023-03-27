@@ -1,4 +1,5 @@
-import pytest
+from pytest import mark, param
+
 
 from startleft.startleft._version.local_scheme import choose_strategy_by_branch, guess_startleft_semver_suffix, DEFAULT_LOCAL_PART
 from .version_mocks import *
@@ -9,7 +10,7 @@ class TestLocalScheme:
     # - RTP (or rtp) stands for Release Testing Period.
     # - RP (or rtp) stands for Release Period.
 
-    @pytest.mark.parametrize('branch,expected_strategy', [
+    @mark.parametrize('branch,expected_strategy', [
         ('main', '_no_local_version_strategy'),
         ('hotfix/XXX-000', '_node_strategy'),
         ('release/1.5.0', '_no_local_version_strategy'),
@@ -26,38 +27,27 @@ class TestLocalScheme:
         # THEN the right strategy is chosen
         assert strategy_fn.__name__ == expected_strategy
 
-    @pytest.mark.parametrize('scm_version,expected_version', [
+    @mark.parametrize('scm_version,expected_version', [
         # MAIN
-        (MAIN_NO_HOTFIX_VERSION, ''),
-        (MAIN_HOTFIX_VERSION, ''),
+        param(MAIN_NO_HOTFIX_VERSION, '', id='test_main_no_hotfix_version'),
+        param(MAIN_HOTFIX_VERSION, '', id='test_main_hotfix_version'),
         # HOTFIX
-        (HOTFIX_VERSION, '+g550c1c9'),
+        param(HOTFIX_VERSION, '+g550c1c9', id='test_hotfix_version'),
         # RELEASE
-        (RELEASE_VERSION_NO_BUGFIX, ''),
-        (RELEASE_VERSION_BUGFIX, ''),
+        param(RELEASE_VERSION_NO_BUGFIX, '', id='test_release_version_no_bugfix'),
+        param(RELEASE_VERSION_BUGFIX, '', id='test_release_version_bugfix'),
         # BUGFIX
-        (BUGFIX_VERSION, '+g6cda015'),
+        param(BUGFIX_VERSION, '+g6cda015', id='test_bugfix_version'),
         # DEV
-        (DEV_RTP_VERSION, '+g17d9f68'),
-        (DEV_RP_VERSION, '+g3e49113'),
+        param(DEV_RTP_VERSION, '+g17d9f68', id='test_dev_rtp_version'),
+        param(DEV_RP_VERSION, '+g3e49113', id='test_dev_rp_version'),
         # FEATURE
-        (FEATURE_RTP_VERSION, '+ga1d748e'),
-        (FEATURE_RP_VERSION, '+g76d029f'),
+        param(FEATURE_RTP_VERSION, '+ga1d748e', id='test_feature_rtp_version'),
+        param(FEATURE_RP_VERSION, '+g76d029f', id='test_feature_rp_version'),
         # FREE BRANCH
-        (FREE_BRANCH_RTP_VERSION, '+g52d796a'),
-        (FREE_BRANCH_RP_VERSION, '+g31a54fa'),
-    ], ids=['test_main_no_hotfix_version',
-            'test_main_hotfix_version',
-            'test_hotfix_version',
-            'test_release_version_no_bugfix',
-            'test_release_version_bugfix',
-            'test_bugfix_version',
-            'test_dev_rtp_version',
-            'test_dev_rp_version',
-            'test_feature_rtp_version',
-            'test_feature_rp_version',
-            'test_free_branch_rtp_version',
-            'test_free_branch_rp_version'])
+        param(FREE_BRANCH_RTP_VERSION, '+g52d796a', id='test_free_branch_rtp_version'),
+        param(FREE_BRANCH_RP_VERSION, '+g31a54fa', id='test_free_branch_rp_version'),
+    ])
     def test_main(self, scm_version, expected_version):
         # GIVEN a ScmVersion mock
         # WHEN guess_startleft_semver_suffix is called

@@ -42,6 +42,7 @@ class TerraformTransformer:
         self.id_parents = {}
         self.id_dataflows = {}
         self.tree = {}
+        self.singleton_component_ids = []
 
     def run(self, iac_mapping):
         self.iac_mapping = iac_mapping
@@ -74,7 +75,7 @@ class TerraformTransformer:
     def transform_components(self):
         logger.info("Adding components")
 
-        components = self.__calculate_singletons(self.__find_components())
+        components = self.__calculate_components()
 
         self.__remove_aux_data(components)
         self.__add_components_to_otm(components)
@@ -143,12 +144,11 @@ class TerraformTransformer:
             if "singleton_multiple_tags" in component:
                 del component["singleton_multiple_tags"]
 
-    def __calculate_singletons(self, components):
-        results_without_singleton = \
-            self.__get_components(components.components, components.skip) + \
-            self.__get_catchall(components.catchall, components.skip)
-
-        return self.__get_singleton(components.singleton, components.skip, results_without_singleton)
+    def __calculate_components(self):
+        components = self.__find_components()
+        results_without_singleton = self.__get_components(components.components, components.skip)
+        results_without_catchall = self.__get_singleton(components.singleton, components.skip, results_without_singleton)
+        return self.__get_catchall(components.catchall, components.skip, results_without_catchall)
 
     def __add_components_to_otm(self, components):
         for component in components:
@@ -183,8 +183,7 @@ class TerraformTransformer:
                 results.append(component)
         return results
 
-    def __get_catchall(self, catchall, skip):
-        results = []
+    def __get_catchall(self, catchall, skip, results):
         for component in catchall:
             skip_this = False
             for skip_component in skip:
@@ -192,6 +191,9 @@ class TerraformTransformer:
                     logger.debug("Skipping catchall component '{}'".format(component["id"]))
                     skip_this = True
                     break
+            if component["id"] in self.singleton_component_ids:
+                logger.debug("Catchall component already added '{}'".format(component["id"]))
+                skip_this = True
             for current_component in results:
                 if component["id"] == current_component["id"]:
                     logger.debug("Catchall component already added '{}'".format(component["id"]))
@@ -211,6 +213,7 @@ class TerraformTransformer:
                     skip_this = True
                     break
             if not skip_this:
+                self.singleton_component_ids.append(component["id"])
                 if component["type"] not in singleton_types_added:
                     results.append(component)
                     singleton_types_added.append(component["type"])
@@ -239,7 +242,6 @@ class TerraformTransformer:
                                 for tag in component["singleton_multiple_tags"]:
                                     if tag not in result["tags"]:
                                         result["tags"].append(tag)
-                            continue
         return results
 
     def transform_dataflows(self):

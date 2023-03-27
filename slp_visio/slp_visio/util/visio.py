@@ -26,6 +26,14 @@ def get_master_shape_text(shape: Shape) -> str:
     return (result or "").strip()
 
 
+def get_unique_id_text(shape: Shape) -> str:
+    if not shape.master_page or not shape.master_page.master_unique_id:
+        return ""
+
+    unique_id = shape.master_page.master_unique_id.strip()
+    return normalize_unique_id(unique_id)
+
+
 def get_child_shapes_text(shapes: [Shape]) -> str:
     if not shapes:
         return ""
@@ -90,3 +98,7 @@ def normalize_label(label):
     label_normalized = label_normalized.strip()
 
     return label_normalized
+
+
+def normalize_unique_id(unique_id):
+    return re.sub("[{}]", "", unique_id) if unique_id else ""
