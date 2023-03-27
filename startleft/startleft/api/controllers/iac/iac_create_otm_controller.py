@@ -22,14 +22,13 @@ router = APIRouter(
 provider_resolver = ProviderResolver(PROCESSORS)
 
 
-@router.post(URL, status_code=RESPONSE_STATUS_CODE, description="Generates an OTM threat model from an IaC file")
+@router.post(URL, status_code=RESPONSE_STATUS_CODE)
 def iac(iac_file: List[UploadFile]
-        = File(..., description="Files that contains Iac definitions to be merged into one data structure"),
-        iac_type: IacType = Form(..., description="Type of IaC File: CLOUDFORMATION, TERRAFORM"),
-        id: str = Form(..., description="ID of the new project"),
-        name: str = Form(..., description="Name of the new project"),
-        mapping_file: UploadFile = File(..., description="File that contains the mapping between IaC "
-                                                         "resources and threat model resources.")):
+        = File(...),
+        iac_type: IacType = Form(...),
+        id: str = Form(...),
+        name: str = Form(...),
+        mapping_file: UploadFile = File(...)):
     logger.info(f"POST request received for creating new project with id {id} and name {name} from IaC {iac_type} file")
 
     logger.info("Parsing Threat Model file to OTM")

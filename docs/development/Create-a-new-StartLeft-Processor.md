@@ -452,6 +452,34 @@ no code is needed, and you only need to perform the configuration steps below.
         'forbidden_dependencies': ['startleft', 'slp_cft', 'slp_tf', 'slp_visio', 'slp_mtmt']
      }
 ```
+
+### Update the Swagger schema
+1. Open the file `startleft/resources/api/v1/swagger.yaml` where the API is defined.
+2. Add the new MAIS type to the `iac_type` description and to the `IacType` enum:
+```yaml
+# Reduced for simplicity
+components:
+  schemas:
+    Body_iac_api_v1_startleft_iac_post:
+      properties:
+        iac_type:
+          description: 'Type of IaC File: CLOUDFORMATION, TERRAFORM, MAIS'
+```
+```yaml
+# Reduced for simplicity
+components:
+  schemas:
+    IacType:
+       title: IacType
+       enum:
+       - CLOUDFORMATION
+       - TERRAFORM
+       - MAIS
+       type: string
+       description: Type of IaC file
+
+
+```
  
 ### Try it on the REST API
 Launch the REST API as explained in the [Quickstart Guide for Developers](Quickstart-Guide-for-Developers.md)
