@@ -59,7 +59,7 @@ git checkout release/1.5.0
 
 Now, we can create the StartLeft image:
 ```shell
-docker build . -f deployment/Dockerfile.application -t startleft
+docker build . -f deployment/Dockerfile.docs.application.application -t startleft
 ```
 
 And, finally, we can run the docker container for the image we have just generated. Notice that you can select the
@@ -100,17 +100,12 @@ For more details about how to use the StartLeft API, you can check the [REST API
 The Dockerfile provided should be enough for the most common integration scenarios, but, of course, it is possible to
 create a custom docker image for StartLeft. For that, you can take the existent 
 [Dockerfile](https://raw.githubusercontent.com/iriusrisk/startleft/main/Dockerfile) available in the root of the StartLeft
-repository as a base. However, you must bear in mind the following considerations:
+repository as a base. However, you must bear in mind that every [official python image from the Docker Hub](https://hub.docker.com/_/python) 
+for versions over 3.6 should work, but:
 
-* Every [official python image from the Docker Hub](https://hub.docker.com/_/python) for versions over 3.6 should work, but:
-    * Depending on the base image, you may need to install additional libraries.
-    * **Debian/Ubuntu based python official images present security vulnerabilities**. This is the reason we decided 
+* Depending on the base image, you may need to install additional libraries.
+* **Debian/Ubuntu based python official images present security vulnerabilities**. This is the reason we decided 
     to use the Alpine based one despite the fact it is significantly slower than others at building time.
-* Although you could set as the entrypoint the `startleft server` command, it is more recommendable to just use the uvicorn 
-  command, that also allows you to select the default deployment port:
-```
-ENTRYPOINT ["uvicorn", "startleft.startleft.api.fastapi_server:webapp", "--host", "0.0.0.0", "--port", "5000"]
-```
 
 ## In batch processes
 

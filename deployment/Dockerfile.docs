@@ -4,4 +4,5 @@ RUN pip install --upgrade pip
 
 RUN pip install mkdocs-glightbox
 
-COPY . .
+COPY /docs ./docs
+COPY mkdocs.yml .
