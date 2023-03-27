@@ -1,11 +1,9 @@
-from slp_visio.slp_visio.validate.visio_validator import VisioValidator, VALID_MIME as VISIO_VALID_MIME
+from slp_base import DiagramType
 
-
-VALID_MIME = VISIO_VALID_MIME.copy()
-VALID_MIME.append('application/zip')
+from slp_visio.slp_visio.validate.visio_validator import VisioValidator
 
 
 class LucidValidator(VisioValidator):
 
     def __init__(self, file):
-        super().__init__(file, VALID_MIME)
+        super().__init__(file, DiagramType.LUCID)

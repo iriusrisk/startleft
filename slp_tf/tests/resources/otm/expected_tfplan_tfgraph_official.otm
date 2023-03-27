@@ -1,0 +1,182 @@
+{
+  "otmVersion": "0.1.0",
+  "project": {
+    "name": "name",
+    "id": "id"
+  },
+  "representations": [
+    {
+      "name": "Terraform",
+      "id": "Terraform",
+      "type": "code"
+    }
+  ],
+  "trustZones": [
+    {
+      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    }
+  ],
+  "components": [
+    {
+      "id": "aws_dynamodb_table.click-logger-table",
+      "name": "click-logger-table",
+      "type": "dynamodb",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_dynamodb_table"
+      ]
+    },
+    {
+      "id": "aws_kinesis_firehose_delivery_stream.click_logger_firehose_delivery_stream",
+      "name": "click_logger_firehose_delivery_stream",
+      "type": "kinesis-data-firehose",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_kinesis_firehose_delivery_stream"
+      ]
+    },
+    {
+      "id": "aws_lambda_function.lambda_clicklogger",
+      "name": "lambda_clicklogger",
+      "type": "aws-lambda-function",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_lambda_function"
+      ]
+    },
+    {
+      "id": "aws_lambda_function.lambda_clicklogger_authorizer",
+      "name": "lambda_clicklogger_authorizer",
+      "type": "aws-lambda-function",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_lambda_function"
+      ]
+    },
+    {
+      "id": "aws_lambda_function.lambda_clicklogger_stream_consumer",
+      "name": "lambda_clicklogger_stream_consumer",
+      "type": "aws-lambda-function",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_lambda_function"
+      ]
+    },
+    {
+      "id": "aws_s3_bucket.click_logger_firehose_delivery_s3_bucket",
+      "name": "click_logger_firehose_delivery_s3_bucket",
+      "type": "s3",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_s3_bucket"
+      ]
+    },
+    {
+      "id": "aws_api_gateway_account.click_logger_api_gateway_account",
+      "name": "api-gateway (grouped)",
+      "type": "api-gateway",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_api_gateway_authorizer",
+        "aws_api_gateway_resource",
+        "aws_api_gateway_integration_response",
+        "aws_api_gateway_method",
+        "aws_api_gateway_method_settings",
+        "aws_api_gateway_rest_api",
+        "aws_api_gateway_method_response",
+        "aws_api_gateway_deployment",
+        "aws_api_gateway_model",
+        "aws_api_gateway_integration",
+        "aws_api_gateway_request_validator",
+        "aws_api_gateway_account"
+      ]
+    },
+    {
+      "id": "aws_cloudwatch_log_group.click_logger_firehose_delivery_stream_log_group",
+      "name": "cloudwatch (grouped)",
+      "type": "cloudwatch",
+      "parent": {
+        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+      },
+      "tags": [
+        "aws_cloudwatch_log_group"
+      ]
+    }
+  ],
+  "dataflows": [
+    {
+      "id": "2ad60aef-7a3e-415a-a5bf-f686058e7e43",
+      "name": "clicklogger-authorizer to lambda_clicklogger_authorizer",
+      "source": "aws_api_gateway_account.click_logger_api_gateway_account",
+      "destination": "aws_lambda_function.lambda_clicklogger_authorizer",
+      "bidirectional": false
+    },
+    {
+      "id": "20549b9b-e0f8-4d94-83b4-a0b078126f38",
+      "name": "integration to lambda_clicklogger",
+      "source": "aws_api_gateway_account.click_logger_api_gateway_account",
+      "destination": "aws_lambda_function.lambda_clicklogger",
+      "bidirectional": false
+    },
+    {
+      "id": "75e08e92-23ad-4c2d-b5f1-3205da78cdfd",
+      "name": "lambda_click_logger_authorizer_log_group to lambda_clicklogger_authorizer",
+      "source": "aws_cloudwatch_log_group.click_logger_firehose_delivery_stream_log_group",
+      "destination": "aws_lambda_function.lambda_clicklogger_authorizer",
+      "bidirectional": false
+    },
+    {
+      "id": "0f04cc44-6ea5-4ea0-acb4-625919fb4039",
+      "name": "lambda_click_logger_log_group to lambda_clicklogger",
+      "source": "aws_cloudwatch_log_group.click_logger_firehose_delivery_stream_log_group",
+      "destination": "aws_lambda_function.lambda_clicklogger",
+      "bidirectional": false
+    },
+    {
+      "id": "713e6fd5-760e-410b-970f-3c2ee27790e0",
+      "name": "lambda_clicklogger_stream_consumer to click-logger-table",
+      "source": "aws_lambda_function.lambda_clicklogger_stream_consumer",
+      "destination": "aws_dynamodb_table.click-logger-table",
+      "bidirectional": false
+    },
+    {
+      "id": "c6a02e80-00e4-40a0-8a7a-fd288b3be01e",
+      "name": "lambda_clicklogger to click_logger_firehose_delivery_stream",
+      "source": "aws_lambda_function.lambda_clicklogger",
+      "destination": "aws_kinesis_firehose_delivery_stream.click_logger_firehose_delivery_stream",
+      "bidirectional": false
+    },
+    {
+      "id": "57865fd0-f96f-41ee-8e18-87c016415096",
+      "name": "click_logger_firehose_delivery_stream to lambda_clicklogger_stream_consumer",
+      "source": "aws_kinesis_firehose_delivery_stream.click_logger_firehose_delivery_stream",
+      "destination": "aws_lambda_function.lambda_clicklogger_stream_consumer",
+      "bidirectional": false
+    },
+    {
+      "id": "1c7a646a-4673-4518-aaea-9d40781e7382",
+      "name": "click_logger_firehose_delivery_stream to click_logger_firehose_delivery_s3_bucket",
+      "source": "aws_kinesis_firehose_delivery_stream.click_logger_firehose_delivery_stream",
+      "destination": "aws_s3_bucket.click_logger_firehose_delivery_s3_bucket",
+      "bidirectional": false
+    }
+  ]
+}

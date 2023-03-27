@@ -44,7 +44,15 @@ def get_module_address(module: {}, parent: str) -> str:
 
 
 def parse_address(address: str) -> str:
+    return remove_name_prefix(remove_index(address)) if address else None
+
+
+def remove_index(address: str) -> str:
     return re.sub(r'\[.*?]', '', address)
+
+
+def remove_name_prefix(address: str) -> str:
+    return re.sub(r'(.*)_name_prefix$', r'\1', address) if address else None
 
 
 class TfplanToResourceDict:

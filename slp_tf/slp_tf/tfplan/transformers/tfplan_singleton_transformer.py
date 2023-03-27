@@ -154,6 +154,9 @@ class TfplanSingletonTransformer(TfplanTransformer):
         repeated_dataflows = []
 
         for index, dataflow in enumerate(self.otm_dataflows):
+            if dataflow.source_node == dataflow.destination_node:
+                continue
+
             if any(dataflow.id == repeated_df.id for repeated_df in repeated_dataflows):
                 continue
 

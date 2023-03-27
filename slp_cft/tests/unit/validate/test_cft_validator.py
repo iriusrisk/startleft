@@ -40,7 +40,7 @@ class TestCloudformationValidator(TestCase):
 
         # AND the right info is in the exception
         assert validation_error.exception.title == 'CloudFormation file is not valid'
-        assert validation_error.exception.message == 'CloudFormation file is not valid. Invalid size'
+        assert validation_error.exception.message == 'Provided iac_file is not valid. Invalid size'
 
     @patch('magic.Magic.from_buffer')
     def test_invalid_mime_type_file(self, mime_checker_mock):
@@ -57,12 +57,4 @@ class TestCloudformationValidator(TestCase):
 
         # AND the right info is in the exception
         assert validation_error.exception.title == 'CloudFormation file is not valid'
-        assert validation_error.exception.message == 'CloudFormation file is not valid. Invalid content type for iac_file'
-
-
-
-
-
-
-
-
+        assert validation_error.exception.message == 'Invalid content type for iac_file'
