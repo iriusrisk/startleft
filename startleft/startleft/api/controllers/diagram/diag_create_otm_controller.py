@@ -21,16 +21,14 @@ router = APIRouter(
 provider_resolver = ProviderResolver(PROCESSORS)
 
 
-@router.post(URL, status_code=RESPONSE_STATUS_CODE, description="Generates an OTM threat model from an Diagram file",
-             tags=['Diagram'])
+@router.post(URL, status_code=RESPONSE_STATUS_CODE, tags=['Diagram'])
 @check_mime_type('diag_file', 'diag_type', DiagramFileNotValidError)
-def diagram(diag_file: UploadFile = File(..., description="File that contains the diagram definition"),
-            diag_type: DiagramType = Form(..., description="Type of Diagram File: VISIO, LUCID"),
-            id: str = Form(..., description="ID of the new project"),
-            name: str = Form(..., description="Name of the new project"),
-            default_mapping_file: UploadFile = File(..., description="File that contains the default mapping file"),
-            custom_mapping_file: UploadFile = File(None,
-                                                   description="File that contains the user custom mapping file")):
+def diagram(diag_file: UploadFile = File(...),
+            diag_type: DiagramType = Form(...),
+            id: str = Form(...),
+            name: str = Form(...),
+            default_mapping_file: UploadFile = File(...),
+            custom_mapping_file: UploadFile = File(None)):
     logger.info(
         f"POST request received for creating new project with id {id} and name {name} from Diagram {diag_type} file")
 

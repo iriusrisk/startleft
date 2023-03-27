@@ -21,16 +21,14 @@ router = APIRouter(
 provider_resolver = ProviderResolver(PROCESSORS)
 
 
-@router.post(URL, status_code=RESPONSE_STATUS_CODE,
-             description="Generates an OTM threat model from a Threat Model file",
-             tags=['Threat Model'])
+@router.post(URL, status_code=RESPONSE_STATUS_CODE, tags=['Threat Model'])
 @check_mime_type('source_file', 'source_type')
-def etm(source_file: UploadFile = File(..., description="File that contains the original Threat model"),
-        source_type: EtmType = Form(..., description="Type of Diagram File: MTMT"),
-        id: str = Form(..., description="ID of the new project"),
-        name: str = Form(..., description="Name of the new project"),
-        default_mapping_file: UploadFile = File(..., description="File that contains the default mapping file"),
-        custom_mapping_file: UploadFile = File(None, description="File that contains the user custom mapping file")):
+def etm(source_file: UploadFile = File(...),
+        source_type: EtmType = Form(...),
+        id: str = Form(...),
+        name: str = Form(...),
+        default_mapping_file: UploadFile = File(...),
+        custom_mapping_file: UploadFile = File(None)):
     logger.info(
         f"POST request received for creating new project with id {id} and name {name} from Diagram {source_type} file")
 
