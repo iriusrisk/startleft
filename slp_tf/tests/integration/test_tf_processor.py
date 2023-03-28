@@ -1,4 +1,7 @@
+from typing import List
+
 import pytest
+from pytest import mark, param
 
 from sl_util.sl_util.file_utils import get_byte_data
 from slp_base.slp_base.errors import MappingFileNotValidError, IacFileNotValidError, \
@@ -20,6 +23,13 @@ DEFAULT_TRUSTZONE_ID = "b61d6911-338d-46a8-9f39-8dcd24abfe91"
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
 SAMPLE_VALID_TF_FILE = terraform_for_mappings_tests_json
+
+MAX_TF_FILE_SIZE = 1024 * 1024
+MIN_TF_FILE_SIZE = 20
+
+
+def create_artificial_file(size: int) -> bytes:
+    return bytes('A' * size, 'utf-8')
 
 
 class TestTerraformProcessor:
@@ -233,14 +243,21 @@ class TestTerraformProcessor:
         assert len(otm.components) == 2
         assert otm.components[0].name == otm.components[1].name
 
-    def test_valid_terraform_size_over_1mb(self):
+    @mark.parametrize('sources', [
+        param([create_artificial_file(MIN_TF_FILE_SIZE - 1)], id='too small'),
+        param([create_artificial_file(MAX_TF_FILE_SIZE + 1)], id='too big')
+    ])
+    def test_invalid_size(self, sources: List[bytes]):
+        # GIVEN a terraform file with an invalid size
 
-        # GIVEN a terraform file file under 2MB
-        tf_file = get_data(test_resource_paths.terraform_invalid_size_over_1mb)
         # AND the default terraform mapping file
-        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+        mapping_file = get_byte_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
-        # WHEN processing
-        # THEN a 400 error is returned
-        with pytest.raises(IacFileNotValidError):
-            TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, tf_file, [mapping_file]).process()
+        # WHEN TFPlanProcessor::process is invoked
+        # THEN a IacFileNotValidError is raised
+        with pytest.raises(IacFileNotValidError) as error:
+            TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, sources, [mapping_file]).process()
+
+        # AND whose information is right
+        assert error.value.title == 'Terraform file is not valid'
+        assert error.value.message == 'Provided iac_file is not valid. Invalid size'

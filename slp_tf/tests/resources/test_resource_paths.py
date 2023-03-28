@@ -70,7 +70,6 @@ terraform_security_groups_type2_outbound_two_subnets = path + '/tf/dataflows/sec
 terraform_security_groups_type2_inbound = path + '/tf/dataflows/security_groups/terraform_sg_type2_inbound.tf'
 terraform_security_groups_type1_and_type2_mixed = path + '/tf/dataflows/security_groups/' \
                                                          'terraform_sg_type1_and_type2_mixed.tf'
-terraform_invalid_size_over_1mb = path + '/tf/terraform_invalid_size_over_1mb.tf'
 
 # mapping
 terraform_mapping_aws_component_without_parent = path + '/mapping/terraform_mapping_component_without_parent.yaml'
