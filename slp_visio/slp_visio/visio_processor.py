@@ -30,7 +30,7 @@ class VisioProcessor(OTMProcessor):
 
     def __del__(self):
         if self.is_temporary_source:
-            delete(self.source.file.name)
+            delete(self.source.name)
 
     def get_provider_validator(self) -> ProviderValidator:
         if self.diag_type == DiagramType.LUCID:

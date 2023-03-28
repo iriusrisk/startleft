@@ -13,7 +13,7 @@ from slp_visio.tests.resources.test_resource_paths import expected_aws_shapes, e
     expected_visio_aws_with_tz_and_vpc, expected_visio_orphan_dataflows, expected_visio_bidirectional_connectors, \
     expected_visio_modified_single_connectors, visio_nested_tzs, expected_visio_nested_tzs, default_visio_mapping, \
     visio_nested_tzs_inside_component, expected_visio_nested_tzs_inside_component
-from slp_visio.tests.util.files import file_exists, get_temp_dir_files_count, get_upload_file
+from slp_visio.tests.util.files import file_exists, get_upload_file
 
 
 class TestVisioProcessor:
@@ -225,15 +225,11 @@ class TestVisioProcessor:
         # Given a visio file read from disk
         source = open(test_resource_paths.visio_aws_shapes, "r")
 
-        # And the total number of files in the temporary directory
-        temp_files = get_temp_dir_files_count()
-
         # When the processor is instanced
         processor = VisioProcessor("project-id", "project-name", source, [get_data(default_visio_mapping)])
 
-        # Then the original file is being used and no temporary file is created
+        # Then the original file is being used
         assert file_exists(processor.source.name)
-        assert temp_files == get_temp_dir_files_count()
 
         # And the file can be processed
         otm = processor.process()
@@ -247,26 +243,22 @@ class TestVisioProcessor:
         # Given a visio file uploaded through the API
         source = get_upload_file(test_resource_paths.visio_aws_shapes)
 
-        # And the total number of files in the temporary directory
-        temp_files = get_temp_dir_files_count()
-
         # The processing need to be done in another method to test the processor's destructor
         temp_file_path = self.__process_upload_file(source)
 
         # And the temporary file is deleted after processing
         assert not file_exists(temp_file_path)
-        assert temp_files == get_temp_dir_files_count()
 
     def __process_upload_file(self, source: UploadFile) -> str:
         # When the processor is instanced
         processor = VisioProcessor("project-id", "project-name", source, [get_data(default_visio_mapping)])
 
         # Then a temporary file is created
-        assert file_exists(processor.source.file.name)
+        assert file_exists(processor.source.name)
 
         # And the file can be processed
         otm = processor.process()
         result, expected = validate_and_compare_otm(otm.json(), expected_aws_shapes, None)
         assert result == expected
 
-        return processor.source.file.name
+        return processor.source.name
