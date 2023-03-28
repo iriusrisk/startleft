@@ -36,6 +36,11 @@ nav:
             - Domain-Specific Language: startleft-processors/iac/tf/Terraform-domain-specific-language.md
             - Additional JMESPath functions: startleft-processors/iac/tf/Terraform-additional-jmespath-functions.md
           - Terraform Examples: startleft-processors/iac/tf/Terraform-Examples.md
+      - Terraform Plan:
+          - Terraform Plan Quickstart: startleft-processors/iac/tfplan/Terraform-Plan-Quickstart.md
+          - How To Create a Mapping File: startleft-processors/iac/tfplan/Terraform-Plan-how-to-create-a-mapping-file.md
+          - Terraform Examples:
+              - An Official AWS example by HashiCorp: startleft-processors/iac/tfplan/examples/aws-ingesting-click-logs-using-terraform.md
       - Visio:
           - Visio Quickstart: startleft-processors/diagram/Visio-Quickstart.md
           - Visio Mapping: startleft-processors/diagram/Visio-Mapping.md
@@ -66,7 +71,6 @@ theme:
     - search.suggest
     - search.highlight
     - content.code.annotate
-    - content.tabs.link
 plugins:
   - search
   - glightbox
