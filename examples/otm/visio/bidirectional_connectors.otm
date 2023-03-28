@@ -1,0 +1,65 @@
+components:
+  - id: '1'
+    name: Amazon EC2
+    parent:
+      trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    type: ec2
+  - id: '6'
+    name: Amazon EC2
+    parent:
+      trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    type: ec2
+  - id: '17'
+    name: Amazon EC2
+    parent:
+      trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    type: ec2
+  - id: '23'
+    name: Amazon VPC
+    parent:
+      trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    type: vpc
+  - id: '28'
+    name: Amazon VPC
+    parent:
+      trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    type: vpc
+  - id: '33'
+    name: Amazon VPC
+    parent:
+      trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    type: vpc
+dataflows:
+  - bidirectional: true
+    destination: '1'
+    id: '38'
+    name: aafb84e5-b562-4ce6-9c31-e97d6ae85f42
+    source: '23'
+  - bidirectional: true
+    destination: '6'
+    id: '39'
+    name: 12f91beb-bd3c-4708-9c22-ef96740a3dbe
+    source: '28'
+  - bidirectional: true
+    destination: '17'
+    id: '41'
+    name: ee05d7f5-451f-4b00-9dd9-971033a576c0
+    source: '33'
+otmVersion: 0.1.0
+project:
+  id: project-id
+  name: project-name
+representations:
+  - id: project-id-diagram
+    name: project-id Diagram Representation
+    size:
+      height: 738
+      width: 1476
+    type: diagram
+trustZones:
+  - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+    attributes:
+      default: true
+    risk:
+      trustRating: 10

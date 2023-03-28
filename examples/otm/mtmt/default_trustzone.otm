@@ -1,0 +1,16 @@
+otmVersion: 0.1.0
+project:
+  name: Example Project
+  id: example-project
+representations:
+  - name: Microsoft Threat Modeling Tool
+    id: Microsoft Threat Modeling Tool
+    type: threat-model
+trustZones:
+  - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+    type: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    risk:
+      trustRating: 10
+components: []
+dataflows: []

@@ -1,0 +1,11 @@
+otmVersion: 0.1.0
+project:
+  name: name
+  id: id
+representations:
+  - name: CloudFormation
+    id: CloudFormation
+    type: code
+trustZones: []
+components: []
+dataflows: []

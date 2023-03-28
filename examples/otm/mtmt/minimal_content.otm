@@ -1,0 +1,11 @@
+otmVersion: 0.1.0
+project:
+  name: Example Project
+  id: example-project
+representations:
+  - name: Microsoft Threat Modeling Tool
+    id: Microsoft Threat Modeling Tool
+    type: threat-model
+trustZones: []
+components: []
+dataflows: []

@@ -1,0 +1,14 @@
+otmVersion: 0.1.0
+project:
+  name: project-name
+  id: project-id
+representations:
+  - name: project-id Diagram Representation
+    id: project-id-diagram
+    type: diagram
+    size:
+      width: 1076
+      height: 1200
+trustZones: []
+components: []
+dataflows: []
