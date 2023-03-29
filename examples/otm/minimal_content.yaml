@@ -1,7 +1,7 @@
 otmVersion: 0.1.0
 project:
-  name: name
-  id: id
+  name: Project name
+  id: project-id
 representations:
   - name: CloudFormation
     id: CloudFormation
