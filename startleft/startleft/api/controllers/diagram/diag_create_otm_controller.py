@@ -4,8 +4,9 @@ from fastapi import APIRouter, File, UploadFile, Form, Response
 
 from _sl_build.modules import PROCESSORS
 from sl_util.sl_util.json_utils import get_otm_as_json
-from slp_base import DiagramType
+from slp_base import DiagramType, DiagramFileNotValidError
 from slp_base.slp_base.provider_resolver import ProviderResolver
+from startleft.startleft.api.check_mime_type import check_mime_type
 from startleft.startleft.api.controllers.otm_controller import RESPONSE_STATUS_CODE, PREFIX, controller_responses
 
 URL = '/diagram'
@@ -21,6 +22,7 @@ provider_resolver = ProviderResolver(PROCESSORS)
 
 
 @router.post(URL, status_code=RESPONSE_STATUS_CODE, tags=['Diagram'])
+@check_mime_type('diag_file', 'diag_type', DiagramFileNotValidError)
 def diagram(diag_file: UploadFile = File(...),
             diag_type: DiagramType = Form(...),
             id: str = Form(...),
