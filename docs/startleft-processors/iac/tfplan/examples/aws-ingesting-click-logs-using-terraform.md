@@ -11,30 +11,42 @@ This example gives the source code for the following AWS architecture diagram:
 
 ![ingesting-click-logs-from-web-application.png](../../../../img/ingesting-click-logs-from-web-application.png)
 
-The `slp_tfplan` processor can generate an accurate diagram by only executing the following commands:
+The `slp_tfplan` processor can generate an accurate threat model by only following the steps below.
+
+???+ abstract "Generating my own Terraform files"
+
+    :one: Clone and prepare the example reporitory:
+    > :material-information-outline: These previous set-up commands are required because the example needs some 
+    > lambda code to be compiled.
+    
+    ```shell 
+    $ git clone https://github.com/aws-samples/aws-ingesting-click-logs-using-terraform.git
+    $ cd aws-ingesting-click-logs-using-terraform/source/clicklogger
+    $ mvn clean package
+    $ cd ../../terraform/templates
+    ```
+    
+    :two: Generate the tf-plan and tf-graph files:
+    ```shell
+    $ terraform init
+    $ terraform plan -out=tf-plan
+    $ terraform show -json tf-plan >> tf-plan.json
+    $ terraform graph -type=plan -plan=tf-plan >> tf-graph.gv
+    ```
+    
+Use the StartLeft CLI to generate the OTM file:
 ```shell
-# Commands only needed by example requirements 
-$ cd aws-ingesting-click-logs-using-terraform
-$ cd source\clicklogger
-$ mvn clean package
-$ cd ..
-$ cd ..
-$ cd terraform\templates
-
-# Commands for generating the tf-plan and tf-graph files
-$ terraform init
-$ terraform plan -out=tf-plan
-$ terraform show -json tf-plan >> tf-plan.json
-$ terraform graph -type=plan -plan=tf-plan >> tf-graph.gv
-
-# Commands for generating the OTM by StartLeft CLI
-$ startleft parse --iac-type TFPLAN --mapping-file ec2-mapping.yaml --output-file ec2.otm \
-	--project-id "my-ec2-project" --project-name "My EC2 project" tf-plan.json tf-graph.gv
+$ startleft parse \ 
+  --iac-type TFPLAN \ 
+  --mapping-file ir-mappings.yaml \ 
+  --output-file output.otm \
+  --project-id "my-project" \
+  --project-name "My project" \ 
+  tf-plan.json tf-graph.gv
 ```
 
-This example has previous set-up commands due it needs some lambda code to be compiled.
-After, we need to use the Terraform CLI to create the needed files and execute StartLeft parse to generate the
-Final OTM.
+After, we need to use the Terraform CLI to create the required files and execute StartLeft parse to generate the
+final OTM.
 
 === "IriusRisk Threat Model Example"
 
@@ -179,7 +191,7 @@ As we can see in the previous example, StartLeft can automatically reproduce an 
 
 ## Full Architecture Representation
 This approach enables StartLeft not only to create threat models but also to explore all the components and the dataflows among them, 
-by configuring this behavior in the mapping file. In that way, you can get this diagram from the example above
+by configuring this behavior in the mapping file. In that way, you can get this diagram from the example above:
 
 === "IriusRisk Threat Model Example"
 
