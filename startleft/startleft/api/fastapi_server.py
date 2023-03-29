@@ -64,8 +64,8 @@ def load_custom_openapi():
         return None
 
 
-def run_webapp(port: int):
-    uvicorn.run(webapp, host="127.0.0.1", port=port, log_config=get_log_config())
+def run_webapp(host: str, port: int):
+    uvicorn.run(webapp, host=host, port=port, log_config=get_log_config())
 
 
 @webapp.exception_handler(HTTPException)
