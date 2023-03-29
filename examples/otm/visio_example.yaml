@@ -1,3 +1,14 @@
+otmVersion: 0.1.0
+project:
+  name: Visio project
+  id: visio-project
+representations:
+  - id: project-id-diagram
+    name: project-id Diagram Representation
+    size:
+      height: 1356
+      width: 1967
+    type: diagram
 components:
   - id: '1'
     name: Amazon EC2
@@ -75,7 +86,8 @@ components:
           width: 82
     type: cloudwatch
 dataflows:
-  - destination: '12'
+  - bidirectional: true
+    destination: '12'
     id: '17'
     name: 21830dc6-840d-4254-bb35-f4b2c68561e5
     source: '1'
@@ -87,22 +99,22 @@ dataflows:
     id: '40'
     name: 7aecb32c-e39f-4dc2-ad6e-7f5793161a6d
     source: '1'
-  - destination: '41'
+  - bidirectional: true
+    destination: '41'
     id: '46'
     name: 6ceb010f-8390-4dc5-943b-62d268c34e78
     source: '12'
-otmVersion: 0.1.0
-project:
-  id: project-id
-  name: project-name
-representations:
-  - id: project-id-diagram
-    name: project-id Diagram Representation
-    size:
-      height: 1356
-      width: 1967
-    type: diagram
 trustZones:
+  - id: ee1b95eb-30ef-4a7a-a9df-3b800589d337
+    name: Public Cloud
+    risk:
+      trustRating: 10
+  - id: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    name: Internet
+    risk:
+      trustRating: 10
+    parent:
+      trustZone: ee1b95eb-30ef-4a7a-a9df-3b800589d337
   - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
     name: Public Cloud
     representations:

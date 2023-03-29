@@ -1,7 +1,7 @@
 otmVersion: 0.1.0
 project:
-  name: Example Project
-  id: example-project
+  name: Mtmt project
+  id: mtmt-project
 representations:
   - name: Microsoft Threat Modeling Tool
     id: Microsoft Threat Modeling Tool
@@ -47,6 +47,15 @@ trustZones:
         position:
           x: 744
           'y': 142
+  - id: 4bd4efaa-40a7-4cd2-ba81-8247a29a6f2a
+    name: Sandbox environment
+    risk:
+      trustRating: 10
+    attributes:
+      Dataflow Order: '0'
+      Name: Sandbox environment
+    parent:
+      trustZone: f0ba7722-39b6-4c81-8290-a30a248bb8d9
 components:
   - id: 53245f54-0656-4ede-a393-357aeaa2e20f
     name: Accounting PostgreSQL
