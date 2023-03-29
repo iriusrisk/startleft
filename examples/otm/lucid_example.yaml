@@ -1,7 +1,7 @@
 otmVersion: 0.1.0
 project:
-  name: parse_diagram
-  id: parse_diagram
+  name: Lucid Project
+  id: lucid-project
 representations:
   - name: Diagram Representation
     id: parse_diagram

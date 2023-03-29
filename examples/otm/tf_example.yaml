@@ -1,7 +1,7 @@
 otmVersion: 0.1.0
 project:
-  name: Terraform project
-  id: tf-project
+  name: Terraform Project
+  id: terraform-project
 representations:
   - name: Terraform
     id: Terraform

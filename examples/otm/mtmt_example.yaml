@@ -1,6 +1,6 @@
 otmVersion: 0.1.0
 project:
-  name: Mtmt project
+  name: MTMT Project
   id: mtmt-project
 representations:
   - name: Microsoft Threat Modeling Tool

@@ -1,6 +1,6 @@
 otmVersion: 0.1.0
 project:
-  name: Visio project
+  name: Visio Project
   id: visio-project
 representations:
   - id: project-id-diagram
