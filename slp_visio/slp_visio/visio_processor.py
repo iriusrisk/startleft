@@ -28,10 +28,6 @@ class VisioProcessor(OTMProcessor):
         self.loader = None
         self.mapping_loader = None
 
-    def __del__(self):
-        if self.is_temporary_source:
-            delete(self.source.name)
-
     def get_provider_validator(self) -> ProviderValidator:
         if self.diag_type == DiagramType.LUCID:
             return LucidValidator(self.source)
@@ -58,3 +54,7 @@ class VisioProcessor(OTMProcessor):
             return LucidParser(self.project_id, self.project_name, visio, self.mapping_loader)
         else:
             return VisioParser(self.project_id, self.project_name, visio, self.mapping_loader)
+
+    def _clean_resources(self):
+        if self.is_temporary_source:
+            delete(self.source.name)

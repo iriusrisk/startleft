@@ -1,7 +1,8 @@
+import pytest
 from pytest import mark
-from starlette.datastructures import UploadFile
 
 from sl_util.sl_util.file_utils import get_data
+from slp_base import DiagramFileNotValidError
 from slp_base.tests.util.otm import validate_and_compare_otm, validate_and_compare
 from slp_visio.slp_visio.visio_processor import VisioProcessor
 from slp_visio.tests.resources import test_resource_paths
@@ -239,17 +240,10 @@ class TestVisioProcessor:
         # And the original file is not deleted
         assert file_exists(processor.source.name)
 
-    def test_temporary_file(self):
+    def test_temporary_file_valid(self):
         # Given a visio file uploaded through the API
         source = get_upload_file(test_resource_paths.visio_aws_shapes)
 
-        # The processing need to be done in another method to test the processor's destructor
-        temp_file_path = self.__process_upload_file(source)
-
-        # And the temporary file is deleted after processing
-        assert not file_exists(temp_file_path)
-
-    def __process_upload_file(self, source: UploadFile) -> str:
         # When the processor is instanced
         processor = VisioProcessor("project-id", "project-name", source, [get_data(default_visio_mapping)])
 
@@ -261,4 +255,22 @@ class TestVisioProcessor:
         result, expected = validate_and_compare_otm(otm.json(), expected_aws_shapes, None)
         assert result == expected
 
-        return processor.source.name
+        # And the temporary file is deleted after processing
+        assert not file_exists(processor.source.name)
+
+    def test_temporary_file_invalid(self):
+        # Given an invalid visio file uploaded through the API
+        source = get_upload_file(test_resource_paths.visio_invalid_file_size)
+
+        # When the processor is instanced
+        processor = VisioProcessor("project-id", "project-name", source, [get_data(default_visio_mapping)])
+
+        # Then a temporary file is created
+        assert file_exists(processor.source.name)
+
+        # And a validation exception is raised
+        with pytest.raises(DiagramFileNotValidError):
+            processor.process()
+
+        # And the temporary file is deleted after processing
+        assert not file_exists(processor.source.name)
