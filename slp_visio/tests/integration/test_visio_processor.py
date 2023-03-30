@@ -222,7 +222,7 @@ class TestVisioProcessor:
         result, expected = validate_and_compare_otm(otm.json(), test_resource_paths.expected_master_unique_id, None)
         assert result == expected
 
-    def test_persistent_file(self):
+    def test_temporary_file_not_created(self):
         # Given a visio file read from disk
         source = open(test_resource_paths.visio_aws_shapes, "r")
 
@@ -240,7 +240,7 @@ class TestVisioProcessor:
         # And the original file is not deleted
         assert file_exists(processor.source.name)
 
-    def test_temporary_file_valid(self):
+    def test_temporary_file_is_deleted(self):
         # Given a visio file uploaded through the API
         source = get_upload_file(test_resource_paths.visio_aws_shapes)
 
@@ -258,7 +258,7 @@ class TestVisioProcessor:
         # And the temporary file is deleted after processing
         assert not file_exists(processor.source.name)
 
-    def test_temporary_file_invalid(self):
+    def test_temporary_file_is_deleted_when_exception(self):
         # Given an invalid visio file uploaded through the API
         source = get_upload_file(test_resource_paths.visio_invalid_file_size)
 
