@@ -15,7 +15,9 @@ COPY . .
 
 RUN pip install .
 
+RUN rm -r ../app/*
+
 # Remove git and geos-dev dependencies
 RUN apk del git geos-dev
 
-ENTRYPOINT ["uvicorn", "startleft.startleft.api.fastapi_server:webapp", "--host", "0.0.0.0", "--port", "5000"]
+ENTRYPOINT ["startleft", "server", "--host", "0.0.0.0"]
