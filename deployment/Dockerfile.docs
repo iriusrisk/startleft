@@ -1,0 +1,8 @@
+FROM squidfunk/mkdocs-material
+
+RUN pip install --upgrade pip
+
+RUN pip install mkdocs-glightbox
+
+COPY /docs ./docs
+COPY mkdocs.yml .
