@@ -2,7 +2,7 @@ import logging
 
 from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.trustzone import Trustzone
-from sl_util.sl_util.str_utls import deterministic_uuid
+from sl_util.sl_util.str_utils import deterministic_uuid
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
 from slp_mtmt.slp_mtmt.mtmt_mapping_file_loader import MTMTMapping
