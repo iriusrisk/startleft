@@ -5,12 +5,12 @@ from _sl_build.modules import ALL_MODULES
 
 
 def _build_dependencies_map():
-    module_dependencies = [{module['name']: module['forbidden_dependencies']} for module in ALL_MODULES]
+    module_dependencies = [{module['name']: module['allowed_imports']} for module in ALL_MODULES]
     return {name: dependencies for module in module_dependencies for name, dependencies in module.items()}
 
 
 _module_names = [module['name'] for module in ALL_MODULES]
-_forbidden_dependencies = _build_dependencies_map()
+_allowed_dependencies = _build_dependencies_map()
 
 
 def _get_base_module_name(full_name):
@@ -22,15 +22,11 @@ def _is_module_restricted(importing_module: str, imported_module: str):
     base_imported_module = _get_base_module_name(imported_module)
 
     if not base_importing_module or not base_imported_module or \
+            base_importing_module == base_imported_module or \
             base_importing_module not in _module_names or base_imported_module not in _module_names:
         return False
 
-    forbidden_dependencies = _forbidden_dependencies[base_importing_module]
-    for fd in forbidden_dependencies:
-        if fd == base_imported_module:
-            return True
-
-    return False
+    return base_imported_module not in _allowed_dependencies[base_importing_module]
 
 
 def _secure_importer(name, globals=None, locals=None, fromlist=(), level=0):

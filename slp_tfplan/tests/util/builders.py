@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
 from networkx import DiGraph
 
@@ -153,7 +153,7 @@ def generate_child_modules(module_count: int,
 # TFGRAPH #
 ###########
 
-def build_tfgraph(relationships: List[Dict] = None) -> DiGraph:
+def build_tfgraph(relationships: List[Tuple] = None) -> DiGraph:
     graph = DiGraph()
 
     if not relationships:

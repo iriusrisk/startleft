@@ -442,14 +442,13 @@ no code is needed, and you only need to perform the configuration steps below.
 
 ### Configure the module
 1. Go to the `_sl_build/modules.py` class, where you can find the modules' configuration.
-2. In the `PROCESSORS` variable, add `slp_mais` as `forbidden_dependency` for all the existent SLP modules.
-3. Create a new entry in the array with the configuration for our `slp_mais` module:
+2. Create a new entry in the array with the configuration for our `slp_mais` module:
 ```python
     {
         'name': 'slp_mais', 
         'type': 'processor', 
         'provider_type': 'MAIS',
-        'forbidden_dependencies': ['startleft', 'slp_cft', 'slp_tf', 'slp_visio', 'slp_mtmt']
+        'allowed_imports': _slp_allowed_imports
      }
 ```
 
