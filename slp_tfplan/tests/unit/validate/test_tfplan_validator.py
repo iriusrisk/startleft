@@ -7,6 +7,8 @@ from pytest import mark, param, fixture
 from slp_base import IacFileNotValidError
 from slp_tfplan.slp_tfplan.validate.tfplan_validator import TFPlanValidator
 from sl_util.sl_util.str_utils import get_bytes
+from slp_tfplan.tests.util.builders import create_artificial_file, MIN_FILE_SIZE, MAX_TFPLAN_FILE_SIZE, \
+    MAX_TFGRAPH_FILE_SIZE
 
 MINIMUM_VALID_TFPLAN_SOURCE = get_bytes('{"planned_values":{"root_module":{"resources":[]}},"configuration":{}}',
                                         'utf-8')
@@ -15,14 +17,6 @@ MINIMUM_VALID_TFGRAPH_SOURCE = get_bytes('digraph {subgraph "root" {}}', 'utf-8'
 TFPLAN_VALID_MIME = 'application/json'
 TFGRAPH_VALID_MIME = 'text/plain'
 VALID_MIME_TYPES = [TFPLAN_VALID_MIME, TFGRAPH_VALID_MIME]
-
-MIN_FILE_SIZE = 20
-MAX_TFPLAN_FILE_SIZE = 5 * 1024 * 1024
-MAX_TFGRAPH_FILE_SIZE = 2 * 1024 * 1024
-
-
-def create_artificial_file(size: int) -> bytes:
-    return bytes('A' * size, 'utf-8')
 
 
 @fixture(autouse=True)

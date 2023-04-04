@@ -15,6 +15,10 @@ DEFAULT_TRUSTZONE = Trustzone(
     type='default-trustzone-type')
 
 TFPLAN_MINIMUM_STRUCTURE = {'planned_values': {'root_module': {}}}
+MIN_FILE_SIZE = 20
+MAX_TFPLAN_FILE_SIZE = 5 * 1024 * 1024
+MAX_TFGRAPH_FILE_SIZE = 2 * 1024 * 1024
+
 
 #######
 # OTM #
@@ -168,3 +172,11 @@ def build_tfgraph(relationships: List[Tuple] = None) -> DiGraph:
             graph.add_edge(build_component_node(resource_id), build_component_node(parent_id))
 
     return graph
+
+
+###########
+# GENERIC #
+###########
+
+def create_artificial_file(size: int) -> bytes:
+    return bytes('A' * size, 'utf-8')

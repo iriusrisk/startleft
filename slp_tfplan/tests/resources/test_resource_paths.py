@@ -5,19 +5,19 @@ path = os.path.dirname(__file__)
 # generic
 invalid_yaml = path + '/generic/invalid-yaml.yaml'
 
-# tfplan
+# tfplan/tfgraph
 tfplan_elb = path + '/tfplan/elb-tfplan.json'
-tfplan_graph_elb = path + '/tfplan/elb-tfgraph.gv'
+tfgraph_elb = path + '/tfplan/elb-tfgraph.gv'
 tfplan_sgs = path + '/tfplan/sgs-tfplan.json'
-tfplan_graph_sgs = path + '/tfplan/sgs-tfgraph.gv'
+tfgraph_sgs = path + '/tfplan/sgs-tfgraph.gv'
 tfplan_official = path + '/tfplan/official-tfplan.json'
-tfplan_graph_official = path + '/tfplan/official-tfgraph.gv'
+tfgraph_official = path + '/tfplan/official-tfgraph.gv'
 
 # mapping
 terraform_iriusrisk_tfplan_aws_mapping = path + '/mapping/iriusrisk-tfplan-aws-mapping.yaml'
 
 # otm
-tfplan_graph_elb_expected = f'{path}/otm/expected_tfplan_tfgraph_elb.otm'
-tfplan_graph_sgs_expected = f'{path}/otm/expected_tfplan_tfgraph_sgs.otm'
-tfplan_graph_official_expected = f'{path}/otm/expected_tfplan_tfgraph_official.otm'
+otm_expected_elb = f'{path}/otm/expected-elb.otm'
+otm_expected_sgs = f'{path}/otm/expected-sgs.otm'
+otm_expected_official = f'{path}/otm/expected-official.otm'
 
