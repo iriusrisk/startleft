@@ -236,15 +236,16 @@ def search(iac_type, query, source_file):
 
 
 @cli.command()
+@click.option('--host', '-h', default="127.0.0.1", envvar='STARTLEFT_HOST', help='Startleft deployment host.')
 @click.option('--port', '-p', default=5000, envvar='STARTLEFT_PORT', help='Startleft deployment port.')
-def server(port: int):
+def server(host: str, port: int):
     """
     Launches the REST server to generate OTMs from requests
     """
     configure_logging(verbose=True)
     logger.info(f'Startleft version: {version}')
 
-    fastapi_server.run_webapp(port)
+    fastapi_server.run_webapp(host, port)
 
 
 if __name__ == '__main__':
