@@ -2,7 +2,7 @@ import random
 from typing import List
 
 import pytest
-from pytest import mark, param
+from pytest import mark, param, fixture
 
 from slp_base import IacFileNotValidError
 from slp_tfplan.slp_tfplan.validate.tfplan_validator import TFPlanValidator
@@ -25,9 +25,14 @@ def create_artificial_file(size: int) -> bytes:
     return bytes('A' * size, 'utf-8')
 
 
-@pytest.fixture
+@fixture(autouse=True)
+def mocked_mime_types():
+    yield VALID_MIME_TYPES
+
+
+@fixture
 def mock_mime_checker(mocker, mocked_mime_types):
-    return mocker.patch('magic.Magic.from_buffer', side_effect=mocked_mime_types)
+    mocker.patch('magic.Magic.from_buffer', side_effect=mocked_mime_types)
 
 
 class TestTFPlanValidator:
@@ -74,18 +79,14 @@ class TestTFPlanValidator:
         assert error.value.title == 'Two tfplan files'
         assert error.value.message == 'Required one tfplan and one tfgraph files'
 
-    @pytest.mark.usefixtures('mock_mime_checker')
-    @mark.parametrize('mocked_mime_types,sources', [
-        param(VALID_MIME_TYPES, [create_artificial_file(MIN_FILE_SIZE - 1), MINIMUM_VALID_TFGRAPH_SOURCE],
-              id='tfplan too small'),
-        param(VALID_MIME_TYPES, [create_artificial_file(MAX_TFPLAN_FILE_SIZE + 1), MINIMUM_VALID_TFGRAPH_SOURCE],
-              id='tfplan too big'),
-        param(VALID_MIME_TYPES, [MINIMUM_VALID_TFPLAN_SOURCE, create_artificial_file(MIN_FILE_SIZE - 1)],
-              id='tfgraph too small'),
-        param(VALID_MIME_TYPES, [MINIMUM_VALID_TFPLAN_SOURCE, create_artificial_file(MAX_TFGRAPH_FILE_SIZE + 1)],
-              id='tfgraph too big')
+    @mark.usefixtures('mock_mime_checker')
+    @mark.parametrize('sources', [
+        param([create_artificial_file(MIN_FILE_SIZE - 1), MINIMUM_VALID_TFGRAPH_SOURCE], id='tfplan too small'),
+        param([create_artificial_file(MAX_TFPLAN_FILE_SIZE + 1), MINIMUM_VALID_TFGRAPH_SOURCE], id='tfplan too big'),
+        param([MINIMUM_VALID_TFPLAN_SOURCE, create_artificial_file(MIN_FILE_SIZE - 1)], id='tfgraph too small'),
+        param([MINIMUM_VALID_TFPLAN_SOURCE, create_artificial_file(MAX_TFGRAPH_FILE_SIZE + 1)], id='tfgraph too big')
     ])
-    def test_invalid_size(self, mocked_mime_types: List[str], sources: List[bytes]):
+    def test_invalid_size(self, sources: List[bytes]):
         # GIVEN a tfplan with an invalid size
 
         # WHEN TFPlanValidator::validate is invoked
@@ -97,7 +98,7 @@ class TestTFPlanValidator:
         assert error.value.title == 'Terraform Plan file is not valid'
         assert error.value.message == 'Provided iac_file is not valid. Invalid size'
 
-    @pytest.mark.usefixtures('mock_mime_checker')
+    @mark.usefixtures('mock_mime_checker')
     @mark.parametrize('mocked_mime_types', [
         param(['text/xml', 'text/plain'], id='tfplan wrong'),
         param(['application/json', 'text/xml'], id='tfgraph wrong'),

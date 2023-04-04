@@ -1,6 +1,6 @@
 from slp_tfplan.slp_tfplan.parse.tfplan_parser import TfplanParser
 from slp_tfplan.slp_tfplan.validate.tfplan_mapping_file_validator import TFPlanMappingFileValidator
-from slp_tfplan.slp_tfplan.load.tfplan_loader import TfplanLoader, get_tfplan, get_tfgraph
+from slp_tfplan.slp_tfplan.load.tfplan_loader import TfplanLoader
 from slp_tfplan.slp_tfplan.map.tfplan_mapping_file_loader import TfplanMappingFileLoader
 from slp_tfplan.slp_tfplan.validate.tfplan_validator import TFPlanValidator
 from slp_base.slp_base import MappingLoader, MappingValidator
@@ -21,9 +21,6 @@ class TFPlanProcessor(OTMProcessor):
         self.mappings = mappings
         self.sources = sources
 
-        self.tfplan_source: bytes = get_tfplan(sources)
-        self.tfgraph_source: bytes = get_tfgraph(sources)
-
         self.terraform_loader = None
         self.mapping_loader = None
 
@@ -31,7 +28,7 @@ class TFPlanProcessor(OTMProcessor):
         return TFPlanValidator(self.sources)
 
     def get_provider_loader(self) -> ProviderLoader:
-        self.terraform_loader = TfplanLoader(self.tfplan_source, self.tfgraph_source)
+        self.terraform_loader = TfplanLoader(self.sources)
         return self.terraform_loader
 
     def get_mapping_validator(self) -> MappingValidator:
