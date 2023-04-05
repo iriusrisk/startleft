@@ -10,7 +10,7 @@ def _build_dependencies_map():
 
 
 _module_names = [module['name'] for module in ALL_MODULES]
-_allowed_dependencies = _build_dependencies_map()
+_allowed_imports = _build_dependencies_map()
 
 
 def _get_base_module_name(full_name):
@@ -26,7 +26,7 @@ def _is_module_restricted(importing_module: str, imported_module: str):
             base_importing_module not in _module_names or base_imported_module not in _module_names:
         return False
 
-    return base_imported_module not in _allowed_dependencies[base_importing_module]
+    return base_imported_module not in _allowed_imports[base_importing_module]
 
 
 def _secure_importer(name, globals=None, locals=None, fromlist=(), level=0):

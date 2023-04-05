@@ -38,7 +38,7 @@ def generate_wrong_number_of_sources_error() -> LoadingIacFileError:
     )
 
 
-class TfplanLoader(ProviderLoader):
+class TFPlanLoader(ProviderLoader):
 
     def __init__(self, sources: List[bytes]):
         self.sources = sources

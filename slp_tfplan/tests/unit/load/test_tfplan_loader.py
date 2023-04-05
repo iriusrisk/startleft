@@ -7,7 +7,7 @@ from unittest.mock import patch, Mock
 from networkx import DiGraph
 from pytest import raises, mark, param, fixture
 
-from slp_tfplan.slp_tfplan.load.tfplan_loader import TfplanLoader
+from slp_tfplan.slp_tfplan.load.tfplan_loader import TFPlanLoader
 from slp_tfplan.tests.resources import test_resource_paths
 from slp_base import LoadingIacFileError
 from slp_tfplan.tests.util.builders import build_tfplan, generate_resources, generate_child_modules
@@ -33,7 +33,7 @@ def mock_load_graph(mocker, mocked_graph):
     mocker.patch('slp_tfplan.slp_tfplan.load.tfplan_loader.load_tfgraph', side_effect=mocked_graph)
 
 
-class TestTfplanLoader:
+class TestTFPlanLoader:
 
     @patch('slp_tfplan.slp_tfplan.load.tfplan_loader.load_tfgraph')
     @patch('yaml.load')
@@ -46,7 +46,7 @@ class TestTfplanLoader:
         from_agraph_mock.side_effect = [DiGraph(label=graph_label)]
 
         # WHEN TfplanLoader::load is invoked
-        tfplan_loader = TfplanLoader(sources=[b'MOCKED', b'MOCKED'])
+        tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
         # THEN the TFPLAN is loaded
@@ -61,7 +61,7 @@ class TestTfplanLoader:
         yaml_mock.side_effect = [build_tfplan(resources=generate_resources(2))]
 
         # WHEN TfplanLoader::load is invoked
-        tfplan_loader = TfplanLoader(sources=[b'MOCKED', b'MOCKED'])
+        tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
         # THEN TF contents are loaded in TfplanLoader.terraform
@@ -88,7 +88,7 @@ class TestTfplanLoader:
             child_modules=generate_child_modules(module_count=2, resource_count=2))]
 
         # WHEN TfplanLoader::load is invoked
-        tfplan_loader = TfplanLoader(sources=[b'MOCKED', b'MOCKED'])
+        tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
         # THEN TF contents are loaded in TfplanLoader.terraform
@@ -123,7 +123,7 @@ class TestTfplanLoader:
                 child_modules=generate_child_modules(module_count=1, resource_count=1)))]
 
         # WHEN TfplanLoader::load is invoked
-        tfplan_loader = TfplanLoader(sources=[b'MOCKED', b'MOCKED'])
+        tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
         # THEN TF contents are loaded in TfplanLoader.terraform
@@ -150,7 +150,7 @@ class TestTfplanLoader:
             child_modules=generate_child_modules(module_count=1, resource_count=1))]
 
         # WHEN TfplanLoader::load is invoked
-        tfplan_loader = TfplanLoader(sources=[b'MOCKED', b'MOCKED'])
+        tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
         # THEN TF contents are loaded in TfplanLoader.terraform
@@ -194,7 +194,7 @@ class TestTfplanLoader:
         yaml_mock.side_effect = [tfplan]
 
         # WHEN TfplanLoader::load is invoked
-        tfplan_loader = TfplanLoader(sources=[b'MOCKED', b'MOCKED'])
+        tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
         # THEN TF contents are loaded in TfplanLoader.terraform
@@ -231,7 +231,7 @@ class TestTfplanLoader:
         yaml_mock.side_effect = [tfplan]
 
         # WHEN TfplanLoader::load is invoked
-        tfplan_loader = TfplanLoader(sources=[b'MOCKED', b'MOCKED'])
+        tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
         # THEN TF contents are loaded in TfplanLoader.terraform
@@ -249,7 +249,7 @@ class TestTfplanLoader:
         yaml_mock.side_effect = [{'planned_values': {'root_module': {}}}]
 
         # WHEN TfplanLoader::load is invoked
-        tfplan_loader = TfplanLoader(sources=[b'MOCKED', b'MOCKED'])
+        tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
         # THEN TfplanLoader.terraform is an empty dictionary
@@ -261,7 +261,7 @@ class TestTfplanLoader:
         yaml_mock.side_effect = [{}]
 
         # WHEN TfplanLoader::load is invoked
-        tfplan_loader = TfplanLoader(sources=[b'MOCKED', b'MOCKED'])
+        tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
         # THEN TfplanLoader.terraform is an empty dictionary
@@ -278,7 +278,7 @@ class TestTfplanLoader:
         # WHEN TfplanLoader::load is invoked
         # THEN a LoadingIacFileError is raised
         with raises(LoadingIacFileError) as error:
-            TfplanLoader(sources=sources).load()
+            TFPlanLoader(sources=sources).load()
 
         # AND an empty IaC file message is on the exception
         assert error.value.title == 'Wrong number of files'
@@ -296,7 +296,7 @@ class TestTfplanLoader:
         # WHEN TfplanLoader::load is invoked
         # THEN a LoadingIacFileError is raised
         with raises(LoadingIacFileError) as error:
-            TfplanLoader(sources=[get_bytes('MOCKED')] * 2).load()
+            TFPlanLoader(sources=[get_bytes('MOCKED')] * 2).load()
 
         # AND an empty IaC file message is on the exception
         assert str(error.value.title) == 'IaC files are not valid'

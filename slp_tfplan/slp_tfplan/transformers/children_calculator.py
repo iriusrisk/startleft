@@ -1,6 +1,6 @@
 from networkx import DiGraph
 
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TfplanComponent, TfplanOTM
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TfplanOTM
 from slp_tfplan.slp_tfplan.transformers.hierarchy_calculator import HierarchyCalculator
 
 # CHILD_TYPE: [PARENT_TYPE_1, PARENT_TYPE_2...]
@@ -12,7 +12,7 @@ class ChildrenCalculator(HierarchyCalculator):
     def __init__(self, otm: TfplanOTM, graph: DiGraph):
         super().__init__(otm, graph.reverse(copy=True))
 
-    def _calculate_component_parents(self, component: TfplanComponent) -> [str]:
+    def _calculate_component_parents(self, component: TFPlanComponent) -> [str]:
         if component.tf_type not in PARENTS_TYPES_BY_CHILDREN_TYPE:
             return []
 

@@ -6,8 +6,8 @@ from networkx import DiGraph
 from otm.otm.entity.dataflow import Dataflow
 from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.trustzone import Trustzone
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TfplanComponent, TfplanOTM, TfplanSecurityGroup, \
-    TfplanLaunchTemplate
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TfplanOTM, TFPlanSecurityGroup, \
+    TFPlanLaunchTemplate
 
 DEFAULT_TRUSTZONE = Trustzone(
     trustzone_id='default-trustzone-id',
@@ -24,10 +24,10 @@ MAX_TFGRAPH_FILE_SIZE = 2000000 # 2MB
 # OTM #
 #######
 
-def build_mocked_otm(components: List[TfplanComponent],
+def build_mocked_otm(components: List[TFPlanComponent],
                      dataflows: List[Dataflow] = None,
-                     security_groups: List[TfplanSecurityGroup] = None,
-                     launch_templates: List[TfplanLaunchTemplate] = None) -> {}:
+                     security_groups: List[TFPlanSecurityGroup] = None,
+                     launch_templates: List[TFPlanLaunchTemplate] = None) -> {}:
     otm = build_base_otm(DEFAULT_TRUSTZONE)
     otm.components = components or []
     otm.security_groups = security_groups or []
@@ -51,11 +51,11 @@ def build_base_otm(default_trustzone: Trustzone = None):
     return otm
 
 
-def build_mocked_tfplan_component(component: {}) -> TfplanComponent:
+def build_mocked_tfplan_component(component: {}) -> TFPlanComponent:
     component_name = component['component_name']
     tf_type = component['tf_type']
     component_id = build_component_id(component_name, tf_type)
-    return TfplanComponent(
+    return TFPlanComponent(
         component_id=component_id,
         name=component_name,
         component_type=component.get('component_type', build_otm_type(tf_type)),
@@ -68,7 +68,7 @@ def build_mocked_tfplan_component(component: {}) -> TfplanComponent:
 
 
 def build_mocked_dataflow(
-        component_a: TfplanComponent, component_b: TfplanComponent,
+        component_a: TFPlanComponent, component_b: TFPlanComponent,
         bidirectional: bool = False, attributes=None, tags=None):
     return Dataflow(
         f"{component_a.id} -> {component_b.id}",

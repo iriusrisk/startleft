@@ -3,7 +3,7 @@ from typing import Union, List
 import networkx as nx
 from networkx import DiGraph
 
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TfplanComponent
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent
 from slp_tfplan.slp_tfplan.load.tfplan_to_resource_dict import remove_name_prefix
 
 
@@ -16,7 +16,7 @@ class RelationshipsExtractor:
         self.nodes_labels: dict = dict(self.graph.nodes(data='label'))
         self.labels_nodes: dict = {v: k for k, v in self.nodes_labels.items()}
 
-    def get_closest_resources(self, source_component: TfplanComponent, target_candidates: [TfplanComponent]) -> [str]:
+    def get_closest_resources(self, source_component: TFPlanComponent, target_candidates: [TFPlanComponent]) -> [str]:
         linked_resources = []
 
         min_size = 0

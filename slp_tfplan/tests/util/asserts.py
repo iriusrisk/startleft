@@ -1,5 +1,5 @@
 from otm.otm.entity.parent_type import ParentType
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TfplanComponent
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent
 from slp_tfplan.tests.util.builders import DEFAULT_TRUSTZONE
 
 
@@ -7,12 +7,12 @@ from slp_tfplan.tests.util.builders import DEFAULT_TRUSTZONE
 # OTM #
 #######
 
-def assert_parents(components: [TfplanComponent], relationships: dict = None):
+def assert_parents(components: [TFPlanComponent], relationships: dict = None):
     for component in components:
         assert_parent(component=component, parent_id=relationships.get(component.id))
 
 
-def assert_parent(component: TfplanComponent, parent_id: str = None):
+def assert_parent(component: TFPlanComponent, parent_id: str = None):
     if parent_id:
         assert component.parent_type == ParentType.COMPONENT
         assert component.parent == parent_id

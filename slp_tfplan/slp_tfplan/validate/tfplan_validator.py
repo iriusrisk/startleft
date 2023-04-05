@@ -55,7 +55,7 @@ class TFPlanValidator(ProviderValidator):
                 message='Required one tfplan and one tfgraph files')
 
     def __validate_request_size(self):
-        max_supported_file_size = max(MAX_TFPLAN_FILE_SIZE, MAX_TFPLAN_FILE_SIZE)
+        max_supported_file_size = max(MAX_TFPLAN_FILE_SIZE, MAX_TFGRAPH_FILE_SIZE)
         if len(self.sources[0]) > max_supported_file_size or len(self.sources[0]) < MIN_FILE_SIZE \
                 or len(self.sources[1]) > max_supported_file_size or len(self.sources[1]) < MIN_FILE_SIZE:
             raise generate_size_error(IacType.TFPLAN, 'iac_file', IacFileNotValidError)

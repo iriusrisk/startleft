@@ -2,7 +2,7 @@ from copy import deepcopy
 from typing import List, Dict
 
 from otm.otm.entity.parent_type import ParentType
-from slp_tfplan.slp_tfplan.map.tfplan_mapper import TfplanMapper
+from slp_tfplan.slp_tfplan.map.tfplan_mapper import TFPlanMapper
 from slp_tfplan.tests.util.builders import build_base_otm
 
 BASE_OTM = build_base_otm()
@@ -57,7 +57,7 @@ def build_multiple_mappings(components: List[Dict]) -> {}:
     return result
 
 
-class TestTfplanMapper:
+class TestTFPlanMapper:
 
     def test_mapping_by_type(self):
         # GIVEN a resource of some TF type
@@ -72,7 +72,7 @@ class TestTfplanMapper:
         otm = deepcopy(BASE_OTM)
 
         # WHEN TfplanMapper::map is invoked
-        TfplanMapper(otm, resource, mapping).map()
+        TFPlanMapper(otm, resource, mapping).map()
 
         # THEN the component is added to the OTM
         assert len(otm.components) == 1
@@ -102,7 +102,7 @@ class TestTfplanMapper:
         otm = deepcopy(BASE_OTM)
 
         # WHEN TfplanMapper::map is invoked
-        TfplanMapper(otm, resource, mapping).map()
+        TFPlanMapper(otm, resource, mapping).map()
 
         # THEN the component is added to the OTM
         assert len(otm.components) == 1
@@ -133,7 +133,7 @@ class TestTfplanMapper:
         otm = deepcopy(BASE_OTM)
 
         # WHEN TfplanMapper::map is invoked
-        TfplanMapper(otm, resource, mapping).map()
+        TFPlanMapper(otm, resource, mapping).map()
 
         # THEN the component is skipped
         assert len(otm.components) == 0
@@ -154,7 +154,7 @@ class TestTfplanMapper:
         otm = deepcopy(BASE_OTM)
 
         # WHEN TfplanMapper::map is invoked
-        TfplanMapper(otm, resource, mapping).map()
+        TFPlanMapper(otm, resource, mapping).map()
 
         # THEN two components are added to the OTM
         assert len(otm.components) == 2
@@ -177,7 +177,7 @@ class TestTfplanMapper:
         otm = deepcopy(BASE_OTM)
 
         # WHEN TfplanMapper::map is invoked
-        TfplanMapper(otm, resource, mapping).map()
+        TFPlanMapper(otm, resource, mapping).map()
 
         # THEN three components are added to the OTM
         assert len(otm.components) == 3
@@ -209,7 +209,7 @@ class TestTfplanMapper:
         otm = deepcopy(BASE_OTM)
 
         # WHEN TfplanMapper::map is invoked
-        TfplanMapper(otm, resource, mapping).map()
+        TFPlanMapper(otm, resource, mapping).map()
 
         # THEN two components are added to the OTM
         assert len(otm.components) == 2

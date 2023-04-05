@@ -84,7 +84,7 @@ SOURCE_STRUCTURES = {
 }
 
 
-class TfplanMappingFileLoader(MappingFileLoader):
+class TFPlanMappingFileLoader(MappingFileLoader):
 
     def __init__(self, mapping_files_data: [bytes]):
         super().__init__(mapping_files_data)

@@ -5,11 +5,11 @@ from networkx import DiGraph
 
 from otm.otm.entity.parent_type import ParentType
 from slp_tfplan.slp_tfplan.graph.relationships_extractor import RelationshipsExtractor
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TfplanComponent, TfplanOTM
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TfplanOTM
 from slp_tfplan.slp_tfplan.transformers.transformer import Transformer
 
 
-def clone_component_by_parents(component: TfplanComponent, parent_ids: [str]) -> [{}]:
+def clone_component_by_parents(component: TFPlanComponent, parent_ids: [str]) -> [{}]:
     clones = []
 
     for index, parent_id in enumerate(parent_ids):
@@ -22,16 +22,16 @@ def clone_component_by_parents(component: TfplanComponent, parent_ids: [str]) ->
     return clones
 
 
-def set_component_clones_ids(components: [TfplanComponent]):
+def set_component_clones_ids(components: [TFPlanComponent]):
     for component in components:
         component.clones_ids = [s.id for s in components if s.id != component.id]
 
 
-def set_component_index(component: TfplanComponent, index: int):
+def set_component_index(component: TFPlanComponent, index: int):
     component.id = f'{component.id}_{index}'
 
 
-def set_component_parent(component: TfplanComponent, parent_id: str):
+def set_component_parent(component: TFPlanComponent, parent_id: str):
     component.parent_type = ParentType.COMPONENT
     component.parent = parent_id
 
@@ -73,10 +73,10 @@ class HierarchyCalculator(Transformer):
         self.otm.components.extend(clones)
 
     @abc.abstractmethod
-    def _calculate_component_parents(self, component: TfplanComponent) -> [str]:
+    def _calculate_component_parents(self, component: TFPlanComponent) -> [str]:
         raise NotImplementedError
 
-    def _find_parent_by_closest_relationship(self, component: TfplanComponent, parent_candidates: []):
+    def _find_parent_by_closest_relationship(self, component: TFPlanComponent, parent_candidates: []):
         return self.relationships_extractor.get_closest_resources(component, parent_candidates)
 
     def _get_parent_candidates(self, parent_types: []):

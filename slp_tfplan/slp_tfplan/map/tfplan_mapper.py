@@ -3,7 +3,7 @@ from typing import Tuple
 
 from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.trustzone import Trustzone
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TfplanComponent, TfplanOTM
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TfplanOTM
 
 
 def trustzone_to_otm(trustzone: {}) -> Trustzone:
@@ -45,7 +45,7 @@ def _is_special_mapping(mapping: {}) -> bool:
     return _is_catchall(mapping) or _is_skip(mapping)
 
 
-class TfplanMapper:
+class TFPlanMapper:
 
     def __init__(self, otm: TfplanOTM, tfplan: {}, mappings: {}):
         self.otm = otm
@@ -79,13 +79,13 @@ class TfplanMapper:
 
         return components
 
-    def __map_resource_by_type(self, resource: {}) -> TfplanComponent:
+    def __map_resource_by_type(self, resource: {}) -> TFPlanComponent:
         resource_type = resource['resource_type']
         if resource_type in self.mappings_by_type:
             mapper = self.mappings_by_type[resource_type]
             return self.__build_otm_component(resource, mapper[0], mapper[1])
 
-    def __map_resource_by_regex(self, resource: {}) -> TfplanComponent:
+    def __map_resource_by_regex(self, resource: {}) -> TFPlanComponent:
         mapper = self.__get_otm_type_by_regex(resource)
         if mapper:
             return self.__build_otm_component(resource, mapper[0], mapper[1])
@@ -95,7 +95,7 @@ class TfplanMapper:
             if re.match(regex[0], resource['resource_type']):
                 return otm_type, regex[1]
 
-    def __map_resource_by_catchall(self, resource: {}) -> TfplanComponent:
+    def __map_resource_by_catchall(self, resource: {}) -> TFPlanComponent:
         mapper = self.__get_otm_type_by_catchall(resource)
         if mapper:
             return self.__build_otm_component(resource, mapper[0], mapper[1])
@@ -111,8 +111,8 @@ class TfplanMapper:
             return True
         return False
 
-    def __build_otm_component(self, resource: {}, otm_type: str, configuration: {}) -> TfplanComponent:
-        return TfplanComponent(
+    def __build_otm_component(self, resource: {}, otm_type: str, configuration: {}) -> TFPlanComponent:
+        return TFPlanComponent(
             component_id=resource['resource_id'],
             name=resource['resource_name'],
             component_type=otm_type,

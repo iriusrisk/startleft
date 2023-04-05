@@ -10,7 +10,7 @@ from slp_base import IacType
 
 
 @auto_repr
-class TfplanComponent(Component):
+class TFPlanComponent(Component):
 
     def __init__(self,
                  component_id: str,
@@ -40,7 +40,7 @@ class TfplanComponent(Component):
 
     def __eq__(self, other):
         """Overrides the default implementation"""
-        if isinstance(other, TfplanComponent):
+        if isinstance(other, TFPlanComponent):
             return self.id == other.id \
                 and self.name == other.name \
                 and self.type == other.type \
@@ -57,7 +57,7 @@ class TfplanComponent(Component):
 
 
 @auto_repr
-class TfplanSecurityGroup:
+class TFPlanSecurityGroup:
     def __init__(self, security_group_id: str, ingress_sgs: List[str] = None, egress_sgs: List[str] = None):
         self.id = security_group_id
         self.ingress_sgs = ingress_sgs
@@ -65,7 +65,7 @@ class TfplanSecurityGroup:
 
 
 @auto_repr
-class TfplanLaunchTemplate:
+class TFPlanLaunchTemplate:
     def __init__(self, launch_template_id: str, security_groups_ids: List[str]):
         self.id = launch_template_id
         self.security_groups_ids = security_groups_ids
@@ -77,9 +77,9 @@ class TfplanOTM(OTM):
     def __init__(self,
                  project_id: str,
                  project_name: str,
-                 components: List[TfplanComponent],
-                 security_groups: List[TfplanSecurityGroup],
-                 launch_templates: List[TfplanLaunchTemplate],
+                 components: List[TFPlanComponent],
+                 security_groups: List[TFPlanSecurityGroup],
+                 launch_templates: List[TFPlanLaunchTemplate],
                  dataflows: List[Dataflow],
                  default_trustzone: Trustzone = None):
         super().__init__(project_name, project_id, IacType.TERRAFORM)

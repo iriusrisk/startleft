@@ -5,7 +5,7 @@ from networkx import DiGraph
 from slp_base import ProviderParser, OTMBuildingError
 from slp_tfplan.slp_tfplan.load.launch_templates_loader import TfplanLaunchTemplateLoader
 from slp_tfplan.slp_tfplan.load.security_groups_loader import SecurityGroupsLoader
-from slp_tfplan.slp_tfplan.map.tfplan_mapper import TfplanMapper
+from slp_tfplan.slp_tfplan.map.tfplan_mapper import TFPlanMapper
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TfplanOTM
 from slp_tfplan.slp_tfplan.transformers.children_calculator import ChildrenCalculator
 from slp_tfplan.slp_tfplan.transformers.dataflow_creator import DataflowCreator
@@ -15,7 +15,7 @@ from slp_tfplan.slp_tfplan.transformers.singleton_transformer import SingletonTr
 logger = logging.getLogger(__name__)
 
 
-class TfplanParser(ProviderParser):
+class TFPlanParser(ProviderParser):
 
     def __init__(self, project_id: str, project_name: str, tfplan: {}, tfgraph: DiGraph, mapping: [{}]):
         self.tfplan = tfplan
@@ -51,7 +51,7 @@ class TfplanParser(ProviderParser):
         return self.otm
 
     def __map_tfplan_resources(self):
-        TfplanMapper(self.otm, self.tfplan, self.mapping).map()
+        TFPlanMapper(self.otm, self.tfplan, self.mapping).map()
 
     def __load_auxiliary_resources(self):
         SecurityGroupsLoader(self.otm, self.tfplan).load()

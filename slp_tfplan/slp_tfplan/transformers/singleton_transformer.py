@@ -3,12 +3,12 @@ from typing import List, Dict
 
 from otm.otm.entity.dataflow import Dataflow
 from sl_util.sl_util.iterations_utils import remove_from_list
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TfplanComponent
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent
 from slp_tfplan.slp_tfplan.transformers.transformer import Transformer
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TfplanOTM
 
 
-def _merge_component_configurations(otm_components: List[TfplanComponent]) -> Dict:
+def _merge_component_configurations(otm_components: List[TFPlanComponent]) -> Dict:
     merge_configuration = {}
     for component in otm_components:
         merge_configuration = {
@@ -60,11 +60,11 @@ def _merge_dataflows(origin_dataflow: Dataflow, dataflows: List[Dataflow]) -> Da
     return origin_dataflow
 
 
-def _build_singleton_component(otm_components: List[TfplanComponent]) -> TfplanComponent:
+def _build_singleton_component(otm_components: List[TFPlanComponent]) -> TFPlanComponent:
     tags = list(set(itertools.chain.from_iterable([c.tags or [] for c in otm_components])))
     configuration = _merge_component_configurations(otm_components)
     component_id = otm_components[0].id
-    return TfplanComponent(
+    return TFPlanComponent(
         component_id=component_id,
         name=f"{otm_components[0].type} (grouped)",
         component_type=otm_components[0].type,
@@ -82,7 +82,7 @@ class SingletonTransformer(Transformer):
         self.otm_components = self.otm.components
         self.otm_dataflows = self.otm.dataflows
 
-        self.singleton_component_relations: Dict[str, TfplanComponent] = {}
+        self.singleton_component_relations: Dict[str, TFPlanComponent] = {}
 
     def transform(self):
         self.__populate_singleton_component_relations()
@@ -98,7 +98,7 @@ class SingletonTransformer(Transformer):
                         self.singleton_component_relations.get(sibling_components[0].id) \
                         or _build_singleton_component(sibling_components)
 
-    def __is_not_parent(self, component: TfplanComponent):
+    def __is_not_parent(self, component: TFPlanComponent):
         return not any(c.parent == component.id for c in self.otm_components)
 
     def __find_siblings_components(self, component_type: str, parent_id: str):

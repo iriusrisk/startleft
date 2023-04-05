@@ -1,11 +1,11 @@
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TfplanOTM, TfplanLaunchTemplate
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TfplanOTM, TFPlanLaunchTemplate
 from slp_tfplan.slp_tfplan.load.resource_data_extractors import security_groups_ids_from_network_interfaces
 
 LAUNCH_TEMPLATE_TYPES = ['aws_launch_template']
 
 
-def build_launch_template(resource: {}) -> TfplanLaunchTemplate:
-    return TfplanLaunchTemplate(
+def build_launch_template(resource: {}) -> TFPlanLaunchTemplate:
+    return TFPlanLaunchTemplate(
         launch_template_id=resource['resource_id'],
         security_groups_ids=security_groups_ids_from_network_interfaces(resource)
     )

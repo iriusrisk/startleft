@@ -1,6 +1,6 @@
 from typing import List, Dict, Literal
 
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TfplanSecurityGroup, TfplanOTM
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanSecurityGroup, TfplanOTM
 from slp_tfplan.slp_tfplan.load.resource_data_extractors import security_groups_ids_from_ingress_property, \
     security_groups_ids_from_egress_property, security_group_id_from_rule, \
     source_security_group_id_from_rule, security_group_rule_type
@@ -54,8 +54,8 @@ class SecurityGroupsLoader:
             if resource['resource_type'] in SECURITY_GROUPS_TYPES:
                 self.otm.security_groups.append(self.__build_security_group(resource))
 
-    def __build_security_group(self, resource: {}) -> TfplanSecurityGroup:
-        return TfplanSecurityGroup(
+    def __build_security_group(self, resource: {}) -> TFPlanSecurityGroup:
+        return TFPlanSecurityGroup(
             security_group_id=resource['resource_id'],
             ingress_sgs=security_groups_ids_from_ingress_property(resource) or security_groups_ids_from_ingress_rule(resource, self.sg_rules),
             egress_sgs=security_groups_ids_from_egress_property(resource) or security_groups_ids_from_egress_rule(resource, self.sg_rules),
