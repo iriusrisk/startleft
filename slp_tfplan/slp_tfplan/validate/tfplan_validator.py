@@ -12,8 +12,8 @@ from slp_base.slp_base.provider_validator import generate_size_error, generate_c
 logger = logging.getLogger(__name__)
 
 MIN_FILE_SIZE = 20
-MAX_TFPLAN_FILE_SIZE = 5 * 1024 * 1024
-MAX_TFGRAPH_FILE_SIZE = 2 * 1024 * 1024
+MAX_TFPLAN_FILE_SIZE = 5000000  # 5MB
+MAX_TFGRAPH_FILE_SIZE = 2000000 # 2MB
 
 TFPLAN_MIME_TYPE = 'application/json'
 TFGRAPH_MIME_TYPE = 'text/plain'

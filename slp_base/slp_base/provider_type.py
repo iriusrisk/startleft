@@ -8,7 +8,7 @@ class IacType(str, Provider):
     TERRAFORM = ("TERRAFORM", "Terraform", RepresentationType.CODE,
                  ['text/plain', 'application/octet-stream', 'application/json'])
     TFPLAN = ("TFPLAN", "Terraform Plan", RepresentationType.CODE,
-              ['text/plain', 'application/json', 'application/msword', 'text/vnd.graphviz'])
+              ['text/plain', 'application/json', 'application/msword', 'text/vnd.graphviz', 'application/octet-stream'])
 
 
 class DiagramType(str, Provider):
