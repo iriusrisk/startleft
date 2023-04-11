@@ -6,7 +6,7 @@ from networkx import DiGraph
 from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.dataflow import Dataflow
 from slp_tfplan.slp_tfplan.graph.relationships_extractor import RelationshipsExtractor
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TfplanOTM, TFPlanComponent, TFPlanSecurityGroup
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanOTM, TFPlanComponent, SecurityGroup
 from slp_tfplan.slp_tfplan.transformers.transformer import Transformer
 
 
@@ -27,11 +27,11 @@ def create_dataflow(source_component: TFPlanComponent, target_component: TFPlanC
 
 class DataflowCreator(Transformer):
 
-    def __init__(self, otm: TfplanOTM, graph: DiGraph):
+    def __init__(self, otm: TFPlanOTM, graph: DiGraph):
         super().__init__(otm, graph)
 
         self.components: [TFPlanComponent] = otm.components
-        self.security_groups: [TFPlanSecurityGroup] = otm.security_groups
+        self.security_groups: [SecurityGroup] = otm.security_groups
         self.dataflows: [Dataflow] = otm.dataflows
 
         self.relationships_extractor = RelationshipsExtractor(
@@ -91,11 +91,11 @@ class DataflowCreator(Transformer):
         return components_in_sgs
 
     def __are_components_related_by_graph(self, component: TFPlanComponent,
-                                          security_group: TFPlanSecurityGroup) -> bool:
+                                          security_group: SecurityGroup) -> bool:
         return self.relationships_extractor.exist_valid_path(component.tf_resource_id, security_group.id) or \
             self.relationships_extractor.exist_valid_path(security_group.id, component.tf_resource_id)
 
-    def __are_related_by_launch_template(self, component: TFPlanComponent, security_group: TFPlanSecurityGroup) -> bool:
+    def __are_related_by_launch_template(self, component: TFPlanComponent, security_group: SecurityGroup) -> bool:
         for launch_template in self.otm.launch_templates:
             if not self.relationships_extractor.exist_valid_path(component.tf_resource_id, launch_template.id):
                 continue
@@ -121,11 +121,11 @@ class DataflowCreator(Transformer):
 
         return sgs_relationships
 
-    def __are_sgs_related_by_configuration(self, source_sg: TFPlanSecurityGroup,
-                                           target_sg: TFPlanSecurityGroup) -> bool:
+    def __are_sgs_related_by_configuration(self, source_sg: SecurityGroup,
+                                           target_sg: SecurityGroup) -> bool:
         return source_sg.id in target_sg.ingress_sgs or target_sg.id in source_sg.egress_sgs
 
-    def __are_sgs_related_by_graph(self, source_sg: TFPlanSecurityGroup, target_sg: TFPlanSecurityGroup) -> bool:
+    def __are_sgs_related_by_graph(self, source_sg: SecurityGroup, target_sg: SecurityGroup) -> bool:
         return self.relationships_extractor.exist_valid_path(target_sg.id, source_sg.id)
 
     def __create_dataflows_among_components(self,

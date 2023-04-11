@@ -71,7 +71,7 @@ class TestTFPlanMapper:
         # AND a base otm dictionary
         otm = deepcopy(BASE_OTM)
 
-        # WHEN TfplanMapper::map is invoked
+        # WHEN TFPlanMapper::map is invoked
         TFPlanMapper(otm, resource, mapping).map()
 
         # THEN the component is added to the OTM
@@ -101,7 +101,7 @@ class TestTFPlanMapper:
         # AND a base otm dictionary
         otm = deepcopy(BASE_OTM)
 
-        # WHEN TfplanMapper::map is invoked
+        # WHEN TFPlanMapper::map is invoked
         TFPlanMapper(otm, resource, mapping).map()
 
         # THEN the component is added to the OTM
@@ -132,7 +132,7 @@ class TestTFPlanMapper:
         # AND a base otm dictionary
         otm = deepcopy(BASE_OTM)
 
-        # WHEN TfplanMapper::map is invoked
+        # WHEN TFPlanMapper::map is invoked
         TFPlanMapper(otm, resource, mapping).map()
 
         # THEN the component is skipped
@@ -153,7 +153,7 @@ class TestTFPlanMapper:
         # AND a base otm dictionary
         otm = deepcopy(BASE_OTM)
 
-        # WHEN TfplanMapper::map is invoked
+        # WHEN TFPlanMapper::map is invoked
         TFPlanMapper(otm, resource, mapping).map()
 
         # THEN two components are added to the OTM
@@ -176,7 +176,7 @@ class TestTFPlanMapper:
         # AND a base otm dictionary
         otm = deepcopy(BASE_OTM)
 
-        # WHEN TfplanMapper::map is invoked
+        # WHEN TFPlanMapper::map is invoked
         TFPlanMapper(otm, resource, mapping).map()
 
         # THEN three components are added to the OTM
@@ -208,7 +208,7 @@ class TestTFPlanMapper:
         # AND a base otm dictionary
         otm = deepcopy(BASE_OTM)
 
-        # WHEN TfplanMapper::map is invoked
+        # WHEN TFPlanMapper::map is invoked
         TFPlanMapper(otm, resource, mapping).map()
 
         # THEN two components are added to the OTM

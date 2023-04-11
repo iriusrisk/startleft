@@ -5,7 +5,7 @@ from otm.otm.entity.dataflow import Dataflow
 from sl_util.sl_util.iterations_utils import remove_from_list
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent
 from slp_tfplan.slp_tfplan.transformers.transformer import Transformer
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TfplanOTM
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanOTM
 
 
 def _merge_component_configurations(otm_components: List[TFPlanComponent]) -> Dict:
@@ -77,7 +77,7 @@ def _build_singleton_component(otm_components: List[TFPlanComponent]) -> TFPlanC
 
 class SingletonTransformer(Transformer):
 
-    def __init__(self, otm: TfplanOTM):
+    def __init__(self, otm: TFPlanOTM):
         super().__init__(otm)
         self.otm_components = self.otm.components
         self.otm_dataflows = self.otm.dataflows

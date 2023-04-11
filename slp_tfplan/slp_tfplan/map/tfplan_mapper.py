@@ -3,7 +3,7 @@ from typing import Tuple
 
 from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.trustzone import Trustzone
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TfplanOTM
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TFPlanOTM
 
 
 def trustzone_to_otm(trustzone: {}) -> Trustzone:
@@ -47,7 +47,7 @@ def _is_special_mapping(mapping: {}) -> bool:
 
 class TFPlanMapper:
 
-    def __init__(self, otm: TfplanOTM, tfplan: {}, mappings: {}):
+    def __init__(self, otm: TFPlanOTM, tfplan: {}, mappings: {}):
         self.otm = otm
         self.resources = tfplan['resource']
         self.mappings = mappings

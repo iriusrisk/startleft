@@ -5,7 +5,7 @@ from networkx import DiGraph
 
 from otm.otm.entity.parent_type import ParentType
 from slp_tfplan.slp_tfplan.graph.relationships_extractor import RelationshipsExtractor
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TfplanOTM
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TFPlanOTM
 from slp_tfplan.slp_tfplan.transformers.transformer import Transformer
 
 
@@ -46,7 +46,7 @@ def __extract_type(component_address: str) -> str:
 
 
 class HierarchyCalculator(Transformer):
-    def __init__(self, otm: TfplanOTM, graph: DiGraph):
+    def __init__(self, otm: TFPlanOTM, graph: DiGraph):
         super().__init__(otm, graph)
 
         self.relationships_extractor = RelationshipsExtractor(

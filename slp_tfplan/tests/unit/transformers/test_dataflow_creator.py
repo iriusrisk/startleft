@@ -5,7 +5,7 @@ from pytest import mark, param
 
 from slp_tfplan.slp_tfplan.transformers.dataflow_creator import DataflowCreator
 from slp_tfplan.tests.util.builders import build_mocked_otm, build_tfgraph, build_mocked_tfplan_component
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanSecurityGroup, TFPlanLaunchTemplate, TFPlanComponent
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import SecurityGroup, LaunchTemplate, TFPlanComponent
 
 
 class TestDataflowCreator:
@@ -15,7 +15,7 @@ class TestDataflowCreator:
         param([], [Mock(id='mocked_sg')], id='no_components'),
         param([Mock(id='mocked_component')], [Mock(id='mocked_sg')], id='unrelated_components_sgs'),
     ])
-    def test_no_dataflows(self, components: List[TFPlanComponent], security_groups: List[TFPlanSecurityGroup]):
+    def test_no_dataflows(self, components: List[TFPlanComponent], security_groups: List[SecurityGroup]):
         # GIVEN an OTM with no SGs
         otm = build_mocked_otm(components=components, security_groups=security_groups)
 
@@ -30,8 +30,8 @@ class TestDataflowCreator:
 
     def test_sgs_and_components_loaded_and_related_by_graph(self):
         # GIVEN two SGs unrelated by configuration
-        sg1 = TFPlanSecurityGroup(security_group_id='sg1', ingress_sgs=[], egress_sgs=[])
-        sg2 = TFPlanSecurityGroup(security_group_id='sg2', ingress_sgs=[], egress_sgs=[])
+        sg1 = SecurityGroup(security_group_id='sg1', ingress_sgs=[], egress_sgs=[])
+        sg2 = SecurityGroup(security_group_id='sg2', ingress_sgs=[], egress_sgs=[])
 
         # AND two components
         component1 = build_mocked_tfplan_component({'component_name': 'c1', 'tf_type': 'c1-type'})
@@ -68,15 +68,15 @@ class TestDataflowCreator:
 
     def test_sgs_related_by_configuration_mixed_sg_component_association(self):
         # GIVEN two SGs related by configuration
-        sg1 = TFPlanSecurityGroup(security_group_id='sg1', ingress_sgs=[], egress_sgs=[])
-        sg2 = TFPlanSecurityGroup(security_group_id='sg2', ingress_sgs=['sg1'], egress_sgs=[])
+        sg1 = SecurityGroup(security_group_id='sg1', ingress_sgs=[], egress_sgs=[])
+        sg2 = SecurityGroup(security_group_id='sg2', ingress_sgs=['sg1'], egress_sgs=[])
 
         # AND two components
         component1 = build_mocked_tfplan_component({'component_name': 'c1', 'tf_type': 'c1-type'})
         component2 = build_mocked_tfplan_component({'component_name': 'c2', 'tf_type': 'c2-type'})
 
         # AND a launch template related with the first SG
-        launch_template = TFPlanLaunchTemplate(launch_template_id='lt1', security_groups_ids=['sg1'])
+        launch_template = LaunchTemplate(launch_template_id='lt1', security_groups_ids=['sg1'])
 
         # AND a graph that relates the launch template with the first component and the second with the second SG
         c1_lt1_relationship = (component1.id, launch_template.id)

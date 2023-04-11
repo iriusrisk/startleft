@@ -1,6 +1,6 @@
 from networkx import DiGraph
 
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TfplanOTM
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TFPlanOTM
 from slp_tfplan.slp_tfplan.transformers.hierarchy_calculator import HierarchyCalculator
 
 PARENT_TYPES = ['aws_subnet', 'aws_vpc', 'azurerm_subnet', 'azurerm_virtual_network']
@@ -8,7 +8,7 @@ PARENT_TYPES = ['aws_subnet', 'aws_vpc', 'azurerm_subnet', 'azurerm_virtual_netw
 
 class ParentCalculator(HierarchyCalculator):
 
-    def __init__(self, otm: TfplanOTM, graph: DiGraph):
+    def __init__(self, otm: TFPlanOTM, graph: DiGraph):
         super().__init__(otm, graph)
         self.parent_candidates = self._get_parent_candidates(PARENT_TYPES)
 

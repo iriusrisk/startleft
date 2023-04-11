@@ -45,7 +45,7 @@ class TestTFPlanLoader:
         graph_label = 'Mocked Graph'
         from_agraph_mock.side_effect = [DiGraph(label=graph_label)]
 
-        # WHEN TfplanLoader::load is invoked
+        # WHEN TFPlanLoader::load is invoked
         tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
@@ -60,7 +60,7 @@ class TestTFPlanLoader:
         # GIVEN a valid plain Terraform Plan file with no modules
         yaml_mock.side_effect = [build_tfplan(resources=generate_resources(2))]
 
-        # WHEN TfplanLoader::load is invoked
+        # WHEN TFPlanLoader::load is invoked
         tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
@@ -87,7 +87,7 @@ class TestTFPlanLoader:
         yaml_mock.side_effect = [build_tfplan(
             child_modules=generate_child_modules(module_count=2, resource_count=2))]
 
-        # WHEN TfplanLoader::load is invoked
+        # WHEN TFPlanLoader::load is invoked
         tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
@@ -122,7 +122,7 @@ class TestTFPlanLoader:
                 module_count=1,
                 child_modules=generate_child_modules(module_count=1, resource_count=1)))]
 
-        # WHEN TfplanLoader::load is invoked
+        # WHEN TFPlanLoader::load is invoked
         tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
@@ -149,7 +149,7 @@ class TestTFPlanLoader:
             resources=generate_resources(1),
             child_modules=generate_child_modules(module_count=1, resource_count=1))]
 
-        # WHEN TfplanLoader::load is invoked
+        # WHEN TFPlanLoader::load is invoked
         tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
@@ -193,7 +193,7 @@ class TestTFPlanLoader:
 
         yaml_mock.side_effect = [tfplan]
 
-        # WHEN TfplanLoader::load is invoked
+        # WHEN TFPlanLoader::load is invoked
         tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
@@ -230,7 +230,7 @@ class TestTFPlanLoader:
 
         yaml_mock.side_effect = [tfplan]
 
-        # WHEN TfplanLoader::load is invoked
+        # WHEN TFPlanLoader::load is invoked
         tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
@@ -248,7 +248,7 @@ class TestTFPlanLoader:
         # GIVEN a valid Terraform Plan file with no resources
         yaml_mock.side_effect = [{'planned_values': {'root_module': {}}}]
 
-        # WHEN TfplanLoader::load is invoked
+        # WHEN TFPlanLoader::load is invoked
         tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
@@ -260,7 +260,7 @@ class TestTFPlanLoader:
         # GIVEN an empty TFPLAN
         yaml_mock.side_effect = [{}]
 
-        # WHEN TfplanLoader::load is invoked
+        # WHEN TFPlanLoader::load is invoked
         tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
         tfplan_loader.load()
 
@@ -275,7 +275,7 @@ class TestTFPlanLoader:
     def test_load_invalid_number_of_sources(self, sources: List[bytes]):
         # GIVEN an invalid number of sources
 
-        # WHEN TfplanLoader::load is invoked
+        # WHEN TFPlanLoader::load is invoked
         # THEN a LoadingIacFileError is raised
         with raises(LoadingIacFileError) as error:
             TFPlanLoader(sources=sources).load()
@@ -293,7 +293,7 @@ class TestTFPlanLoader:
     def test_load_invalid_sources(self, mocked_tfplan, mocked_graph):
         # GIVEN mocked invalid results for loading tfplan and tfgraph
 
-        # WHEN TfplanLoader::load is invoked
+        # WHEN TFPlanLoader::load is invoked
         # THEN a LoadingIacFileError is raised
         with raises(LoadingIacFileError) as error:
             TFPlanLoader(sources=[get_bytes('MOCKED')] * 2).load()

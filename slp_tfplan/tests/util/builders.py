@@ -6,8 +6,8 @@ from networkx import DiGraph
 from otm.otm.entity.dataflow import Dataflow
 from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.trustzone import Trustzone
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TfplanOTM, TFPlanSecurityGroup, \
-    TFPlanLaunchTemplate
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TFPlanOTM, SecurityGroup, \
+    LaunchTemplate
 
 DEFAULT_TRUSTZONE = Trustzone(
     trustzone_id='default-trustzone-id',
@@ -26,8 +26,8 @@ MAX_TFGRAPH_FILE_SIZE = 2000000 # 2MB
 
 def build_mocked_otm(components: List[TFPlanComponent],
                      dataflows: List[Dataflow] = None,
-                     security_groups: List[TFPlanSecurityGroup] = None,
-                     launch_templates: List[TFPlanLaunchTemplate] = None) -> {}:
+                     security_groups: List[SecurityGroup] = None,
+                     launch_templates: List[LaunchTemplate] = None) -> {}:
     otm = build_base_otm(DEFAULT_TRUSTZONE)
     otm.components = components or []
     otm.security_groups = security_groups or []
@@ -37,7 +37,7 @@ def build_mocked_otm(components: List[TFPlanComponent],
 
 
 def build_base_otm(default_trustzone: Trustzone = None):
-    otm = TfplanOTM(
+    otm = TFPlanOTM(
         project_id='project_id',
         project_name='project_name',
         components=[],

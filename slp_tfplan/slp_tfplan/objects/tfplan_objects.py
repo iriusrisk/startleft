@@ -57,7 +57,7 @@ class TFPlanComponent(Component):
 
 
 @auto_repr
-class TFPlanSecurityGroup:
+class SecurityGroup:
     def __init__(self, security_group_id: str, ingress_sgs: List[str] = None, egress_sgs: List[str] = None):
         self.id = security_group_id
         self.ingress_sgs = ingress_sgs
@@ -65,21 +65,21 @@ class TFPlanSecurityGroup:
 
 
 @auto_repr
-class TFPlanLaunchTemplate:
+class LaunchTemplate:
     def __init__(self, launch_template_id: str, security_groups_ids: List[str]):
         self.id = launch_template_id
         self.security_groups_ids = security_groups_ids
 
 
 @auto_repr
-class TfplanOTM(OTM):
+class TFPlanOTM(OTM):
 
     def __init__(self,
                  project_id: str,
                  project_name: str,
                  components: List[TFPlanComponent],
-                 security_groups: List[TFPlanSecurityGroup],
-                 launch_templates: List[TFPlanLaunchTemplate],
+                 security_groups: List[SecurityGroup],
+                 launch_templates: List[LaunchTemplate],
                  dataflows: List[Dataflow],
                  default_trustzone: Trustzone = None):
         super().__init__(project_name, project_id, IacType.TERRAFORM)
