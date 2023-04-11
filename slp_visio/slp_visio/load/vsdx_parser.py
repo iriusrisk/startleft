@@ -5,6 +5,7 @@ from slp_visio.slp_visio.load.objects.diagram_objects import Diagram, DiagramCom
 from slp_visio.slp_visio.load.parent_calculator import ParentCalculator
 from slp_visio.slp_visio.load.representation.simple_component_representer import SimpleComponentRepresenter
 from slp_visio.slp_visio.load.representation.zone_component_representer import ZoneComponentRepresenter
+from slp_visio.slp_visio.load.strategies.dataflow.validate_connector_strategy import ValidateConnectorStrategy
 from slp_visio.slp_visio.util.visio import get_limits, get_shape_text
 
 DIAGRAM_LIMITS_PADDING = 2
@@ -43,8 +44,8 @@ class VsdxParser:
 
     @staticmethod
     def _is_connector(shape: Shape) -> bool:
-        for connect in shape.connects:
-            if shape.ID == connect.connector_shape_id:
+        for strategy in ValidateConnectorStrategy.get_strategies():
+            if strategy.is_connector(shape):
                 return True
 
         return False
