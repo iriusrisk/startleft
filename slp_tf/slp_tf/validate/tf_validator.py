@@ -1,6 +1,6 @@
 import logging
 
-import magic
+from sl_util.sl_util.file_utils import get_file_type_by_content
 
 from slp_base import IacFileNotValidError, IacType
 from slp_base.slp_base import ProviderValidator
@@ -31,7 +31,5 @@ class TerraformValidator(ProviderValidator):
 
     def __validate_content_type(self):
         for tf_data in self.terraform_data_list:
-            magik = magic.Magic(mime=True)
-            mime = magik.from_buffer(tf_data)
-            if mime not in IacType.TERRAFORM.valid_mime:
+            if get_file_type_by_content(tf_data) not in IacType.TERRAFORM.valid_mime:
                 raise generate_content_type_error(IacType.TERRAFORM, 'iac_file', IacFileNotValidError)
