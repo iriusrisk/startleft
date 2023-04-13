@@ -358,7 +358,7 @@ class TestSingletonTransformer:
         component_configuration = {"singleton": True}
 
         components = []
-        for index in range(randrange(50)):
+        for index in range(randrange(2, 50)):
             components.append(build_mocked_tfplan_component(
                 {
                     'component_name': f'component_{index}',
