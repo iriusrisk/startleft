@@ -391,7 +391,7 @@ Now we can create a simple test that verifies that the conversion process is wor
 create a `test_mais_processor.py` file inside the `slp_mais/slp_mais/tests/integration` folder:
 ```python
 import os
-from sl_util.sl_util.file_utils import get_data
+from sl_util.sl_util.file_utils import get_byte_data
 from slp_base.tests.util.otm import validate_and_compare
 from slp_mais.slp_mais.mais_processor import MAISProcessor
 
@@ -405,10 +405,10 @@ class TestMAISProcessor:
 
     def test_single_component_mais_file_ok(self):
         # GIVEN a simple MAIS file with a single component
-        mais_file = get_data(f'{resources_path}/mais-sample.json')
+        mais_file = get_byte_data(f'{resources_path}/mais-sample.json')
 
         # AND a MAIS mapping file that defines a mapping for that component
-        mapping_file = get_data(f'{resources_path}/mapping-sample.yaml')
+        mapping_file = get_byte_data(f'{resources_path}/mapping-sample.yaml')
 
         # AND an expected OTM result
         expected_otm = f'{resources_path}/expected-otm.otm'
