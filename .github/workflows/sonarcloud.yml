@@ -40,17 +40,13 @@ permissions:
 
 
 jobs:
-  Build:
+  Analysis:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the project from Git
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
-
-  Analysis:
-    runs-on: ubuntu-latest
-    steps:
+            fetch-depth: 0
       - name: Analyze with SonarCloud
         # You can pin the exact commit or the version.
         # uses: SonarSource/sonarcloud-github-action@de2e56b42aa84d0b1c5b622644ac17e505c9a049
