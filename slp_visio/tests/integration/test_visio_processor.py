@@ -1,6 +1,8 @@
+import pytest
 from pytest import mark
 
 from sl_util.sl_util.file_utils import get_data
+from slp_base import DiagramFileNotValidError
 from slp_base.tests.util.otm import validate_and_compare_otm, validate_and_compare
 from slp_visio.slp_visio.visio_processor import VisioProcessor
 from slp_visio.tests.resources import test_resource_paths
@@ -12,6 +14,7 @@ from slp_visio.tests.resources.test_resource_paths import expected_aws_shapes, e
     expected_visio_aws_with_tz_and_vpc, expected_visio_orphan_dataflows, expected_visio_bidirectional_connectors, \
     expected_visio_modified_single_connectors, visio_nested_tzs, expected_visio_nested_tzs, default_visio_mapping, \
     visio_nested_tzs_inside_component, expected_visio_nested_tzs_inside_component
+from slp_visio.tests.util.files import file_exists, get_upload_file
 
 
 class TestVisioProcessor:
@@ -218,3 +221,56 @@ class TestVisioProcessor:
         otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
         result, expected = validate_and_compare_otm(otm.json(), test_resource_paths.expected_master_unique_id, None)
         assert result == expected
+
+    def test_temporary_file_not_created(self):
+        # Given a visio file read from disk
+        source = open(test_resource_paths.visio_aws_shapes, "r")
+
+        # When the processor is instanced
+        processor = VisioProcessor("project-id", "project-name", source, [get_data(default_visio_mapping)])
+
+        # Then the original file is being used
+        assert file_exists(processor.source.name)
+
+        # And the file can be processed
+        otm = processor.process()
+        result, expected = validate_and_compare_otm(otm.json(), expected_aws_shapes, None)
+        assert result == expected
+
+        # And the original file is not deleted
+        assert file_exists(processor.source.name)
+
+    def test_temporary_file_is_deleted(self):
+        # Given a visio file uploaded through the API
+        source = get_upload_file(test_resource_paths.visio_aws_shapes)
+
+        # When the processor is instanced
+        processor = VisioProcessor("project-id", "project-name", source, [get_data(default_visio_mapping)])
+
+        # Then a temporary file is created
+        assert file_exists(processor.source.name)
+
+        # And the file can be processed
+        otm = processor.process()
+        result, expected = validate_and_compare_otm(otm.json(), expected_aws_shapes, None)
+        assert result == expected
+
+        # And the temporary file is deleted after processing
+        assert not file_exists(processor.source.name)
+
+    def test_temporary_file_is_deleted_when_exception(self):
+        # Given an invalid visio file uploaded through the API
+        source = get_upload_file(test_resource_paths.visio_invalid_file_size)
+
+        # When the processor is instanced
+        processor = VisioProcessor("project-id", "project-name", source, [get_data(default_visio_mapping)])
+
+        # Then a temporary file is created
+        assert file_exists(processor.source.name)
+
+        # And a validation exception is raised
+        with pytest.raises(DiagramFileNotValidError):
+            processor.process()
+
+        # And the temporary file is deleted after processing
+        assert not file_exists(processor.source.name)
