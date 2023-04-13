@@ -63,6 +63,7 @@ jobs:
             -Dsonar.organization=continuumsec
             -Dsonar.test.exclusions=**/test/**/*
             -Dsonar.python.version=3.8,3.9,3.10,3.11
+            -Dsonar.qualitygate.wait=true
             # Comma-separated paths to directories containing main source files.
             #-Dsonar.sources= # optional, default is project base directory
             # When you need the analysis to take place in a directory other than the one from which it was launched
