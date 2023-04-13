@@ -1,8 +1,9 @@
 import abc
+from typing import Optional
 
 from vsdx import Shape
 
-from otm.otm.entity.dataflow import Dataflow
+from slp_visio.slp_visio.load.objects.diagram_objects import DiagramConnector
 from slp_visio.slp_visio.load.strategies.strategy import Strategy
 
 
@@ -18,6 +19,6 @@ class CreateConnectorStrategy(Strategy):
                 or NotImplemented)
 
     @abc.abstractmethod
-    def create_connector(self, shape: Shape) -> Dataflow:
+    def create_connector(self, shape: Shape) -> Optional[DiagramConnector]:
         """creates the OTM Dataflow from the vsdx shape"""
         raise NotImplementedError

@@ -1,6 +1,6 @@
 from vsdx import Shape
 
-from slp_visio.slp_visio.load.strategies.dataflow.validate_connector_strategy import ValidateConnectorStrategy
+from slp_visio.slp_visio.load.strategies.connector.validate_connector_strategy import ValidateConnectorStrategy
 
 
 class ValidateConnectorByConnects(ValidateConnectorStrategy):

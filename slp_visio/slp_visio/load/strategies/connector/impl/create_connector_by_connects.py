@@ -1,7 +1,9 @@
+from typing import Optional
+
 from vsdx import Shape
 
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramConnector
-from slp_visio.slp_visio.load.strategies.dataflow.create_connector_strategy import CreateConnectorStrategy
+from slp_visio.slp_visio.load.strategies.connector.create_connector_strategy import CreateConnectorStrategy
 
 
 class CreateConnectorByConnects(CreateConnectorStrategy):
@@ -9,7 +11,7 @@ class CreateConnectorByConnects(CreateConnectorStrategy):
     Strategy to create a connector from the shape connects
     """
 
-    def create_connector(self, shape: Shape) -> bool:
+    def create_connector(self, shape: Shape) -> Optional[DiagramConnector]:
         connected_shapes = shape.connects
         if not self.are_two_different_shapes(connected_shapes):
             return None

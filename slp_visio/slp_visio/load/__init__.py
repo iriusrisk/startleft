@@ -1,1 +1,1 @@
-from .strategies.dataflow.impl import validate_connector_by_connects, create_connector_by_connects
+from .strategies.connector.impl import validate_connector_by_connects, create_connector_by_connects

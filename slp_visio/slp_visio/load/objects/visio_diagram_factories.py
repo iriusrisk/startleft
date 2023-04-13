@@ -1,7 +1,7 @@
 from typing import Optional
 
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent, DiagramConnector
-from slp_visio.slp_visio.load.strategies.dataflow.create_connector_strategy import CreateConnectorStrategy
+from slp_visio.slp_visio.load.strategies.connector.create_connector_strategy import CreateConnectorStrategy
 from slp_visio.slp_visio.util.visio import get_shape_text, get_master_shape_text, normalize_label, get_unique_id_text
 
 
