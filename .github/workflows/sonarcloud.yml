@@ -32,7 +32,7 @@ on:
   push:
     branches: [ main, dev, release/*, feature/* ]
   pull_request:
-    branches: [ main, dev ]
+    branches: [ main, dev, release/*, feature/* ]
   workflow_dispatch:
 
 permissions:
