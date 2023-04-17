@@ -112,12 +112,13 @@ class TestTFPlanValidator:
         assert error.value.title == 'Terraform Plan file is not valid'
         assert error.value.message == 'Invalid content type for iac_file'
 
-    def test_tfplan_wrong_schema(self):
-        # GIVEN a valid tfgraph
-        tfgraph = MINIMUM_VALID_TFGRAPH_SOURCE
-
-        # AND an invalid tfplan
-        tfplan = bytes('{"invalid": "tfplan"}', 'utf-8')
+    @mark.parametrize('tfplan,tfgraph', [
+        param(get_bytes('{"invalid": "tfplan"}'), MINIMUM_VALID_TFGRAPH_SOURCE, id='invalid tfplan'),
+        param(MINIMUM_VALID_TFPLAN_SOURCE, get_bytes('{"invalid": "tfgraph"}'), id='invalid tfgraph'),
+        param(get_bytes('{"invalid": "tfplan"}'), get_bytes('{"invalid": "tfgraph"}'), id='both invalid')
+    ])
+    def test_wrong_sources(self, tfplan: bytes, tfgraph: bytes):
+        # GIVEN a valid tfgraph and wrong tfplan or vice-versa
 
         # WHEN TFPlanValidator::validate is invoked
         # THEN a IacFileNotValidError is raised

@@ -1,10 +1,11 @@
 import json
 import logging
+import re
 from json import JSONDecodeError
 from typing import List, Dict
 
 from slp_base.slp_base.schema import Schema
-from sl_util.sl_util.file_utils import get_file_type_by_content
+from sl_util.sl_util.file_utils import get_file_type_by_content, read_byte_data
 from slp_base import IacFileNotValidError, IacType
 from slp_base.slp_base import ProviderValidator
 from slp_base.slp_base.provider_validator import generate_size_error, generate_content_type_error
@@ -13,22 +14,27 @@ logger = logging.getLogger(__name__)
 
 MIN_FILE_SIZE = 20
 MAX_TFPLAN_FILE_SIZE = 5000000  # 5MB
-MAX_TFGRAPH_FILE_SIZE = 2000000 # 2MB
+MAX_TFGRAPH_FILE_SIZE = 2000000  # 2MB
 
 TFPLAN_MIME_TYPE = 'application/json'
 TFGRAPH_MIME_TYPE = 'text/plain'
 
 TFPLAN_SCHEMA_FILENAME = 'tfplan_schema.json'
+VALID_TFGRAPH_REGEX = r"\bdigraph[\s\S]*\bsubgraph[\s\S]*"
 
 
-def is_valid_tfplan_schema(source: bytes) -> bool:
+def is_valid_tfplan(tfplan: bytes) -> bool:
     schema = Schema.from_package('slp_tfplan', TFPLAN_SCHEMA_FILENAME)
     try:
-        schema.validate(json.loads(source))
+        schema.validate(json.loads(tfplan))
     except JSONDecodeError:
         return False
 
     return schema.valid
+
+
+def is_valid_tfgraph(tfgraph: bytes) -> bool:
+    return bool(re.match(VALID_TFGRAPH_REGEX, read_byte_data(tfgraph)))
 
 
 class TFPlanValidator(ProviderValidator):
@@ -47,6 +53,7 @@ class TFPlanValidator(ProviderValidator):
 
         self.__match_params_and_sources()
         self.__validate_file_sizes()
+        self.__validate_tfgraph()
 
     def __validate_number_of_sources(self):
         if len(self.sources) != 2:
@@ -67,8 +74,8 @@ class TFPlanValidator(ProviderValidator):
             raise generate_content_type_error(IacType.TFPLAN, 'iac_file', IacFileNotValidError)
 
     def __match_params_and_sources(self):
-        is_first_source_tfplan = is_valid_tfplan_schema(self.sources[0])
-        is_second_source_tfplan = is_valid_tfplan_schema(self.sources[1])
+        is_first_source_tfplan = is_valid_tfplan(self.sources[0])
+        is_second_source_tfplan = is_valid_tfplan(self.sources[1])
 
         if is_first_source_tfplan and is_second_source_tfplan:
             raise IacFileNotValidError(
@@ -88,3 +95,7 @@ class TFPlanValidator(ProviderValidator):
         if len(self.param_sources['tfplan']) > MAX_TFPLAN_FILE_SIZE or \
                 len(self.param_sources['tfgraph']) > MAX_TFGRAPH_FILE_SIZE:
             raise generate_size_error(IacType.TFPLAN, 'iac_file', IacFileNotValidError)
+
+    def __validate_tfgraph(self):
+        if not is_valid_tfgraph(self.param_sources['tfgraph']):
+            raise generate_content_type_error(IacType.TFPLAN, 'iac_file', IacFileNotValidError)
