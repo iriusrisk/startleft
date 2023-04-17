@@ -48,7 +48,8 @@ setup(
             'pytest==7.2.2',
             'responses==0.22.0',
             'deepdiff==6.2.3',
-            'httpx==0.23.3'
+            'httpx==0.23.3',
+            'pytest-mock==3.10.0'
         ],
         "doc": [
             'mkdocs-material==9.1.1',

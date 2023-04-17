@@ -1,9 +1,9 @@
 from vsdx import Shape
 
-from slp_visio.slp_visio.load.strategies.connector.validate_connector_strategy import ValidateConnectorStrategy
+from slp_visio.slp_visio.load.strategies.connector.connector_identifier_strategy import ConnectorIdentifierStrategy
 
 
-class ValidateConnectorByConnects(ValidateConnectorStrategy):
+class ConnectorIdentifierByConnects(ConnectorIdentifierStrategy):
     """
     Strategy to know if a shape is a connector
     The shape must have connects and each connector_shape_id must match with the shape id

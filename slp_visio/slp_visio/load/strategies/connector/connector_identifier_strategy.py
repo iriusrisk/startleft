@@ -5,9 +5,9 @@ from vsdx import Shape
 from slp_visio.slp_visio.load.strategies.strategy import Strategy
 
 
-class ValidateConnectorStrategy(Strategy):
+class ConnectorIdentifierStrategy(Strategy):
     """
-    Formal Interface to validate if a shape is a connector
+    Formal Interface to check if a shape is a connector
     """
 
     @classmethod

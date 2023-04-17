@@ -2,11 +2,11 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from slp_visio.slp_visio.load.strategies.connector.impl.validate_connector_by_connects import \
-    ValidateConnectorByConnects
+from slp_visio.slp_visio.load.strategies.connector.impl.connector_identifier_by_connects import \
+    ConnectorIdentifierByConnects
 
 
-class TestValidateConnectorByConnects:
+class TestConnectorIdentifierByConnects:
 
     @pytest.mark.parametrize('connector_shape_id_first,connector_shape_id_second', {
         (1001, 1001),
@@ -21,7 +21,7 @@ class TestValidateConnectorByConnects:
                       MagicMock(from_rel='EndX', shape_id=2, connector_shape_id=connector_shape_id_second)])
 
         # WHEN the connector is validated
-        strategy = ValidateConnectorByConnects()
+        strategy = ConnectorIdentifierByConnects()
         result = strategy.is_connector(shape)
 
         # THEN is a valid connector
@@ -40,7 +40,7 @@ class TestValidateConnectorByConnects:
                       MagicMock(from_rel='EndX', shape_id=2, connector_shape_id=connector_shape_id_second)])
 
         # WHEN the connector is validated
-        strategy = ValidateConnectorByConnects()
+        strategy = ConnectorIdentifierByConnects()
         result = strategy.is_connector(shape)
 
         # THEN is not a valid connector
