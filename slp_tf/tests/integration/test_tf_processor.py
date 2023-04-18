@@ -233,10 +233,10 @@ class TestTerraformProcessor:
         assert len(otm.components) == 2
         assert otm.components[0].name == otm.components[1].name
 
-    def test_valid_terraform_size_under_2mb(self):
+    def test_valid_terraform_size_over_1mb(self):
 
         # GIVEN a terraform file file under 2MB
-        tf_file = get_data(test_resource_paths.terraform_invalid_size_over_2mb)
+        tf_file = get_data(test_resource_paths.terraform_invalid_size_over_1mb)
         # AND the default terraform mapping file
         mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
