@@ -1,7 +1,7 @@
 import pytest
 from slp_tf import TerraformProcessor
 from slp_tf.tests.resources import test_resource_paths
-from sl_util.sl_util.file_utils import get_data
+from sl_util.sl_util.file_utils import get_byte_data
 
 TF_MAPPING_FILE = test_resource_paths.terraform_iriusrisk_tf_aws_mapping
 TF_MAPPING_FILE_V180 = test_resource_paths.terraform_iriusrisk_tf_aws_mapping_v180
@@ -12,12 +12,12 @@ SAMPLE_NAME = 'name'
 class TestTerraformDataflows:
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(TF_MAPPING_FILE), id="with actual mapping file"),
-        pytest.param(get_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
+        pytest.param(get_byte_data(TF_MAPPING_FILE), id="with actual mapping file"),
+        pytest.param(get_byte_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
     def test_tf_dataflow_to_lambda_function(self, mapping_file):
         # GIVEN a valid TF file with an aws_lambda_function resource
         # AND a valid TF mapping file
-        tf_file = get_data(test_resource_paths.terraform_lambda_dataflow)
+        tf_file = get_byte_data(test_resource_paths.terraform_lambda_dataflow)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -39,12 +39,12 @@ class TestTerraformDataflows:
         assert destination_component[0].id == otm.dataflows[0].destination_node
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(TF_MAPPING_FILE), id="with actual mapping file"),
-        pytest.param(get_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
+        pytest.param(get_byte_data(TF_MAPPING_FILE), id="with actual mapping file"),
+        pytest.param(get_byte_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
     def test_tf_dataflow_to_lambda_function_on_failure(self, mapping_file):
         # GIVEN a valid TF file with an aws_lambda_function on failure resource
         # AND a valid TF mapping file
-        tf_file = get_data(test_resource_paths.terraform_lambda_on_failure_dataflow)
+        tf_file = get_byte_data(test_resource_paths.terraform_lambda_on_failure_dataflow)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -66,12 +66,12 @@ class TestTerraformDataflows:
         assert destination_component[0].id == otm.dataflows[0].destination_node
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(TF_MAPPING_FILE), id="with actual mapping file"),
-        pytest.param(get_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
+        pytest.param(get_byte_data(TF_MAPPING_FILE), id="with actual mapping file"),
+        pytest.param(get_byte_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
     def test_tf_dataflow_s3(self, mapping_file):
         # GIVEN a valid TF file with an aws_s3_bucket resource
         # AND a valid TF mapping file
-        tf_file = get_data(test_resource_paths.terraform_s3_dataflow)
+        tf_file = get_byte_data(test_resource_paths.terraform_s3_dataflow)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -93,12 +93,12 @@ class TestTerraformDataflows:
         assert destination_component[0].id == otm.dataflows[0].destination_node
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(TF_MAPPING_FILE), id="with actual mapping file"),
-        pytest.param(get_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
+        pytest.param(get_byte_data(TF_MAPPING_FILE), id="with actual mapping file"),
+        pytest.param(get_byte_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
     def test_tf_dataflow_s3_bucket_logging(self, mapping_file):
         # GIVEN a valid TF file with an aws_s3_bucket_logging resource
         # AND a valid TF mapping file
-        tf_file = get_data(test_resource_paths.terraform_s3_bucket_logging_dataflow)
+        tf_file = get_byte_data(test_resource_paths.terraform_s3_bucket_logging_dataflow)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -120,13 +120,13 @@ class TestTerraformDataflows:
         assert destination_component[0].id == otm.dataflows[0].destination_node
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(TF_MAPPING_FILE), id="with actual mapping file"),
-        pytest.param(get_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
+        pytest.param(get_byte_data(TF_MAPPING_FILE), id="with actual mapping file"),
+        pytest.param(get_byte_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
     def test_tf_dataflow_api_gateway_one_source(self, mapping_file):
         # GIVEN a valid TF file with an aws_api_gateway_authorizer resource
         # AND a single api resource
         # AND a valid TF mapping file
-        tf_file = get_data(test_resource_paths.terraform_api_gateway_authorizer_one_source_dataflow)
+        tf_file = get_byte_data(test_resource_paths.terraform_api_gateway_authorizer_one_source_dataflow)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -148,13 +148,13 @@ class TestTerraformDataflows:
         assert destination_component[0].id == otm.dataflows[0].destination_node
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(TF_MAPPING_FILE), id="with actual mapping file"),
-        pytest.param(get_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
+        pytest.param(get_byte_data(TF_MAPPING_FILE), id="with actual mapping file"),
+        pytest.param(get_byte_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
     def test_tf_dataflow_api_gateway_multiple_sources(self, mapping_file):
         # GIVEN a valid TF file with an aws_api_gateway_authorizer resource
         # AND multiple api resource
         # AND a valid TF mapping file
-        tf_file = get_data(test_resource_paths.terraform_api_gateway_authorizer_multiple_sources_dataflow)
+        tf_file = get_byte_data(test_resource_paths.terraform_api_gateway_authorizer_multiple_sources_dataflow)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -176,12 +176,12 @@ class TestTerraformDataflows:
         assert destination_component[0].id == otm.dataflows[0].destination_node
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(TF_MAPPING_FILE), id="with actual mapping file"),
-        pytest.param(get_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
+        pytest.param(get_byte_data(TF_MAPPING_FILE), id="with actual mapping file"),
+        pytest.param(get_byte_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
     def test_tf_dataflow_security_group_type1_outbound(self, mapping_file):
         # GIVEN a valid TF file with security groups type 1: A -> SG -> B
         # AND a valid TF mapping file
-        tf_file = get_data(test_resource_paths.terraform_security_groups_type1_outbound)
+        tf_file = get_byte_data(test_resource_paths.terraform_security_groups_type1_outbound)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -203,13 +203,13 @@ class TestTerraformDataflows:
         assert destination_component[0].id == otm.dataflows[0].destination_node
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(TF_MAPPING_FILE), id="with actual mapping file"),
-        pytest.param(get_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
+        pytest.param(get_byte_data(TF_MAPPING_FILE), id="with actual mapping file"),
+        pytest.param(get_byte_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
     def test_tf_dataflow_security_group_type1_outbound_two_subnets(self, mapping_file):
         # GIVEN a valid TF file with security groups type 1: A -> SG -> B
         # AND 2 subnets
         # AND a valid TF mapping file
-        tf_file = get_data(test_resource_paths.terraform_security_groups_type1_outbound_two_subnets)
+        tf_file = get_byte_data(test_resource_paths.terraform_security_groups_type1_outbound_two_subnets)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -227,13 +227,13 @@ class TestTerraformDataflows:
         assert otm.dataflows[0].destination_node == otm.dataflows[1].destination_node
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(TF_MAPPING_FILE), id="with actual mapping file"),
-        pytest.param(get_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
+        pytest.param(get_byte_data(TF_MAPPING_FILE), id="with actual mapping file"),
+        pytest.param(get_byte_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
     def test_tf_dataflow_security_group_type1_inbound(self, mapping_file):
         # GIVEN a valid TF file with security groups type 1: A -> SG -> B
         # AND a CustomVPC
         # AND a valid TF mapping file
-        tf_file = get_data(test_resource_paths.terraform_security_groups_type1_inbound)
+        tf_file = get_byte_data(test_resource_paths.terraform_security_groups_type1_inbound)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -255,13 +255,13 @@ class TestTerraformDataflows:
         assert destination_component[0].id == otm.dataflows[0].destination_node
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(TF_MAPPING_FILE), id="with actual mapping file"),
-        pytest.param(get_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
+        pytest.param(get_byte_data(TF_MAPPING_FILE), id="with actual mapping file"),
+        pytest.param(get_byte_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
     def test_tf_dataflow_security_group_type1_inbound_two_subnets(self, mapping_file):
         # GIVEN a valid TF file with security groups type 1: A -> SG -> B
         # AND 2 subnets
         # AND a valid TF mapping file
-        tf_file = get_data(test_resource_paths.terraform_security_groups_type1_inbound_two_subnets)
+        tf_file = get_byte_data(test_resource_paths.terraform_security_groups_type1_inbound_two_subnets)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -279,13 +279,13 @@ class TestTerraformDataflows:
         assert otm.dataflows[0].source_node == otm.dataflows[1].source_node
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(TF_MAPPING_FILE), id="with actual mapping file"),
-        pytest.param(get_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
+        pytest.param(get_byte_data(TF_MAPPING_FILE), id="with actual mapping file"),
+        pytest.param(get_byte_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
     def test_tf_dataflow_security_group_type1_inbound_with_generic_component(self, mapping_file):
         # GIVEN a valid TF file with security groups type 1: A -> SG -> B
         # AND without a CustomVPC
         # AND a valid TF mapping file
-        tf_file = get_data(test_resource_paths.terraform_security_groups_type1_inbound_with_generic_client)
+        tf_file = get_byte_data(test_resource_paths.terraform_security_groups_type1_inbound_with_generic_client)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -307,12 +307,12 @@ class TestTerraformDataflows:
         assert destination_component[0].id == otm.dataflows[0].destination_node
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(TF_MAPPING_FILE), id="with actual mapping file"),
-        pytest.param(get_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
+        pytest.param(get_byte_data(TF_MAPPING_FILE), id="with actual mapping file"),
+        pytest.param(get_byte_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
     def test_tf_dataflow_security_group_type2_outbound(self, mapping_file):
         # GIVEN a valid TF file with security groups type 2: A -> SGA -> SGB -> B
         # AND a valid TF mapping file
-        tf_file = get_data(test_resource_paths.terraform_security_groups_type2_outbound)
+        tf_file = get_byte_data(test_resource_paths.terraform_security_groups_type2_outbound)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -334,13 +334,13 @@ class TestTerraformDataflows:
         assert destination_component[0].id == otm.dataflows[0].destination_node
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(TF_MAPPING_FILE), id="with actual mapping file"),
-        pytest.param(get_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
+        pytest.param(get_byte_data(TF_MAPPING_FILE), id="with actual mapping file"),
+        pytest.param(get_byte_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
     def test_tf_dataflow_security_group_type2_outbound_two_subnets(self, mapping_file):
         # GIVEN a valid TF file with security groups type 2: A -> SGA -> SGB -> B and two subnets both in Service
         # AND in ServiceLB
         # AND a valid TF mapping file
-        tf_file = get_data(test_resource_paths.terraform_security_groups_type2_outbound_two_subnets)
+        tf_file = get_byte_data(test_resource_paths.terraform_security_groups_type2_outbound_two_subnets)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -372,12 +372,12 @@ class TestTerraformDataflows:
         assert private_subnet_2_dataflows[0].destination_node != private_subnet_2_dataflows[1].destination_node
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(TF_MAPPING_FILE), id="with actual mapping file"),
-        pytest.param(get_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
+        pytest.param(get_byte_data(TF_MAPPING_FILE), id="with actual mapping file"),
+        pytest.param(get_byte_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
     def test_tf_dataflow_security_group_type2_inbound(self, mapping_file):
         # GIVEN a valid TF file with security groups type 2: A -> SGA -> SGB -> B
         # AND a valid TF mapping file
-        tf_file = get_data(test_resource_paths.terraform_security_groups_type2_inbound)
+        tf_file = get_byte_data(test_resource_paths.terraform_security_groups_type2_inbound)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -399,12 +399,12 @@ class TestTerraformDataflows:
         assert destination_component[0].id == otm.dataflows[0].destination_node
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(TF_MAPPING_FILE), id="with actual mapping file"),
-        pytest.param(get_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
+        pytest.param(get_byte_data(TF_MAPPING_FILE), id="with actual mapping file"),
+        pytest.param(get_byte_data(TF_MAPPING_FILE_V180), id="with backwards mapping_file")])
     def test_tf_dataflow_security_group_type1_and_type2_mixed(self, mapping_file):
         # GIVEN a valid TF file with security groups type 1: A -> SGA -> B and type 2: A -> SGA -> SGB -> B
         # AND a valid TF mapping file
-        tf_file = get_data(test_resource_paths.terraform_security_groups_type1_and_type2_mixed)
+        tf_file = get_byte_data(test_resource_paths.terraform_security_groups_type1_and_type2_mixed)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()

@@ -4,7 +4,7 @@ from typing import List
 import pytest
 from pytest import mark, param
 
-from slp_base import LoadingIacFileError, IacFileNotValidError
+from slp_base import IacFileNotValidError
 from sl_util.sl_util.file_utils import get_byte_data
 from slp_tfplan import TFPlanProcessor
 from slp_tfplan.tests.resources.test_resource_paths import terraform_iriusrisk_tfplan_aws_mapping, \
@@ -15,8 +15,13 @@ from slp_tfplan.tests.util.builders import create_artificial_file, MIN_FILE_SIZE
     MAX_TFGRAPH_FILE_SIZE
 
 DEFAULT_MAPPING_FILE = get_byte_data(terraform_iriusrisk_tfplan_aws_mapping)
+
 SAMPLE_VALID_TFPLAN = get_byte_data(tfplan_elb)
 SAMPLE_VALID_TFGRAPH = get_byte_data(tfgraph_elb)
+
+SAMPLE_INVALID_TFPLAN = get_byte_data(invalid_yaml)
+SAMPLE_INVALID_TFGRAPH = get_byte_data(invalid_yaml)
+
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
 EXCLUDED_REGEX = r"root\[\'dataflows'\]\[.+?\]\['id'\]"
@@ -93,10 +98,11 @@ class TestTFPlan:
         assert str(error.value.message) == 'Required one tfplan and one tfgraph files'
 
     @mark.parametrize('sources', [
-        param([invalid_yaml, SAMPLE_VALID_TFGRAPH], id='invalid tfplan'),
-        param([invalid_yaml, invalid_yaml], id='both invalid')
+        param([SAMPLE_INVALID_TFPLAN, SAMPLE_VALID_TFGRAPH], id='invalid tfplan'),
+        param([SAMPLE_VALID_TFPLAN, SAMPLE_INVALID_TFGRAPH], id='invalid tfgraph'),
+        param([SAMPLE_INVALID_TFPLAN, SAMPLE_INVALID_TFGRAPH], id='both invalid')
     ])
-    def test_invalid_tfplan(self, sources: List[bytes]):
+    def test_invalid_sources(self, sources: List[bytes]):
         # GIVEN some invalid tfplan
 
         # WHEN TFPlanProcessor::process is invoked
@@ -107,16 +113,3 @@ class TestTFPlan:
         # AND the message says that no multiple tfplan files can be processed at the same time
         assert str(error.value.title) == 'Terraform Plan file is not valid'
         assert str(error.value.message) == 'Invalid content type for iac_file'
-
-    def test_invalid_tfgraph(self):
-        # GIVEN a valid tfplan and an invalid tfgraph
-        sources = [SAMPLE_VALID_TFPLAN, invalid_yaml]
-
-        # WHEN TFPlanProcessor::process is invoked
-        # THEN a LoadingIacFileError exception is raised
-        with pytest.raises(LoadingIacFileError) as error:
-            TFPlanProcessor(SAMPLE_ID, SAMPLE_NAME, sources, [DEFAULT_MAPPING_FILE]).process()
-
-        # AND the message says that no multiple tfplan files can be processed at the same time
-        assert str(error.value.title) == 'IaC files are not valid'
-        assert str(error.value.message) == 'The provided IaC files could not be processed'

@@ -1,6 +1,6 @@
 import pytest
 
-from sl_util.sl_util.file_utils import get_data
+from sl_util.sl_util.file_utils import get_byte_data
 from slp_base import OTMBuildingError
 from slp_base.tests.util.otm import validate_and_compare
 from slp_tf import TerraformProcessor
@@ -20,10 +20,10 @@ class TestTerraformCalculateParents:
     @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
     def test_orphan_component_is_not_mapped(self, mapping_file):
         # GIVEN a valid TF file with a resource (VPCssm) whose parents do (private VPCs) not exist in the file
-        terraform_file = get_data(test_resource_paths.terraform_orphan_component)
+        terraform_file = get_byte_data(test_resource_paths.terraform_orphan_component)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(mapping_file)
+        mapping_file = get_byte_data(mapping_file)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
@@ -35,10 +35,10 @@ class TestTerraformCalculateParents:
 
     def test_mapping_component_without_parent(self):
         # GIVEN a valid TF file
-        terraform_file = get_data(test_resource_paths.terraform_component_without_parent)
+        terraform_file = get_byte_data(test_resource_paths.terraform_component_without_parent)
 
         # AND an invalid TF mapping file with a mapping without parent
-        mapping_file = get_data(test_resource_paths.terraform_mapping_aws_component_without_parent)
+        mapping_file = get_byte_data(test_resource_paths.terraform_mapping_aws_component_without_parent)
 
         # WHEN the TF file is processed
         # THEN an OTMBuildingError is raised
@@ -51,10 +51,10 @@ class TestTerraformCalculateParents:
 
     def test_mapping_skipped_component_without_parent(self):
         # GIVEN a valid TF file
-        terraform_file = get_data(test_resource_paths.terraform_skipped_component_without_parent)
+        terraform_file = get_byte_data(test_resource_paths.terraform_skipped_component_without_parent)
 
         # AND a TF mapping file that skips the component without parent
-        mapping_file = get_data(test_resource_paths.terraform_mapping_aws_component_without_parent)
+        mapping_file = get_byte_data(test_resource_paths.terraform_mapping_aws_component_without_parent)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
@@ -65,16 +65,16 @@ class TestTerraformCalculateParents:
         assert result == expected
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(tf_mapping_parent_by_type_name), id="by {type}.{name}"),
-        pytest.param(get_data(tf_mapping_parent_by_full_path_attribute), id="by full path attribute"),
-        pytest.param(get_data(tf_mapping_parent_by_name), id="by {name}")])
+        pytest.param(get_byte_data(tf_mapping_parent_by_type_name), id="by {type}.{name}"),
+        pytest.param(get_byte_data(tf_mapping_parent_by_full_path_attribute), id="by full path attribute"),
+        pytest.param(get_byte_data(tf_mapping_parent_by_name), id="by {name}")])
     def test_define_parent_relationship(self, mapping_file):
         """
         Generate an OTM for TF file with parent definition
         """
         # GIVEN a TF file with two resources
         #    AND a mapping file with parent definition
-        tf_file = get_data(test_resource_paths.terraform_define_parent_relationship)
+        tf_file = get_byte_data(test_resource_paths.terraform_define_parent_relationship)
 
         # WHEN processing
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()

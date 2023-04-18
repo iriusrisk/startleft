@@ -1,5 +1,5 @@
 import pytest
-from sl_util.sl_util.file_utils import get_data
+from sl_util.sl_util.file_utils import get_byte_data
 from slp_tf.tests.resources import test_resource_paths
 from slp_tf import TerraformProcessor
 from slp_base.tests.util.otm import validate_and_compare
@@ -13,10 +13,10 @@ class TestTerraformCalculateSecurityGroups:
 
     def test_security_group_components_from_same_resource(self):
         # GIVEN a valid TF file with a security group containing both an inbound and an outbound rule
-        tf_file = get_data(test_resource_paths.terraform_components_from_same_resource)
+        tf_file = get_byte_data(test_resource_paths.terraform_components_from_same_resource)
 
         # AND a valid CFT mapping file
-        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+        mapping_file = get_byte_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
         # WHEN the CFT file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -35,8 +35,8 @@ class TestTerraformCalculateSecurityGroups:
         assert '0_0_0_0_0' in egress_id
 
     @pytest.mark.parametrize('mapping_file', [
-        pytest.param(get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping), id="with actual mapping file"),
-        pytest.param(get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping_v180),
+        pytest.param(get_byte_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping), id="with actual mapping file"),
+        pytest.param(get_byte_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping_v180),
                      id="with backwards mapping_file")])
     def test_aws_security_groups_components_full_example(self, mapping_file):
         """
@@ -45,7 +45,7 @@ class TestTerraformCalculateSecurityGroups:
         """
         # GIVEN the TF file of aws security groups
         # AND a valid mapping file
-        terraform_file = get_data(test_resource_paths.terraform_aws_security_groups_components)
+        terraform_file = get_byte_data(test_resource_paths.terraform_aws_security_groups_components)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
