@@ -1,0 +1,238 @@
+otmVersion: 0.1.0
+project:
+  name: Lucid Project
+  id: lucid-project
+representations:
+  - name: Diagram Representation
+    id: parse_diagram
+    type: diagram
+    size:
+      width: 2378
+      height: 1558
+trustZones:
+  - id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+    risk:
+      trustRating: 10
+    representations:
+      - name: Public Cloud Representation
+        id: 1-representation
+        representation: parse_diagram
+        size:
+          width: 779
+          height: 902
+        position:
+          x: 759
+          'y': 328
+  - id: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+    name: Private Secured Cloud
+    risk:
+      trustRating: 10
+    representations:
+      - name: Private Secured Cloud Representation
+        id: 5-representation
+        representation: parse_diagram
+        size:
+          width: 450
+          height: 512
+        position:
+          x: 1600
+          'y': 328
+  - id: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    name: Internet
+    risk:
+      trustRating: 10
+    representations:
+      - name: Internet Representation
+        id: 36-representation
+        representation: parse_diagram
+        size:
+          width: 288
+          height: 492
+        position:
+          x: 328
+          'y': 574
+components:
+  - id: '7'
+    name: Custom VPC
+    type: empty-component
+    parent:
+      trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    representations:
+      - name: Custom VPC Representation
+        id: 7-representation
+        representation: parse_diagram
+        size:
+          width: 246
+          height: 226
+        position:
+          x: 287
+          'y': 30
+  - id: '9'
+    name: My EC2
+    type: ec2
+    parent:
+      component: '7'
+    representations:
+      - name: My EC2 Representation
+        id: 9-representation
+        representation: parse_diagram
+        size:
+          width: 82
+          height: 82
+        position:
+          x: 62
+          'y': 93
+  - id: '12'
+    name: My CloudWatch
+    type: cloudwatch
+    parent:
+      trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    representations:
+      - name: My CloudWatch Representation
+        id: 12-representation
+        representation: parse_diagram
+        size:
+          width: 75
+          height: 75
+        position:
+          x: 103
+          'y': 102
+  - id: '17'
+    name: My API Gateway
+    type: api-gateway
+    parent:
+      trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    representations:
+      - name: My API Gateway Representation
+        id: 17-representation
+        representation: parse_diagram
+        size:
+          width: 82
+          height: 82
+        position:
+          x: 287
+          'y': 369
+  - id: '26'
+    name: My CloudTrail
+    type: cloudtrail
+    parent:
+      trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    representations:
+      - name: My CloudTrail Representation
+        id: 26-representation
+        representation: parse_diagram
+        size:
+          width: 82
+          height: 82
+        position:
+          x: 553
+          'y': 594
+  - id: '29'
+    name: My Simple Storage Service (S3)
+    type: s3
+    parent:
+      trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    representations:
+      - name: My Simple Storage Service (S3) Representation
+        id: 29-representation
+        representation: parse_diagram
+        size:
+          width: 82
+          height: 82
+        position:
+          x: 61
+          'y': 594
+  - id: '38'
+    name: Web browser
+    type: generic-client
+    parent:
+      trustZone: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    representations:
+      - name: Web browser Representation
+        id: 38-representation
+        representation: parse_diagram
+        size:
+          width: 82
+          height: 80
+        position:
+          x: 96
+          'y': 82
+  - id: '44'
+    name: Android
+    type: android-device-client
+    parent:
+      trustZone: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+    representations:
+      - name: Android Representation
+        id: 44-representation
+        representation: parse_diagram
+        size:
+          width: 67
+          height: 123
+        position:
+          x: 96
+          'y': 246
+  - id: '47'
+    name: SQL Database
+    type: CD-MICROSOFT-AZURE-SQL-DB
+    parent:
+      trustZone: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+    representations:
+      - name: SQL Database Representation
+        id: 47-representation
+        representation: parse_diagram
+        size:
+          width: 61
+          height: 82
+        position:
+          x: 164
+          'y': 75
+  - id: '53'
+    name: My DynamoDB
+    type: dynamodb
+    parent:
+      trustZone: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+    representations:
+      - name: My DynamoDB Representation
+        id: 53-representation
+        representation: parse_diagram
+        size:
+          width: 82
+          height: 103
+        position:
+          x: 143
+          'y': 266
+dataflows:
+  - id: '32'
+    name: EC2 Logs
+    source: '9'
+    destination: '12'
+  - id: '33'
+    name: GW/EC2
+    source: '17'
+    destination: '9'
+  - id: '34'
+    name: Log trace
+    source: '17'
+    destination: '26'
+  - id: '35'
+    name: Customer data
+    source: '17'
+    destination: '29'
+  - id: '43'
+    name: 2114ddb1-f677-4275-a9a2-0b2ac8e11073
+    source: '38'
+    destination: '17'
+  - id: '46'
+    name: f58ee066-de2c-4464-9ceb-117b5dfa2703
+    source: '44'
+    destination: '17'
+  - id: '56'
+    name: User data
+    source: '17'
+    destination: '53'
+  - id: '57'
+    name: App data
+    source: '17'
+    destination: '47'

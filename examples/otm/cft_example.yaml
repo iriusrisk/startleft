@@ -1,0 +1,382 @@
+otmVersion: 0.1.0
+project:
+  name: CloudFormation Project
+  id: cloudformation-project
+representations:
+- name: CloudFormation
+  id: CloudFormation
+  type: code
+  repository:
+    url: http://mockedurl
+trustZones:
+- id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+  name: Public Cloud
+  risk:
+    trustRating: 10
+- id: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+  name: Internet
+  risk:
+    trustRating: 10
+components:
+- id: 37e5e555-46ee-44bf-bc38-41fc3405346c
+  name: CustomVPC
+  type: vpc
+  parent:
+    trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+  tags:
+  - AWS::EC2::VPC
+- id: 22139da0-2e4a-4336-a7af-c2d889e5b77e
+  name: PrivateSubnet1
+  type: empty-component
+  parent:
+    component: 37e5e555-46ee-44bf-bc38-41fc3405346c
+  tags:
+  - AWS::EC2::Subnet
+- id: 3311b437-913b-470d-b8f0-55655e8ad0a4
+  name: PrivateSubnet2
+  type: empty-component
+  parent:
+    component: 37e5e555-46ee-44bf-bc38-41fc3405346c
+  tags:
+  - AWS::EC2::Subnet
+- id: 87908756-5674-4829-a26b-796c7d0be3e6
+  name: PublicSubnet1
+  type: empty-component
+  parent:
+    component: 37e5e555-46ee-44bf-bc38-41fc3405346c
+  tags:
+  - AWS::EC2::Subnet
+- id: 8d3000f5-8432-470b-9389-34c4347316c6
+  name: PublicSubnet2
+  type: empty-component
+  parent:
+    component: 37e5e555-46ee-44bf-bc38-41fc3405346c
+  tags:
+  - AWS::EC2::Subnet
+- id: a25f8e7a-e386-4cfe-9100-456dccbca545
+  name: VPCssm
+  type: empty-component
+  parent:
+    component: 22139da0-2e4a-4336-a7af-c2d889e5b77e
+  tags:
+  - AWS::EC2::VPCEndpoint
+- id: 1776bf66-00f5-406c-a163-5effd88ee91a
+  name: VPCssm
+  type: empty-component
+  parent:
+    component: 3311b437-913b-470d-b8f0-55655e8ad0a4
+  tags:
+  - AWS::EC2::VPCEndpoint
+- id: 4364bd81-0ac9-4711-a2ac-2f604ddbd273
+  name: VPCssmmessages
+  type: empty-component
+  parent:
+    component: 22139da0-2e4a-4336-a7af-c2d889e5b77e
+  tags:
+  - AWS::EC2::VPCEndpoint
+- id: 5a3aee3d-257e-48c3-9e95-0be556b1bf8d
+  name: VPCssmmessages
+  type: empty-component
+  parent:
+    component: 3311b437-913b-470d-b8f0-55655e8ad0a4
+  tags:
+  - AWS::EC2::VPCEndpoint
+- id: 48e317c3-68fa-45fe-ba88-8c0a3d78e1fc
+  name: VPCmonitoring
+  type: empty-component
+  parent:
+    component: 22139da0-2e4a-4336-a7af-c2d889e5b77e
+  tags:
+  - AWS::EC2::VPCEndpoint
+- id: f415ff8f-31ea-45ef-ab95-e1ac5ceb32a7
+  name: VPCmonitoring
+  type: empty-component
+  parent:
+    component: 3311b437-913b-470d-b8f0-55655e8ad0a4
+  tags:
+  - AWS::EC2::VPCEndpoint
+- id: d866c98b-72b1-4b1d-b750-31674628f0f8
+  name: Service
+  type: elastic-container-service
+  parent:
+    component: 22139da0-2e4a-4336-a7af-c2d889e5b77e
+  tags:
+  - AWS::ECS::Service
+- id: e00d48e3-9918-480f-b8e9-c7f2403746e9
+  name: Service
+  type: elastic-container-service
+  parent:
+    component: 3311b437-913b-470d-b8f0-55655e8ad0a4
+  tags:
+  - AWS::ECS::Service
+- id: c4ab8f7f-4aed-4ca2-86fb-751dea985ad1
+  name: ServiceTaskDefinition
+  type: docker-container
+  parent:
+    component: d866c98b-72b1-4b1d-b750-31674628f0f8
+  tags:
+  - AWS::ECS::TaskDefinition
+- id: 04a441b2-f80e-4c0b-9abb-409b4505cb11
+  name: ServiceTaskDefinition
+  type: docker-container
+  parent:
+    component: e00d48e3-9918-480f-b8e9-c7f2403746e9
+  tags:
+  - AWS::ECS::TaskDefinition
+- id: 002e971c-fd66-4122-8544-ae4382bc4e0a
+  name: ServiceLB
+  type: load-balancer
+  parent:
+    component: 22139da0-2e4a-4336-a7af-c2d889e5b77e
+  tags:
+  - AWS::ElasticLoadBalancingV2::LoadBalancer
+- id: 737b8bc3-96d4-414f-b2f2-e1bca442554f
+  name: ServiceLB
+  type: load-balancer
+  parent:
+    component: 3311b437-913b-470d-b8f0-55655e8ad0a4
+  tags:
+  - AWS::ElasticLoadBalancingV2::LoadBalancer
+- id: 4d017725-1f8e-4bc9-a0bc-17724df8a273
+  name: Canary
+  type: empty-component
+  parent:
+    component: 87908756-5674-4829-a26b-796c7d0be3e6
+  tags:
+  - AWS::Synthetics::Canary
+- id: 9dd4df79-96b0-4b1b-be16-de15c24ac0cc
+  name: Canary
+  type: empty-component
+  parent:
+    component: 8d3000f5-8432-470b-9389-34c4347316c6
+  tags:
+  - AWS::Synthetics::Canary
+- id: 46352529-a7f3-427b-9e4a-414f29ff07a6
+  name: 0.0.0.0/0
+  type: generic-client
+  parent:
+    trustZone: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+  tags:
+  - Outbound connection destination IP
+- id: 38a701da-0597-4b14-83b1-a8417cb510aa
+  name: 255.255.255.255/32
+  type: generic-client
+  parent:
+    trustZone: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+  tags:
+  - Outbound connection destination IP
+- id: 3b407661-592a-49eb-8d06-715a787189d7
+  name: Systems Manager from VPCEndpoint (grouped)
+  type: CD-SYSTEMS-MANAGER
+  parent:
+    trustZone: b61d6911-338d-46a8-9f39-8dcd24abfe91
+  tags:
+  - VPCssm (AWS::EC2::VPCEndpoint)
+  - VPCssmmessages (AWS::EC2::VPCEndpoint)
+dataflows:
+- id: 136e2cb8-2f08-42a0-995a-0951339fe962
+  name: VPCssmSecurityGroup -> VPCssm
+  source: 37e5e555-46ee-44bf-bc38-41fc3405346c
+  destination: a25f8e7a-e386-4cfe-9100-456dccbca545
+  tags:
+  - Allow all outbound traffic by default
+  - tcp
+  - '443'
+  - '443'
+- id: f32de4b2-5169-46ff-a88f-b291c2dc887e
+  name: VPCssm -> VPCssmSecurityGroup
+  source: a25f8e7a-e386-4cfe-9100-456dccbca545
+  destination: 46352529-a7f3-427b-9e4a-414f29ff07a6
+  tags:
+  - Allow all outbound traffic by default
+  - "-1"
+  - 0.0.0.0/0
+- id: de0fbac7-8697-40c2-802c-f67e349b460d
+  name: VPCssmSecurityGroup -> VPCssm
+  source: 37e5e555-46ee-44bf-bc38-41fc3405346c
+  destination: 1776bf66-00f5-406c-a163-5effd88ee91a
+  tags:
+  - Allow all outbound traffic by default
+  - tcp
+  - '443'
+  - '443'
+- id: 7c0f4163-a302-434a-9099-e3df09924eed
+  name: VPCssm -> VPCssmSecurityGroup
+  source: 1776bf66-00f5-406c-a163-5effd88ee91a
+  destination: 46352529-a7f3-427b-9e4a-414f29ff07a6
+  tags:
+  - Allow all outbound traffic by default
+  - "-1"
+  - 0.0.0.0/0
+- id: bb985603-ce31-4be3-ad33-57e407a09b5e
+  name: VPCssmmessagesSecurityGroup -> VPCssmmessages
+  source: 37e5e555-46ee-44bf-bc38-41fc3405346c
+  destination: 4364bd81-0ac9-4711-a2ac-2f604ddbd273
+  tags:
+  - Allow all outbound traffic by default
+  - tcp
+  - '443'
+  - '443'
+- id: 9bab7c72-013a-46a8-9618-526c9a7ed025
+  name: VPCssmmessages -> VPCssmmessagesSecurityGroup
+  source: 4364bd81-0ac9-4711-a2ac-2f604ddbd273
+  destination: 46352529-a7f3-427b-9e4a-414f29ff07a6
+  tags:
+  - Allow all outbound traffic by default
+  - "-1"
+  - 0.0.0.0/0
+- id: e170a483-5091-4342-bccb-34fdaaa372d1
+  name: VPCssmmessagesSecurityGroup -> VPCssmmessages
+  source: 37e5e555-46ee-44bf-bc38-41fc3405346c
+  destination: 5a3aee3d-257e-48c3-9e95-0be556b1bf8d
+  tags:
+  - Allow all outbound traffic by default
+  - tcp
+  - '443'
+  - '443'
+- id: 47f551d0-aee2-4e83-a408-ef019c97aa3e
+  name: VPCssmmessages -> VPCssmmessagesSecurityGroup
+  source: 5a3aee3d-257e-48c3-9e95-0be556b1bf8d
+  destination: 46352529-a7f3-427b-9e4a-414f29ff07a6
+  tags:
+  - Allow all outbound traffic by default
+  - "-1"
+  - 0.0.0.0/0
+- id: 63ea2aac-4d2e-4cef-a19c-7f933eaf3bd5
+  name: VPCmonitoringSecurityGroup -> VPCmonitoring
+  source: 37e5e555-46ee-44bf-bc38-41fc3405346c
+  destination: 48e317c3-68fa-45fe-ba88-8c0a3d78e1fc
+  tags:
+  - Allow all outbound traffic by default
+  - tcp
+  - '443'
+  - '443'
+- id: 9dd0d880-779d-428d-a7d6-47251b5bab30
+  name: VPCmonitoring -> VPCmonitoringSecurityGroup
+  source: 48e317c3-68fa-45fe-ba88-8c0a3d78e1fc
+  destination: 46352529-a7f3-427b-9e4a-414f29ff07a6
+  tags:
+  - Allow all outbound traffic by default
+  - "-1"
+  - 0.0.0.0/0
+- id: 664e7faf-1a1a-4e73-96ab-8e329153b6a3
+  name: VPCmonitoringSecurityGroup -> VPCmonitoring
+  source: 37e5e555-46ee-44bf-bc38-41fc3405346c
+  destination: f415ff8f-31ea-45ef-ab95-e1ac5ceb32a7
+  tags:
+  - Allow all outbound traffic by default
+  - tcp
+  - '443'
+  - '443'
+- id: 0170d9ce-ef42-4c45-86fd-9144299ff67f
+  name: VPCmonitoring -> VPCmonitoringSecurityGroup
+  source: f415ff8f-31ea-45ef-ab95-e1ac5ceb32a7
+  destination: 46352529-a7f3-427b-9e4a-414f29ff07a6
+  tags:
+  - Allow all outbound traffic by default
+  - "-1"
+  - 0.0.0.0/0
+- id: 94ee6620-89bb-4818-bf5c-11fd8806ca2f
+  name: Service -> OutboundSecurityGroup
+  source: d866c98b-72b1-4b1d-b750-31674628f0f8
+  destination: 38a701da-0597-4b14-83b1-a8417cb510aa
+  tags:
+  - Disallow all traffic
+  - icmp
+  - 255.255.255.255/32
+- id: 6ac18223-01d4-4237-b3ee-db4cf1930ea7
+  name: Service -> OutboundSecurityGroup
+  source: e00d48e3-9918-480f-b8e9-c7f2403746e9
+  destination: 38a701da-0597-4b14-83b1-a8417cb510aa
+  tags:
+  - Disallow all traffic
+  - icmp
+  - 255.255.255.255/32
+- id: e976229f-23bb-4259-bb09-4e3cbf200e90
+  name: ServiceLB -> Service
+  source: 002e971c-fd66-4122-8544-ae4382bc4e0a
+  destination: d866c98b-72b1-4b1d-b750-31674628f0f8
+  tags:
+  - Load balancer to target
+  - tcp
+  - '80'
+  - '80'
+  - Load balancer to target
+  - tcp
+  - '80'
+  - '80'
+- id: 99d18f43-5d0c-43bd-935c-623915e92299
+  name: ServiceLB -> Service
+  source: 002e971c-fd66-4122-8544-ae4382bc4e0a
+  destination: e00d48e3-9918-480f-b8e9-c7f2403746e9
+  tags:
+  - Load balancer to target
+  - tcp
+  - '80'
+  - '80'
+  - Load balancer to target
+  - tcp
+  - '80'
+  - '80'
+- id: 30e2e53a-ff9c-4e85-9d1f-739d6eb295ae
+  name: Canary -> ServiceLB
+  source: 4d017725-1f8e-4bc9-a0bc-17724df8a273
+  destination: 002e971c-fd66-4122-8544-ae4382bc4e0a
+  tags:
+  - from ECSFargateGoCanaryStackCanarySecurityGroup:443
+  - tcp
+  - '443'
+  - '443'
+- id: 59a4148e-5124-4099-83db-f936aae78eb9
+  name: Canary -> ServiceLB
+  source: 9dd4df79-96b0-4b1b-be16-de15c24ac0cc
+  destination: 002e971c-fd66-4122-8544-ae4382bc4e0a
+  tags:
+  - from ECSFargateGoCanaryStackCanarySecurityGroup:443
+  - tcp
+  - '443'
+  - '443'
+- id: d6fc28b6-d03c-4e49-a038-68643b5faf75
+  name: ServiceLB -> Service
+  source: 737b8bc3-96d4-414f-b2f2-e1bca442554f
+  destination: d866c98b-72b1-4b1d-b750-31674628f0f8
+  tags:
+  - Load balancer to target
+  - tcp
+  - '80'
+  - '80'
+  - Load balancer to target
+  - tcp
+  - '80'
+  - '80'
+- id: 2c100e5d-00e9-44ea-8a5b-8e464d129343
+  name: ServiceLB -> Service
+  source: 737b8bc3-96d4-414f-b2f2-e1bca442554f
+  destination: e00d48e3-9918-480f-b8e9-c7f2403746e9
+  tags:
+  - Load balancer to target
+  - tcp
+  - '80'
+  - '80'
+  - Load balancer to target
+  - tcp
+  - '80'
+  - '80'
+- id: df42ee74-c76d-4045-940d-b299ecb8572f
+  name: Canary -> ServiceLB
+  source: 4d017725-1f8e-4bc9-a0bc-17724df8a273
+  destination: 737b8bc3-96d4-414f-b2f2-e1bca442554f
+  tags:
+  - from ECSFargateGoCanaryStackCanarySecurityGroup:443
+  - tcp
+  - '443'
+  - '443'
+- id: 7ebfb90d-7809-4043-bdc4-2eb1cccb27b1
+  name: Canary -> ServiceLB
+  source: 9dd4df79-96b0-4b1b-be16-de15c24ac0cc
+  destination: 737b8bc3-96d4-414f-b2f2-e1bca442554f
+  tags:
+  - from ECSFargateGoCanaryStackCanarySecurityGroup:443
+  - tcp
+  - '443'
+  - '443'

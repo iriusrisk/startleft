@@ -21,7 +21,7 @@ setup(
         'jmespath==1.0.1',
         'python-hcl2==4.3.0',
         'requests==2.28.2',
-        'fastapi==0.92.0',
+        'fastapi==0.93.0',
         'python-multipart==0.0.5',
         'click==8.1.3',
         'uvicorn==0.20.0',
@@ -45,14 +45,14 @@ setup(
         ],
         "test": [
             'tox==4.4.6',
-            'pytest==7.2.1',
+            'pytest==7.2.2',
             'responses==0.22.0',
             'deepdiff==6.2.3',
             'httpx==0.23.3'
         ],
         "doc": [
-            'mkdocs-material==9.0.13',
-            'pymdown-extensions==9.9.2',
+            'mkdocs-material==9.1.1',
+            'pymdown-extensions==9.10',
             'mkdocs-glightbox==0.3.1'
         ]
     },

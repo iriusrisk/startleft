@@ -38,8 +38,8 @@ class TestOTMControllerIaCTerraform:
     uc_d = ('proj_D', 'proj D', tf_file, app_json, None, 'RequestValidationError')
     uc_e = ('proj_E', 'proj E', tf_file, app_json, wrong_id, 'MappingFileNotValidError')
     uc_f = ('proj_F', 'proj F', None, None, None, 'RequestValidationError')
-    uc_h = ('proj_H', 'proj H', invalid_tf, '', tf_map, 'LoadingIacFileError')
-    uc_i = ('proj_I', 'proj I', invalid_tf, text_yaml, tf_map, 'LoadingIacFileError')
+    uc_h = ('proj_H', 'proj H', invalid_tf, '', tf_map, 'IacFileNotValidError')
+    uc_i = ('proj_I', 'proj I', invalid_tf, text_yaml, tf_map, 'IacFileNotValidError')
     uc_j = ('proj_J', 'proj J', invalid_tf, None, tf_map, 'LoadingIacFileError')
     uc_k = ('proj_K', 'proj K', terraform_gz, None, tf_map, 'IacFileNotValidError')
     uc_l = ('proj_L', 'proj L', visio_aws_shapes, None, tf_map, 'IacFileNotValidError')
@@ -285,9 +285,9 @@ class TestOTMControllerIaCTerraform:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @mark.parametrize('iac_source,detail', [
-        (b'', 'Terraform file is not valid. Invalid size'),
-        (bytearray(4), 'Terraform file is not valid. Invalid size'),
-        (bytearray(1024 * 1024 * 20 + 1), 'Terraform file is not valid. Invalid size')])
+        (b'', 'Provided iac_file is not valid. Invalid size'),
+        (bytearray(4), 'Provided iac_file is not valid. Invalid size'),
+        (bytearray(1024 * 1024 * 20 + 1), 'Provided iac_file is not valid. Invalid size')])
     @responses.activate
     def test_response_on_invalid_iac_file(self, iac_source, detail):
         # Given a project_id
