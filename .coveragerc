@@ -9,12 +9,6 @@ omit =
     run_tests.py
 
 [report]
-omit =
-    ./venv/*
-    */tests/*
-    *__init__.py
-    setup.py
-    run_tests.py
 fail_under = 80
 
 [html]
