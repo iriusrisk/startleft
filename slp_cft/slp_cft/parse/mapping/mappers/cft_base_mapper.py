@@ -90,9 +90,7 @@ class CloudformationBaseMapper(ABC):
         if mapping_tags is not None and singleton_multiple_tags is not None:
             resource["singleton_multiple_tags"] = singleton_multiple_tags
 
-        if 1 == 1:
-            resource = None
-        return resource["QA test"]
+        return resource
 
     def get_altsource_mapping_path_value(self, source_model, alt_source_object, mapping_path):
         value = None
