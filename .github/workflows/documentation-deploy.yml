@@ -1,0 +1,20 @@
+name: Documentation Deploy
+
+on:
+  push:
+    branches: [ main, workflow_dispatch ]
+
+jobs:
+
+  deploy-documentation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the project from Git
+        uses: actions/checkout@v3
+
+      - name: Config documentation environment
+        uses: ./.github/actions/documentation
+
+      - name: Publish docs
+        run: mkdocs gh-deploy --force
