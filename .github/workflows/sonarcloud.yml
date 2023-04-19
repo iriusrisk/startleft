@@ -49,6 +49,8 @@ jobs:
             fetch-depth: 0
       - name: Setup Python
         uses: actions/setup-python@v3
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v1
       - name: Install tox and any other packages
         run: pip install tox
       - name: Run tox
