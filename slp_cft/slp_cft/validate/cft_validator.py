@@ -36,3 +36,7 @@ class CloudformationValidator(ProviderValidator):
             mime = magik.from_buffer(cft_data)
             if mime not in IacType.CLOUDFORMATION.valid_mime:
                 raise generate_content_type_error(IacType.CLOUDFORMATION, 'iac_file', IacFileNotValidError)
+
+    @staticmethod
+    def __validate_empty():
+        return None
