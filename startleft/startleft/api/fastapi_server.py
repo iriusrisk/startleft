@@ -1,7 +1,10 @@
 import logging
+import os
 from typing import Dict, Any, List
 
+import pkg_resources
 import uvicorn
+import yaml
 from fastapi import FastAPI, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
@@ -25,6 +28,10 @@ webapp.include_router(iac_create_otm_controller.router)
 webapp.include_router(diag_create_otm_controller.router)
 webapp.include_router(etm_create_otm_controller.router)
 
+webapp.openapi = lambda: set_custom_openapi()
+
+swagger_schema_filename = "swagger.yaml"
+
 
 def get_log_config():
     log_config = uvicorn.config.LOGGING_CONFIG
@@ -39,8 +46,26 @@ def get_log_config():
     return log_config
 
 
-def run_webapp(port: int):
-    uvicorn.run(webapp, host="127.0.0.1", port=port, log_config=get_log_config())
+def set_custom_openapi():
+    if webapp.openapi_schema:
+        return webapp.openapi_schema
+    webapp.openapi_schema = load_custom_openapi()
+    return webapp.openapi_schema
+
+
+def load_custom_openapi():
+    try:
+        schema_path = pkg_resources.resource_filename('startleft',
+                                                      os.path.join('resources/api/v1', swagger_schema_filename))
+        with open(schema_path, 'r') as f:
+            return yaml.load(f.read(), Loader=yaml.BaseLoader)
+    except Exception as e:
+        logger.exception(f"Failed to load Swagger schema.\n{e}")
+        return None
+
+
+def run_webapp(host: str, port: int):
+    uvicorn.run(webapp, host=host, port=port, log_config=get_log_config())
 
 
 @webapp.exception_handler(HTTPException)
@@ -102,4 +127,3 @@ def common_response_handler(status_code: int, type_: str, title: str, detail: st
     error_response = ErrorResponse(error_type=type_, status=status_code, title=title, detail=detail, messages=messages)
 
     return JSONResponse(status_code=status_code, content=jsonable_encoder(error_response))
-

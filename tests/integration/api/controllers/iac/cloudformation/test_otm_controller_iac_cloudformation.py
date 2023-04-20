@@ -36,7 +36,7 @@ class TestOTMControllerIaCCloudformation:
     uc_d = ('proj_D', 'proj D', example_json, app_json, None, 'RequestValidationError')
     uc_e = ('proj_E', 'proj E', example_json, app_json, wrong_id, 'MappingFileNotValidError')
     uc_f = ('proj_F', 'proj F', None, None, None, 'RequestValidationError')
-    uc_h = ('proj_H', 'proj H', invalid_yaml, '', cft_map, 'OTMBuildingError')
+    uc_h = ('proj_H', 'proj H', invalid_yaml, '', cft_map, 'IacFileNotValidError')
     uc_i = ('proj_I', 'proj I', invalid_yaml, text_yaml, cft_map, 'OTMBuildingError')
     uc_j = ('proj_J', 'proj J', invalid_yaml, None, cft_map, 'OTMBuildingError')
     uc_k = ('proj_K', 'proj K', cloudformation_gz, None, cft_map, 'IacFileNotValidError')
@@ -272,9 +272,9 @@ class TestOTMControllerIaCCloudformation:
         assert body_response['errors'][0]['errorMessage'] == 'mocked error msg'
 
     @mark.parametrize('iac_source,detail', [
-        (b'', 'CloudFormation file is not valid. Invalid size'),
-        (bytearray(4), 'CloudFormation file is not valid. Invalid size'),
-        (bytearray(1024 * 1024 * 20 + 1), 'CloudFormation file is not valid. Invalid size')
+        (b'', 'Provided iac_file is not valid. Invalid size'),
+        (bytearray(4), 'Provided iac_file is not valid. Invalid size'),
+        (bytearray(1024 * 1024 * 20 + 1), 'Provided iac_file is not valid. Invalid size')
     ])
     @responses.activate
     def test_response_on_invalid_iac_file(self, iac_source, detail):
