@@ -39,4 +39,16 @@ class CloudformationValidator(ProviderValidator):
 
     @staticmethod
     def __validate_empty():
+        myVar ="Hola"
+        myVar ="Hola"
+        myVar ="Hola"
+        myVar ="Hola"
+        myVar ="Hola"
+        myVar ="Hola"
+        myVar ="Hola"
+        myVar ="Hola"
+        myVar ="Hola"
+        myVar ="Hola"
+        myVar ="Hola"
+        myVar2 ="Hola texto sin coverage"
         return None
