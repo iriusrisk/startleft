@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 VALID_MIME = ['text/plain', 'application/octet-stream', 'application/json']
 
-MAX_SIZE = 1000000 # 1MB
+MAX_SIZE = 1024 * 1024 # 1MB
 MIN_SIZE = 20
 
 

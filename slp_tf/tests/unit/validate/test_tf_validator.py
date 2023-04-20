@@ -6,7 +6,7 @@ from slp_tf.slp_tf.validate.tf_validator import TerraformValidator
 
 VALID_MIME = 'text/plain'
 MIN_SIZE = 20
-MAX_SIZE = 1000000 # 1MB
+MAX_SIZE = 1024 * 1024 # 1MB
 
 
 def create_terraform_file_data(size: int) -> bytes:
