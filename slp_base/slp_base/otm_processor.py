@@ -29,13 +29,16 @@ class OTMProcessor(metaclass=abc.ABCMeta):
     # Do not override this method.
     def process(self) -> OTM:
         """Process all the flow from the input data to the OTM output"""
-        self.get_provider_validator().validate()
-        self.get_provider_loader().load()
+        try:
+            self.get_provider_validator().validate()
+            self.get_provider_loader().load()
 
-        self.get_mapping_validator().validate()
-        self.get_mapping_loader().load()
+            self.get_mapping_validator().validate()
+            self.get_mapping_loader().load()
 
-        otm = self.get_provider_parser().build_otm()
+            otm = self.get_provider_parser().build_otm()
+        finally:
+            self._clean_resources()
 
         OTMRepresentationsPruner(otm).prune()
         OTMTrustZoneUnifier(otm).unify()
@@ -67,3 +70,7 @@ class OTMProcessor(metaclass=abc.ABCMeta):
     def get_provider_parser(self) -> ProviderParser:
         """get the provider parser implementation to build the otm"""
         raise NotImplementedError
+
+    def _clean_resources(self):
+        """hook method to let the subclasses clean up its resources if necessary"""
+        pass
