@@ -124,6 +124,7 @@ customerexamples
 /.run/
 /bin/
 /startleft/bin/
+/coveragereport/
 
 # SonarLint plugin
 .scannerwork
