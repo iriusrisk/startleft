@@ -124,3 +124,10 @@ customerexamples
 /.run/
 /bin/
 /startleft/bin/
+/coveragereport/
+
+# SonarLint plugin
+.scannerwork
+
+# SonarLint plugin
+.scannerwork

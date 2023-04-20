@@ -1,0 +1,341 @@
+---
+openapi: 3.0.2
+info:
+  title: StartLeft API
+  version: 1.0.0
+  description: "StartLeft is an automation tool for generating Threat Models written in the Open Threat Model (OTM) format from a variety of different sources such as IaC files, diagrams or projects exported from Threat Modelling tools."
+  contact:
+    name: "StartLeft GitHub"
+    url: https://github.com/iriusrisk/startleft/issues
+  license:
+    name: "Apache-2.0 license"
+    url: https://github.com/iriusrisk/startleft/blob/main/LICENSE
+paths:
+  "/health":
+    get:
+      tags:
+        - health
+      summary: Health
+      operationId: health_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+              example: {"status":"OK","version":"1.12.0","components":{"StartLeft":"OK"}}
+  "/api/v1/startleft/iac":
+    post:
+      tags:
+        - IaC
+      summary: IaC to OTM
+      description: It generates an OTM from an IaC file
+      operationId: iac_api_v1_startleft_iac_post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+                - iac_file
+                - iac_type
+                - id
+                - name
+                - mapping_file
+              type: object
+              properties:
+                iac_file:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Files that contains Iac definitions to be merged into one data
+                    structure
+                  example:
+                    externalValue: https://github.com/iriusrisk/startleft/raw/main/examples/terraform/multinetwork_security_groups_with_lb.tf
+                iac_type:
+                  "$ref": "#/components/schemas/IacType"
+                id:
+                  type: string
+                  description: ID of the new project
+                  example: example-project
+                name:
+                  type: string
+                  description: Name of the new project
+                  example: Example project
+                mapping_file:
+                  type: string
+                  description: File that contains the mapping between IaC resources and threat
+                    model resources
+                  format: binary
+                  example:
+                    externalValue: https://github.com/iriusrisk/startleft/raw/main/examples/terraform/iriusrisk-tf-aws-mapping.yaml
+        required: true
+      responses:
+        '201':
+          description: Provided source file has been successfully processed and a
+            new OTM file has been created
+          content:
+            application/json:
+              schema: {}
+              examples:
+                Example:
+                  "$ref": '#/components/examples/201'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                Example:
+                  "$ref": '#/components/examples/400'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                Example:
+                  "$ref": '#/components/examples/500'
+  "/api/v1/startleft/diagram":
+    post:
+      tags:
+        - Diagram
+      summary: Diagram to OTM
+      description: It generates an OTM from an diagram file
+      operationId: diagram_api_v1_startleft_diagram_post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+                - diag_file
+                - diag_type
+                - id
+                - name
+                - default_mapping_file
+              type: object
+              properties:
+                diag_file:
+                  type: string
+                  description: File that contains the diagram definition
+                  format: binary
+                  example:
+                    externalValue: https://github.com/iriusrisk/startleft/raw/main/examples/visio/visio-basic-example.vsdx
+                diag_type:
+                  "$ref": "#/components/schemas/DiagramType"
+                id:
+                  type: string
+                  description: ID of the new project
+                  example: example-project
+                name:
+                  type: string
+                  description: Name of the new project
+                  example: Example project
+                default_mapping_file:
+                  type: string
+                  description: File that contains the default mapping file
+                  format: binary
+                  example:
+                    externalValue: https://github.com/iriusrisk/startleft/raw/main/examples/visio/iriusrisk-visio-aws-mapping.yaml
+                custom_mapping_file:
+                  type: string
+                  description: File that contains the user custom mapping file
+                  format: binary
+        required: true
+      responses:
+        '201':
+          description: Provided source file has been successfully processed and a
+            new OTM file has been created
+          content:
+            application/json:
+              schema: {}
+              examples:
+                Example:
+                  "$ref": '#/components/examples/201'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                Example:
+                  "$ref": '#/components/examples/400'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                Example:
+                  "$ref": '#/components/examples/500'
+  "/api/v1/startleft/external-threat-model":
+    post:
+      tags:
+        - Threat Model
+      summary: External Threat Model to OTM
+      description: It generates an OTM from another threat models formats
+      operationId: etm_api_v1_startleft_external_threat_model_post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+                - source_file
+                - source_type
+                - id
+                - name
+                - default_mapping_file
+              type: object
+              properties:
+                source_file:
+                  type: string
+                  description: File that contains the original Threat model
+                  format: binary
+                  example:
+                    externalValue: https://github.com/iriusrisk/startleft/raw/main/examples/mtmt/MTMT_example.tm7
+                source_type:
+                  "$ref": "#/components/schemas/EtmType"
+                id:
+                  type: string
+                  description: ID of the new project
+                  example: example-project
+                name:
+                  type: string
+                  description: Name of the new project
+                  example: Example project
+                default_mapping_file:
+                  type: string
+                  description: File that contains the default mapping file
+                  format: binary
+                  example:
+                    externalValue: https://github.com/iriusrisk/startleft/raw/main/examples/mtmt/mtmt_default_mapping_example.yaml
+                custom_mapping_file:
+                  type: string
+                  description: File that contains the user custom mapping file
+                  format: binary
+        required: true
+      responses:
+        '201':
+          description: Provided source file has been successfully processed and a
+            new OTM file has been created
+          content:
+            application/json:
+              schema: {}
+              examples:
+                Example:
+                  "$ref": '#/components/examples/201'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                Example:
+                  "$ref": '#/components/examples/400'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                Example:
+                  "$ref": '#/components/examples/500'
+components:
+  schemas:
+    ErrorResponse:
+      required:
+        - status
+        - error_type
+        - title
+        - detail
+      type: object
+      description: Object containing all the information about an error
+      properties:
+        status:
+          type: string
+          description: The HTTP status code
+        error_type:
+          type: string
+          description: The error type
+        title:
+          type: string
+          description: The error in human readable format
+        detail:
+          type: string
+          description: Detailed description of the error and its cause
+        errors:
+          type: array
+          description: An array listing all the errors
+          items:
+            "$ref": "#/components/schemas/ErrorResponseItem"
+          default: []
+      externalDocs:
+        url: https://iriusrisk.github.io/startleft/development/Errors-Management/
+    ErrorResponseItem:
+      required:
+        - errorMessage
+      type: object
+      properties:
+        errorMessage:
+          type: string
+          description: The reason of the error
+    EtmType:
+      enum:
+        - MTMT
+      type: string
+      description: Type of ETM file
+      example: MTMT
+    IacType:
+      enum:
+        - CLOUDFORMATION
+        - TERRAFORM
+      type: string
+      description: Type of IaC file
+      example: TERRAFORM
+    DiagramType:
+      enum:
+        - VISIO
+        - LUCID
+      type: string
+      description: Type of Diagram file
+      example: VISIO
+  examples:
+    201:
+      value: {"otmVersion": "0.1.0", "project": {"name": "Example project", "id": "example-project" }, "representations": [], "trustZones": [], "components": [], "dataflows": []}
+    400:
+      value:
+        status: 400
+        error_type: RequestValidationError
+        title: The request is not valid
+        detail: InvalidRequest
+        errors: ["errorMessage": "Error in field 'field' located in 'body'. field required"]
+    500:
+      value:
+        status: 500
+        error_type: OtmGenerationError
+        title: Internal Server Error
+        detail: OtmGenerationError
+        errors: ["errorMessage": "The server encountered an error and could not process the request"]
+tags:
+  - name: health
+    description: Check the service status
+    externalDocs:
+      url: https://iriusrisk.github.io/startleft/usage/REST-API/#health
+  - name: IaC
+    description: Parse Infraestructure as Code formats like Terraform or Cloudformation
+    externalDocs:
+      url: https://iriusrisk.github.io/startleft/usage/REST-API/#iac
+  - name: Diagram
+    description: Parse diagram formats like Visio or Lucidchart
+    externalDocs:
+      url: https://iriusrisk.github.io/startleft/usage/REST-API/#diagram
+  - name: Threat Model
+    description: Parse threat modeling formats like MTMT
+    externalDocs:
+      url: https://iriusrisk.github.io/startleft/usage/REST-API/#external-threat-model

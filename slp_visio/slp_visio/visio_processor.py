@@ -1,6 +1,6 @@
 from starlette.datastructures import UploadFile
 
-from sl_util.sl_util.file_utils import copy_to_disk
+from sl_util.sl_util.file_utils import copy_to_disk, delete
 from slp_base import OTMProcessor, ProviderValidator, ProviderLoader, MappingValidator, MappingLoader, ProviderParser, \
     DiagramType
 from slp_visio.slp_visio.load.visio_loader import VisioLoader
@@ -23,10 +23,8 @@ class VisioProcessor(OTMProcessor):
         self.project_id = project_id
         self.project_name = project_name
         self.mappings = mappings
-        if type(source) is UploadFile:
-            self.source = copy_to_disk(source.file, '.vsdx')
-        else:
-            self.source = source
+        self.is_temporary_source = type(source) is UploadFile
+        self.source = copy_to_disk(source.file, '.vsdx') if self.is_temporary_source else source
         self.loader = None
         self.mapping_loader = None
 
@@ -56,3 +54,7 @@ class VisioProcessor(OTMProcessor):
             return LucidParser(self.project_id, self.project_name, visio, self.mapping_loader)
         else:
             return VisioParser(self.project_id, self.project_name, visio, self.mapping_loader)
+
+    def _clean_resources(self):
+        if self.is_temporary_source:
+            delete(self.source.name)
