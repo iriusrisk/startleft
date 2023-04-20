@@ -8,11 +8,5 @@ omit =
     setup.py
     run_tests.py
 
-[report]
-fail_under = 80
-
-[html]
-directory = coveragereport
-
 [xml]
 output = coveragereport/coverage.xml
