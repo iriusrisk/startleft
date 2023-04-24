@@ -53,6 +53,9 @@ coverage.xml
 test-reports/
 /coveragereport/
 
+# SonarLint plugin
+.scannerwork
+
 # Translations
 *.mo
 *.pot
