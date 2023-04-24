@@ -4,17 +4,17 @@ import re
 from json import JSONDecodeError
 from typing import List, Dict
 
-from slp_base.slp_base.schema import Schema
 from sl_util.sl_util.file_utils import get_file_type_by_content, read_byte_data
 from slp_base import IacFileNotValidError, IacType
 from slp_base.slp_base import ProviderValidator
 from slp_base.slp_base.provider_validator import generate_size_error, generate_content_type_error
+from slp_base.slp_base.schema import Schema
 
 logger = logging.getLogger(__name__)
 
 MIN_FILE_SIZE = 20
-MAX_TFPLAN_FILE_SIZE = 5000000  # 5MB
-MAX_TFGRAPH_FILE_SIZE = 2000000  # 2MB
+MAX_TFPLAN_FILE_SIZE = 5 * 1024 * 1024  # 5MB
+MAX_TFGRAPH_FILE_SIZE = 2 * 1024 * 1024  # 2MB
 
 TFPLAN_MIME_TYPE = 'application/json'
 TFGRAPH_MIME_TYPE = 'text/plain'
