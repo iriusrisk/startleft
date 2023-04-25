@@ -37,5 +37,4 @@ jobs:
         run: pip install -e ".[setup,test]"
 
       - name: Test with pytest
-        run: |
-          python run_tests.py --log-level debug
+        run: python run_tests.py --log-level debug

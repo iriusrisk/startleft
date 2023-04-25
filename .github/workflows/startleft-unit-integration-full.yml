@@ -37,7 +37,8 @@ jobs:
       - name: Setup Graphviz
         uses: ts-graphviz/setup-graphviz@v1
 
-      - if: runner.os == 'Windows'
+      - name: Configure Graphviz in Windows
+        if: runner.os == 'Windows'
         shell: bash
         run: |
           pip install --global-option=build_ext --global-option="-IC:\Program files\Graphviz\include" --global-option="-LC:\Program files\Graphviz\lib" pygraphviz
@@ -47,10 +48,9 @@ jobs:
         run: pip install -e ".[setup,test]"
 
         # This step MUST be after the general installation of StartLeft
-      - if: runner.os == 'Windows'
-        run: |
-          pip install python-magic-bin
+      - name: Install libmagic in Windows
+        if: runner.os == 'Windows'
+        run: pip install python-magic-bin
 
       - name: Test with pytest
-        run: |
-          python run_tests.py --log-level debug
+        run: python run_tests.py --log-level debug
