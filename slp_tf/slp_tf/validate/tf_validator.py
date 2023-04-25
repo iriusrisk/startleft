@@ -8,7 +8,9 @@ from slp_base.slp_base.provider_validator import generate_size_error, generate_c
 
 logger = logging.getLogger(__name__)
 
-MAX_SIZE = 20 * 1024 * 1024
+VALID_MIME = ['text/plain', 'application/octet-stream', 'application/json']
+
+MAX_SIZE = 1024 * 1024  # 1MB
 MIN_SIZE = 20
 
 
