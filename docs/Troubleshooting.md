@@ -16,7 +16,7 @@ library as indicated in the [prerequisites section](Quickstart-Guide-for-Beginne
 When trying to launch StartLeft documentation by `mkdocs serve` using IntelliJ, you may get an 
 error stating that the `glightbox` package is not installed. 
 
-This requires re-running the `pip install -e ".[doc]"` 
+This requires re-running the `pip install -r docs/requirements.txt` 
 command and restarting the IDE.
 ---
 
