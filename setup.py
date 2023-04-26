@@ -50,11 +50,6 @@ setup(
             'responses==0.22.0',
             'deepdiff==6.2.3',
             'httpx==0.23.3'
-        ],
-        "doc": [
-            'mkdocs-material==9.1.1',
-            'pymdown-extensions==9.10',
-            'mkdocs-glightbox==0.3.1'
         ]
     },
     entry_points='''

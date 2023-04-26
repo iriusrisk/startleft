@@ -232,3 +232,15 @@ class TestTerraformProcessor:
         #    AND both components are mapped with the same name
         assert len(otm.components) == 2
         assert otm.components[0].name == otm.components[1].name
+
+    def test_valid_terraform_size_over_1mb(self):
+
+        # GIVEN a terraform file file under 2MB
+        tf_file = get_data(test_resource_paths.terraform_invalid_size_over_1mb)
+        # AND the default terraform mapping file
+        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+
+        # WHEN processing
+        # THEN a 400 error is returned
+        with pytest.raises(IacFileNotValidError):
+            TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, tf_file, [mapping_file]).process()
