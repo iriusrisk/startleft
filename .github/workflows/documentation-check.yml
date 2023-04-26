@@ -1,0 +1,18 @@
+name: Documentation Check
+
+on: [pull_request]
+
+jobs:
+
+  check-documentation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the project from Git
+        uses: actions/checkout@v3
+
+      - name: Config documentation environment
+        uses: ./.github/actions/documentation
+
+      - name: Check doc build
+        run: mkdocs build
