@@ -19,6 +19,6 @@ class CreateConnectorStrategy(Strategy):
                 or NotImplemented)
 
     @abc.abstractmethod
-    def create_connector(self, shape: Shape) -> Optional[DiagramConnector]:
+    def create_connector(self, shape: Shape, **kwargs) -> Optional[DiagramConnector]:
         """creates the OTM Dataflow from the vsdx shape"""
         raise NotImplementedError
