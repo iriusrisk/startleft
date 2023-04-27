@@ -21,7 +21,7 @@ class CreateConnectorByLineCoordinates(CreateConnectorStrategy):
         self.tolerance = 0.09
         self.representer: SimpleComponentRepresenter() = SimpleComponentRepresenter()
 
-    def create_connector(self, shape: Shape, **kwargs) -> Optional[DiagramConnector]:
+    def create_connector(self, shape: Shape, components=None) -> Optional[DiagramConnector]:
         if not shape.begin_x or not shape.begin_y or not shape.end_x or not shape.end_y:
             return None
         begin_line = Point(shape.begin_x, shape.begin_y)
@@ -29,7 +29,6 @@ class CreateConnectorByLineCoordinates(CreateConnectorStrategy):
         if not begin_line or not end_line:
             return None
 
-        components = kwargs.get('components')
         if not components:
             return None
         origin = self.__match_component(begin_line, components)

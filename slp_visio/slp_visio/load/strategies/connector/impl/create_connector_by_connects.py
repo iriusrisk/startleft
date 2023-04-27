@@ -11,7 +11,7 @@ class CreateConnectorByConnects(CreateConnectorStrategy):
     Strategy to create a connector from the shape connects
     """
 
-    def create_connector(self, shape: Shape, **kwargs) -> Optional[DiagramConnector]:
+    def create_connector(self, shape: Shape, components=None) -> Optional[DiagramConnector]:
         connected_shapes = shape.connects
         if not self.are_two_different_shapes(connected_shapes):
             return None
