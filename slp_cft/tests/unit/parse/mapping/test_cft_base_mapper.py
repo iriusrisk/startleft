@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 from slp_cft.slp_cft.parse.mapping.mappers.cft_base_mapper import CloudformationBaseMapper
 from slp_cft.slp_cft.parse.mapping.cft_sourcemodel import CloudformationSourceModel
 from slp_cft.slp_cft.load.cft_loader import CloudformationLoader
-from sl_util.sl_util.file_utils import get_data
+from sl_util.sl_util.file_utils import get_byte_data
 from slp_cft.tests.resources import test_resource_paths
 
 REF_FUNCTION_COMMON_SOURCE = {'Type': 'AWS::EC2::SecurityGroup', 'Condition': 'EC2SecurityEnabled', 'Properties':
@@ -40,7 +40,7 @@ class TestCloudformationBaseMapper:
     def test_retrieve_name_with_ref_function_parameters_and_default(self):
         # GIVEN a cloudformation JSON file
         # AND the ref value is a Parameter with Default Attribute
-        cft_file = get_data(test_resource_paths.cloudformation_with_ref_function_and_default_property_json)
+        cft_file = get_byte_data(test_resource_paths.cloudformation_with_ref_function_and_default_property_json)
         cft_loader = CloudformationLoader([cft_file])
         cft_loader.load()
 
@@ -57,7 +57,7 @@ class TestCloudformationBaseMapper:
     def test_retrieve_name_with_ref_function_parameters_without_default(self):
         # GIVEN a cloudformation JSON file
         # AND the ref value is a Parameter without Default Attribute
-        cft_file = get_data(test_resource_paths.cloudformation_with_ref_function_and_without_default_property_json)
+        cft_file = get_byte_data(test_resource_paths.cloudformation_with_ref_function_and_without_default_property_json)
         cft_loader = CloudformationLoader([cft_file])
         cft_loader.load()
 
@@ -74,7 +74,7 @@ class TestCloudformationBaseMapper:
     def test_retrieve_name_with_ref_function_without_parameters(self):
         # GIVEN a cloudformation JSON file
         # AND the ref value is a Parameter without Parameters
-        cft_file = get_data(test_resource_paths.cloudformation_with_ref_function_and_without_parameters)
+        cft_file = get_byte_data(test_resource_paths.cloudformation_with_ref_function_and_without_parameters)
         cft_loader = CloudformationLoader([cft_file])
         cft_loader.load()
 

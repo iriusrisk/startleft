@@ -7,7 +7,7 @@ import click
 
 from _sl_build.modules import PROCESSORS
 from otm.otm.entity.otm import OTM
-from sl_util.sl_util.file_utils import get_data, get_byte_data
+from sl_util.sl_util.file_utils import get_byte_data
 from slp_base import CommonError
 from slp_base import DiagramType, OTMGenerationError, EtmType
 from slp_base import IacType
@@ -85,9 +85,9 @@ def parse_iac(iac_type, mapping_file, output_file, project_name, project_id, iac
     logger.info("Parsing IaC source files into OTM")
     iac_data = []
     for iac_file in iac_files:
-        iac_data.append(get_data(iac_file))
+        iac_data.append(get_byte_data(iac_file))
 
-    mapping_data = [get_data(mapping_file)]
+    mapping_data = [get_byte_data(mapping_file)]
 
     processor = provider_resolver.get_processor(IacType(iac_type.upper()), project_id, project_name, iac_data,
                                                 mapping_data)
@@ -105,10 +105,10 @@ def parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, outpu
     type_ = DiagramType(diagram_type.upper())
     file = open(diag_file[0], "r")
 
-    mapping_data_list = [get_data(default_mapping_file)]
+    mapping_data_list = [get_byte_data(default_mapping_file)]
 
     if custom_mapping_file:
-        mapping_data_list.append(get_data(custom_mapping_file))
+        mapping_data_list.append(get_byte_data(custom_mapping_file))
 
     processor = provider_resolver.get_processor(type_, project_id, project_name, file, mapping_data_list,
                                                 diag_type=type_)
@@ -125,10 +125,10 @@ def parse_etm(etm_type, default_mapping_file, custom_mapping_file, output_file, 
     type_ = EtmType(etm_type.upper())
     file = get_byte_data(etm_file[0])
 
-    mapping_data_list = [get_data(default_mapping_file)]
+    mapping_data_list = [get_byte_data(default_mapping_file)]
 
     if custom_mapping_file:
-        mapping_data_list.append(get_data(custom_mapping_file))
+        mapping_data_list.append(get_byte_data(custom_mapping_file))
 
     processor = provider_resolver.get_processor(type_, project_id, project_name, file, mapping_data_list)
     otm = processor.process()
@@ -232,7 +232,7 @@ def search(iac_type, query, source_file):
     Searches source files for the given query
     """
     logger.info("Running JMESPath search query against the IaC file")
-    get_iac_searcher(iac_type, [get_data(sf) for sf in source_file]).search(query)
+    get_iac_searcher(iac_type, [get_byte_data(sf) for sf in source_file]).search(query)
 
 
 @cli.command()

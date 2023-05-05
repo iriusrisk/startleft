@@ -295,6 +295,7 @@ components:
       enum:
         - CLOUDFORMATION
         - TERRAFORM
+        - TFPLAN
       type: string
       description: Type of IaC file
       example: TERRAFORM
