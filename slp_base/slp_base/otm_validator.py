@@ -46,53 +46,57 @@ class OTMValidator:
         wrong_dataflow_from_ids = set()
         wrong_dataflow_to_ids = set()
 
-        for trustzone in otm['trustZones']:
-            if trustzone['id'] in all_valid_ids:
-                repeated_ids.add(trustzone['id'])
-            elif trustzone['id'] not in all_valid_ids:
-                all_valid_ids.add(trustzone['id'])
+        if 'trustZones' in otm:
+            for trustzone in otm['trustZones']:
+                if trustzone['id'] in all_valid_ids:
+                    repeated_ids.add(trustzone['id'])
+                elif trustzone['id'] not in all_valid_ids:
+                    all_valid_ids.add(trustzone['id'])
 
-        for component in otm['components']:
-            if component['id'] in all_valid_ids:
-                repeated_ids.add(component['id'])
-            elif component['id'] not in all_valid_ids:
-                all_valid_ids.add(component['id'])
+        if 'components' in otm:
+            for component in otm['components']:
+                if component['id'] in all_valid_ids:
+                    repeated_ids.add(component['id'])
+                elif component['id'] not in all_valid_ids:
+                    all_valid_ids.add(component['id'])
 
-            component_parent_id = self.__get_parent_id(component)
-            parent_ids.add(component_parent_id)
+                component_parent_id = self.__get_parent_id(component)
+                parent_ids.add(component_parent_id)
 
-        for parent_id in parent_ids:
-            if parent_id not in all_valid_ids:
-                wrong_component_parent_ids.add(parent_id)
+            for parent_id in parent_ids:
+                if parent_id not in all_valid_ids:
+                    wrong_component_parent_ids.add(parent_id)
 
-        for dataflow in otm['dataflows']:
-            if dataflow['id'] in all_valid_ids:
-                repeated_ids.add(dataflow['id'])
-            elif dataflow['id'] not in all_valid_ids:
-                all_valid_ids.add(dataflow['id'])
+        if 'dataflows' in otm:
+            for dataflow in otm['dataflows']:
+                if dataflow['id'] in all_valid_ids:
+                    repeated_ids.add(dataflow['id'])
+                elif dataflow['id'] not in all_valid_ids:
+                    all_valid_ids.add(dataflow['id'])
 
-            if dataflow['source'] not in all_valid_ids:
-                wrong_dataflow_from_ids.add(dataflow['source'])
+                if dataflow['source'] not in all_valid_ids:
+                    wrong_dataflow_from_ids.add(dataflow['source'])
 
-            if dataflow['destination'] not in all_valid_ids:
-                wrong_dataflow_to_ids.add(dataflow['destination'])
+                if dataflow['destination'] not in all_valid_ids:
+                    wrong_dataflow_to_ids.add(dataflow['destination'])
 
-        if wrong_component_parent_ids:
-            logger.error(f"Component parent identifiers inconsistent: {wrong_component_parent_ids}")
+            if wrong_component_parent_ids:
+                logger.error(f"Component parent identifiers inconsistent: {wrong_component_parent_ids}")
 
-        if wrong_dataflow_from_ids:
-            logger.error(f"Dataflow 'source' identifiers inconsistent: {wrong_dataflow_from_ids}")
+            if wrong_dataflow_from_ids:
+                logger.error(f"Dataflow 'source' identifiers inconsistent: {wrong_dataflow_from_ids}")
 
-        if wrong_dataflow_to_ids:
-            logger.error(f"Dataflow 'destination' identifiers inconsistent: {wrong_dataflow_to_ids}")
+            if wrong_dataflow_to_ids:
+                logger.error(f"Dataflow 'destination' identifiers inconsistent: {wrong_dataflow_to_ids}")
 
-        if repeated_ids:
-            logger.error(f"Repeated identifiers inconsistent: {repeated_ids}")
+            if repeated_ids:
+                logger.error(f"Repeated identifiers inconsistent: {repeated_ids}")
 
         return (not wrong_component_parent_ids and
                 not wrong_dataflow_from_ids and
                 not wrong_dataflow_to_ids and
                 not repeated_ids)
+
 
     @staticmethod
     def __get_parent_id(trustzone: dict):
