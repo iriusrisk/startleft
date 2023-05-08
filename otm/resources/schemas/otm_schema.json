@@ -7,7 +7,7 @@
     "required": ["project", "otmVersion"],
     "properties": {
         "project": {
-            "type": ["object", "null"],
+            "type": "object",
             "required": ["name", "id"],
             "properties": {
                 "name": {"type": "string"},
@@ -18,7 +18,7 @@
                 "tags": {
                     "type": ["array", "null"],
                     "items": {
-                        "type": ["string", "null"]
+                        "type": "string"
                     }
                 },
                 "attributes": {"type": ["object", "null"]}
@@ -44,14 +44,14 @@
             }
         },
         "assets": {
-            "type": "array",
+            "type": ["array", "null"],
             "required": ["name", "id", "risk"],
             "properties": {
                 "name": {"type": "string"},
                 "id": {"type": "string"},
                 "description": {"type": ["string", "null"]},
                 "risk": {
-                    "type": ["object", "null"],
+                    "type": "object",
                     "required": ["confidentiality", "integrity", "availability"],
                     "properties": {
                         "confidentiality": {"type": "number"},
@@ -82,7 +82,7 @@
                     },
                     "parent": {"$ref": "#/definitions/parent"},
                     "representations": {
-                        "type": "array",
+                        "type": ["array", "null"],
                         "items": {"$ref": "#/definitions/representationElement"}
                     },
                     "attributes": {"type": ["object", "null"]}
@@ -90,7 +90,7 @@
             }
         },
         "components": {
-            "type": "array",
+            "type": ["array", "null"],
             "items": {
                 "type": "object",
                 "required": ["id", "name", "type", "parent"],
@@ -144,7 +144,7 @@
                     "id": {"type": "string"},
                     "name": {"type": "string"},
                     "description": {"type": ["string", "null"]},
-                    "bidirectional": {"type": "boolean"},
+                    "bidirectional": {"type": ["boolean", "null"]},
                     "source": {"type": "string"},
                     "destination": {"type": "string"},
                     "assets": {
@@ -166,7 +166,7 @@
             }
         },
         "threats": {
-            "type": "array",
+            "type": ["array", "null"],
             "items": {
                 "type": "object",
                 "required": ["id", "name", "risk"],
@@ -186,8 +186,8 @@
                         "type": "object",
                         "required": ["likelihood", "impact"],
                         "properties": {
-                            "likelihood": {"type": "number"},
-                            "likelihoodComment": {"type": "string"},
+                            "likelihood": {"type": ["number", "null"]},
+                            "likelihoodComment": {"type": ["string", "null"]},
                             "impact": {"type": "number"},
                             "impactComment": {"type": "string"}
                         }
@@ -203,7 +203,7 @@
             }
         },
         "mitigations": {
-            "type": "array",
+            "type": ["array", "null"],
             "items": {
                 "type": "object",
                 "required": ["id", "name", "riskReduction"],
@@ -219,7 +219,7 @@
     },
     "definitions": {
         "size": {
-            "type": "object",
+            "type": ["object", "null"],
             "required": ["width", "height"],
             "properties": {
                 "width": {"type": "number"},
@@ -238,7 +238,7 @@
             }
         },
         "position": {
-            "type": "object",
+            "type": ["object", "null"],
             "required": ["x", "y"],
             "properties": {
                 "x": {"type": "number"},
