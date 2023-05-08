@@ -1,0 +1,19 @@
+name: Config documentation environment
+description: 'Config documentation environment'
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.8"
+
+    - name: Configure git username
+      run: git config user.name 'github-actions[bot]' && git config user.email 'github-actions[bot]@users.noreply.github.com'
+      shell: bash
+
+    - name: Install doc dependencies
+      run: pip install -r docs/requirements.txt
+      shell: bash

@@ -1,6 +1,9 @@
-import pytest
+from typing import List
 
-from sl_util.sl_util.file_utils import get_data, get_byte_data
+import pytest
+from pytest import mark, param
+
+from sl_util.sl_util.file_utils import get_byte_data
 from slp_base.slp_base.errors import MappingFileNotValidError, IacFileNotValidError, \
     LoadingIacFileError
 from slp_base.tests.util.otm import validate_and_compare
@@ -21,16 +24,23 @@ SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
 SAMPLE_VALID_TF_FILE = terraform_for_mappings_tests_json
 
+MAX_TF_FILE_SIZE = 1024 * 1024
+MIN_TF_FILE_SIZE = 20
+
+
+def create_artificial_file(size: int) -> bytes:
+    return bytes('A' * size, 'utf-8')
+
 
 class TestTerraformProcessor:
 
     @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
     def test_run_valid_mappings(self, mapping_file):
         # GIVEN a valid TF file with some resources
-        terraform_file = get_data(test_resource_paths.terraform_for_mappings_tests_json)
+        terraform_file = get_byte_data(test_resource_paths.terraform_for_mappings_tests_json)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(mapping_file)
+        mapping_file = get_byte_data(mapping_file)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
@@ -42,10 +52,10 @@ class TestTerraformProcessor:
     @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
     def test_no_resources(self, mapping_file):
         # GIVEN a valid TF file with some resources
-        terraform_file = get_data(test_resource_paths.terraform_no_resources)
+        terraform_file = get_byte_data(test_resource_paths.terraform_no_resources)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(mapping_file)
+        mapping_file = get_byte_data(mapping_file)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
@@ -57,10 +67,10 @@ class TestTerraformProcessor:
     @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
     def test_elb_example(self, mapping_file):
         # GIVEN a valid TF file with some special TF modules
-        terraform_file = get_data(test_resource_paths.terraform_elb)
+        terraform_file = get_byte_data(test_resource_paths.terraform_elb)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(mapping_file)
+        mapping_file = get_byte_data(mapping_file)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
@@ -72,19 +82,19 @@ class TestTerraformProcessor:
     @pytest.mark.parametrize('mapping_file', [None, [None]])
     def test_mapping_files_not_provided(self, mapping_file):
         # GIVEN a sample valid IaC file (and none mapping file)
-        terraform_file = [get_data(SAMPLE_VALID_TF_FILE)]
+        terraform_file = [get_byte_data(SAMPLE_VALID_TF_FILE)]
 
         # WHEN creating OTM project from IaC file
         # THEN raises TypeError
         with pytest.raises(TypeError):
-            TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [get_data(mapping_file)]).process()
+            TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [get_byte_data(mapping_file)]).process()
 
     def test_invalid_mapping_files(self):
         # GIVEN a sample valid IaC file
-        terraform_file = get_data(SAMPLE_VALID_TF_FILE)
+        terraform_file = get_byte_data(SAMPLE_VALID_TF_FILE)
 
         # AND an invalid iac mappings file
-        mapping_file = [get_data(test_resource_paths.invalid_yaml)]
+        mapping_file = [get_byte_data(test_resource_paths.invalid_yaml)]
 
         # WHEN creating OTM project from IaC file
         # THEN raises MappingFileNotValidError
@@ -93,10 +103,10 @@ class TestTerraformProcessor:
 
     def test_invalid_terraform_file(self):
         # Given a sample invalid TF file
-        terraform_file = [get_data(test_resource_paths.invalid_tf)]
+        terraform_file = [get_byte_data(test_resource_paths.invalid_tf)]
 
         # And a valid iac mappings file
-        mapping_file = [get_data(terraform_iriusrisk_tf_aws_mapping)]
+        mapping_file = [get_byte_data(terraform_iriusrisk_tf_aws_mapping)]
 
         # When creating OTM project from IaC file
         # Then raises OTMBuildingError
@@ -106,14 +116,14 @@ class TestTerraformProcessor:
     @pytest.mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
     def test_expected_separated_networks_components(self, mapping_file):
         # GIVEN the single tf file with all the resources
-        single_file = get_data(test_resource_paths.terraform_single_tf)
+        single_file = get_byte_data(test_resource_paths.terraform_single_tf)
 
         # AND the same resources separated in two files
-        networks = get_data(test_resource_paths.terraform_networks)
-        resources = get_data(test_resource_paths.terraform_resources)
+        networks = get_byte_data(test_resource_paths.terraform_networks)
+        resources = get_byte_data(test_resource_paths.terraform_resources)
 
         # AND the iriusrisk-tf-aws-mapping.yaml file
-        mapping_file = get_data(mapping_file)
+        mapping_file = get_byte_data(mapping_file)
 
         # WHEN the method TerraformProcessor::process is invoked for the single file
         otm_single = TerraformProcessor(
@@ -138,7 +148,7 @@ class TestTerraformProcessor:
         terraform_empty_iac_array = []
 
         # AND the iriusrisk-tf-aws-mapping.yaml file
-        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+        mapping_file = get_byte_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
         # WHEN the method TerraformProcessor::process is invoked
         # THEN an LoadingIacFileError  is returned
@@ -147,20 +157,20 @@ class TestTerraformProcessor:
 
     @pytest.mark.parametrize('source', [
         # GIVEN a request with one iac_file keys with no value
-        [get_data(test_resource_paths.terraform_invalid_size)],
+        [get_byte_data(test_resource_paths.terraform_invalid_size)],
         # GIVEN a request with all iac_file keys with no value
-        [get_data(test_resource_paths.terraform_invalid_size),
-         get_data(test_resource_paths.terraform_invalid_size)],
+        [get_byte_data(test_resource_paths.terraform_invalid_size),
+         get_byte_data(test_resource_paths.terraform_invalid_size)],
         # GIVEN a request with some iac_file keys with no value
-        [get_data(test_resource_paths.terraform_single_tf),
-         get_data(test_resource_paths.terraform_invalid_size)],
+        [get_byte_data(test_resource_paths.terraform_single_tf),
+         get_byte_data(test_resource_paths.terraform_invalid_size)],
         # GIVEN a request with some iac_file keys with invalid format
-        [get_data(test_resource_paths.terraform_single_tf),
+        [get_byte_data(test_resource_paths.terraform_single_tf),
          get_byte_data(test_resource_paths.terraform_gz)]
     ])
     def test_iac_file_is_invalid(self, source):
         # AND the iriusrisk-tf-aws-mapping.yaml file
-        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+        mapping_file = get_byte_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
         # WHEN creating OTM project from IaC file
         # THEN an LoadingIacFileError  is returned
@@ -169,10 +179,10 @@ class TestTerraformProcessor:
 
     def test_minimal_tf_file(self):
         # Given a minimal valid TF file
-        terraform_minimal_file = get_data(test_resource_paths.terraform_minimal_content)
+        terraform_minimal_file = get_byte_data(test_resource_paths.terraform_minimal_content)
 
         # and the default mapping file for TF
-        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+        mapping_file = get_byte_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
         # When parsing the file with Startleft and the default mapping file
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_minimal_file], [mapping_file]).process()
@@ -184,10 +194,10 @@ class TestTerraformProcessor:
 
     def test_generate_empty_otm_with_empty_mapping_file(self):
         # Given an empty mapping file
-        mapping_file = get_data(test_resource_paths.empty_terraform_mapping)
+        mapping_file = get_byte_data(test_resource_paths.empty_terraform_mapping)
 
         # and a valid TF file with content
-        terraform_file = get_data(test_resource_paths.terraform_aws_simple_components)
+        terraform_file = get_byte_data(test_resource_paths.terraform_aws_simple_components)
 
         # When parsing the file with Startleft and the empty mapping file
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
@@ -198,12 +208,12 @@ class TestTerraformProcessor:
 
     def test_variable_references_in_tfvars_file_processed_ok(self):
         # GIVEN the multiples tf file and tfvars file
-        terraform_main = get_data(test_resource_paths.terraform_main_referenced_variables)
-        terraform_vars = get_data(test_resource_paths.terraform_variables_file_referenced_variables)
-        terraform_referenced_vars = get_data(test_resource_paths.terraform_vars_referenced_variables)
+        terraform_main = get_byte_data(test_resource_paths.terraform_main_referenced_variables)
+        terraform_vars = get_byte_data(test_resource_paths.terraform_variables_file_referenced_variables)
+        terraform_referenced_vars = get_byte_data(test_resource_paths.terraform_vars_referenced_variables)
 
         # AND the iriusrisk-tf-aws-mapping.yaml file
-        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+        mapping_file = get_byte_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
         # WHEN the method TerraformProcessor::process is invoked
         otm = TerraformProcessor(
@@ -222,8 +232,8 @@ class TestTerraformProcessor:
 
         # GIVEN a TF file with two resources of different types and the same name id
         #    AND the default mapping file
-        tf_file = get_data(test_resource_paths.terraform_resources_with_same_name)
-        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+        tf_file = get_byte_data(test_resource_paths.terraform_resources_with_same_name)
+        mapping_file = get_byte_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
         # WHEN processing
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -233,14 +243,21 @@ class TestTerraformProcessor:
         assert len(otm.components) == 2
         assert otm.components[0].name == otm.components[1].name
 
-    def test_valid_terraform_size_over_1mb(self):
+    @mark.parametrize('sources', [
+        param([create_artificial_file(MIN_TF_FILE_SIZE - 1)], id='too small'),
+        param([create_artificial_file(MAX_TF_FILE_SIZE + 1)], id='too big')
+    ])
+    def test_invalid_size(self, sources: List[bytes]):
+        # GIVEN a terraform file with an invalid size
 
-        # GIVEN a terraform file file under 2MB
-        tf_file = get_data(test_resource_paths.terraform_invalid_size_over_1mb)
         # AND the default terraform mapping file
-        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+        mapping_file = get_byte_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
-        # WHEN processing
-        # THEN a 400 error is returned
-        with pytest.raises(IacFileNotValidError):
-            TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, tf_file, [mapping_file]).process()
+        # WHEN TFPlanProcessor::process is invoked
+        # THEN a IacFileNotValidError is raised
+        with pytest.raises(IacFileNotValidError) as error:
+            TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, sources, [mapping_file]).process()
+
+        # AND whose information is right
+        assert error.value.title == 'Terraform file is not valid'
+        assert error.value.message == 'Provided iac_file is not valid. Invalid size'

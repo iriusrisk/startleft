@@ -39,12 +39,12 @@ Deploy the documentation using the provided `docker-compose.yml` file inside the
 - With docker installed from debian/ubuntu packages (docker.io) and the docker-compose plugin
 ```shell
 cd deployment
-docker-compose up -d docs
+docker-compose up -d startleft-docs
 ```
 - With docker installed from docker.com packages
 ```shell
 cd deployment
-docker compose up -d docs
+docker compose up -d startleft-docs
 ```
 
 
@@ -56,7 +56,7 @@ Now you can access the docs in [http://localhost:8000](http://localhost:8000).
 ## Launch StartLeft documentation by mkdocs serve
 Run into StartLeft root folder
 ```shell
-pip install -e ".[doc]"
+pip install -r docs/requirements.txt
 mkdocs serve
 ```
 

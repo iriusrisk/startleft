@@ -1,6 +1,6 @@
 from pytest import mark
 
-from sl_util.sl_util.str_utls import deterministic_uuid
+from sl_util.sl_util.str_utils import deterministic_uuid
 
 
 class TestStrUtils:
