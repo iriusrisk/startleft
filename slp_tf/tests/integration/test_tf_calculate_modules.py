@@ -1,4 +1,4 @@
-from sl_util.sl_util.file_utils import get_data
+from sl_util.sl_util.file_utils import get_byte_data
 from slp_tf.tests.resources import test_resource_paths
 from slp_tf import TerraformProcessor
 from slp_base.tests.util.otm import validate_and_compare
@@ -12,10 +12,10 @@ class TestTerraformCalculateModules:
 
     def test_mapping_modules(self):
         # GIVEN a valid TF file with some TF modules
-        terraform_file = get_data(test_resource_paths.terraform_modules)
+        terraform_file = get_byte_data(test_resource_paths.terraform_modules)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(test_resource_paths.terraform_mapping_modules)
+        mapping_file = get_byte_data(test_resource_paths.terraform_mapping_modules)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
@@ -26,10 +26,10 @@ class TestTerraformCalculateModules:
 
     def test_extra_modules(self):
         # GIVEN a valid TF file with some special TF modules
-        terraform_file = get_data(test_resource_paths.terraform_extra_modules_sample)
+        terraform_file = get_byte_data(test_resource_paths.terraform_extra_modules_sample)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(test_resource_paths.terraform_mapping_extra_modules)
+        mapping_file = get_byte_data(test_resource_paths.terraform_mapping_extra_modules)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()

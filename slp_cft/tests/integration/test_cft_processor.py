@@ -1,6 +1,6 @@
 import pytest
 
-from sl_util.sl_util.file_utils import get_data
+from sl_util.sl_util.file_utils import get_byte_data
 from slp_base.slp_base.errors import OTMBuildingError, MappingFileNotValidError, IacFileNotValidError, \
     LoadingIacFileError
 from slp_base.tests.util.otm import validate_and_compare_otm, validate_and_compare
@@ -29,10 +29,10 @@ ALTSOURCE_COMPONENTS_OTM_EXPECTED = test_resource_paths.altsource_components_otm
 class TestCloudformationProcessor:
     def test_altsource_components(self):
         # GIVEN a valid CFT file with altsource resources
-        cft_file = get_data(test_resource_paths.altsource_components_json)
+        cft_file = get_byte_data(test_resource_paths.altsource_components_json)
 
         # AND a valid CFT mapping file
-        mapping_file = get_data(test_resource_paths.default_cloudformation_mapping)
+        mapping_file = get_byte_data(test_resource_paths.default_cloudformation_mapping)
 
         # WHEN the CFT file is processed
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cft_file], [mapping_file]).process()
@@ -43,10 +43,10 @@ class TestCloudformationProcessor:
 
     def test_orphan_component_is_not_mapped(self):
         # GIVEN a valid CFT file with a resource (VPCssm) with a parent which is not declared as component itself (CustomVPC)
-        cloudformation_file = get_data(test_resource_paths.cloudformation_orphan_component)
+        cloudformation_file = get_byte_data(test_resource_paths.cloudformation_orphan_component)
 
         # AND a valid CFT mapping file
-        mapping_file = get_data(test_resource_paths.default_cloudformation_mapping)
+        mapping_file = get_byte_data(test_resource_paths.default_cloudformation_mapping)
 
         # WHEN the CFT file is processed
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
@@ -57,10 +57,10 @@ class TestCloudformationProcessor:
 
     def test_component_dataflow_ids(self):
         # GIVEN a valid CFT file with some resources
-        cloudformation_file = get_data(test_resource_paths.cloudformation_for_security_group_tests_json)
+        cloudformation_file = get_byte_data(test_resource_paths.cloudformation_for_security_group_tests_json)
 
         # AND a valid CFT mapping file
-        mapping_file = get_data(test_resource_paths.default_cloudformation_mapping)
+        mapping_file = get_byte_data(test_resource_paths.default_cloudformation_mapping)
 
         # WHEN the CFT file is processed
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
@@ -210,10 +210,10 @@ class TestCloudformationProcessor:
 
     def test_run_valid_mappings(self):
         # GIVEN a valid CFT file with some resources
-        cloudformation_file = get_data(test_resource_paths.cloudformation_for_mappings_tests_json)
+        cloudformation_file = get_byte_data(test_resource_paths.cloudformation_for_mappings_tests_json)
 
         # AND a valid CFT mapping file
-        mapping_file = get_data(test_resource_paths.default_cloudformation_mapping)
+        mapping_file = get_byte_data(test_resource_paths.default_cloudformation_mapping)
 
         # WHEN the CFT file is processed
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
@@ -266,10 +266,10 @@ class TestCloudformationProcessor:
 
     def test_mapping_component_without_parent(self):
         # GIVEN a valid CFT file
-        cloudformation_file = get_data(test_resource_paths.cloudformation_component_without_parent)
+        cloudformation_file = get_byte_data(test_resource_paths.cloudformation_component_without_parent)
 
         # AND an invalid CFT mapping file with a mapping without parent
-        mapping_file = get_data(test_resource_paths.cloudformation_mapping_component_without_parent)
+        mapping_file = get_byte_data(test_resource_paths.cloudformation_mapping_component_without_parent)
 
         # WHEN the CFT file is processed
         # THEN an OTMBuildingError is raised
@@ -282,10 +282,10 @@ class TestCloudformationProcessor:
 
     def test_mapping_skipped_component_without_parent(self):
         # GIVEN a valid CFT file
-        cloudformation_file = get_data(test_resource_paths.cloudformation_skipped_component_without_parent)
+        cloudformation_file = get_byte_data(test_resource_paths.cloudformation_skipped_component_without_parent)
 
         # AND a CFT mapping file that skips the component without parent
-        mapping_file = get_data(test_resource_paths.cloudformation_mapping_component_without_parent)
+        mapping_file = get_byte_data(test_resource_paths.cloudformation_mapping_component_without_parent)
 
         # WHEN the CFT file is processed
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
@@ -304,10 +304,10 @@ class TestCloudformationProcessor:
 
     def test_security_groups_use_case_a_1_with_3_components(self):
         # GIVEN a valid CFT file
-        cloudformation_file = get_data(test_resource_paths.cloudformation_for_security_group_tests_json)
+        cloudformation_file = get_byte_data(test_resource_paths.cloudformation_for_security_group_tests_json)
 
         # AND a CFT mapping file that skips the component without parent
-        mapping_file = get_data(test_resource_paths.cloudformation_for_security_groups_mapping)
+        mapping_file = get_byte_data(test_resource_paths.cloudformation_for_security_groups_mapping)
 
         # WHEN the CFT file is processed
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
@@ -339,10 +339,10 @@ class TestCloudformationProcessor:
 
     def test_run_security_groups_use_case_a_2(self):
         # GIVEN a valid CFT file
-        cloudformation_file = get_data(test_resource_paths.cloudformation_for_security_group_tests_2_json)
+        cloudformation_file = get_byte_data(test_resource_paths.cloudformation_for_security_group_tests_2_json)
 
         # AND a CFT mapping file that skips the component without parent
-        mapping_file = get_data(test_resource_paths.cloudformation_for_security_groups_mapping)
+        mapping_file = get_byte_data(test_resource_paths.cloudformation_for_security_groups_mapping)
 
         # WHEN the CFT file is processed
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
@@ -394,10 +394,10 @@ class TestCloudformationProcessor:
 
     def test_run_security_groups_use_case_b(self):
         # GIVEN a valid CFT file
-        cloudformation_file = get_data(test_resource_paths.cloudformation_for_security_group_tests_json)
+        cloudformation_file = get_byte_data(test_resource_paths.cloudformation_for_security_group_tests_json)
 
         # AND a CFT mapping file that skips the component without parent
-        mapping_file = get_data(test_resource_paths.cloudformation_for_security_groups_mapping)
+        mapping_file = get_byte_data(test_resource_paths.cloudformation_for_security_groups_mapping)
 
         # WHEN the CFT file is processed
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
@@ -455,19 +455,19 @@ class TestCloudformationProcessor:
     @pytest.mark.parametrize('mapping_file', [None, [None]])
     def test_mapping_files_not_provided(self, mapping_file):
         # GIVEN a sample valid IaC file (and none mapping file)
-        cloudformation_file = [get_data(SAMPLE_VALID_CFT_FILE)]
+        cloudformation_file = [get_byte_data(SAMPLE_VALID_CFT_FILE)]
 
         # WHEN creating OTM project from IaC file
         # THEN raises TypeError
         with pytest.raises(TypeError):
-            CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [get_data(mapping_file)]).process()
+            CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [get_byte_data(mapping_file)]).process()
 
     def test_invalid_mapping_files(self):
         # GIVEN a sample valid IaC file
-        cloudformation_file = get_data(SAMPLE_VALID_CFT_FILE)
+        cloudformation_file = get_byte_data(SAMPLE_VALID_CFT_FILE)
 
         # AND an invalid iac mappings file
-        mapping_file = [get_data(test_resource_paths.invalid_yaml)]
+        mapping_file = [get_byte_data(test_resource_paths.invalid_yaml)]
 
         # WHEN creating OTM project from IaC file
         # THEN raises MappingFileNotValidError
@@ -475,15 +475,15 @@ class TestCloudformationProcessor:
             CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], mapping_file).process()
 
     @pytest.mark.parametrize('cloudformation_file',
-                             [[get_data(test_resource_paths.cloudformation_invalid_size)],
-                              [get_data(test_resource_paths.cloudformation_invalid_size),
-                               get_data(test_resource_paths.cloudformation_invalid_size)],
-                              [get_data(test_resource_paths.cloudformation_invalid_size),
-                               get_data(test_resource_paths.cloudformation_resources_file)]])
+                             [[get_byte_data(test_resource_paths.cloudformation_invalid_size)],
+                              [get_byte_data(test_resource_paths.cloudformation_invalid_size),
+                               get_byte_data(test_resource_paths.cloudformation_invalid_size)],
+                              [get_byte_data(test_resource_paths.cloudformation_invalid_size),
+                               get_byte_data(test_resource_paths.cloudformation_resources_file)]])
     def test_invalid_cloudformation_file(self, cloudformation_file):
         # GIVEN a sample invalid CFT file
         # AND a valid iac mappings file
-        mapping_file = [get_data(SAMPLE_VALID_MAPPING_FILE)]
+        mapping_file = [get_byte_data(SAMPLE_VALID_MAPPING_FILE)]
 
         # WHEN creating OTM project from IaC file
         # THEN raises OTMBuildingError
@@ -492,9 +492,9 @@ class TestCloudformationProcessor:
 
     def test_run_valid_simple_iac_mapping_file(self):
         # GIVEN a valid CFT file
-        cloudformation_file = get_data(SAMPLE_SINGLE_VALID_CFT_FILE)
+        cloudformation_file = get_byte_data(SAMPLE_SINGLE_VALID_CFT_FILE)
         # AND a valid mapping file
-        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE_IR)
+        mapping_file = get_byte_data(SAMPLE_VALID_MAPPING_FILE_IR)
 
         # WHEN the method CloudformationProcessor::process is invoked
         otm = CloudformationProcessor('multiple-files', 'multiple-files', [cloudformation_file],
@@ -506,11 +506,11 @@ class TestCloudformationProcessor:
 
     def test_run_valid_multiple_iac_mapping_files(self):
         # GIVEN the valid CFT file
-        networks_cft_file = get_data(SAMPLE_NETWORKS_CFT_FILE)
+        networks_cft_file = get_byte_data(SAMPLE_NETWORKS_CFT_FILE)
         # AND another valid CFT file
-        resources_cft_file = get_data(SAMPLE_RESOURCES_CFT_FILE)
+        resources_cft_file = get_byte_data(SAMPLE_RESOURCES_CFT_FILE)
         # AND a valid mapping file
-        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE_IR)
+        mapping_file = get_byte_data(SAMPLE_VALID_MAPPING_FILE_IR)
         # WHEN the method CloudformationProcessor::process is invoked
         otm = CloudformationProcessor('multiple-files', 'multiple-files', [networks_cft_file, resources_cft_file],
                                       [mapping_file]).process()
@@ -520,7 +520,7 @@ class TestCloudformationProcessor:
 
     def test_run_empty_multiple_iac_files(self):
         # GIVEN a request without any iac_file key
-        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE_IR)
+        mapping_file = get_byte_data(SAMPLE_VALID_MAPPING_FILE_IR)
         # WHEN the method CloudformationProcessor::process is invoked
         # THEN an RequestValidationError is raised
         with pytest.raises(LoadingIacFileError):
@@ -528,12 +528,12 @@ class TestCloudformationProcessor:
 
     @pytest.mark.parametrize('source', [
         # GIVEN a standalone SecurityGroupEgress configuration
-        [get_data(test_resource_paths.standalone_securitygroupegress_configuration)],
+        [get_byte_data(test_resource_paths.standalone_securitygroupegress_configuration)],
         # GIVEN a standalone SecurityGroupIngress configuration
-        [get_data(test_resource_paths.standalone_securitygroupingress_configuration)]])
+        [get_byte_data(test_resource_paths.standalone_securitygroupingress_configuration)]])
     def test_security_group_configuration(self, source):
         # AND a CFT mapping file
-        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE)
+        mapping_file = get_byte_data(SAMPLE_VALID_MAPPING_FILE)
         # WHEN the method CloudformationProcessor::process is invoked
         otm = CloudformationProcessor('id', 'name', source, [mapping_file]).process()
         # THEN otm has a generic-client in Internet Trustzone
@@ -543,9 +543,9 @@ class TestCloudformationProcessor:
 
     def test_multiple_stack_plus_s3_ec2(self):
         # GIVEN the file with multiple Subnet AWS::EC2::Instance different configurations
-        cloudformation_file = get_data(test_resource_paths.multiple_stack_plus_s3_ec2)
+        cloudformation_file = get_byte_data(test_resource_paths.multiple_stack_plus_s3_ec2)
         # AND a valid iac mappings file
-        mapping_file = [get_data(SAMPLE_VALID_MAPPING_FILE)]
+        mapping_file = [get_byte_data(SAMPLE_VALID_MAPPING_FILE)]
 
         # WHEN processing
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], mapping_file).process()
@@ -559,10 +559,10 @@ class TestCloudformationProcessor:
 
     def test_parsing_cft_json_file_with_ref(self):
         # GIVEN a cloudformation JSON  file
-        cloudformation_file = get_data(SAMPLE_REF_DEFAULT_JSON)
+        cloudformation_file = get_byte_data(SAMPLE_REF_DEFAULT_JSON)
         # AND a mapping file that matches a component whose name is a Ref Value
         # AND the ref value is a Parameter with Default Attribute
-        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE_IR)
+        mapping_file = get_byte_data(SAMPLE_VALID_MAPPING_FILE_IR)
         # WHEN parsing the file
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file],
                                       [mapping_file]).process()
@@ -571,10 +571,10 @@ class TestCloudformationProcessor:
 
     def test_parsing_cft_yaml_file_with_ref(self):
         # GIVEN a cloudformation YAML  file
-        cloudformation_file = get_data(SAMPLE_REF_DEFAULT_YAML)
+        cloudformation_file = get_byte_data(SAMPLE_REF_DEFAULT_YAML)
         # AND a mapping file that matches a component whose name is a Ref Value
         # AND the ref value is a Resource
-        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE_IR)
+        mapping_file = get_byte_data(SAMPLE_VALID_MAPPING_FILE_IR)
         # WHEN parsing the file
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file],
                                       [mapping_file]).process()
@@ -583,10 +583,10 @@ class TestCloudformationProcessor:
 
     def test_parsing_cft_json_file_without_ref(self):
         # GIVEN a cloudformation file
-        cloudformation_file = get_data(SAMPLE_REF_WITHOUT_DEFAULT_JSON)
+        cloudformation_file = get_byte_data(SAMPLE_REF_WITHOUT_DEFAULT_JSON)
         # AND a mapping file that matches a component whose name is a Ref Value
         # AND the ref value is a Parameter without Default Attribute
-        mapping_file = get_data(SAMPLE_VALID_MAPPING_FILE_IR)
+        mapping_file = get_byte_data(SAMPLE_VALID_MAPPING_FILE_IR)
         # WHEN parsing the file
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file],
                                       [mapping_file]).process()
@@ -595,8 +595,8 @@ class TestCloudformationProcessor:
 
     def test_mapping_without_ref_attribute(self):
         # GIVEN a mapping file with searchPath: ["Properties.SubnetId.Ref","Properties.SubnetId"] function
-        cloudformation_file = get_data(test_resource_paths.multiple_stack_plus_s3_ec2)
-        mapping_file = get_data(SAMPLE_MAPPING_FILE_WITHOUT_REF)
+        cloudformation_file = get_byte_data(test_resource_paths.multiple_stack_plus_s3_ec2)
+        mapping_file = get_byte_data(SAMPLE_MAPPING_FILE_WITHOUT_REF)
         # WHEN parsing a CFT
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file],
                                       [mapping_file]).process()
@@ -608,10 +608,10 @@ class TestCloudformationProcessor:
 
     def test_minimal_cft_file(self):
         # Given a minimal valid CFT file
-        cft_minimal_file = get_data(test_resource_paths.cloudformation_minimal_content)
+        cft_minimal_file = get_byte_data(test_resource_paths.cloudformation_minimal_content)
 
         # and the default mapping file for CFT
-        mapping_file = get_data(test_resource_paths.default_cloudformation_mapping)
+        mapping_file = get_byte_data(test_resource_paths.default_cloudformation_mapping)
 
         # When parsing the file with Startleft and the default mapping file
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cft_minimal_file], [mapping_file]).process()
@@ -624,10 +624,10 @@ class TestCloudformationProcessor:
 
     def test_generate_empty_otm_with_empty_mapping_file(self):
         # Given an empty mapping file
-        mapping_file = get_data(test_resource_paths.empty_cloudformation_mapping)
+        mapping_file = get_byte_data(test_resource_paths.empty_cloudformation_mapping)
 
         # and a valid CFT file with content
-        cloudformation_file = get_data(test_resource_paths.cloudformation_for_mappings_tests_json)
+        cloudformation_file = get_byte_data(test_resource_paths.cloudformation_for_mappings_tests_json)
 
         # When parsing the file with Startleft and the empty mapping file
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
@@ -639,10 +639,10 @@ class TestCloudformationProcessor:
 
     def test_security_group_components_from_same_resource(self):
         # GIVEN a valid CFT file with a security group containing both an inbound and an outbound rule
-        cloudformation_file = get_data(test_resource_paths.cloudformation_components_from_same_resource)
+        cloudformation_file = get_byte_data(test_resource_paths.cloudformation_components_from_same_resource)
 
         # AND a valid CFT mapping file
-        mapping_file = get_data(test_resource_paths.default_cloudformation_mapping)
+        mapping_file = get_byte_data(test_resource_paths.default_cloudformation_mapping)
 
         # WHEN the CFT file is processed
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
@@ -662,10 +662,10 @@ class TestCloudformationProcessor:
 
     def test_trustzone_types(self):
         # GIVEN a valid CFT file
-        cloudformation_file = get_data(test_resource_paths.cloudformation_minimal_content)
+        cloudformation_file = get_byte_data(test_resource_paths.cloudformation_minimal_content)
 
         # AND a valid CFT mapping file that defines two TZs, one with type and the one without type
-        mapping_file = get_data(test_resource_paths.cloudformation_trustzone_types_mapping)
+        mapping_file = get_byte_data(test_resource_paths.cloudformation_trustzone_types_mapping)
 
         # WHEN the CFT file is processed
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
@@ -676,10 +676,10 @@ class TestCloudformationProcessor:
 
     def test_components_with_trustzones_of_same_type(self):
         # GIVEN a valid CFT file WITH some components mapped to different TZs of the same type
-        cloudformation_file = get_data(test_resource_paths.cloudformation_components_with_trustzones_of_same_type)
+        cloudformation_file = get_byte_data(test_resource_paths.cloudformation_components_with_trustzones_of_same_type)
 
         # AND a valid CFT mapping file that defines two different TZs of the same type
-        mapping_file = get_data(test_resource_paths.cloudformation_multiple_trustzones_same_type_mapping)
+        mapping_file = get_byte_data(test_resource_paths.cloudformation_multiple_trustzones_same_type_mapping)
 
         # WHEN the CFT file is processed
         otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
