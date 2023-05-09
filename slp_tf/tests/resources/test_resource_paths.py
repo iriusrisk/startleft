@@ -70,16 +70,6 @@ terraform_security_groups_type2_outbound_two_subnets = path + '/tf/dataflows/sec
 terraform_security_groups_type2_inbound = path + '/tf/dataflows/security_groups/terraform_sg_type2_inbound.tf'
 terraform_security_groups_type1_and_type2_mixed = path + '/tf/dataflows/security_groups/' \
                                                          'terraform_sg_type1_and_type2_mixed.tf'
-terraform_invalid_size_over_1mb = path + '/tf/terraform_invalid_size_over_1mb.tf'
-
-
-# tfplan
-tfplan_elb = path + '/tfplan/elb-tfplan.json'
-tfplan_graph_elb = path + '/tfplan/elb-tfgraph.gv'
-tfplan_sgs = path + '/tfplan/sgs-tfplan.json'
-tfplan_graph_sgs = path + '/tfplan/sgs-tfgraph.gv'
-tfplan_official = path + '/tfplan/official-tfplan.json'
-tfplan_graph_official = path + '/tfplan/official-tfgraph.gv'
 
 # mapping
 terraform_mapping_aws_component_without_parent = path + '/mapping/terraform_mapping_component_without_parent.yaml'
@@ -129,7 +119,6 @@ expected_mapping_skipped_component_without_parent = path + '/otm/expected_mappin
 expected_no_resources = path + '/otm/expected_no_resources.otm'
 expected_run_valid_mappings = path + '/otm/expected_run_valid_mappings.otm'
 tf_file_referenced_vars_expected_result = path + '/otm/tf-file-referenced-vars-expected-result.otm'
-expected_elb_tfplan = path + '/otm/expected_elb_tfplan.otm'
 tf_expected_only_catchall = path + '/otm/catchall/tf_only_catchall_expected.otm'
 tf_expected_explicit_mapping_and_catchall = path + '/otm/catchall/tf_explicit_mapping_and_catchall_expected.otm'
 tf_expected_skip_and_catchall = path + '/otm/catchall/tf_skip_and_catchall_expected.otm'
@@ -137,8 +126,4 @@ tf_expected_singleton_and_catchall = path + '/otm/catchall/tf_singleton_and_catc
 terraform_minimal_content_otm = f'{path}/otm/terraform_minimal_content.otm'
 tf_components_with_trustzones_of_same_type_otm = f'{path}/otm/calculate_trustzones/' \
                                                  f'tf_components_with_trustzones_of_same_type.otm'
-tfplan_elb_expected = f'{path}/otm/expected_elb_tfplan.otm'
-tfplan_graph_elb_expected = f'{path}/otm/expected_tfplan_tfgraph_elb.otm'
-tfplan_graph_sgs_expected = f'{path}/otm/expected_tfplan_tfgraph_sgs.otm'
-tfplan_graph_official_expected = f'{path}/otm/expected_tfplan_tfgraph_official.otm'
 

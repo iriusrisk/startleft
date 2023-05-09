@@ -1,7 +1,7 @@
 import pytest
 from pytest import mark
 
-from sl_util.sl_util.file_utils import get_data
+from sl_util.sl_util.file_utils import get_byte_data
 from slp_base import DiagramFileNotValidError
 from slp_base.tests.util.otm import validate_and_compare_otm, validate_and_compare
 from slp_visio.slp_visio.visio_processor import VisioProcessor
@@ -27,7 +27,7 @@ class TestVisioProcessor:
     ])
     def test_empties(self, vsdx, mapping):
         visio_file = open(vsdx, "r")
-        otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
+        otm = VisioProcessor("project-id", "project-name", visio_file, [get_byte_data(mapping)]).process()
 
         assert len(otm.trustzones) == 0
         assert len(otm.components) == 0
@@ -43,7 +43,7 @@ class TestVisioProcessor:
             "project-id",
             "project-name",
             visio_file,
-            [get_data(mapping)],
+            [get_byte_data(mapping)],
         ).process()
         result, expected = validate_and_compare_otm(otm.json(), expected_aws_shapes, None)
         assert result == expected
@@ -54,7 +54,7 @@ class TestVisioProcessor:
     ])
     def test_generic_elements(self, mapping):
         visio_file = open(test_resource_paths.visio_generic_shapes, "r")
-        otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
+        otm = VisioProcessor("project-id", "project-name", visio_file, [get_byte_data(mapping)]).process()
         result, expected = validate_and_compare_otm(otm.json(), expected_visio_generic_shapes, None)
         assert result == expected
 
@@ -64,7 +64,7 @@ class TestVisioProcessor:
     ])
     def test_self_pointing_connectors(self, mapping):
         visio_file = open(test_resource_paths.visio_self_pointing_connectors, "r")
-        otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
+        otm = VisioProcessor("project-id", "project-name", visio_file, [get_byte_data(mapping)]).process()
         result, expected = validate_and_compare_otm(otm.json(), expected_visio_self_pointing_connectors, None)
         assert result == expected
 
@@ -74,7 +74,7 @@ class TestVisioProcessor:
     ])
     def test_extraneous_elements(self, mapping):
         visio_file = open(test_resource_paths.visio_extraneous_elements, "r")
-        otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
+        otm = VisioProcessor("project-id", "project-name", visio_file, [get_byte_data(mapping)]).process()
         result, expected = validate_and_compare_otm(otm.json(), expected_visio_extraneous_elements, None)
         assert result == expected
 
@@ -84,7 +84,7 @@ class TestVisioProcessor:
     ])
     def test_simple_boundary_tzs(self, mapping):
         visio_file = open(test_resource_paths.visio_simple_boundary_tzs, "r")
-        otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
+        otm = VisioProcessor("project-id", "project-name", visio_file, [get_byte_data(mapping)]).process()
         result, expected = validate_and_compare_otm(otm.json(), expected_simple_boundary_tzs, None)
         assert result == expected
 
@@ -94,7 +94,7 @@ class TestVisioProcessor:
     ])
     def test_boundary_tz_and_default_tz(self, mapping):
         visio_file = open(test_resource_paths.visio_boundary_tz_and_default_tz, "r")
-        otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
+        otm = VisioProcessor("project-id", "project-name", visio_file, [get_byte_data(mapping)]).process()
         result, expected = validate_and_compare_otm(otm.json(), expected_visio_boundary_tz_and_default_tz, None)
         assert result == expected
 
@@ -108,7 +108,7 @@ class TestVisioProcessor:
             "project-id",
             "project-name",
             visio_file,
-            [get_data(mapping)],
+            [get_byte_data(mapping)],
         ).process()
         result, expected = validate_and_compare_otm(otm.json(), expected_overlapped_boundary_tzs, None)
         assert result == expected
@@ -119,7 +119,7 @@ class TestVisioProcessor:
     ])
     def test_visio_boundary_and_component_tzs(self, mapping):
         visio_file = open(test_resource_paths.visio_boundary_and_component_tzs, "r")
-        otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
+        otm = VisioProcessor("project-id", "project-name", visio_file, [get_byte_data(mapping)]).process()
         result, expected = validate_and_compare_otm(otm.json(), expected_visio_boundary_and_component_tzs, None)
         assert result == expected
 
@@ -129,7 +129,7 @@ class TestVisioProcessor:
     ])
     def test_multiple_pages_diagram(self, mapping):
         visio_file = open(test_resource_paths.visio_multiple_pages_diagram, "r")
-        otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
+        otm = VisioProcessor("project-id", "project-name", visio_file, [get_byte_data(mapping)]).process()
         result, expected = validate_and_compare_otm(otm.json(), expected_visio_multiple_pages_diagram, None)
         assert result == expected
 
@@ -139,7 +139,7 @@ class TestVisioProcessor:
     ])
     def test_complex_diagram(self, mapping):
         visio_file = open(test_resource_paths.visio_aws_with_tz_and_vpc, "r")
-        otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
+        otm = VisioProcessor("project-id", "project-name", visio_file, [get_byte_data(mapping)]).process()
         result, expected = validate_and_compare_otm(otm.json(), expected_visio_aws_with_tz_and_vpc, None)
         assert result == expected
 
@@ -149,7 +149,7 @@ class TestVisioProcessor:
     ])
     def test_prune_orphan_connectors(self, mapping):
         visio_file = open(test_resource_paths.visio_orphan_dataflows, "r")
-        otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
+        otm = VisioProcessor("project-id", "project-name", visio_file, [get_byte_data(mapping)]).process()
         result, expected = validate_and_compare_otm(otm.json(), expected_visio_orphan_dataflows, None)
         assert result == expected
 
@@ -159,7 +159,7 @@ class TestVisioProcessor:
     ])
     def test_bidirectional_connectors(self, mapping):
         visio_file = open(test_resource_paths.visio_bidirectional_connectors, "r")
-        otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
+        otm = VisioProcessor("project-id", "project-name", visio_file, [get_byte_data(mapping)]).process()
         result, expected = validate_and_compare_otm(otm.json(), expected_visio_bidirectional_connectors, None)
         assert result == expected
 
@@ -169,7 +169,7 @@ class TestVisioProcessor:
     ])
     def test_manually_modified_connectors(self, mapping):
         visio_file = open(test_resource_paths.visio_modified_single_connectors, "r")
-        otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
+        otm = VisioProcessor("project-id", "project-name", visio_file, [get_byte_data(mapping)]).process()
         result, expected = validate_and_compare_otm(otm.json(), expected_visio_modified_single_connectors, None)
         assert result == expected
 
@@ -186,7 +186,7 @@ class TestVisioProcessor:
             "project-id",
             "project-name",
             visio_file,
-            [get_data(test_resource_paths.default_visio_mapping)],
+            [get_byte_data(test_resource_paths.default_visio_mapping)],
         ).process()
 
         result, expected = validate_and_compare(otm, expected, None)
@@ -205,7 +205,7 @@ class TestVisioProcessor:
             "project-id",
             "project-name",
             visio_file,
-            [get_data(default_visio_mapping)],
+            [get_byte_data(default_visio_mapping)],
         ).process()
 
         # Then the otm should be the expected
@@ -218,7 +218,7 @@ class TestVisioProcessor:
     ])
     def test_master_unique_id(self, mapping):
         visio_file = open(test_resource_paths.master_unique_id, "r")
-        otm = VisioProcessor("project-id", "project-name", visio_file, [get_data(mapping)]).process()
+        otm = VisioProcessor("project-id", "project-name", visio_file, [get_byte_data(mapping)]).process()
         result, expected = validate_and_compare_otm(otm.json(), test_resource_paths.expected_master_unique_id, None)
         assert result == expected
 
@@ -227,7 +227,7 @@ class TestVisioProcessor:
         source = open(test_resource_paths.visio_aws_shapes, "r")
 
         # When the processor is instanced
-        processor = VisioProcessor("project-id", "project-name", source, [get_data(default_visio_mapping)])
+        processor = VisioProcessor("project-id", "project-name", source, [get_byte_data(default_visio_mapping)])
 
         # Then the original file is being used
         assert file_exists(processor.source.name)
@@ -245,7 +245,7 @@ class TestVisioProcessor:
         source = get_upload_file(test_resource_paths.visio_aws_shapes)
 
         # When the processor is instanced
-        processor = VisioProcessor("project-id", "project-name", source, [get_data(default_visio_mapping)])
+        processor = VisioProcessor("project-id", "project-name", source, [get_byte_data(default_visio_mapping)])
 
         # Then a temporary file is created
         assert file_exists(processor.source.name)
@@ -263,7 +263,7 @@ class TestVisioProcessor:
         source = get_upload_file(test_resource_paths.visio_invalid_file_size)
 
         # When the processor is instanced
-        processor = VisioProcessor("project-id", "project-name", source, [get_data(default_visio_mapping)])
+        processor = VisioProcessor("project-id", "project-name", source, [get_byte_data(default_visio_mapping)])
 
         # Then a temporary file is created
         assert file_exists(processor.source.name)
