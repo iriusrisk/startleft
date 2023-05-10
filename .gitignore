@@ -51,6 +51,10 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 test-reports/
+/coveragereport/
+
+# SonarLint plugin
+.scannerwork
 
 # Translations
 *.mo
