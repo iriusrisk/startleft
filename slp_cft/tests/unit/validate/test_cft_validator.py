@@ -5,8 +5,8 @@ from slp_base.slp_base.errors import IacFileNotValidError
 from slp_cft.slp_cft.validate.cft_validator import CloudformationValidator
 
 VALID_MIME = 'text/plain'
-MIN_SIZE = 20
-MAX_SIZE = 20 * 1024 * 1024
+MIN_SIZE = 13
+MAX_SIZE = 1 * 1024 * 1024
 
 
 def create_cloudformation_file_data(size: int) -> bytes:
