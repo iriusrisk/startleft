@@ -1,0 +1,11 @@
+otmVersion: 0.1.0
+project:
+  name: Minimal Project
+  id: minimal-project
+representations:
+  - name: CloudFormation
+    id: CloudFormation
+    type: code
+trustZones: []
+components: []
+dataflows: []

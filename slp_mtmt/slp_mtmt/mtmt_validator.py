@@ -1,6 +1,6 @@
 import logging
 
-import magic as magik
+from sl_util.sl_util.file_utils import get_file_type_by_content
 
 from slp_base import ProviderValidator, EtmType
 from slp_base.slp_base.provider_validator import generate_content_type_error, generate_size_error
@@ -28,7 +28,5 @@ class MTMTValidator(ProviderValidator):
             raise generate_size_error(EtmType.MTMT, 'source_file')
 
     def __validate_content_type(self):
-        magic = magik.Magic(mime=True)
-        mime = magic.from_buffer(self.mt_data)
-        if mime not in EtmType.MTMT.valid_mime:
+        if get_file_type_by_content(self.mt_data) not in EtmType.MTMT.valid_mime:
             raise generate_content_type_error(EtmType.MTMT, 'source_file')

@@ -6,8 +6,9 @@ class IacType(str, Provider):
     CLOUDFORMATION = ("CLOUDFORMATION", "CloudFormation", RepresentationType.CODE,
                       ['application/json', 'text/yaml', 'text/plain', 'application/octet-stream'])
     TERRAFORM = ("TERRAFORM", "Terraform", RepresentationType.CODE,
-                 ['text/plain', 'application/octet-stream', 'application/json', 'application/msword',
-                  'text/vnd.graphviz'])
+                 ['text/plain', 'application/octet-stream', 'application/json'])
+    TFPLAN = ("TFPLAN", "Terraform Plan", RepresentationType.CODE,
+              ['text/plain', 'application/json', 'application/msword', 'text/vnd.graphviz', 'application/octet-stream'])
 
 
 class DiagramType(str, Provider):
@@ -20,4 +21,3 @@ class DiagramType(str, Provider):
 class EtmType(str, Provider):
     MTMT = ("MTMT", "Microsoft Threat Modeling Tool", RepresentationType.THREAT_MODEL,
             ['application/octet-stream', 'application/xml', 'text/plain'])
-

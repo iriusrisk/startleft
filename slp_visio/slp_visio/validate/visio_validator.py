@@ -2,7 +2,7 @@ import logging
 import os
 from zipfile import ZipFile
 
-import magic as magik
+from sl_util.sl_util.file_utils import get_file_type_by_name
 
 from slp_base import ProviderValidator, DiagramFileNotValidError, DiagramType
 from slp_base.slp_base.provider_validator import generate_content_type_error, generate_size_error
@@ -30,17 +30,13 @@ class VisioValidator(ProviderValidator):
         if size > MAX_SIZE or size < MIN_SIZE:
             raise generate_size_error(self.provider, 'diag_file', DiagramFileNotValidError)
 
-    def __get_mime_type(self):
-        magic = magik.Magic(mime=True)
-        return magic.from_file(self.file.name)
-
     def __validate_content_type(self):
-        mime = self.__get_mime_type()
+        mime = get_file_type_by_name(self.file.name)
         if mime not in self.provider.valid_mime:
             raise generate_content_type_error(self.provider, 'diag_file', DiagramFileNotValidError)
 
     def __validate_zip_content(self):
-        mime = self.__get_mime_type()
+        mime = get_file_type_by_name(self.file.name)
         if 'application/zip' == mime:
             with ZipFile(self.file.name) as myzip:
                 if not any("[Content_Types].xml" == file.filename for file in myzip.filelist):

@@ -5,17 +5,13 @@ from slp_base.slp_base.errors import SourceFileNotValidError
 
 
 def generate_content_type_error(provider: Provider, source_file_name: str, exception=SourceFileNotValidError):
-    title = f'{provider.provider_name} file is not valid'
-    details = f'Invalid content type for {source_file_name}'
-    msg = details
-    return exception(title, msg, msg)
+    return exception(title=f'{provider.provider_name} file is not valid',
+                     message=f'Invalid content type for {source_file_name}')
 
 
 def generate_size_error(provider: Provider, source_file_name: str, exception=SourceFileNotValidError):
-    title = f'{provider.provider_name} file is not valid'
-    details = f'Provided {source_file_name} is not valid. Invalid size'
-    msg = details
-    return exception(title, msg, msg)
+    return exception(title=f'{provider.provider_name} file is not valid',
+                     message=f'Provided {source_file_name} is not valid. Invalid size')
 
 
 class ProviderValidator(metaclass=abc.ABCMeta):
