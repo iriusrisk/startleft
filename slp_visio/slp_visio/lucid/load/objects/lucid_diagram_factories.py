@@ -1,10 +1,9 @@
 from typing import Optional
 
-from shapely.geometry import Point
 from vsdx import Shape
 
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent, DiagramConnector
-from slp_visio.slp_visio.load.representation.simple_component_representer import SimpleComponentRepresenter
+from slp_visio.slp_visio.load.strategies.connector.create_connector_strategy import CreateConnectorStrategy
 from slp_visio.slp_visio.util.visio import get_shape_text, get_master_shape_text
 
 LUCID_COMPONENT_PREFIX = 'com.lucidchart'
@@ -39,29 +38,9 @@ class LucidComponentFactory:
 
 class LucidConnectorFactory:
 
-    def __init__(self):
-        self.tolerance = 0.09
-        self.representer: SimpleComponentRepresenter() = SimpleComponentRepresenter()
-
-    def create_connector(self, shape: Shape, components: [Shape]) -> Optional[DiagramConnector]:
-
-        begin_line = Point(shape.begin_x, shape.begin_y)
-        end_line = Point(shape.end_x, shape.end_y)
-        if not begin_line or not end_line:
-            return None
-
-        origin = self.__match_component(begin_line, components)
-        target = self.__match_component(end_line, components)
-
-        if not origin or not target:
-            return None
-
-        return DiagramConnector(shape.ID, origin, target, name=shape.text)
-
-    def __match_component(self, point, components):
-
-        for component in components:
-            polygon = self.representer.build_representation(component)
-            distance = polygon.exterior.distance(point)
-            if distance <= self.tolerance:
-                return component.ID
+    @staticmethod
+    def create_connector(shape: Shape, components: [Shape]) -> Optional[DiagramConnector]:
+        for strategy in CreateConnectorStrategy.get_strategies():
+            connector = strategy.create_connector(shape, components=components)
+            if connector:
+                return connector
