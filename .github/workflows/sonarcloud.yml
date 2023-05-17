@@ -1,0 +1,69 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# This workflow helps you trigger a SonarCloud analysis of your code and populates
+# GitHub Code Scanning alerts with the vulnerabilities found.
+# Free for open source project.
+
+name: SonarCloud analysis
+
+on:
+  pull_request:
+    branches: [feature/*]
+  workflow_dispatch:
+
+permissions:
+  pull-requests: read # allows SonarCloud to decorate PRs with analysis results
+
+jobs:
+  Analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the project from Git
+        uses: actions/checkout@v3
+        with:
+            fetch-depth: 0
+      - name: Setup Python 3.8
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v1
+      - name: Install dependencies
+        run: pip install -e ".[setup,test]"
+      - name: Run test using coverage
+        run: coverage run -m pytest
+      - name: Generate coverage report
+        run: coverage xml
+      - name: Analyze with SonarCloud
+        # You can pin the exact commit or the version.
+        # uses: SonarSource/sonarcloud-github-action@commithas or tag
+        uses: SonarSource/sonarcloud-github-action@v1.9.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # Generate a token on Sonarcloud.io, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
+        with:
+          # Additional arguments for the sonarcloud scanner
+          args:
+            -Dsonar.projectKey=startleft
+            -Dsonar.organization=continuumsec
+            -Dsonar.python.version=3.8,3.9,3.10,3.11
+            -Dsonar.qualitygate.wait=true
+            -Dsonar.python.coverage.reportPaths=coveragereport/coverage.xml
+
+            # Args explanation
+            # Unique keys of your project and organization. You can find them in SonarCloud > Information (bottom-left menu)
+            # mandatory
+            # -Dsonar.projectKey=
+            # -Dsonar.organization=
+
+            # Version of supported python versions to get a more precise analysis
+            # -Dsonar.python.version=
+
+            # Flag to way for Analysis Quality Gate results, if fail the steps it will be marked as failed too.
+            # -Dsonar.qualitygate.wait=
+
+            # The path for coverage report to use in the SonarCloud analysis, it must be in XML format.
+            # -Dsonar.python.coverage.reportPaths=
