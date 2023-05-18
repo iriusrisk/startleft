@@ -46,14 +46,11 @@ setup(
         "test": [
             'tox==4.4.6',
             'pytest==7.2.2',
+            'coverage==7.2.3',
             'responses==0.22.0',
             'deepdiff==6.2.3',
-            'httpx==0.23.3'
-        ],
-        "doc": [
-            'mkdocs-material==9.1.1',
-            'pymdown-extensions==9.10',
-            'mkdocs-glightbox==0.3.1'
+            'httpx==0.23.3',
+            'pytest-mock==3.10.0'
         ]
     },
     entry_points='''

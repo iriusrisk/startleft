@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "planned_values": {
+      "type": "object",
+      "properties": {
+        "root_module": {
+          "type": "object",
+          "properties": {
+            "resources": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/resource_data"}
+            },
+            "child_modules": {"$ref": "#/definitions/child_modules"}
+          },
+          "anyOf": [
+            {"required": ["resources"]},
+            {"required": ["child_modules"]}
+          ]
+        }
+      },
+      "required": ["root_module"]
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "root_module": {
+          "type": "object",
+          "properties": {
+            "resources": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/resource_data"}
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "planned_values",
+    "configuration"
+  ],
+  "definitions": {
+    "resource_data": {
+      "type": "object",
+      "required": ["address", "type", "name"],
+      "properties": {
+        "address": {"type": "string"},
+        "type": {"type": "string"},
+        "name": {"type": "string"}
+      }
+    },
+    "child_modules": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "resources": {
+              "type": "array",
+              "items": {"$ref": "#/definitions/resource_data"}
+            },
+            "address": {"type": "string"},
+            "child_modules": {"$ref": "#/definitions/child_modules"}
+          },
+          "anyOf": [
+            {"required": ["resources","address"]},
+            {"required": ["child_modules","address"]}
+          ]
+        }
+      ]
+    }
+  }
+}

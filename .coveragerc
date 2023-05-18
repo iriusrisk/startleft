@@ -1,0 +1,18 @@
+[run]
+source = .
+branch = false
+omit =
+    ./venv/*
+    */tests/*
+    *__init__.py
+    setup.py
+    run_tests.py
+
+[report]
+fail_under = 80
+
+[html]
+directory = coveragereport
+
+[xml]
+output = coveragereport/coverage.xml

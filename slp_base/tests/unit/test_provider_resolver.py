@@ -5,18 +5,18 @@ from unittest.mock import patch, Mock
 import pytest
 
 from slp_base import OTMProcessor, ProviderParser, MappingLoader, MappingValidator, ProviderLoader, ProviderValidator, \
-    LoadingSourceFileError, ProviderNotFoundError
+    ProviderNotFoundError
 from slp_base.slp_base.provider_resolver import ProviderResolver
 
+_slp_allowed_imports = ['slp_base', 'sl_util', 'otm']
 MOCKED_PROCESSORS = [
-    {'name': 'slp_base_MOCKED', 'type': 'processor',
-     'forbidden_dependencies': ['startleft', 'slp_cft', 'slp_tf', 'slp_mtmt']},
+    {'name': 'slp_base_MOCKED', 'type': 'processor', 'allowed_imports': _slp_allowed_imports},
     {'name': 'slp_cft_MOCKED', 'type': 'processor', 'provider_type': 'CLOUDFORMATION',
-     'forbidden_dependencies': ['startleft', 'slp_tf', 'slp_mtmt']},
+     'allowed_imports': _slp_allowed_imports},
     {'name': 'slp_tf_MOCKED', 'type': 'processor', 'provider_type': 'TERRAFORM',
-     'forbidden_dependencies': ['startleft', 'slp_cft', 'slp_mtmt']},
+     'allowed_imports': _slp_allowed_imports},
     {'name': 'slp_mtmt_MOCKED', 'type': 'processor', 'provider_type': 'MTMT',
-     'forbidden_dependencies': ['startleft', 'slp_cft', 'slp_tf']}
+     'allowed_imports': _slp_allowed_imports}
 ]
 
 

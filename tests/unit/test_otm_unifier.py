@@ -5,7 +5,7 @@ from otm.otm.entity.representation import RepresentationType
 from otm.otm.entity.trustzone import Trustzone
 from otm.otm.otm_builder import OTMBuilder
 from otm.otm.provider import Provider
-from sl_util.sl_util.file_utils import get_data
+from sl_util.sl_util.file_utils import get_byte_data
 from slp_base.slp_base.otm_trustzone_unifier import OTMTrustZoneUnifier
 from tests.resources.test_resource_paths import MTMT_multiple_trustzones_same_type_ID
 
@@ -38,7 +38,7 @@ class TestOTMUnifier:
             .build()
 
         # AND the expected otm without tz type field
-        expected = json.loads(get_data(MTMT_multiple_trustzones_same_type_ID))
+        expected = json.loads(get_byte_data(MTMT_multiple_trustzones_same_type_ID))
 
         # WHEN we unify the trust zones
         OTMTrustZoneUnifier(origin).unify()

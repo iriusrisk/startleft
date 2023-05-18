@@ -31,7 +31,7 @@ class CommonError(Exception):
 
     def __init__(self, title, detail=None, message=None):
         self.title = title
-        self.detail = detail
+        self.detail = detail or message
         self.message = message
 
     def __str__(self):

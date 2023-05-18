@@ -2,7 +2,7 @@ FROM squidfunk/mkdocs-material
 
 RUN pip install --upgrade pip
 
-RUN pip install mkdocs-glightbox
+RUN pip install -r requirements.txt
 
 COPY /docs ./docs
 COPY mkdocs.yml .
