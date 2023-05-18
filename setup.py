@@ -48,11 +48,8 @@ setup(
             'pytest==7.3.1',
             'responses==0.23.1',
             'deepdiff==6.3.0',
-            'httpx==0.23.3'
-        ],
-        "doc": [
-            'mkdocs-material==9.1.8',
-            'mkdocs-glightbox==0.3.3'
+            'httpx==0.23.3',
+            'pytest-mock==3.10.0'
         ]
     },
     entry_points='''

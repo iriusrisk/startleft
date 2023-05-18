@@ -1,6 +1,6 @@
 from pytest import mark, param
 
-from sl_util.sl_util.file_utils import get_data
+from sl_util.sl_util.file_utils import get_byte_data
 from slp_base.tests.util.otm import validate_and_compare
 from slp_tf import TerraformProcessor
 from slp_tf.tests.resources import test_resource_paths
@@ -28,10 +28,10 @@ class TestTerraformMappingFunctions:
     @mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
     def test_aws_singleton_components(self, mapping_file):
         # GIVEN a valid TF file with some resources
-        terraform_file = get_data(test_resource_paths.terraform_aws_singleton_components_unix_line_breaks)
+        terraform_file = get_byte_data(test_resource_paths.terraform_aws_singleton_components_unix_line_breaks)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(mapping_file)
+        mapping_file = get_byte_data(mapping_file)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
@@ -47,8 +47,8 @@ class TestTerraformMappingFunctions:
         # GIVEN a TF file with two resources
         #   AND a mapping file maps those resources by $ip
         #   AND the $ip value is assigned to the same value
-        tf_file = get_data(test_resource_paths.terraform_multiple_aws_security_group)
-        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+        tf_file = get_byte_data(test_resource_paths.terraform_multiple_aws_security_group)
+        mapping_file = get_byte_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
         # WHEN processing
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -66,8 +66,8 @@ class TestTerraformMappingFunctions:
         # GIVEN a TF file with one resource
         #   AND a mapping file map multiple times resources by $ip
         #   AND the $ip value is assigned to a distinct value
-        tf_file = get_data(test_resource_paths.terraform_aws_security_group_in_and_eg_gress)
-        mapping_file = get_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
+        tf_file = get_byte_data(test_resource_paths.terraform_aws_security_group_in_and_eg_gress)
+        mapping_file = get_byte_data(test_resource_paths.terraform_iriusrisk_tf_aws_mapping)
 
         # WHEN processing
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [tf_file], [mapping_file]).process()
@@ -84,10 +84,10 @@ class TestTerraformMappingFunctions:
     @mark.parametrize('mapping_file', [terraform_iriusrisk_tf_aws_mapping])
     def test_aws_altsource_components(self, mapping_file):
         # GIVEN a valid TF file with some resources
-        terraform_file = get_data(test_resource_paths.terraform_aws_altsource_components)
+        terraform_file = get_byte_data(test_resource_paths.terraform_aws_altsource_components)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(mapping_file)
+        mapping_file = get_byte_data(mapping_file)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()
@@ -109,10 +109,10 @@ class TestTerraformMappingFunctions:
               id='singleton_and_catchall')])
     def test_aws_catchall_components(self, mapping_file, expected_otm):
         # GIVEN a valid TF file with some resources
-        terraform_file = get_data(TERRAFORM_FOR_CATCHALL_TESTS)
+        terraform_file = get_byte_data(TERRAFORM_FOR_CATCHALL_TESTS)
 
         # AND a valid TF mapping file
-        mapping_file = get_data(mapping_file)
+        mapping_file = get_byte_data(mapping_file)
 
         # WHEN the TF file is processed
         otm = TerraformProcessor(SAMPLE_ID, SAMPLE_NAME, [terraform_file], [mapping_file]).process()

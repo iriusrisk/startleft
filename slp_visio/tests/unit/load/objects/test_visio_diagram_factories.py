@@ -1,111 +1,134 @@
-from unittest.mock import MagicMock
+from typing import List, Union
+from unittest.mock import Mock
 
 import pytest
+from pytest import fixture, mark, param
 
+from slp_visio.slp_visio.load.objects.diagram_objects import DiagramConnector
 from slp_visio.slp_visio.load.objects.visio_diagram_factories import VisioConnectorFactory
+from slp_visio.slp_visio.load.strategies.connector.create_connector_strategy import CreateConnectorStrategy
+
+
+def mocked_strategy(result: Union[DiagramConnector, None, Exception]):
+    strategy = Mock()
+    strategy.create_connector = Mock(side_effect=[result])
+    return strategy
+
+
+def mocked_strategies(results: List[Union[DiagramConnector, None, Exception]]):
+    return list(map(mocked_strategy, results))
+
+
+def mocked_connector(c_id: int = 1001, from_id: int = 1, to_id: int = 2):
+    return Mock(id=c_id, from_id=from_id, to_id=to_id)
+
+
+@fixture
+def strategies():
+    return []
+
+
+@fixture(autouse=True)
+def mock_get_strategies(mocker, strategies):
+    return mocker.patch(
+        'slp_visio.slp_visio.load.strategies.connector.create_connector_strategy.CreateConnectorStrategy.get_strategies',
+        return_value=strategies)
 
 
 class TestVisioConnectorFactory:
 
-    def test_create_connector_ok(self):
-        # GIVEN visio connector shape
-        shape = MagicMock(
-            ID=1001,
-            connects=[MagicMock(from_rel='BeginX', shape_id=1), MagicMock(from_rel='EndX', shape_id=2)])
+    def test_create_connector_when_strategy_returns_value(self, mock_get_strategies):
+        # GIVEN a visio connector shape
+        shape = Mock(ID=1001)
+
+        # AND only one strategy that returns a connector
+        strategy = mocked_strategy(mocked_connector())
+        mock_get_strategies.return_value = [strategy]
 
         # WHEN a connector is created
-        visio_connector = VisioConnectorFactory()
-        diagram_connector = visio_connector.create_connector(shape)
+        result = VisioConnectorFactory().create_connector(shape)
 
-        # THEN a diagram connector has the following properties
-        assert diagram_connector.id == 1001
-        assert diagram_connector.from_id == 1
-        assert diagram_connector.to_id == 2
+        # THEN the strategy implementations are the expected
+        assert CreateConnectorStrategy.get_strategies().__len__() == 1
+        # AND the strategies method implementations are called once
+        strategy.create_connector.assert_called_once()
+        # AND the result is the expected
+        assert result.id == 1001
+        assert result.to_id == 2
+        assert result.from_id == 1
 
-    def test_create_connector_reversed_ok(self):
-        # GIVEN visio connector shape with reversed relationship
-        shape = MagicMock(
-            ID=1001,
-            connects=[MagicMock(from_rel='EndX', shape_id=1), MagicMock(from_rel='BeginX', shape_id=2)])
-
-        # WHEN a connector is created
-        visio_connector = VisioConnectorFactory()
-        diagram_connector = visio_connector.create_connector(shape)
-
-        # THEN a diagram connector has the following properties
-        assert diagram_connector.id == 1001
-        assert diagram_connector.from_id == 2
-        assert diagram_connector.to_id == 1
-
-    def test_create_connector_incomplete_connectors(self):
-        # GIVEN visio connector shape with incomplete connectors
-        shape = MagicMock(
-            ID=1001,
-            connects=[MagicMock(from_rel='BeginX', shape_id=1)])
-
-        # WHEN a connector is created
-        visio_connector = VisioConnectorFactory()
-        diagram_connector = visio_connector.create_connector(shape)
-
-        # THEN None diagram connector is returned
-        assert not diagram_connector
-
-    def test_create_connector_self_pointing(self):
-        # GIVEN visio connector shape self pointing
-        shape = MagicMock(
-            ID=1001,
-            connects=[MagicMock(from_rel='BeginX', shape_id=1), MagicMock(from_rel='EndX', shape_id=1)])
-
-        # WHEN a connector is created
-        visio_connector = VisioConnectorFactory()
-        diagram_connector = visio_connector.create_connector(shape)
-
-        # THEN None diagram connector is returned
-        assert not diagram_connector
-
-    @pytest.mark.parametrize('shape,cell_values,master_name,from_shape,to_shape,bidirectional', [
-        # Control case
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=1), MagicMock(from_rel='EndX', shape_id=2)]), {'BeginArrow': None, 'EndArrow': None}, None, 1, 2, False, id='control'),
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=1), MagicMock(from_rel='EndX', shape_id=2)]), {'BeginArrow': None, 'EndArrow': None}, 'Custom Arrow', 1, 2, False, id='control_inverted'),
-        # Created left to right, arrow changed left to right
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=1), MagicMock(from_rel='EndX', shape_id=2)]), {'BeginArrow': None, 'EndArrow': '13'}, None, 1, 2, False, id='left_to_right_arrow_changed_left_to_right'),
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='EndX', shape_id=2), MagicMock(from_rel='BeginX', shape_id=1)]), {'BeginArrow': None, 'EndArrow': '13'}, None, 1, 2, False, id='left_to_right_arrow_changed_left_to_right_inverted'),
-        # Created left to right, arrow changed right to left
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=1), MagicMock(from_rel='EndX', shape_id=2)]), {'BeginArrow': '13', 'EndArrow': None}, None, 2, 1, False, id='left_to_right_arrow_changed_right_to_left'),
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='EndX', shape_id=2), MagicMock(from_rel='BeginX', shape_id=1)]), {'BeginArrow': '13', 'EndArrow': None}, None, 2, 1, False, id='left_to_right_arrow_changed_right_to_left_inverted'),
-        # Created right to left, arrow changed right to left
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=2), MagicMock(from_rel='EndX', shape_id=1)]), {'BeginArrow': None, 'EndArrow': '13'}, None, 2, 1, False, id='right_to_left_arrow_changed_right_to_left'),
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='EndX', shape_id=1), MagicMock(from_rel='BeginX', shape_id=2)]), {'BeginArrow': None, 'EndArrow': '13'}, None, 2, 1, False, id='right_to_left_arrow_changed_right_to_left_inverted'),
-        # Created right to left, arrow changed left to right
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=2), MagicMock(from_rel='EndX', shape_id=1)]), {'BeginArrow': '13', 'EndArrow': None}, None, 1, 2, False, id='right_to_left_arrow_changed_left_to_right'),
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='EndX', shape_id=1), MagicMock(from_rel='BeginX', shape_id=2)]), {'BeginArrow': '13', 'EndArrow': None}, None, 1, 2, False, id='right_to_left_arrow_changed_left_to_right_inverted'),
-        # Invalid BeginArrow/EndArrow combinations
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=1), MagicMock(from_rel='EndX', shape_id=2)]), {'BeginArrow': '0', 'EndArrow': None}, None, 1, 2, False, id='invalid_begin_0_no_end'),
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=1), MagicMock(from_rel='EndX', shape_id=2)]), {'BeginArrow': None, 'EndArrow': '0'}, None, 1, 2, False, id='invalid_no_begin_end_0'),
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=1), MagicMock(from_rel='EndX', shape_id=2)]), {'BeginArrow': '0', 'EndArrow': '0'}, None, 1, 2, False, id='invalid_begin_0_end_0'),
-        # Created left to right, arrow changed to bidirectional
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=1), MagicMock(from_rel='EndX', shape_id=2)]), {'BeginArrow': '13', 'EndArrow': '13'}, None, 1, 2, True, id='left_to_right_arrow_changed_bidirectional'),
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='EndX', shape_id=2), MagicMock(from_rel='BeginX', shape_id=1)]), {'BeginArrow': '13', 'EndArrow': '13'}, None, 2, 1, True, id='left_to_right_arrow_changed_bidirectional_inverted'),
-        # Created right to left, arrow changed to bidirectional
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=2), MagicMock(from_rel='EndX', shape_id=1)]), {'BeginArrow': '13', 'EndArrow': '13'}, None, 2, 1, True, id='right_to_left_arrow_changed_bidirectional'),
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='EndX', shape_id=1), MagicMock(from_rel='BeginX', shape_id=2)]), {'BeginArrow': '13', 'EndArrow': '13'}, None, 1, 2, True, id='right_to_left_arrow_changed_bidirectional_inverted'),
-        # Created left to right, shape changed to bidirectional
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=1), MagicMock(from_rel='EndX', shape_id=2)]), {'BeginArrow': None, 'EndArrow': None}, 'Simple Double Arrow', 1, 2, True, id='left_to_right_shape_changed_bidirectional'),
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='EndX', shape_id=2), MagicMock(from_rel='BeginX', shape_id=1)]), {'BeginArrow': None, 'EndArrow': None}, 'Line Double Arrow', 2, 1, True, id='left_to_right_shape_changed_bidirectional_inverted'),
-        # Created right to left, shape changed to bidirectional
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='BeginX', shape_id=2), MagicMock(from_rel='EndX', shape_id=1)]), {'BeginArrow': None, 'EndArrow': None}, 'Arced Line Double Arrow', 2, 1, True, id='right_to_left_shape_changed_bidirectional'),
-        pytest.param(MagicMock(ID=1001, connects=[MagicMock(from_rel='EndX', shape_id=1), MagicMock(from_rel='BeginX', shape_id=2)]), {'BeginArrow': None, 'EndArrow': None}, 'Block Double Arrow', 1, 2, True, id='right_to_left_shape_changed_bidirectional_inverted')
+    @mark.parametrize('strategies,_id,_from,_to,valid_strategy', [
+        param(mocked_strategies(
+            [mocked_connector(c_id=1001, from_id=1, to_id=2),
+             mocked_connector(c_id=2002, from_id=2, to_id=1)]),
+            1001, 1, 2, 0),
+        param(mocked_strategies(
+            [mocked_connector(c_id=1001, from_id=1, to_id=2),
+             None]),
+            1001, 1, 2, 0),
+        param(mocked_strategies(
+            [None,
+             mocked_connector(c_id=2002, from_id=9, to_id=21)]),
+            2002, 9, 21, 1),
+        param(mocked_strategies(
+            [None,
+             None,
+             mocked_connector(c_id=3003, from_id=5, to_id=7)]),
+            3003, 5, 7, 2)
     ])
-    def test_create_connector_modified_manually(self, shape, cell_values, master_name, from_shape, to_shape, bidirectional):
-        # GIVEN a mocked visio connector
-        shape.cell_value.side_effect = cell_values.get
-        shape.master_page.name = master_name
+    def test_create_connector_when_some_strategy_return_value(self, strategies, _id, _from, _to, valid_strategy: int):
+        # GIVEN a visio connector shape
+        shape = Mock(ID=1001)
 
         # WHEN a connector is created
-        diagram_connector = VisioConnectorFactory().create_connector(shape)
+        result = VisioConnectorFactory().create_connector(shape)
 
-        # THEN a diagram connector has the following properties
-        assert diagram_connector.id == 1001
-        assert diagram_connector.from_id == from_shape
-        assert diagram_connector.to_id == to_shape
-        assert diagram_connector.bidirectional == bidirectional
+        # THEN we call strategies until we find the first valid strategy
+        for i in range(0, valid_strategy):
+            strategies[i].create_connector.assert_called_once()
+        for i in range(valid_strategy + 1, len(strategies)):
+            strategies[i].create_connector.assert_not_called()
+        # AND the result is the returned by the first strategy
+        assert result.id == _id
+        assert result.to_id == _to
+        assert result.from_id == _from
+
+    @mark.parametrize('strategies', [
+        param(mocked_strategies([Exception("Some Error")]), id='one error'),
+        param(mocked_strategies([Exception("Some Error"), Exception("Other Error")]), id='two errors'),
+        param(mocked_strategies([Exception("Some Error"), mocked_connector()]), id='first error, second valid'),
+    ])
+    def test_create_connector_when_some_strategy_return_error(self, strategies):
+        # GIVEN a visio connector shape
+        shape = Mock(ID=1001)
+
+        # WHEN a connector is created
+        with pytest.raises(Exception) as error:
+            VisioConnectorFactory().create_connector(shape)
+
+        # THEN the strategy implementations are the expected
+        assert CreateConnectorStrategy.get_strategies().__len__() == len(strategies)
+
+        # AND the first strategy is called
+        strategies[0].create_connector.assert_called_once()
+
+        # AND the error is propagated
+        assert error.value.args[0] == 'Some Error'
+
+    @mark.parametrize('strategies', [
+        param(mocked_strategies([None]), id='one strategy'),
+        param(mocked_strategies([None, None]), id='two strategies')
+    ])
+    def test_create_connector_when_strategy_does_not_return_value(self, strategies):
+        # GIVEN a visio connector shape
+        shape = Mock(ID=1001)
+
+        # WHEN a connector is created
+        result = VisioConnectorFactory().create_connector(shape)
+
+        # THEN the strategy implementations are the expected
+        assert CreateConnectorStrategy.get_strategies().__len__() == len(strategies)
+        # AND the strategies method implementations are called once
+        strategies[0].create_connector.assert_called_once()
+        # AND no result is returned
+        assert not result
