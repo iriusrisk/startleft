@@ -2,7 +2,7 @@ from random import randint
 from typing import List
 from unittest.mock import Mock
 
-from pytest import mark, fixture, param
+from pytest import mark, param
 
 from slp_tfplan.slp_tfplan.transformers.dataflow.dataflow_creator import DataflowCreator
 from slp_tfplan.tests.util.builders import build_tfgraph
@@ -20,18 +20,6 @@ def mocked_strategies(results: List):
     return list(map(mocked_strategy, results))
 
 
-@fixture
-def strategies():
-    return []
-
-
-@fixture(autouse=True)
-def mock_get_strategies(mocker, strategies):
-    return mocker.patch(
-        'slp_tfplan.slp_tfplan.transformers.dataflow.dataflow_creator.get_strategies',
-        return_value=strategies)
-
-
 class TestDataflowCreator:
     def test_no_strategies(self):
         # GIVEN some mocked components
@@ -44,9 +32,10 @@ class TestDataflowCreator:
         graph = MOCKED_GRAPH
 
         # AND no strategies
+        strategies = []
 
         # WHEN DataflowCreator::transform is called
-        DataflowCreator(otm, graph).transform()
+        DataflowCreator(otm=otm, graph=graph, strategies=strategies).transform()
 
         # THEN no dataflows were added
         assert not otm.dataflows
@@ -57,7 +46,7 @@ class TestDataflowCreator:
         param(mocked_strategies([['C1 -> C2', 'C3 -> C4'], ['C5 -> C6', 'C7 -> C8']]),
               4,
               id='two strategies, two dataflows per strategy')])
-    def test_all_strategies_applied(self, strategies, expected_dataflows):
+    def test_all_strategies_applied(self, strategies: List, expected_dataflows):
         # GIVEN some mocked components
         components = [Mock()] * randint(1, 5)
 
@@ -70,7 +59,7 @@ class TestDataflowCreator:
         # AND different combinations of strategies
 
         # WHEN DataflowCreator::transform is called
-        DataflowCreator(otm, graph).transform()
+        DataflowCreator(otm=otm, graph=graph, strategies=strategies).transform()
 
         # THEN the expected dataflows are generated
         assert len(otm.dataflows) == expected_dataflows

@@ -1,6 +1,6 @@
 from unittest.mock import Mock
 
-from slp_tfplan.slp_tfplan.matcher.component_security_group_match_strategies import \
+from slp_tfplan.slp_tfplan.matcher.strategies.component_security_group_match_strategies import \
     ComponentSecurityGroupByLaunchTemplateStrategyMatchStrategy
 
 

@@ -5,7 +5,7 @@ from pytest import mark, param
 
 from slp_tfplan.slp_tfplan.graph.relationships_extractor import RelationshipsExtractor
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent
-from slp_tfplan.slp_tfplan.transformers.dataflow.dataflow_by_straight_relationship_strategy import \
+from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_by_straight_relationship_strategy import \
     DataflowByStraightRelationshipStrategy
 from slp_tfplan.tests.util.builders import build_tfgraph, build_simple_mocked_component, build_mocked_otm
 

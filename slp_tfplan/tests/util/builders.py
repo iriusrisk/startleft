@@ -1,7 +1,8 @@
 from copy import deepcopy
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Type
 from unittest.mock import Mock
 
+from dependency_injector import providers
 from networkx import DiGraph
 
 from otm.otm.entity.dataflow import Dataflow
@@ -202,3 +203,7 @@ def _create_graph_nodes(graph: DiGraph, relationships: List[Tuple]):
 
 def create_artificial_file(size: int) -> bytes:
     return bytes('A' * size, 'utf-8')
+
+
+def get_instance_classes(instances: providers.List) -> List[Type]:
+    return [instance.cls for instance in list(instances.args)]

@@ -1,10 +1,12 @@
 from typing import List
 
 from otm.otm.entity.dataflow import Dataflow
-from slp_tfplan.slp_tfplan.transformers.dataflow.dataflow_creator import create_dataflow
-from slp_tfplan.slp_tfplan.transformers.dataflow.dataflow_strategies import DataflowCreationStrategy
+from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_creation_strategy import DataflowCreationStrategy, \
+    create_dataflow, DataflowCreationStrategyContainer
+from slp_tfplan.slp_tfplan.util.injection import register
 
 
+@register(DataflowCreationStrategyContainer.strategies)
 class DataflowByStraightRelationshipStrategy(DataflowCreationStrategy):
     def create_dataflows(self, **kwargs) -> List[Dataflow]:
         dataflows = []

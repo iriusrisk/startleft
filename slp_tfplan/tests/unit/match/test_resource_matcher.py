@@ -2,7 +2,6 @@ from typing import List
 from unittest.mock import Mock
 
 import pytest
-from pytest import fixture
 
 from slp_tfplan.slp_tfplan.matcher.resource_matcher import ResourcesMatcher
 
@@ -17,18 +16,6 @@ def mocked_strategies(results: List):
     return list(map(mocked_strategy, results))
 
 
-@fixture
-def strategies():
-    return []
-
-
-@fixture(autouse=True)
-def mock_get_strategies(mocker, strategies):
-    return mocker.patch(
-        'slp_tfplan.slp_tfplan.matcher.resource_matcher.get_strategies',
-        return_value=strategies)
-
-
 class TestResourceMatcher:
 
     def test_no_strategies(self):
@@ -37,10 +24,10 @@ class TestResourceMatcher:
         object_2 = Mock()
 
         # AND no strategies
-        no_strategies_group = Mock()
+        strategies = []
 
         # WHEN ObjectsMatcher::are_related is called
-        result = ResourcesMatcher(no_strategies_group).are_related(object_1, object_2)
+        result = ResourcesMatcher(strategies=strategies).are_related(object_1, object_2)
 
         # THEN we call strategies until we find the first valid strategy
         assert not result
@@ -59,11 +46,10 @@ class TestResourceMatcher:
         object_1 = Mock()
         object_2 = Mock()
 
-        # AND a StrategyGroup with mocked strategies
-        mocked_strategy_group = Mock()
+        # AND some mocked strategies
 
         # WHEN ObjectsMatcher::are_related is called
-        result = ResourcesMatcher(mocked_strategy_group).are_related(object_1, object_2)
+        result = ResourcesMatcher(strategies).are_related(object_1, object_2)
 
         # THEN we call strategies until we find the first valid strategy
         for i in range(0, valid_strategy):

@@ -1,43 +1,38 @@
 from typing import List, Dict, Callable
 
+from dependency_injector.wiring import Provide, inject
+
 from otm.otm.entity.dataflow import Dataflow
 from slp_tfplan.slp_tfplan.graph.relationships_extractor import RelationshipsExtractor
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, SecurityGroup, LaunchTemplate
-from slp_tfplan.slp_tfplan.transformers.dataflow.dataflow_creator import create_dataflow
-from slp_tfplan.slp_tfplan.transformers.dataflow.dataflow_strategies import DataflowCreationStrategy
+from slp_tfplan.slp_tfplan.matcher.resource_matcher import ResourcesMatcher, ResourcesMatcherContainer
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TFPlanOTM
+from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_creation_strategy import DataflowCreationStrategy, \
+    create_dataflow, DataflowCreationStrategyContainer
+from slp_tfplan.slp_tfplan.util.injection import register
 
 
+@register(DataflowCreationStrategyContainer.strategies)
 class DataflowBySecurityGroupsStrategy(DataflowCreationStrategy):
-    def __init__(self):
+    @inject
+    def __init__(self,
+                 sgs_matcher: ResourcesMatcher = Provide[ResourcesMatcherContainer.sgs_resources_matcher],
+                 components_sg_matcher: ResourcesMatcher = Provide[ResourcesMatcherContainer.component_sg_matcher]):
         # Data structures
-        self.components: List[TFPlanComponent]
-        self.security_groups: List[SecurityGroup]
-        self.launch_templates: List[LaunchTemplate]
 
-        # Injected dependencies required by this strategy
-        self.are_hierarchically_related: Callable
-        self.are_sgs_related: Callable
-        self.are_component_in_sg: Callable
-
-        # Injected dependencies required by child strategies
+        self.otm: TFPlanOTM
         self.relationships_extractor: RelationshipsExtractor
 
+        # Injected dependencies
+        self.are_hierarchically_related: Callable
+        self.are_sgs_related = sgs_matcher.are_related
+        self.are_component_in_sg = components_sg_matcher.are_related
+
     def create_dataflows(self, **kwargs) -> List[Dataflow]:
-        self.__initialize_strategy(**kwargs)
+        self.otm = kwargs['otm']
+        self.relationships_extractor = kwargs.get('relationships_extractor', None)
+        self.are_hierarchically_related = kwargs.get('are_hierarchically_related', None)
 
         return self.__create_dataflows_by_security_groups()
-
-    def __initialize_strategy(self, **kwargs):
-        otm = kwargs.get('otm')
-        self.components = otm.components
-        self.security_groups = otm.security_groups
-        self.launch_templates = otm.launch_templates
-
-        self.relationships_extractor = kwargs.get('relationships_extractor', None)
-
-        self.are_hierarchically_related = kwargs.get('are_hierarchically_related', None)
-        self.are_sgs_related = kwargs.get('are_sgs_related', None)
-        self.are_component_in_sg = kwargs.get('are_component_in_sg', None)
 
     def __create_dataflows_by_security_groups(self):
         dataflows = []
@@ -61,13 +56,13 @@ class DataflowBySecurityGroupsStrategy(DataflowCreationStrategy):
     def __match_components_and_sgs(self) -> Dict[str, List[TFPlanComponent]]:
         components_in_sgs: Dict[str, List[TFPlanComponent]] = {}
 
-        for security_group in self.security_groups:
+        for security_group in self.otm.security_groups:
             components_in_sg = []
-            for component in self.components:
+            for component in self.otm.components:
                 if self.are_component_in_sg(component,
                                             security_group,
                                             relationships_extractor=self.relationships_extractor,
-                                            launch_templates=self.launch_templates):
+                                            launch_templates=self.otm.launch_templates):
                     components_in_sg.append(component)
 
             if components_in_sg:
@@ -78,10 +73,10 @@ class DataflowBySecurityGroupsStrategy(DataflowCreationStrategy):
     def __find_sgs_relationships(self) -> Dict[str, List[str]]:
         sgs_relationships: Dict[str, List[str]] = {}
 
-        for source_sg in self.security_groups:
+        for source_sg in self.otm.security_groups:
             sg_relationships = []
 
-            for target_sg in self.security_groups:
+            for target_sg in self.otm.security_groups:
                 if source_sg.id == target_sg.id:
                     continue
 

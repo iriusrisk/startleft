@@ -31,7 +31,8 @@ setup(
         'setuptools==65.5.1',
         'defusedxml==0.7.1',
         'networkx==3.0',
-        'pygraphviz==1.10'
+        'pygraphviz==1.10',
+        'dependency-injector==4.41.0'
     ],
     use_scm_version={
         'write_to': 'startleft/version.py',

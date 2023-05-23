@@ -1,11 +1,18 @@
-from typing import List
+from typing import List, Callable
+from unittest.mock import Mock
 
 from pytest import mark, param
 
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, SecurityGroup
-from slp_tfplan.slp_tfplan.transformers.dataflow.dataflow_by_security_groups_strategy import \
+from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_by_security_groups_strategy import \
     DataflowBySecurityGroupsStrategy
 from slp_tfplan.tests.util.builders import build_simple_mocked_component, build_security_group_mock, build_mocked_otm
+
+
+def build_mocked_matcher(are_related: Callable) -> Mock:
+    mock = Mock()
+    mock.are_related = are_related
+    return mock
 
 
 class TestDataflowBySecurityGroupsStrategy:
@@ -32,12 +39,11 @@ class TestDataflowBySecurityGroupsStrategy:
         def are_component_in_sg(*args, **kwargs): return False
 
         # WHEN DataflowBySecurityGroupsStrategy::create_dataflows is invoked
-        dataflows = DataflowBySecurityGroupsStrategy().create_dataflows(
-            are_hierarchically_related=are_hierarchically_related,
-            are_component_in_sg=are_component_in_sg,
-            are_sgs_related=are_sgs_related,
-            otm=build_mocked_otm(components=components, security_groups=security_groups)
-        )
+        dataflows = DataflowBySecurityGroupsStrategy(
+            components_sg_matcher=build_mocked_matcher(are_component_in_sg),
+            sgs_matcher=build_mocked_matcher(are_sgs_related)).create_dataflows(
+                otm=build_mocked_otm(components=components, security_groups=security_groups),
+                are_hierarchically_related=are_hierarchically_related)
 
         # THEN no DFs are created in the OTM
         assert not dataflows
@@ -72,10 +78,10 @@ class TestDataflowBySecurityGroupsStrategy:
             return c.tf_resource_id in components_in_sgs.get(sg.id, [])
 
         # WHEN DataflowBySecurityGroupsStrategy::create_dataflows is invoked
-        dataflows = DataflowBySecurityGroupsStrategy().create_dataflows(
+        dataflows = DataflowBySecurityGroupsStrategy(
+            components_sg_matcher=build_mocked_matcher(are_component_in_sg),
+            sgs_matcher=build_mocked_matcher(are_sgs_related)).create_dataflows(
             are_hierarchically_related=are_hierarchically_related,
-            are_sgs_related=are_sgs_related,
-            are_component_in_sg=are_component_in_sg,
             otm=build_mocked_otm(components=[component_a, component_b], security_groups=[sg1, sg2])
         )
 
