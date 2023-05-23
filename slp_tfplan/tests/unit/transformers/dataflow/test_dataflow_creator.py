@@ -1,13 +1,15 @@
+import uuid
 from random import randint
 from typing import List
 from unittest.mock import Mock
 
-from pytest import mark, param
+from pytest import mark, param, raises, fixture
 
 from slp_tfplan.slp_tfplan.transformers.dataflow.dataflow_creator import DataflowCreator
-from slp_tfplan.tests.util.builders import build_tfgraph
+from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_creation_strategy import DataflowCreationStrategy
+from slp_tfplan.tests.util.builders import build_tfgraph, MockedException
 
-MOCKED_GRAPH = build_tfgraph([])
+ERROR_MESSAGE = 'Error creating dataflows'
 
 
 def mocked_strategy(result):
@@ -20,48 +22,96 @@ def mocked_strategies(results: List):
     return list(map(mocked_strategy, results))
 
 
+def mocked_random_strategies(number_of_strategies, number_of_dataflows_per_strategy):
+    return list(map(lambda _: mocked_strategy(
+        [random_dataflow() for _ in range(number_of_dataflows_per_strategy)]), range(number_of_strategies)))
+
+
+def random_dataflow() -> str:
+    return str(uuid.uuid4())
+
+
+@fixture(autouse=True)
+def mocked_otm():
+    yield Mock(components=[Mock()] * randint(1, 5), dataflows=[], mapped_resources_ids=[])
+
+
+@fixture(autouse=True)
+def mocked_graph():
+    yield build_tfgraph([])
+
+
 class TestDataflowCreator:
-    def test_no_strategies(self):
-        # GIVEN some mocked components
-        components = [Mock()] * randint(1, 5)
-
-        # AND an OTM with those components and no dataflows
-        otm = Mock(components=components, dataflows=[], mapped_resources_ids=[])
-
+    def test_no_strategies(self, mocked_otm, mocked_graph):
+        # GIVEN a mocked OTM with some fake components
         # AND a mocked graph
-        graph = MOCKED_GRAPH
 
         # AND no strategies
         strategies = []
 
         # WHEN DataflowCreator::transform is called
-        DataflowCreator(otm=otm, graph=graph, strategies=strategies).transform()
+        DataflowCreator(otm=mocked_otm, graph=mocked_graph, strategies=strategies).transform()
 
         # THEN no dataflows were added
-        assert not otm.dataflows
+        assert not mocked_otm.dataflows
 
-    # TODO Separate in two tests, number of dataflows and expected dataflows
-    @mark.parametrize('strategies,expected_dataflows', [
-        param(mocked_strategies([['C1 -> C2']]), 1, id='one strategy, one dataflow per strategy'),
-        param(mocked_strategies([['C1 -> C2', 'C3 -> C4'], ['C5 -> C6', 'C7 -> C8']]),
-              4,
-              id='two strategies, two dataflows per strategy')])
-    def test_all_strategies_applied(self, strategies: List, expected_dataflows):
-        # GIVEN some mocked components
-        components = [Mock()] * randint(1, 5)
-
-        # AND an OTM with those components and no dataflows
-        otm = Mock(components=components, dataflows=[], mapped_resources_ids=[])
-
+    def test_dataflows_appended(self, mocked_otm, mocked_graph):
+        # GIVEN a mocked OTM with some fake components
         # AND a mocked graph
-        graph = MOCKED_GRAPH
 
-        # AND different combinations of strategies
+        # AND two strategies returning one dataflow per each
+        dataflow_strategy_1_result = 'C1 -> C2'
+        dataflow_strategy_2_result = 'C3 -> C4'
+        strategies = mocked_strategies([[dataflow_strategy_1_result], [dataflow_strategy_2_result]])
 
         # WHEN DataflowCreator::transform is called
-        DataflowCreator(otm=otm, graph=graph, strategies=strategies).transform()
+        DataflowCreator(otm=mocked_otm, graph=mocked_graph, strategies=strategies).transform()
 
-        # THEN the expected dataflows are generated
-        assert len(otm.dataflows) == expected_dataflows
+        # THEN the dataflows from both strategies are in the result OTM
+        assert mocked_otm.dataflows == [dataflow_strategy_1_result] + [dataflow_strategy_2_result]
 
-# TODO def test_error_on_strategy(self):
+    def test_number_of_dataflows(self, mocked_otm, mocked_graph):
+        # GIVEN a mocked OTM with some fake components
+        # AND a mocked graph
+
+        # AND a random number of strategies returning a random number of dataflows
+        number_of_strategies = randint(1, 5)
+        number_of_dataflows_per_strategy = randint(1, 5)
+        strategies = mocked_random_strategies(number_of_strategies, number_of_dataflows_per_strategy)
+
+        # WHEN DataflowCreator::transform is called
+        DataflowCreator(otm=mocked_otm, graph=mocked_graph, strategies=strategies).transform()
+
+        # THEN all the dataflows from every strategy are included in the OTM
+        assert len(mocked_otm.dataflows) == number_of_strategies * number_of_dataflows_per_strategy
+
+    def test_repeated_dataflows(self, mocked_otm, mocked_graph):
+        # GIVEN a mocked OTM with some fake components
+        # AND a mocked graph
+
+        # AND two strategies returning the same dataflow
+        same_dataflow = 'C1 -> C2'
+        strategies = mocked_strategies([[same_dataflow], [same_dataflow]])
+
+        # WHEN DataflowCreator::transform is called
+        DataflowCreator(otm=mocked_otm, graph=mocked_graph, strategies=strategies).transform()
+
+        # THEN the OTM contains the dataflow only once
+        assert mocked_otm.dataflows == [same_dataflow]
+
+    @mark.parametrize('strategies', [
+        param(mocked_strategies([MockedException(ERROR_MESSAGE), []]), id='first error'),
+        param(mocked_strategies([[], MockedException(ERROR_MESSAGE), []]), id='middle error'),
+        param(mocked_strategies([[], MockedException(ERROR_MESSAGE)]), id='last error')
+    ])
+    def test_error_in_strategy(self, mocked_otm, mocked_graph, strategies: List[DataflowCreationStrategy]):
+        # GIVEN a mocked OTM with some fake components
+        # AND a mocked graph
+
+        # AND some strategies which return or not errors
+
+        # WHEN DataflowCreator::transform is called
+        # THEN the error is propagated
+        with raises(MockedException) as ex:
+            DataflowCreator(otm=mocked_otm, graph=mocked_graph, strategies=strategies).transform()
+            assert ex.value.message == ERROR_MESSAGE

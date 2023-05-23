@@ -1,4 +1,4 @@
-from typing import List, Callable
+from typing import List, Callable, Tuple, Dict
 from unittest.mock import Mock
 
 from pytest import mark, param
@@ -53,8 +53,8 @@ class TestDataflowBySecurityGroupsStrategy:
         param([('SG2', 'SG1')], {'SG1': 'A', 'SG2': 'B'}, 'B', 'A', False, id='SG2 to SG1'),
         # TODO param([('SG1', 'SG2'), ('SG2', 'SG1')], {'SG1': 'A', 'SG2': 'B'}, 'A', 'B', True, id='bidirectional')
     ])
-    def test_two_related_sgs(self, related_sgs, components_in_sgs, expected_source, expected_destination,
-                             bidirectional):
+    def test_two_related_sgs(self, related_sgs: List[Tuple], components_in_sgs: Dict,
+                             expected_source: str, expected_destination: str, bidirectional: bool):
         # GIVEN two SGs
         sg1 = SecurityGroup(security_group_id='SG1')
         sg2 = SecurityGroup(security_group_id='SG2')

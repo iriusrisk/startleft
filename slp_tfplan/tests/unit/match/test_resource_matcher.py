@@ -1,22 +1,26 @@
 from typing import List
 from unittest.mock import Mock
 
-import pytest
+from pytest import raises, mark, param
 
 from slp_tfplan.slp_tfplan.matcher.resource_matcher import ResourcesMatcher
+from slp_tfplan.slp_tfplan.matcher.strategies.match_strategy import MatchStrategy
+from slp_tfplan.tests.util.builders import MockedException
+
+ERROR_MESSAGE = 'Error matching resources'
 
 
-def mocked_strategy(result):
+def mocked_strategy(result) -> Mock:
     strategy = Mock()
     strategy.are_related = Mock(side_effect=[result])
     return strategy
 
 
-def mocked_strategies(results: List):
+def mocked_strategies(results: List) -> List[Mock]:
     return list(map(mocked_strategy, results))
 
 
-class TestResourceMatcher:
+class TestResourceSMatcher:
 
     def test_no_strategies(self):
         # GIVEN two mocked objects
@@ -32,23 +36,23 @@ class TestResourceMatcher:
         # THEN we call strategies until we find the first valid strategy
         assert not result
 
-    @pytest.mark.parametrize('strategies,valid_strategy,expected', [
-        (mocked_strategies([True, True]), 0, True),
-        (mocked_strategies([True, False]), 0, True),
-        (mocked_strategies([False, True]), 1, True),
-        (mocked_strategies([False, False]), -1, False),
-        (mocked_strategies([True, False, False]), 0, True),
-        (mocked_strategies([False, False, True]), 2, True),
-        (mocked_strategies([False, False, False]), -1, False)
+    @mark.parametrize('strategies,valid_strategy,expected', [
+        param(mocked_strategies([True, True]), 0, True, id='all true'),
+        param(mocked_strategies([True, False]), 0, True, id='first true'),
+        param(mocked_strategies([False, True]), 1, True, id='second true'),
+        param(mocked_strategies([False, False]), -1, False, id='none true'),
+        param(mocked_strategies([True, False, False]), 0, True, id='first true, three strategies'),
+        param(mocked_strategies([False, False, True]), 2, True, id='last true, three strategies'),
+        param(mocked_strategies([False, False, False]), -1, False, id='none true, three strategies')
     ])
-    def test_first_strategy_applied(self, strategies, valid_strategy, expected):
+    def test_first_strategy_applied(self, strategies: List[Mock], valid_strategy: int, expected: bool):
         # GIVEN two mocked objects
         object_1 = Mock()
         object_2 = Mock()
 
         # AND some mocked strategies
 
-        # WHEN ObjectsMatcher::are_related is called
+        # WHEN ResourceSMatcher::are_related is called
         result = ResourcesMatcher(strategies).are_related(object_1, object_2)
 
         # THEN we call strategies until we find the first valid strategy
@@ -58,4 +62,20 @@ class TestResourceMatcher:
         # AND the result is true if any strategy returns true
         assert result == expected
 
-    # TODO def test_error_on_strategy(self):
+    @mark.parametrize('strategies', [
+        param(mocked_strategies([MockedException(ERROR_MESSAGE), True]), id='first error'),
+        param(mocked_strategies([False, MockedException(ERROR_MESSAGE), True]), id='middle error'),
+        param(mocked_strategies([False, MockedException(ERROR_MESSAGE)]), id='last error')
+    ])
+    def test_error_in_strategy(self, strategies: List[MatchStrategy]):
+        # GIVEN two mocked objects
+        object_1 = Mock()
+        object_2 = Mock()
+
+        # AND some strategies which return or not errors
+
+        # WHEN ResourceSMatcher::are_related is called
+        # THEN the error is propagated
+        with raises(MockedException) as ex:
+            ResourcesMatcher(strategies).are_related(object_1, object_2)
+            assert ex.value.message == ERROR_MESSAGE

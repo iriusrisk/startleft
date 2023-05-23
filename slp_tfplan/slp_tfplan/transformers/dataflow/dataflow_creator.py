@@ -3,8 +3,8 @@ from typing import List
 from dependency_injector.wiring import Provide, inject
 from networkx import DiGraph
 
-from otm.otm.entity.dataflow import Dataflow
 from otm.otm.entity.parent_type import ParentType
+from sl_util.sl_util.iterations_utils import remove_duplicates
 from slp_tfplan.slp_tfplan.graph.relationships_extractor import RelationshipsExtractor
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanOTM, TFPlanComponent
 from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_creation_strategy import DataflowCreationStrategy, \
@@ -26,9 +26,6 @@ class DataflowCreator(Transformer):
                      DataflowCreationStrategyContainer.strategies]):
         super().__init__(otm, graph)
 
-        self.components: [TFPlanComponent] = otm.components
-        self.dataflows: [Dataflow] = otm.dataflows
-
         self.relationships_extractor = RelationshipsExtractor(
             mapped_resources_ids=self.otm.mapped_resources_ids,
             graph=graph)
@@ -37,10 +34,12 @@ class DataflowCreator(Transformer):
 
     def transform(self):
         for strategy in self.strategies:
-            self.dataflows.extend(strategy.create_dataflows(
+            self.otm.dataflows.extend(strategy.create_dataflows(
                 otm=self.otm,
                 relationships_extractor=self.relationships_extractor,
                 are_hierarchically_related=self._are_hierarchically_related))
+
+        self.otm.dataflows = remove_duplicates(self.otm.dataflows)
 
     # TODO Refactor to an specific class
     def _are_hierarchically_related(self, first: TFPlanComponent, second: TFPlanComponent) -> bool:
@@ -51,14 +50,14 @@ class DataflowCreator(Transformer):
     def __is_ancestor(self, component: TFPlanComponent, ancestor: TFPlanComponent) -> bool:
         return component.parent_type == ParentType.COMPONENT and \
             (component.parent == ancestor.id
-             or self.__is_ancestor(find_component_by_id(component.parent, self.components), ancestor))
+             or self.__is_ancestor(find_component_by_id(component.parent, self.otm.components), ancestor))
 
     def __is_ancestor_of_any_clone(self, component: TFPlanComponent, ancestor: TFPlanComponent) -> bool:
         if not component.clones_ids:
             return False
 
         for clone_id in component.clones_ids:
-            if self.__is_ancestor(find_component_by_id(clone_id, self.components), ancestor):
+            if self.__is_ancestor(find_component_by_id(clone_id, self.otm.components), ancestor):
                 return True
 
         return False

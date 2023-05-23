@@ -207,3 +207,12 @@ def create_artificial_file(size: int) -> bytes:
 
 def get_instance_classes(instances: providers.List) -> List[Type]:
     return [instance.cls for instance in list(instances.args)]
+
+
+##########
+# ERRORS #
+##########
+
+class MockedException(Exception):
+    def __init__(self, message):
+        self.message = message
