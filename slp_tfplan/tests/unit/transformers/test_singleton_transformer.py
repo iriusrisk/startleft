@@ -36,7 +36,7 @@ class TestSingletonTransformer:
         first_component = build_mocked_tfplan_component({
             'component_name': 'first_component',
             'tf_type': 'aws_type',
-            'configuration': {"singleton": True}
+            'configuration': {"$singleton": True}
         })
 
         otm = build_mocked_otm([first_component])
@@ -61,19 +61,19 @@ class TestSingletonTransformer:
         component_a = build_mocked_tfplan_component({
             'component_name': 'component_a',
             'tf_type': 'aws_type',
-            'configuration': {"singleton": True}
+            'configuration': {"$singleton": True}
         })
 
         component_b = build_mocked_tfplan_component({
             'component_name': 'component_b',
             'tf_type': 'aws_type',
-            'configuration': {"singleton": True}
+            'configuration': {"$singleton": True}
         })
 
         component_c = build_mocked_tfplan_component({
             'component_name': 'component_c',
             'tf_type': 'aws_type',
-            'configuration': {"singleton": True}
+            'configuration': {"$singleton": True}
         })
 
         component_d = build_mocked_tfplan_component({
@@ -105,7 +105,7 @@ class TestSingletonTransformer:
         # GIVEN an OTM with two components with same type/parent  marked as singleton
         tf_type = 'aws_type'
         component_type = build_otm_type(tf_type)
-        component_configuration = {"singleton": True}
+        component_configuration = {"$singleton": True}
 
         first_component = build_mocked_tfplan_component({
             'component_name': 'first_component',
@@ -150,7 +150,7 @@ class TestSingletonTransformer:
 
         # GIVEN an OTM with two components with same type and different parent marked as singleton
         tf_type = 'aws_type'
-        component_configuration = {"singleton": True}
+        component_configuration = {"$singleton": True}
 
         first_component = build_mocked_tfplan_component({
             'component_name': 'first_component',
@@ -190,7 +190,7 @@ class TestSingletonTransformer:
         first_component = build_mocked_tfplan_component({
             'component_name': 'first_component',
             'tf_type': tf_type,
-            'configuration': {"singleton": True}
+            'configuration': {"$singleton": True}
         })
 
         second_component = build_mocked_tfplan_component({
@@ -220,7 +220,7 @@ class TestSingletonTransformer:
         # grouped by two set of parents
         tf_type = 'aws_type'
         component_type = build_otm_type(tf_type)
-        component_configuration = {"singleton": True}
+        component_configuration = {"$singleton": True}
 
         first_component_parent_a = build_mocked_tfplan_component({
             'component_name': 'first_component_parent_a',
@@ -302,7 +302,7 @@ class TestSingletonTransformer:
         # GIVEN an OTM with two components with same type/parent marked as singleton
         # AND different tags
         component_type = 'component_type'
-        component_configuration = {"singleton": True}
+        component_configuration = {"$singleton": True}
         tag_1 = "tag_1"
         tag_2 = "tag_2"
         tag_3 = "tag_3"
@@ -355,7 +355,7 @@ class TestSingletonTransformer:
         # GIVEN an otm with a random number of singleton components with same type and parent
         tf_type = 'aws_type'
         component_type = build_otm_type(tf_type)
-        component_configuration = {"singleton": True}
+        component_configuration = {"$singleton": True}
 
         components = []
         for index in range(randrange(2, 50)):

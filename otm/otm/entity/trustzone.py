@@ -3,7 +3,7 @@ from otm.otm.entity.parent_type import ParentType
 
 class Trustzone:
     def __init__(self, trustzone_id, name, parent=None, parent_type: ParentType = None, source=None, type=type,
-                 attributes=None, representations=None):
+                 attributes=None, trustrating=10, representations=None):
         self.id = trustzone_id
         self.name = name
         self.type = type
@@ -11,7 +11,7 @@ class Trustzone:
         self.parent_type: ParentType = parent_type
         self.source = source
         self.attributes = attributes
-        self.trustrating = 10
+        self.trustrating = trustrating
         self.representations = representations
 
     def __eq__(self, other):
