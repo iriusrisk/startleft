@@ -1,5 +1,6 @@
 from typing import List
 
+from sl_util.sl_util.str_utils import deterministic_uuid
 from slp_base import MappingFileNotValidError
 
 MAPPING_FILE_NOT_VALID = 'Mapping file not valid'
@@ -35,7 +36,7 @@ class TrustZoneMapping:
 
     @property
     def id(self) -> str:
-        return self.__trustzone['id']
+        return deterministic_uuid(f"{self.type}-{self.name}")
 
     @property
     def type(self) -> str:
@@ -59,14 +60,14 @@ class TrustZoneMapping:
                f'trust_rating: {self.trust_rating}, is_default: {self.is_default}}}'
 
 
-def _exist_trustzone(trustzone_id: str, trustzones: List[TrustZoneMapping]) -> bool:
+def _exist_trustzone_by_type(trustzone_type: str, trustzones: List[TrustZoneMapping]) -> bool:
     """
-    Returns True if exists a TrustZone with the given identifier, returns False otherwise
-    :param trustzone_id: The TrustZone identifier
+    Returns True if exists a TrustZone with the given type, returns False otherwise
+    :param trustzone_type: The TrustZone type
     :param trustzones: The TrustZone list
     :return: Whether a TrustZone exists
     """
-    return len(list(filter(lambda tz: tz.id == trustzone_id, trustzones))) > 0
+    return bool(list(filter(lambda tz: tz.type == trustzone_type, trustzones)))
 
 
 class AttackSurface:
@@ -81,8 +82,8 @@ class AttackSurface:
             msg = 'Attack Surface must contain a client'
             raise MappingFileNotValidError(MAPPING_FILE_NOT_VALID, msg, msg)
 
-        if not self.__trustzone_id or not self.__trustzones \
-                or not _exist_trustzone(self.__trustzone_id, self.__trustzones):
+        if not self.__trustzone_type or not self.__trustzones \
+                or not _exist_trustzone_by_type(self.__trustzone_type, self.__trustzones):
             msg = 'Attack Surface must contain a valid TrustZone'
             raise MappingFileNotValidError(MAPPING_FILE_NOT_VALID, msg, msg)
 
@@ -92,10 +93,10 @@ class AttackSurface:
 
     @property
     def trustzone(self) -> TrustZoneMapping:
-        return next(filter(lambda tz: tz.id == self.__trustzone_id, self.__trustzones))
+        return next(filter(lambda tz: tz.type == self.__trustzone_type, self.__trustzones))
 
     @property
-    def __trustzone_id(self) -> str:
+    def __trustzone_type(self) -> str:
         return self.__attack_surface.get('trustzone', None)
 
     def __str__(self) -> str:

@@ -28,9 +28,6 @@
          "type":"object",
          "additionalProperties":false,
          "properties":{
-            "id":{
-               "type":"string"
-            },
             "type":{
                "type":"string"
             },
@@ -45,7 +42,6 @@
             }
          },
          "required":[
-            "id",
             "name",
             "type"
          ],

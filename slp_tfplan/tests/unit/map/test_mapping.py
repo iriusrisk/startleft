@@ -6,10 +6,12 @@ import pytest
 from slp_base import MappingFileNotValidError
 from slp_tfplan.slp_tfplan.map.mapping import Mapping, ComponentMapping, TrustZoneMapping, AttackSurface
 
+TZ_TYPE_0_ID = '944a88f6-b08a-4eee-a501-4499b12d1956'
+TZ_TYPE_1_ID = 'e7b84a79-66ea-4322-8d5e-5029ef7ea007'
+
 
 def _create_trustzone(value: str, default: bool = False, trust_rating: int = None) -> dict:
     trustzone = {
-        'id': f'{value}',
         'type': f'type-{value}',
         'name': f'name-{value}'
     }
@@ -54,19 +56,23 @@ class TestComponentMapping:
 
 class TestTrustZoneMapping:
 
-    @pytest.mark.parametrize('trustzone_id, default, trust_rating, trust_rating_class', [
-        pytest.param(1, False, None, type(None), id='not default with not trust rating'),
-        pytest.param(2, True, None, type(None), id='default with not trust rating'),
-        pytest.param(1, False, 10, int, id='not default with trust rating'),
-        pytest.param(2, True, 10, int, id='default with trust rating'),
+    @pytest.mark.parametrize('tz_id, tz_type, default, trust_rating, trust_rating_class', [
+        pytest.param(TZ_TYPE_0_ID, 0, False, None, type(None),
+                     id='not default with not trust rating'),
+        pytest.param(TZ_TYPE_1_ID, 1, True, None, type(None),
+                     id='default with not trust rating'),
+        pytest.param(TZ_TYPE_0_ID, 0, False, 10, int,
+                     id='not default with trust rating'),
+        pytest.param(TZ_TYPE_1_ID, 1, True, 10, int,
+                     id='default with trust rating'),
     ])
-    def test_trustzone_mapping(self, trustzone_id: str, default: bool, trust_rating: int, trust_rating_class: type):
+    def test_trustzone_mapping(self, tz_id: str, tz_type: str, default: bool, trust_rating: int, trust_rating_class: type):
         # GIVEN a trustzone dictionary
-        trustzone_dict = _create_trustzone(trustzone_id, default, trust_rating)
+        trustzone_dict = _create_trustzone(tz_type, default, trust_rating)
         # WHEN loading the ComponentMapping
         trustzone_mapping = TrustZoneMapping(trustzone_dict)
         # THEN attributes are mapped correctly
-        assert trustzone_mapping.id == trustzone_dict['id']
+        assert trustzone_mapping.id == tz_id
         assert trustzone_mapping.type == trustzone_dict['type']
         assert trustzone_mapping.name == trustzone_dict['name']
         assert trustzone_mapping.trust_rating == trustzone_dict.get('risk', {}).get('trust_rating', None)
@@ -104,10 +110,10 @@ class TestAttackSurface:
         # GIVEN an attack surface dictionary
         attack_surface_dict = {
             'client': 'c',
-            'trustzone': 'tz-1'
+            'trustzone': 'type-1'
         }
         # AND a list of trustzones
-        trustzones = [MagicMock(id='tz-0'), MagicMock(id='tz-1')]
+        trustzones = [MagicMock(type='type-0'), MagicMock(type='type-1')]
         # WHEN loading the AttackSurface Object
         attack_surface_mapping = AttackSurface(attack_surface_dict, trustzones)
         # THEN attributes are mapped correctly
@@ -146,8 +152,8 @@ class TestMapping:
         mapping = Mapping(mapping_dict)
         # THEN the attribute trustzones returns the data correctly
         assert len(mapping.trustzones) == 2
-        assert mapping.trustzones[0].id == '0'
-        assert mapping.trustzones[1].id == '1'
+        assert mapping.trustzones[0].id == TZ_TYPE_0_ID
+        assert mapping.trustzones[1].id == TZ_TYPE_1_ID
         assert len(mapping.__str__())
 
     def test_components(self):
@@ -223,13 +229,14 @@ class TestMapping:
 
     def test_attack_surface(self):
         # GIVEN a dict with attack surface configuration
+        trustzone = _create_trustzone('0', True)
         mapping_dict = {
-            'trustzones': [_create_trustzone('0', True)],
+            'trustzones': [trustzone],
             'components': [_create_component('0')],
             'configuration': {
                 'attack_surface': {
                     'client': 'c',
-                    'trustzone': '0'
+                    'trustzone': trustzone.get('type')
                 }
             }
         }
@@ -237,5 +244,5 @@ class TestMapping:
         mapping = Mapping(mapping_dict)
         # THEN the attribute attack_surface returns the data correctly
         assert mapping.attack_surface.client == 'c'
-        assert mapping.attack_surface.trustzone.id == '0'
+        assert mapping.attack_surface.trustzone.type == trustzone.get('type')
         assert len(mapping.__str__())
