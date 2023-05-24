@@ -49,7 +49,8 @@ setup(
             'responses==0.23.1',
             'deepdiff==6.3.0',
             'httpx==0.23.3',
-            'pytest-mock==3.10.0'
+            'pytest-mock==3.10.0',
+            'coverage==7.2.3'
         ]
     },
     entry_points='''
