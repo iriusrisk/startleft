@@ -41,7 +41,6 @@ class DataflowCreator(Transformer):
 
         self.otm.dataflows = remove_duplicates(self.otm.dataflows)
 
-    # TODO Refactor to an specific class
     def _are_hierarchically_related(self, first: TFPlanComponent, second: TFPlanComponent) -> bool:
         return first.id == second.id or \
             self.__is_ancestor(first, second) or self.__is_ancestor_of_any_clone(first, second) \

@@ -8,6 +8,17 @@ from slp_tfplan.slp_tfplan.util.injection import register
 
 @register(DataflowCreationStrategyContainer.strategies)
 class DataflowByStraightRelationshipStrategy(DataflowCreationStrategy):
+    """
+    Strategy to find and create dataflows based straight relationships between resources in the tfgraph.
+    It creates dataflows when there is a straight relationship between two components in the tfgraph file.
+    One relationship is straight when there is no mapped components in the middle. For example:
+    - GIVEN three mapped components C1, C2 and C3.
+    - AND one non mapped resource R1.
+    - THEN C1 -> C2 or C1 -> R1 -> C2 are valid straight relationships between C1 and C2.
+    - AND C1 -> C2 -> C3 is an invalid relationship between C1 and C3.
+    Apart from this, no dataflows are created between components with a hierarchical relationship between them.
+    """
+
     def create_dataflows(self, **kwargs) -> List[Dataflow]:
         dataflows = []
 

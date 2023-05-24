@@ -7,7 +7,8 @@ from slp_tfplan.slp_tfplan.util.injection import register
 @register(MatchStrategyContainer.component_sg_match_strategies)
 class ComponentMatchStrategySecurityGroupByGraphStrategy(MatchStrategy):
     """
-    A component belongs to a security group if there is a relationship between the SG and the component in any direction
+    A component belongs to a security group if there is a tfgraph relationship between the SG and the component
+    in any direction.
     """
 
     def are_related(self, component: TFPlanComponent, security_group: SecurityGroup, **kwargs) -> bool:
@@ -19,6 +20,10 @@ class ComponentMatchStrategySecurityGroupByGraphStrategy(MatchStrategy):
 
 @register(MatchStrategyContainer.component_sg_match_strategies)
 class ComponentSecurityGroupByLaunchTemplateStrategyMatchStrategy(MatchStrategy):
+    """
+    A component belongs to a security group if there is a relationship from the component to a Launch Template in the
+    tfgraph and the ID of the security group is referenced in that Launch Template.
+    """
     def are_related(self, component: TFPlanComponent, security_group: SecurityGroup, **kwargs) -> bool:
         relationships_extractor = kwargs['relationships_extractor']
         launch_templates = kwargs['launch_templates']

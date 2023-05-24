@@ -50,8 +50,7 @@ class TestDataflowBySecurityGroupsStrategy:
 
     @mark.parametrize('related_sgs,components_in_sgs,expected_source,expected_destination,bidirectional', [
         param([('SG1', 'SG2')], {'SG1': 'A', 'SG2': 'B'}, 'A', 'B', False, id='SG1 to SG2'),
-        param([('SG2', 'SG1')], {'SG1': 'A', 'SG2': 'B'}, 'B', 'A', False, id='SG2 to SG1'),
-        # TODO param([('SG1', 'SG2'), ('SG2', 'SG1')], {'SG1': 'A', 'SG2': 'B'}, 'A', 'B', True, id='bidirectional')
+        param([('SG2', 'SG1')], {'SG1': 'A', 'SG2': 'B'}, 'B', 'A', False, id='SG2 to SG1')
     ])
     def test_two_related_sgs(self, related_sgs: List[Tuple], components_in_sgs: Dict,
                              expected_source: str, expected_destination: str, bidirectional: bool):

@@ -4,7 +4,7 @@ from dependency_injector.wiring import Provide, inject
 
 from otm.otm.entity.dataflow import Dataflow
 from slp_tfplan.slp_tfplan.graph.relationships_extractor import RelationshipsExtractor
-from slp_tfplan.slp_tfplan.matcher.resource_matcher import ResourcesMatcher, ResourcesMatcherContainer
+from slp_tfplan.slp_tfplan.matcher.resource_matcher import ResourceMatcher, ResourcesMatcherContainer
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TFPlanOTM
 from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_creation_strategy import DataflowCreationStrategy, \
     create_dataflow, DataflowCreationStrategyContainer
@@ -13,10 +13,19 @@ from slp_tfplan.slp_tfplan.util.injection import register
 
 @register(DataflowCreationStrategyContainer.strategies)
 class DataflowBySecurityGroupsStrategy(DataflowCreationStrategy):
+    """
+    Strategy to find and create dataflows based on AWS Security Groups.
+    It creates dataflows for components belonging to related dataflows, for example:
+    - GIVEN two Security groups, SG1 and SG2 related in some way (using `MatchStrategy`s).
+    - AND two components C1 and C2 belonging to SG1 (using `MatchStrategy`s).
+    - AND two components C3 and C4 belonging to SG2 (using `MatchStrategy`s).
+    - THEN the DataflowBySecurityGroupsStrategy returns two dataflows: C1 -> C2 and C3 -> C4.
+    """
+
     @inject
     def __init__(self,
-                 sgs_matcher: ResourcesMatcher = Provide[ResourcesMatcherContainer.sgs_resources_matcher],
-                 components_sg_matcher: ResourcesMatcher = Provide[ResourcesMatcherContainer.component_sg_matcher]):
+                 sgs_matcher: ResourceMatcher = Provide[ResourcesMatcherContainer.sgs_resources_matcher],
+                 components_sg_matcher: ResourceMatcher = Provide[ResourcesMatcherContainer.component_sg_matcher]):
         # Data structures
 
         self.otm: TFPlanOTM

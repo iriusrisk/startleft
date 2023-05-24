@@ -3,7 +3,7 @@ from unittest.mock import Mock
 
 from pytest import raises, mark, param
 
-from slp_tfplan.slp_tfplan.matcher.resource_matcher import ResourcesMatcher
+from slp_tfplan.slp_tfplan.matcher.resource_matcher import ResourceMatcher
 from slp_tfplan.slp_tfplan.matcher.strategies.match_strategy import MatchStrategy
 from slp_tfplan.tests.util.builders import MockedException
 
@@ -31,7 +31,7 @@ class TestResourceSMatcher:
         strategies = []
 
         # WHEN ObjectsMatcher::are_related is called
-        result = ResourcesMatcher(strategies=strategies).are_related(object_1, object_2)
+        result = ResourceMatcher(strategies=strategies).are_related(object_1, object_2)
 
         # THEN we call strategies until we find the first valid strategy
         assert not result
@@ -53,7 +53,7 @@ class TestResourceSMatcher:
         # AND some mocked strategies
 
         # WHEN ResourceSMatcher::are_related is called
-        result = ResourcesMatcher(strategies).are_related(object_1, object_2)
+        result = ResourceMatcher(strategies).are_related(object_1, object_2)
 
         # THEN we call strategies until we find the first valid strategy
         for i in range(0, valid_strategy):
@@ -77,5 +77,5 @@ class TestResourceSMatcher:
         # WHEN ResourceSMatcher::are_related is called
         # THEN the error is propagated
         with raises(MockedException) as ex:
-            ResourcesMatcher(strategies).are_related(object_1, object_2)
+            ResourceMatcher(strategies).are_related(object_1, object_2)
             assert ex.value.message == ERROR_MESSAGE
