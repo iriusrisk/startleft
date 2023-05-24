@@ -49,6 +49,7 @@ class TestComponentMapping:
         assert component_mapping.label == component_dict['label']
         assert component_mapping.type == component_dict['type']
         assert component_mapping.configuration.get('$singleton') == singleton
+        assert len(component_mapping.__str__())
 
 
 class TestTrustZoneMapping:
@@ -71,6 +72,7 @@ class TestTrustZoneMapping:
         assert trustzone_mapping.trust_rating == trustzone_dict.get('risk', {}).get('trust_rating', None)
         assert trustzone_mapping.is_default == trustzone_dict.get('$default', False)
         assert isinstance(trustzone_mapping.trust_rating, trust_rating_class)
+        assert len(trustzone_mapping.__str__())
 
 
 class TestAttackSurface:
@@ -111,6 +113,7 @@ class TestAttackSurface:
         # THEN attributes are mapped correctly
         assert attack_surface_mapping.client == 'c'
         assert attack_surface_mapping.trustzone == trustzones[1]
+        assert len(attack_surface_mapping.__str__())
 
 
 class TestMapping:
@@ -134,7 +137,6 @@ class TestMapping:
         assert error_info.value.detail == error_info_detail
 
     def test_trustzones(self):
-        pass
         # GIVEN a dict with two Trustzones
         mapping_dict = {
             'trustzones': [_create_trustzone('0', True), _create_trustzone('1')],
@@ -146,9 +148,9 @@ class TestMapping:
         assert len(mapping.trustzones) == 2
         assert mapping.trustzones[0].id == '0'
         assert mapping.trustzones[1].id == '1'
+        assert len(mapping.__str__())
 
     def test_components(self):
-        pass
         # GIVEN a dict with two Components
         mapping_dict = {
             'trustzones': [_create_trustzone('0', True)],
@@ -160,6 +162,7 @@ class TestMapping:
         assert len(mapping.components) == 2
         assert mapping.components[0].label == '0'
         assert mapping.components[1].label == '1'
+        assert len(mapping.__str__())
 
     @pytest.mark.parametrize('configuration, expected', [
         pytest.param(None, [], id='configuration none exists'),
@@ -168,7 +171,6 @@ class TestMapping:
         pytest.param({'skip': ['attr1']}, ['attr1'], id='skip is an empty array'),
     ])
     def test_skip(self, configuration, expected):
-        pass
         # GIVEN a dict with Skip configuration
         mapping_dict = {
             'trustzones': [_create_trustzone('0', True)],
@@ -180,6 +182,7 @@ class TestMapping:
         mapping = Mapping(mapping_dict)
         # THEN the attribute label_to_skip returns the data correctly
         assert mapping.label_to_skip == expected
+        assert len(mapping.__str__())
 
     @pytest.mark.parametrize('configuration, label, otm_type', [
         pytest.param({'catch_all': 'c'}, {'$regex': r'^aws_\w*$'}, 'c',
@@ -198,6 +201,7 @@ class TestMapping:
         # THEN the attribute catchall returns the data correctly
         assert mapping.catch_all.label == label
         assert mapping.catch_all.type == otm_type
+        assert len(mapping.__str__())
 
     @pytest.mark.parametrize('configuration, label, otm_type', [
         pytest.param(None, None, None, id='configuration none exists'),
@@ -215,6 +219,7 @@ class TestMapping:
         mapping = Mapping(mapping_dict)
         # THEN the attribute catchall returns the data correctly
         assert mapping.catch_all is None
+        assert len(mapping.__str__())
 
     def test_attack_surface(self):
         # GIVEN a dict with attack surface configuration
@@ -233,3 +238,4 @@ class TestMapping:
         # THEN the attribute attack_surface returns the data correctly
         assert mapping.attack_surface.client == 'c'
         assert mapping.attack_surface.trustzone.id == '0'
+        assert len(mapping.__str__())

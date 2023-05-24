@@ -2,6 +2,8 @@ from typing import List
 
 from slp_base import MappingFileNotValidError
 
+MAPPING_FILE_NOT_VALID = 'Mapping file not valid'
+
 
 class ComponentMapping:
 
@@ -77,12 +79,12 @@ class AttackSurface:
     def __validate(self):
         if not self.client:
             msg = 'Attack Surface must contain a client'
-            raise MappingFileNotValidError('Mapping file not valid', msg, msg)
+            raise MappingFileNotValidError(MAPPING_FILE_NOT_VALID, msg, msg)
 
         if not self.__trustzone_id or not self.__trustzones \
                 or not _exist_trustzone(self.__trustzone_id, self.__trustzones):
             msg = 'Attack Surface must contain a valid TrustZone'
-            raise MappingFileNotValidError('Mapping file not valid', msg, msg)
+            raise MappingFileNotValidError(MAPPING_FILE_NOT_VALID, msg, msg)
 
     @property
     def client(self) -> str:
@@ -113,15 +115,15 @@ class Mapping:
     def __validate(self):
         if not self.trustzones:
             msg = 'Mapping file must contain at least one TrustZone'
-            raise MappingFileNotValidError('Mapping file not valid', msg, msg)
+            raise MappingFileNotValidError(MAPPING_FILE_NOT_VALID, msg, msg)
 
         if not self.components:
             msg = 'Mapping file must contain at least one Component'
-            raise MappingFileNotValidError('Mapping file not valid', msg, msg)
+            raise MappingFileNotValidError(MAPPING_FILE_NOT_VALID, msg, msg)
 
         if not _exist_default_trustzone(self.trustzones):
             msg = 'Mapping file must contain a default TrustZone'
-            raise MappingFileNotValidError('Mapping file not valid', msg, msg)
+            raise MappingFileNotValidError(MAPPING_FILE_NOT_VALID, msg, msg)
 
     @property
     def default_trustzone(self) -> TrustZoneMapping:
