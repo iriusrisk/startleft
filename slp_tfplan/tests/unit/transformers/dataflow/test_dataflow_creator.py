@@ -1,5 +1,4 @@
 import uuid
-from random import randint
 from typing import List
 from unittest.mock import Mock
 
@@ -33,7 +32,7 @@ def random_dataflow() -> str:
 
 @fixture(autouse=True)
 def mocked_otm():
-    yield Mock(components=[Mock()] * randint(1, 5), dataflows=[], mapped_resources_ids=[])
+    yield Mock(components=[Mock()] * 5, dataflows=[], mapped_resources_ids=[])
 
 
 @fixture(autouse=True)
@@ -74,9 +73,9 @@ class TestDataflowCreator:
         # GIVEN a mocked OTM with some fake components
         # AND a mocked graph
 
-        # AND a random number of strategies returning a random number of dataflows
-        number_of_strategies = randint(1, 5)
-        number_of_dataflows_per_strategy = randint(1, 5)
+        # AND a number of strategies returning another number of dataflows
+        number_of_strategies = 4
+        number_of_dataflows_per_strategy = 5
         strategies = mocked_random_strategies(number_of_strategies, number_of_dataflows_per_strategy)
 
         # WHEN DataflowCreator::transform is called

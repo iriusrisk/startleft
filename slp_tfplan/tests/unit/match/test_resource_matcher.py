@@ -23,15 +23,15 @@ def mocked_strategies(results: List) -> List[Mock]:
 class TestResourceSMatcher:
 
     def test_no_strategies(self):
-        # GIVEN two mocked objects
-        object_1 = Mock()
-        object_2 = Mock()
+        # GIVEN two mocked resources
+        resource_1 = Mock()
+        resource_2 = Mock()
 
         # AND no strategies
         strategies = []
 
         # WHEN ObjectsMatcher::are_related is called
-        result = ResourceMatcher(strategies=strategies).are_related(object_1, object_2)
+        result = ResourceMatcher(strategies=strategies).are_related(resource_1, resource_2)
 
         # THEN we call strategies until we find the first valid strategy
         assert not result
@@ -46,14 +46,14 @@ class TestResourceSMatcher:
         param(mocked_strategies([False, False, False]), -1, False, id='none true, three strategies')
     ])
     def test_first_strategy_applied(self, strategies: List[Mock], valid_strategy: int, expected: bool):
-        # GIVEN two mocked objects
-        object_1 = Mock()
-        object_2 = Mock()
+        # GIVEN two mocked resources
+        resource_1 = Mock()
+        resource_2 = Mock()
 
         # AND some mocked strategies
 
         # WHEN ResourceSMatcher::are_related is called
-        result = ResourceMatcher(strategies).are_related(object_1, object_2)
+        result = ResourceMatcher(strategies).are_related(resource_1, resource_2)
 
         # THEN we call strategies until we find the first valid strategy
         for i in range(0, valid_strategy):
@@ -68,14 +68,14 @@ class TestResourceSMatcher:
         param(mocked_strategies([False, MockedException(ERROR_MESSAGE)]), id='last error')
     ])
     def test_error_in_strategy(self, strategies: List[MatchStrategy]):
-        # GIVEN two mocked objects
-        object_1 = Mock()
-        object_2 = Mock()
+        # GIVEN two mocked resources
+        resource_1 = Mock()
+        resource_2 = Mock()
 
         # AND some strategies which return or not errors
 
         # WHEN ResourceSMatcher::are_related is called
         # THEN the error is propagated
         with raises(MockedException) as ex:
-            ResourceMatcher(strategies).are_related(object_1, object_2)
+            ResourceMatcher(strategies).are_related(resource_1, resource_2)
             assert ex.value.message == ERROR_MESSAGE

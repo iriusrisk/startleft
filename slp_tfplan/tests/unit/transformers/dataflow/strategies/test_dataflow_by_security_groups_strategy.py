@@ -49,14 +49,15 @@ class TestDataflowBySecurityGroupsStrategy:
         assert not dataflows
 
     @mark.parametrize('related_sgs,components_in_sgs,expected_source,expected_destination,bidirectional', [
-        param([('SG1', 'SG2')], {'SG1': 'A', 'SG2': 'B'}, 'A', 'B', False, id='SG1 to SG2'),
+        param([('SG1', 'SG2'), ('SG3', 'SG1')], {'SG1': 'A', 'SG2': 'B'}, 'A', 'B', False, id='SG1 to SG2'),
         param([('SG2', 'SG1')], {'SG1': 'A', 'SG2': 'B'}, 'B', 'A', False, id='SG2 to SG1')
     ])
     def test_two_related_sgs(self, related_sgs: List[Tuple], components_in_sgs: Dict,
                              expected_source: str, expected_destination: str, bidirectional: bool):
-        # GIVEN two SGs
+        # GIVEN three related SGs
         sg1 = SecurityGroup(security_group_id='SG1', name='SG1')
-        sg2 = SecurityGroup(security_group_id='SG2', name='SG1')
+        sg2 = SecurityGroup(security_group_id='SG2', name='SG2')
+        sg3 = SecurityGroup(security_group_id='SG3', name='SG3')
 
         # AND two components
         component_a = build_simple_mocked_component('A')
@@ -81,7 +82,7 @@ class TestDataflowBySecurityGroupsStrategy:
             components_sg_matcher=build_mocked_matcher(are_component_in_sg),
             sgs_matcher=build_mocked_matcher(are_sgs_related)).create_dataflows(
             are_hierarchically_related=are_hierarchically_related,
-            otm=build_mocked_otm(components=[component_a, component_b], security_groups=[sg1, sg2])
+            otm=build_mocked_otm(components=[component_a, component_b], security_groups=[sg1, sg2, sg3])
         )
 
         # THEN one dataflow is created

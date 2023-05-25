@@ -1,3 +1,7 @@
+from unittest.mock import Mock
+
+from pytest import raises
+
 from slp_tfplan.slp_tfplan.matcher.strategies.match_strategy import MatchStrategy, MatchStrategyContainer
 from slp_tfplan.tests.util.builders import get_instance_classes
 
@@ -23,3 +27,12 @@ class TestMatchStrategy:
 
         # THEN the subclasses and the instances match
         assert match_strategy_subclasses == all_instance_classes
+
+    def test_interface_instantiated_error(self):
+        # GIVEN an instance of the interface itself
+        instance = MatchStrategy()
+
+        # WHEN MatchStrategy::are_related is called
+        # THEN an NotImplementedError is raised
+        with raises(NotImplementedError):
+            instance.are_related(resource_1=Mock(), resource_2=Mock())

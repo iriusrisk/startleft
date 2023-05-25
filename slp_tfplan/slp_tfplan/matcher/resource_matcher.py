@@ -14,8 +14,8 @@ def _log_applied_strategy(resource_1, resource_2, strategy_name):
     try:
         logger.debug(
             f'Matched {get_class_name(resource_1)} {resource_1.name} and {get_class_name(resource_2)} {resource_2.name} using {strategy_name}.')
-    except Exception as ex:
-        logger.error(ex)
+    except AttributeError:
+        pass
 
 
 class ResourceMatcher:
