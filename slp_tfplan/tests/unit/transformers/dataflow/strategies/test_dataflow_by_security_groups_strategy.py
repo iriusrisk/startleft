@@ -55,8 +55,8 @@ class TestDataflowBySecurityGroupsStrategy:
     def test_two_related_sgs(self, related_sgs: List[Tuple], components_in_sgs: Dict,
                              expected_source: str, expected_destination: str, bidirectional: bool):
         # GIVEN two SGs
-        sg1 = SecurityGroup(security_group_id='SG1')
-        sg2 = SecurityGroup(security_group_id='SG2')
+        sg1 = SecurityGroup(security_group_id='SG1', name='SG1')
+        sg2 = SecurityGroup(security_group_id='SG2', name='SG1')
 
         # AND two components
         component_a = build_simple_mocked_component('A')

@@ -1,9 +1,21 @@
+import logging
 from typing import List
 
 from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 
+from sl_util.sl_util.lang_utils import get_class_name
 from slp_tfplan.slp_tfplan.matcher.strategies.match_strategy import MatchStrategy, MatchStrategyContainer
+
+logger = logging.getLogger(__name__)
+
+
+def _log_applied_strategy(resource_1, resource_2, strategy_name):
+    try:
+        logger.debug(
+            f'Matched {get_class_name(resource_1)} {resource_1.name} and {get_class_name(resource_2)} {resource_2.name} using {strategy_name}.')
+    except Exception as ex:
+        logger.error(ex)
 
 
 class ResourceMatcher:
@@ -26,6 +38,7 @@ class ResourceMatcher:
         """
         for strategy in self.strategies:
             if strategy.are_related(resource_1, resource_2, **kwargs):
+                _log_applied_strategy(resource_1, resource_2, strategy.__class__.__name__)
                 return True
 
         return False
