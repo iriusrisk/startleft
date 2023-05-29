@@ -31,7 +31,7 @@ setup(
         'setuptools==67.8.0',
         'defusedxml==0.7.1',
         'networkx==3.1',
-        'pygraphviz==1.10'
+        'pygraphviz==1.10',
         'dependency-injector==4.41.0'
     ],
     use_scm_version={
