@@ -1,3 +1,10 @@
+---
+
+??? note "This mapping configuration only applies to Visio and Lucidchart Processor."
+    
+    Please refer to another mapping file configuration documentation if needed. 
+    You can locate each processor's documentation in the left menu under the "StartLeft Processors (SLP)" section. 
+
 The greatest challenge when mapping Microsoft Visio files is that it is a completely open format where the user can
 place whatever they want. For that reason, the `slp_visio` works with some premises in order to build an OTM file
 with only the necessary information:

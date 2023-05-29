@@ -38,8 +38,8 @@ nav:
           - Terraform Examples: startleft-processors/iac/tf/Terraform-Examples.md
       - Terraform Plan:
           - Terraform Plan Quickstart: startleft-processors/iac/tfplan/Terraform-Plan-Quickstart.md
-          - How To Create a Mapping File: startleft-processors/iac/tfplan/Terraform-Plan-how-to-create-a-mapping-file.md
-          - Terraform Examples:
+          - Terraform Plan Mapping: startleft-processors/iac/tfplan/Terraform-Plan-how-to-create-a-mapping-file.md
+          - Terraform Plan Examples:
               - Ingesting Web Application Click Logs into AWS (by HashiCorp): startleft-processors/iac/tfplan/examples/aws-ingesting-click-logs-using-terraform.md
       - Visio:
           - Visio Quickstart: startleft-processors/diagram/Visio-Quickstart.md
