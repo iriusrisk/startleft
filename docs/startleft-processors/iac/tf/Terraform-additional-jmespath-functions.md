@@ -1,5 +1,10 @@
 ---
 
+??? note "This mapping configuration only applies to Terraform Processor."
+    
+    Please refer to another mapping file configuration documentation if needed. 
+    You can locate each processor's documentation in the left menu under the "StartLeft Processors (SLP)" section. 
+
 Parsing of IaC files may be sometimes complex, so that the built-in JMESPath functions are not enough. For that cases,
 a set of custom functions has been created to simplify and make more powerful the creation of mapping files.
 

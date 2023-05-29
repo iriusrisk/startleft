@@ -1,4 +1,10 @@
 ---
+
+??? note "This mapping configuration only applies to Terraform Processor."
+    
+    Please refer to another mapping file configuration documentation if needed. 
+    You can locate each processor's documentation in the left menu under the "StartLeft Processors (SLP)" section.
+
 This page is an in-depth explanation of how `slp_tf` handles mapping and Terraform resource files to generate an OTM.
 
 This diagram shows how mapping and Terraform resource files are pre-processed to simplify and decouple the
