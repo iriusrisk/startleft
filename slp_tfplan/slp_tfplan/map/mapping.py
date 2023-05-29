@@ -62,7 +62,7 @@ class TrustZoneMapping:
 
 def _exist_trustzone_by_type(trustzone_type: str, trustzones: List[TrustZoneMapping]) -> bool:
     """
-    Returns True if exists a TrustZone with the given type, returns False otherwise
+    Returns True if a TrustZone exists with the given type and returns False otherwise.
     :param trustzone_type: The TrustZone type
     :param trustzones: The TrustZone list
     :return: Whether a TrustZone exists
@@ -118,7 +118,7 @@ class Mapping:
             msg = 'Mapping file must contain at least one TrustZone'
             raise MappingFileNotValidError(MAPPING_FILE_NOT_VALID, msg, msg)
 
-        if not self.components:
+        if not self.components and not self.catch_all:
             msg = 'Mapping file must contain at least one Component'
             raise MappingFileNotValidError(MAPPING_FILE_NOT_VALID, msg, msg)
 

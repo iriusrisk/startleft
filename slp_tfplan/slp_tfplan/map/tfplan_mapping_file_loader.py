@@ -6,9 +6,11 @@ class TFPlanMappingFileLoader(MappingFileLoader):
 
     def __init__(self, mapping_files_data: [bytes]):
         super().__init__(mapping_files_data)
+        self.mapping = None
 
     def load(self):
         super().load()
+        self.mapping: Mapping = Mapping(self.map)
 
     def get_mappings(self) -> Mapping:
-        return Mapping(self.map)
+        return self.mapping

@@ -198,10 +198,8 @@ class TestMapping:
         # GIVEN a dict with Catchall configuration
         mapping_dict = {
             'trustzones': [_create_trustzone('0', True)],
-            'components': [_create_component('0')]
+            'configuration': configuration
         }
-        if configuration is not None:
-            mapping_dict['configuration'] = configuration
         # WHEN loading the Mapping Object
         mapping = Mapping(mapping_dict)
         # THEN the attribute catchall returns the data correctly
