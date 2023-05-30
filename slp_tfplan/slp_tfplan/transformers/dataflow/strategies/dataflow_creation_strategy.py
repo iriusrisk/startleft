@@ -15,7 +15,9 @@ def __create_directed_id(source_component_id: str, target_component_id: str):
 
 
 def __create_undirected_id(source_component_id: str, target_component_id: str):
-    return deterministic_uuid(hash(source_component_id) + hash(target_component_id))
+    components = [source_component_id, target_component_id]
+    components.sort()
+    return __create_directed_id(*components)
 
 
 def __create_deterministic_id(source_component_id: str, target_component_id: str, bidirectional: bool):
@@ -26,7 +28,8 @@ def __create_deterministic_id(source_component_id: str, target_component_id: str
 def create_dataflow(source_component: TFPlanComponent, target_component: TFPlanComponent, bidirectional: bool = False):
     return Dataflow(
         dataflow_id=__create_deterministic_id(source_component.id, target_component.id, bidirectional),
-        name=f'{source_component.name} to {target_component.name}',
+        name=f'{source_component.name} to {target_component.name} (bidirectional)'
+        if bidirectional else f'{source_component.name} to {target_component.name}',
         source_node=source_component.id,
         destination_node=target_component.id,
         bidirectional=bidirectional

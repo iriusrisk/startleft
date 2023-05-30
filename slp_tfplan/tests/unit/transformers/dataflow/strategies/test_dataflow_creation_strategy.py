@@ -2,7 +2,6 @@ from unittest.mock import Mock
 
 from pytest import raises, mark, param
 
-from sl_util.sl_util.str_utils import deterministic_uuid
 from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_creation_strategy import DataflowCreationStrategy, \
     DataflowCreationStrategyContainer, create_dataflow
 from slp_tfplan.tests.util.builders import get_instance_classes
@@ -32,12 +31,20 @@ class TestDataflowCreationStrategy:
         with raises(NotImplementedError):
             instance.create_dataflows(otm=Mock(), relationships_extractor=Mock(), are_hierarchically_related=Mock())
 
-    @mark.parametrize('source_id,source_name,target_id,target_name,bidirectional', [
-        param('1', 'C1', '2', 'C2', False, id='simple dataflow'),
-        param('1', 'C1', '2', 'C2', True, id='bidirectional dataflow')
+    @mark.parametrize('source_id,source_name,target_id,target_name,bidirectional,expected_id,expected_name', [
+        param('1', 'C1', '2', 'C2', False, '465a886e-6345-4dc1-90dd-05b94067c641', 'C1 to C2',
+              id='simple dataflow'),
+        param('2', 'C2', '1', 'C1', True, '465a886e-6345-4dc1-90dd-05b94067c641', 'C2 to C1 (bidirectional)',
+              id='bidirectional dataflow')
     ])
     def test_create_dataflow(self,
-                             source_id: str, source_name: str, target_id: str, target_name: str, bidirectional: bool):
+                             source_id: str,
+                             source_name: str,
+                             target_id: str,
+                             target_name: str,
+                             bidirectional: bool,
+                             expected_id: str,
+                             expected_name: str):
         # GIVEN a source component
         source_component = Mock(id=source_id)
         source_component.name = source_name
@@ -52,13 +59,10 @@ class TestDataflowCreationStrategy:
         dataflow = create_dataflow(source_component, target_component, bidirectional)
 
         # THEN a dataflow is created with the right ID
-        if bidirectional:
-            assert dataflow.id == deterministic_uuid(hash(source_id) + hash(target_id))
-        else:
-            assert dataflow.id == deterministic_uuid(f'{source_id}-{target_id}')
+        assert dataflow.id == expected_id
 
         # AND its name is right
-        assert dataflow.name == f'{source_name} to {target_name}'
+        assert dataflow.name == expected_name
 
         # AND its source_node is the ID of the source component
         assert dataflow.source_node == source_id
