@@ -5,7 +5,8 @@ from unittest.mock import Mock
 from pytest import mark, param, raises, fixture
 
 from slp_tfplan.slp_tfplan.transformers.dataflow.dataflow_creator import DataflowCreator
-from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_creation_strategy import DataflowCreationStrategy
+from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_creation_strategy import \
+    DataflowCreationStrategy, create_dataflow
 from slp_tfplan.tests.util.builders import build_tfgraph, MockedException
 
 ERROR_MESSAGE = 'Error creating dataflows'
@@ -32,7 +33,8 @@ def random_dataflow() -> str:
 
 @fixture(autouse=True)
 def mocked_otm():
-    yield Mock(components=[Mock()] * 5, dataflows=[], mapped_resources_ids=[])
+    components = [Mock(id=i, name=f'Component {i}') for i in range(0, 5)]
+    yield Mock(components=components, dataflows=[], mapped_resources_ids=[])
 
 
 @fixture(autouse=True)
@@ -54,20 +56,39 @@ class TestDataflowCreator:
         # THEN no dataflows were added
         assert not mocked_otm.dataflows
 
-    def test_dataflows_appended(self, mocked_otm, mocked_graph):
+    @mark.parametrize('strategy_results,expected_dataflows', [
+        param([(0, 1, False)], [(0, 1, False)], id='simple dataflow'),
+        param([(0, 1, False), (0, 1, False)], [(0, 1, False)], id='repeated dataflow'),
+        param([(0, 1, False), (1, 0, False)], [(0, 1, False), (1, 0, False)], id='opposite dataflow'),
+        param([(0, 1, True)], [(0, 1, True)], id='bidirectional dataflow'),
+        param([(0, 1, True), (1, 0, True)], [(0, 1, True)], id='repeated bidirectional dataflow'),
+        param([(0, 1, False), (1, 0, True)], [(0, 1, False), (1, 0, True)], id='single and bidirectional dataflow')
+    ])
+    def test_dataflows_created(self, mocked_otm, mocked_graph, strategy_results: List, expected_dataflows):
         # GIVEN a mocked OTM with some fake components
+        components = mocked_otm.components
+
         # AND a mocked graph
 
-        # AND two strategies returning one dataflow per each
-        dataflow_strategy_1_result = 'C1 -> C2'
-        dataflow_strategy_2_result = 'C3 -> C4'
-        strategies = mocked_strategies([[dataflow_strategy_1_result], [dataflow_strategy_2_result]])
+        # AND some mocked strategies for each test parameter
+        strategies = mocked_strategies(
+            [[create_dataflow(components[sr[0]], components[sr[1]], bidirectional=sr[2])]
+             for sr in strategy_results])
 
         # WHEN DataflowCreator::transform is called
         DataflowCreator(otm=mocked_otm, graph=mocked_graph, strategies=strategies).transform()
 
-        # THEN the dataflows from both strategies are in the result OTM
-        assert mocked_otm.dataflows == [dataflow_strategy_1_result] + [dataflow_strategy_2_result]
+        # THEN the dataflows are the expected
+        assert len(mocked_otm.dataflows) == len(expected_dataflows)
+        for i, dataflow in enumerate(mocked_otm.dataflows):
+            # AND the source_node is right
+            assert dataflow.source_node == expected_dataflows[i][0]
+
+            # AND the destination node is right
+            assert dataflow.destination_node == expected_dataflows[i][1]
+
+            # AND the dataflow is bidirectional or not
+            assert dataflow.bidirectional == expected_dataflows[i][2]
 
     def test_number_of_dataflows(self, mocked_otm, mocked_graph):
         # GIVEN a mocked OTM with some fake components
@@ -83,20 +104,6 @@ class TestDataflowCreator:
 
         # THEN all the dataflows from every strategy are included in the OTM
         assert len(mocked_otm.dataflows) == number_of_strategies * number_of_dataflows_per_strategy
-
-    def test_repeated_dataflows(self, mocked_otm, mocked_graph):
-        # GIVEN a mocked OTM with some fake components
-        # AND a mocked graph
-
-        # AND two strategies returning the same dataflow
-        same_dataflow = 'C1 -> C2'
-        strategies = mocked_strategies([[same_dataflow], [same_dataflow]])
-
-        # WHEN DataflowCreator::transform is called
-        DataflowCreator(otm=mocked_otm, graph=mocked_graph, strategies=strategies).transform()
-
-        # THEN the OTM contains the dataflow only once
-        assert mocked_otm.dataflows == [same_dataflow]
 
     @mark.parametrize('strategies', [
         param(mocked_strategies([MockedException(ERROR_MESSAGE), []]), id='first error'),

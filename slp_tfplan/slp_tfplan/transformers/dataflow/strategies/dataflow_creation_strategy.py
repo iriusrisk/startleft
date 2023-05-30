@@ -1,4 +1,3 @@
-import uuid
 from abc import abstractmethod
 from typing import List, Callable
 
@@ -6,13 +5,27 @@ from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 
 from otm.otm.entity.dataflow import Dataflow
+from sl_util.sl_util.str_utils import deterministic_uuid
 from slp_tfplan.slp_tfplan.graph.relationships_extractor import RelationshipsExtractor
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanOTM, TFPlanComponent
 
 
+def __create_directed_id(source_component_id: str, target_component_id: str):
+    return deterministic_uuid(f'{source_component_id}-{target_component_id}')
+
+
+def __create_undirected_id(source_component_id: str, target_component_id: str):
+    return deterministic_uuid(hash(source_component_id) + hash(target_component_id))
+
+
+def __create_deterministic_id(source_component_id: str, target_component_id: str, bidirectional: bool):
+    return __create_undirected_id(source_component_id, target_component_id) if bidirectional \
+        else __create_directed_id(source_component_id, target_component_id)
+
+
 def create_dataflow(source_component: TFPlanComponent, target_component: TFPlanComponent, bidirectional: bool = False):
     return Dataflow(
-        dataflow_id=str(uuid.uuid4()),
+        dataflow_id=__create_deterministic_id(source_component.id, target_component.id, bidirectional),
         name=f'{source_component.name} to {target_component.name}',
         source_node=source_component.id,
         destination_node=target_component.id,

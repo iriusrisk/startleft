@@ -52,7 +52,7 @@ class ResourcesMatcherContainer(DeclarativeContainer):
     (see https://python-dependency-injector.ets-labs.org/)
     """
 
-    sgs_resources_matcher = providers.Singleton(
+    sgs_matcher = providers.Singleton(
         ResourceMatcher,
         strategies=MatchStrategyContainer.sg_match_strategies
     )

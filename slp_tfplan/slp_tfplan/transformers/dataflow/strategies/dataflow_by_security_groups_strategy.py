@@ -24,7 +24,7 @@ class DataflowBySecurityGroupsStrategy(DataflowCreationStrategy):
 
     @inject
     def __init__(self,
-                 sgs_matcher: ResourceMatcher = Provide[ResourcesMatcherContainer.sgs_resources_matcher],
+                 sgs_matcher: ResourceMatcher = Provide[ResourcesMatcherContainer.sgs_matcher],
                  components_sg_matcher: ResourceMatcher = Provide[ResourcesMatcherContainer.component_sg_matcher]):
         # Data structures
 

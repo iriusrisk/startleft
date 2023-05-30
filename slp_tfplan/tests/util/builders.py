@@ -71,6 +71,7 @@ def build_mocked_component(component: Dict) -> TFPlanComponent:
         clones_ids=component.get('clones_ids', [])
     )
 
+
 def build_simple_mocked_component(id: str, parent: str = None, clones_ids: List[str] = None) -> Mock:
     c = Mock(id=id, tf_resource_id=id, clones_ids=clones_ids)
     c.name = id
