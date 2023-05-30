@@ -24,7 +24,7 @@ class TestComponentMatchStrategySecurityGroupByGraphStrategy:
             component, security_group, relationships_extractor=relationships_extractor)
 
         # THEN the strategy returns False
-        assert result == False
+        assert result is False
 
     @mark.parametrize('relationship', [
         param(('C', 'SG'), id='component to security group'),
@@ -45,7 +45,7 @@ class TestComponentMatchStrategySecurityGroupByGraphStrategy:
             component, security_group, relationships_extractor=relationships_extractor)
 
         # THEN the strategy returns True
-        assert result == True
+        assert result is True
 
 
 class TestComponentSecurityGroupByLaunchTemplateStrategyMatchStrategy:
@@ -70,7 +70,7 @@ class TestComponentSecurityGroupByLaunchTemplateStrategyMatchStrategy:
                                                                                            launch_templates=launch_templates)
 
         # THEN the strategy returns False
-        assert result == False
+        assert result is False
 
     def test_match_when_launch_template_sg_relationship(self):
         # GIVEN a mocked component
@@ -93,4 +93,4 @@ class TestComponentSecurityGroupByLaunchTemplateStrategyMatchStrategy:
                                                                                            launch_templates=[launch_template])
 
         # THEN the strategy returns True
-        assert result == True
+        assert result is True

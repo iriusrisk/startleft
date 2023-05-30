@@ -18,7 +18,7 @@ class TestSecurityGroupByConfigurationStrategy:
         result = SecurityGroupByConfigurationStrategy().are_related(security_group_1, security_group_2)
 
         # THEN the strategy returns False
-        assert result == False
+        assert result is False
 
     @mark.parametrize('source_security_group,target_security_group', [
         param(Mock(id='SG1', ingress_sgs=[], egress_sgs=[]), Mock(id='SG2', ingress_sgs=['SG1'], egress_sgs=[]),
@@ -33,7 +33,7 @@ class TestSecurityGroupByConfigurationStrategy:
         result = SecurityGroupByConfigurationStrategy().are_related(source_security_group, target_security_group)
 
         # THEN the strategy returns True
-        assert result == True
+        assert result is True
 
 
 class TestSecurityGroupByGraphStrategy:
@@ -51,7 +51,7 @@ class TestSecurityGroupByGraphStrategy:
             .are_related(*mocked_sgs, relationships_extractor=relationships_extractor)
 
         # THEN the strategy returns False
-        assert result == False
+        assert result is False
 
     def test_match_when_graph_relationship(self):
         # GIVEN two mocked security groups SG1 and SG2
@@ -67,4 +67,4 @@ class TestSecurityGroupByGraphStrategy:
             security_group_1, security_group_2, relationships_extractor=relationships_extractor)
 
         # THEN the strategy returns True
-        assert result == True
+        assert result is True
