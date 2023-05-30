@@ -34,7 +34,7 @@ class TestDataflowCreationStrategy:
     @mark.parametrize('source_id,source_name,target_id,target_name,bidirectional,expected_id,expected_name', [
         param('1', 'C1', '2', 'C2', False, '465a886e-6345-4dc1-90dd-05b94067c641', 'C1 to C2',
               id='simple dataflow'),
-        param('2', 'C2', '1', 'C1', True, '465a886e-6345-4dc1-90dd-05b94067c641', 'C2 to C1 (bidirectional)',
+        param('2', 'C2', '1', 'C1', True, '6e4a6b08-a58d-4a0c-a070-57df888afd35', 'C2 to C1 (bidirectional)',
               id='bidirectional dataflow')
     ])
     def test_create_dataflow(self,

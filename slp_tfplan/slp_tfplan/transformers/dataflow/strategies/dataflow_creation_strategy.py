@@ -17,7 +17,7 @@ def __create_directed_id(source_component_id: str, target_component_id: str):
 def __create_undirected_id(source_component_id: str, target_component_id: str):
     components = [source_component_id, target_component_id]
     components.sort()
-    return __create_directed_id(*components)
+    return deterministic_uuid(f'{components[0]}-{components[1]}-bidirectional')
 
 
 def __create_deterministic_id(source_component_id: str, target_component_id: str, bidirectional: bool):
