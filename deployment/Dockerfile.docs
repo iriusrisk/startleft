@@ -1,8 +1,10 @@
 FROM squidfunk/mkdocs-material
 
-RUN pip install --upgrade pip
-
-RUN pip install -r requirements.txt
+RUN adduser -D startleft
+USER startleft
 
 COPY /docs ./docs
 COPY mkdocs.yml .
+
+RUN pip install --upgrade pip
+RUN pip install -r docs/requirements.txt
