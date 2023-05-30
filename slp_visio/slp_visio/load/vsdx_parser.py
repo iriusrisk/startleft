@@ -1,12 +1,13 @@
 from vsdx import Shape, VisioFile
 
 from slp_base import DiagramType
+from slp_visio.slp_visio.load.component_identifier import ComponentIdentifier
 from slp_visio.slp_visio.load.connector_identifier import ConnectorIdentifier
 from slp_visio.slp_visio.load.objects.diagram_objects import Diagram, DiagramComponentOrigin, DiagramLimits
 from slp_visio.slp_visio.load.parent_calculator import ParentCalculator
 from slp_visio.slp_visio.load.representation.simple_component_representer import SimpleComponentRepresenter
 from slp_visio.slp_visio.load.representation.zone_component_representer import ZoneComponentRepresenter
-from slp_visio.slp_visio.util.visio import get_limits, get_shape_text
+from slp_visio.slp_visio.util.visio import get_limits
 
 DIAGRAM_LIMITS_PADDING = 2
 DEFAULT_DIAGRAM_LIMITS = DiagramLimits(((1000, 1000), (1000, 1000)))
@@ -46,9 +47,6 @@ class VsdxParser:
     def _is_boundary(shape: Shape) -> bool:
         return shape.shape_name is not None and 'Curved panel' in shape.shape_name
 
-    def _is_component(self, shape: Shape) -> bool:
-        return get_shape_text(shape) and not ConnectorIdentifier.is_connector(shape)
-
     def __calculate_diagram_limits(self) -> DiagramLimits:
         floor_coordinates = [None, None]
         top_coordinates = [0, 0]
@@ -76,7 +74,7 @@ class VsdxParser:
                 self._add_connector(shape)
             elif self._is_boundary(shape):
                 self._add_boundary_component(shape)
-            elif self._is_component(shape):
+            elif ComponentIdentifier.is_component(shape):
                 self._add_simple_component(shape)
 
     def _add_simple_component(self, component_shape: Shape):
