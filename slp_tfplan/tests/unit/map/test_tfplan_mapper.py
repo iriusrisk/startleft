@@ -1,5 +1,6 @@
 from copy import deepcopy
 from typing import List, Dict
+from unittest.mock import MagicMock
 
 from otm.otm.entity.parent_type import ParentType
 from slp_tfplan.slp_tfplan.map.tfplan_mapper import TFPlanMapper
@@ -10,12 +11,14 @@ BASE_OTM = build_base_otm()
 DEFAULT_TRUSTZONE = {
     'id': 'b61d6911-338d-46a8-9f39-8dcd24abfe91',
     'name': 'Public Cloud',
-    'type': 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+    'type': 'b61d6911-338d-46a8-9f39-8dcd24abfe91',
+    'risk': {'trust_rating': 10},
+    '$default': True
 }
 
 
-def build_resource(tf_type: str) -> {}:
-    return build_multiple_resources([tf_type])
+def build_resource(resource_type: str) -> {}:
+    return build_multiple_resources([resource_type])
 
 
 def build_multiple_resources(resource_types: List[str]) -> {}:
@@ -29,44 +32,59 @@ def build_multiple_resources(resource_types: List[str]) -> {}:
     return result
 
 
-def build_mapping(otm_type: str, tf_type: str = None, tf_regex: str = None, configuration: {} = None) -> {}:
-    config = {'otm_type': otm_type}
-    if tf_type:
-        config['tf_type'] = tf_type
-    if tf_regex:
-        config['tf_regex'] = tf_regex
-    if configuration:
-        config['configuration'] = configuration
-    return build_multiple_mappings([config])
+def __mock_trustzone(trustzone: {}):
+    return MagicMock(
+        id=trustzone.get('id'),
+        type=trustzone.get('type'),
+        name=trustzone.get('name'),
+        trust_rating=trustzone.get('risk', {}).get('trust_rating', None),
+        is_default=trustzone.get('$default')
+    )
 
 
-def build_multiple_mappings(components: List[Dict]) -> {}:
-    result = {
-        'default_trustzone': DEFAULT_TRUSTZONE,
-        'components': []
-    }
+def __mock_component(component: {}):
+    return MagicMock(
+        label=component.get('label'),
+        type=component.get('type'),
+        configuration={'$singleton': component.get('$singleton', False)}
+    )
 
-    for component in components:
-        elem = {'otm_type': component['otm_type'],
-                'tf_type': component.get('tf_type', {'$regex': component.get('tf_regex')})}
-        if bool(component.get('configuration', None)):
-            elem['configuration'] = component['configuration']
 
-        result['components'].append(elem)
+def mock_mapping(components_dict: List[Dict], skip=None, catch_all_type: str=None) -> {}:
+    if skip is None:
+        skip = []
+    components_mock = []
+    catch_all = None
 
-    return result
+    for component in components_dict:
+        components_mock.append(__mock_component(component))
+
+    if catch_all_type:
+        catch_all = __mock_component({
+                'label': {'$regex': r'^aws_\w*$'},
+                'type': catch_all_type
+        })
+
+    return MagicMock(
+        default_trustzone=__mock_trustzone(DEFAULT_TRUSTZONE),
+        trustzones=[__mock_trustzone(DEFAULT_TRUSTZONE)],
+        components=components_mock,
+        label_to_skip=skip,
+        catch_all=catch_all
+
+    )
 
 
 class TestTFPlanMapper:
 
     def test_mapping_by_type(self):
         # GIVEN a resource of some TF type
-        tf_type = 'aws_vpc'
-        resource = build_resource(tf_type)
+        resource_type = 'aws_vpc'
+        resource = build_resource(resource_type)
 
         # AND a mapping by type to some OTM type
         otm_type = 'vpc'
-        mapping = build_mapping(otm_type, tf_type=tf_type)
+        mapping = mock_mapping([{'type': otm_type, 'label': resource_type}])
 
         # AND a base otm dictionary
         otm = deepcopy(BASE_OTM)
@@ -81,9 +99,9 @@ class TestTFPlanMapper:
         # AND the resource is mapped to the right type
         assert component.type == otm_type
 
-        # AND source type is in the tag and the _tf_type field
-        assert component.tf_type == tf_type
-        assert component.tags[0] == tf_type
+        # AND source type is in the tag and the resource_type field
+        assert component.tf_type == resource_type
+        assert component.tags[0] == resource_type
 
         # AND the parent of the component is the default TrustZone
         assert component.parent == DEFAULT_TRUSTZONE['id']
@@ -91,12 +109,12 @@ class TestTFPlanMapper:
 
     def test_mapping_by_regex(self):
         # GIVEN a resource of some TF type
-        tf_type = 'aws_vpc'
-        resource = build_resource(tf_type)
+        resource_type = 'aws_vpc'
+        resource = build_resource(resource_type)
 
         # AND a mapping by type to some OTM type for some regex
         otm_type = 'vpc'
-        mapping = build_mapping(otm_type, tf_regex='^aws_*')
+        mapping = mock_mapping([{'type': otm_type, 'label': {'$regex': r'^aws_\w*$'}}])
 
         # AND a base otm dictionary
         otm = deepcopy(BASE_OTM)
@@ -111,9 +129,9 @@ class TestTFPlanMapper:
         # AND the resource is mapped to the right type
         assert component.type == otm_type
 
-        # AND source type is in the tag and the _tf_type field
-        assert component.tf_type == tf_type
-        assert component.tags[0] == tf_type
+        # AND source type is in the tag and the resource_type field
+        assert component.tf_type == resource_type
+        assert component.tags[0] == resource_type
 
         # AND the parent of the component is the default TrustZone
         assert component.parent == DEFAULT_TRUSTZONE['id']
@@ -121,13 +139,11 @@ class TestTFPlanMapper:
 
     def test_mapping_by_skip(self):
         # GIVEN a resource of some TF type
-        tf_type = 'aws_vpc'
-        resource = build_resource(tf_type)
+        resource_type = 'aws_vpc'
+        resource = build_resource(resource_type)
 
         # AND a skip by type
-        mapping = build_multiple_mappings([
-            {'otm_type': 'to-skip', 'tf_type': tf_type},
-            {'otm_type': 'to-skip', 'tf_type': tf_type, 'configuration': {'skip': True}}])
+        mapping = mock_mapping([{'type': 'to-skip', 'label': resource_type}], skip=[resource_type])
 
         # AND a base otm dictionary
         otm = deepcopy(BASE_OTM)
@@ -140,15 +156,13 @@ class TestTFPlanMapper:
 
     def test_mapping_by_catchall(self):
         # GIVEN a resource of some TF type
-        tf_type = 'aws_vpc'
+        resource_type = 'aws_vpc'
         otm_type = 'vpc'
         otm_empty = 'empty-component'
-        resource = build_multiple_resources([tf_type, f"{tf_type}_catchall"])
+        resource = build_multiple_resources([resource_type, f"{resource_type}_catchall"])
 
         # AND a catchall by regex
-        mapping = build_multiple_mappings([
-            {'otm_type': otm_type, 'tf_type': tf_type},
-            {'otm_type': otm_empty, 'tf_regex': '^aws_*', 'configuration': {'catchall': True}}])
+        mapping = mock_mapping([{'type': otm_type, 'label': resource_type}], catch_all_type=otm_empty)
 
         # AND a base otm dictionary
         otm = deepcopy(BASE_OTM)
@@ -160,50 +174,21 @@ class TestTFPlanMapper:
         assert len(otm.components) == 2
         assert otm.components[0].type == otm_type
         assert otm.components[1].type == otm_empty
-
-    def test_mapping_by_singleton_catchall(self):
-        # GIVEN a resource of some TF type
-        tf_type = 'aws_vpc'
-        otm_type = 'vpc'
-        otm_empty = 'empty-component'
-        resource = build_multiple_resources([tf_type, f"{tf_type}_catchall", f"{tf_type}_catchall2"])
-
-        # AND a catchall by regex marked as singleton
-        mapping = build_multiple_mappings([
-            {'otm_type': otm_type, 'tf_type': tf_type},
-            {'otm_type': otm_empty, 'tf_regex': '^aws_*', 'configuration': {'singleton': True, 'catchall': True}}])
-
-        # AND a base otm dictionary
-        otm = deepcopy(BASE_OTM)
-
-        # WHEN TFPlanMapper::map is invoked
-        TFPlanMapper(otm, resource, mapping).map()
-
-        # THEN three components are added to the OTM
-        assert len(otm.components) == 3
-        assert otm.components[0].type == otm_type
-        # AND component is marked as singleton
-        assert otm.components[1].type == otm_empty
-        assert otm.components[1].is_singleton
-        # AND component is marked as singleton
-        assert otm.components[2].type == otm_empty
-        assert otm.components[2].is_singleton
 
     def test_mapping_by_type_skip_and_catchall(self):
         # GIVEN a resource of some TF type
-        tf_type = 'aws_vpc'
-        tf_skip = f'{tf_type}_skip'
-        tf_catchall = f'{tf_type}_catchall'
+        resource_type = 'aws_vpc'
+        tf_skip = f'{resource_type}_skip'
+        tf_catchall = f'{resource_type}_catchall'
         otm_type = 'vpc'
         otm_empty = 'empty-component'
-        resource = build_multiple_resources([tf_type, tf_skip, tf_catchall])
+        resource = build_multiple_resources([resource_type, tf_skip, tf_catchall])
 
         # AND a type, skip and catchall
-        mapping = build_multiple_mappings([
-            {'otm_type': otm_type, 'tf_type': tf_type},
-            {'otm_type': otm_type, 'tf_type': tf_skip},
-            {'otm_type': 'to-skip', 'tf_type': tf_skip, 'configuration': {'skip': True}},
-            {'otm_type': otm_empty, 'tf_regex': '^aws_*', 'configuration': {'catchall': True}}])
+        mapping = mock_mapping([
+            {'type': otm_type, 'label': resource_type},
+            {'type': otm_type, 'label': tf_skip}],
+            skip=[tf_skip], catch_all_type=otm_empty)
 
         # AND a base otm dictionary
         otm = deepcopy(BASE_OTM)
@@ -215,4 +200,3 @@ class TestTFPlanMapper:
         assert len(otm.components) == 2
         assert otm.components[0].type == otm_type
         assert otm.components[1].type == otm_empty
-

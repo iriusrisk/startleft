@@ -1,297 +1,180 @@
 trustzones:
-  - id:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - type: b61d6911-338d-46a8-9f39-8dcd24abfe91
     name: Public Cloud
-    type: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    risk:
+      trust_rating: 10
     $default: true
 
-  # SG MAPPING (AUXILIARY SG)
-  # type 4
-  - id:   f0ba7722-39b6-4c81-8290-a30a248bb8d9
+  - type: f0ba7722-39b6-4c81-8290-a30a248bb8d9
     name: Internet
-    type: f0ba7722-39b6-4c81-8290-a30a248bb8d9
-    $source: {$singleton: {$type: "aws_security_group", $props: ["egress[0].cidr_blocks", "ingress[0].cidr_blocks"]}}
+    risk:
+      trust_rating: 1
 
-# The order of the components is important because parent components must be defined before child components
 components:
 
-  - type:        CD-ACM
-    $source:     {$singleton: {$type: "aws_acm_certificate"}}
-
-  - type:        cloudwatch
-    $source:     {$singleton: {$type: "aws_cloudwatch_metric_alarm"}}
-
-  - type:        dynamodb
-    $source:     {$type: "aws_dynamodb_table"}
-    $altsource:
-      - $mappingType: {$type: "aws_vpc_endpoint"}
-        $mappingPath: {$path: "*.service_name | [0]"}
-        $mappingLookups:
-          - regex: ^(.*)dynamodb$
-            name:  DynamoDB from VPCEndpoint
+  - label: aws_acm_certificate
+    type: CD-ACM
+    $singleton: true
 
-  - type:        vpc
-    $source:     {$type: "aws_vpc"}
+  - label: aws_cloudwatch_metric_alarm
+    type: cloudwatch
+    $singleton: true
 
-  - type:        ec2
-    $source:     {$type: "aws_instance"}
-    parent:      {$path: "resource_properties.subnet_id"}
+  - label: aws_dynamodb_table
+    type: dynamodb
 
-  - type:        empty-component
-    $source:     {$type: "aws_subnet"}
-    parent:      {$path: "resource_properties.vpc_id"}
+  - label: aws_vpc
+    type: vpc
 
-  - type:        empty-component
-    $source:     {$type: "aws_vpc_endpoint"}
-    parent:      {$path: "resource_properties.subnet_ids"}
-#   (Previous) parent:      {$findFirst: ["*.subnet_ids[]", "*.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('aws_[\\w-]+\\.', '', @) | re_sub('\\.id', '', @)"]}
-#   This findFirst never executes the second condition as *.subnet_ids[] always will return an array (maybe empty) and findFirst only works with None
+  - label: aws_instance
+    type: ec2
 
+  - label: aws_subnet
+    type: empty-component
 
-  - type:        empty-component
-    $source:     {$type: "aws_internet_gateway"}
+  - label: aws_vpc_endpoint
+    type: empty-component
 
-  - type:        elastic-container-service
-    $source:     {$type:  "aws_ecs_service"}
-    parent:      {$path:  "resource_properties.network_configuration[0].subnets"}
-    $children:   {$path:  "resource_properties.task_definition"}
+  - label: aws_internet_gateway
+    type: empty-component
 
-  - type:        docker-container
-    $source:     {$type: "aws_ecs_task_definition"}
+  - label: aws_ecs_service
+    type: elastic-container-service
 
-  - type:        load-balancer
-    $source:     {$type: ["aws_lb", "aws_elb", "aws_alb"]}
-    parent:      {$path: "resource_properties.subnets"}
+  - label: aws_ecs_task_definition
+    type: docker-container
 
-  - type:        kms
-    $source:     {$singleton: {$type: "aws_kms_key"}}
+  - label: ["aws_lb", "aws_elb", "aws_alb"]
+    type: load-balancer
 
-  - type:        aws-lambda-function
-    $source:     {$type: "aws_lambda_function"}
+  - label: aws_kms_key
+    type: kms
+    $singleton: true
 
-  - type:        cloudwatch
-    $source:     {$singleton: {$type: "aws_cloudwatch_log_group"}}
+  - label: aws_lambda_function
+    type: aws-lambda-function
 
-  - type:        rds
-    $source:     {$type: ["aws_db_instance", "aws_rds_cluster"]}
+  - label: aws_cloudwatch_log_group
+    type: cloudwatch
+    $singleton: true
 
-  - type:        route-53
-    $source:     {$type: "aws_route53_zone"}
+  - label: ["aws_db_instance", "aws_rds_cluster"]
+    type: rds
 
-  - type: CD-EC2-AUTO-SCALING
-    $source: { $type: "aws_autoscaling_group" }
+  - label: aws_route53_zone
+    type: route-53
 
-  - type: empty-component
-    $source: { $type: "cloudflare_record" }
+  - label: aws_autoscaling_group
+    type: CD-EC2-AUTO-SCALING
 
-  - type:        s3
-    $source:     {$type: "aws_s3_bucket"}
-    $altsource:
-      - $mappingType: {$type: "aws_vpc_endpoint"}
-        $mappingPath: {$path: "*.service_name | [0]"}
-        $mappingLookups:
-          - regex: ^(.*)s3$
-            name: S3 from VPCEndpoint
+  - label: cloudflare_record
+    type: empty-component
 
-  - type:        CD-SECRETS-MANAGER
-    $source:     {$singleton: {$type: "aws_secretsmanager_secret"}}
+  - label: aws_s3_bucket
+    type: s3
 
-  - type:        sqs-simple-queue-service
-    $source:     {$type: "aws_sqs_queue"}
+  - label: aws_secretsmanager_secret
+    type: CD-SECRETS-MANAGER
+    $singleton: true
 
-  - type:        CD-SYSTEMS-MANAGER
-    $source:     {$singleton: {$type: {$regex: ^aws_ssm_\w*$}}}
-    $altsource:
-      - $mappingType: {$type: "aws_vpc_endpoint"}
-        $mappingPath: {$path: "*.service_name | [0]"}
-        $mappingLookups:
-          - regex: ^(.*)ssm$
-            name: {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "Systems Manager from VPCEndpoint (grouped)"}}}
-          - regex: ^(.*)ssmmessages$
-            name: {$numberOfSources: {oneSource: {$path: "Type"}, multipleSource: {$format: "Systems Manager from VPCEndpoint (grouped)"}}}
+  - label: aws_sqs_queue
+    type: sqs-simple-queue-service
 
-  - type:        empty-component
-    $source:     {$type: "aws_synthetics_canary"}
-    parent:      {$path: "resource_properties.vpc_config[0].subnet_ids"}
+  - label: {$regex: ^aws_ssm_\w*$}
+    type: CD-SYSTEMS-MANAGER
+    $singleton: true
 
-  - type:        api-gateway
-    $source:     {$singleton: {$type: {$regex: ^aws_api_gateway_\w*$}}}
+  - label: aws_synthetics_canary
+    type: empty-component
 
+  - label: {$regex: ^aws_api_gateway_\w*$}
+    type: api-gateway
+    $singleton: true
 
-  - type:        athena
-    $source:     {$singleton: {$type: {$regex: ^aws_athena_\w*$}}}
+  - label: {$regex: ^aws_athena_\w*$}
+    type: athena
+    $singleton: true
 
-  - type:        CD-MQ
-    $source:     {$singleton: {$type: {$regex: ^aws_mq_\w*$}}}
+  - label: {$regex: ^aws_mq_\w*$}
+    type: CD-MQ
+    $singleton: true
 
-  - type:        cf-cloudfront
-    $source:     {$singleton: {$type: {$regex: ^aws_cloudfront_\w*$}}}
+  - label: {$regex: ^aws_cloudfront_\w*$}
+    type: cf-cloudfront
+    $singleton: true
 
-  - type:        cloudtrail
-    $source:     {$type: "aws_cloudtrail"}
+  - label: aws_cloudtrail
+    type: cloudtrail
 
-  - type:        cognito
-    $source:     {$type: ["aws_cognito_user_pool", "aws_cognito_identity_pool"]}
+  - label: ["aws_cognito_user_pool", "aws_cognito_identity_pool"]
+    type: cognito
 
-  - type:        CD-CONFIG
-    $source:     {$singleton: {$type: {$regex: ^aws_config_\w*$}}}
+  - label: {$regex: ^aws_config_\w*$}
+    type: CD-CONFIG
+    $singleton: true
 
-  - type:        elastic-container-registry
-    $source:     {$singleton: {$type: {$regex: ^aws_ecr_\w*$}}}
-    $altsource:
-      - $mappingType: {$type: "aws_vpc_endpoint"}
-        $mappingPath: {$path: "*.service_name | [0]"}
-        $mappingLookups:
-          - regex: ^(.*)ecr.dkr$
-            name:  ECR from VPCEndpoint
+  - label: {$regex: ^aws_ecr_\w*$}
+    type: elastic-container-registry
+    $singleton: true
 
-  - type:        elastic-container-kubernetes
-    $source:     {$type: "aws_eks_cluster"}
+  - label: aws_eks_cluster
+    type: elastic-container-kubernetes
 
-  - type:        elasticache
-    $source:     {$singleton: {$type: {$regex: ^aws_elasticache_\w*$}}}
+  - label: {$regex: ^aws_elasticache_\w*$}
+    type: elasticache
+    $singleton: true
 
-  - type:        CD-GUARDDUTY
-    $source:     {$singleton: {$type: {$regex: ^aws_guardduty_\w*$}}}
-
-  - type:        CD-INSPECTOR
-    $source:     {$singleton: {$type: {$regex: ^aws_inspector_\w*$}}}
-
-  - type:        CD-MACIE
-    $source:     {$singleton: {$type: {$regex: ^aws_macie2_\w*$}}}
-
-  - type:        CD-AWS-NETWORK-FIREWALL
-    $source:     {$type: "aws_networkfirewall_firewall"}
-    parent:      {$path: "resource_properties.vpc_id"}
-
-  - type:        redshift
-    $source:     {$type: "aws_redshift_cluster"}
-
-  - type:        CD-SES
-    $source:     {$singleton: {$type: {$regex: ^aws_ses_\w*$}}}
-
-  - type:        sns
-    $source:     {$singleton: {$type: {$regex: ^aws_sns_\w*$}}}
-
-  - type:        step-functions
-    $source:     {$type: {$regex: ^aws_sfn_\w*$}}
-
-  - type:        CD-WAF
-    $source:     {$singleton: {$type: {$regex: ^aws_waf_\w*$}}}
-
-  - type:        kinesis-data-analytics
-    $source:     {$singleton: {$type: {$regex: ^aws_kinesis_analytics_\w*$}}}
-
-  - type:        kinesis-data-analytics
-    $source:     {$singleton: {$type: {$regex: ^aws_kinesis_stream\w*$}}}
-
-  - type:        kinesis-data-firehose
-    $source:     {$singleton: {$type: {$regex: ^aws_kinesis_firehose_\w*$}}}
-
-  - type:        generic-client
-    name:        {$ip: {$path: "resource_properties.egress[0].cidr_blocks"}}
-    $source:     {$type: "aws_security_group", $props: "egress[0].cidr_blocks"}
-    parent:      f0ba7722-39b6-4c81-8290-a30a248bb8d9
-    tags:
-      - Outbound connection destination IP
-
-  - type:        generic-client
-    name:        {$ip: {$path: "resource_properties.ingress[0].cidr_blocks"}}
-    $source:     {$type: "aws_security_group", $props: "ingress[0].cidr_blocks"}
-    parent:      f0ba7722-39b6-4c81-8290-a30a248bb8d9
-    tags:
-      - Inbound connection source IP
-
-  - type: rds
-    $source: {$module: "terraform-aws-modules/rds/aws"}
-
-  - type: vpc
-    $source: {$module: "terraform-aws-modules/vpc/aws"}
-
-  - type: load-balancer
-    $source: {$module: "terraform-aws-modules/alb/aws"}
-
-dataflows:
-  #### Security Groups ####
-  #### Type 1 #### - Resource to Security Group
-  - $source:      {$props: "security_group_ids"}
-    source:       {$path: "resource_id"}
-    destination:  {$hub: {$path: "resource_properties.security_group_ids"}}
-
-  - $source:      {$props: "security_groups"}
-    source:       {$path: "resource_id"}
-    destination:  {$hub: {$path: "resource_properties.security_groups"}}
-
-  - $source:      {$props: "network_configuration | [0].security_groups"}
-    source:       {$path: "resource_id"}
-    destination:  {$hub: {$path: "resource_properties.network_configuration[0].security_groups"}}
-
-  - $source:      {$props: "vpc_config" }
-    source:       {$path: "resource_id"}
-    destination:  {$hub: {$path: "resource_properties.vpc_config[0].security_group_ids"}}
-
-  #### Type 2 #### Security Group to Security Group
-  - $source:      {$type: "aws_security_group_rule",  $props: "type=='ingress'"}
-    source:       {$hub: {$path: "resource_properties.source_security_group_id"}}
-    destination:  {$hub: {$path: "resource_properties.security_group_id"}}
-    tags:
-      - $path: "resource_properties.description"
-      - $path: "resource_properties.protocol"
-      - $path: "resource_properties.from_port|to_string(@)"
-      - $path: "resource_properties.to_port|to_string(@)"
-
-  - $source:      {$type: "aws_security_group_rule",  $props: "type=='egress'"}
-    source:       {$hub: {$path: "resource_properties.security_group_id"}}
-    destination:  {$hub: {$path: "resource_properties.source_security_group_id"}}
-    tags:
-      - $path: "resource_properties.description"
-      - $path: "resource_properties.protocol"
-      - $path: "resource_properties.from_port|to_string(@)"
-      - $path: "resource_properties.to_port|to_string(@)"
-
-  #### Type 3 #### - Security Group to Resource
-  - $source:      {$type: "aws_security_group"}
-    source:       {$path: "resource_properties.ingress[0].cidr_blocks"}
-    destination:  {$hub: {$path: "resource_id"}}
-    tags:
-      - $path: "resource_properties.ingress[0].description"
-      - $path: "resource_properties.ingress[0].protocol"
-      - $path: "resource_properties.ingress[0].from_port|to_string(@)"
-      - $path: "resource_properties.ingress[0].to_port|to_string(@)"
-
-  - $source:      {$type: "aws_security_group"}
-    source:       {$hub: {$path: "resource_id"}}
-    destination:  {$path: "resource_properties.egress[0].cidr_blocks"}
-    tags:
-      - $path: "resource_properties.egress[0].description"
-      - $path: "resource_properties.egress[0].protocol"
-      - $path: "resource_properties.egress[0].cidr_blocks|join(',', @)"
-
-  #### Security Groups ####
-  - name:         {$format: "dataflow to Lambda function in {resource_name}"}
-    $source:      {$type: "aws_lambda_event_source_mapping"}
-    source:       {$path: "resource_properties.event_source_arn"}
-    destination:  {$path: "resource_properties.function_name"}
-
-  - name:         {$format: "dataflow from Lambda function on Failure {resource_name}"}
-    $source:      {$type: "aws_lambda_event_source_mapping"}
-    source:       {$path: "resource_properties.function_name"}
-    destination:  {$path: "resource_properties.destination_config[0].on_failure[0].destination_arn"}
-
-  # The parameter "logging" is deprecated. Use the resource "aws_s3_bucket_logging" instead
-  - name:         {$format: "S3 dataflow from {resource_name}"}
-    $source:      {$type: "aws_s3_bucket"}
-    source:       {$path: "resource_id"}
-    destination:  {$path: "resource_properties.logging[0].target_bucket"}
-
-  - name:         {$format: "S3 dataflow from {resource_type}"}
-    $source:      {$type: "aws_s3_bucket_logging"}
-    source:       {$path: "resource_properties.bucket" }
-    destination:  {$path: "resource_properties.target_bucket"}
-  # The parameter "logging" is deprecated. Use the resource "aws_s3_bucket_logging" instead
-
-  - name:         {$format: "API gateway data flow from {resource_type}"}
-    $source:      {$type: "aws_api_gateway_authorizer"}
-    source:       {$numberOfSources: {oneSource: {$path: "resource_id"}, multipleSource: {$format: "api-gateway (grouped)"}}}
-    destination:  {$path: "resource_properties.provider_arns[0]"}
-    tags:
-      - API gateway dataflow
+  - label: {$regex: ^aws_guardduty_\w*$}
+    type: CD-GUARDDUTY
+    $singleton: true
+
+  - label: {$regex: ^aws_inspector_\w*$}
+    type: CD-INSPECTOR
+    $singleton: true
+
+  - label: {$regex: ^aws_macie2_\w*$}
+    type: CD-MACIE
+    $singleton: true
+
+  - label: aws_networkfirewall_firewall
+    type: CD-AWS-NETWORK-FIREWALL
+
+  - label: aws_redshift_cluster
+    type: redshift
+
+  - label: {$regex: ^aws_ses_\w*$}
+    type: CD-SES
+    $singleton: true
+
+  - label: {$regex: ^aws_sns_\w*$}
+    type: sns
+    $singleton: true
+
+  - label: {$regex: ^aws_sfn_\w*$}
+    type: step-functions
+
+  - label: {$regex: ^aws_waf_\w*$}
+    type: CD-WAF
+    $singleton: true
+
+  - label: {$regex: ^aws_kinesis_analytics_\w*$}
+    type: kinesis-data-analytics
+    $singleton: true
+
+  - label: {$regex: ^aws_kinesis_stream\w*$}
+    type: kinesis-data-analytics
+    $singleton: true
+
+  - label: {$regex: ^aws_kinesis_firehose_\w*$}
+    type: kinesis-data-firehose
+    $singleton: true
+
+configuration:
+  attack_surface:
+    client: generic-client
+    trustzone: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+
+#  skip:
+#    - aws_security_group
+#    - aws_db_subnet_group
+#  catch_all: empty-component
