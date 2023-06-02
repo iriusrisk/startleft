@@ -4,7 +4,6 @@ import os
 
 import jsonschema
 import pkg_resources
-import yaml
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +32,7 @@ class Schema:
     def __load_schema(self, schema_path):
         logger.info(f"Loading schema file '{schema_path}'")
         with open(schema_path, "r") as f:
-            return yaml.load(f, Loader=yaml.BaseLoader)
+            return json.load(f)
 
     @staticmethod
     def from_package(package: str, filename: str):

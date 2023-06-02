@@ -1,4 +1,10 @@
 # CloudFormation mapping
+---
+
+??? note "This mapping configuration only applies to CloudFormation Processor."
+    
+    Please refer to another mapping file configuration documentation if needed. 
+    You can locate each processor's documentation in the left menu under the "StartLeft Processors (SLP)" section. 
 
 A source mapping file (or "mapping files" for short) describes how to find components, dataflows, and trustzones in source file data structures.
 

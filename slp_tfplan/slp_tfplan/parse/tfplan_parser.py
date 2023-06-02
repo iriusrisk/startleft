@@ -5,6 +5,7 @@ from networkx import DiGraph
 from slp_base import ProviderParser, OTMBuildingError
 from slp_tfplan.slp_tfplan.load.launch_templates_loader import LaunchTemplatesLoader
 from slp_tfplan.slp_tfplan.load.security_groups_loader import SecurityGroupsLoader
+from slp_tfplan.slp_tfplan.map.mapping import Mapping
 from slp_tfplan.slp_tfplan.map.tfplan_mapper import TFPlanMapper
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanOTM
 from slp_tfplan.slp_tfplan.transformers.children_calculator import ChildrenCalculator
@@ -17,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 class TFPlanParser(ProviderParser):
 
-    def __init__(self, project_id: str, project_name: str, tfplan: {}, tfgraph: DiGraph, mapping: [{}]):
+    def __init__(self, project_id: str, project_name: str, tfplan: {}, tfgraph: DiGraph, mapping: Mapping):
         self.tfplan = tfplan
         self.tfgraph = tfgraph
         self.mapping = mapping
