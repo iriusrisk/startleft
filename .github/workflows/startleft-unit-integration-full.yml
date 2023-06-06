@@ -41,7 +41,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: bash
         run: |
-          pip install --global-option=build_ext --global-option="-IC:\Program files\Graphviz\include" --global-option="-LC:\Program files\Graphviz\lib" pygraphviz
+          pip install --global-option=build_ext --global-option="-IC:\Program files\Graphviz\include" --global-option="-LC:\Program files\Graphviz\lib" pygraphviz==1.10
           echo "C:\Program Files\Graphviz\bin" >> $GITHUB_PATH
 
       - name: Install dependencies
