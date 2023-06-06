@@ -2,6 +2,11 @@
 
 ---
 
+??? note "This mapping configuration only applies to Microsoft Threat Model Tool Processor."
+    
+    Please refer to another mapping file configuration documentation if needed. 
+    You can locate each processor's documentation in the left menu under the "StartLeft Processors (SLP)" section. 
+
 A source mapping file (or 'mapping file' for short) describe how to identify components, dataflows, TrustZones, 
 threats and mitigations in source file and how to map them to the OTM equivalent.
 

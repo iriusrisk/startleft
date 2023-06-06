@@ -36,7 +36,7 @@ class TFPlanComponent(Component):
 
     @property
     def is_singleton(self) -> bool:
-        return self.configuration.get('singleton', False)
+        return self.configuration.get('$singleton', False)
 
     def __eq__(self, other):
         """Overrides the default implementation"""
