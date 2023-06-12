@@ -108,7 +108,15 @@ class TestVisioUtils:
                        ' \nTest\nlabel\n ',
                        '   Test   label   ',
                        u'Test \u00A0\u00A0 \u00A0 label',
-                       u'\u00A0Test label\u00A0'])
+                       u'\u00A0Test label\u00A0',
+                       'Test label 2017',
+                       'Test label AWS19',
+                       'Test label AWS19_v2',
+                       'Test label AWS2021',
+                       'Test label_2017',
+                       'Test label_AWS19',
+                       'Test label_AWS19_v2',
+                       'Test label_AWS2021'])
     def test_normalize_label(self, source_label):
         assert normalize_label(source_label) == 'Test label'
 
