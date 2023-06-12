@@ -1,308 +1,153 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Mapping File",
-    "type": "object",
-    "required": ["trustzones", "components", "dataflows"],
-    "properties": {
-        "lookup": {
-            "type": "object"
-        },
-        "trustzones": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "required": ["id", "name"],
-                "properties": {
-                    "id": {"$ref": "#/definitions/query"},
-                    "name": {"$ref": "#/definitions/query"},
-                    "$source": {"$ref": "#/definitions/query"},
-                    "$default": {"type": "boolean"}
-                }
-            }
-        },
-        "components": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "required": ["type"],
-                "properties": {
-                    "id": {"$ref": "#/definitions/query"},
-                    "name": {"$ref": "#/definitions/query"},
-                    "type": {"$ref": "#/definitions/query"},
-                    "$source": {"$ref": "#/definitions/query"},
-                    "parent": {"$ref": "#/definitions/query"}
-                }
-            }        
-        },
-        "dataflows": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "required": ["source", "destination"],
-                "properties": {
-                    "id": {"$ref": "#/definitions/query"},
-                    "name": {"$ref": "#/definitions/query"},
-                    "$source": {"$ref": "#/definitions/query"},
-                    "source": {"$ref": "#/definitions/query"},
-                    "destination": {"$ref": "#/definitions/query"}
-                }
-            }    
-        }
-    },
-    "definitions": {
-        "regex": {
-            "type": "object",
-            "required": ["$regex"],
-            "properties": {
-                "$props": {
-                    "anyOf": [
-                        {"type": "string"}
-                    ]
-                }
-            }
-        },
-        "query": {
-            "anyOf": [
-                {
-                    "type": "string"
-                },
-                {
-                    "anyOf": [
-                        {
-                            "type": "object",
-                            "required": ["$lookup"],
-                            "properties": {
-                                "$lookup": {
-                                    "anyOf": [
-                                        {"type": "string"},
-                                        {"$ref": "#/definitions/query"}
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            "type": "object",
-                            "required": ["$skip"],
-                            "properties": {
-                                "$skip": {
-                                    "anyOf": [
-                                        {"type": "string"},
-                                        {"$ref": "#/definitions/query"}
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            "type": "object",
-                            "required": ["$singleton"],
-                            "properties": {
-                                "$singleton": {
-                                    "anyOf": [
-                                        {"type": "string"},
-                                        {"$ref": "#/definitions/query"}
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            "type": "object",
-                            "required": ["$root"],
-                            "properties": {
-                                "$root": {
-                                    "anyOf": [
-                                        {"type": "string"},
-                                        {"$ref": "#/definitions/query"}
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            "type": "object",
-                            "required": ["$type"],
-                            "properties": {
-                                "$type": {
-                                    "anyOf": [
-                                        {"type": "string"},
-                                        {"type": "array", "items": {"type": "string"}},
-                                        {"$ref": "#/definitions/regex"}
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            "type": "object",
-                            "required": ["$name"],
-                            "properties": {
-                                "$name": {
-                                    "anyOf": [
-                                        {"type": "string"},
-                                        {"type": "array", "items": {"type": "string"}},
-                                        {"$ref": "#/definitions/regex"}
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            "type": "object",
-                            "required": ["$props"],
-                            "properties": {
-                                "$props": {
-                                    "anyOf": [
-                                        {"type": "string"},
-                                        {"type": "array", "items": {"type": "string"}},
-                                        {"$ref": "#/definitions/regex"}
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            "type": "object",
-                            "required": ["$path"],
-                            "properties": {
-                                "$path": {
-                                    "anyOf": [
-                                        {"type": "string"},
-                                        {"$ref": "#/definitions/query"}
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            "type": "object",
-                            "required": ["$format"],
-                            "properties": {
-                                "$format": {
-                                    "anyOf": [
-                                        {"type": "string"},
-                                        {"$ref": "#/definitions/query"}
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            "type": "object",
-                            "required": ["$catchall"],
-                            "properties": {
-                                "$catchall": {
-                                    "anyOf": [
-                                        {"type": "string"},
-                                        {"$ref": "#/definitions/query"}
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            "type": "object",
-                            "required": ["$children"],
-                            "properties": {
-                                "$children": {
-                                    "anyOf": [
-                                        {"type": "string"},
-                                        {"$ref": "#/definitions/query"}
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            "type": "object",
-                            "required": ["$parent"],
-                            "properties": {
-                                "$parent": {
-                                    "anyOf": [
-                                        {"type": "string"},
-                                        {"$ref": "#/definitions/query"}
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            "type": "object",
-                            "required": ["$findFirst"],
-                            "properties": {
-                                "$findFirst": {
-                                    "anyOf": [
-                                        {"type": "array"},
-                                        {"$ref": "#/definitions/query"}
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            "type": "object",
-                            "required": ["$ip"],
-                            "properties": {
-                                "$ip": {
-                                    "anyOf": [
-                                        {"type": "string"},
-                                        {"$ref": "#/definitions/query"}
-                                    ]
-                                }
-                            }
-                        }
-                    ]
-                },
-                {
-                    "type": "object",
-                    "required": ["$searchParams"],
-                    "properties": {
-                        "searchPath": {
-                            "anyOf": [
-                                {
-                                    "type": "string"
-                                },{
-                                    "type": "array"
-                                }
-                            ]
-                        },
-                        "defaultValue": {
-                            "type": "string"
-                        }
-                    }
+   "$schema":"http://json-schema.org/draft-06/schema#",
+   "title":"Terraform Plan Mapping File Schema",
+   "type":"object",
+   "additionalProperties":false,
+   "properties":{
+      "trustzones":{
+         "type":"array",
+         "items":{
+            "$ref":"#/definitions/Trustzone"
+         }
+      },
+      "components":{
+         "type":"array",
+         "items":{
+            "$ref":"#/definitions/Component"
+         }
+      },
+      "configuration":{
+         "$ref":"#/definitions/Configuration"
+      }
+   },
+   "required":[
 
-                },
-                {
-                    "type": "object",
-                    "required": ["$numberOfSources"],
-                    "properties": {
-                        "oneSource": {
-                            "anyOf": [
-                                {"type": "string"},
-                                {"$ref": "#/definitions/query"}
-                            ]
-                        },
-                        "multipleSource": {
-                            "anyOf": [
-                                {"type": "string"},
-                                {"$ref": "#/definitions/query"}
-                            ]
-                        }
-                    }
+   ],
+   "definitions":{
+      "Trustzone":{
+         "type":"object",
+         "additionalProperties":false,
+         "properties":{
+            "type":{
+               "type":"string"
+            },
+            "name":{
+               "type":"string"
+            },
+            "risk":{
+               "$ref":"#/definitions/Risk"
+            },
+            "$default":{
+               "type":"boolean"
+            }
+         },
+         "required":[
+            "name",
+            "type"
+         ],
+         "title":"Trustzone"
+      },
+      "Component":{
+         "type":"object",
+         "additionalProperties":false,
+         "properties":{
+            "label":{
+               "$ref":"#/definitions/LabelUnion"
+            },
+            "type":{
+               "type":"string"
+            },
+            "$singleton":{
+               "type":"boolean"
+            }
+         },
+         "required":[
+            "label",
+            "type"
+         ],
+         "title":"Component"
+      },
+      "Configuration":{
+         "type":"object",
+         "additionalProperties":false,
+         "properties":{
+            "attack_surface":{
+               "$ref":"#/definitions/AttackSurface"
+            },
+            "skip":{
+               "type":"array",
+               "items":{
+                  "type":"string"
+               }
+            },
+            "catch_all":{
+               "type":"string"
+            }
+         },
+         "required":[
 
-                },
-                {
-                    "type": "object",
-                    "required": ["$hub"],
-                    "properties": {
-                        "$hub": {
-                            "anyOf": [
-                                {"type": "string"},
-                                {"$ref": "#/definitions/query"}
-                            ]
-                        }
-                    }
-                },
-                {
-                    "type": "object",
-                    "required": ["$module"],
-                    "properties": {
-                        "$hub": {
-                            "anyOf": [
-                                {"type": "string"}
-                            ]
-                        }
-                    }
-                }
-            ]
-        }
-    }
+         ],
+         "title":"Configuration"
+      },
+      "AttackSurface":{
+         "type":"object",
+         "additionalProperties":false,
+         "properties":{
+            "client":{
+               "type":"string"
+            },
+            "trustzone":{
+               "type":"string"
+            }
+         },
+         "required":[
+            "client",
+            "trustzone"
+         ],
+         "title":"AttackSurface"
+      },
+      "Risk":{
+         "type":"object",
+         "additionalProperties":false,
+         "properties":{
+            "trust_rating":{
+               "type":"integer"
+            }
+         },
+         "required":[
+            "trust_rating"
+         ],
+         "title":"Risk"
+      },
+      "LabelUnion":{
+         "anyOf":[
+            {
+               "type":"array",
+               "items":{
+                  "type":"string"
+               }
+            },
+            {
+               "$ref":"#/definitions/RegExClass"
+            },
+            {
+               "type":"string"
+            }
+         ],
+         "title":"LabelUnion"
+      },
+      "RegExClass":{
+         "type":"object",
+         "additionalProperties":false,
+         "properties":{
+            "$regex":{
+               "type":"string"
+            }
+         },
+         "required":[
+            "$regex"
+         ],
+         "title":"RegExClass"
+      }
+   }
 }

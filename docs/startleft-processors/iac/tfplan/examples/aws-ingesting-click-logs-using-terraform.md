@@ -201,12 +201,13 @@ by configuring this behavior in the mapping file. In that way, you can get this 
 
 === "Mapping file"
     
-    > The following component mappers need to be added in the mapping file to enable this feature. 
+    > The following configuration needs to be added in the mapping file to enable this feature. 
 
     ```yaml
-      - type: empty-component
-        $source: { $skip: { $type: ["aws_db_subnet_group", "aws_internet_gateway"] } }
-    
-      - type: empty-component
-        $source: { $singleton: { $catchall: { $type: { $regex: ^aws_\w*$ } } } }
+    configuration:
+      skip:
+        - aws_security_group
+        - aws_internet_gateway
+        - aws_db_subnet_group
+      catch_all: empty-component
     ```

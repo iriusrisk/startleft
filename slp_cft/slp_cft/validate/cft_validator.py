@@ -8,7 +8,7 @@ from slp_base.slp_base.provider_validator import generate_content_type_error, ge
 
 logger = logging.getLogger(__name__)
 
-MAX_SIZE = 20 * 1024 * 1024
+MAX_SIZE = 1 * 1024 * 1024
 MIN_SIZE = 13
 
 

@@ -2,6 +2,11 @@
 
 ---
 
+??? note "This mapping configuration only applies to Terraform Processor."
+    
+    Please refer to another mapping file configuration documentation if needed. 
+    You can locate each processor's documentation in the left menu under the "StartLeft Processors (SLP)" section.
+
 A source mapping file (or 'mapping file' for short) describes how to find and map components, dataflows, and TrustZones in
 source file data structures.
 

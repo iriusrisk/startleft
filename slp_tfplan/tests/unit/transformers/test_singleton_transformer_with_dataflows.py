@@ -10,13 +10,13 @@ from slp_tfplan.tests.util.builders import build_mocked_component, \
 _component_a = build_mocked_component({
     'component_name': 'component_a',
     'tf_type': 'aws_type',
-    'configuration': {"singleton": True}
+    'configuration': {"$singleton": True}
 })
 
 _component_b = build_mocked_component({
     'component_name': 'component_b',
     'tf_type': 'aws_type',
-    'configuration': {"singleton": True}
+    'configuration': {"$singleton": True}
 })
 
 _component_c = build_mocked_component({
