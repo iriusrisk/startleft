@@ -2,6 +2,7 @@ from otm.otm.entity.trustzone import Trustzone
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
 from slp_visio.slp_visio.parse.mappers.diagram_mapper import DiagramMapper
 from slp_visio.slp_visio.parse.representation.representation_calculator import RepresentationCalculator
+from slp_visio.slp_visio.util.visio import normalize_label
 
 
 def find_type(trustzone_mapping):
@@ -17,7 +18,7 @@ class DiagramTrustzoneMapper(DiagramMapper):
                  trustzone_mappings: dict,
                  representation_calculator: RepresentationCalculator):
         self.components = components
-        self.trustzone_mappings = trustzone_mappings
+        self.trustzone_mappings = {normalize_label(lb): value for (lb, value) in trustzone_mappings.items()}
         self.representation_calculator = representation_calculator
 
     def to_otm(self) -> [Trustzone]:
@@ -27,11 +28,17 @@ class DiagramTrustzoneMapper(DiagramMapper):
         trustzones = []
 
         for c in self.components:
-            if c.name in self.trustzone_mappings:
+            if self.__filter_trustzone(c):
                 c.trustzone = True
                 trustzones.append(c)
 
         return trustzones
+
+    def __filter_trustzone(self, trustzone: DiagramComponent) -> bool:
+        map_by_name = normalize_label(trustzone.name) in self.trustzone_mappings
+        map_by_type = normalize_label(trustzone.type) in self.trustzone_mappings
+        map_by_unique_id = trustzone.unique_id in self.trustzone_mappings
+        return map_by_name or map_by_type or map_by_unique_id
 
     def __map_to_otm(self, trustzones: [DiagramComponent]) -> [Trustzone]:
         return list(map(self.__build_otm_trustzone, trustzones)) \
