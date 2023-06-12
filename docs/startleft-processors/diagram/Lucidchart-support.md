@@ -19,6 +19,8 @@ About the mappings:
 * The internal name of the Lucidchart stencil shapes does not match the one shown in the application. In the
   <a href="https://github.com/iriusrisk/startleft/blob/main/examples/lucidchart/iriusrisk-lucid-aws-mapping.yaml" target="_blank">mapping file</a>
   provided in the StartLeft examples folder, you can find a list of AWS components' internal names.
+* LucidChart stencil libraries are versioned by year, but you don't need to take care OF it. At building the mapping
+  file, ignore the year suffix (2017, AWS19, AWS19_v2, or AWS2021).
 
 About the parsing logic:
 
@@ -45,95 +47,8 @@ will be respected in the resultant OTM.
 If we compose a default mapping file for all the stencil shapes:
 
 ??? abstract "default-mapping.yaml"
-
     ```yaml
-    trustzones:
-    - label:  Public Cloud
-      type:   Public Cloud
-      id:     b61d6911-338d-46a8-9f39-8dcd24abfe91
-    
-    - label:  Private Secured Cloud
-      type:   Private Secured
-      id:     2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
-    
-    - label: AWSCloudAWS2021
-      type: Public Cloud
-      id: b61d6911-338d-46a8-9f39-8dcd24abfe91
-    
-    components:
-    
-    ## Visio Lucid names
-    - label: ClientAWS19
-      type: generic-client
-    
-    - label: AmazonCognitoAWS19
-      type: cognito
-    
-    - label: AmazonEC2AWS2021
-      type: ec2
-    
-    - label: SQLDatabaseAzure2021
-      type: CD-MICROSOFT-AZURE-SQL-DB
-    
-    - label: DatabaseBlock
-      type: other-database
-    
-    - label: AmazonSimpleStorageServiceS3AWS19
-      type: s3
-    
-    - label: AWSIdentityandAccessManagement_IAMAWS19
-      type: iam
-    
-    - label: AWSCloudTrailAWS19
-      type: cloudtrail
-    
-    - label: AWSCloudTrailAWS2021
-      type: cloudtrail
-    
-    - label: AmazonAPIGateway_purpleAWS19
-      type: api-gateway
-    
-    - label: AWSGeneral_UserAWS19
-      type: empty-component
-    
-    - label: ImageSearchBlock2
-      type: empty-component
-    
-    - label: ElasticLoadBalancingELLoadBalancer2017
-      type: empty-component
-    
-    - label: AmazonEC2AutoScalingAWS2021
-      type: empty-component
-    
-    - label: AWSFargateAWS19
-      type: empty-component
-    
-    - label: AmazonDynamoDBAWS19
-      type: empty-component
-    
-    - label: AWSCertificateManagerAWS19
-      type: empty-component
-    
-    - label: AWSCodePipelineAWS19
-      type: empty-component
-    
-    - label: AWSCodeBuildAWS19
-      type: empty-component
-    
-    - label: AmazonCloudWatchAWS19
-      type: cloudwatch
-    
-    - label: AmazonCloudWatchAWS2021
-      type: cloudwatch
-    
-    - label: AWSCodeStarAWS19
-      type: empty-component
-    
-    - label: AmazonECR2017
-      type: empty-component
-
-
-    dataflows: [ ]
+    --8<-- "examples/lucidchart/iriusrisk-lucid-aws-mapping.yaml"
     ```
 
 Then, we can map the generic shapes by name in a custom mapping file:
