@@ -37,31 +37,26 @@ class DiagramTrustzoneMapper(DiagramMapper):
             if trustzones \
             else []
 
-    def __build_otm_trustzone(self, trustzone: DiagramComponent) -> Trustzone:
-        trustzone_mapping = self.__get_trustzone_mapping(trustzone)
+    def __build_otm_trustzone(self, component: DiagramComponent) -> Trustzone:
+        trustzone_mapping = self.__get_trustzone_mapping(component)
 
         if trustzone_mapping:
-            representation = self.representation_calculator.calculate_representation(trustzone)
+            component.trustzone = True
+            representation = self.representation_calculator.calculate_representation(component)
+
             return Trustzone(
-                trustzone_id=trustzone.id,
-                name=trustzone.name if trustzone.name else trustzone_mapping['type'],
-                parent=_calculate_parent_id(trustzone),
-                parent_type=self._calculate_parent_type(trustzone),
+                trustzone_id=component.id,
+                name=component.name if component.name else trustzone_mapping['type'],
+                parent=_calculate_parent_id(component),
+                parent_type=self._calculate_parent_type(component),
                 type=_find_type(trustzone_mapping),
                 representations=[representation] if representation else None
             )
 
-    def __get_trustzone_mapping(self, trustzone: DiagramComponent) -> Dict:
-        trustzone_mapping = self.trustzone_mappings.get(
-            normalize_label(trustzone.name),
-            self.trustzone_mappings.get(
-                normalize_label(trustzone.type),
-                self.trustzone_mappings.get(trustzone.unique_id,{})))
-
-        if trustzone_mapping:
-            trustzone.trustzone = True
-
-        return trustzone_mapping
+    def __get_trustzone_mapping(self, component: DiagramComponent) -> Dict:
+        return self.trustzone_mappings.get(normalize_label(component.name), {}) \
+            or self.trustzone_mappings.get(normalize_label(component.type), {}) \
+            or self.trustzone_mappings.get(component.unique_id, {})
 
     def _get_trustzone_mappings(self):
         return self.trustzone_mappings
