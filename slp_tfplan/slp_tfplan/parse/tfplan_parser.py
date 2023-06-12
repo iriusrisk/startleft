@@ -9,7 +9,7 @@ from slp_tfplan.slp_tfplan.map.mapping import Mapping
 from slp_tfplan.slp_tfplan.map.tfplan_mapper import TFPlanMapper
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanOTM
 from slp_tfplan.slp_tfplan.transformers.children_calculator import ChildrenCalculator
-from slp_tfplan.slp_tfplan.transformers.dataflow_creator import DataflowCreator
+from slp_tfplan.slp_tfplan.transformers.dataflow.dataflow_creator import DataflowCreator
 from slp_tfplan.slp_tfplan.transformers.parent_calculator import ParentCalculator
 from slp_tfplan.slp_tfplan.transformers.singleton_transformer import SingletonTransformer
 

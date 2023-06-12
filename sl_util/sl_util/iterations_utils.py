@@ -1,6 +1,9 @@
 # This weird while needs to be done because:
 # - The foreach does not work if you remove an element from the list
 # - The remove has to be invoked on the list to affect the object passed as a class attribute
+from typing import List
+
+
 def remove_from_list(collection: [],
                      filter_function,
                      remove_function=None) -> None:
@@ -15,7 +18,7 @@ def remove_from_list(collection: [],
             i += 1
 
 
-def remove_duplicates(duplicated_list: []):
+def remove_duplicates(duplicated_list: List) -> List:
     unique_list = []
 
     for element in duplicated_list:
