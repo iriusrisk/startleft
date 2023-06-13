@@ -1,3 +1,10 @@
+---
+
+??? note "This mapping configuration only applies to Terraform Processor."
+    
+    Please refer to another mapping file configuration documentation if needed. 
+    You can locate each processor's documentation in the left menu under the "StartLeft Processors (SLP)" section. 
+
 >  :material-information-outline: Refer to [How To Map Dataflows](Terraform-how-mapping-file-works.md#how-to-map-dataflows) section for a simpler introduction.
 
 ---

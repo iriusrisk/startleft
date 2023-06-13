@@ -7,3 +7,7 @@ def auto_repr(cls):
 
     cls.__repr__ = __repr__
     return cls
+
+
+def get_class_name(o):
+    return type(o).__name__

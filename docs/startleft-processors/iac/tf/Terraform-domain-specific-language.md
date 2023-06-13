@@ -1,9 +1,9 @@
 ---
-search:
-  boost: 2 
----
 
----
+??? note "This mapping configuration only applies to Terraform Processor."
+    
+    Please refer to another mapping file configuration documentation if needed. 
+    You can locate each processor's documentation in the left menu under the "StartLeft Processors (SLP)" section. 
 
 There is an available Terraform Domain-Specific Language for easy mapping behavior configuration.
 This Terraform-DSL can be split into two sections: Special Mapping Fields and Mapping functions.
