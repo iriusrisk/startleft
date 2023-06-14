@@ -15,7 +15,7 @@ def remove_from_list(collection: [],
             i += 1
 
 
-def remove_duplicates(duplicated_list: []):
+def remove_duplicates(duplicated_list: []) -> []:
     unique_list = []
 
     for element in duplicated_list:
@@ -23,3 +23,7 @@ def remove_duplicates(duplicated_list: []):
             unique_list.append(element)
 
     return unique_list
+
+
+def remove_nones(list: []) -> []:
+    return [e for e in list if e != None]
