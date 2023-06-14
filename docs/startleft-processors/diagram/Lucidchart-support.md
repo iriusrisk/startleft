@@ -19,7 +19,7 @@ About the mappings:
 * The internal name of the Lucidchart stencil shapes does not match the one shown in the application. In the
   <a href="https://github.com/iriusrisk/startleft/blob/main/examples/lucidchart/iriusrisk-lucid-aws-mapping.yaml" target="_blank">mapping file</a>
   provided in the StartLeft examples folder, you can find a list of AWS components' internal names.
-* LucidChart stencil libraries are versioned by year, but you don't need to take care OF it. At building the mapping
+* LucidChart stencil libraries are versioned by year, but you don't need to take care of it. At building the mapping
   file, ignore the year suffix (2017, AWS19, AWS19_v2, or AWS2021).
 
 About the parsing logic:
