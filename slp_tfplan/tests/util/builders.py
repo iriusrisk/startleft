@@ -1,6 +1,8 @@
 from copy import deepcopy
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Type
+from unittest.mock import Mock
 
+from dependency_injector import providers
 from networkx import DiGraph
 
 from otm.otm.entity.dataflow import Dataflow
@@ -51,10 +53,11 @@ def build_base_otm(default_trustzone: Trustzone = None):
     return otm
 
 
-def build_mocked_tfplan_component(component: {}) -> TFPlanComponent:
+def build_mocked_component(component: Dict) -> TFPlanComponent:
     component_name = component['component_name']
     tf_type = component['tf_type']
-    component_id = build_component_id(component_name, tf_type)
+    component_id = component.get('id', build_component_id(component_name, tf_type))
+
     return TFPlanComponent(
         component_id=component_id,
         name=component_name,
@@ -64,7 +67,20 @@ def build_mocked_tfplan_component(component: {}) -> TFPlanComponent:
         tags=component.get('tags', [tf_type]),
         tf_resource_id=component_id,
         tf_type=tf_type,
-        configuration=component.get('configuration', {}))
+        configuration=component.get('configuration', {}),
+        clones_ids=component.get('clones_ids', [])
+    )
+
+
+def build_simple_mocked_component(id: str, parent: str = None, clones_ids: List[str] = None) -> Mock:
+    c = Mock(id=id, tf_resource_id=id, clones_ids=clones_ids)
+    c.name = id
+
+    if parent:
+        c.parent_type = ParentType.COMPONENT
+        c.parent = parent
+
+    return c
 
 
 def build_mocked_dataflow(
@@ -75,6 +91,10 @@ def build_mocked_dataflow(
         f"{component_a.name} to {component_b.name}",
         component_a.id, component_b.id,
         bidirectional=bidirectional, attributes=attributes, tags=tags)
+
+
+def build_security_group_mock(id: str, ingres_sgs: List[str] = None, egress_sgs: List[str] = None):
+    return Mock(security_group_id=id, ingres_sgs=ingres_sgs, egress_sgs=egress_sgs)
 
 
 def build_component_node(component_id: str) -> str:
@@ -157,15 +177,14 @@ def generate_child_modules(module_count: int,
 # TFGRAPH #
 ###########
 
+
 def build_tfgraph(relationships: List[Tuple] = None) -> DiGraph:
     graph = DiGraph()
 
     if not relationships:
         return graph
 
-    for relationship in relationships:
-        resource_id = relationship[0]
-        graph.add_node(build_component_node(resource_id), label=resource_id)
+    _create_graph_nodes(graph, relationships)
 
     for resource_id, parent_id in relationships:
         if parent_id != DEFAULT_TRUSTZONE.id:
@@ -174,9 +193,27 @@ def build_tfgraph(relationships: List[Tuple] = None) -> DiGraph:
     return graph
 
 
+def _create_graph_nodes(graph: DiGraph, relationships: List[Tuple]):
+    [graph.add_node(build_component_node(resource_id), label=resource_id)
+     for resource_id in set([resource_id for relationship in relationships for resource_id in relationship])]
+
+
 ###########
 # GENERIC #
 ###########
 
 def create_artificial_file(size: int) -> bytes:
     return bytes('A' * size, 'utf-8')
+
+
+def get_instance_classes(instances: providers.List) -> List[Type]:
+    return [instance.cls for instance in list(instances.args)]
+
+
+##########
+# ERRORS #
+##########
+
+class MockedException(Exception):
+    def __init__(self, message):
+        self.message = message

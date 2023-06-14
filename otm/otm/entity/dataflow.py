@@ -31,3 +31,14 @@ class Dataflow:
         return f'Dataflow(id="{self.id}", name="{self.name}", source="{self.source_node}", ' \
                f'destination="{self.destination_node}")'
 
+    def __eq__(self, other):
+        if other is None:
+            return False
+
+        if other is self:
+            return True
+
+        if not isinstance(other, Dataflow):
+            return False
+
+        return self.id == other.id

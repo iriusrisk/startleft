@@ -58,8 +58,9 @@ class TFPlanComponent(Component):
 
 @auto_repr
 class SecurityGroup:
-    def __init__(self, security_group_id: str, ingress_sgs: List[str] = None, egress_sgs: List[str] = None):
+    def __init__(self, security_group_id: str, name: str, ingress_sgs: List[str] = None, egress_sgs: List[str] = None):
         self.id = security_group_id
+        self.name = name
         self.ingress_sgs = ingress_sgs
         self.egress_sgs = egress_sgs
 
