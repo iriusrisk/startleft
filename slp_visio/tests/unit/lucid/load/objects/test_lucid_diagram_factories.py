@@ -1,26 +1,12 @@
-from typing import List, Union
 from unittest.mock import Mock
 
 import pytest
 from pytest import fixture, mark, param
 
-from slp_visio.slp_visio.load.objects.diagram_objects import DiagramConnector
-from slp_visio.slp_visio.load.objects.visio_diagram_factories import VisioConnectorFactory
 from slp_visio.slp_visio.load.strategies.connector.create_connector_strategy import CreateConnectorStrategy
-
-
-def mocked_strategy(result: Union[DiagramConnector, None, Exception]):
-    strategy = Mock()
-    strategy.create_connector = Mock(side_effect=[result])
-    return strategy
-
-
-def mocked_strategies(results: List[Union[DiagramConnector, None, Exception]]):
-    return list(map(mocked_strategy, results))
-
-
-def mocked_connector(c_id: int = 1001, from_id: int = 1, to_id: int = 2):
-    return Mock(id=c_id, from_id=from_id, to_id=to_id)
+from slp_visio.slp_visio.lucid.load.objects.lucid_diagram_factories import LucidConnectorFactory
+from slp_visio.tests.unit.load.objects.test_visio_diagram_factories import mocked_strategy, mocked_connector, \
+    mocked_strategies
 
 
 @fixture
@@ -35,7 +21,7 @@ def mock_get_strategies(mocker, strategies):
         return_value=strategies)
 
 
-class TestVisioConnectorFactory:
+class TestLucidConnectorFactory:
 
     def test_create_connector_when_strategy_returns_value(self, mock_get_strategies):
         # GIVEN a visio connector shape
@@ -46,7 +32,7 @@ class TestVisioConnectorFactory:
         mock_get_strategies.return_value = [strategy]
 
         # WHEN a connector is created
-        result = VisioConnectorFactory().create_connector(shape)
+        result = LucidConnectorFactory().create_connector(shape, [])
 
         # THEN the strategy implementations are the expected
         assert CreateConnectorStrategy.get_strategies().__len__() == 1
@@ -81,7 +67,7 @@ class TestVisioConnectorFactory:
         shape = Mock(ID=1001)
 
         # WHEN a connector is created
-        result = VisioConnectorFactory().create_connector(shape)
+        result = LucidConnectorFactory().create_connector(shape, [])
 
         # THEN we call strategies until we find the first valid strategy
         for i in range(0, valid_strategy):
@@ -104,7 +90,7 @@ class TestVisioConnectorFactory:
 
         # WHEN a connector is created
         with pytest.raises(Exception) as error:
-            VisioConnectorFactory().create_connector(shape)
+            LucidConnectorFactory().create_connector(shape, [])
 
         # THEN the strategy implementations are the expected
         assert CreateConnectorStrategy.get_strategies().__len__() == len(strategies)
@@ -124,7 +110,7 @@ class TestVisioConnectorFactory:
         shape = Mock(ID=1001)
 
         # WHEN a connector is created
-        result = VisioConnectorFactory().create_connector(shape)
+        result = LucidConnectorFactory().create_connector(shape, [])
 
         # THEN the strategy implementations are the expected
         assert CreateConnectorStrategy.get_strategies().__len__() == len(strategies)

@@ -19,18 +19,19 @@ setup(
         'jsonschema==4.17.3',
         'deepmerge==1.1.0',
         'jmespath==1.0.1',
-        'python-hcl2==4.3.0',
-        'requests==2.28.2',
-        'fastapi==0.93.0',
-        'python-multipart==0.0.5',
+        'python-hcl2==4.3.2',
+        'requests==2.31.0',
+        'fastapi==0.95.2',
+        'python-multipart==0.0.6',
         'click==8.1.3',
-        'uvicorn==0.20.0',
+        'uvicorn==0.22.0',
         'shapely==2.0.1',
         'vsdx==0.5.13',
         'python-magic==0.4.27',
-        'setuptools==65.5.1',
+        'setuptools==67.8.0',
         'defusedxml==0.7.1',
-        'networkx==3.0',
+        'networkx==3.1',
+        # Do not upgrade pygraphviz unless security issues because it is heavily dependent on the underlying OS
         'pygraphviz==1.10'
     ],
     use_scm_version={
@@ -44,13 +45,13 @@ setup(
             "pytest-runner==6.0.0",
         ],
         "test": [
-            'tox==4.4.6',
-            'pytest==7.2.2',
-            'coverage==7.2.3',
-            'responses==0.22.0',
-            'deepdiff==6.2.3',
-            'httpx==0.23.3',
-            'pytest-mock==3.10.0'
+            'tox==4.5.1',
+            'pytest==7.3.1',
+            'responses==0.23.1',
+            'deepdiff==6.3.0',
+            'httpx==0.24.1',
+            'pytest-mock==3.10.0',
+            'coverage==7.2.6'
         ]
     },
     entry_points='''
