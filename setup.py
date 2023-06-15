@@ -31,6 +31,7 @@ setup(
         'setuptools==67.8.0',
         'defusedxml==0.7.1',
         'networkx==3.1',
+        # Do not upgrade pygraphviz unless security issues because it is heavily dependent on the underlying OS
         'pygraphviz==1.10'
     ],
     use_scm_version={
