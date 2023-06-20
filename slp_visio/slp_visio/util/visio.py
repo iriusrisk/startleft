@@ -83,21 +83,30 @@ def get_limits(shape: Shape) -> tuple:
     height = get_height(shape)
 
     return (center_x - (width / 2), center_y - (height / 2)), \
-           (center_x + (width / 2), center_y + (height / 2)) 
+        (center_x + (width / 2), center_y + (height / 2))
 
 
-def normalize_label(label):
+# Notice that the order of the functions is relevant
+normalize_functions = [
+    # remove year from Lucidchart AWS stencils
+    lambda label: re.sub(r'_?(2017|AWS19|AWS19_v2|AWS2021)$', '', label),
+    # replace by ' ' any '\n'
+    lambda label: label.replace('\n', ' '),
+    # replace multiple spaces in a row (2 or more) by a single one
+    lambda label: re.sub(r'\s+', ' ', label),
+    # strip any leading or trailing space
+    lambda label: label.strip()
+]
+
+
+def normalize_label(label: str) -> str:
     if not label:
         return label
 
-    # replace by ' ' any '\n'
-    label_normalized = label.replace('\n', ' ')
-    # replace multiple spaces in a row (2 or more) by a single one
-    label_normalized = re.sub(r'\s+', ' ', label_normalized)
-    # strip any leading or trailing space
-    label_normalized = label_normalized.strip()
+    for normalize_function in normalize_functions:
+        label = normalize_function(label)
 
-    return label_normalized
+    return label
 
 
 def normalize_unique_id(unique_id):

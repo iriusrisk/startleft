@@ -7,20 +7,20 @@ trustzones:
     type:   Private Secured
     id:     2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
 
-  - label: AWSCloudAWS2021
+  - label: AWSCloud
     type: Public Cloud
     id: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
 components:
 
   ## Visio Lucid names
-  - label: ClientAWS19
+  - label: Client
     type: generic-client
 
-  - label: AmazonCognitoAWS19
+  - label: AmazonCognito
     type: cognito
 
-  - label: AmazonEC2AWS2021
+  - label: AmazonEC2
     type: ec2
 
   - label: SQLDatabaseAzure2021
@@ -29,58 +29,55 @@ components:
   - label: DatabaseBlock
     type: other-database
 
-  - label: AmazonSimpleStorageServiceS3AWS19
+  - label: AmazonSimpleStorageServiceS3
     type: s3
 
-  - label: AWSIdentityandAccessManagement_IAMAWS19
+  - label: AWSIdentityandAccessManagement_IAM
     type: iam
 
-  - label: AWSCloudTrailAWS19
+  - label: AWSCloudTrail
     type: cloudtrail
 
-  - label: AWSCloudTrailAWS2021
+  - label: AWSCloudTrail
     type: cloudtrail
 
-  - label: AmazonAPIGateway_purpleAWS19
+  - label: AmazonAPIGateway_purple
     type: api-gateway
 
-  - label: AWSGeneral_UserAWS19
+  - label: AWSGeneral_User
     type: empty-component
 
   - label: ImageSearchBlock2
     type: empty-component
 
-  - label: ElasticLoadBalancingELLoadBalancer2017
+  - label: ElasticLoadBalancingELLoadBalancer
     type: empty-component
 
-  - label: AmazonEC2AutoScalingAWS2021
+  - label: AmazonEC2AutoScaling
     type: empty-component
 
-  - label: AWSFargateAWS19
+  - label: AWSFargate
     type: empty-component
 
-  - label: AmazonDynamoDBAWS19
+  - label: AmazonDynamoDB
     type: empty-component
 
-  - label: AWSCertificateManagerAWS19
+  - label: AWSCertificateManager
     type: empty-component
 
-  - label: AWSCodePipelineAWS19
+  - label: AWSCodePipeline
     type: empty-component
 
-  - label: AWSCodeBuildAWS19
+  - label: AWSCodeBuild
     type: empty-component
 
-  - label: AmazonCloudWatchAWS19
+  - label: AmazonCloudWatch
     type: cloudwatch
 
-  - label: AmazonCloudWatchAWS2021
-    type: cloudwatch
-
-  - label: AWSCodeStarAWS19
+  - label: AWSCodeStar
     type: empty-component
 
-  - label: AmazonECR2017
+  - label: AmazonECR
     type: empty-component
 
 

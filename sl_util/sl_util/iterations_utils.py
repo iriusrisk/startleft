@@ -4,7 +4,7 @@
 from typing import List
 
 
-def remove_from_list(collection: [],
+def remove_from_list(collection: List,
                      filter_function,
                      remove_function=None) -> None:
     if collection is None:
@@ -26,3 +26,7 @@ def remove_duplicates(duplicated_list: List) -> List:
             unique_list.append(element)
 
     return unique_list
+
+
+def remove_nones(list: List) -> List:
+    return [e for e in list if e != None]

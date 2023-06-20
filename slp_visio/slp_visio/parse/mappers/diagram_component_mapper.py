@@ -28,7 +28,7 @@ class DiagramComponentMapper(DiagramMapper):
     def __filter_components(self) -> [DiagramComponent]:
         return [component for component in self.components if self.__filter_component(component)]
 
-    def __filter_component(self, component):
+    def __filter_component(self, component: DiagramComponent) -> bool:
         map_by_name = normalize_label(component.name) in self.normalized_component_mappings
         map_by_type = normalize_label(component.type) in self.normalized_component_mappings
         map_by_unique_id = component.unique_id in self.normalized_component_mappings
