@@ -4,8 +4,9 @@ from typing import List, Dict
 from otm.otm.entity.dataflow import Dataflow
 from sl_util.sl_util.iterations_utils import remove_from_list
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent
-from slp_tfplan.slp_tfplan.transformers.transformer import Transformer
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanOTM
+from slp_tfplan.slp_tfplan.transformers.transformer import Transformer
+from slp_tfplan.slp_tfplan.util.tfplan import find_component_by_id
 
 
 def _merge_component_configurations(otm_components: List[TFPlanComponent]) -> Dict:
@@ -161,6 +162,12 @@ class SingletonTransformer(Transformer):
                 continue
 
             if index == len(self.otm_dataflows):
+                unique_singleton_dataflows.append(dataflow)
+                continue
+
+            source_component = find_component_by_id(dataflow.source_node, self.otm_components)
+            destination_component = find_component_by_id(dataflow.destination_node, self.otm_components)
+            if not source_component.is_singleton and not destination_component.is_singleton:
                 unique_singleton_dataflows.append(dataflow)
                 continue
 

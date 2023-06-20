@@ -57,12 +57,26 @@ class TFPlanComponent(Component):
 
 
 @auto_repr
+class SecurityGroupCIDR:
+    def __init__(self, cidr_blocks: List[str], description: str, from_port: int = None, to_port: int = None,
+                 protocol: str = None):
+        self.cidr_blocks = cidr_blocks
+        self.description = description
+        self.from_port = from_port
+        self.to_port = to_port
+        self.protocol = protocol
+
+
+@auto_repr
 class SecurityGroup:
-    def __init__(self, security_group_id: str, name: str, ingress_sgs: List[str] = None, egress_sgs: List[str] = None):
-        self.id = security_group_id
-        self.name = name
-        self.ingress_sgs = ingress_sgs
-        self.egress_sgs = egress_sgs
+    def __init__(self, security_group_id: str, name: str, ingress_sgs: List[str] = None, egress_sgs: List[str] = None,
+                 ingress_cidr: List[SecurityGroupCIDR] = None, egress_cidr: List[SecurityGroupCIDR] = None):
+        self.id: str = security_group_id
+        self.name: str = name
+        self.ingress_sgs: List[str] = ingress_sgs
+        self.egress_sgs: List[str] = egress_sgs
+        self.ingress_cidr: List[SecurityGroupCIDR] = ingress_cidr
+        self.egress_cidr: List[SecurityGroupCIDR] = egress_cidr
 
 
 @auto_repr
