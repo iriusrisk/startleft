@@ -69,7 +69,11 @@ class TestAttackSurfaceCalculator:
         # THEN the attack surface calculator does not calculate clients and dataflows
         attack_surface_calculator.calculate_clients_and_dataflows.assert_not_called()
 
-    def test_no_security_group_cidr_info(self):
+    @pytest.mark.usefixtures('mock_components_in_sgs')
+    @pytest.mark.parametrize('mocked_components_in_sgs', [
+        pytest.param({'SG1': [_component_a]}, id='SG1 related to component_a'),
+    ])
+    def test_no_security_group_cidr_info(self, mock_components_in_sgs: Dict[str, List[TFPlanComponent]]):
 
         # GIVEN a Security Group without CIDR info
         security_groups = [build_security_group_mock('SG1')]
@@ -81,7 +85,6 @@ class TestAttackSurfaceCalculator:
             otm,
             MagicMock(),
             attack_surface_mapping)
-        attack_surface_calculator.calculate_clients_and_dataflows = MagicMock()
 
         # WHEN the attack surface calculator is transformed
         attack_surface_calculator.transform()

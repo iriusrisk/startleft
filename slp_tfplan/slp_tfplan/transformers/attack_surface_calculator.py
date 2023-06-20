@@ -121,7 +121,7 @@ class AttackSurfaceCalculator:
 
     def __generate_dataflows(self, security_group_cidr: List[SecurityGroupCIDR], components: List[TFPlanComponent],
                              direction: DataflowDirection):
-        for security_group in security_group_cidr:
+        for security_group in security_group_cidr or []:
             for ip in security_group.cidr_blocks:
                 if _is_valid_ip(ip):
                     client_component = self.__generate_client(ip)
