@@ -29,7 +29,7 @@ attack_surface_mapping = MagicMock(
     trustzone=internet_trustzone)
 
 variables = {
-    "whitelist_cidrs": ['7.235.083.057/32', '7.235.083.058/32']
+    "whitelist_cidrs": ['255.255.255.0/32', '255.255.255.1/32']
 }
 
 INTERNET_CLIENT_ID = 'b0a3f48b-e876-4903-9931-31a1c7e29c17'
@@ -109,11 +109,11 @@ class TestAttackSurfaceCalculator:
             ['0.0.0.0/0'], description='Ingress HTTPS', from_port=443, to_port=443, protocol='tcp'),
             {'SG1': [_component_a]}, INTERNET_CLIENT_ID, id='Ingress HTTPS to component_a'),
         pytest.param(build_security_group_cidr_mock(
-            ['0.0.0.0/0', '192.168.0.0/22'], description='Ingress All', from_port=0, to_port=0, protocol='-1'),
-            {'SG1': [_component_a]}, '61aaee85-2f59-48b3-b4da-f8ad31b60e15', id='Ingress All to component_a'),
+            ['0.0.0.0/0', '255.255.255.255/32'], description='Ingress All', from_port=0, to_port=0, protocol='-1'),
+            {'SG1': [_component_a]}, '7bf408da-3c58-4ec4-93a3-aba7665175d0', id='Ingress All to component_a'),
         pytest.param(build_security_group_cidr_mock(
-            ['172.31.0.0/16', '0.0.0.0/0'], description='Ingress All', from_port=0, to_port=0, protocol='-1'),
-            {'SG1': [_component_a]}, '0876b634-5d5f-4554-bcd1-5ff6d3bcb9e0', id='Ingress All to component_a'),
+            ['255.255.255.255/32', '0.0.0.0/0'], description='Ingress All', from_port=0, to_port=0, protocol='-1'),
+            {'SG1': [_component_a]}, '7bf408da-3c58-4ec4-93a3-aba7665175d0', id='Ingress All to component_a'),
     ])
     def test_ingress_dataflows(self,
                                ingress_cidr: SecurityGroupCIDR,
@@ -246,16 +246,16 @@ class TestAttackSurfaceCalculator:
     @pytest.mark.usefixtures('mock_components_in_sgs')
     @pytest.mark.parametrize('cidr_blocks, mocked_components_in_sgs, expected_client_id, expected_client_name', [
         pytest.param(
-            ['7.235.083.057/32', '7.235.083.058/32'], {'SG1': [_component_a]},
-            '472c31fc-a182-4bdf-9af2-d11609a51b1d', 'whitelist_cidrs',
+            ['255.255.255.0/32', '255.255.255.1/32'], {'SG1': [_component_a]},
+            '2fcb86af-123c-44f8-be57-6d32bb680c80', 'whitelist_cidrs',
             id='exists cidr in whitelist_cidrs'),
         pytest.param(
-            ['7.235.083.058/32', '7.235.083.057/32'], {'SG1': [_component_a]},
-            '2a285426-0900-4b51-8fc0-9a38cd1ef977', 'whitelist_cidrs',
+            ['255.255.255.1/32', '255.255.255.0/32'], {'SG1': [_component_a]},
+            '2fcb86af-123c-44f8-be57-6d32bb680c80', 'whitelist_cidrs',
             id='exists cidr in whitelist_cidrs (reverse)'),
         pytest.param(
-            ['7.0.0.0/32', '7.0.0.1/32'], {'SG1': [_component_a]},
-            'c24b1dc8-3967-4c61-9615-2184295fe531', 'Ingress HTTP',
+            ['255.255.255.0/32', '0.0.0.0/0'], {'SG1': [_component_a]},
+            '3fac1ad2-e0ba-4a4d-bb35-bb35515c5ce0', 'Ingress HTTP',
             id='not exists cidr in whitelist_cidrs'),
     ])
     def test_security_group_cidr_multiple_ips(self,
@@ -306,7 +306,7 @@ class TestAttackSurfaceCalculator:
         # GIVEN an Ingress HTTP Security Group from Internet to component_a
         security_groups = [build_security_group_mock('SG1', ingress_cidr=[
             build_security_group_cidr_mock(
-                ['8.15.0.0/16', '8.16.0.0/16'], description=None, from_port=80, to_port=80, protocol='tcp')])]
+                ['255.255.255.0/32', '255.255.255.1/32'], description=None, from_port=80, to_port=80, protocol='tcp')])]
 
         otm = build_mocked_otm([_component_a], security_groups=security_groups)
 
@@ -330,14 +330,14 @@ class TestAttackSurfaceCalculator:
             {'SG1': [_component_a]}, ["protocol: tcp", "from_port: 80 to_port: 80", 'ip: 0.0.0.0/0'],
             id='Ingress HTTP to component_a'),
         pytest.param(build_security_group_cidr_mock(
-            ['0.0.0.0/0', '192.168.0.0/22'], description='Ingress All', from_port=0, to_port=10, protocol='-1'),
+            ['0.0.0.0/0', '255.255.255.255/32'], description='Ingress All', from_port=0, to_port=10, protocol='-1'),
             {'SG1': [_component_a]},
             ["protocol: all", "from_port: 0 to_port: 10", "ip: 0.0.0.0/0"],
             id='Ingress All to component_a'),
         pytest.param(build_security_group_cidr_mock(
-            ['8.31.0.0/16', '0.0.0.0/0'], description='Ingress All', protocol='-1'),
+            ['255.255.255.0/32', '0.0.0.0/0'], description='Ingress All', protocol='-1'),
             {'SG1': [_component_a]},
-            ["protocol: all", "from_port: N/A to_port: N/A", "ip: 8.31.0.0/16", "ip: 0.0.0.0/0"],
+            ["protocol: all", "from_port: N/A to_port: N/A", "ip: 255.255.255.0/32", "ip: 0.0.0.0/0"],
             id='Ingress All to component_a without defined ports'),
     ])
     def test_generate_security_group_cidr_tags(self,

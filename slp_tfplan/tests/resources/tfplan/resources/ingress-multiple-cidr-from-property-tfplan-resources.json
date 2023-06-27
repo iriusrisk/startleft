@@ -61,7 +61,7 @@
                   },
                   {
                      "cidr_blocks":[
-                        "22.22.22.22/32"
+                        "255.255.255.0/32"
                      ],
                      "description":"SSH access access to ALB",
                      "from_port":"22",

@@ -84,7 +84,7 @@ def _generate_security_group_cidr_tags(security_group_cidr: SecurityGroupCIDR) -
 
 
 def _generate_client_id(security_group: SecurityGroupCIDR):
-    valids_ips = ", ".join(security_group.cidr_blocks)
+    valids_ips = ", ".join(sorted(security_group.cidr_blocks))
     return deterministic_uuid(valids_ips)
 
 

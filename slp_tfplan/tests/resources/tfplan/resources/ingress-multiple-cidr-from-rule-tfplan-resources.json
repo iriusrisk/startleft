@@ -92,8 +92,8 @@
                "resource_schema_version":"2",
                "resource_address":"aws_security_group_rule.http-ingress-1",
                "cidr_blocks":[
-                  "25.0.16.90/32",
-                  "25.0.16.91/32"
+                  "255.255.255.0/32",
+                  "255.255.255.1/32"
                ],
                "description":"Allows inbound traffic through port 80",
                "from_port":"80",
@@ -152,7 +152,7 @@
                "resource_schema_version":"2",
                "resource_address":"aws_security_group_rule.http-ingress-2",
                "cidr_blocks":[
-                  "25.0.16.92/32"
+                  "255.255.255.2/32"
                ],
                "description":"Allows inbound traffic through port 443",
                "from_port":"443",
@@ -540,8 +540,8 @@
       },
       "ingress_tcp_80_cidrs":{
          "value":[
-            "25.0.16.90/32",
-            "25.0.16.91/32"
+            "255.255.255.0/32",
+            "255.255.255.1/32"
          ]
       }
    }

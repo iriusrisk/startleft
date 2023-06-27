@@ -45,7 +45,7 @@ class TestSecurityGroupsLoader:
         assert otm.security_groups[0].ingress_cidr[0].from_port == '80'
         assert otm.security_groups[0].ingress_cidr[0].to_port == '80'
 
-        assert otm.security_groups[0].ingress_cidr[1].cidr_blocks == ['22.22.22.22/32']
+        assert otm.security_groups[0].ingress_cidr[1].cidr_blocks == ['255.255.255.0/32']
         assert otm.security_groups[0].ingress_cidr[1].description == 'SSH access access to ALB'
         assert otm.security_groups[0].ingress_cidr[1].protocol == 'tcp'
         assert otm.security_groups[0].ingress_cidr[1].from_port == '22'
@@ -63,13 +63,13 @@ class TestSecurityGroupsLoader:
         assert len(otm.security_groups) == 1
         # AND the SecurityGroup should have the expected CIDR
         assert len(otm.security_groups[0].ingress_cidr) == 3
-        assert otm.security_groups[0].ingress_cidr[0].cidr_blocks == ['25.0.16.90/32', '25.0.16.91/32']
+        assert otm.security_groups[0].ingress_cidr[0].cidr_blocks == ['255.255.255.0/32', '255.255.255.1/32']
         assert otm.security_groups[0].ingress_cidr[0].description == 'Allows inbound traffic through port 80'
         assert otm.security_groups[0].ingress_cidr[0].protocol == 'tcp'
         assert otm.security_groups[0].ingress_cidr[0].from_port == '80'
         assert otm.security_groups[0].ingress_cidr[0].to_port == '80'
 
-        assert otm.security_groups[0].ingress_cidr[1].cidr_blocks == ['25.0.16.92/32']
+        assert otm.security_groups[0].ingress_cidr[1].cidr_blocks == ['255.255.255.2/32']
         assert otm.security_groups[0].ingress_cidr[1].description == 'Allows inbound traffic through port 443'
         assert otm.security_groups[0].ingress_cidr[1].protocol == 'tcp'
         assert otm.security_groups[0].ingress_cidr[1].from_port == '443'
@@ -100,7 +100,7 @@ class TestSecurityGroupsLoader:
         assert otm.security_groups[0].ingress_cidr[0].to_port == '80'
 
         assert len(otm.security_groups[1].ingress_cidr) == 1
-        assert otm.security_groups[1].ingress_cidr[0].cidr_blocks == ['0.0.1.0/24']
+        assert otm.security_groups[1].ingress_cidr[0].cidr_blocks == ['255.255.0.0/32']
         assert otm.security_groups[1].ingress_cidr[0].description == 'HTTP access from ALB'
         assert otm.security_groups[1].ingress_cidr[0].protocol == 'tcp'
         assert otm.security_groups[1].ingress_cidr[0].from_port == '80'
