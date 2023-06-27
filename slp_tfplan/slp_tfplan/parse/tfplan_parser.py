@@ -5,6 +5,7 @@ from networkx import DiGraph
 from slp_base import ProviderParser, OTMBuildingError
 from slp_tfplan.slp_tfplan.load.launch_templates_loader import LaunchTemplatesLoader
 from slp_tfplan.slp_tfplan.load.security_groups_loader import SecurityGroupsLoader
+from slp_tfplan.slp_tfplan.load.variables_loader import VariablesLoader
 from slp_tfplan.slp_tfplan.map.mapping import Mapping
 from slp_tfplan.slp_tfplan.map.tfplan_mapper import TFPlanMapper
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanOTM
@@ -32,6 +33,7 @@ class TFPlanParser(ProviderParser):
             components=[],
             security_groups=[],
             launch_templates=[],
+            variables=[],
             dataflows=[])
 
     def build_otm(self):
@@ -59,6 +61,7 @@ class TFPlanParser(ProviderParser):
     def __load_auxiliary_resources(self):
         SecurityGroupsLoader(self.otm, self.tfplan).load()
         LaunchTemplatesLoader(self.otm, self.tfplan).load()
+        VariablesLoader(self.otm, self.tfplan).load()
 
     def __calculate_parents(self):
         ParentCalculator(self.otm, self.tfgraph).transform()

@@ -7,6 +7,7 @@ from networkx import DiGraph
 
 from otm.otm.entity.dataflow import Dataflow
 from otm.otm.entity.parent_type import ParentType
+from sl_util.sl_util.str_utils import deterministic_uuid
 from slp_tfplan.slp_tfplan.graph.relationships_extractor import RelationshipsExtractor
 from slp_tfplan.slp_tfplan.map.mapping import AttackSurface
 from slp_tfplan.slp_tfplan.map.tfplan_mapper import trustzone_to_otm
@@ -15,7 +16,7 @@ from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanOTM, TFPlanCompon
 from slp_tfplan.slp_tfplan.relationship.component_relationship_calculator import ComponentRelationshipCalculator, \
     ComponentRelationshipType
 from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_creation_strategy import create_dataflow
-from slp_tfplan.slp_tfplan.util.tfplan import find_component_by_id
+from slp_tfplan.slp_tfplan.util.tfplan import find_component_by_id, find_variable_name_by_value
 
 
 def __is_ip_with_mask(ip: str) -> bool:
@@ -52,10 +53,10 @@ def _is_valid_ip(ip: str) -> bool:
     return __is_ip_with_mask(ip) and __is_public_ip(ip) and not __is_broadcast_ip(ip)
 
 
-def _create_client(cidr_block: str, attack_surface_mapping: AttackSurface) -> TFPlanComponent:
+def _create_client(client_id: str, client_name: str, attack_surface_mapping: AttackSurface) -> TFPlanComponent:
     return TFPlanComponent(
-        component_id=cidr_block,
-        name=cidr_block,
+        component_id=client_id,
+        name=client_name,
         component_type=attack_surface_mapping.client,
         parent=attack_surface_mapping.trustzone.type,
         parent_type=ParentType.TRUST_ZONE,
@@ -63,11 +64,28 @@ def _create_client(cidr_block: str, attack_surface_mapping: AttackSurface) -> TF
     )
 
 
-def _generate_security_group_cidr_tags(security_group_cidr: SecurityGroupCIDR) -> List[str]:
+def _generate_protocol_tags(security_group_cidr: SecurityGroupCIDR) -> List[str]:
     protocol = "all" if security_group_cidr.protocol == "-1" else security_group_cidr.protocol
     from_port = "N/A" if security_group_cidr.from_port is None else security_group_cidr.from_port
     to_port = "N/A" if security_group_cidr.to_port is None else security_group_cidr.to_port
-    return ["protocol: {}, from_port: {}, to_port: {}".format(protocol, from_port, to_port)]
+    return ["protocol: {}".format(protocol), "from_port: {} to_port: {}".format(from_port, to_port)]
+
+
+def _generate_cidr_blocks_tags(security_group_cidr: SecurityGroupCIDR) -> List[str]:
+    return ["ip: {}".format(ip) for ip in security_group_cidr.cidr_blocks if _is_valid_ip(ip)]
+
+
+def _generate_security_group_cidr_tags(security_group_cidr: SecurityGroupCIDR) -> List[str]:
+    result = []
+    result.extend(_generate_protocol_tags(security_group_cidr))
+    result.extend(_generate_cidr_blocks_tags(security_group_cidr))
+
+    return result
+
+
+def _generate_client_id(security_group: SecurityGroupCIDR):
+    valids_ips = ", ".join(security_group.cidr_blocks)
+    return deterministic_uuid(valids_ips)
 
 
 class DataflowDirection(Enum):
@@ -114,7 +132,6 @@ class AttackSurfaceCalculator:
             sg = self.__get_security_group_by_id(sg_id)
             components = components_in_sgs[sg_id]
             self.__generate_dataflows(sg.ingress_cidr, components, DataflowDirection.INGRESS)
-            # self.__generate_dataflows(sg.egress_cidr, components, DataflowDirection.EGRESS)
 
     def __get_security_group_by_id(self, sg_id: str):
         return next(filter(lambda e: e.id == sg_id, self.otm.security_groups))
@@ -122,20 +139,41 @@ class AttackSurfaceCalculator:
     def __generate_dataflows(self, security_group_cidr: List[SecurityGroupCIDR], components: List[TFPlanComponent],
                              direction: DataflowDirection):
         for security_group in security_group_cidr or []:
-            for ip in security_group.cidr_blocks:
-                if _is_valid_ip(ip):
-                    client_component = self.__generate_client(ip)
-                    for component in components:
-                        flow = (client_component, component) if direction == DataflowDirection.INGRESS \
-                            else (component, client_component)
-                        self.dataflows.append(create_dataflow(
-                            flow[0], flow[1], name=security_group.description,
-                            tags=_generate_security_group_cidr_tags(security_group)))
+            self.__generate_dataflow_by_cidr_block(components, direction, security_group)
 
-    def __generate_client(self, ip: str):
-        if not self.__exists_ip_as_client(ip):
-            self.clients.append(_create_client(ip, self.attack_surface_mapping))
-        return self.__get_ip_as_client(ip)
+    def __generate_dataflow_by_cidr_block(self, components, direction, security_group: SecurityGroupCIDR):
+        no_valids_ips = not any(filter(lambda ip: _is_valid_ip(ip), security_group.cidr_blocks))
+        if no_valids_ips:
+            return
+
+        client_component = self.__generate_client(security_group)
+        for component in components:
+            flow = (client_component, component) if direction == DataflowDirection.INGRESS \
+                else (component, client_component)
+            self.dataflows.append(create_dataflow(
+                flow[0], flow[1], name=security_group.description,
+                tags=_generate_security_group_cidr_tags(security_group)))
+
+    def __generate_client_name(self, security_group: SecurityGroupCIDR):
+        var_name = find_variable_name_by_value(self.otm.variables, security_group.cidr_blocks)
+        if var_name:
+            return var_name
+
+        valids_ips = list(filter(lambda ip: _is_valid_ip(ip), security_group.cidr_blocks))
+        if len(valids_ips) == 1:
+            return valids_ips[0]
+
+        if security_group.description:
+            return security_group.description
+
+        return self.attack_surface_mapping.client
+
+    def __generate_client(self, security_group: SecurityGroupCIDR):
+        client_id = _generate_client_id(security_group)
+        client_name = self.__generate_client_name(security_group)
+        if not self.__exists_ip_as_client(client_id):
+            self.clients.append(_create_client(client_id, client_name, self.attack_surface_mapping))
+        return self.__get_ip_as_client(client_id)
 
     def __get_ip_as_client(self, ip: str) -> TFPlanComponent:
         return next(filter(lambda c: c.id == ip, self.clients))

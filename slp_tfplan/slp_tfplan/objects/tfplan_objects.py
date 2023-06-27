@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict, Union
 
 from otm.otm.entity.component import Component
 from otm.otm.entity.dataflow import Dataflow
@@ -95,6 +95,7 @@ class TFPlanOTM(OTM):
                  components: List[TFPlanComponent],
                  security_groups: List[SecurityGroup],
                  launch_templates: List[LaunchTemplate],
+                 variables: Dict[str, Union[list, str]],
                  dataflows: List[Dataflow],
                  default_trustzone: Trustzone = None):
         super().__init__(project_name, project_id, IacType.TERRAFORM)
@@ -103,6 +104,7 @@ class TFPlanOTM(OTM):
         self.components = components or []
         self.security_groups = security_groups or []
         self.launch_templates = launch_templates or []
+        self.variables = variables or {}
         self.dataflows = dataflows or []
 
     @property

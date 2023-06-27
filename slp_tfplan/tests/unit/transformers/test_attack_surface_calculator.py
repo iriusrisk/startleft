@@ -28,6 +28,12 @@ attack_surface_mapping = MagicMock(
     client='client',
     trustzone=internet_trustzone)
 
+variables = {
+    "whitelist_cidrs": ['7.235.083.057/32', '7.235.083.058/32']
+}
+
+INTERNET_CLIENT_ID = 'b0a3f48b-e876-4903-9931-31a1c7e29c17'
+
 
 @pytest.fixture
 def mock_components_in_sgs(mocker, mocked_components_in_sgs: Dict[str, List[TFPlanComponent]]):
@@ -95,23 +101,23 @@ class TestAttackSurfaceCalculator:
         assert len(otm.trustzones) == 1
 
     @pytest.mark.usefixtures('mock_components_in_sgs')
-    @pytest.mark.parametrize('ingress_cidr, mocked_components_in_sgs', [
+    @pytest.mark.parametrize('ingress_cidr, mocked_components_in_sgs, expected_id', [
         pytest.param(build_security_group_cidr_mock(
             ['0.0.0.0/0'], description='Ingress HTTP', from_port=80, to_port=80, protocol='tcp'),
-            {'SG1': [_component_a]}, id='Ingress HTTP to component_a'),
+            {'SG1': [_component_a]}, INTERNET_CLIENT_ID, id='Ingress HTTP to component_a'),
         pytest.param(build_security_group_cidr_mock(
             ['0.0.0.0/0'], description='Ingress HTTPS', from_port=443, to_port=443, protocol='tcp'),
-            {'SG1': [_component_a]}, id='Ingress HTTPS to component_a'),
+            {'SG1': [_component_a]}, INTERNET_CLIENT_ID, id='Ingress HTTPS to component_a'),
         pytest.param(build_security_group_cidr_mock(
             ['0.0.0.0/0', '192.168.0.0/22'], description='Ingress All', from_port=0, to_port=0, protocol='-1'),
-            {'SG1': [_component_a]}, id='Ingress All to component_a'),
+            {'SG1': [_component_a]}, '61aaee85-2f59-48b3-b4da-f8ad31b60e15', id='Ingress All to component_a'),
         pytest.param(build_security_group_cidr_mock(
             ['172.31.0.0/16', '0.0.0.0/0'], description='Ingress All', from_port=0, to_port=0, protocol='-1'),
-            {'SG1': [_component_a]}, id='Ingress All to component_a'),
+            {'SG1': [_component_a]}, '0876b634-5d5f-4554-bcd1-5ff6d3bcb9e0', id='Ingress All to component_a'),
     ])
     def test_ingress_dataflows(self,
                                ingress_cidr: SecurityGroupCIDR,
-                               mocked_components_in_sgs: Dict[str, List[TFPlanComponent]]):
+                               mocked_components_in_sgs: Dict[str, List[TFPlanComponent]], expected_id: str):
         # GIVEN an Ingress HTTP Security Group from Internet to component_a
         security_groups = [build_security_group_mock('SG1', ingress_cidr=[ingress_cidr])]
 
@@ -135,7 +141,7 @@ class TestAttackSurfaceCalculator:
         assert otm.components[0].parent == 'default-trustzone-id'
 
         # THE second component is the 'client' in the Internet trustzone
-        assert otm.components[1].id == '0.0.0.0/0'
+        assert otm.components[1].id == expected_id
         assert otm.components[1].type == 'client'
         assert otm.components[1].parent == 'Internet'
 
@@ -159,10 +165,9 @@ class TestAttackSurfaceCalculator:
     @pytest.mark.parametrize('ingress_cidr_ip, mocked_components_in_sgs', [
         pytest.param('10.0.0.0/0', {'SG1': [_component_a]}, id='Private IP address commonly used in local networks'),
         pytest.param('172.16.0.0/0', {'SG1': [_component_a]}, id='Private IP address in the "Class B" network range'),
-        pytest.param('172.31.0.0/0', {'SG1': [_component_a]}, id='Private IP address in the "Class B" network range (2)'),
+        pytest.param('172.31.0.0/0', {'SG1': [_component_a]}, id='Private IP address in the "Class B" network range'),
         pytest.param('192.168.0.0/0', {'SG1': [_component_a]}, id='Private IP address in the "Class C" network range'),
         pytest.param('169.254.0.0/0', {'SG1': [_component_a]}, id='Link-local IP address'),
-        pytest.param('var.private_ip', {'SG1': [_component_a]}, id='Private IP address variable'),
         pytest.param('255.255.255.255/32', {'SG1': [_component_a]}, id='Broadcast IP address'),
     ])
     def test_ip_not_allowed(self, ingress_cidr_ip: str, mocked_components_in_sgs: Dict[str, List[TFPlanComponent]]):
@@ -227,26 +232,81 @@ class TestAttackSurfaceCalculator:
         assert len(otm.dataflows) == 2
 
         # AND it generates a dataflow from the Internet to component_a
-        assert otm.dataflows[0].source_node == '0.0.0.0/0'
+        assert otm.dataflows[0].source_node == INTERNET_CLIENT_ID
         assert otm.dataflows[0].destination_node == _component_a.id
         assert otm.dataflows[0].name == 'Ingress HTTP'
         assert not otm.dataflows[0].bidirectional
 
         # AND it generates a dataflow from the Internet to component_a
-        assert otm.dataflows[1].source_node == '0.0.0.0/0'
+        assert otm.dataflows[1].source_node == INTERNET_CLIENT_ID
         assert otm.dataflows[1].destination_node == _component_a.id
         assert otm.dataflows[1].name == 'Ingress HTTPS'
         assert not otm.dataflows[1].bidirectional
 
     @pytest.mark.usefixtures('mock_components_in_sgs')
-    @pytest.mark.parametrize('mocked_components_in_sgs', [
-        pytest.param({'SG1': [_component_a]}, id='with one security group')
+    @pytest.mark.parametrize('cidr_blocks, mocked_components_in_sgs, expected_client_id, expected_client_name', [
+        pytest.param(
+            ['7.235.083.057/32', '7.235.083.058/32'], {'SG1': [_component_a]},
+            '472c31fc-a182-4bdf-9af2-d11609a51b1d', 'whitelist_cidrs',
+            id='exists cidr in whitelist_cidrs'),
+        pytest.param(
+            ['7.235.083.058/32', '7.235.083.057/32'], {'SG1': [_component_a]},
+            '2a285426-0900-4b51-8fc0-9a38cd1ef977', 'whitelist_cidrs',
+            id='exists cidr in whitelist_cidrs (reverse)'),
+        pytest.param(
+            ['7.0.0.0/32', '7.0.0.1/32'], {'SG1': [_component_a]},
+            'c24b1dc8-3967-4c61-9615-2184295fe531', 'Ingress HTTP',
+            id='not exists cidr in whitelist_cidrs'),
     ])
-    def test_security_group_cidr_multiple_ips(self, mock_components_in_sgs: Dict[str, List[TFPlanComponent]]):
+    def test_security_group_cidr_multiple_ips(self,
+                                              cidr_blocks: List[str],
+                                              mocked_components_in_sgs: Dict[str, List[TFPlanComponent]],
+                                              expected_client_id: str, expected_client_name: str):
         # GIVEN an Ingress HTTP Security Group from a multiple ips to component_a
         security_groups = [build_security_group_mock('SG1', ingress_cidr=[build_security_group_cidr_mock(
-            ['7.235.083.057/32', '7.235.083.058/32'],
-            description='Ingress HTTP', from_port=80, to_port=80, protocol='tcp')])]
+            cidr_blocks, description='Ingress HTTP', from_port=80, to_port=80, protocol='tcp')])]
+
+        otm = build_mocked_otm([_component_a], security_groups=security_groups, variables=variables)
+
+        # AND an attack surface calculator
+        attack_surface_calculator = AttackSurfaceCalculator(
+            otm,
+            MagicMock(),
+            attack_surface_mapping)
+
+        # WHEN the attack surface calculator is transformed
+        attack_surface_calculator.transform()
+
+        # THEN the attack surface calculator calculates the dataflows
+        # AND the otm has 2 components
+        assert len(otm.components) == 2
+
+        # AND the client_id and name is the expected
+        assert otm.components[1].id == expected_client_id
+        assert otm.components[1].name == expected_client_name
+
+        # AND the otm has 2 trustzones
+        assert len(otm.trustzones) == 2
+
+        # AND it generates 2 dataflows
+        assert len(otm.dataflows) == 1
+
+        # AND it generates a dataflow to component_a
+        assert otm.dataflows[0].source_node == expected_client_id
+        assert otm.dataflows[0].destination_node == _component_a.id
+        assert otm.dataflows[0].name == 'Ingress HTTP'
+        assert not otm.dataflows[0].bidirectional
+
+    @pytest.mark.usefixtures('mock_components_in_sgs')
+    @pytest.mark.parametrize('mocked_components_in_sgs', [
+        pytest.param({'SG1': [_component_a]}, id='name is attack surface client type')
+    ])
+    def test_security_group_without_description_and_multiple_cidrs(self,
+                                                                   mocked_components_in_sgs: Dict[str, List[TFPlanComponent]]):
+        # GIVEN an Ingress HTTP Security Group from Internet to component_a
+        security_groups = [build_security_group_mock('SG1', ingress_cidr=[
+            build_security_group_cidr_mock(
+                ['8.15.0.0/16', '8.16.0.0/16'], description=None, from_port=80, to_port=80, protocol='tcp')])]
 
         otm = build_mocked_otm([_component_a], security_groups=security_groups)
 
@@ -260,46 +320,30 @@ class TestAttackSurfaceCalculator:
         attack_surface_calculator.transform()
 
         # THEN the attack surface calculator calculates the dataflows
-        # AND the otm has 2 components
-        assert len(otm.components) == 3
-
-        # AND the otm has 2 trustzones
-        assert len(otm.trustzones) == 2
-
-        # AND it generates 2 dataflows
-        assert len(otm.dataflows) == 2
-
-        # AND it generates a dataflow from the '7.235.083.057/32' to component_a
-        assert otm.dataflows[0].source_node == '7.235.083.057/32'
-        assert otm.dataflows[0].destination_node == _component_a.id
-        assert otm.dataflows[0].name == 'Ingress HTTP'
-        assert not otm.dataflows[0].bidirectional
-
-        # AND it generates a dataflow from the '7.235.083.058/32' to component_a
-        assert otm.dataflows[1].source_node == '7.235.083.058/32'
-        assert otm.dataflows[1].destination_node == _component_a.id
-        assert otm.dataflows[1].name == 'Ingress HTTP'
-        assert not otm.dataflows[1].bidirectional
+        # AND the client has the following name
+        assert otm.components[1].name == attack_surface_mapping.client
 
     @pytest.mark.usefixtures('mock_components_in_sgs')
-    @pytest.mark.parametrize('ingress_cidr, mocked_components_in_sgs, expected_tag', [
+    @pytest.mark.parametrize('ingress_cidr, mocked_components_in_sgs, expected_tags', [
         pytest.param(build_security_group_cidr_mock(
             ['0.0.0.0/0'], description='Ingress HTTP', from_port=80, to_port=80, protocol='tcp'),
-            {'SG1': [_component_a]}, "protocol: tcp, from_port: 80, to_port: 80",
+            {'SG1': [_component_a]}, ["protocol: tcp", "from_port: 80 to_port: 80", 'ip: 0.0.0.0/0'],
             id='Ingress HTTP to component_a'),
         pytest.param(build_security_group_cidr_mock(
             ['0.0.0.0/0', '192.168.0.0/22'], description='Ingress All', from_port=0, to_port=10, protocol='-1'),
-            {'SG1': [_component_a]}, "protocol: all, from_port: 0, to_port: 10",
+            {'SG1': [_component_a]},
+            ["protocol: all", "from_port: 0 to_port: 10", "ip: 0.0.0.0/0"],
             id='Ingress All to component_a'),
         pytest.param(build_security_group_cidr_mock(
-            ['172.31.0.0/16', '0.0.0.0/0'], description='Ingress All', protocol='-1'),
-            {'SG1': [_component_a]}, "protocol: all, from_port: N/A, to_port: N/A",
+            ['8.31.0.0/16', '0.0.0.0/0'], description='Ingress All', protocol='-1'),
+            {'SG1': [_component_a]},
+            ["protocol: all", "from_port: N/A to_port: N/A", "ip: 8.31.0.0/16", "ip: 0.0.0.0/0"],
             id='Ingress All to component_a without defined ports'),
     ])
     def test_generate_security_group_cidr_tags(self,
                                                ingress_cidr: SecurityGroupCIDR,
-                                               mock_components_in_sgs: Dict[str, List[TFPlanComponent]],
-                                               expected_tag: str):
+                                               mocked_components_in_sgs: Dict[str, List[TFPlanComponent]],
+                                               expected_tags: List[str]):
         # GIVEN an Ingress HTTP Security Group from Internet to component_a
         security_groups = [build_security_group_mock('SG1', ingress_cidr=[ingress_cidr])]
 
@@ -316,7 +360,8 @@ class TestAttackSurfaceCalculator:
 
         # THEN the attack surface calculator calculates the dataflows
         # AND the dataflow has the expected tag
-        assert otm.dataflows[0].tags[0] == expected_tag
+        for i, tag in enumerate(expected_tags):
+            assert otm.dataflows[0].tags[i] == tag
 
     @pytest.mark.usefixtures('mock_components_in_sgs')
     @pytest.mark.usefixtures('mock_component_relationship_calculator')

@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import List, Dict, Tuple, Type
+from typing import List, Dict, Tuple, Type, Union
 from unittest.mock import Mock
 
 from dependency_injector import providers
@@ -29,11 +29,13 @@ MAX_TFGRAPH_FILE_SIZE = 2 * 1024 * 1024  # 2MB
 def build_mocked_otm(components: List[TFPlanComponent],
                      dataflows: List[Dataflow] = None,
                      security_groups: List[SecurityGroup] = None,
+                     variables: Dict[str, Union[list, str]] = None,
                      launch_templates: List[LaunchTemplate] = None) -> {}:
     otm = build_base_otm(DEFAULT_TRUSTZONE)
     otm.components = components or []
     otm.security_groups = security_groups or []
     otm.launch_templates = launch_templates or []
+    otm.variables = variables or {}
     otm.dataflows = dataflows or []
     return otm
 
@@ -46,6 +48,7 @@ def build_base_otm(default_trustzone: Trustzone = None):
         security_groups=[],
         launch_templates=[],
         dataflows=[],
+        variables={},
         default_trustzone=default_trustzone
     )
 
