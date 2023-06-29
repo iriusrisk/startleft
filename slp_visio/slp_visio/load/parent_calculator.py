@@ -37,7 +37,8 @@ def select_parent(child: DiagramComponent, potential_parents: [DiagramComponent]
 
 def is_contained(parent_candidate: DiagramComponent, child_candidate: DiagramComponent) -> bool:
     return parent_candidate.id != child_candidate.id and \
-           parent_candidate.representation.contains(child_candidate.representation)
+           parent_candidate.representation.contains(child_candidate.representation) and \
+            parent_candidate.representation != child_candidate.representation
 
 
 class ParentCalculator:
