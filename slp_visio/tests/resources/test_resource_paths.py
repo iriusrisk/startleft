@@ -46,6 +46,8 @@ visio_origin_target_trustzone = f'{path}/visio/origin-target-trustzone.vsdx'
 visio_origin_trustzone = f'{path}/visio/origin-trustzone.vsdx'
 visio_target_trustzone = f'{path}/visio/target-trustzone.vsdx'
 master_unique_id = f'{path}/visio/master_unique_id.vsdx'
+visio_shape_group = f'{path}/visio/group_of_shapes.vsdx'
+lucid_two_children_same_relative_coordinates = f'{path}/lucid/two_children_same_relative_coordinates.vsdx'
 
 # otm
 expected_aws_shapes = f'{path}/otm/expected_aws_shapes.otm'

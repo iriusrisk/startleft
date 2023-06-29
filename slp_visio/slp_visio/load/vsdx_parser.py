@@ -79,6 +79,8 @@ class VsdxParser:
             self._add_boundary_component(shape)
         elif ComponentIdentifier.is_component(shape):
             self._add_simple_component(shape)
+        elif self._is_group(shape):
+            self._load_shapes(shape.child_shapes)
 
     def _add_simple_component(self, component_shape: Shape):
         self._visio_components.append(
@@ -98,3 +100,7 @@ class VsdxParser:
     def _calculate_parents(self):
         for component in self._visio_components:
             component.parent = ParentCalculator(component).calculate_parent(self._visio_components)
+
+    @staticmethod
+    def _is_group(shape : Shape):
+        return shape.shape_type == 'Group'

@@ -6,8 +6,6 @@ from vsdx import Shape
 
 def get_shape_text(shape: Shape) -> str:
     result = shape.text
-    if not result:
-        result = get_child_shapes_text(shape.child_shapes)
 
     if not result:
         result = get_master_shape_text(shape)
@@ -20,8 +18,6 @@ def get_master_shape_text(shape: Shape) -> str:
         return ""
 
     result = shape.master_shape.text
-    if not result:
-        result = get_child_shapes_text(shape.master_shape.child_shapes)
 
     return (result or "").strip()
 
@@ -32,12 +28,6 @@ def get_unique_id_text(shape: Shape) -> str:
 
     unique_id = shape.master_page.master_unique_id.strip()
     return normalize_unique_id(unique_id)
-
-
-def get_child_shapes_text(shapes: [Shape]) -> str:
-    if not shapes:
-        return ""
-    return "".join(shape.text for shape in shapes)
 
 
 def get_x_center(shape: Shape) -> float:
