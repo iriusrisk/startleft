@@ -6,7 +6,6 @@ from otm.otm.entity.trustzone import Trustzone
 from sl_util.sl_util.str_utils import deterministic_uuid
 from slp_base import MappingLoader
 from slp_base.slp_base.mapping_file_loader import MappingFileLoader
-from slp_visio.slp_visio.util.visio import normalize_unique_id
 
 PUBLIC_CLOUD_NAME = 'Public Cloud'
 PUBLIC_CLOUD = Trustzone(trustzone_id=deterministic_uuid(PUBLIC_CLOUD_NAME), name=PUBLIC_CLOUD_NAME,
@@ -35,12 +34,8 @@ class VisioMappingFileLoader(MappingLoader):
 
     def load(self):
         self.default_otm_trustzone = self.__load_default_otm_trustzone()
-        self.trustzone_mappings = self.__load_trustzone_mappings()
-        self.component_mappings = self.__load_component_mappings()
-
-    def get_all_labels(self) -> [str]:
-        component_and_tz_mappings = self.mappings['components'] + self.mappings['trustzones']
-        return [c['label'] for c in component_and_tz_mappings]
+        self.trustzone_mappings = self.mappings['trustzones']
+        self.component_mappings = self.mappings['components']
 
     def __load_default_otm_trustzone(self):
         trustzone_mappings_list = jmespath.search("trustzones", self.mappings)
@@ -52,19 +47,6 @@ class VisioMappingFileLoader(MappingLoader):
                              attributes={"default": True})
         else:
             return PUBLIC_CLOUD
-
-    def __load_trustzone_mappings(self):
-        trustzone_mappings_list = jmespath.search("trustzones", self.mappings)
-        return dict(zip([tz['label'] for tz in trustzone_mappings_list], trustzone_mappings_list))
-
-    def __load_component_mappings(self):
-        component_mappings_list = jmespath.search("components", self.mappings)
-        return dict(zip([self.__get_component_identifier(cp) for cp in component_mappings_list],
-                        component_mappings_list))
-
-    def __get_component_identifier(self, component: dict) -> str:
-        identifier = component.get('id', component['label'])
-        return normalize_unique_id(identifier)
 
     def get_trustzone_mappings(self):
         return self.trustzone_mappings
