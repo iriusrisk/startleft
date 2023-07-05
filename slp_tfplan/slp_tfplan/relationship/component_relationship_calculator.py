@@ -2,7 +2,6 @@ from enum import Enum
 
 from otm.otm.entity.parent_type import ParentType
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TFPlanOTM
-from slp_tfplan.slp_tfplan.util.tfplan import find_component_by_id
 
 
 class ComponentRelationshipType(Enum):
@@ -58,14 +57,14 @@ class ComponentRelationshipCalculator:
     def __is_ancestor(self, component: TFPlanComponent, ancestor: TFPlanComponent) -> bool:
         return component.parent_type == ParentType.COMPONENT and \
                (component.parent == ancestor.id
-                or self.__is_ancestor(find_component_by_id(component.parent, self.tfplan_otm.components), ancestor))
+                or self.__is_ancestor(self.tfplan_otm.get_component_by_id(component.parent), ancestor))
 
     def __is_ancestor_of_any_clone(self, component: TFPlanComponent, ancestor: TFPlanComponent) -> bool:
         if not component.clones_ids:
             return False
 
         for clone_id in component.clones_ids:
-            if self.__is_ancestor(find_component_by_id(clone_id, self.tfplan_otm.components), ancestor):
+            if self.__is_ancestor(self.tfplan_otm.get_component_by_id(clone_id), ancestor):
                 return True
 
         return False

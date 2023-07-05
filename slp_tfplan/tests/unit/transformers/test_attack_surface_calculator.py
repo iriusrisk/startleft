@@ -67,19 +67,21 @@ class TestAttackSurfaceCalculator:
             MagicMock(),
             MagicMock(),
             attack_surface)
-        attack_surface_calculator.calculate_clients_and_dataflows = MagicMock()
+        attack_surface_calculator.add_clients_and_dataflows = MagicMock()
 
         # WHEN the attack surface calculator is transformed
         attack_surface_calculator.transform()
 
         # THEN the attack surface calculator does not calculate clients and dataflows
-        attack_surface_calculator.calculate_clients_and_dataflows.assert_not_called()
+        attack_surface_calculator.add_clients_and_dataflows.assert_not_called()
 
     @pytest.mark.usefixtures('mock_components_in_sgs')
     @pytest.mark.parametrize('mocked_components_in_sgs', [
         pytest.param({'SG1': [_component_a]}, id='SG1 related to component_a'),
     ])
-    def test_no_security_group_cidr_info(self, mock_components_in_sgs: Dict[str, List[TFPlanComponent]]):
+    def test_no_security_group_cidr_info(self,
+                                         mock_components_in_sgs: Dict[str, List[TFPlanComponent]],
+                                         mocked_components_in_sgs):
 
         # GIVEN a Security Group without CIDR info
         security_groups = [build_security_group_mock('SG1')]
@@ -301,8 +303,7 @@ class TestAttackSurfaceCalculator:
     @pytest.mark.parametrize('mocked_components_in_sgs', [
         pytest.param({'SG1': [_component_a]}, id='name is attack surface client type')
     ])
-    def test_security_group_without_description_and_multiple_cidrs(self,
-                                                                   mocked_components_in_sgs: Dict[str, List[TFPlanComponent]]):
+    def test_security_group_without_description_and_multiple_cidrs(self, mocked_components_in_sgs: Dict[str, List[TFPlanComponent]]):
         # GIVEN an Ingress HTTP Security Group from Internet to component_a
         security_groups = [build_security_group_mock('SG1', ingress_cidr=[
             build_security_group_cidr_mock(
@@ -368,7 +369,9 @@ class TestAttackSurfaceCalculator:
     @pytest.mark.parametrize('mocked_components_in_sgs', [
         pytest.param({'SG1': [_component_a, _component_b]}, id='to the same component'),
     ])
-    def test_remove_parent_dataflows(self, mock_components_in_sgs: Dict[str, List[TFPlanComponent]]):
+    def test_remove_parent_dataflows(self,
+                                     mock_components_in_sgs: Dict[str, List[TFPlanComponent]],
+                                     mocked_components_in_sgs):
         # GIVEN an Ingress HTTP Security Group from Internet to component_a and component_b
         security_groups = [build_security_group_mock('SG1', ingress_cidr=[build_security_group_cidr_mock(
                 ['0.0.0.0/0'], description='Ingress HTTP', from_port=80, to_port=80, protocol='tcp')])]

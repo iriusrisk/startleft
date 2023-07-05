@@ -112,3 +112,15 @@ class TFPlanOTM(OTM):
         return [component.id for component in self.components] + \
             [sg.id for sg in self.security_groups] + \
             [lt.id for lt in self.launch_templates]
+
+    def get_security_group_by_id(self, sg_id: str) -> SecurityGroup:
+        return next(filter(lambda e: e.id == sg_id, self.security_groups))
+
+    def get_component_by_id(self, c_id: str) -> TFPlanComponent:
+        return next(filter(lambda c: c.id == c_id, self.components))
+
+    def exists_component_with_parent(self, parent: str) -> bool:
+        return any(filter(lambda c: c.parent == parent, self.components))
+
+    def exists_trustzone_with_type(self, trustzone_type: str) -> bool:
+        return any(filter(lambda t: t.type == trustzone_type, self.trustzones))
