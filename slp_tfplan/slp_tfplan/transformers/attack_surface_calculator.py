@@ -1,4 +1,3 @@
-from enum import Enum
 from typing import List, Union, Dict
 
 from dependency_injector.wiring import inject
@@ -13,7 +12,8 @@ from slp_tfplan.slp_tfplan.graph.relationships_extractor import RelationshipsExt
 from slp_tfplan.slp_tfplan.map.mapping import AttackSurface
 from slp_tfplan.slp_tfplan.map.tfplan_mapper import trustzone_to_otm
 from slp_tfplan.slp_tfplan.matcher import ComponentsAndSGsMatcher
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanOTM, TFPlanComponent, SecurityGroupCIDR
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanOTM, TFPlanComponent, SecurityGroupCIDR, \
+    SecurityGroupCIDRType
 from slp_tfplan.slp_tfplan.relationship.component_relationship_calculator import ComponentRelationshipCalculator, \
     ComponentRelationshipType
 from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_creation_strategy import create_dataflow
@@ -80,11 +80,6 @@ def _generate_security_group_cidr_tags(security_group_cidr: SecurityGroupCIDR) -
     return result
 
 
-class DataflowDirection(Enum):
-    INGRESS = 'ingress'
-    EGRESS = 'egress'
-
-
 class AttackSurfaceCalculator:
     """
     Calculate the attack surface of the infrastructure
@@ -123,25 +118,20 @@ class AttackSurfaceCalculator:
         components_in_sgs = self._components_and_sgs_matcher.match()
         for sg_id in components_in_sgs:
             self.__generate_dataflows(security_group_cidrs=self.otm.get_security_group_by_id(sg_id).ingress_cidr,
-                                      components=components_in_sgs[sg_id],
-                                      direction=DataflowDirection.INGRESS)
+                                      components=components_in_sgs[sg_id])
 
         self.otm.components.extend(self._clients)
         self.otm.dataflows.extend(filter(lambda df: not self.__is_parent_dataflow(df), self._dataflows))
 
-    def __generate_dataflows(self, security_group_cidrs: List[SecurityGroupCIDR], components: List[TFPlanComponent],
-                             direction: DataflowDirection):
-        for security_group in security_group_cidrs or []:
-            if any(filter(_is_valid_cidr, security_group.cidr_blocks)):
-                self.__generate_dataflow_by_cidr_block(components, direction, security_group)
+    def __generate_dataflows(self, security_group_cidrs: List[SecurityGroupCIDR], components: List[TFPlanComponent]):
+        for security_group_cidr in security_group_cidrs or []:
+            if any(filter(_is_valid_cidr, security_group_cidr.cidr_blocks)):
+                self.__generate_dataflow_by_cidr_block(components, security_group_cidr)
 
-    def __generate_dataflow_by_cidr_block(self,
-                                          components: List[TFPlanComponent],
-                                          direction: DataflowDirection,
-                                          security_group: SecurityGroupCIDR):
+    def __generate_dataflow_by_cidr_block(self, components: List[TFPlanComponent], security_group: SecurityGroupCIDR):
         client_component = self.__generate_client(security_group)
         for component in components:
-            flow = (client_component, component) if direction == DataflowDirection.INGRESS \
+            flow = (client_component, component) if security_group.type == SecurityGroupCIDRType.INGRESS \
                 else (component, client_component)
             self._dataflows.append(create_dataflow(*flow,
                                                    name=security_group.description,

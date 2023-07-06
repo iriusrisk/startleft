@@ -9,7 +9,7 @@ from otm.otm.entity.dataflow import Dataflow
 from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.trustzone import Trustzone
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TFPlanOTM, SecurityGroup, \
-    LaunchTemplate, SecurityGroupCIDR
+    LaunchTemplate, SecurityGroupCIDR, SecurityGroupCIDRType
 
 DEFAULT_TRUSTZONE = Trustzone(
     trustzone_id='default-trustzone-id',
@@ -106,8 +106,8 @@ def build_security_group_mock(id: str,
 
 
 def build_security_group_cidr_mock(cidr_blocks: List[str], description: str = None, from_port: int = None,
-                                    to_port: int = None, protocol: str = None):
-    return Mock(cidr_blocks=cidr_blocks, description=description, from_port=from_port, to_port=to_port,
+                                   to_port: int = None, protocol: str = None):
+    return Mock(cidr_blocks=cidr_blocks, description=description, type=SecurityGroupCIDRType.INGRESS, from_port=from_port, to_port=to_port,
                 protocol=protocol)
 
 

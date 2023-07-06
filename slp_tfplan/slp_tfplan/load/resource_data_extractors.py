@@ -11,7 +11,7 @@ def _get_referenced_resources(references: List[str]):
     valid_references = []
 
     for reference in references:
-        if not reference.split('.')[-1] == 'id':
+        if reference.split('.')[-1] != 'id':
             valid_references.append(reference)
 
     return valid_references

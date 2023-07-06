@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import List, Dict, Union
 
 from otm.otm.entity.component import Component
@@ -56,12 +57,19 @@ class TFPlanComponent(Component):
         return False
 
 
+class SecurityGroupCIDRType(Enum):
+    INGRESS = 'ingress'
+    EGRESS = 'egress'
+
+
 @auto_repr
 class SecurityGroupCIDR:
-    def __init__(self, cidr_blocks: List[str], description: str, from_port: int = None, to_port: int = None,
+    def __init__(self, cidr_blocks: List[str], description: str, type: SecurityGroupCIDRType,
+                 from_port: int = None, to_port: int = None,
                  protocol: str = None):
         self.cidr_blocks = cidr_blocks
         self.description = description
+        self.type = type
         self.from_port = from_port
         self.to_port = to_port
         self.protocol = protocol

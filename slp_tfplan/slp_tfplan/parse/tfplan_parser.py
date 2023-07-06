@@ -33,7 +33,7 @@ class TFPlanParser(ProviderParser):
             components=[],
             security_groups=[],
             launch_templates=[],
-            variables=[],
+            variables={},
             dataflows=[])
 
     def build_otm(self):
