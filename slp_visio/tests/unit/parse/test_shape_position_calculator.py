@@ -12,7 +12,6 @@ class TestShapePositionCalculator:
         (0, 0),
         (0.5, 0.9),
         (0.9, 0.5),
-        (0.9, 0.5),
     ])
     def test_get_absolute_center_no_parent(self, x, y):
         shape = Mock(ID=1111, x=x, y=y, center_x_y=(x, y))
