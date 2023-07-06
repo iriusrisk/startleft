@@ -20,6 +20,7 @@ class TestCreateComponentByShapeText:
         shape = MagicMock(ID=1001, text=shape_text, shape_name=None, master_shape=MagicMock(text=master_shape_text),
                           master_page=MagicMock(master_unique_id='777'), center_x_y=(0.5, 2.5),
                           cells={'Width': MagicMock(value=8), 'Height': MagicMock(value=12)})
+        shape.parent = None
 
         # WHEN the component is created
         strategy = CreateComponentByShapeText()

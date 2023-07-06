@@ -3,6 +3,8 @@ from math import pi
 
 from vsdx import Shape
 
+from slp_visio.slp_visio.parse.shape_position_calculator import ShapePositionCalculator
+
 
 def get_shape_text(shape: Shape) -> str:
     result = shape.text
@@ -28,14 +30,6 @@ def get_unique_id_text(shape: Shape) -> str:
 
     unique_id = shape.master_page.master_unique_id.strip()
     return normalize_unique_id(unique_id)
-
-
-def get_x_center(shape: Shape) -> float:
-    return float(shape.center_x_y[0])
-
-
-def get_y_center(shape: Shape) -> float:
-    return float(shape.center_x_y[1])
 
 
 def get_width(shape: Shape) -> float:
@@ -67,8 +61,8 @@ def normalize_angle(angle: float) -> float:
 
 
 def get_limits(shape: Shape) -> tuple:
-    center_x = get_x_center(shape)
-    center_y = get_y_center(shape)
+    calculator = ShapePositionCalculator(shape)
+    center_x, center_y = calculator.get_absolute_center()
     width = get_width(shape)
     height = get_height(shape)
 

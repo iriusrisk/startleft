@@ -14,6 +14,7 @@ class DiagramPruner:
 
     def run(self):
         self.__remove_unmapped_components()
+
         self.__prune_orphan_connectors()
         self.__restore_parents()
 

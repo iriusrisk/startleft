@@ -7,7 +7,8 @@ from slp_visio.slp_visio.load.objects.diagram_objects import DiagramLimits
 from slp_visio.slp_visio.load.representation.visio_shape_representer import VisioShapeRepresenter
 from slp_visio.slp_visio.load.representation.zone.irregular_zones import irregular_zones
 from slp_visio.slp_visio.load.representation.zone.regular_zones import regular_zones
-from slp_visio.slp_visio.util.visio import get_normalized_angle, get_y_center, get_x_center
+from slp_visio.slp_visio.parse.shape_position_calculator import ShapePositionCalculator
+from slp_visio.slp_visio.util.visio import get_normalized_angle
 
 
 def calc_slope_angle(angle):
@@ -56,7 +57,8 @@ class ZoneComponentRepresenter(VisioShapeRepresenter):
 
     def build_representation(self, shape: Shape) -> Polygon:
         angle = get_normalized_angle(shape)
-        shape_center = (get_x_center(shape), get_y_center(shape))
+        calculator = ShapePositionCalculator(shape)
+        shape_center = calculator.get_absolute_center()
 
         return represent_quadrant(angle, shape_center, self.diagram_limits) or \
             represent_irregular_zone(angle, shape_center, self.diagram_limits)
