@@ -64,8 +64,8 @@ class TestComponentRelationshipCalculator:
     ])
     def test_get_relationship(self, component_from: TFPlanComponent, component_to: TFPlanComponent,
                               component_relationship_type: ComponentRelationshipType):
-        # GIVEN a component relationship calculator
-        # WHEN getting the relationship between two components
+        # GIVEN two components which has or not some relationship between them
+        # WHEN ComponentRelationshipCalculator::get_relationship is called
         # THEN the relationship is as expected
         assert ComponentRelationshipCalculator(otm).get_relationship(component_from, component_to) \
                == component_relationship_type
@@ -79,9 +79,10 @@ class TestComponentRelationshipCalculator:
         pytest.param(ComponentRelationshipType.UNRELATED, False, id='UNRELATED'),
     ])
     def test_are_related(self, relationship: ComponentRelationshipType, are_related: bool):
-        # GIVEN a component relationship calculator
-        # WHEN checking if two components are related
-        # THEN the result is as expected
+        # GIVEN a mock for the ComponentRelationshipCalculator::get_relationship method
         component_relationship_calculator = ComponentRelationshipCalculator(otm)
         component_relationship_calculator.get_relationship = lambda x, y: relationship
+
+        # WHEN ComponentRelationshipCalculator::are_related is called
+        # THEN it returns True when components are not unrelated
         assert component_relationship_calculator.are_related(Mock(), Mock()) == are_related

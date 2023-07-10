@@ -1,5 +1,5 @@
 from typing import List, Dict
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, Mock
 
 import pytest
 
@@ -7,7 +7,8 @@ from slp_tfplan.slp_tfplan.matcher import ComponentsAndSGsMatcher
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import SecurityGroupCIDR, TFPlanComponent
 from slp_tfplan.slp_tfplan.relationship.component_relationship_calculator import ComponentRelationshipCalculator, \
     ComponentRelationshipType
-from slp_tfplan.slp_tfplan.transformers.attack_surface_calculator import AttackSurfaceCalculator
+from slp_tfplan.slp_tfplan.transformers.attack_surface_calculator import AttackSurfaceCalculator, \
+    _generate_client_id, _generate_client_name
 from slp_tfplan.tests.util.builders import build_mocked_component, build_mocked_otm, build_security_group_cidr_mock, \
     build_security_group_mock
 
@@ -24,7 +25,7 @@ _component_b = build_mocked_component({
 internet_trustzone = MagicMock(id='internet-trustzone-id', type='Internet')
 internet_trustzone.name = 'Internet Trustzone'
 
-attack_surface_mapping = MagicMock(
+attack_surface_configuration = MagicMock(
     client='client',
     trustzone=internet_trustzone)
 
@@ -33,6 +34,8 @@ variables = {
 }
 
 INTERNET_CLIENT_ID = 'b0a3f48b-e876-4903-9931-31a1c7e29c17'
+ALL_ALLOWED_CIDR_BLOCK = '0.0.0.0/0'
+ALL_ALLOWED_CIDR_DESCRIPTION = 'All inbound connections allowed'
 
 
 @pytest.fixture
@@ -40,6 +43,18 @@ def mock_components_in_sgs(mocker, mocked_components_in_sgs: Dict[str, List[TFPl
     if mocked_components_in_sgs is None:
         mocked_components_in_sgs = {}
     mocker.patch.object(ComponentsAndSGsMatcher, 'match', return_value=mocked_components_in_sgs)
+
+
+@pytest.fixture
+def mock_get_variable_name_by_value(mocker, mocked_var_name: str):
+    mocker.patch('slp_tfplan.slp_tfplan.transformers.attack_surface_calculator._get_variable_name_by_value',
+                 side_effect=[mocked_var_name])
+
+
+@pytest.fixture
+def mock_is_valid_cidr(mocker, mocked_is_valid_cidr: str):
+    mocker.patch('slp_tfplan.slp_tfplan.transformers.attack_surface_calculator._is_valid_cidr',
+                 side_effect=[mocked_is_valid_cidr])
 
 
 @pytest.fixture
@@ -54,6 +69,49 @@ def mock_component_relationship_calculator(mocker):
         return ComponentRelationshipType.UNRELATED
 
     mocker.patch.object(ComponentRelationshipCalculator, 'get_relationship', side_effect=get_relationship)
+
+
+class TestGenerateClientName:
+    @pytest.mark.usefixtures('mock_get_variable_name_by_value')
+    @pytest.mark.usefixtures('mock_is_valid_cidr')
+    @pytest.mark.parametrize('mocked_var_name,mocked_is_valid_cidr,cidr_description,expected_name', [
+        pytest.param('var_name', False, None, 'var_name', id='by cidr block variable name'),
+        pytest.param(None, True, None, ALL_ALLOWED_CIDR_BLOCK, id='by cidr block'),
+        pytest.param(None, False, ALL_ALLOWED_CIDR_DESCRIPTION, ALL_ALLOWED_CIDR_DESCRIPTION, id='by cidr description'),
+        pytest.param(None, False, None, INTERNET_CLIENT_ID, id='by default attack surface client')
+    ])
+    def test_generate_client_name(self,
+                                  mocked_var_name, mocked_is_valid_cidr, cidr_description: str, expected_name: str):
+        # GIVEN a mocked SecurityGroupCIDR with a list of CIDR blocks
+        security_group_cidr = build_security_group_cidr_mock([ALL_ALLOWED_CIDR_BLOCK], cidr_description)
+
+        # AND an attack surface client
+        attack_surface_client = INTERNET_CLIENT_ID
+
+        # WHEN AttackSurfaceCalculator::generate_client_name is called
+        client_name = _generate_client_name(security_group_cidr, Mock(), attack_surface_client)
+
+        # THEN the Client Name is properly calculated
+        assert client_name == expected_name
+
+
+class TestGenerateClientId:
+    @pytest.mark.parametrize('cidr_blocks,expected_id', [
+        pytest.param(None, None, id='no cidr blocks'),
+        pytest.param([], None, id='empty cidr blocks'),
+        pytest.param(['0.0.0.0/0'], 'b0a3f48b-e876-4903-9931-31a1c7e29c17', id='single cidr block'),
+        pytest.param(['192.168.0.0/24', '10.0.0.0/16'], '723437a1-1c81-4d1f-b93c-13e06389a5b9',
+                     id='multiple cidr block')
+    ])
+    def test_generate_client_id(self, cidr_blocks: List[str], expected_id: str):
+        # GIVEN a mocked SecurityGroupCIDR with a list of CIDR blocks
+        security_group_cidr = build_security_group_cidr_mock(cidr_blocks)
+
+        # WHEN AttackSurfaceCalculator::generate_client_name is called
+        client_id = _generate_client_id(security_group_cidr)
+
+        # THEN the Client ID is a UUID for a comma-concatenated str of the CIDR blocks
+        assert client_id == expected_id
 
 
 class TestAttackSurfaceCalculator:
@@ -82,7 +140,6 @@ class TestAttackSurfaceCalculator:
     def test_no_security_group_cidr_info(self,
                                          mock_components_in_sgs: Dict[str, List[TFPlanComponent]],
                                          mocked_components_in_sgs):
-
         # GIVEN a Security Group without CIDR info
         security_groups = [build_security_group_mock('SG1')]
 
@@ -92,7 +149,7 @@ class TestAttackSurfaceCalculator:
         attack_surface_calculator = AttackSurfaceCalculator(
             otm,
             MagicMock(),
-            attack_surface_mapping)
+            attack_surface_configuration)
 
         # WHEN the attack surface calculator is transformed
         attack_surface_calculator.transform()
@@ -129,7 +186,7 @@ class TestAttackSurfaceCalculator:
         attack_surface_calculator = AttackSurfaceCalculator(
             otm,
             MagicMock(),
-            attack_surface_mapping)
+            attack_surface_configuration)
 
         # WHEN the attack surface calculator is transformed
         attack_surface_calculator.transform()
@@ -183,7 +240,7 @@ class TestAttackSurfaceCalculator:
         attack_surface_calculator = AttackSurfaceCalculator(
             otm,
             MagicMock(),
-            attack_surface_mapping)
+            attack_surface_configuration)
 
         # WHEN the attack surface calculator is transformed
         attack_surface_calculator.transform()
@@ -218,7 +275,7 @@ class TestAttackSurfaceCalculator:
         attack_surface_calculator = AttackSurfaceCalculator(
             otm,
             MagicMock(),
-            attack_surface_mapping)
+            attack_surface_configuration)
 
         # WHEN the attack surface calculator is transformed
         attack_surface_calculator.transform()
@@ -274,7 +331,7 @@ class TestAttackSurfaceCalculator:
         attack_surface_calculator = AttackSurfaceCalculator(
             otm,
             MagicMock(),
-            attack_surface_mapping)
+            attack_surface_configuration)
 
         # WHEN the attack surface calculator is transformed
         attack_surface_calculator.transform()
@@ -303,7 +360,8 @@ class TestAttackSurfaceCalculator:
     @pytest.mark.parametrize('mocked_components_in_sgs', [
         pytest.param({'SG1': [_component_a]}, id='name is attack surface client type')
     ])
-    def test_security_group_without_description_and_multiple_cidrs(self, mocked_components_in_sgs: Dict[str, List[TFPlanComponent]]):
+    def test_security_group_without_description_and_multiple_cidrs(self, mocked_components_in_sgs: Dict[
+        str, List[TFPlanComponent]]):
         # GIVEN an Ingress HTTP Security Group from Internet to component_a
         security_groups = [build_security_group_mock('SG1', ingress_cidr=[
             build_security_group_cidr_mock(
@@ -315,14 +373,14 @@ class TestAttackSurfaceCalculator:
         attack_surface_calculator = AttackSurfaceCalculator(
             otm,
             MagicMock(),
-            attack_surface_mapping)
+            attack_surface_configuration)
 
         # WHEN the attack surface calculator is transformed
         attack_surface_calculator.transform()
 
         # THEN the attack surface calculator calculates the dataflows
         # AND the client has the following name
-        assert otm.components[1].name == attack_surface_mapping.client
+        assert otm.components[1].name == attack_surface_configuration.client
 
     @pytest.mark.usefixtures('mock_components_in_sgs')
     @pytest.mark.parametrize('ingress_cidr, mocked_components_in_sgs, expected_tags', [
@@ -354,7 +412,7 @@ class TestAttackSurfaceCalculator:
         attack_surface_calculator = AttackSurfaceCalculator(
             otm,
             MagicMock(),
-            attack_surface_mapping)
+            attack_surface_configuration)
 
         # WHEN the attack surface calculator is transformed
         attack_surface_calculator.transform()
@@ -374,17 +432,16 @@ class TestAttackSurfaceCalculator:
                                      mocked_components_in_sgs):
         # GIVEN an Ingress HTTP Security Group from Internet to component_a and component_b
         security_groups = [build_security_group_mock('SG1', ingress_cidr=[build_security_group_cidr_mock(
-                ['0.0.0.0/0'], description='Ingress HTTP', from_port=80, to_port=80, protocol='tcp')])]
+            ['0.0.0.0/0'], description='Ingress HTTP', from_port=80, to_port=80, protocol='tcp')])]
 
         # AND component_a is parent of component_b
-
         otm = build_mocked_otm([_component_a, _component_b], security_groups=security_groups)
 
         # AND an attack surface calculator
         attack_surface_calculator = AttackSurfaceCalculator(
             otm,
             MagicMock(),
-            attack_surface_mapping)
+            attack_surface_configuration)
 
         # WHEN the attack surface calculator is transformed
         attack_surface_calculator.transform()

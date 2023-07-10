@@ -41,22 +41,23 @@ def _create_client(client_id: str, variables: Dict, security_group_cidr: Securit
     )
 
 
-def _generate_client_id(security_group: SecurityGroupCIDR):
-    valids_ips = ", ".join(sorted(security_group.cidr_blocks))
-    return deterministic_uuid(valids_ips)
+def _generate_client_id(security_group_cidr: SecurityGroupCIDR):
+    if security_group_cidr.cidr_blocks:
+        valids_ips = ", ".join(sorted(security_group_cidr.cidr_blocks))
+        return deterministic_uuid(valids_ips)
 
 
-def _generate_client_name(security_group: SecurityGroupCIDR, variables: Dict, attack_surface_client: str):
-    cidr_var_name = _get_variable_name_by_value(security_group.cidr_blocks, variables)
+def _generate_client_name(security_group_cidr: SecurityGroupCIDR, variables: Dict, attack_surface_client: str):
+    cidr_var_name = _get_variable_name_by_value(security_group_cidr.cidr_blocks, variables)
     if cidr_var_name:
         return cidr_var_name
 
-    valids_ips = list(filter(_is_valid_cidr, security_group.cidr_blocks))
+    valids_ips = list(filter(_is_valid_cidr, security_group_cidr.cidr_blocks))
     if len(valids_ips) == 1:
         return valids_ips[0]
 
-    if security_group.description:
-        return security_group.description
+    if security_group_cidr.description:
+        return security_group_cidr.description
 
     return attack_surface_client
 
