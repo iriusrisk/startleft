@@ -1,12 +1,15 @@
-from typing import List, Callable, Tuple, Dict
-from unittest.mock import Mock
+from typing import List, Callable, Dict
+from unittest.mock import Mock, MagicMock
 
+from _pytest.fixtures import fixture
 from pytest import mark, param
 
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, SecurityGroup
+from slp_tfplan.slp_tfplan.matcher import ComponentsAndSGsMatcher, SGsMatcher
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent
+from slp_tfplan.slp_tfplan.relationship.component_relationship_calculator import ComponentRelationshipCalculator
 from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_by_security_groups_strategy import \
     DataflowBySecurityGroupsStrategy
-from slp_tfplan.tests.util.builders import build_simple_mocked_component, build_security_group_mock, build_mocked_otm
+from slp_tfplan.tests.util.builders import build_simple_mocked_component
 
 
 def build_mocked_matcher(are_related: Callable) -> Mock:
@@ -15,75 +18,65 @@ def build_mocked_matcher(are_related: Callable) -> Mock:
     return mock
 
 
+@fixture(autouse=True)
+def mock_components_in_sgs(mocker, mocked_components_in_sgs: Dict[str, List[TFPlanComponent]]):
+    if mocked_components_in_sgs is None:
+        mocked_components_in_sgs = {}
+    mocker.patch.object(ComponentsAndSGsMatcher, 'match', return_value=mocked_components_in_sgs)
+
+
+@fixture(autouse=True)
+def mock_sg_in_sgs(mocker, mocked_sg_in_sgs: Dict[str, List[str]]):
+    if mocked_sg_in_sgs is None:
+        mocked_sg_in_sgs = []
+    mocker.patch.object(SGsMatcher, 'match', return_value=mocked_sg_in_sgs)
+
+
+@fixture(autouse=True)
+def mock_components_relationship_calculator(mocker, mocked_are_components_related: bool):
+    if mocked_are_components_related is None:
+        mocked_are_components_related = False
+    mocker.patch.object(ComponentRelationshipCalculator, 'are_related', return_value=mocked_are_components_related)
+
+
+tf_plan_component_a = build_simple_mocked_component('A')
+tf_plan_component_b = build_simple_mocked_component('B')
+
+
 class TestDataflowBySecurityGroupsStrategy:
 
-    @mark.parametrize('components,security_groups', [
-        param([], [], id='no components nor security groups'),
-        param([], [build_security_group_mock('SG')], id='no components'),
-        param([build_simple_mocked_component('A')], [], id='no sgs'),
-        param([build_simple_mocked_component('A'), build_simple_mocked_component('B')],
-              [build_security_group_mock('SG1'), build_security_group_mock('SG2')],
-              id='unrelated_components and SGs')
+    @mark.parametrize('mocked_components_in_sgs,mocked_sg_in_sgs, mocked_are_components_related', [
+        param({}, {}, False, id='no components in security groups'),
+        param({'SG1': [tf_plan_component_a]}, {}, False, id='no sg in security groups'),
+        param({'SG1': [tf_plan_component_a]}, {'SG2': ['SG3']}, False, id='unrelated_components and SGs'),
     ])
-    def test_no_related_components_no_dataflows(self, components: List[TFPlanComponent],
-                                                security_groups: List[SecurityGroup]):
-        # GIVEN a set of components and security groups
-
-        # AND no hierarchical relationships among the components
-        def are_hierarchically_related(*args, **kwargs): return False
-
-        # AND the sgs are not related
-        def are_sgs_related(*args, **kwargs): return False
-
-        # AND the components does not belong to any SG
-        def are_component_in_sg(*args, **kwargs): return False
+    def test_no_related_components_no_dataflows(self, mocked_components_in_sgs: Dict[str, List[TFPlanComponent]],
+                                                mocked_sg_in_sgs: Dict[str, List[str]],
+                                                mocked_are_components_related: bool):
+        # GIVEN a set of unrelated components and security groups
 
         # WHEN DataflowBySecurityGroupsStrategy::create_dataflows is invoked
-        dataflows = DataflowBySecurityGroupsStrategy(
-            components_sg_matcher=build_mocked_matcher(are_component_in_sg),
-            sgs_matcher=build_mocked_matcher(are_sgs_related)).create_dataflows(
-                otm=build_mocked_otm(components=components, security_groups=security_groups),
-                are_hierarchically_related=are_hierarchically_related)
+        dataflows = DataflowBySecurityGroupsStrategy().create_dataflows(otm=MagicMock())
 
         # THEN no DFs are created in the OTM
         assert not dataflows
 
-    @mark.parametrize('related_sgs,components_in_sgs,expected_source,expected_destination,bidirectional', [
-        param([('SG1', 'SG2'), ('SG3', 'SG1')], {'SG1': 'A', 'SG2': 'B'}, 'A', 'B', False, id='SG1 to SG2'),
-        param([('SG2', 'SG1')], {'SG1': 'A', 'SG2': 'B'}, 'B', 'A', False, id='SG2 to SG1')
-    ])
-    def test_two_related_sgs(self, related_sgs: List[Tuple], components_in_sgs: Dict,
+    @mark.parametrize('mocked_components_in_sgs,mocked_sg_in_sgs,mocked_are_components_related,'
+                      'expected_source,expected_destination,bidirectional', [
+                          param({'SG1': [tf_plan_component_a], 'SG2': [tf_plan_component_b]}, {'SG1': ['SG2']}, False,
+                                'A', 'B', False, id='SG1 to SG2'),
+                          param({'SG1': [tf_plan_component_a], 'SG2': [tf_plan_component_b]}, {'SG2': ['SG1']}, False,
+                                'B', 'A', False, id='SG2 to SG1')
+                      ])
+    def test_two_related_sgs(self, mocked_components_in_sgs: Dict[str, List[TFPlanComponent]],
+                             mocked_sg_in_sgs: Dict[str, List[str]], mocked_are_components_related: bool,
                              expected_source: str, expected_destination: str, bidirectional: bool):
-        # GIVEN three related SGs
-        sg1 = SecurityGroup(security_group_id='SG1', name='SG1')
-        sg2 = SecurityGroup(security_group_id='SG2', name='SG2')
-        sg3 = SecurityGroup(security_group_id='SG3', name='SG3')
+        # GIVEN a set of related components and security groups
 
-        # AND two components
-        component_a = build_simple_mocked_component('A')
-        component_b = build_simple_mocked_component('B')
-
-        # AND some relationships between SGs
-        # AND some relationships between SGs and components
-
-        # AND no hierarchical relationships among the components
-        def are_hierarchically_related(*args, **kwargs): return False
-
-        # AND there are some relationships among SGs
-        def are_sgs_related(sg1, sg2, **kwargs):
-            return (sg1.id, sg2.id) in related_sgs
-
-        # AND some components belong to SGs
-        def are_component_in_sg(c, sg, **kwargs):
-            return c.tf_resource_id in components_in_sgs.get(sg.id, [])
+        # AND components are not related
 
         # WHEN DataflowBySecurityGroupsStrategy::create_dataflows is invoked
-        dataflows = DataflowBySecurityGroupsStrategy(
-            components_sg_matcher=build_mocked_matcher(are_component_in_sg),
-            sgs_matcher=build_mocked_matcher(are_sgs_related)).create_dataflows(
-            are_hierarchically_related=are_hierarchically_related,
-            otm=build_mocked_otm(components=[component_a, component_b], security_groups=[sg1, sg2, sg3])
-        )
+        dataflows = DataflowBySecurityGroupsStrategy().create_dataflows(otm=MagicMock())
 
         # THEN one dataflow is created
         assert len(dataflows) == 1
@@ -93,3 +86,23 @@ class TestDataflowBySecurityGroupsStrategy:
         assert dataflow.source_node == expected_source
         assert dataflow.destination_node == expected_destination
         assert dataflow.bidirectional == bidirectional
+
+    @mark.parametrize('mocked_components_in_sgs,mocked_sg_in_sgs,mocked_are_components_related,'
+                      'expected_source,expected_destination,bidirectional', [
+                          param({'SG1': [tf_plan_component_a], 'SG2': [tf_plan_component_b]}, {'SG1': ['SG2']}, True,
+                                'A', 'B', False, id='SG1 to SG2'),
+                          param({'SG1': [tf_plan_component_a], 'SG2': [tf_plan_component_b]}, {'SG2': ['SG1']}, True,
+                                'B', 'A', False, id='SG2 to SG1')
+                      ])
+    def test_are_componentes_related(self, mocked_components_in_sgs: Dict[str, List[TFPlanComponent]],
+                                        mocked_sg_in_sgs: Dict[str, List[str]], mocked_are_components_related: bool,
+                                        expected_source: str, expected_destination: str, bidirectional: bool):
+        # GIVEN a set of related components and security groups
+
+        # AND components are related
+
+        # WHEN DataflowBySecurityGroupsStrategy::create_dataflows is invoked
+        dataflows = DataflowBySecurityGroupsStrategy().create_dataflows(otm=MagicMock())
+
+        # THEN one dataflow is created
+        assert not dataflows

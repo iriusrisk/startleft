@@ -23,7 +23,7 @@ def _match_resource_by_dict(label: dict, resource: str):
     return re.match(label.get('$regex'), resource)
 
 
-def _trustzone_to_otm(trustzone: TrustZoneMapping) -> Trustzone:
+def trustzone_to_otm(trustzone: TrustZoneMapping) -> Trustzone:
     return Trustzone(
         trustzone_id=trustzone.id,
         name=trustzone.name,
@@ -39,7 +39,7 @@ class TFPlanMapper:
         self.resources = tfplan['resource']
         self.mapping = mapping
 
-        self.default_trustzone: Trustzone = _trustzone_to_otm(self.mapping.default_trustzone)
+        self.default_trustzone: Trustzone = trustzone_to_otm(self.mapping.default_trustzone)
 
     def map(self):
         self.otm.components = self.__tfplan_resources_to_otm_components()

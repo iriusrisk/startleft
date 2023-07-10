@@ -4,8 +4,8 @@ from typing import List, Dict
 from otm.otm.entity.dataflow import Dataflow
 from sl_util.sl_util.iterations_utils import remove_from_list
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent
-from slp_tfplan.slp_tfplan.transformers.transformer import Transformer
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanOTM
+from slp_tfplan.slp_tfplan.transformers.transformer import Transformer
 
 
 def _merge_component_configurations(otm_components: List[TFPlanComponent]) -> Dict:
@@ -38,24 +38,23 @@ def _are_equivalent_dataflows(dataflow_1: Dataflow, dataflow_2: Dataflow) -> boo
 
 
 def _merge_dataflows(origin_dataflow: Dataflow, dataflows: List[Dataflow]) -> Dataflow:
-    if len(dataflows) > 0:
-        for df in dataflows:
-            if origin_dataflow.tags is None:
-                origin_dataflow.tags = df.tags
-            else:
-                origin_dataflow.tags.extend(df.tags or [])
-                origin_dataflow.tags = list(set(origin_dataflow.tags))
+    for df in dataflows:
+        if origin_dataflow.tags is None:
+            origin_dataflow.tags = df.tags
+        else:
+            origin_dataflow.tags.extend(df.tags or [])
+            origin_dataflow.tags = list(set(origin_dataflow.tags))
 
-            if origin_dataflow.attributes is None:
-                origin_dataflow.attributes = df.attributes
-            else:
-                origin_dataflow.attributes.extend(df.attributes or [])
-                origin_dataflow.attributes = list(set(origin_dataflow.attributes))
+        if origin_dataflow.attributes is None:
+            origin_dataflow.attributes = df.attributes
+        else:
+            origin_dataflow.attributes.extend(df.attributes or [])
+            origin_dataflow.attributes = list(set(origin_dataflow.attributes))
 
-            if (origin_dataflow.source_node == df.destination_node
-                and origin_dataflow.destination_node == df.source_node) \
-                    or df.bidirectional:
-                origin_dataflow.bidirectional = True
+        if (origin_dataflow.source_node == df.destination_node
+            and origin_dataflow.destination_node == df.source_node) \
+                or df.bidirectional:
+            origin_dataflow.bidirectional = True
 
     return origin_dataflow
 
@@ -161,6 +160,12 @@ class SingletonTransformer(Transformer):
                 continue
 
             if index == len(self.otm_dataflows):
+                unique_singleton_dataflows.append(dataflow)
+                continue
+
+            source_component = self.otm.get_component_by_id(dataflow.source_node)
+            destination_component = self.otm.get_component_by_id(dataflow.destination_node)
+            if not source_component.is_singleton and not destination_component.is_singleton:
                 unique_singleton_dataflows.append(dataflow)
                 continue
 

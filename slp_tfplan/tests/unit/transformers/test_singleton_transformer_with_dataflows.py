@@ -24,12 +24,19 @@ _component_c = build_mocked_component({
     'tf_type': 'aws_type'
 })
 
+_component_d = build_mocked_component({
+    'component_name': 'component_d',
+    'tf_type': 'aws_type'
+})
+
 _dataflow_a_b = build_mocked_dataflow(_component_a, _component_b)
 _dataflow_a_c = build_mocked_dataflow(_component_a, _component_c)
 _dataflow_b_a = build_mocked_dataflow(_component_b, _component_a)
 _dataflow_b_c = build_mocked_dataflow(_component_b, _component_c)
 _dataflow_c_a = build_mocked_dataflow(_component_c, _component_a)
 _dataflow_c_b = build_mocked_dataflow(_component_c, _component_b)
+_dataflow_c_d_http = build_mocked_dataflow(_component_c, _component_d, name='http')
+_dataflow_c_d_https = build_mocked_dataflow(_component_c, _component_d, name='https')
 
 _dataflow_a_b_bidirectional = build_mocked_dataflow(_component_a, _component_b, bidirectional=True)
 _dataflow_a_c_bidirectional = build_mocked_dataflow(_component_a, _component_c, bidirectional=True)
@@ -226,3 +233,18 @@ class TestSingletonTransformerWithDataflows:
         assert attribute_1 in otm.dataflows[0].attributes
         assert attribute_2 in otm.dataflows[0].attributes
         assert attribute_3 in otm.dataflows[0].attributes
+
+    def test_not_singleton_and_same_dataflow_direction(self):
+        """
+        Components not singleton (C) has two dataflows to component not singleton (D) with the same direction
+        """
+        # GIVEN components with some dataflows
+        otm = build_mocked_otm([_component_c, _component_d], [_dataflow_c_d_http, _dataflow_c_d_https])
+
+        # WHEN SingletonTransformer::transform is invoked
+        SingletonTransformer(otm).transform()
+
+        # THEN nothing happens
+        assert len(otm.dataflows) == 2
+        assert otm.dataflows[0] == _dataflow_c_d_http
+        assert otm.dataflows[1] == _dataflow_c_d_https
