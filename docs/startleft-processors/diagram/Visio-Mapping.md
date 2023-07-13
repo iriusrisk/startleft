@@ -361,3 +361,42 @@ DataFlow is not created. This can be easily understood with the following pictur
 ![img/mapped-dataflows.png](img/mapped-dataflows.png)
 
 
+## Mapping Functions
+This processor includes multiple functionalities to map Component and TrustZones. 
+These functionalities aim to give flexibility when mapping shapes and to avoid the need to create numerous mapping entries.
+All these functionalities are available to map both, components and TrustZones.
+
+### Mapping by Label
+
+```yaml
+  - label: AmazonS3
+    type: s3
+```
+
+!!! note ""
+
+    This configuration sets all the shapes with name/type `AmazonS3` to components of type `s3`
+
+### Mapping by a list of Labels
+
+```yaml
+  - label: [AmazonS3, AmazonSimpleStorageServiceS3]
+    type: s3
+```
+
+!!! note ""
+
+    This configuration sets all the shapes of name/type `AmazonS3` or `AmazonSimpleStorageServiceS3` to components of type `s3`
+
+#### Mapping by a Regex
+
+```yaml
+  - label: {$regex: ^AWS Region:.*$}
+    type: Public Cloud
+    id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+```
+
+!!! note ""
+
+    This configuration maps all the shapes whose name/type matches the regex `^AWS Region:.*$` to TrustZones of type `Public Cloud`
+
