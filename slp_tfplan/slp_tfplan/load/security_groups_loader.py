@@ -1,9 +1,9 @@
 from typing import List, Dict, Literal
 
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import SecurityGroup, TFPlanOTM
 from slp_tfplan.slp_tfplan.load.resource_data_extractors import security_groups_ids_from_ingress_property, \
     security_groups_ids_from_egress_property, security_group_id_from_rule, \
     source_security_group_id_from_rule, security_group_rule_type
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import SecurityGroup, TFPlanOTM
 
 SECURITY_GROUPS_TYPES = ['aws_security_group']
 SECURITY_GROUP_RULE_TYPES = ['aws_security_group_rule']
@@ -57,6 +57,7 @@ class SecurityGroupsLoader:
     def __build_security_group(self, resource: {}) -> SecurityGroup:
         return SecurityGroup(
             security_group_id=resource['resource_id'],
+            name=resource['resource_name'],
             ingress_sgs=security_groups_ids_from_ingress_property(resource) or security_groups_ids_from_ingress_rule(resource, self.sg_rules),
             egress_sgs=security_groups_ids_from_egress_property(resource) or security_groups_ids_from_egress_rule(resource, self.sg_rules),
         )

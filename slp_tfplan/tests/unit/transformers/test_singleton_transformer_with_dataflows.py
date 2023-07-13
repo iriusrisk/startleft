@@ -4,22 +4,22 @@ from charset_normalizer.md import List
 from otm.otm.entity.dataflow import Dataflow
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent
 from slp_tfplan.slp_tfplan.transformers.singleton_transformer import SingletonTransformer
-from slp_tfplan.tests.util.builders import build_mocked_tfplan_component, \
+from slp_tfplan.tests.util.builders import build_mocked_component, \
     build_mocked_dataflow, build_mocked_otm
 
-_component_a = build_mocked_tfplan_component({
+_component_a = build_mocked_component({
     'component_name': 'component_a',
     'tf_type': 'aws_type',
-    'configuration': {"singleton": True}
+    'configuration': {"$singleton": True}
 })
 
-_component_b = build_mocked_tfplan_component({
+_component_b = build_mocked_component({
     'component_name': 'component_b',
     'tf_type': 'aws_type',
-    'configuration': {"singleton": True}
+    'configuration': {"$singleton": True}
 })
 
-_component_c = build_mocked_tfplan_component({
+_component_c = build_mocked_component({
     'component_name': 'component_c',
     'tf_type': 'aws_type'
 })
