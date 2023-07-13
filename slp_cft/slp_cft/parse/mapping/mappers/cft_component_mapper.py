@@ -1,6 +1,6 @@
-import re
 import uuid
 
+from sl_util.sl_util.secure_regex import SecureRegexWrapper as re
 from slp_cft.slp_cft.parse.mapping.mappers.cft_base_mapper import CloudformationBaseMapper
 
 
@@ -234,7 +234,7 @@ class CloudformationComponentMapper(CloudformationBaseMapper):
 
     def __multiple_sources_mapping_inside(self, mapping_definition):
         return "$singleton" in self.mapping["$source"] and \
-               len(list(filter(lambda obj: "$numberOfSources" in obj, mapping_definition))) > 0
+            len(list(filter(lambda obj: "$numberOfSources" in obj, mapping_definition))) > 0
 
     def __get_parent_names(self, source_model, source_object, id_parents, component_name):
         # Retrieves a list of parent resource names (components or trustZones) of the element.

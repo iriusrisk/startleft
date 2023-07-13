@@ -1,4 +1,3 @@
-import re
 from functools import singledispatch
 from typing import List, Dict
 
@@ -8,6 +7,7 @@ from otm.otm.entity.representation import DiagramRepresentation, RepresentationT
 from otm.otm.entity.trustzone import Trustzone
 from otm.otm.otm_builder import OTMBuilder
 from otm.otm.otm_pruner import OTMPruner
+from sl_util.sl_util.secure_regex import SecureRegexWrapper as re
 from slp_base import ProviderParser
 from slp_visio.slp_visio.load.objects.diagram_objects import Diagram, DiagramComponent
 from slp_visio.slp_visio.load.visio_mapping_loader import VisioMappingFileLoader

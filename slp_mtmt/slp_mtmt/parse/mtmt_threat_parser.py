@@ -1,9 +1,9 @@
-import re
 from enum import Enum
 
 from otm.otm.entity.component import Component
 from otm.otm.entity.mitigation import Mitigation, MitigationInstance
 from otm.otm.entity.threat import Threat, ThreatInstance
+from sl_util.sl_util.secure_regex import SecureRegexWrapper as re
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_threatinstance import MTMThreat
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
 

@@ -1,5 +1,5 @@
 import logging
-import re
+from sl_util.sl_util.secure_regex import SecureRegexWrapper as re
 from copy import deepcopy
 
 import jmespath

@@ -1,3 +1,5 @@
+from pytest import mark
+
 from slp_tf.slp_tf.parse.mapping.search.functions.tf_query_mapping_functions import query
 
 
@@ -26,6 +28,27 @@ class TestTfQueryMappingFunctions:
                 "aws_vpc": {},
                 "resource_type": "aws_vpc",
                 "resource_name": "vpc",
+                "resource_properties": {
+                    "cidr_block": "var.vpcCidrblock"
+                }
+            }
+        ]
+    }
+
+    source_model_data_redos = {
+        "resource": [
+            {
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2": {},
+                "resource_type": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2",
+                "resource_name": "redos_component1",
+                "resource_properties": {
+                    "cidr_block": "var.vpcCidrblock"
+                }
+            },
+            {
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {},
+                "resource_type": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "resource_name": "redos_component2",
                 "resource_properties": {
                     "cidr_block": "var.vpcCidrblock"
                 }
@@ -77,3 +100,12 @@ class TestTfQueryMappingFunctions:
         data = query(mapping_source, source_model_data=self.source_model_data)
         assert len(data) == 1
         assert data[0]['resource_type'] == 'aws_vpc_endpoint'
+
+
+    @mark.parametrize('regex', [ "^a+$", "^(a+)+$"])
+    def test_query_with_type_regex_long_name(self,regex):
+        mapping_source = {"$type": {"$regex": regex}}
+        data = query(mapping_source, source_model_data=self.source_model_data_redos)
+        assert len(data) == 1
+        assert data[0]['resource_type'] == 'a' * 59
+

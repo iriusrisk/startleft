@@ -1,6 +1,6 @@
-import re
+from sl_util.sl_util.secure_regex import SecureRegexWrapper as re
 
-VALID_ID_REGEX = r"(\w+)"
+VALID_ID_REGEX = r'\w+'
 
 
 def normalize_name(name: str):

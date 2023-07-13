@@ -1,4 +1,4 @@
-import re
+from sl_util.sl_util.secure_regex import SecureRegexWrapper as re
 import uuid
 
 from slp_tf.slp_tf.parse.mapping.mappers.tf_base_mapper import TerraformBaseMapper, is_terraform_resource_reference, \

@@ -33,7 +33,8 @@ setup(
         'networkx==3.1',
         'dependency-injector==4.41.0',
         # Do not upgrade pygraphviz unless security issues because it is heavily dependent on the underlying OS
-        'pygraphviz==1.10'
+        'pygraphviz==1.10',
+        'google-re2==1.0'
     ],
     use_scm_version={
         'write_to': 'startleft/version.py',
