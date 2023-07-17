@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+
 from slp_base import DiagramType
 from slp_visio.slp_visio.load.objects.diagram_objects import Diagram, DiagramComponent, DiagramConnector
 from slp_visio.slp_visio.parse.diagram_pruner import DiagramPruner
@@ -13,7 +15,7 @@ class TestDiagramPruner:
         connectors = []
 
         # AND no mapping labels
-        mapping_labels = []
+        mapping_labels = {}
 
         # WHEN calling run
         diagram = Diagram(DiagramType.VISIO, components, connectors)
@@ -31,7 +33,7 @@ class TestDiagramPruner:
         connectors = []
 
         # AND mapping labels matching all given components
-        mapping_labels = ['Component 1', 'Component 2']
+        mapping_labels = {'1': MagicMock(), '2': MagicMock()}
 
         # WHEN calling run
         diagram = Diagram(DiagramType.VISIO, components, connectors)
@@ -49,7 +51,7 @@ class TestDiagramPruner:
         connectors = [DiagramConnector('12', '1', '2')]
 
         # AND mapping labels matching all given components
-        mapping_labels = ['Component 1', 'Component 2']
+        mapping_labels = {'1': MagicMock(), '2': MagicMock()}
 
         # WHEN calling run
         diagram = Diagram(DiagramType.VISIO, components, connectors)
@@ -67,7 +69,7 @@ class TestDiagramPruner:
         connectors = [DiagramConnector('12', '1', '2')]
 
         # AND mapping labels with only one component mapped
-        mapping_labels = ['Component 1']
+        mapping_labels = {'1': MagicMock()}
 
         # WHEN calling run
         diagram = Diagram(DiagramType.VISIO, components, connectors)
@@ -99,13 +101,7 @@ class TestDiagramPruner:
         connectors = []
 
         # AND mapping labels that does not map an intermediate component
-        mapping_labels = [
-            # 'Trustzone 1',
-            'Grandparent 1',
-            # 'Parent 1',
-            'Grandchild 1',
-            'Child 1'
-        ]
+        mapping_labels = {'GP1': MagicMock(), 'GC1': MagicMock(), 'C1': MagicMock()}
 
         # WHEN calling run
         diagram = Diagram(DiagramType.VISIO, components, connectors)
@@ -147,13 +143,7 @@ class TestDiagramPruner:
         ]
 
         # AND mapping labels that does not map an intermediate component
-        mapping_labels = [
-            # 'Trustzone 1',
-            'Grandparent 1',
-            # 'Parent 1',
-            'Grandchild 1',
-            'Child 1'
-        ]
+        mapping_labels = {'GP1': MagicMock(), 'GC1': MagicMock(), 'C1': MagicMock()}
 
         # WHEN calling run
         diagram = Diagram(DiagramType.VISIO, components, connectors)

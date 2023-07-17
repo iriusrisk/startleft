@@ -1,14 +1,13 @@
 from sl_util.sl_util.iterations_utils import remove_from_list
 from slp_visio.slp_visio.load.objects.diagram_objects import Diagram, DiagramComponent
-from slp_visio.slp_visio.util.visio import normalize_label
 
 
 class DiagramPruner:
 
-    def __init__(self, diagram: Diagram, mapped_labels: [str]):
+    def __init__(self, diagram: Diagram, shape_ids_mapped: [str]):
         self.components = diagram.components
         self.connectors = diagram.connectors
-        self.normalized_mapped_labels = [normalize_label(mapped_label) for mapped_label in mapped_labels]
+        self.shape_ids_mapped = shape_ids_mapped
 
         self.__removed_components = []
 
@@ -43,10 +42,7 @@ class DiagramPruner:
                 diagram_component.parent = removed_parents[diagram_component.parent.id]
 
     def __is_component_mapped(self, component: DiagramComponent):
-        map_by_name = normalize_label(component.name) in self.normalized_mapped_labels
-        map_by_type = normalize_label(component.type) in self.normalized_mapped_labels
-
-        return map_by_name or map_by_type
+        return component.id in self.shape_ids_mapped
 
     def __remove_component(self, component: DiagramComponent):
         self.components.remove(component)
