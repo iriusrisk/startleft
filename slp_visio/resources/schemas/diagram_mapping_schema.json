@@ -10,7 +10,7 @@
                 "type": "object",
                 "required": ["label", "type"],
                 "properties": {
-                    "label": {"$ref": "#/definitions/query"},
+                    "label": {"$ref": "#/definitions/LabelUnion"},
                     "type": {"$ref": "#/definitions/query"}
                 }
             }
@@ -21,7 +21,7 @@
                 "type": "object",
                 "required": ["label", "type"],
                 "properties": {
-                    "label": {"$ref": "#/definitions/query"},
+                    "label": {"$ref": "#/definitions/LabelUnion"},
                     "id": {"$ref": "#/definitions/query"},
                     "type": {"$ref": "#/definitions/query"}
                 }
@@ -43,6 +43,36 @@
                     "type": "string"
                 }
             ]
-        }
+        },
+        "LabelUnion":{
+         "anyOf":[
+            {
+               "type":"array",
+               "items":{
+                  "type":"string"
+               }
+            },
+            {
+               "$ref":"#/definitions/RegExClass"
+            },
+            {
+               "type":"string"
+            }
+         ],
+         "title":"LabelUnion"
+      },
+      "RegExClass":{
+         "type":"object",
+         "additionalProperties":false,
+         "properties":{
+            "$regex":{
+               "type":"string"
+            }
+         },
+         "required":[
+            "$regex"
+         ],
+         "title":"RegExClass"
+      }
     }
 }
