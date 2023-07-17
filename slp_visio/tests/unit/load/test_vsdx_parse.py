@@ -19,8 +19,8 @@ class TestVsdxParser:
         assert len( diagram.connectors) == 0
         assert len( diagram.components) == 1
         assert diagram.components[0].origin == DiagramComponentOrigin.SIMPLE_COMPONENT
-        assert diagram.components[0].name == 'Custom AWS Step Functions workflow name'
-        assert diagram.components[0].id == '3'
+        assert diagram.components[0].name == 'AWS Step Functions workflow'
+        assert diagram.components[0].id == '1'
 
 
     def test_shape_group(self):
