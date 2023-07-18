@@ -13,6 +13,7 @@ class TestCreateComponentByMasterShapeName:
         # GIVEN a visio component shape
         shape = MagicMock(ID=1001, text='My EC2', shape_name=None)
         shape.master_page = None
+        shape.child_shapes = None
 
         # WHEN the component is created
         strategy = CreateComponentByMasterPageName()
@@ -30,6 +31,7 @@ class TestCreateComponentByMasterShapeName:
         # GIVEN a visio component shape
         shape = MagicMock(ID=1001, text='My EC2', shape_name=None)
         shape.master_page.name = page_name
+        shape.child_shapes = None
 
         # WHEN the component is created
         strategy = CreateComponentByMasterPageName()
@@ -50,11 +52,37 @@ class TestCreateComponentByMasterShapeName:
         shape = MagicMock(ID=1001, text='My EC2', shape_name=None, master_page=MagicMock(master_unique_id='777'),
                           center_x_y=(0.5, 2.5), cells={'Width': MagicMock(value=8), 'Height': MagicMock(value=12)})
         shape.master_page.name = page_name
+        shape.child_shapes = None
 
         # WHEN the component is created
         strategy = CreateComponentByMasterPageName()
         diagram_component = strategy.create_component(shape, representer=SimpleComponentRepresenter())
 
-        # THEN is not a valid component
+        # THEN is a valid component
         assert diagram_component.id == 1001
         assert diagram_component.name == page_name.strip()
+
+    @pytest.mark.parametrize('text1,text2,text3,expected', {
+        pytest.param('Lambda1', None, None, 'Lambda1', id='In first child'),
+        pytest.param(None, 'Lambda1', '', 'Lambda1', id='In second child'),
+        pytest.param(None, '', 'Lambda1', 'Lambda1', id='In last child'),
+        pytest.param('AWS ', 'Lambda', '', 'AWS Lambda', id='In two'),
+        pytest.param('AWS ', 'Lambda ', 'Step functions', 'AWS Lambda Step functions', id='In all'),
+    })
+    def test_validate_with_child_shapes(self, text1, text2, text3, expected):
+        # GIVEN a visio component shape
+        shape = MagicMock(ID=1001, shape_name=None, master_page=MagicMock(master_unique_id='777'),
+                          center_x_y=(0.5, 2.5), cells={'Width': MagicMock(value=8), 'Height': MagicMock(value=12)})
+        shape.master_page = None
+        shape.child_shapes = [MagicMock(ID=1101), MagicMock(ID=1102), MagicMock(ID=1103)]
+        shape.child_shapes[0].text = text1
+        shape.child_shapes[1].text = text2
+        shape.child_shapes[2].text = text3
+
+        # WHEN the component is created
+        strategy = CreateComponentByMasterPageName()
+        diagram_component = strategy.create_component(shape, representer=SimpleComponentRepresenter())
+
+        # THEN is a valid component
+        assert diagram_component.id == 1001
+        assert diagram_component.name == expected

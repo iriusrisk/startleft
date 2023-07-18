@@ -8,7 +8,7 @@ from slp_visio.slp_visio.load.strategies.component.create_component_strategy imp
 from slp_visio.slp_visio.load.strategies.component.impl.component_identifier_by_master_page_name import \
     ComponentIdentifierByMasterPageName
 from slp_visio.slp_visio.load.strategies.component.impl.create_component_by_shape_text import CreateComponentByShapeText
-from slp_visio.slp_visio.util.visio import normalize_label, get_unique_id_text
+from slp_visio.slp_visio.util.visio import normalize_label, get_unique_id_text, get_shape_text
 
 
 class CreateComponentByMasterPageName(CreateComponentStrategy):
@@ -20,7 +20,7 @@ class CreateComponentByMasterPageName(CreateComponentStrategy):
 
     def create_component(self, shape: Shape, origin=None, representer: VisioShapeRepresenter = None) \
             -> Optional[DiagramComponent]:
-        name = ComponentIdentifierByMasterPageName.get_master_page_name(shape)
+        name = get_shape_text(shape.child_shapes) or ComponentIdentifierByMasterPageName.get_master_page_name(shape)
         if name:
             return DiagramComponent(
                 id=shape.ID,

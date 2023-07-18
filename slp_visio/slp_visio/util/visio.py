@@ -1,18 +1,28 @@
 import re
+from functools import singledispatch
 from math import pi
 
 from vsdx import Shape
 
 from slp_visio.slp_visio.parse.shape_position_calculator import ShapePositionCalculator
 
-
-def get_shape_text(shape: Shape) -> str:
+@singledispatch
+def get_shape_text(shape):
+    if not shape:
+        return ""
     result = shape.text
 
     if not result:
         result = get_master_shape_text(shape)
 
     return (result or "").strip()
+
+@get_shape_text.register(list)
+def get_shape_text_from_list(shapes: [Shape]) -> str:
+    if not shapes:
+        return ""
+    return "".join(shape.text or "" for shape in shapes)
+
 
 
 def get_master_shape_text(shape: Shape) -> str:
@@ -30,7 +40,6 @@ def get_unique_id_text(shape: Shape) -> str:
 
     unique_id = shape.master_page.master_unique_id.strip()
     return normalize_unique_id(unique_id)
-
 
 def get_width(shape: Shape) -> float:
     if 'Width' in shape.cells:

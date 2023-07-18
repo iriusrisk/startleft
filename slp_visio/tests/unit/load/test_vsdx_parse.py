@@ -19,8 +19,31 @@ class TestVsdxParser:
         assert len( diagram.connectors) == 0
         assert len( diagram.components) == 1
         assert diagram.components[0].origin == DiagramComponentOrigin.SIMPLE_COMPONENT
-        assert diagram.components[0].name == 'AWS Step Functions workflow'
+        assert diagram.components[0].name == 'Custom AWS Step Functions workflow name'
         assert diagram.components[0].id == '1'
+
+    def test_name_in_two_master_page_with_children(self):
+        # GIVEN the parser
+        parser = VsdxParser(VisioComponentFactory(), VisioConnectorFactory())
+        # WHEN we parse the vsdx file
+        diagram : Diagram = parser.parse(test_resource_paths.visio_two_lambda)
+        # THEN we check the components created
+        assert diagram.diagram_type == DiagramType.VISIO
+        assert len( diagram.connectors) == 0
+        assert len( diagram.components) == 4
+        for component in diagram.components:
+            assert component.origin == DiagramComponentOrigin.SIMPLE_COMPONENT
+        assert diagram.components[0].name == 'First Lambda step-flow'
+        assert diagram.components[0].id == '1'
+        assert diagram.components[1].name == 'Second Lambda step-flow'
+        assert diagram.components[1].id == '45'
+        assert diagram.components[2].name == 'Lambda Function 1'
+        assert diagram.components[2].id == '35'
+        assert diagram.components[2].parent.id == '1'
+        assert diagram.components[3].name == 'Lambda Function 2'
+        assert diagram.components[3].id == '63'
+        assert diagram.components[3].parent.id == '45'
+
 
 
     def test_shape_group(self):
