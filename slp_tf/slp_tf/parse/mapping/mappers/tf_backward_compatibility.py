@@ -1,5 +1,6 @@
-from sl_util.sl_util.secure_regex import SecureRegexWrapper as re
 from collections.abc import MutableMapping
+
+import sl_util.sl_util.secure_regex as re
 
 
 def is_type_and_name_string(key):

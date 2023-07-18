@@ -32,9 +32,9 @@ setup(
         'defusedxml==0.7.1',
         'networkx==3.1',
         'dependency-injector==4.41.0',
+        'google-re2==1.0',
         # Do not upgrade pygraphviz unless security issues because it is heavily dependent on the underlying OS
-        'pygraphviz==1.10',
-        'google-re2==1.0'
+        'pygraphviz==1.10'
     ],
     use_scm_version={
         'write_to': 'startleft/version.py',

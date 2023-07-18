@@ -1,6 +1,6 @@
 from pytest import mark, param
 
-from sl_util.sl_util.secure_regex import SecureRegexWrapper as wrapper
+import sl_util.sl_util.secure_regex  as sre
 
 
 class TestSecureRegexWrapper:
@@ -11,7 +11,7 @@ class TestSecureRegexWrapper:
 
     ])
     def test_match(self, expression, value, expected):
-        match = wrapper.match(expression, value)
+        match = sre.match(expression, value)
         assert match.string == expected
 
     @mark.parametrize('expression, value', [
@@ -20,7 +20,7 @@ class TestSecureRegexWrapper:
 
     ])
     def test_no_match(self, expression, value):
-        assert not wrapper.match(expression, value)
+        assert not sre.match(expression, value)
 
     @mark.parametrize('pattern, replace, string, expected', [
         param('^a+$', 'a', 'a' * 999, 'a', id='duplicated_a_match'),
@@ -29,13 +29,13 @@ class TestSecureRegexWrapper:
 
     ])
     def test_sub(self, pattern, replace, string, expected):
-        assert wrapper.sub(pattern, replace, string) == expected
+        assert sre.sub(pattern, replace, string) == expected
 
     @mark.parametrize('text, expected', [
         param('\n\x0b', '\\\n\\\x0b', id='non_printable'),
     ])
     def test_escape(self, text, expected):
-        assert wrapper.escape(text) == expected
+        assert sre.escape(text) == expected
 
     @mark.parametrize('expression, value, expected', [
         param('^a+$', 'a' * 999, ['a' * 999], id='duplicated_a'),
@@ -44,7 +44,7 @@ class TestSecureRegexWrapper:
 
     ])
     def test_find_all(self, expression, value, expected):
-        assert wrapper.findall(expression, value) == expected
+        assert sre.findall(expression, value) == expected
 
     @mark.parametrize('expression, value, expected', [
         param('^z+$', 'z' * 999, ['z' * 999], id='duplicated_z'),
@@ -53,4 +53,4 @@ class TestSecureRegexWrapper:
 
     ])
     def test_split(self, expression, value, expected):
-        assert wrapper.findall(expression, value) == expected
+        assert sre.findall(expression, value) == expected

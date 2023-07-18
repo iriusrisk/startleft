@@ -1,5 +1,6 @@
-from sl_util.sl_util.secure_regex import SecureRegexWrapper as re
 from typing import Dict, List
+
+import sl_util.sl_util.secure_regex as re
 
 
 def map_resource_properties(resource: Dict) -> {}:

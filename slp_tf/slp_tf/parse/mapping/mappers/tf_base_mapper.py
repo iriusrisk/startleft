@@ -1,8 +1,8 @@
 import logging
-from sl_util.sl_util.secure_regex import SecureRegexWrapper as re
 import uuid
 from abc import ABC, abstractmethod
 
+import sl_util.sl_util.secure_regex as re
 from slp_tf.slp_tf.parse.mapping.mappers.tf_backward_compatibility import TfIdMapDictionary
 
 
@@ -122,7 +122,7 @@ class TerraformBaseMapper(ABC):
     def repeated_type4_hub_definition_component(self, source_model, mapping, component_resource_id):
         if "$ip" in str(mapping["name"]) or "$ip" in str(mapping["type"]):
             return component_resource_id in self.id_map or \
-                   self.exists_vpc_with_cidr_block_in_id_map(source_model, component_resource_id)
+                self.exists_vpc_with_cidr_block_in_id_map(source_model, component_resource_id)
 
     # if exists an aws_vpc which cidr_block value is the component["id"]
     # Prevent to generate component and map on id_map the component["id"] to the aws_vpc uuid

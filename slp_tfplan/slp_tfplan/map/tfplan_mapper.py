@@ -1,7 +1,7 @@
-from sl_util.sl_util.secure_regex import SecureRegexWrapper as re
 from functools import singledispatch
 from typing import List
 
+import sl_util.sl_util.secure_regex as re
 from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.trustzone import Trustzone
 from slp_tfplan.slp_tfplan.map.mapping import Mapping, TrustZoneMapping, ComponentMapping

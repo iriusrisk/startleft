@@ -1,7 +1,7 @@
 import logging
 from abc import ABC, abstractmethod
 
-from sl_util.sl_util.secure_regex import SecureRegexWrapper as re
+import sl_util.sl_util.secure_regex as re
 
 
 class CloudformationBaseMapper(ABC):

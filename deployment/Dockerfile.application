@@ -9,7 +9,7 @@ RUN apk update && \
     apk add graphviz-dev
 
 RUN apk --no-cache add lapack libstdc++ libmagic geos-dev && \
-    apk --no-cache add --virtual .builddeps g++ gcc gfortran musl-dev lapack-dev
+    apk --no-cache add --virtual .builddeps g++ gcc gfortran musl-dev lapack-dev re2 re2-dev py3-pybind11-dev
 
 COPY . .
 
@@ -17,7 +17,7 @@ RUN pip install .
 
 RUN rm -r ../app/*
 
-# Remove git and geos-dev dependencies
-RUN apk del git geos-dev
+# Remove not needed dependencies for runtime
+RUN apk del git geos-dev re2-dev py3-pybind11-dev
 
 ENTRYPOINT ["startleft", "server", "--host", "0.0.0.0"]

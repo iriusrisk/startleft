@@ -3,7 +3,7 @@ import json
 import jmespath
 from deepmerge import always_merger
 
-from sl_util.sl_util.secure_regex import SecureRegexWrapper as re
+import sl_util.sl_util.secure_regex as re
 
 
 class CloudformationCustomFunctions(jmespath.functions.Functions):

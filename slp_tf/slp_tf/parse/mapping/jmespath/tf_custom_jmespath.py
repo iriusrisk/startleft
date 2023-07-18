@@ -1,9 +1,9 @@
 import logging
-from sl_util.sl_util.secure_regex import SecureRegexWrapper as re
 from copy import deepcopy
 
 import jmespath
 
+import sl_util.sl_util.secure_regex as re
 from slp_tf.slp_tf.parse.mapping.mappers.tf_base_mapper import generate_resource_identifier
 
 logger = logging.getLogger(__name__)

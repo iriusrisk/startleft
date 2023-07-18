@@ -1,6 +1,6 @@
 import uuid
 
-from sl_util.sl_util.secure_regex import SecureRegexWrapper as re
+import sl_util.sl_util.secure_regex as re
 from slp_cft.slp_cft.parse.mapping.mappers.cft_base_mapper import CloudformationBaseMapper
 
 
