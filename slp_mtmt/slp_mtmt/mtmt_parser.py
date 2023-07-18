@@ -2,6 +2,8 @@ from otm.otm.entity.component import Component
 from otm.otm.entity.otm import OTM
 from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
 from otm.otm.otm_builder import OTMBuilder
+from otm.otm.otm_pruner import OTMPruner
+
 from slp_base.slp_base.provider_parser import ProviderParser
 from slp_base.slp_base.provider_type import EtmType
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
@@ -62,7 +64,7 @@ class MTMTParser(ProviderParser):
     def build_otm(self) -> OTM:
         threats, mitigations = self.__get_mtmt_threats_and_mitigations(self.__get_mtmt_components())
 
-        return OTMBuilder(self.project_id, self.project_name, EtmType.MTMT) \
+        otm = OTMBuilder(self.project_id, self.project_name, EtmType.MTMT) \
             .add_representations(self.__get_mtmt_representations()) \
             .add_trustzones(self.__get_mtmt_trustzones()) \
             .add_components(self.__get_mtmt_components()) \
@@ -70,3 +72,7 @@ class MTMTParser(ProviderParser):
             .add_threats(threats) \
             .add_mitigations(mitigations) \
             .build()
+
+        OTMPruner(otm).prune_orphan_dataflows()
+
+        return otm
