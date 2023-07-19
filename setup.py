@@ -15,7 +15,7 @@ setup(
     include_package_data=True,
     python_requires='>=3.8',
     install_requires=[
-        'pyyaml==6.0',
+        'pyyaml==6.0.1',
         'jsonschema==4.17.3',
         'deepmerge==1.1.0',
         'jmespath==1.0.1',
