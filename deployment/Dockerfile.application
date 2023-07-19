@@ -20,4 +20,4 @@ RUN rm -r ../app/*
 # Remove not needed dependencies for runtime
 RUN apk del git geos-dev re2-dev py3-pybind11-dev
 
-ENTRYPOINT ["startleft", "server", "--host", "0.0.0.0"]
+CMD ["startleft", "server", "--host", "0.0.0.0"]
