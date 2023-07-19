@@ -3,12 +3,13 @@ from typing import List, Dict, Callable
 from dependency_injector.wiring import Provide, inject
 
 from otm.otm.entity.dataflow import Dataflow
+from sl_util.sl_util.injection import register
 from slp_tfplan.slp_tfplan.graph.relationships_extractor import RelationshipsExtractor
 from slp_tfplan.slp_tfplan.matcher.resource_matcher import ResourceMatcher, ResourcesMatcherContainer
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TFPlanOTM
 from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_creation_strategy import DataflowCreationStrategy, \
     create_dataflow, DataflowCreationStrategyContainer
-from slp_tfplan.slp_tfplan.util.injection import register
+
 
 
 @register(DataflowCreationStrategyContainer.strategies)

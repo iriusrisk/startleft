@@ -2,14 +2,17 @@ from typing import Optional
 
 from vsdx import Shape
 
+from sl_util.sl_util.injection import register
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
 from slp_visio.slp_visio.load.representation.visio_shape_representer import VisioShapeRepresenter
 from slp_visio.slp_visio.load.strategies.component.create_component_strategy import CreateComponentStrategy
+from slp_visio.slp_visio.load.strategies.component.create_component_strategy import CreateComponentStrategyContainer
 from slp_visio.slp_visio.util.visio import get_shape_text, get_master_shape_text, normalize_label, get_unique_id_text
 
 LUCID_COMPONENT_PREFIX = 'com.lucidchart'
 
 
+@register(CreateComponentStrategyContainer.visio_strategies)
 class CreateComponentByShapeText(CreateComponentStrategy):
     """
     Strategy to create a component from the shape text
