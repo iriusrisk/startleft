@@ -1,1 +1,2 @@
-from slp_visio.slp_visio.load.strategies.component.impl.create_component_by_shape_text import CreateComponentByShapeText
+from .impl.component_identifier_by_shape_text import ComponentIdentifierByShapeText
+from .impl.create_component_by_shape_text import CreateComponentByShapeText

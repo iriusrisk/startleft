@@ -1,10 +1,13 @@
 from vsdx import Shape
 
+from sl_util.sl_util.injection import register
 from slp_visio.slp_visio.load.connector_identifier import ConnectorIdentifier
-from slp_visio.slp_visio.load.strategies.component.component_identifier_strategy import ComponentIdentifierStrategy
+from slp_visio.slp_visio.load.strategies.component.component_identifier_strategy import ComponentIdentifierStrategy, \
+    ComponentIdentifierStrategyContainer
 from slp_visio.slp_visio.util.visio import get_shape_text
 
 
+@register(ComponentIdentifierStrategyContainer.visio_strategies)
 class ComponentIdentifierByShapeText(ComponentIdentifierStrategy):
     """
     Strategy to know if a shape is a component

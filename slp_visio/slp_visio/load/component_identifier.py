@@ -1,13 +1,21 @@
+from typing import List
+
+from dependency_injector.wiring import inject, Provide
 from vsdx import Shape
 
-from slp_visio.slp_visio.load.strategies.component.component_identifier_strategy import ComponentIdentifierStrategy
+from slp_visio.slp_visio.load.strategies.component.component_identifier_strategy import ComponentIdentifierStrategy, \
+    ComponentIdentifierStrategyContainer
 
 
 class ComponentIdentifier:
 
-    @staticmethod
-    def is_component(shape: Shape) -> bool:
-        for strategy in ComponentIdentifierStrategy.get_strategies():
+    @inject
+    def __init__(self, strategies: List[ComponentIdentifierStrategy] = Provide[
+        ComponentIdentifierStrategyContainer.visio_strategies]):
+        self.strategies = strategies
+
+    def is_component(self, shape: Shape) -> bool:
+        for strategy in self.strategies:
             if strategy.is_component(shape):
                 return True
 

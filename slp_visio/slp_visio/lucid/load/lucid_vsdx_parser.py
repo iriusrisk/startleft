@@ -8,7 +8,9 @@ from slp_visio.slp_visio.load.vsdx_parser import VsdxParser
 class LucidVsdxParser(VsdxParser):
 
     def _add_connector(self, connector_shape: Shape):
-        shape_components = [c for c in self.page.child_shapes if ComponentIdentifier.is_component(c) and not self._is_boundary(c)]
+        component_identifier = ComponentIdentifier()
+        shape_components = [c for c in self.page.child_shapes if
+                            component_identifier.is_component(c) and not self._is_boundary(c)]
 
         visio_connector = self.connector_factory.create_connector(connector_shape, shape_components)
         if visio_connector:
