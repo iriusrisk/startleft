@@ -21,7 +21,7 @@ setup(
         'jmespath==1.0.1',
         'python-hcl2==4.3.2',
         'requests==2.31.0',
-        'fastapi==0.95.2',
+        'fastapi==0.99.1',
         'python-multipart==0.0.6',
         'click==8.1.3',
         'uvicorn==0.22.0',
@@ -47,12 +47,12 @@ setup(
             "pytest-runner==6.0.0",
         ],
         "test": [
-            'tox==4.5.2',
-            'pytest==7.3.1',
+            'tox==4.6.3',
+            'pytest==7.4.0',
             'responses==0.23.1',
             'deepdiff==6.3.0',
             'httpx==0.24.1',
-            'pytest-mock==3.10.0',
+            'pytest-mock==3.11.1',
             'coverage==7.2.7'
         ]
     },
