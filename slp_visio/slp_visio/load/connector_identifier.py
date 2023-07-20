@@ -4,6 +4,10 @@ from slp_visio.slp_visio.load.strategies.connector.connector_identifier_strategy
 
 
 class ConnectorIdentifier:
+    """
+    Identifies if a Visio Shape is a representation of a data flow
+    when we parse from Visio Shape to a DiagramComponent class
+    """
 
     @staticmethod
     def is_connector(shape: Shape) -> bool:
