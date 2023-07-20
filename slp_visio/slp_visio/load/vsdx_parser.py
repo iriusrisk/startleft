@@ -31,6 +31,7 @@ class VsdxParser:
         self._visio_components = []
         self._visio_connectors = []
         self.component_identifier = ComponentIdentifier()
+        self.connector_identifier = ConnectorIdentifier()
 
     def parse(self, visio_diagram_filename) -> Diagram:
         self.page = load_visio_page_from_file(visio_diagram_filename)
@@ -71,7 +72,7 @@ class VsdxParser:
 
     def _load_page_elements(self):
         for shape in self.page.child_shapes:
-            if ConnectorIdentifier.is_connector(shape):
+            if self.connector_identifier.is_connector(shape):
                 self._add_connector(shape)
             elif self._is_boundary(shape):
                 self._add_boundary_component(shape)

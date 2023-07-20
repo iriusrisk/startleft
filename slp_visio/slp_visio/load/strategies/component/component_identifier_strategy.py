@@ -22,7 +22,6 @@ class ComponentIdentifierStrategy:
         raise NotImplementedError
 
 
-
 class ComponentIdentifierStrategyContainer(DeclarativeContainer):
     """
     ComponentIdentifierStrategy implementations is grouped depending on the source tool:
