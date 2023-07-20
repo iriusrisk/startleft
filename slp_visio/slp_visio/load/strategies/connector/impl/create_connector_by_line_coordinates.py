@@ -3,11 +3,14 @@ from typing import Optional
 from shapely.geometry import Point
 from vsdx import Shape
 
+from sl_util.sl_util.injection import register
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramConnector
 from slp_visio.slp_visio.load.representation.simple_component_representer import SimpleComponentRepresenter
-from slp_visio.slp_visio.load.strategies.connector.create_connector_strategy import CreateConnectorStrategy
+from slp_visio.slp_visio.load.strategies.connector.create_connector_strategy import CreateConnectorStrategy, \
+    CreateConnectorStrategyContainer
 
 
+@register(CreateConnectorStrategyContainer.visio_strategies)
 class CreateConnectorByLineCoordinates(CreateConnectorStrategy):
     """
     Strategy to create a connector from the shape begin and end coordinates
