@@ -5,6 +5,8 @@ from shapely.geometry import Polygon, Point
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
 from slp_visio.slp_visio.load.parent_calculator import ParentCalculator
 
+CHILD_CANDIDATE_NAME = 'Child Candidate'
+PARENT_CANDIDATE_NAME = 'Parent Candidate'
 
 def create_representation_mock(dimension: float = None) -> Polygon:
     return Point(1, 1).buffer(dimension or 10, 0)
@@ -14,7 +16,7 @@ class TestParentCalculator:
 
     def test_no_parent_candidates(self):
         # GIVEN a child candidate
-        child_candidate = DiagramComponent(id='CC', name='Child Candidate')
+        child_candidate = DiagramComponent(id='CC', name=CHILD_CANDIDATE_NAME)
 
         # AND no parent candidates
         parent_candidates = []
@@ -28,13 +30,31 @@ class TestParentCalculator:
     @patch('shapely.geometry.Polygon.contains')
     def test_one_candidate_does_not_contains_the_component(self, mock_representation_contains):
         # GIVEN a child candidate
-        child_candidate = DiagramComponent(id='CC', name='Child Candidate', representation=create_representation_mock())
+        child_candidate = DiagramComponent(id='CC', name=CHILD_CANDIDATE_NAME, representation=create_representation_mock())
 
         # AND a mock for the representation contains function that returns always false
         mock_representation_contains.side_effect = [False]
 
         # AND a parent candidate
-        parent_candidate = DiagramComponent(id='PC', name='Parent Candidate', representation=create_representation_mock())
+        parent_candidate = DiagramComponent(id='PC', name=PARENT_CANDIDATE_NAME, representation=create_representation_mock())
+        parent_candidates = [parent_candidate]
+
+        # WHEN calling calculate_parent
+        parent = ParentCalculator(child_candidate).calculate_parent(parent_candidates)
+
+        # THEN no parent is returned
+        assert not parent
+
+    @patch('shapely.geometry.Polygon.contains')
+    def test_one_candidate_contains_the_component_with_same_position(self, mock_representation_contains):
+        # GIVEN a child candidate
+        child_candidate = DiagramComponent(id='CC', name=CHILD_CANDIDATE_NAME, representation=create_representation_mock())
+
+        # AND a mock for the representation contains function that returns always true
+        mock_representation_contains.side_effect = [True]
+
+        # AND a parent candidate
+        parent_candidate = DiagramComponent(id='PC', name=PARENT_CANDIDATE_NAME, representation=create_representation_mock())
         parent_candidates = [parent_candidate]
 
         # WHEN calling calculate_parent
@@ -46,13 +66,13 @@ class TestParentCalculator:
     @patch('shapely.geometry.Polygon.contains')
     def test_one_candidate_contains_the_component(self, mock_representation_contains):
         # GIVEN a child candidate
-        child_candidate = DiagramComponent(id='CC', name='Child Candidate', representation=create_representation_mock())
+        child_candidate = DiagramComponent(id='CC', name=CHILD_CANDIDATE_NAME, representation=create_representation_mock(8))
 
         # AND a mock for the representation contains function that returns always true
         mock_representation_contains.side_effect = [True]
 
         # AND a parent candidate
-        parent_candidate = DiagramComponent(id='PC', name='Parent Candidate', representation=create_representation_mock())
+        parent_candidate = DiagramComponent(id='PC', name=PARENT_CANDIDATE_NAME, representation=create_representation_mock(9))
         parent_candidates = [parent_candidate]
 
         # WHEN calling calculate_parent
@@ -64,7 +84,7 @@ class TestParentCalculator:
     @patch('shapely.geometry.Polygon.contains')
     def test_multiple_candidates_contain_the_component(self, mock_representation_contains):
         # GIVEN a child candidate
-        child_candidate = DiagramComponent(id='CC', name='Child Candidate', representation=create_representation_mock())
+        child_candidate = DiagramComponent(id='CC', name=CHILD_CANDIDATE_NAME, representation=create_representation_mock(4.9))
 
         # AND a mock for the representation contains function that returns always true
         mock_representation_contains.side_effect = [True, True]
