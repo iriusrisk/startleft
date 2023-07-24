@@ -3,22 +3,11 @@ Attack Surface is the set of all the possible ways an attacker can enter or extr
 by an attacker through the Internet.
 
 ## How it works?
-Firstly, we need to configure the mapping file to define the attack surface behavior.
-In the [Attack Surface Mapping Configuration](Terraform-Plan-how-to-create-a-mapping-file.md#attack-surface) 
-you will find all the parameters needed to enable this feature. 
-After enabling this feature, the processor will generate the `AttackSurface` retrieving all the `ingress` data
-from the `Security Group Resources`, filtering the dataflows by the configuration which gives through the 
-Internet Trustzone.
-
-### Attack Surface Calculation Capabilities
-Presently, the `Attack Surface` is available when using `Security Groups` for configuring
-how your infrastructure is accessible through the Internet.
-
-The `Terraform Plan Processor` will enhance its Attack Surface behavior in the future to support more resources and configurations.
-> Any contribution, question or enhancement request is welcome!
-> Get in touch with us by opening a new issue in our 
-> <a href="https://github.com/iriusrisk/startleft/issues" target="_blank">GitHub repository</a>. 
-> :smile:
+Firstly, we need to configure the mapping file to define the attack surface behavior. You will find all the parameters 
+required to enable this feature in the 
+[Attack Surface Mapping Configuration](Terraform-Plan-how-to-create-a-mapping-file.md#attack-surface).
+After enabling it, the processor will generate the `AttackSurface` retrieving all the `ingress` data
+from the `Security Group Resources` and their rules.
 
 ## Example
 Given the following Terraform files:
