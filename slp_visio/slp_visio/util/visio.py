@@ -1,18 +1,28 @@
 import re
+from functools import singledispatch
 from math import pi
 
 from vsdx import Shape
 
+from slp_visio.slp_visio.parse.shape_position_calculator import ShapePositionCalculator
 
-def get_shape_text(shape: Shape) -> str:
+@singledispatch
+def get_shape_text(shape):
+    if not shape:
+        return ""
     result = shape.text
-    if not result:
-        result = get_child_shapes_text(shape.child_shapes)
 
     if not result:
         result = get_master_shape_text(shape)
 
     return (result or "").strip()
+
+@get_shape_text.register(list)
+def get_shape_text_from_list(shapes: [Shape]) -> str:
+    if not shapes:
+        return ""
+    return "".join(shape.text or "" for shape in shapes)
+
 
 
 def get_master_shape_text(shape: Shape) -> str:
@@ -20,8 +30,6 @@ def get_master_shape_text(shape: Shape) -> str:
         return ""
 
     result = shape.master_shape.text
-    if not result:
-        result = get_child_shapes_text(shape.master_shape.child_shapes)
 
     return (result or "").strip()
 
@@ -32,21 +40,6 @@ def get_unique_id_text(shape: Shape) -> str:
 
     unique_id = shape.master_page.master_unique_id.strip()
     return normalize_unique_id(unique_id)
-
-
-def get_child_shapes_text(shapes: [Shape]) -> str:
-    if not shapes:
-        return ""
-    return "".join(shape.text for shape in shapes)
-
-
-def get_x_center(shape: Shape) -> float:
-    return float(shape.center_x_y[0])
-
-
-def get_y_center(shape: Shape) -> float:
-    return float(shape.center_x_y[1])
-
 
 def get_width(shape: Shape) -> float:
     if 'Width' in shape.cells:
@@ -77,27 +70,36 @@ def normalize_angle(angle: float) -> float:
 
 
 def get_limits(shape: Shape) -> tuple:
-    center_x = get_x_center(shape)
-    center_y = get_y_center(shape)
+    calculator = ShapePositionCalculator(shape)
+    center_x, center_y = calculator.get_absolute_center()
     width = get_width(shape)
     height = get_height(shape)
 
     return (center_x - (width / 2), center_y - (height / 2)), \
-           (center_x + (width / 2), center_y + (height / 2)) 
+        (center_x + (width / 2), center_y + (height / 2))
 
 
-def normalize_label(label):
+# Notice that the order of the functions is relevant
+normalize_functions = [
+    # remove year from Lucidchart AWS stencils
+    lambda label: re.sub(r'_?(2017|AWS19|AWS19_v2|AWS2021)$', '', label),
+    # replace by ' ' any '\n'
+    lambda label: label.replace('\n', ' '),
+    # replace multiple spaces in a row (2 or more) by a single one
+    lambda label: re.sub(r'\s+', ' ', label),
+    # strip any leading or trailing space
+    lambda label: label.strip()
+]
+
+
+def normalize_label(label: str) -> str:
     if not label:
         return label
 
-    # replace by ' ' any '\n'
-    label_normalized = label.replace('\n', ' ')
-    # replace multiple spaces in a row (2 or more) by a single one
-    label_normalized = re.sub(r'\s+', ' ', label_normalized)
-    # strip any leading or trailing space
-    label_normalized = label_normalized.strip()
+    for normalize_function in normalize_functions:
+        label = normalize_function(label)
 
-    return label_normalized
+    return label
 
 
 def normalize_unique_id(unique_id):

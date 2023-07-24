@@ -4,7 +4,7 @@
 from typing import List, Union
 
 
-def remove_from_list(collection: [],
+def remove_from_list(collection: List,
                      filter_function,
                      remove_function=None) -> None:
     if collection is None:
@@ -37,3 +37,7 @@ def compare_unordered_list_or_string(a: Union[str, List], b: Union[str, List]) -
         return sorted(a) == sorted(b)
     else:
         return False
+
+      
+def remove_nones(list: List) -> List:
+    return [e for e in list if e != None]
