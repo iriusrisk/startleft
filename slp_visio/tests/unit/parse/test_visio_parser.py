@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 import pytest
 
 from otm.otm.entity.parent_type import ParentType
-from slp_visio.slp_visio.parse.visio_parser import VisioParser
+from slp_visio.slp_visio.parse.visio_parser import VisioParser, _match_resource_by_dict
 
 tz1 = MagicMock(id='tz1')
 tz1.name = 'AWS Region: us-east-1'
@@ -143,5 +143,16 @@ class TestVisioParser:
         assert otm.components[2].parent == default_trustzone.id
         assert otm.components[2].parent_type == ParentType.TRUST_ZONE
 
+    @pytest.mark.parametrize('label,value', [
+        pytest.param({'$regex': '^a+$'}, 'a' * 999, id="duplicated a"),
+        pytest.param({'$regex': '^(a+)+$'}, 'a' * 999, id="evil regex"),
+    ])
+    def test_match_resource_by_dict(self, label: dict, value: str):
+        assert _match_resource_by_dict(label, value)
 
-
+    @pytest.mark.parametrize('label,value', [
+        pytest.param({'$regex': '^a+$'}, 'a' * 999 + 'X', id="duplicated a"),
+        pytest.param({'$regex': '^(a+)+$'}, 'a' * 999 + 'X', id="evil regex"),
+    ])
+    def test_no_match_resource_by_dict(self, label: dict, value: str):
+        assert not _match_resource_by_dict(label, value)

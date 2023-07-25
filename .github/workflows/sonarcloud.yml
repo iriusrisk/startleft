@@ -32,7 +32,7 @@ jobs:
         with:
           python-version: "3.8"
       - name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@v1
+        uses: ts-graphviz/setup-graphviz@55fcdfa9328aed658432c22011bec2873cd8e69f # v1
       - name: Install dependencies
         run: pip install -e ".[setup,test]"
       - name: Run test using coverage
@@ -42,7 +42,7 @@ jobs:
       - name: Analyze with SonarCloud
         # You can pin the exact commit or the version.
         # uses: SonarSource/sonarcloud-github-action@commithas or tag
-        uses: SonarSource/sonarcloud-github-action@v1.9.1
+        uses: SonarSource/sonarcloud-github-action@5875562561d22a34be0c657405578705a169af6c #v1.9.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # Generate a token on Sonarcloud.io, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)

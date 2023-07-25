@@ -1,6 +1,7 @@
 import logging
-import re
 from abc import ABC, abstractmethod
+
+import sl_util.sl_util.secure_regex as re
 
 
 class CloudformationBaseMapper(ABC):
@@ -23,14 +24,12 @@ class CloudformationBaseMapper(ABC):
     def get_variable_name_from_variable_reference(self, variable_reference: str):
         return variable_reference[variable_reference.find(".") + 1:variable_reference.find("}")]
 
-
     def format_aws_fns(self, source_objects):
         if 'Fn::ImportValue' in source_objects:
             source_objects = self.get_import_value_resource_name(source_objects['Fn::ImportValue'])
         elif 'Fn::GetAtt' in source_objects:
             source_objects = source_objects['Fn::GetAtt'][0]
         return source_objects
-
 
     def set_cidr_blocks(self, source_object, source_component_name, value):
         if "ingress" in source_object['Properties'] \
@@ -74,7 +73,7 @@ class CloudformationBaseMapper(ABC):
         return c_tags
 
     @staticmethod
-    def __search_and_add_tag( c_tags: [], query, source_model, source_object):
+    def __search_and_add_tag(c_tags: [], query, source_model, source_object):
 
         tag = source_model.search(query, source=source_object)
         if isinstance(tag, str):
