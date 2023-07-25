@@ -1,4 +1,5 @@
 import re
+import string
 from functools import singledispatch
 from math import pi
 
@@ -78,15 +79,19 @@ def get_limits(shape: Shape) -> tuple:
     return (center_x - (width / 2), center_y - (height / 2)), \
         (center_x + (width / 2), center_y + (height / 2))
 
+# These expressions are secure, so we can use the standard re lib by performance reason
+LUCID_AWS_YEARS_PATTERN = re.compile(r'_?(?:2017|AWS19|AWS19_v2|AWS2021)$')
+NON_PRINTABLE_CHARS_PATTERN = re.compile(f'[^{re.escape(string.printable)}]')
+ANY_SPACE_PATTERN = re.compile(r'\s+')
 
 # Notice that the order of the functions is relevant
 normalize_functions = [
     # remove year from Lucidchart AWS stencils
-    lambda label: re.sub(r'_?(2017|AWS19|AWS19_v2|AWS2021)$', '', label),
-    # replace by ' ' any '\n'
-    lambda label: label.replace('\n', ' '),
+    lambda label: LUCID_AWS_YEARS_PATTERN.sub('', label),
+    # replace by a space any non-printable character
+    lambda label: NON_PRINTABLE_CHARS_PATTERN.sub(' ', label),
     # replace multiple spaces in a row (2 or more) by a single one
-    lambda label: re.sub(r'\s+', ' ', label),
+    lambda label: ANY_SPACE_PATTERN.sub(' ', label),
     # strip any leading or trailing space
     lambda label: label.strip()
 ]
