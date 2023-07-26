@@ -51,12 +51,12 @@ Firstly, it is necessary to generate the `tf-plan` and `tf-graph` files by the T
     :one: Generate the Terraform plan file in JSON format:
     ```
     terraform plan -out=tf-plan
-    terraform show -json tf-plan >> tf-plan.json
+    terraform show -json tf-plan > tf-plan.json
     ```
     
     :two: Generate the Terraform graph file:
     ```
-    terraform graph -type=plan -plan=tf-plan >> tf-graph.gv
+    terraform graph -type=plan -plan=tf-plan > tf-graph.gv
     ```
 
 Next, you need to have a mapping file to configure the processor mapping behavior.

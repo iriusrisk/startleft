@@ -13,6 +13,14 @@ tfgraph_sgs = path + '/tfplan/sgs-tfgraph.gv'
 tfplan_official = path + '/tfplan/official-tfplan.json'
 tfgraph_official = path + '/tfplan/official-tfgraph.gv'
 
+# resources tfplan
+ingress_cidr_from_property = path + '/tfplan/resources/ingress-cidr-from-property-tfplan-resources.json'
+ingress_multiple_cidr_from_property = path + \
+                                      '/tfplan/resources/ingress-multiple-cidr-from-property-tfplan-resources.json'
+ingress_multiple_cidr_from_rule = path + '/tfplan/resources/ingress-multiple-cidr-from-rule-tfplan-resources.json'
+ingress_multiple_security_groups = path + '/tfplan/resources/ingress-multiple-security-groups-tfplan-resources.json'
+
+
 # mapping
 terraform_iriusrisk_tfplan_aws_mapping = path + '/mapping/iriusrisk-tfplan-aws-mapping.yaml'
 

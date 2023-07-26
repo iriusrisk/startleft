@@ -1,24 +1,24 @@
-from typing import List, Dict
+from typing import List, Dict, Literal
 
 
 # TODO Consider migrating these functions to use jmespath
 
-def _get_resource_properties_expressions(resource: {}) -> Dict:
-    return resource['resource_properties'].get('expressions', {})
+def _get_resource_properties_root(resource: {}, path: Literal['expressions', 'planned_values']) -> Dict:
+    return resource['resource_properties'].get(path, {})
 
 
 def _get_referenced_resources(references: List[str]):
     valid_references = []
 
     for reference in references:
-        if not reference.split('.')[-1] == 'id':
+        if reference.split('.')[-1] != 'id':
             valid_references.append(reference)
 
     return valid_references
 
 
-def _get_value_from_expressions(resource: Dict, path: List[str]):
-    expressions = _get_resource_properties_expressions(resource)
+def _get_value_from(resource: Dict, root: Literal['expressions', 'planned_values'], path: List[str]):
+    expressions = _get_resource_properties_root(resource, root)
     if not expressions:
         return []
 
@@ -35,6 +35,14 @@ def _get_value_from_expressions(resource: Dict, path: List[str]):
                 return []
 
     return source
+
+
+def _get_value_from_planned_values(resource: Dict, path: List[str]):
+    return _get_value_from(resource, 'planned_values', path)
+
+
+def _get_value_from_expressions(resource: Dict, path: List[str]):
+    return _get_value_from(resource, 'expressions', path)
 
 
 def _get_references_from_expressions(resource: Dict, path: List[str]) -> List[str]:
@@ -56,12 +64,12 @@ def security_groups_ids_from_network_interfaces(resource: {}) -> List[str]:
     ])
 
 
-def security_groups_ids_from_ingress_property(resource: {}) -> List[str]:
-    return _get_references_from_expressions(resource, ['ingress', 'references'])
+def security_groups_ids_from_type_property(resource: {}, cidr_type: Literal['ingress', 'egress']) -> List[str]:
+    return _get_references_from_expressions(resource, [cidr_type, 'references'])
 
 
-def security_groups_ids_from_egress_property(resource: {}) -> List[str]:
-    return _get_references_from_expressions(resource, ['egress', 'references'])
+def cidr_from_type_property(resource: {}, cidr_type: Literal['ingress', 'egress']) -> List[dict]:
+    return _get_value_from_planned_values(resource, [cidr_type])
 
 
 def source_security_group_id_from_rule(resource: {}) -> str:
@@ -74,6 +82,26 @@ def security_group_id_from_rule(resource: {}) -> str:
     sg_ids = _get_references_from_expressions(resource, ['security_group_id', 'references'])
     if sg_ids:
         return sg_ids[0]
+
+
+def description_from_rule(resource: {}) -> str:
+    return _get_value_from_planned_values(resource, ['description'])
+
+
+def protocol_from_rule(resource: {}) -> str:
+    return _get_value_from_planned_values(resource, ['protocol'])
+
+
+def from_port_from_rule(resource: {}) -> str:
+    return _get_value_from_planned_values(resource, ['from_port'])
+
+
+def to_port_from_rule(resource: {}) -> str:
+    return _get_value_from_planned_values(resource, ['to_port'])
+
+
+def cidr_blocks_from_rule(resource: {}) -> List[str]:
+    return _get_value_from_planned_values(resource, ['cidr_blocks'])
 
 
 def security_group_rule_type(resource: {}) -> str:
