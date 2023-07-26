@@ -2,7 +2,6 @@ from otm.otm.entity.component import Component
 from otm.otm.entity.otm import OTM
 from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
 from otm.otm.otm_builder import OTMBuilder
-from otm.otm.otm_pruner import OTMPruner
 
 from slp_base.slp_base.provider_parser import ProviderParser
 from slp_base.slp_base.provider_type import EtmType
@@ -72,7 +71,5 @@ class MTMTParser(ProviderParser):
             .add_threats(threats) \
             .add_mitigations(mitigations) \
             .build()
-
-        OTMPruner(otm).prune_orphan_dataflows()
 
         return otm
