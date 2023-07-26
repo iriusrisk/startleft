@@ -1,9 +1,9 @@
 import json
 import logging
-import re
 from json import JSONDecodeError
 from typing import List, Dict
 
+import sl_util.sl_util.secure_regex as re
 from sl_util.sl_util.file_utils import get_file_type_by_content, read_byte_data
 from slp_base import IacFileNotValidError, IacType
 from slp_base.slp_base import ProviderValidator
