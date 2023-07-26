@@ -78,9 +78,16 @@ class TfplanToResourceDict:
             'resource_id': get_resource_id(resource),
             'resource_name': get_resource_name(resource, parent),
             'resource_type': resource['type'],
-            'resource_properties':
-                self.__get_resource_configuration(resource['address']) or map_resource_properties(resource)
+            'resource_properties': self.__get_resource_properties(resource)
         }
+
+    def __get_resource_properties(self, resource: Dict) -> Dict:
+        _resource_configuration = self.__get_resource_configuration(resource['address'])
+        _resource_properties = map_resource_properties(resource)
+        if _resource_configuration:
+            _resource_configuration["planned_values"] = _resource_properties
+
+        return _resource_configuration or _resource_properties
 
     def __get_resource_configuration(self, resource_address: str) -> Dict:
         return next(filter(lambda r: r['address'] == resource_address, self.resources_configuration), None)

@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import List, Dict, Tuple, Type
+from typing import List, Dict, Tuple, Type, Union
 from unittest.mock import Mock
 
 from dependency_injector import providers
@@ -9,7 +9,7 @@ from otm.otm.entity.dataflow import Dataflow
 from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.trustzone import Trustzone
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TFPlanOTM, SecurityGroup, \
-    LaunchTemplate
+    LaunchTemplate, SecurityGroupCIDR, SecurityGroupCIDRType
 
 DEFAULT_TRUSTZONE = Trustzone(
     trustzone_id='default-trustzone-id',
@@ -29,11 +29,13 @@ MAX_TFGRAPH_FILE_SIZE = 2 * 1024 * 1024  # 2MB
 def build_mocked_otm(components: List[TFPlanComponent],
                      dataflows: List[Dataflow] = None,
                      security_groups: List[SecurityGroup] = None,
+                     variables: Dict[str, Union[list, str]] = None,
                      launch_templates: List[LaunchTemplate] = None) -> {}:
     otm = build_base_otm(DEFAULT_TRUSTZONE)
     otm.components = components or []
     otm.security_groups = security_groups or []
     otm.launch_templates = launch_templates or []
+    otm.variables = variables or {}
     otm.dataflows = dataflows or []
     return otm
 
@@ -46,9 +48,9 @@ def build_base_otm(default_trustzone: Trustzone = None):
         security_groups=[],
         launch_templates=[],
         dataflows=[],
+        variables={},
+        default_trustzone=default_trustzone
     )
-    if default_trustzone:
-        otm.default_trustzone = default_trustzone
 
     return otm
 
@@ -84,17 +86,29 @@ def build_simple_mocked_component(id: str, parent: str = None, clones_ids: List[
 
 
 def build_mocked_dataflow(
-        component_a: TFPlanComponent, component_b: TFPlanComponent,
+        component_a: TFPlanComponent, component_b: TFPlanComponent, name: str = None,
         bidirectional: bool = False, attributes=None, tags=None):
     return Dataflow(
-        f"{component_a.id} -> {component_b.id}",
-        f"{component_a.name} to {component_b.name}",
+        f"{f'{name}-' if name else ''}{component_a.id} -> {component_b.id}",
+        f"{f'{name}-' if name else ''}{component_a.name} to {component_b.name}",
         component_a.id, component_b.id,
         bidirectional=bidirectional, attributes=attributes, tags=tags)
 
 
-def build_security_group_mock(id: str, ingres_sgs: List[str] = None, egress_sgs: List[str] = None):
-    return Mock(security_group_id=id, ingres_sgs=ingres_sgs, egress_sgs=egress_sgs)
+def build_security_group_mock(id: str,
+                              ingres_sgs: List[str] = None,
+                              egress_sgs: List[str] = None,
+                              ingress_cidr: List[SecurityGroupCIDR] = None,
+                              egress_cidr: List[SecurityGroupCIDR] = None
+                              ):
+    return Mock(id=id, ingres_sgs=ingres_sgs, egress_sgs=egress_sgs,
+                ingress_cidr=ingress_cidr, egress_cidr=egress_cidr)
+
+
+def build_security_group_cidr_mock(cidr_blocks: List[str], description: str = None, from_port: int = None,
+                                   to_port: int = None, protocol: str = None):
+    return Mock(cidr_blocks=cidr_blocks, description=description, type=SecurityGroupCIDRType.INGRESS, from_port=from_port, to_port=to_port,
+                protocol=protocol)
 
 
 def build_component_node(component_id: str) -> str:
