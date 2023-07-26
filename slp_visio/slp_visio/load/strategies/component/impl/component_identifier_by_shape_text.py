@@ -14,7 +14,10 @@ class ComponentIdentifierByShapeText(ComponentIdentifierStrategy):
     The shape must have the text property and must not be a connector
     """
 
+    def __init__(self):
+        self.connector_identifier = ConnectorIdentifier()
+
     def is_component(self, shape: Shape) -> bool:
         text = get_shape_text(shape)
-        is_connector = ConnectorIdentifier().is_connector(shape)
+        is_connector = self.connector_identifier.is_connector(shape)
         return text and not is_connector
