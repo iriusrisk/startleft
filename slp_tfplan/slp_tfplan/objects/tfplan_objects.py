@@ -1,4 +1,5 @@
-from typing import List
+from enum import Enum
+from typing import List, Dict, Union
 
 from otm.otm.entity.component import Component
 from otm.otm.entity.dataflow import Dataflow
@@ -56,13 +57,34 @@ class TFPlanComponent(Component):
         return False
 
 
+class SecurityGroupCIDRType(Enum):
+    INGRESS = 'ingress'
+    EGRESS = 'egress'
+
+
+@auto_repr
+class SecurityGroupCIDR:
+    def __init__(self, cidr_blocks: List[str], description: str, type: SecurityGroupCIDRType,
+                 from_port: int = None, to_port: int = None,
+                 protocol: str = None):
+        self.cidr_blocks = cidr_blocks
+        self.description = description
+        self.type = type
+        self.from_port = from_port
+        self.to_port = to_port
+        self.protocol = protocol
+
+
 @auto_repr
 class SecurityGroup:
-    def __init__(self, security_group_id: str, name: str, ingress_sgs: List[str] = None, egress_sgs: List[str] = None):
-        self.id = security_group_id
-        self.name = name
-        self.ingress_sgs = ingress_sgs
-        self.egress_sgs = egress_sgs
+    def __init__(self, security_group_id: str, name: str, ingress_sgs: List[str] = None, egress_sgs: List[str] = None,
+                 ingress_cidr: List[SecurityGroupCIDR] = None, egress_cidr: List[SecurityGroupCIDR] = None):
+        self.id: str = security_group_id
+        self.name: str = name
+        self.ingress_sgs: List[str] = ingress_sgs
+        self.egress_sgs: List[str] = egress_sgs
+        self.ingress_cidr: List[SecurityGroupCIDR] = ingress_cidr
+        self.egress_cidr: List[SecurityGroupCIDR] = egress_cidr
 
 
 @auto_repr
@@ -81,6 +103,7 @@ class TFPlanOTM(OTM):
                  components: List[TFPlanComponent],
                  security_groups: List[SecurityGroup],
                  launch_templates: List[LaunchTemplate],
+                 variables: Dict[str, Union[list, str]],
                  dataflows: List[Dataflow],
                  default_trustzone: Trustzone = None):
         super().__init__(project_name, project_id, IacType.TERRAFORM)
@@ -89,6 +112,7 @@ class TFPlanOTM(OTM):
         self.components = components or []
         self.security_groups = security_groups or []
         self.launch_templates = launch_templates or []
+        self.variables = variables or {}
         self.dataflows = dataflows or []
 
     @property
@@ -96,3 +120,15 @@ class TFPlanOTM(OTM):
         return [component.id for component in self.components] + \
             [sg.id for sg in self.security_groups] + \
             [lt.id for lt in self.launch_templates]
+
+    def get_security_group_by_id(self, sg_id: str) -> SecurityGroup:
+        return next(filter(lambda e: e.id == sg_id, self.security_groups))
+
+    def get_component_by_id(self, c_id: str) -> TFPlanComponent:
+        return next(filter(lambda c: c.id == c_id, self.components))
+
+    def exists_component_with_parent(self, parent: str) -> bool:
+        return any(filter(lambda c: c.parent == parent, self.components))
+
+    def exists_trustzone_with_type(self, trustzone_type: str) -> bool:
+        return any(filter(lambda t: t.type == trustzone_type, self.trustzones))

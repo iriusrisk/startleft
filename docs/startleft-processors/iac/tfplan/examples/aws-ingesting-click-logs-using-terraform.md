@@ -30,8 +30,8 @@ The `slp_tfplan` processor can generate an accurate threat model by only followi
     ```shell
     $ terraform init
     $ terraform plan -out=tf-plan
-    $ terraform show -json tf-plan >> tf-plan.json
-    $ terraform graph -type=plan -plan=tf-plan >> tf-graph.gv
+    $ terraform show -json tf-plan > tf-plan.json
+    $ terraform graph -type=plan -plan=tf-plan > tf-graph.gv
     ```
     
 Use the StartLeft CLI to generate the OTM file:

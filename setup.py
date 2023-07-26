@@ -15,7 +15,7 @@ setup(
     include_package_data=True,
     python_requires='>=3.8',
     install_requires=[
-        'pyyaml==6.0',
+        'pyyaml==6.0.1',
         'jsonschema==4.17.3',
         'deepmerge==1.1.0',
         'jmespath==1.0.1',
@@ -32,6 +32,7 @@ setup(
         'defusedxml==0.7.1',
         'networkx==3.1',
         'dependency-injector==4.41.0',
+        'google-re2==1.0',
         # Do not upgrade pygraphviz unless security issues because it is heavily dependent on the underlying OS
         'pygraphviz==1.10'
     ],
