@@ -9,9 +9,11 @@ from slp_visio.slp_visio.load.strategies.connector.impl.create_connector_by_line
 def mock_component(_id, pos):
     x, y = pos[0], pos[1]
     width, height = pos[2], pos[3]
-    return MagicMock(ID=_id, begin_x=x, begin_y=y,
+    mocked = MagicMock(ID=_id, begin_x=x, begin_y=y,
                      cells={'Width': Mock(value=width), 'Height': Mock(value=height)},
                      center_x_y=(float(x) + float(width) / 2, float(y) + float(height) / 2))
+    mocked.parent=None
+    return mocked
 
 
 class TestCreateConnectorByLineCoordinates:

@@ -1,8 +1,9 @@
 import json
-import re
 
 import jmespath
 from deepmerge import always_merger
+
+import sl_util.sl_util.secure_regex as re
 
 
 class CloudformationCustomFunctions(jmespath.functions.Functions):
@@ -200,7 +201,7 @@ class CloudformationSourceModel:
             if 'Ref' in source_objects:
                 ref = source_objects['Ref']
                 return jmespath.search("Parameters." + ref + ".Default || '" + ref + "'", self.data,
-                                        options=self.jmespath_options)
+                                       options=self.jmespath_options)
             else:
                 return source_objects
         except:

@@ -2,6 +2,8 @@ from copy import deepcopy
 from typing import List, Dict
 from unittest.mock import MagicMock
 
+from pytest import mark, param
+
 from otm.otm.entity.parent_type import ParentType
 from slp_tfplan.slp_tfplan.map.tfplan_mapper import TFPlanMapper
 from slp_tfplan.tests.util.builders import build_base_otm
@@ -107,14 +109,18 @@ class TestTFPlanMapper:
         assert component.parent == DEFAULT_TRUSTZONE['id']
         assert component.parent_type == ParentType.TRUST_ZONE
 
-    def test_mapping_by_regex(self):
+    @mark.parametrize('regex,resource_type', [
+        param(r'^aws_\w*$','aws_vpc', id='aws_vpc'),
+        param(r'^a+$','a'*256, id='long_string'),
+        param(r'^(a+)+$','a'*256, id='redos_attack'),
+    ])
+    def test_mapping_by_regex(self,regex,resource_type:str):
         # GIVEN a resource of some TF type
-        resource_type = 'aws_vpc'
         resource = build_resource(resource_type)
 
         # AND a mapping by type to some OTM type for some regex
         otm_type = 'vpc'
-        mapping = mock_mapping([{'type': otm_type, 'label': {'$regex': r'^aws_\w*$'}}])
+        mapping = mock_mapping([{'type': otm_type, 'label': {'$regex': regex}}])
 
         # AND a base otm dictionary
         otm = deepcopy(BASE_OTM)

@@ -42,4 +42,4 @@ class CreateComponentByShapeText(CreateComponentStrategy):
 
     @staticmethod
     def get_lucid_component_type(shape: Shape):
-        return shape.shape_name.replace(f'{LUCID_COMPONENT_PREFIX}.', '').replace(f'.{shape.ID}', '')
+        return shape.shape_name.replace(f'{LUCID_COMPONENT_PREFIX}.', '').split('.')[0]

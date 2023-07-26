@@ -1,9 +1,10 @@
 from typing import List
 
 from otm.otm.entity.dataflow import Dataflow
-from sl_util.sl_util.injection import register
+from slp_tfplan.slp_tfplan.relationship.component_relationship_calculator import ComponentRelationshipCalculator
 from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_creation_strategy import DataflowCreationStrategy, \
     create_dataflow, DataflowCreationStrategyContainer
+from slp_tfplan.slp_tfplan.util.injection import register
 
 
 @register(DataflowCreationStrategyContainer.strategies)
@@ -24,7 +25,7 @@ class DataflowByStraightRelationshipStrategy(DataflowCreationStrategy):
 
         otm = kwargs['otm']
         relationships_extractor = kwargs['relationships_extractor']
-        are_hierarchically_related = kwargs['are_hierarchically_related']
+        component_relationship_calculator = ComponentRelationshipCalculator(otm)
 
         for component in otm.components:
             for related_component in otm.components:
@@ -33,7 +34,7 @@ class DataflowByStraightRelationshipStrategy(DataflowCreationStrategy):
 
                 if relationships_extractor.exist_valid_path(component.tf_resource_id,
                                                             related_component.tf_resource_id) \
-                        and not are_hierarchically_related(component, related_component):
+                        and not component_relationship_calculator.are_related(component, related_component):
                     dataflows.append(create_dataflow(component, related_component))
 
         return dataflows

@@ -1,6 +1,6 @@
-import re
 from enum import Enum
 
+import sl_util.sl_util.secure_regex as re
 from otm.otm.entity.component import Component
 from otm.otm.entity.mitigation import Mitigation, MitigationInstance
 from otm.otm.entity.threat import Threat, ThreatInstance
