@@ -1,8 +1,8 @@
 from slp_visio.slp_visio.load.strategies.component.create_component_strategy import CreateComponentStrategyContainer
-from slp_visio.slp_visio.load.strategies.component.create_component_strategy import CreateComponentStrategy
-from slp_visio.slp_visio.load.strategies.component.impl.create_component_by_shape_text import CreateComponentByShapeText
 from slp_visio.slp_visio.load.strategies.component.impl.create_component_by_master_page_name import \
     CreateComponentByMasterPageName
+from slp_visio.slp_visio.load.strategies.component.impl.create_component_by_shape_text import CreateComponentByShapeText
+
 
 class TestCreateComponentStrategy:
 

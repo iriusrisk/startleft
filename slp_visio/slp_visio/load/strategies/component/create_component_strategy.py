@@ -29,7 +29,6 @@ class CreateComponentStrategy:
 
 class CreateComponentStrategyContainer(DeclarativeContainer):
     """
-    CreateComponentStrategy implementations is grouped depending on the source tool:
-    Lucid or Visio
+    CreateComponentStrategy implementations
     """
     visio_strategies = providers.List()

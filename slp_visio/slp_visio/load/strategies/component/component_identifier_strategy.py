@@ -24,7 +24,6 @@ class ComponentIdentifierStrategy:
 
 class ComponentIdentifierStrategyContainer(DeclarativeContainer):
     """
-    ComponentIdentifierStrategy implementations is grouped depending on the source tool:
-    Lucid or Visio
+    ComponentIdentifierStrategy implementations
     """
     visio_strategies = providers.List()
