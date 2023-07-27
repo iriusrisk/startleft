@@ -1,5 +1,4 @@
 from .strategies.boundary.boundary_identifier_strategy import BoundaryIdentifierStrategyContainer
-from .strategies.boundary.boundary_identifier_strategy import BoundaryIdentifierStrategyContainer
 from .strategies.component.component_identifier_strategy import ComponentIdentifierStrategyContainer
 from .strategies.component.create_component_strategy import CreateComponentStrategyContainer
 from .strategies.connector.connector_identifier_strategy import ConnectorIdentifierStrategyContainer
