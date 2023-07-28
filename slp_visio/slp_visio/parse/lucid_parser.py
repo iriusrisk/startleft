@@ -1,6 +1,6 @@
-import re
 from typing import Union
 
+from sl_util.sl_util import secure_regex
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent, Diagram
 from slp_visio.slp_visio.load.visio_mapping_loader import VisioMappingFileLoader
 from slp_visio.slp_visio.parse.visio_parser import VisioParser
@@ -13,7 +13,7 @@ LUCID_CATCH_ALL_REGEX = AWS_REGEX + AZURE_REGEX
 def _get_diagram_component_mapping_by_catch_all(resource: DiagramComponent, catch_all_config: [str]) \
         -> Union[None, dict]:
     for regex in LUCID_CATCH_ALL_REGEX:
-        if re.match(regex, resource.type):
+        if secure_regex.match(regex, resource.type):
             return {'label': resource.type, 'type': catch_all_config}
 
 
