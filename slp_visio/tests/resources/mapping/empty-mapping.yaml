@@ -2,4 +2,4 @@ trustzones: []
 
 components: []
 
-dataflows: []
+configuration: {}

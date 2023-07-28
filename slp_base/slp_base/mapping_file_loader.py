@@ -23,7 +23,8 @@ class MappingFileLoader(MappingLoader):
         validate_size(self.mapping_files[0])
 
         try:
-            for mapping_file_data in self.mapping_files:
+            # Here we reverse the list to give higher priority to the custom mapping file
+            for mapping_file_data in self.mapping_files[::-1]:
                 if not mapping_file_data:
                     continue
                 logger.info('Loading mapping data')

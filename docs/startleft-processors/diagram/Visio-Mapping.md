@@ -55,10 +55,11 @@ arrays for the mappings of each type of element:
 ```yaml
 trustzones: []
 components: []
-dataflows: []
+configuration: {}
 ```
 
-Each of these arrays contains the information for mapping shapes into TrustZones, Components or Dataflows, respectively. 
+Each of these arrays contains the information for mapping shapes into TrustZones, Components, or configure 
+particular behavior for the processor.  
 Also note that all three are mandatory and have to be included in each mapping file, even if they only contain an empty array.
 
 ### Mapping TrustZones 
@@ -353,8 +354,7 @@ The resulting OTM will be as follows:
     More info in the <a href="https://learn.microsoft.com/en-us/openspecs/sharepoint_protocols/ms-vsdx/e58f5f25-76d8-4f65-ae24-d286b10168d7" target="_blank">official Microsoft documentation</a>.
 
 ### Mapping DataFlows
-Despite the fact that a `dataflows` tag is already defined in the mapping file structure, and it is required by the schema,
-the DataFlows mapping process is fixed and not configurable. Basically, it takes all the arrows in the Visio source that connect 
+The DataFlows mapping process is fixed and not configurable. Basically, it takes all the arrows in the Visio source that connect 
 components that are mapped and create a DataFlow for them. If some arrow connects shapes that are not mapped, the 
 DataFlow is not created. This can be easily understood with the following picture:
 
@@ -388,7 +388,7 @@ All these functionalities are available to map both, components and TrustZones.
 
     This configuration sets all the shapes of name/type `AmazonS3` or `AmazonSimpleStorageServiceS3` to components of type `s3`
 
-#### Mapping by a Regex
+### Mapping by a Regex
 
 ```yaml
   - label: {$regex: ^AWS Region:.*$}

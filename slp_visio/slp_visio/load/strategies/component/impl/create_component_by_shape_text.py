@@ -5,7 +5,7 @@ from vsdx import Shape
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
 from slp_visio.slp_visio.load.representation.visio_shape_representer import VisioShapeRepresenter
 from slp_visio.slp_visio.load.strategies.component.create_component_strategy import CreateComponentStrategy
-from slp_visio.slp_visio.util.visio import get_shape_text, get_master_shape_text, normalize_label, get_unique_id_text
+from slp_visio.slp_visio.util.visio import get_shape_text, get_master_shape_text, get_unique_id_text, normalize_label
 
 LUCID_COMPONENT_PREFIX = 'com.lucidchart'
 
@@ -22,7 +22,7 @@ class CreateComponentByShapeText(CreateComponentStrategy):
             return DiagramComponent(
                 id=shape.ID,
                 name=normalize_label(name),
-                type=normalize_label(self.get_component_type(shape)),
+                type=self.get_component_type(shape),
                 origin=origin,
                 representation=representer.build_representation(shape),
                 unique_id=get_unique_id_text(shape))
