@@ -1,7 +1,7 @@
-import re
 from functools import singledispatch
 from typing import List
 
+import sl_util.sl_util.secure_regex as re
 from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.trustzone import Trustzone
 from slp_tfplan.slp_tfplan.map.mapping import Mapping, TrustZoneMapping, ComponentMapping
@@ -23,7 +23,7 @@ def _match_resource_by_dict(label: dict, resource: str):
     return re.match(label.get('$regex'), resource)
 
 
-def _trustzone_to_otm(trustzone: TrustZoneMapping) -> Trustzone:
+def trustzone_to_otm(trustzone: TrustZoneMapping) -> Trustzone:
     return Trustzone(
         trustzone_id=trustzone.id,
         name=trustzone.name,
@@ -39,7 +39,7 @@ class TFPlanMapper:
         self.resources = tfplan['resource']
         self.mapping = mapping
 
-        self.default_trustzone: Trustzone = _trustzone_to_otm(self.mapping.default_trustzone)
+        self.default_trustzone: Trustzone = trustzone_to_otm(self.mapping.default_trustzone)
 
     def map(self):
         self.otm.components = self.__tfplan_resources_to_otm_components()

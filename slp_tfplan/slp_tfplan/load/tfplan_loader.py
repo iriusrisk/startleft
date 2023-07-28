@@ -3,9 +3,8 @@ from typing import List, Dict, Union
 import pygraphviz
 from networkx import nx_agraph, DiGraph
 
-from sl_util.sl_util.json_utils import yaml_reader
 from sl_util.sl_util.file_utils import read_byte_data
-
+from sl_util.sl_util.json_utils import yaml_reader
 from slp_base import ProviderLoader, LoadingIacFileError
 from slp_tfplan.slp_tfplan.load.tfplan_to_resource_dict import TfplanToResourceDict
 
@@ -52,6 +51,7 @@ class TFPlanLoader(ProviderLoader):
         self.__load_sources()
         if self.tfplan:
             self.__map_tfplan_to_resources()
+            self.__map_tfplan_to_variables()
 
     def get_terraform(self):
         return self.terraform
@@ -81,7 +81,7 @@ class TFPlanLoader(ProviderLoader):
         resources = TfplanToResourceDict(self.__get_tfplan_resources()).map_modules(self.__get_tfplan_root_module())
 
         if resources:
-            self.terraform = {'resource': resources}
+            self.terraform['resource'] = resources
 
     def __get_tfplan_resources(self) -> Dict:
         return self.tfplan \
@@ -91,3 +91,12 @@ class TFPlanLoader(ProviderLoader):
 
     def __get_tfplan_root_module(self) -> List[Dict]:
         return [self.tfplan['planned_values']['root_module']]
+
+    def __map_tfplan_to_variables(self):
+        variables = self.__get_tfplan_variables()
+        if variables:
+            self.terraform['variables'] = variables
+
+    def __get_tfplan_variables(self) -> Dict:
+        return self.tfplan.get('variables', {})
+

@@ -29,7 +29,7 @@ class TestDataflowCreationStrategy:
         # WHEN DataflowCreationStrategy::create_dataflows is called
         # THEN an NotImplementedError is raised
         with raises(NotImplementedError):
-            instance.create_dataflows(otm=Mock(), relationships_extractor=Mock(), are_hierarchically_related=Mock())
+            instance.create_dataflows(otm=Mock(), relationships_extractor=Mock())
 
     @mark.parametrize('source_id,source_name,target_id,target_name,bidirectional,expected_id,expected_name', [
         param('1', 'C1', '2', 'C2', False, '465a886e-6345-4dc1-90dd-05b94067c641', 'C1 to C2',
@@ -56,7 +56,7 @@ class TestDataflowCreationStrategy:
         # AND a bidirectional flag
 
         # WHEN create_dataflow is invoked
-        dataflow = create_dataflow(source_component, target_component, bidirectional)
+        dataflow = create_dataflow(source_component, target_component, bidirectional=bidirectional)
 
         # THEN a dataflow is created with the right ID
         assert dataflow.id == expected_id
@@ -85,8 +85,8 @@ class TestDataflowCreationStrategy:
         bidirectional = True
 
         # WHEN create_dataflow with the components in the two directions
-        dataflow_1 = create_dataflow(component_1, component_2, bidirectional)
-        dataflow_2 = create_dataflow(component_2, component_1, bidirectional)
+        dataflow_1 = create_dataflow(component_1, component_2, bidirectional=bidirectional)
+        dataflow_2 = create_dataflow(component_2, component_1, bidirectional=bidirectional)
 
         # THEN the ID for the two dataflows is the same
         assert dataflow_1.id == dataflow_2.id

@@ -1,7 +1,7 @@
-import re
 from functools import singledispatch
 from typing import List, Dict
 
+import sl_util.sl_util.secure_regex as re
 from otm.otm.entity.component import Component
 from otm.otm.entity.dataflow import Dataflow
 from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
