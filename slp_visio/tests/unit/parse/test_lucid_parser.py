@@ -43,10 +43,17 @@ def mock_diagram():
 
 class TestLucidParser:
 
-    def test_none_catch_all_config(self):
+    @pytest.mark.parametrize('catch_all_config', [
+        pytest.param({}, id='None configuration'),
+        pytest.param({'catch_all': False}, id='Configured as boolean'),
+        pytest.param({'catch_all': 'False'}, id='Configured as string Capital F'),
+        pytest.param({'catch_all': 'false'}, id='Configured as string ')
+    ])
+    def test_none_catch_all_config(self, catch_all_config):
         # GIVEN a mapping loader with none configuration
-        mapping_loader = MagicMock(configuration={})
-        lucid_parser = LucidParser(*(MagicMock(),) * 3, mapping_loader)
+        mapping_loader = MagicMock(configuration=catch_all_config)
+        diagram = MagicMock(components=[MagicMock(id='1', type="AmazonEC22017")])
+        lucid_parser = LucidParser(*(MagicMock(),) * 2, diagram, mapping_loader)
 
         # WHEN _get_component_mappings is called in LucidParser
         component_mappings = lucid_parser._get_component_mappings()

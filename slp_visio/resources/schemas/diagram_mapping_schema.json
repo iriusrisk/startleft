@@ -74,7 +74,14 @@
          "additionalProperties":false,
          "properties":{
             "catch_all":{
-               "type":"string"
+              "anyOf": [
+                {
+                  "type":"string"
+                },
+                {
+                  "type":"boolean"
+                }
+              ]
             }
          },
          "required":[

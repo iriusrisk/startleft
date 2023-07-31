@@ -41,7 +41,7 @@ class LucidParser(VisioParser):
 
     def __get_catch_all_mappings(self, ids_to_skip) -> [dict]:
         result = {}
-        catch_all_config = self.mapping_loader.configuration.get('catch_all', False)
+        catch_all_config = self.__get_catch_all_config()
         if not catch_all_config:
             return result
         for diag_component in self.diagram.components:
@@ -51,3 +51,10 @@ class LucidParser(VisioParser):
             if mapping:
                 result[diag_component.id] = mapping
         return result
+
+    def __get_catch_all_config(self):
+        catch_all = self.mapping_loader.configuration.get('catch_all', False)
+        if not catch_all or catch_all.lower() == 'false':
+            return
+
+        return catch_all.strip()
