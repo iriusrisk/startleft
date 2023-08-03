@@ -48,12 +48,16 @@ will be used. Summarizing, the steps that an external developer must follow to c
 1. [Fork the StartLeft repository](https://github.com/iriusrisk/startleft/fork).
 2. Implement your changes in your forked repository.
 3. Create a Pull Request (PR) from the forked branch to the StartLeft `dev` branch in the main
-   repository describing the changes done and their motivations.
+repository describing the changes done and their motivations.
 4. The PR will be reviewed by the owners' team using the
-   [GitHub strategy](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-proposed-changes-in-a-pull-request).
-   for async communication.
+[GitHub strategy](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-proposed-changes-in-a-pull-request).
+for async communication.
 5. Once approved, the PR will be merged in the `dev` branch of the StartLeft repository and delivered in the next
-   release.
+release.
+
+> **Disclaimer:** Any PR which contains changes in otm_schema.json file will be discarded. If you want to propose any change
+> in the schema should be made through https://github.com/iriusrisk/OpenThreatModel
+
 
 ## Code conventions
 There are no specific code conventions for the StartLeft project. At this point, the generic
