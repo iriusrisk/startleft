@@ -1,11 +1,11 @@
 import abc
 
+from dependency_injector import providers
+from dependency_injector.containers import DeclarativeContainer
 from vsdx import Shape
 
-from slp_visio.slp_visio.load.strategies.strategy import Strategy
 
-
-class ComponentIdentifierStrategy(Strategy):
+class ComponentIdentifierStrategy:
     """
     Formal Interface to check if a shape is a component
     """
@@ -20,3 +20,10 @@ class ComponentIdentifierStrategy(Strategy):
     def is_component(self, shape: Shape) -> bool:
         """return True if the Shape is a component"""
         raise NotImplementedError
+
+
+class ComponentIdentifierStrategyContainer(DeclarativeContainer):
+    """
+    ComponentIdentifierStrategy implementations
+    """
+    visio_strategies = providers.List()
