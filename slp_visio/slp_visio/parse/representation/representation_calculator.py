@@ -11,7 +11,7 @@ def scale_to_int(value: float) -> int:
     return round(value * SCALE_FACTOR)
 
 
-def get_absolute_coordinates(component: DiagramComponent) -> ():
+def get_scaled_coordinates(component: DiagramComponent) -> ():
     minx, miny, maxx, maxy = component.representation.bounds
     return scale_to_int(minx), scale_to_int(maxy)
 
@@ -67,13 +67,13 @@ class RepresentationCalculator:
         return {'x': xleft, 'y': ytop}
 
     def __calculate_position(self, component: DiagramComponent):
-        xleft, ytop = get_absolute_coordinates(component)
+        xleft, ytop = get_scaled_coordinates(component)
         xmin, ymax = self.__get_parent_coordinates(component)
 
         return xleft - xmin, ymax - ytop
 
     def __get_parent_coordinates(self, component):
-        return get_absolute_coordinates(component.parent) \
+        return get_scaled_coordinates(component.parent) \
             if component.parent \
             else self.__get_diagram_origin()
 

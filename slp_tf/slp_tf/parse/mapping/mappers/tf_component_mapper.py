@@ -1,6 +1,6 @@
-import re
 import uuid
 
+import sl_util.sl_util.secure_regex as re
 from slp_tf.slp_tf.parse.mapping.mappers.tf_base_mapper import TerraformBaseMapper, is_terraform_resource_reference, \
     get_resource_id_from_resource_reference
 

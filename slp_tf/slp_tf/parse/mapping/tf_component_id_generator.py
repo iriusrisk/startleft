@@ -1,4 +1,4 @@
-import re
+import sl_util.sl_util.secure_regex as re
 
 VALID_ID_REGEX = r"([a-z0-9_]+)"
 
