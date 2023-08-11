@@ -6,13 +6,17 @@ PATCH_VERSION_POSITION = 2
 DEFAULT_VERSION = 'development-version'
 
 
-def choose_strategy_by_branch(branch_name: str) -> callable:
+def __is_tag_commit(branch_name: str, exact: bool):
+    return branch_name == 'HEAD' and exact
+
+
+def choose_strategy_by_branch(branch_name: str, exact: bool) -> callable:
     """
     This function chooses the right strategy for calculating the version of the application based on the given branch name.
     :param branch_name: The name of the branch for which the version is being calculated
     :return: The callable for the version strategy calculation
     """
-    if branch_name == 'main' or 'release/' in branch_name:
+    if branch_name == 'main' or 'release/' in branch_name or __is_tag_commit(branch_name, exact):
         return _tag_version_strategy
     elif 'hotfix/' in branch_name:
         return _patch_version_dev_commit_strategy
@@ -33,7 +37,7 @@ def guess_startleft_semver(scm_version) -> str:
     1.5.0.dev5
     """
     try:
-        return choose_strategy_by_branch(scm_version.branch)(scm_version)
+        return choose_strategy_by_branch(scm_version.branch, scm_version.exact)(scm_version)
     except Exception:
         return DEFAULT_VERSION
 
