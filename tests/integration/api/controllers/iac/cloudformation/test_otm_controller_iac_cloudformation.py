@@ -30,17 +30,19 @@ class TestOTMControllerIaCCloudformation:
     wrong_id = cloudformation_malformed_mapping_wrong_id
     app_json = 'application/json'
     text_yaml = 'text/yaml'
-    uc_a = (None, 'proj A', example_json, app_json, cft_map, 'RequestValidationError')
-    uc_b = ('proj_B', None, example_json, app_json, cft_map, 'RequestValidationError')
-    uc_c = ('proj_C', 'proj C', None, None, cft_map, 'RequestValidationError')
-    uc_d = ('proj_D', 'proj D', example_json, app_json, None, 'RequestValidationError')
-    uc_e = ('proj_E', 'proj E', example_json, app_json, wrong_id, 'MappingFileNotValidError')
-    uc_f = ('proj_F', 'proj F', None, None, None, 'RequestValidationError')
-    uc_h = ('proj_H', 'proj H', invalid_yaml, '', cft_map, 'IacFileNotValidError')
-    uc_i = ('proj_I', 'proj I', invalid_yaml, text_yaml, cft_map, 'OTMBuildingError')
-    uc_j = ('proj_J', 'proj J', invalid_yaml, None, cft_map, 'OTMBuildingError')
-    uc_k = ('proj_K', 'proj K', cloudformation_gz, None, cft_map, 'IacFileNotValidError')
-    uc_l = ('proj_L', 'proj L', visio_aws_shapes, None, cft_map, 'IacFileNotValidError')
+    uc_a = (None, 'proj A', example_json, app_json, cft_map, None, 'RequestValidationError')
+    uc_b = ('proj_B', None, example_json, app_json, cft_map, None, 'RequestValidationError')
+    uc_c = ('proj_C', 'proj C', None, None, cft_map, None, 'RequestValidationError')
+    uc_d = ('proj_D', 'proj D', example_json, app_json, None, None, 'MappingFileNotValidError')
+    uc_e = ('proj_E', 'proj E', example_json, app_json, wrong_id, None, 'MappingFileNotValidError')
+    uc_f = ('proj_F', 'proj F', None, None, None, None, 'RequestValidationError')
+    uc_h = ('proj_H', 'proj H', invalid_yaml, '', cft_map, None, 'IacFileNotValidError')
+    uc_i = ('proj_I', 'proj I', invalid_yaml, text_yaml, cft_map, None, 'OTMBuildingError')
+    uc_j = ('proj_J', 'proj J', invalid_yaml, None, cft_map, None, 'OTMBuildingError')
+    uc_k = ('proj_K', 'proj K', cloudformation_gz, None, cft_map, None, 'IacFileNotValidError')
+    uc_l = ('proj_L', 'proj L', visio_aws_shapes, None, cft_map, None,'IacFileNotValidError')
+    uc_m = ('proj_M', 'proj M', example_json, app_json, cft_map, cft_map, 'MappingFileNotValidError')
+
 
     @responses.activate
     def test_create_otm_ok(self):
@@ -65,10 +67,10 @@ class TestOTMControllerIaCCloudformation:
         assert '"trustZones": ' in response.text
         assert '"components": ' in response.text
 
-    @mark.parametrize('project_id,project_name,cft_filename,cft_mimetype,mapping_filename,error_type',
-                      [uc_a, uc_b, uc_c, uc_d, uc_e, uc_f, uc_h, uc_i, uc_j, uc_k])
+    @mark.parametrize('project_id,project_name,cft_filename,cft_mimetype,mapping_filename,default_mapping_file,error_type',
+                      [uc_m])
     def test_create_project_validation_error(self, project_id: str, project_name: str, cft_filename, cft_mimetype,
-                                             mapping_filename, error_type):
+                                             mapping_filename, default_mapping_file, error_type):
         # Given a body
         body = {'iac_type': TESTING_IAC_TYPE, 'id': project_id, 'name': project_name}
 
@@ -78,6 +80,9 @@ class TestOTMControllerIaCCloudformation:
             files['iac_file'] = (cft_filename, open(cft_filename, 'rb'), cft_mimetype)
         if mapping_filename:
             files['mapping_file'] = (mapping_filename, open(mapping_filename, 'rb'), 'text/yaml')
+        if default_mapping_file:
+            files['default_mapping_file'] = (mapping_filename, open(mapping_filename, 'rb'), 'text/yaml')
+
 
         # When I do post on cloudformation endpoint
         response = client.post(get_url(), files=files, data=body)
