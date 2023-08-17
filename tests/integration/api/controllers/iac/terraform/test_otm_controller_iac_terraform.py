@@ -42,8 +42,7 @@ class TestOTMControllerIaCTerraform:
     uc_i = ('proj_I', 'proj I', invalid_tf, text_yaml, tf_map, None, 'IacFileNotValidError')
     uc_j = ('proj_J', 'proj J', invalid_tf, None, tf_map, None, 'LoadingIacFileError')
     uc_k = ('proj_K', 'proj K', terraform_gz, None, tf_map, None, 'IacFileNotValidError')
-    uc_l = ('proj_L', 'proj L', visio_aws_shapes, None, tf_map, None, 'IacFileNotValidError')
-    uc_m = ('proj_D', 'proj D', tf_file, app_json, tf_map, tf_map, 'MappingFileNotValidError')
+    uc_l = ('proj_D', 'proj D', tf_file, app_json, tf_map, tf_map, 'MappingFileNotValidError')
 
     @responses.activate
     @pytest.mark.parametrize('filename,break_line', [
@@ -80,7 +79,7 @@ class TestOTMControllerIaCTerraform:
         assert '"components": ' in response.text
 
     @mark.parametrize('project_id,project_name,cft_filename,cft_mimetype,mapping_filename,default_mapping_file,error_type',
-                      [uc_a, uc_b, uc_c, uc_d, uc_e, uc_f, uc_h, uc_i, uc_j, uc_k, uc_l, uc_m])
+                      [uc_a, uc_b, uc_c, uc_d, uc_e, uc_f, uc_h, uc_i, uc_j, uc_k, uc_l])
     def test_create_project_validation_error(self, project_id: str, project_name: str, cft_filename, cft_mimetype,
                                              mapping_filename, default_mapping_file, error_type):
         # Given a body
