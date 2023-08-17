@@ -78,7 +78,8 @@ def cli(log_level, verbose):
     configure_logging(verbose, log_level)
 
 
-def parse_iac(iac_type, mapping_file, output_file, project_name, project_id, iac_files):
+def parse_iac(iac_type, default_mapping_file, custom_mapping_file, output_file, project_name, project_id,
+              iac_files):
     """
     Parses IaC source files into Open Threat Model
     """
@@ -87,10 +88,13 @@ def parse_iac(iac_type, mapping_file, output_file, project_name, project_id, iac
     for iac_file in iac_files:
         iac_data.append(get_byte_data(iac_file))
 
-    mapping_data = [get_byte_data(mapping_file)]
+    mapping_data_list = [get_byte_data(default_mapping_file)]
+
+    if custom_mapping_file:
+        mapping_data_list.append(get_byte_data(custom_mapping_file))
 
     processor = provider_resolver.get_processor(IacType(iac_type.upper()), project_id, project_name, iac_data,
-                                                mapping_data)
+                                                mapping_data_list)
     otm = processor.process()
 
     get_otm_as_file(otm, output_file)
@@ -141,45 +145,38 @@ def parse_etm(etm_type, default_mapping_file, custom_mapping_file, output_file, 
               help=IAC_TYPE_DESC,
               cls=Exclusion,
               mandatory=True,
-              mutually_exclusion=['diagram_type', 'etm_type', 'default_mapping_file', 'custom_mapping_file'])
+              mutually_exclusion=['diagram_type', 'etm_type'])
 @click.option(DIAGRAM_TYPE_NAME, DIAGRAM_TYPE_SHORTNAME,
               type=click.Choice(DIAGRAM_TYPE_SUPPORTED, case_sensitive=False),
               help=DIAGRAM_TYPE_DESC,
               cls=Exclusion,
               mandatory=True,
-              mutually_exclusion=['iac_type', 'etm_type', 'mapping_file'])
+              mutually_exclusion=['iac_type', 'etm_type'])
 @click.option(ETM_TYPE_NAME, ETM_TYPE_SHORTNAME,
               type=click.Choice(ETM_TYPE_SUPPORTED, case_sensitive=False),
               help=ETM_TYPE_DESC,
               cls=Exclusion,
               mandatory=True,
-              mutually_exclusion=['diagram_type', 'iac_type', 'mapping_file'])
-@click.option(MAPPING_FILE_NAME, MAPPING_FILE_SHORTNAME,
-              help=MAPPING_FILE_DESC,
-              cls=Exclusion,
-              mandatory=True,
-              mutually_exclusion=['default_mapping_file', 'custom_mapping_file', 'diagram_type', 'etm_type'])
+              mutually_exclusion=['diagram_type', 'iac_type'])
 @click.option(DEFAULT_MAPPING_FILE_NAME, DEFAULT_MAPPING_FILE_SHORTNAME,
               help=DEFAULT_MAPPING_FILE_DESC,
               cls=Exclusion,
-              mandatory=True,
-              mutually_exclusion=['mapping_file', 'iac_type'])
+              mandatory=True)
 @click.option(CUSTOM_MAPPING_FILE_NAME, CUSTOM_MAPPING_FILE_SHORTNAME,
               help=CUSTOM_MAPPING_FILE_DESC,
-              cls=Exclusion,
-              mutually_exclusion=['mapping_file', 'iac_type'])
+              cls=Exclusion)
 @click.option(OUTPUT_FILE_NAME, OUTPUT_FILE_SHORTNAME, default=OUTPUT_FILE, help=OUTPUT_FILE_DESC)
 @click.option(PROJECT_NAME_NAME, PROJECT_NAME_SHORTNAME, required=True, help=PROJECT_NAME_DESC)
 @click.option(PROJECT_ID_NAME, PROJECT_ID_SHORTNAME, required=True, help=PROJECT_ID_DESC)
 @click.argument(SOURCE_FILE_NAME, required=True, nargs=-1)
-def parse_any(iac_type, diagram_type, etm_type, mapping_file, default_mapping_file, custom_mapping_file,
+def parse_any(iac_type, diagram_type, etm_type, default_mapping_file, custom_mapping_file,
               output_file, project_name, project_id, source_file):
     """
     Parses source files into Open Threat Model
     """
     logger.info("Parsing source files into OTM")
     if iac_type is not None:
-        parse_iac(iac_type, mapping_file, output_file, project_name, project_id, source_file)
+        parse_iac(iac_type, default_mapping_file, custom_mapping_file, output_file, project_name, project_id, source_file)
     elif diagram_type is not None:
         parse_diagram(diagram_type, default_mapping_file, custom_mapping_file, output_file, project_name,
                       project_id, source_file)

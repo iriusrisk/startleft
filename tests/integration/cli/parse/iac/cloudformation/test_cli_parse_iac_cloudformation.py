@@ -38,7 +38,7 @@ class TestCliParseIaCCloudformation:
                 # a valid IaC type
                 '--iac-type', "CLOUDFORMATION",
                 #   and a valid mapping file
-                '--mapping-file', CLOUDFORMATION_MAPPING,
+                '--default-mapping-file', CLOUDFORMATION_MAPPING,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -71,7 +71,7 @@ class TestCliParseIaCCloudformation:
                 # a valid IaC type
                 '--iac-type', "CLOUDFORMATION",
                 #   and a valid mapping file
-                '--mapping-file', CLOUDFORMATION_MAPPING,
+                '--default-mapping-file', CLOUDFORMATION_MAPPING,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -105,7 +105,7 @@ class TestCliParseIaCCloudformation:
                 # a valid IaC type
                 '--iac-type', "CLOUDFORMATION",
                 #   and a valid mapping file
-                '--mapping-file', CLOUDFORMATION_MAPPING,
+                '--default-mapping-file', CLOUDFORMATION_MAPPING,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -135,7 +135,7 @@ class TestCliParseIaCCloudformation:
                 # a valid IaC type
                 '--iac-type', "CLOUDFORMATION",
                 #   and a valid mapping file
-                '--mapping-file', mapping_file,
+                '--default-mapping-file', mapping_file,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
