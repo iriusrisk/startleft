@@ -61,7 +61,7 @@ def _determine_source_file(mapping_file: File, default_mapping_file: File):
         raise MappingFileNotValidError("Error processing mapping file", msg, msg)
 
     if not mapping_file and not default_mapping_file:
-        msg = "Mapping file must no be void"
+        msg = "Mapping file must not be void"
         raise MappingFileNotValidError("Error processing mapping file", msg, msg)
 
     if mapping_file:

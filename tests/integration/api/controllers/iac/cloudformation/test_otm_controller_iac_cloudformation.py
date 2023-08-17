@@ -68,7 +68,7 @@ class TestOTMControllerIaCCloudformation:
         assert '"components": ' in response.text
 
     @mark.parametrize('project_id,project_name,cft_filename,cft_mimetype,mapping_filename,default_mapping_file,error_type',
-                      [uc_m])
+                      [uc_a, uc_b, uc_c, uc_d, uc_e, uc_f, uc_h, uc_i, uc_j, uc_k, uc_l, uc_m])
     def test_create_project_validation_error(self, project_id: str, project_name: str, cft_filename, cft_mimetype,
                                              mapping_filename, default_mapping_file, error_type):
         # Given a body
