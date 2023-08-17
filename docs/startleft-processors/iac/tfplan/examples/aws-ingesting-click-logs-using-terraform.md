@@ -38,7 +38,7 @@ Use the StartLeft CLI to generate the OTM file:
 ```shell
 $ startleft parse \ 
   --iac-type TFPLAN \ 
-  --mapping-file ir-mappings.yaml \ 
+  --default-mapping-file ir-mappings.yaml \ 
   --output-file output.otm \
   --project-id "my-project" \
   --project-name "My project" \ 

@@ -83,7 +83,7 @@ With this two files we are ready to execute the `parse` command in order to gene
 ```shell
 startleft parse \
 	--iac-type TERRAFORM \
-	--mapping-file iriusrisk-tf-aws-mapping.yaml \
+	--default-mapping-filefile iriusrisk-tf-aws-mapping.yaml \
 	--output-file multinetwork_security_groups_with_lb.otm \
 	--project-name "Terraform MN Security Groups with LB" \
 	--project-id "tf-mn-sg-lb" \
