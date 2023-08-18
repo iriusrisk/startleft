@@ -23,7 +23,6 @@ class MappingFileLoader(MappingLoader):
         validate_size(self.mapping_files[0])
 
         try:
-            # Here we reverse the list to give higher priority to the custom mapping file
             for mapping_file_data in self.mapping_files:
                 if not mapping_file_data:
                     continue
