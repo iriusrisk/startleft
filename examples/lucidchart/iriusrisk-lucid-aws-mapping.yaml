@@ -80,5 +80,5 @@ components:
   - label: AmazonECR
     type: empty-component
 
-
-dataflows: [ ]
+configuration:
+  catch_all: empty-component

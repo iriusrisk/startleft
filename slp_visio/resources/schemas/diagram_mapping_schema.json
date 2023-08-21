@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-07/schema#",
     "title": "Mapping File",
     "type": "object",
-    "required": ["trustzones", "components", "dataflows"],
+    "required": ["trustzones", "components"],
     "properties": {
         "trustzones": {
             "type": "array",
@@ -27,14 +27,9 @@
                 }
             }        
         },
-        "dataflows": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "required": [],
-                "properties": {}
-            }    
-        }
+        "configuration":{
+         "$ref":"#/definitions/Configuration"
+      }
     },
     "definitions": {
         "query": {
@@ -73,6 +68,26 @@
             "$regex"
          ],
          "title":"RegExClass"
+      },
+      "Configuration":{
+         "type":"object",
+         "additionalProperties":false,
+         "properties":{
+            "catch_all":{
+              "anyOf": [
+                {
+                  "type":"string"
+                },
+                {
+                  "type":"boolean"
+                }
+              ]
+            }
+         },
+         "required":[
+
+         ],
+         "title":"Configuration"
       }
     }
 }

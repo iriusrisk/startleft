@@ -102,8 +102,8 @@ class VisioParser(ProviderParser):
         self.__component_mappings = {}
 
     def build_otm(self):
-        self.__trustzone_mappings = self.__get_trustzone_mappings()
-        self.__component_mappings = self.__get_component_mappings()
+        self.__trustzone_mappings = self._get_trustzone_mappings()
+        self.__component_mappings = self._get_component_mappings()
 
         self.__prune_diagram()
 
@@ -116,10 +116,10 @@ class VisioParser(ProviderParser):
 
         return otm
 
-    def __get_trustzone_mappings(self) -> Dict[str, dict]:
+    def _get_trustzone_mappings(self) -> Dict[str, dict]:
         return self.__get_shape_mappings(self.mapping_loader.get_trustzone_mappings())
 
-    def __get_component_mappings(self) -> Dict[str, dict]:
+    def _get_component_mappings(self) -> Dict[str, dict]:
         return self.__get_shape_mappings(self.mapping_loader.get_component_mappings())
 
     def __get_shape_mappings(self, mappings: [dict]) -> Dict[str, dict]:
