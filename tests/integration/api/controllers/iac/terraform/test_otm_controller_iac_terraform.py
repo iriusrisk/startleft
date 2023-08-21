@@ -32,17 +32,17 @@ class TestOTMControllerIaCTerraform:
     wrong_id = terraform_malformed_mapping_wrong_id
     app_json = 'application/json'
     text_yaml = 'text/yaml'
-    uc_a = (None, 'proj A', tf_file, app_json, tf_map, 'RequestValidationError')
-    uc_b = ('proj_B', None, tf_file, app_json, tf_map, 'RequestValidationError')
-    uc_c = ('proj_C', 'proj C', None, None, tf_map, 'RequestValidationError')
-    uc_d = ('proj_D', 'proj D', tf_file, app_json, None, 'RequestValidationError')
-    uc_e = ('proj_E', 'proj E', tf_file, app_json, wrong_id, 'MappingFileNotValidError')
-    uc_f = ('proj_F', 'proj F', None, None, None, 'RequestValidationError')
-    uc_h = ('proj_H', 'proj H', invalid_tf, '', tf_map, 'IacFileNotValidError')
-    uc_i = ('proj_I', 'proj I', invalid_tf, text_yaml, tf_map, 'IacFileNotValidError')
-    uc_j = ('proj_J', 'proj J', invalid_tf, None, tf_map, 'LoadingIacFileError')
-    uc_k = ('proj_K', 'proj K', terraform_gz, None, tf_map, 'IacFileNotValidError')
-    uc_l = ('proj_L', 'proj L', visio_aws_shapes, None, tf_map, 'IacFileNotValidError')
+    uc_a = (None, 'proj A', tf_file, app_json, tf_map, None, 'RequestValidationError')
+    uc_b = ('proj_B', None, tf_file, app_json, tf_map, None, 'RequestValidationError')
+    uc_c = ('proj_C', 'proj C', None, None, tf_map, None, 'RequestValidationError')
+    uc_d = ('proj_D', 'proj D', tf_file, app_json, None, None, 'MappingFileNotValidError')
+    uc_e = ('proj_E', 'proj E', tf_file, app_json, wrong_id, None, 'MappingFileNotValidError')
+    uc_f = ('proj_F', 'proj F', None, None, None, None, 'RequestValidationError')
+    uc_h = ('proj_H', 'proj H', invalid_tf, '', tf_map, None, 'IacFileNotValidError')
+    uc_i = ('proj_I', 'proj I', invalid_tf, text_yaml, tf_map, None, 'IacFileNotValidError')
+    uc_j = ('proj_J', 'proj J', invalid_tf, None, tf_map, None, 'LoadingIacFileError')
+    uc_k = ('proj_K', 'proj K', terraform_gz, None, tf_map, None, 'IacFileNotValidError')
+    uc_l = ('proj_D', 'proj D', tf_file, app_json, tf_map, tf_map, 'MappingFileNotValidError')
 
     @responses.activate
     @pytest.mark.parametrize('filename,break_line', [
@@ -78,10 +78,10 @@ class TestOTMControllerIaCTerraform:
         assert '"trustZones": ' in response.text
         assert '"components": ' in response.text
 
-    @mark.parametrize('project_id,project_name,cft_filename,cft_mimetype,mapping_filename,error_type',
-                      [uc_a, uc_b, uc_c, uc_d, uc_e, uc_f, uc_h, uc_i, uc_j, uc_k])
+    @mark.parametrize('project_id,project_name,cft_filename,cft_mimetype,mapping_filename,default_mapping_file,error_type',
+                      [uc_a, uc_b, uc_c, uc_d, uc_e, uc_f, uc_h, uc_i, uc_j, uc_k, uc_l])
     def test_create_project_validation_error(self, project_id: str, project_name: str, cft_filename, cft_mimetype,
-                                             mapping_filename, error_type):
+                                             mapping_filename, default_mapping_file, error_type):
         # Given a body
         body = {'iac_type': TESTING_IAC_TYPE, 'id': project_id, 'name': project_name}
 
@@ -91,6 +91,8 @@ class TestOTMControllerIaCTerraform:
             files['iac_file'] = (cft_filename, open(cft_filename, 'rb'), cft_mimetype)
         if mapping_filename:
             files['mapping_file'] = (mapping_filename, open(mapping_filename, 'rb'), 'text/yaml')
+        if default_mapping_file:
+            files['default_mapping_file'] = (mapping_filename, open(mapping_filename, 'rb'), 'text/yaml')
 
         # When I do post on TERRAFORM endpoint
         response = client.post(get_url(), files=files, data=body)
