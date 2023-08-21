@@ -161,7 +161,7 @@ def parse_etm(etm_type, default_mapping_file, custom_mapping_file, output_file, 
 @click.option(DEFAULT_MAPPING_FILE_NAME, DEFAULT_MAPPING_FILE_SHORTNAME,
               help=DEFAULT_MAPPING_FILE_DESC,
               cls=Exclusion,
-              mandatory=True)
+              required=True)
 @click.option(CUSTOM_MAPPING_FILE_NAME, CUSTOM_MAPPING_FILE_SHORTNAME,
               help=CUSTOM_MAPPING_FILE_DESC,
               cls=Exclusion)
