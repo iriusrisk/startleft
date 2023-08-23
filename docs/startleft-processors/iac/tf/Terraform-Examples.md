@@ -21,7 +21,7 @@ StartLeft supports parsing Terraform source files. Some examples are provided in
 ```shell
 startleft parse \
 	--iac-type TERRAFORM \
-	--mapping-file iriusrisk-tf-aws-mapping \
+	--default-mapping-file iriusrisk-tf-aws-mapping \
 	--output-file elb.otm \
 	--project-name "Terraform ELB" \
 	--project-id "terraform-elb" \
