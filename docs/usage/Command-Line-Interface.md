@@ -112,7 +112,7 @@ The options that it supports are:
                                   [diagram_type, iac_type]. [required]
   -d, --default-mapping-file TEXT
                                   Default mapping file to parse the diagram
-                                  file.
+                                  file. [required]
   -c, --custom-mapping-file TEXT  Custom mapping file to parse the diagram
                                   file.
   -o, --output-file TEXT          OTM output file.
