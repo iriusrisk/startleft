@@ -12,6 +12,10 @@ def __get_component_representation(component: Component):
     return component.representations[0] if component.representations and len(component.representations) > 0 else None
 
 
+def __get_tz_components(otm, tz_id):
+    return list(filter(lambda component: component.parent == tz_id, otm.components))
+
+
 def __calculate_tz_representation_by_components(
         representation_id, tz: Trustzone, components: List[Component]) -> Optional[RepresentationElement]:
     """
@@ -22,7 +26,11 @@ def __calculate_tz_representation_by_components(
     :param components:
     :return:
     """
-    left_x, right_x, top_y, bottom_y = (None,)*4
+
+    if not all(__get_component_representation(c) for c in components):
+        return
+
+    left_x, right_x, top_y, bottom_y = (None,) * 4
     for component in components:
         representation = __get_component_representation(component)
         if not representation:
@@ -40,9 +48,6 @@ def __calculate_tz_representation_by_components(
             top_y = y
         if not bottom_y or bottom_y < (y + height):
             bottom_y = (y + height)
-
-    if not left_x and not right_x and not top_y and not bottom_y:
-        return
 
     return RepresentationElement(
         id_=f'{tz.id}-representation',
@@ -74,7 +79,7 @@ def calculate_tz_representation(otm: OTM, representation_id):
     for tz in otm.trustzones:
         if tz.representations and len(tz.representations) > 0:
             continue
-        tz_components = list(filter(lambda component: component.parent == tz.id, otm.components))
+        tz_components = __get_tz_components(otm, tz.id)
         representation = __calculate_tz_representation_by_components(representation_id, tz, tz_components)
         if representation:
             tz.representations = [representation]
