@@ -16,6 +16,7 @@ from slp_visio.slp_visio.parse.mappers.diagram_connector_mapper import DiagramCo
 from slp_visio.slp_visio.parse.mappers.diagram_trustzone_mapper import DiagramTrustzoneMapper
 from slp_visio.slp_visio.parse.representation.representation_calculator import RepresentationCalculator, \
     build_size_object, calculate_diagram_size
+from slp_visio.slp_visio.parse.representation.trustzone_representation_calculator import calculate_tz_representation
 from slp_visio.slp_visio.util.visio import normalize_unique_id, normalize_label
 
 
@@ -103,6 +104,9 @@ class VisioParser(ProviderParser):
     def build_otm(self):
         self.__trustzone_mappings = self.__get_trustzone_mappings()
         self.__component_mappings = self.__get_component_mappings()
+        # Remove from __component_mappings the trustzones
+        for key in self.__trustzone_mappings.keys():
+            self.__component_mappings.pop(key, None)
 
         self.__prune_diagram()
 
@@ -111,6 +115,7 @@ class VisioParser(ProviderParser):
         dataflows = self.__map_dataflows()
 
         otm = self.__build_otm(trustzones, components, dataflows)
+        calculate_tz_representation(otm, self.representation_id)
 
         return otm
 

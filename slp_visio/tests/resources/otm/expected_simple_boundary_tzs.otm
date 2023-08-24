@@ -1,60 +1,120 @@
 {
-  "otmVersion": "0.1.0",
-  "project": {
-    "name": "project-name",
-    "id": "project-id"
-  },
-  "representations": [
-    {
-      "name": "project-id Diagram Representation",
-      "id": "project-id-diagram",
-      "type": "diagram",
-      "size": {
-        "width": 1433,
-        "height": 738
-      }
-    }
-  ],
-  "trustZones": [
-    {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
-      "name": "Public Cloud",
-      "risk": {
-        "trustRating": 10
-      }
+    "otmVersion": "0.1.0",
+    "project": {
+        "name": "project-name",
+        "id": "project-id"
     },
-    {
-      "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
-      "name": "Private Secured Cloud",
-      "risk": {
-        "trustRating": 10
-      }
-    }
-  ],
-  "components": [
-    {
-      "id": "12",
-      "name": "Custom machine",
-      "type": "ec2",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
-    },
-    {
-      "id": "30",
-      "name": "Private Database",
-      "type": "rds",
-      "parent": {
-        "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
-      }
-    }
-  ],
-  "dataflows": [
-    {
-      "id": "34",
-      "name": "89ab351c-6ae7-4afb-ad90-0eb045fd801a",
-      "source": "12",
-      "destination": "30"
-    }
-  ]
+    "representations": [
+        {
+            "name": "project-id Diagram Representation",
+            "id": "project-id-diagram",
+            "type": "diagram",
+            "size": {
+                "width": 1433,
+                "height": 738
+            }
+        }
+    ],
+    "trustZones": [
+        {
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "name": "Public Cloud",
+            "risk": {
+                "trustRating": 10
+            },
+            "representations": [
+                {
+                    "name": "Public Cloud Representation",
+                    "id": "62-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 142,
+                        "height": 142
+                    },
+                    "position": {
+                        "x": 298,
+                        "y": 298
+                    }
+                }
+            ]
+        },
+        {
+            "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+            "name": "Private Secured Cloud",
+            "risk": {
+                "trustRating": 10
+            },
+            "representations": [
+                {
+                    "name": "Private Secured Cloud Representation",
+                    "id": "64-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 142,
+                        "height": 142
+                    },
+                    "position": {
+                        "x": 78,
+                        "y": 298
+                    }
+                }
+            ]
+        }
+    ],
+    "components": [
+        {
+            "id": "12",
+            "name": "Custom machine",
+            "type": "ec2",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Custom machine Representation",
+                    "id": "12-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 30,
+                        "y": 30
+                    }
+                }
+            ]
+        },
+        {
+            "id": "30",
+            "name": "Private Database",
+            "type": "rds",
+            "parent": {
+                "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+            },
+            "representations": [
+                {
+                    "name": "Private Database Representation",
+                    "id": "30-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 30,
+                        "y": 30
+                    }
+                }
+            ]
+        }
+    ],
+    "dataflows": [
+        {
+            "id": "34",
+            "name": "89ab351c-6ae7-4afb-ad90-0eb045fd801a",
+            "source": "12",
+            "destination": "30"
+        }
+    ]
 }
