@@ -33,9 +33,6 @@ def __calculate_tz_representation_by_components(
     left_x, right_x, top_y, bottom_y = (None,) * 4
     for component in components:
         representation = __get_component_representation(component)
-        if not representation:
-            continue
-
         x, y = representation.position['x'], representation.position['y']
         width, height = representation.size['width'], representation.size['height']
 
