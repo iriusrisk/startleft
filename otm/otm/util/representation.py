@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Tuple
 
 from otm.otm.entity.representation import RepresentationElement
 
@@ -19,5 +19,5 @@ def build_size(left_x: float, right_x: float, top_y: float, bottom_y: float, pad
 
 
 def _get_relative_position(absolute_x: float, absolute_y: float, parent_x: float, parent_y: float) \
-        -> tuple[float, float]:
+        -> Tuple[float, float]:
     return absolute_x - parent_x, absolute_y - parent_y

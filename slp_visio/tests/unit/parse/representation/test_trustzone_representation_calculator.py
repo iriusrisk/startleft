@@ -15,12 +15,13 @@ TZ_REPRESENTATION.size = {'width': 210, 'height': 210}
 
 
 def mock_trustzone():
-    __tz_without_representation = Mock()
-    __tz_without_representation.id = 'tz-id'
-    __tz_without_representation.name = 'tz-name'
-    __tz_without_representation.representations = None
+    trustzone = MagicMock()
 
-    return __tz_without_representation
+    trustzone.id = 'tz-id'
+    trustzone.name = 'tz-name'
+    trustzone.representations = None
+
+    return trustzone
 
 
 def mock_component(start_position: int = 100):
