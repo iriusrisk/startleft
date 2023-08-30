@@ -82,7 +82,11 @@ class TestTrustZoneRepresentationCalculator:
         # WHEN TrustZoneRepresentationCalculator::calculate is invoked
         TrustZoneRepresentationCalculator(REPRESENTATION_ID, trustzone, trustzone_components).calculate()
 
-        # THEN the TrustZone representation is as expected
+        # THEN the TrustZone representation is calculated
+        assert trustzone.representations
+        assert len(trustzone.representations) == 1
+
+        # AND the representation is correct
         representation = trustzone.representations[0]
         assert representation.representation == REPRESENTATION_ID
         assert representation.id == TZ_REPRESENTATION.id
