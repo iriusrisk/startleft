@@ -1,83 +1,77 @@
-from typing import List, Optional
+from typing import List, Tuple
 
 from otm.otm.entity.component import Component
 from otm.otm.entity.otm import OTM
 from otm.otm.entity.representation import RepresentationElement
 from otm.otm.entity.trustzone import Trustzone
+from otm.otm.util.representation import build_size, build_position, make_relative
 
 TZ_PADDING = 30
 
 
-def __get_component_representation(component: Component):
+def _get_trustzone_components(trustzone_id: str, components: List[Component]):
+    return list(filter(lambda component: component.parent == trustzone_id, components))
+
+
+def _get_first_representation(component: Component):
     return component.representations[0] if component.representations and len(component.representations) > 0 else None
 
 
-def __get_tz_components(otm, tz_id):
-    return list(filter(lambda component: component.parent == tz_id, otm.components))
+def calculate_missing_trustzones_representations(otm: OTM, representation_id):
+    for trustzone in otm.trustzones:
+        if not trustzone.representations:
+            tz_components = _get_trustzone_components(trustzone.id, otm.components)
+            TrustZoneRepresentationCalculator(representation_id, trustzone, tz_components).calculate()
 
 
-def __calculate_tz_representation_by_components(
-        representation_id, tz: Trustzone, components: List[Component]) -> Optional[RepresentationElement]:
-    """
-    Calculate the trustzone representation:
-    The coordinates x, y starts as 0,0 in the top left corner of the diagram
-    :param representation_id:
-    :param tz:
-    :param components:
-    :return:
-    """
+class TrustZoneRepresentationCalculator:
+    def __init__(self, representation_id: str, trustzone: Trustzone, trustzone_components: List[Component]):
+        self.representation_id = representation_id
+        self.trustzone = trustzone
+        self.components = trustzone_components
 
-    if not all(__get_component_representation(c) for c in components):
-        return
+        self.component_representations = list(filter(lambda r: r, map(_get_first_representation, trustzone_components)))
 
-    left_x, right_x, top_y, bottom_y = (None,) * 4
-    for component in components:
-        representation = __get_component_representation(component)
-        x, y = representation.position['x'], representation.position['y']
-        width, height = representation.size['width'], representation.size['height']
+    def calculate(self):
+        if self.component_representations:
+            self.trustzone.representations = [self.__calculate_trustzone_representation_by_components()]
+            self.__make_components_representations_relative()
 
-        if not left_x or x < left_x:
-            left_x = x
-        if not right_x or right_x < (x + width):
-            right_x = (x + width)
+    def __calculate_trustzone_representation_by_components(self):
+        left_x, right_x, top_y, bottom_y = self.__calculate_trustzone_limits_by_components()
 
-        if not top_y or y < top_y:
-            top_y = y
-        if not bottom_y or bottom_y < (y + height):
-            bottom_y = (y + height)
+        return RepresentationElement(
+            id_=f'{self.trustzone.id}-representation',
+            name=f'{self.trustzone.name} Representation',
+            representation=self.representation_id,
+            position=build_position(left_x, top_y, TZ_PADDING),
+            size=build_size(left_x, right_x, top_y, bottom_y, TZ_PADDING)
+        )
 
-    return RepresentationElement(
-        id_=f'{tz.id}-representation',
-        name=f'{tz.name} Representation',
-        representation=representation_id,
-        position={'x': left_x - TZ_PADDING, 'y': top_y - TZ_PADDING},
-        size={'width': (right_x - left_x) + (TZ_PADDING*2), 'height': (bottom_y - top_y) + (TZ_PADDING*2)}
-    )
+    def __calculate_trustzone_limits_by_components(self) -> Tuple:
+        """
+        Calculate the trustzone representation by the position of its children components.
+        The coordinates x, y starts as 0,0 in the top left corner of the diagram
+        """
+        left_x, right_x, top_y, bottom_y = (None,) * 4
 
+        for representation in self.component_representations:
+            x, y = representation.position['x'], representation.position['y']
+            width, height = representation.size['width'], representation.size['height']
 
-def __calculate_relative_representation_by_tz(tz: Trustzone, tz_components: List[Component]):
-    """
-    Calculates the relative component coordinates by the given trustzone
-    :param tz:
-    :param tz_components:
-    :return:
-    """
-    tz_position_x, tz_position_y = tz.representations[0].position['x'], tz.representations[0].position['y']
+            if not left_x or x < left_x:
+                left_x = x
+            if not right_x or right_x < (x + width):
+                right_x = (x + width)
 
-    for component in tz_components:
-        c_representation = __get_component_representation(component)
-        if not c_representation:
-            continue
-        c_representation.position['x'] -= tz_position_x
-        c_representation.position['y'] -= tz_position_y
+            if not top_y or y < top_y:
+                top_y = y
+            if not bottom_y or bottom_y < (y + height):
+                bottom_y = (y + height)
 
+        return left_x, right_x, top_y, bottom_y
 
-def calculate_tz_representation(otm: OTM, representation_id):
-    for tz in otm.trustzones:
-        if tz.representations and len(tz.representations) > 0:
-            continue
-        tz_components = __get_tz_components(otm, tz.id)
-        representation = __calculate_tz_representation_by_components(representation_id, tz, tz_components)
-        if representation:
-            tz.representations = [representation]
-            __calculate_relative_representation_by_tz(tz, tz_components)
+    def __make_components_representations_relative(self):
+        tz_position = self.trustzone.representations[0].position
+        for component in self.components:
+            make_relative(_get_first_representation(component), tz_position)
