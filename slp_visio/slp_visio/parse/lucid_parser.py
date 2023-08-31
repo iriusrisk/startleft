@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, List
 
 from sl_util.sl_util import secure_regex
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent, Diagram
@@ -37,6 +37,10 @@ class LucidParser(VisioParser):
         """
         component_mappings = super()._get_component_mappings()
         catch_all_components = self.__get_catch_all_mappings(ids_to_skip=self.__get_ids_to_skip())
+
+        component_mappings = self.__prune__skip__components(component_mappings)
+        catch_all_components = self.__prune__skip__components(catch_all_components)
+
         return {**catch_all_components, **component_mappings}
 
     def __get_catch_all_mappings(self, ids_to_skip) -> [dict]:
@@ -58,3 +62,13 @@ class LucidParser(VisioParser):
             return
 
         return catch_all.strip()
+
+    def __get_skip_config(self) -> List[str]:
+        return self.mapping_loader.configuration.get('skip')
+    
+    def __prune__skip__components(self, components):
+
+        components_to_skip = self.__get_skip_config()
+        if components_to_skip is not None:
+            components = {key: value for key, value in components.items() if value.get('type') not in components_to_skip}
+        return components
