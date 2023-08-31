@@ -175,7 +175,7 @@ class TestLucidParser:
         pytest.param({'skip': ['ec2', 'empty-component']}, id='Configured as wrong type'),
     ])
     @patch.object(VisioParser, '_get_component_mappings', return_value={'5': {'label': 'AmazonEC2', 'type': 'ec2'}})
-    @patch.object(LucidParser, '¡__get_catch_all_mappings', return_value={'14': {'label': 'CorporateDataCenterContainer2017', 'type': 'empty-component'}, '19': {'label': 'AmazonAPIGatewayAWS2021', 'type': 'empty-component'}, '23': {'label': 'Azure Storage', 'type': 'azure-storage'}})
+    @patch.object(LucidParser, '_LucidParser__get_catch_all_mappings', return_value={'14': {'label': 'CorporateDataCenterContainer2017', 'type': 'empty-component'}, '19': {'label': 'AmazonAPIGatewayAWS2021', 'type': 'empty-component'}, '23': {'label': 'Azure Storage', 'type': 'azure-storage'}})
     def test_good_skip_config_with_catch_all_config(self, visio_get_component_mappings, lucid__get_catch_all_mappings, skip_config):
 
         """
