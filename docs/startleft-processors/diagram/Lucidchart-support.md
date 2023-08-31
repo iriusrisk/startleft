@@ -36,6 +36,14 @@ configuration:
   catch_all: empty-component
 ```
 
+#### Skip
+This configuration defines a list of resources that will never be mapped.
+```yaml
+configuration:
+  skip:
+    - aws_security_group
+    - ec2
+```
 
 ## An example
 
@@ -261,7 +269,7 @@ curl --location --request POST localhost:5000/api/v1/startleft/diagram \
 ### Command line usage
 You can also use the Command Line option for this example, with the files downloaded in the previous section.
 
-Make sure StartLeft is [properly installed](../../../Quickstart-Guide-for-Beginners/#install-startleft) 
+Make sure StartLeft is [properly installed](../../Quickstart-Guide-for-Beginners.md#install-startleft) 
 and execute the following command:
 
 ```shell
