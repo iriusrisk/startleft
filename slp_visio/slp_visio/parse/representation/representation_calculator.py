@@ -17,13 +17,14 @@ def get_scaled_coordinates(component: DiagramComponent) -> ():
 
 
 def has_representation(component: DiagramComponent) -> bool:
+    """
+    Component has no representation if:
+    * not(component.representation)
+    * component origin is Boundary
+    :param component:
+    :return:
+    """
     if not component.representation or component.origin == DiagramComponentOrigin.BOUNDARY:
-        return False
-
-    if not component.trustzone and (not component.parent or not component.parent.representation):
-        return False
-
-    if component.parent and component.parent.origin == DiagramComponentOrigin.BOUNDARY:
         return False
 
     return True

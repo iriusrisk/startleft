@@ -1,7 +1,14 @@
+import random
+
 from pytest import mark, param
 
-from startleft.startleft._version.version_scheme import choose_strategy_by_branch, guess_startleft_semver, DEFAULT_VERSION
+from startleft.startleft._version.version_scheme import choose_strategy_by_branch, guess_startleft_semver, \
+    DEFAULT_VERSION
 from .version_mocks import *
+
+
+def rand_bool() -> bool:
+    return bool(random.getrandbits(1))
 
 
 class TestVersionScheme:
@@ -21,10 +28,26 @@ class TestVersionScheme:
     def test_strategy_by_branch(self, branch, expected_strategy):
         # GIVEN some branch
         # WHEN choose_strategy_by_branch is called
-        strategy_fn = choose_strategy_by_branch(branch)
+        strategy_fn = choose_strategy_by_branch(branch, rand_bool())
 
         # THEN the right strategy is chosen
         assert strategy_fn.__name__ == expected_strategy
+
+    @mark.parametrize('exact,expected_strategy', [
+        param(True, '_tag_version_strategy', id='exact version'),
+        param(False, '_minor_version_dev_commit_strategy', id='non exact version')])
+    def test_detached_head(self, exact: bool, expected_strategy):
+        # GIVEN a detached head
+        branch = 'HEAD'
+
+        # AND a parametrized exact flag
+
+        # WHEN choose_strategy_by_branch is called
+        strategy_fn = choose_strategy_by_branch(branch, exact)
+
+        # THEN the right strategy is chosen
+        assert strategy_fn.__name__ == expected_strategy
+
 
     @mark.parametrize('scm_version,expected_version', [
         # MAIN
@@ -61,7 +84,7 @@ class TestVersionScheme:
 
     def test_error_calculating_version(self):
         # GIVEN some invalid version
-        version = Mock(branch= 'dev', tag='invalid_version')
+        version = Mock(branch='dev', tag='invalid_version')
 
         # WHEN guess_startleft_semver_suffix is called
         version = guess_startleft_semver(version)
