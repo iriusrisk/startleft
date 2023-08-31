@@ -6,7 +6,8 @@ from slp_mtmt.tests.mtmt_test_utils import get_mtmt_from_file, get_mapping_from_
 from slp_mtmt.tests.resources import test_resource_paths
 from slp_mtmt.tests.resources.test_resource_paths import mapping_mtmt_mvp, model_mtmt_mvp, mapping_mtmt_mvp_legacy, \
     mtmt_default_mapping, mtmt_default_mapping_legacy, mapping_mtmt_mvp_no_type, mtmt_default_mapping_no_type, \
-    nested_trustzones_tm7
+    nested_trustzones_tm7, name_mapping_overriden, name_mapping_overriden_legacy, type_mapping_overriden, \
+    type_mapping_overriden_legacy
 
 diagram_representation = DiagramRepresentation(id_='project-test-diagram',
                                                name='Project Test Diagram Representation',
@@ -138,3 +139,23 @@ class TestMTMTTrustzoneParser:
         assert current.id == '26e6fdb8-013f-4d59-bb11-208eec4d6bc9'
         assert not current.parent
         assert not current.parent_type
+
+    @mark.parametrize('mapping_file', [name_mapping_overriden, name_mapping_overriden_legacy,
+                                       type_mapping_overriden, type_mapping_overriden_legacy])
+    def test_mapping_trust_zones_by_name(self, mapping_file):
+        # GIVEN the Mtmt data with one trustzone
+        mtmt = get_mtmt_from_file(test_resource_paths.one_trustzone_tm7)
+
+        # AND the mapping data without the mapping of the trustzone
+        mtmt_mapping = get_mapping_from_file(mapping_file)
+
+        # THEN a MtmtMapping is returned with the default trustzone
+        parser = MTMTTrustzoneParser(mtmt, mtmt_mapping, diagram_representation.id)
+        trustzones = parser.parse()
+
+        # THEN we check the trust zone
+        assert len(trustzones) == 1
+        assert trustzones[0].name == 'The TrustZone'
+        assert trustzones[0].type == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
+
+
