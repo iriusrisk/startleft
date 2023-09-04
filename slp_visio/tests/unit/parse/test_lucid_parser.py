@@ -1,5 +1,5 @@
 from typing import List
-from unittest.mock import MagicMock, mock_open, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 from pytest import fixture
@@ -197,5 +197,5 @@ class TestLucidParser:
         # WHEN _get_component_mappings is called in LucidParser
         component_mappings = lucid_parser._get_component_mappings()
 
-        # THEN none components are mapped
+        # THEN one component is mapped
         assert len(component_mappings) == 1
