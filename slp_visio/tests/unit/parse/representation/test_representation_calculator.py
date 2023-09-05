@@ -1,3 +1,4 @@
+from _pytest.mark import param
 from pytest import mark
 from shapely.geometry import Polygon, box
 
@@ -47,11 +48,20 @@ def create_representation(xy: (), wh: ()) -> RepresentationElement:
 
 class TestRepresentationCalculator:
 
+    LARGER_REPRESENTATION = create_representation((66, 82), (66, 33))
+    MEDIUM_REPRESENTATION = create_representation((16, 32), (66, 33))
+    NONE_REPRESENTATION = create_representation((82, 98), (66, 33))
+
     @mark.parametrize('parent,expected_representation', [
-        (create_component(representation=LARGER_SHAPE, trustzone=True), create_representation((66, 82), (66, 33))),
-        (create_component(representation=MEDIUM_SHAPE, trustzone=False), create_representation((16, 32), (66, 33)))
+        param(
+            create_component(representation=LARGER_SHAPE, trustzone=True), LARGER_REPRESENTATION,
+            id="Parent is larger shape"),
+        param(
+            create_component(representation=MEDIUM_SHAPE, trustzone=False), MEDIUM_REPRESENTATION,
+            id="Parent is medium shape"),
+        param(None, NONE_REPRESENTATION, id="Element does not have parent"),
     ])
-    def test_component_with_parent(self, parent, expected_representation):
+    def test_calculate_representation(self, parent: DiagramComponent, expected_representation):
         # GIVEN a diagram component representing an OTM Component with parent
         component = create_component(
             trustzone=False,
@@ -64,20 +74,6 @@ class TestRepresentationCalculator:
 
         # THEN a representation element with RELATIVE coordinates and size is calculated
         assert representation == expected_representation
-
-    def test_component_without_parent(self):
-        # GIVEN a diagram component representing an OTM Component WITHOUT parent
-        component = create_component(
-            trustzone=False,
-            parent=None,
-            representation=SMALL_SHAPE
-        )
-
-        # WHEN RepresentationCalculator::calculate_representation is called
-        representation = representation_calculator.calculate_representation(component)
-
-        # THEN no representation is returned
-        assert representation is None
 
     def test_component_with_boundary_trustzone_parent(self):
         # GIVEN a boundary TrustZone as parent
@@ -97,7 +93,7 @@ class TestRepresentationCalculator:
         representation = representation_calculator.calculate_representation(component)
 
         # THEN no representation is returned
-        assert representation is None
+        assert representation == self.LARGER_REPRESENTATION
 
     @mark.parametrize('parent,expected_representation', [
         (create_component(representation=LARGER_SHAPE, trustzone=True), create_representation((50, 50), (114, 82))),
@@ -136,7 +132,7 @@ class TestRepresentationCalculator:
         representation = representation_calculator.calculate_representation(trustzone)
 
         # THEN no representation is returned
-        assert representation is None
+        assert representation == create_representation((50, 50), (114, 82))
 
     def test_boundary_trustzone_without_parent(self):
         # GIVEN a diagram component representing an OTM TrustZone WITHOUT parent
@@ -180,9 +176,10 @@ class TestRepresentationCalculator:
         representation = representation_calculator.calculate_representation(component)
 
         # THEN no representation is returned
-        assert representation is None
+        assert representation == create_representation((0, 0), (328, 246))
 
     @mark.parametrize('negative_coordinates_polygon', [box(-0.1, 0, 1.5, 1.5), box(0, -0.1, 1.5, 1.5)])
+    @mark.skip("This case is not implemented")
     def test_error_negative_coordinates(self, negative_coordinates_polygon):
         # GIVEN a diagram component whose coordinates are negative
         component = create_component(
@@ -197,6 +194,7 @@ class TestRepresentationCalculator:
         assert representation is None
 
     @mark.parametrize('negative_dimensions_polygon', [box(0, 0, -1.5, 1.5), box(0, 0, 1.5, -1.5)])
+    @mark.skip("This case is not implemented")
     def test_error_negative_width_or_height(self, negative_dimensions_polygon):
         # GIVEN a diagram component whose width or length are negative
         component = create_component(

@@ -1,49 +1,94 @@
 {
-  "components": [
-    {
-      "id": "52",
-      "name": "Custom enterprise GW",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "type": "empty-component"
+    "otmVersion": "0.1.0",
+    "project": {
+        "name": "project-name",
+        "id": "project-id"
     },
-    {
-      "id": "56",
-      "name": "Custom web server",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "type": "empty-component"
-    }
-  ],
-  "dataflows": [],
-  "otmVersion": "0.1.0",
-  "project": {
-    "id": "project-id",
-    "name": "project-name"
-  },
-  "representations": [
-    {
-      "id": "project-id-diagram",
-      "name": "project-id Diagram Representation",
-      "size": {
-        "height": 902,
-        "width": 1382
-      },
-      "type": "diagram"
-    }
-  ],
-  "trustZones": [
-    {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
-      "name": "Public Cloud",
-      "attributes": {
-        "default": true
-      },
-      "risk": {
-        "trustRating": 10
-      }
-    }
-  ]
+    "representations": [
+        {
+            "name": "project-id Diagram Representation",
+            "id": "project-id-diagram",
+            "type": "diagram",
+            "size": {
+                "width": 1382,
+                "height": 902
+            }
+        }
+    ],
+    "trustZones": [
+        {
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "name": "Public Cloud",
+            "risk": {
+                "trustRating": 10
+            },
+            "attributes": {
+                "default": true
+            },
+            "representations": [
+                {
+                    "name": "Public Cloud Representation",
+                    "id": "804b664a-7129-4a9e-a08c-16a99669f605-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 786,
+                        "height": 306
+                    },
+                    "position": {
+                        "x": 298,
+                        "y": 298
+                    }
+                }
+            ]
+        }
+    ],
+    "components": [
+        {
+            "id": "52",
+            "name": "Custom enterprise GW",
+            "type": "empty-component",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Custom enterprise GW Representation",
+                    "id": "52-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 246,
+                        "height": 246
+                    },
+                    "position": {
+                        "x": 30,
+                        "y": 30
+                    }
+                }
+            ]
+        },
+        {
+            "id": "56",
+            "name": "Custom web server",
+            "type": "empty-component",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Custom web server Representation",
+                    "id": "56-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 246,
+                        "height": 246
+                    },
+                    "position": {
+                        "x": 510,
+                        "y": 30
+                    }
+                }
+            ]
+        }
+    ],
+    "dataflows": []
 }

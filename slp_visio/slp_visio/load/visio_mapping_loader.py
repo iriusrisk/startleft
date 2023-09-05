@@ -8,8 +8,11 @@ from slp_base import MappingLoader
 from slp_base.slp_base.mapping_file_loader import MappingFileLoader
 
 PUBLIC_CLOUD_NAME = 'Public Cloud'
-PUBLIC_CLOUD = Trustzone(trustzone_id=deterministic_uuid(PUBLIC_CLOUD_NAME), name=PUBLIC_CLOUD_NAME,
-                         type='b61d6911-338d-46a8-9f39-8dcd24abfe91', attributes={"default": True})
+
+
+def get_public_cloud():
+    return Trustzone(trustzone_id=deterministic_uuid(PUBLIC_CLOUD_NAME), name=PUBLIC_CLOUD_NAME,
+                     type='b61d6911-338d-46a8-9f39-8dcd24abfe91', attributes={"default": True})
 
 
 def load_mappings(mapping_file):
@@ -46,7 +49,7 @@ class VisioMappingFileLoader(MappingLoader):
             return Trustzone(trustzone_id=deterministic_uuid(name), name=name, type=default_otm_trustzone['type'],
                              attributes={"default": True})
         else:
-            return PUBLIC_CLOUD
+            return get_public_cloud()
 
     def get_trustzone_mappings(self):
         return self.trustzone_mappings
