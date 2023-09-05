@@ -1,3 +1,5 @@
+from typing import List
+
 from otm.otm.entity.component import Component
 from otm.otm.entity.dataflow import Dataflow
 from otm.otm.entity.representation import Representation, DiagramRepresentation, RepresentationType
@@ -12,9 +14,9 @@ class OTM:
         self.project_name = project_name
         self.project_id = project_id
         self.representations = []
-        self.trustzones = []
-        self.components = []
-        self.dataflows = []
+        self.trustzones: List[Trustzone] = []
+        self.components: List[Component] = []
+        self.dataflows: List[Dataflow] = []
         self.threats = []
         self.mitigations = []
         self.version = "0.1.0"
