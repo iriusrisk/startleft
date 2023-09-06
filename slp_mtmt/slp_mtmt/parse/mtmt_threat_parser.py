@@ -9,12 +9,21 @@ from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
 
 
 def get_threat_description(threat: MTMThreat):
-    return remove_trailing_dot(re.split("\\.\\s*Consider", threat.long_description)[0])
+    if threat.long_description:
+        return remove_trailing_dot(re.split("\\.\\s*Consider", threat.long_description)[0])
+    if threat.short_description:
+        return remove_trailing_dot(re.split("\\.\\s*Consider", threat.short_description)[0])
+    return None
 
 
 def get_mitigation_description(threat: MTMThreat):
-    description = re.match(".*(Consider.+\\.)", threat.long_description)
-    return remove_trailing_dot(description.group(1)) if description else None
+    if threat.long_description:
+        description = re.match(".*(Consider.+\\.)", threat.long_description)
+        return remove_trailing_dot(description.group(1)) if description else None
+    if threat.short_description:
+        description = re.match(".*(Consider.+\\.)", threat.short_description)
+        return remove_trailing_dot(description.group(1)) if description else None
+    return None
 
 
 def get_first_sentence(message: str):
