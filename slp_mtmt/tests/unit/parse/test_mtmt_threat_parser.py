@@ -318,3 +318,51 @@ class TestMTMThreatParser:
         message_without_trailing_dot = remove_trailing_dot(message)
 
         assert message_without_trailing_dot == expected_message
+
+    def test_long_description(self):
+        threat = MTMThreat({
+            "Value": {
+                "Properties": {
+                    "KeyValueOfstringstring": [
+                        {
+                            "Key": "UserThreatDescription",
+                            "Value": "This is a long description. Consider this."
+                        }
+                    ]
+                }
+            }
+        })
+        result = get_threat_description(threat)
+        assert result == "This is a long description"
+
+    def test_short_description(self):
+        threat = MTMThreat({
+            "Value": {
+                "Properties": {
+                    "KeyValueOfstringstring": [
+                        {
+                            "Key": "UserThreatShortDescription",
+                            "Value": "No Short description. Consider that."
+                        }
+                    ]
+                }
+            }
+        })
+        result = get_threat_description(threat)
+        assert result == "No Short description"
+
+    def test_no_description(self):
+        threat = MTMThreat({
+            "Value": {
+                "Properties": {
+                    "KeyValueOfstringstring": [
+                        {
+                            "Key": "NonRealKey",
+                            "Value": "This is a value for a non real key."
+                        }
+                    ]
+                }
+            }
+        })
+        result = get_threat_description(threat)
+        assert result is None
