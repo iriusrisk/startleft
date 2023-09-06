@@ -24,7 +24,22 @@
       },
       "attributes": {
         "default": true
-      }
+      },
+      "representations": [
+        {
+          "name": "Public Cloud Representation",
+          "id": "804b664a-7129-4a9e-a08c-16a99669f605-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 571,
+            "height": 701
+          },
+          "position": {
+            "x": 298,
+            "y": 298
+          }
+        }
+      ]
     }
   ],
   "components": [
@@ -34,7 +49,22 @@
       "type": "s3",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
+      },
+      "representations": [
+        {
+          "name": "Bucket Representation",
+          "id": "13-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 82,
+            "height": 82
+          },
+          "position": {
+            "x": 459,
+            "y": 30
+          }
+        }
+      ]
     },
     {
       "id": "19",
@@ -42,7 +72,22 @@
       "type": "s3",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
+      },
+      "representations": [
+        {
+          "name": "Bucket Representation",
+          "id": "19-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 82,
+            "height": 82
+          },
+          "position": {
+            "x": 250,
+            "y": 345
+          }
+        }
+      ]
     },
     {
       "id": "31",
@@ -50,7 +95,22 @@
       "type": "CD-MQ",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
+      },
+      "representations": [
+        {
+          "name": "Amazon MQ Representation",
+          "id": "31-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 82,
+            "height": 82
+          },
+          "position": {
+            "x": 30,
+            "y": 345
+          }
+        }
+      ]
     },
     {
       "id": "46",
@@ -58,7 +118,22 @@
       "type": "CD-MQ",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
+      },
+      "representations": [
+        {
+          "name": "Amazon MQ Representation",
+          "id": "46-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 82,
+            "height": 82
+          },
+          "position": {
+            "x": 459,
+            "y": 263
+          }
+        }
+      ]
     },
     {
       "id": "86",
@@ -66,7 +141,22 @@
       "type": "rds",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
+      },
+      "representations": [
+        {
+          "name": "Database Representation",
+          "id": "86-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 82,
+            "height": 82
+          },
+          "position": {
+            "x": 459,
+            "y": 589
+          }
+        }
+      ]
     },
     {
       "id": "99",
@@ -74,7 +164,22 @@
       "type": "CD-MQ",
       "parent": {
         "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
+      },
+      "representations": [
+        {
+          "name": "Amazon MQ Representation",
+          "id": "99-representation",
+          "representation": "project-id-diagram",
+          "size": {
+            "width": 82,
+            "height": 82
+          },
+          "position": {
+            "x": 459,
+            "y": 435
+          }
+        }
+      ]
     }
   ],
   "dataflows": [

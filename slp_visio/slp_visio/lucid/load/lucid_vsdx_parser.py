@@ -1,20 +1,14 @@
 from vsdx import Shape
 
-from slp_visio.slp_visio.load.boundary_identifier import BoundaryIdentifier
-from slp_visio.slp_visio.load.component_identifier import ComponentIdentifier
 from slp_visio.slp_visio.load.parent_calculator import ParentCalculator
-from slp_visio.slp_visio.load.vsdx_parser import VsdxParser
+from slp_visio.slp_visio.load.vsdx_parser import VsdxParser, COMPONENT
 
 
 class LucidVsdxParser(VsdxParser):
 
     def _add_connector(self, connector_shape: Shape):
-        component_identifier = ComponentIdentifier()
-        boundary_identifier = BoundaryIdentifier()
-        shape_components = [c for c in self.page.child_shapes if component_identifier.is_component(c)
-                            and not boundary_identifier.is_boundary(c)]
 
-        visio_connector = self.connector_factory.create_connector(connector_shape, shape_components)
+        visio_connector = self.connector_factory.create_connector(connector_shape, self._classified_shapes[COMPONENT])
         if visio_connector:
             self._visio_connectors.append(visio_connector)
 
