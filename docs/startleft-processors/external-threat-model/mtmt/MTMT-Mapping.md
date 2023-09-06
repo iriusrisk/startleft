@@ -14,25 +14,36 @@ Let's see how to identify the different elements:
 
 
 ## Trustzones
-For the TrustZones we need to write two fields: ``label`` and ``id``
+For the TrustZones we need to write two fields: ``label`` and ``type``
 
-The label will identify the MTMT TrustZone by its type. 
+The label will identify the MTMT TrustZone by its MTMT type or by its name. 
 
 Let's see an example with a TrustZone in the MTMT_example.tm7:
 
 ![](img/MTMT_example.png)
 
-Our TrustZone named ``Internet`` is of ``Generic Trust Border Boundary`` type.
+Our ``Generic Trust Border Boundary`` TrustZone is named ``Internet``.
+
 
 
 
 ![](img/mtmt_generic_trust_boundary.png)
 
-So we need to put this
-type in the label value.
+We can map it by either of the two: ``Generic Trust Border Boundary`` (MTMT type) or ``Internet`` (MTMT name).
+
+```yaml
+  - label: Generic Trust Border Boundary
+    type:  6376d53e-6461-412b-8e04-7b3fe2b397de
+```
+or
+```yaml
+  - label: Internet
+    type:  6376d53e-6461-412b-8e04-7b3fe2b397de
+```
+---
 
 The type in the mapping file will be the type in the OTM trust zone output.
-In this example, the `Generic Trust Border Boundary` source trust zones
+In this example, the `Generic Trust Border Boundary` source trust zone
 will be mapped to a OTM trust zone which type will be the value of the `type`
 in our mapping file.
 
@@ -59,7 +70,7 @@ The TrustZone OTM output will be:
     }]}
 ```
 
-In case we have two trust zones with the same type, the OTM will have two trust zones
+In case we have two trust zones with the same MTMT type (e.g: ``Generic Trust Border Boundary``), the OTM will have two trust zones
 with the same type but different id. In the mapping file is enough having mapped once:
 ```yaml
   - label: Generic Trust Border Boundary

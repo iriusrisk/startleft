@@ -18,12 +18,17 @@ mtmt_mapping_filled_file = f'{path}/mapping/mtmt-mapping-filled.yaml'
 mapping_mtmt_mvp = f'{path}/mapping/MTMT_MVP.yaml'
 mtmt_default_mapping = f'{path}/mapping/mtmt_default_mapping.yaml'
 mtmt_mapping_invalid_no_dataflows = f'{path}/mapping/invalid-mapping-without-dataflows.yaml'
+name_mapping_overriden = f'{path}/mapping/name_mapping_overriden.yaml'
+type_mapping_overriden = f'{path}/mapping/type_mapping_overriden.yaml'
+
 
 # legacy mapping
 mapping_mtmt_mvp_legacy = f'{path}/mapping/MTMT_MVP_legacy.yaml'
 mtmt_default_mapping_legacy = f'{path}/mapping/mtmt_default_mapping_legacy.yaml'
 mapping_mtmt_mvp_no_type = f'{path}/mapping/MTMT_MVP_no_type.yaml'
 mtmt_default_mapping_no_type = f'{path}/mapping/mtmt_default_mapping_no_type.yaml'
+name_mapping_overriden_legacy = f'{path}/mapping/name_mapping_overriden_legacy.yaml'
+type_mapping_overriden_legacy = f'{path}/mapping/type_mapping_overriden_legacy.yaml'
 
 # mtmt
 model_mtmt_source_file = f'{path}/mtmt/test_model.tm7'
@@ -37,6 +42,7 @@ position_1line_tz_tm7 = f'{path}/mtmt/MTMT_example_coordinates_1_line_trustzone.
 position_1orphan_tm7 = f'{path}/mtmt/MTMT_example_coordinates_1_orphan.tm7'
 nested_trustzones_tm7 = f'{path}/mtmt/MTMT_nested_tz.tm7'
 nested_trustzones_line_tm7 = f'{path}/mtmt/MTMT_nested_tz_line.tm7'
+one_trustzone_tm7 = f'{path}/mtmt/one-trustzone.tm7'
 
 # OTM
 example_position_otm = f'{path}/mtmt/MTMT_example_coordinates.otm'
