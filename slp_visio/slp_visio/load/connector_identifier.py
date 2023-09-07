@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import List
 
 from dependency_injector.wiring import inject, Provide
@@ -18,6 +19,7 @@ class ConnectorIdentifier:
         ConnectorIdentifierStrategyContainer.visio_strategies]):
         self.strategies = strategies
 
+    @lru_cache(maxsize=None)
     def is_connector(self, shape: Shape) -> bool:
         for strategy in self.strategies:
             if strategy.is_connector(shape):

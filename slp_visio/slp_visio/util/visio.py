@@ -1,3 +1,4 @@
+import logging
 import re
 import string
 from functools import singledispatch
@@ -6,6 +7,8 @@ from math import pi
 from vsdx import Shape
 
 from slp_visio.slp_visio.parse.shape_position_calculator import ShapePositionCalculator
+logger = logging.getLogger(__name__)
+
 
 @singledispatch
 def get_shape_text(shape):

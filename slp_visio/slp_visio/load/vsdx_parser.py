@@ -1,3 +1,5 @@
+import logging
+
 from vsdx import Shape, VisioFile
 
 from slp_base import DiagramType
@@ -9,6 +11,8 @@ from slp_visio.slp_visio.load.parent_calculator import ParentCalculator
 from slp_visio.slp_visio.load.representation.simple_component_representer import SimpleComponentRepresenter
 from slp_visio.slp_visio.load.representation.zone_component_representer import ZoneComponentRepresenter
 from slp_visio.slp_visio.util.visio import get_limits
+
+logger = logging.getLogger(__name__)
 
 DIAGRAM_LIMITS_PADDING = 2
 DEFAULT_DIAGRAM_LIMITS = DiagramLimits(((1000, 1000), (1000, 1000)))
@@ -73,10 +77,18 @@ class VsdxParser:
 
     def _load_page_elements(self):
         self._classified_shapes = {CONNECTOR: [], BOUNDARY: [], COMPONENT: []}
+        logger.info('classifiying shapes')
         self._classify_shapes(self.page.child_shapes)
+        logger.info('classifed shapes')
+        logger.info('loading connectors')
         self._load_connectors()
+        logger.info('loaded connectors')
+        logger.info('loading boundaries')
         self._load_boundaries()
+        logger.info('loaded boundaries')
+        logger.info('loading components')
         self._load_components()
+        logger.info('loaded components')
 
     def _classify_shapes(self, shapes: [Shape]):
         for shape in shapes:

@@ -1,3 +1,4 @@
+import logging
 from typing import Optional, List
 
 from dependency_injector.wiring import inject, Provide
@@ -8,6 +9,8 @@ from slp_visio.slp_visio.load.strategies.component.create_component_strategy imp
 from slp_visio.slp_visio.load.strategies.connector.create_connector_strategy import CreateConnectorStrategy, \
     CreateConnectorStrategyContainer
 
+logger = logging.getLogger(__name__)
+
 
 class VisioComponentFactory:
 
@@ -17,10 +20,14 @@ class VisioComponentFactory:
         self.strategies = strategies
 
     def create_component(self, shape, origin, representer) -> DiagramComponent:
+        logger.debug(f'creating diagramComponent from shape {shape.ID}')
         for strategy in self.strategies:
+            logger.debug(f'Applying  {strategy.__class__.__name__}')
             component = strategy.create_component(shape, origin=origin, representer=representer)
             if component:
+                logger.debug(f'Created diagramComponent from shape {shape.ID}')
                 return component
+        logger.debug(f'No diagramComponent was created from shape {shape.ID}')
 
 
 class VisioConnectorFactory:
