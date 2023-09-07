@@ -1,6 +1,7 @@
+from sl_util.sl_util.injection import register
 from slp_tfplan.slp_tfplan.matcher.strategies.match_strategy import MatchStrategy, MatchStrategyContainer
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import SecurityGroup
-from slp_tfplan.slp_tfplan.util.injection import register
+
 
 
 @register(MatchStrategyContainer.sg_match_strategies)

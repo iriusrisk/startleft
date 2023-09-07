@@ -1,11 +1,12 @@
 import abc
 
+from dependency_injector import providers
+from dependency_injector.containers import DeclarativeContainer
 from vsdx import Shape
 
-from slp_visio.slp_visio.load.strategies.strategy import Strategy
 
 
-class BoundaryIdentifierStrategy(Strategy):
+class BoundaryIdentifierStrategy:
     """
     Formal Interface to check if a shape is a boundary
     """
@@ -20,3 +21,9 @@ class BoundaryIdentifierStrategy(Strategy):
     def is_boundary(self, shape: Shape) -> bool:
         """return True if the Shape is a boundary"""
         raise NotImplementedError
+
+class BoundaryIdentifierStrategyContainer(DeclarativeContainer):
+    """
+    ComponentIdentifierStrategy implementations
+    """
+    visio_strategies = providers.List()
