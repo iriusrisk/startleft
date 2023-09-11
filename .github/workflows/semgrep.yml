@@ -17,4 +17,43 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - run: semgrep ci --config=p/owasp-top-ten --config=p/cwe-top-25 --config=p/gitleaks -q --exclude="tests" --exclude="*/tests" --skip-unknown-extensions --suppress-errors
+
+      - id: semgrep
+        run: semgrep ci --config=p/owasp-top-ten --config=p/cwe-top-25 --config=p/gitleaks -q --exclude="tests" --exclude="*/tests" --skip-unknown-extensions --suppress-errors
+        continue-on-error: true
+
+      - name: Get branch name (merge)
+        if: github.event_name != 'pull_request'
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
+
+      - name: Get branch name (pull request)
+        if: github.event_name == 'pull_request'
+        run: echo "BRANCH_NAME=${{ github.event.pull_request.base.ref }}" >> $GITHUB_ENV
+
+      - name: Set failure message vars
+        if: steps.semgrep.outcome == 'failure'
+        run: echo "icon=fire" >> $GITHUB_ENV
+
+      - name: Set success message vars
+        if: steps.semgrep.outcome == 'success'
+        run: echo "icon=checkered_flag" >> $GITHUB_ENV
+
+      - name: Format Branch name
+        shell: bash
+        run: echo "BRANCH_NAME=${BRANCH_NAME^^}" >> $GITHUB_ENV
+
+      - name: Semgrep report to Slack
+        if: ${{ env.BRANCH_NAME }} == 'DEV' || ${{ env.BRANCH_NAME }} == 'MAIN'
+        id: slack-report
+        uses: slackapi/slack-github-action@e28cf165c92ffef168d23c5c9000cffc8a25e117 #v1.24.0
+        with:
+          payload: |
+            {
+              "text": ":${{ env.icon }}: Semgrep-Startleft-${{ env.BRANCH_NAME }} vulnerability test result: ${{ steps.semgrep.outcome }} <https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}|Pipeline logs>"
+            }
+        env:
+           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_NOTIFICATION_WEBHOOK_URL }}
+
+      - name: Stop if Semgrep finds a vulnerability
+        if: steps.semgrep.outcome == 'failure'
+        run: exit 1
