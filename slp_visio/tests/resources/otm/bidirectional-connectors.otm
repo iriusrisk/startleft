@@ -1,103 +1,208 @@
 {
-  "components": [
-    {
-      "id": "1",
-      "name": "Amazon EC2",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "type": "ec2"
+    "otmVersion": "0.1.0",
+    "project": {
+        "name": "project-name",
+        "id": "project-id"
     },
-    {
-      "id": "6",
-      "name": "Amazon EC2",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "type": "ec2"
-    },
-    {
-      "id": "17",
-      "name": "Amazon EC2",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "type": "ec2"
-    },
-    {
-      "id": "23",
-      "name": "Amazon VPC",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "type": "vpc"
-    },
-    {
-      "id": "28",
-      "name": "Amazon VPC",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "type": "vpc"
-    },
-    {
-      "id": "33",
-      "name": "Amazon VPC",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "type": "vpc"
-    }
-  ],
-  "dataflows": [
-    {
-      "bidirectional": true,
-      "destination": "1",
-      "id": "38",
-      "name": "aafb84e5-b562-4ce6-9c31-e97d6ae85f42",
-      "source": "23"
-    },
-    {
-      "bidirectional": true,
-      "destination": "6",
-      "id": "39",
-      "name": "12f91beb-bd3c-4708-9c22-ef96740a3dbe",
-      "source": "28"
-    },
-    {
-      "bidirectional": true,
-      "destination": "17",
-      "id": "41",
-      "name": "ee05d7f5-451f-4b00-9dd9-971033a576c0",
-      "source": "33"
-    }
-  ],
-  "otmVersion": "0.1.0",
-  "project": {
-    "id": "project-id",
-    "name": "project-name"
-  },
-  "representations": [
-    {
-      "id": "project-id-diagram",
-      "name": "project-id Diagram Representation",
-      "size": {
-        "height": 738,
-        "width": 1476
-      },
-      "type": "diagram"
-    }
-  ],
-  "trustZones": [
-    {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
-      "name": "Public Cloud",
-      "attributes": {
-        "default": true
-      },
-      "risk": {
-        "trustRating": 10
-      }
-    }
-  ]
+    "representations": [
+        {
+            "name": "project-id Diagram Representation",
+            "id": "project-id-diagram",
+            "type": "diagram",
+            "size": {
+                "width": 1476,
+                "height": 738
+            }
+        }
+    ],
+    "trustZones": [
+        {
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "name": "Public Cloud",
+            "risk": {
+                "trustRating": 10
+            },
+            "attributes": {
+                "default": true
+            },
+            "representations": [
+                {
+                    "name": "Public Cloud Representation",
+                    "id": "804b664a-7129-4a9e-a08c-16a99669f605-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 880,
+                        "height": 388
+                    },
+                    "position": {
+                        "x": 298,
+                        "y": 298
+                    }
+                }
+            ]
+        }
+    ],
+    "components": [
+        {
+            "id": "1",
+            "name": "Amazon EC2",
+            "type": "ec2",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Amazon EC2 Representation",
+                    "id": "1-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 30,
+                        "y": 30
+                    }
+                }
+            ]
+        },
+        {
+            "id": "6",
+            "name": "Amazon EC2",
+            "type": "ec2",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Amazon EC2 Representation",
+                    "id": "6-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 768,
+                        "y": 30
+                    }
+                }
+            ]
+        },
+        {
+            "id": "17",
+            "name": "Amazon EC2",
+            "type": "ec2",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Amazon EC2 Representation",
+                    "id": "17-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 30,
+                        "y": 276
+                    }
+                }
+            ]
+        },
+        {
+            "id": "23",
+            "name": "Amazon VPC",
+            "type": "vpc",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Amazon VPC Representation",
+                    "id": "23-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 276,
+                        "y": 30
+                    }
+                }
+            ]
+        },
+        {
+            "id": "28",
+            "name": "Amazon VPC",
+            "type": "vpc",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Amazon VPC Representation",
+                    "id": "28-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 522,
+                        "y": 30
+                    }
+                }
+            ]
+        },
+        {
+            "id": "33",
+            "name": "Amazon VPC",
+            "type": "vpc",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Amazon VPC Representation",
+                    "id": "33-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 276,
+                        "y": 276
+                    }
+                }
+            ]
+        }
+    ],
+    "dataflows": [
+        {
+            "id": "38",
+            "name": "aafb84e5-b562-4ce6-9c31-e97d6ae85f42",
+            "source": "23",
+            "destination": "1",
+            "bidirectional": true
+        },
+        {
+            "id": "39",
+            "name": "12f91beb-bd3c-4708-9c22-ef96740a3dbe",
+            "source": "28",
+            "destination": "6",
+            "bidirectional": true
+        },
+        {
+            "id": "41",
+            "name": "ee05d7f5-451f-4b00-9dd9-971033a576c0",
+            "source": "33",
+            "destination": "17",
+            "bidirectional": true
+        }
+    ]
 }

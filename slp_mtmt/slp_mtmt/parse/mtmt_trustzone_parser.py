@@ -19,6 +19,7 @@ class MTMTTrustzoneParser(MTMTGeneralParser):
 
     def __init__(self, source: MTMT, mapping: MTMTMapping, diagram_representation: str):
         super().__init__(source, mapping, diagram_representation)
+        self.__format_legacy_mapping_tz()
         self.trustzones = []
         self.default_trustzone = self.create_default_trustzone()
 
@@ -57,25 +58,25 @@ class MTMTTrustzoneParser(MTMTGeneralParser):
             return tz
 
     def __calculate_otm_type(self, border: MTMBorder) -> str:
-        return self.__get_mapping_type(border.stencil_name)
+        return (self.__get_mapping_type(border.name)
+                or self.__get_mapping_type(border.stencil_name)
+                or self.__get_default_label_value())
 
     def __get_mapping_type(self, label) -> str:
-        id_ = self.__get_label_value(label, 'id')
-        if id_:
-            return id_
         return self.__get_label_value(label, 'type')
+
+    def __get_default_label_value(self):
+        try:
+            return self.mapping.mapping_trustzones[DEFAULT_LABEL]['type']
+        except KeyError:
+            logger.warning('Mapping file error. Any default trustzone is present')
 
     def __get_label_value(self, label, key):
         try:
             if label in self.mapping.mapping_trustzones:
                 return self.mapping.mapping_trustzones[label][key]
-            else:
-                return self.mapping.mapping_trustzones[DEFAULT_LABEL][key]
         except KeyError:
-            logger.warning(f'Mapping file error. The trustzone "{label}" is not present or does not has '
-                           f' "{key}" and any default trustzone is present')
-
-        return None
+            logger.warning(f'Mapping file error. The trustzone "{label}" is not present or does not has "{key}"')
 
     def add_default(self):
         for tz in self.trustzones:
@@ -88,3 +89,8 @@ class MTMTTrustzoneParser(MTMTGeneralParser):
             trustzone_type = self.__get_mapping_type(DEFAULT_LABEL)
             trustzone_id = deterministic_uuid(trustzone_type)
             return Trustzone(trustzone_id=trustzone_id, type=trustzone_type, name=DEFAULT_NAME)
+
+    def __format_legacy_mapping_tz(self):
+        for k, v in self.mapping.mapping_trustzones.items():
+            if 'id' in v:
+                v['type'] = v.pop('id')
