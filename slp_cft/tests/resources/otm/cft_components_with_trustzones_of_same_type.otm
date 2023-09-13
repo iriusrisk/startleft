@@ -4,7 +4,7 @@
       "id": "public-cloud-01.customvpc",
       "name": "CustomVPC",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "public-cloud-01"
       },
       "tags": [
         "AWS::EC2::VPC"
@@ -15,7 +15,7 @@
       "id": "public-cloud-02.rdscluster",
       "name": "RDSCluster",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "public-cloud-02"
       },
       "tags": [
         "AWS::RDS::DBCluster"
@@ -24,7 +24,7 @@
     }
   ],
   "dataflows": [],
-  "otmVersion": "0.1.0",
+  "otmVersion": "0.2.0",
   "project": {
     "id": "id",
     "name": "name"
@@ -38,7 +38,16 @@
   ],
   "trustZones": [
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "id": "public-cloud-01",
+      "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "name": "Public Cloud",
+      "risk": {
+        "trustRating": 10
+      }
+    },
+    {
+      "id": "public-cloud-02",
+      "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "name": "Public Cloud",
       "risk": {
         "trustRating": 10

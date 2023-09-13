@@ -1,5 +1,5 @@
 {
-    "otmVersion": "0.1.0",
+    "otmVersion": "0.2.0",
     "project": {
         "name": "test_parse_diagram_file_ok",
         "id": "test_parse_diagram_file_ok"
@@ -17,7 +17,8 @@
     ],
     "trustZones": [
         {
-            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "id": "1",
+            "type":  "b61d6911-338d-46a8-9f39-8dcd24abfe91",
             "name": "Public Cloud",
             "risk": {
                 "trustRating": 10
@@ -39,7 +40,8 @@
             ]
         },
         {
-            "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+            "id": "5",
+            "type": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
             "name": "Private Secured Cloud",
             "risk": {
                 "trustRating": 10
@@ -61,7 +63,8 @@
             ]
         },
         {
-            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
+            "id": "36",
+            "type": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
             "name": "Internet",
             "risk": {
                 "trustRating": 10
@@ -89,7 +92,7 @@
             "name": "Custom VPC",
             "type": "empty-component",
             "parent": {
-                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+                "trustZone": "1"
             },
             "representations": [
                 {
@@ -135,7 +138,7 @@
             "name": "My CloudWatch",
             "type": "cloudwatch",
             "parent": {
-                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+                "trustZone": "1"
             },
             "representations": [
                 {
@@ -158,7 +161,7 @@
             "name": "My API Gateway",
             "type": "api-gateway",
             "parent": {
-                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+                "trustZone": "1"
             },
             "representations": [
                 {
@@ -181,7 +184,7 @@
             "name": "My CloudTrail",
             "type": "cloudtrail",
             "parent": {
-                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+                "trustZone": "1"
             },
             "representations": [
                 {
@@ -204,7 +207,7 @@
             "name": "My Simple Storage Service (S3)",
             "type": "s3",
             "parent": {
-                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+                "trustZone": "1"
             },
             "representations": [
                 {
@@ -227,7 +230,7 @@
             "name": "Web browser",
             "type": "generic-client",
             "parent": {
-                "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
+                "trustZone": "36"
             },
             "representations": [
                 {
@@ -250,7 +253,7 @@
             "name": "Android",
             "type": "android-device-client",
             "parent": {
-                "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
+                "trustZone": "36"
             },
             "representations": [
                 {
@@ -273,7 +276,7 @@
             "name": "SQL Database",
             "type": "CD-MICROSOFT-AZURE-SQL-DB",
             "parent": {
-                "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+                "trustZone": "5"
             },
             "representations": [
                 {
@@ -296,7 +299,7 @@
             "name": "My DynamoDB",
             "type": "dynamodb",
             "parent": {
-                "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+                "trustZone": "5"
             },
             "representations": [
                 {
@@ -342,13 +345,13 @@
         },
         {
             "id": "43",
-            "name": "2114ddb1-f677-4275-a9a2-0b2ac8e11073",
+            "name": "b8161949-a8ba-4a30-b409-9547dfb51740",
             "source": "38",
             "destination": "17"
         },
         {
             "id": "46",
-            "name": "f58ee066-de2c-4464-9ceb-117b5dfa2703",
+            "name": "6ceb010f-8390-4dc5-943b-62d268c34e78",
             "source": "44",
             "destination": "17"
         },
