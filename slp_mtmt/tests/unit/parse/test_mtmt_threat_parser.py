@@ -230,6 +230,42 @@ class TestMTMThreatParser:
             }
         }
     }
+    threat_short_description_consider = {
+        "Value": {
+            "Properties": {
+                "KeyValueOfstringstring": [
+                    {
+                        "Key": "UserThreatShortDescription",
+                        "Value": "BEFORE. Consider AFTER."
+                    }
+                ]
+            }
+        }
+    }
+    threat_short_description_without_consider = {
+        "Value": {
+            "Properties": {
+                "KeyValueOfstringstring": [
+                    {
+                        "Key": "UserThreatShortDescription",
+                        "Value": "No consider pattern."
+                    }
+                ]
+            }
+        }
+    }
+    threat_without_description = {
+        "Value": {
+            "Properties": {
+                "KeyValueOfstringstring": [
+                    {
+                        "Key": "NoRealKey",
+                        "Value": "This value belongs to a non real key from MTMT files. No description."
+                    }
+                ]
+            }
+        }
+    }
     threat_with_mitigation = {
         "Value": {
             "Properties": {
@@ -249,6 +285,30 @@ class TestMTMThreatParser:
                     {
                         "Key": "UserThreatDescription",
                         "Value": "Threat Description."
+                    }
+                ]
+            }
+        }
+    }
+    threat_with_mitigation_short_description = {
+        "Value": {
+            "Properties": {
+                "KeyValueOfstringstring": [
+                    {
+                        "Key": "UserThreatShortDescription",
+                        "Value": "Threat short description. Consider Mitigation Name. Mitigation Description."
+                    }
+                ]
+            }
+        }
+    }
+    threat_with_mitigation_no_description = {
+        "Value": {
+            "Properties": {
+                "KeyValueOfstringstring": [
+                    {
+                        "Key": "NoRealKey",
+                        "Value": "This value belongs to a non real key from MTMT files. No description."
                     }
                 ]
             }
@@ -293,6 +353,9 @@ class TestMTMThreatParser:
     @pytest.mark.parametrize("mtmt_threat, expected_description", [
         (MTMThreat(threat_description_consider), "BEFORE"),
         (MTMThreat(threat_description_without_consider), "No consider pattern"),
+        (MTMThreat(threat_short_description_consider), "BEFORE"),
+        (MTMThreat(threat_short_description_without_consider), "No consider pattern"),
+        (MTMThreat(threat_without_description), None)
     ])
     def test_get_threat_description(self, mtmt_threat, expected_description):
         description = get_threat_description(mtmt_threat)
@@ -302,6 +365,8 @@ class TestMTMThreatParser:
     @pytest.mark.parametrize("mtmt_threat, expected_description", [
         (MTMThreat(threat_with_mitigation), "Consider Mitigation Name. Mitigation Description"),
         (MTMThreat(threat_without_mitigation), None),
+        (MTMThreat(threat_with_mitigation_short_description), "Consider Mitigation Name. Mitigation Description"),
+        (MTMThreat(threat_with_mitigation_no_description), None)
     ])
     def test_get_mitigation_description(self, mtmt_threat, expected_description):
         description = get_mitigation_description(mtmt_threat)
@@ -318,3 +383,51 @@ class TestMTMThreatParser:
         message_without_trailing_dot = remove_trailing_dot(message)
 
         assert message_without_trailing_dot == expected_message
+
+    def test_long_description(self):
+        threat = MTMThreat({
+            "Value": {
+                "Properties": {
+                    "KeyValueOfstringstring": [
+                        {
+                            "Key": "UserThreatDescription",
+                            "Value": "This is a long description. Consider this."
+                        }
+                    ]
+                }
+            }
+        })
+        result = get_threat_description(threat)
+        assert result == "This is a long description"
+
+    def test_short_description(self):
+        threat = MTMThreat({
+            "Value": {
+                "Properties": {
+                    "KeyValueOfstringstring": [
+                        {
+                            "Key": "UserThreatShortDescription",
+                            "Value": "No Short description. Consider that."
+                        }
+                    ]
+                }
+            }
+        })
+        result = get_threat_description(threat)
+        assert result == "No Short description"
+
+    def test_no_description(self):
+        threat = MTMThreat({
+            "Value": {
+                "Properties": {
+                    "KeyValueOfstringstring": [
+                        {
+                            "Key": "NonRealKey",
+                            "Value": "This is a value for a non real key."
+                        }
+                    ]
+                }
+            }
+        })
+        result = get_threat_description(threat)
+        assert result is None
