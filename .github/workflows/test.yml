@@ -1,0 +1,41 @@
+# This workflow will install Python, StarLeft dependencies and then run StarLeft tests with the given Python version and Operating System.
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: test
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: 'Python Version'
+        required: true
+        type: string
+      os:
+        description: 'Operating System'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  run_tests:
+
+    runs-on: ${{ inputs.os }}
+
+    steps:
+      - name: Checkout the project from Git
+        uses: actions/checkout@v3
+
+      - name: Get history and tags for SCM versioning to work
+        run: |
+          git fetch --prune --unshallow
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+
+      - name: Install StartLeft
+        uses: ./.github/actions/install-startleft
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - name: Test with pytest
+        run: python run_tests.py --log-level debug
