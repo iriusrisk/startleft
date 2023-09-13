@@ -64,41 +64,41 @@ class TestOTMControllerDiagramVisio:
         assert result == expected
 
 
-@mark.parametrize('default_mapping,custom_mapping', [
-    (default_visio_mapping, custom_vpc_mapping),
-    (default_visio_mapping_legacy, custom_vpc_mapping_legacy),
-    (default_visio_mapping, custom_vpc_mapping_legacy),
-    (default_visio_mapping_legacy, custom_vpc_mapping),
-])
-@responses.activate
-def test_create_otm_ok_both_mapping_files(self, default_mapping, custom_mapping):
-    # Given a project_id
-    project_id: str = 'test_parse_diagram_file_ok'
+    @mark.parametrize('default_mapping,custom_mapping', [
+        (default_visio_mapping, custom_vpc_mapping),
+        (default_visio_mapping_legacy, custom_vpc_mapping_legacy),
+        (default_visio_mapping, custom_vpc_mapping_legacy),
+        (default_visio_mapping_legacy, custom_vpc_mapping),
+    ])
+    @responses.activate
+    def test_create_otm_ok_both_mapping_files(self, default_mapping, custom_mapping):
+        # Given a project_id
+        project_id: str = 'test_parse_diagram_file_ok'
 
-    # And the source file
-    diag_file = get_byte_data(visio_aws_with_tz_and_vpc)
+        # And the source file
+        diag_file = get_byte_data(visio_aws_with_tz_and_vpc)
 
-    # And the mapping files
-    mapping_file = get_byte_data(default_mapping)
-    custom_mapping_file = get_byte_data(custom_mapping)
+        # And the mapping files
+        mapping_file = get_byte_data(default_mapping)
+        custom_mapping_file = get_byte_data(custom_mapping)
 
-    # And the expected otm
-    expected_otm = test_resource_paths.visio_aws_with_tz_and_vpc_otm_expected
+        # And the expected otm
+        expected_otm = test_resource_paths.visio_aws_with_tz_and_vpc_otm_expected
 
-    # When I do post on diagram endpoint
-    files = {'diag_file': diag_file, 'default_mapping_file': mapping_file,
-             'custom_mapping_file': custom_mapping_file}
-    body = {'diag_type': 'VISIO', 'id': project_id, 'name': project_id}
-    response = client.post(get_url(), files=files, data=body)
+        # When I do post on diagram endpoint
+        files = {'diag_file': diag_file, 'default_mapping_file': mapping_file,
+                 'custom_mapping_file': custom_mapping_file}
+        body = {'diag_type': 'VISIO', 'id': project_id, 'name': project_id}
+        response = client.post(get_url(), files=files, data=body)
 
-    # Then the OTM is returned inside the response as JSON
-    assert response.status_code == diag_create_otm_controller.RESPONSE_STATUS_CODE
-    assert response.headers.get('content-type') == json_mime
-    otm = json.loads(response.text)
+        # Then the OTM is returned inside the response as JSON
+        assert response.status_code == diag_create_otm_controller.RESPONSE_STATUS_CODE
+        assert response.headers.get('content-type') == json_mime
+        otm = json.loads(response.text)
 
-    # and the otm is as expected
-    result, expected = validate_and_compare_otm(otm, expected_otm, None)
-    assert result == expected
+        # and the otm is as expected
+        result, expected = validate_and_compare_otm(otm, expected_otm, None)
+        assert result == expected
 
     @responses.activate
     @patch('slp_visio.slp_visio.validate.visio_validator.VisioValidator.validate')
