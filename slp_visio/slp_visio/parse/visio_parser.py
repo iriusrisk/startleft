@@ -7,7 +7,6 @@ from otm.otm.entity.dataflow import Dataflow
 from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
 from otm.otm.entity.trustzone import Trustzone
 from otm.otm.otm_builder import OTMBuilder
-from otm.otm.otm_pruner import OTMPruner
 from slp_base import ProviderParser
 from slp_visio.slp_visio.load.objects.diagram_objects import Diagram, DiagramComponent
 from slp_visio.slp_visio.load.visio_mapping_loader import VisioMappingFileLoader
@@ -17,6 +16,8 @@ from slp_visio.slp_visio.parse.mappers.diagram_connector_mapper import DiagramCo
 from slp_visio.slp_visio.parse.mappers.diagram_trustzone_mapper import DiagramTrustzoneMapper
 from slp_visio.slp_visio.parse.representation.representation_calculator import RepresentationCalculator, \
     build_size_object, calculate_diagram_size
+from slp_visio.slp_visio.parse.representation.trustzone_representation_calculator import \
+    calculate_missing_trustzones_representations
 from slp_visio.slp_visio.util.visio import normalize_unique_id, normalize_label
 
 
@@ -104,6 +105,9 @@ class VisioParser(ProviderParser):
     def build_otm(self):
         self.__trustzone_mappings = self._get_trustzone_mappings()
         self.__component_mappings = self._get_component_mappings()
+        # Remove from __component_mappings the trustzones
+        for key in self.__trustzone_mappings.keys():
+            self.__component_mappings.pop(key, None)
 
         self.__prune_diagram()
 
@@ -112,7 +116,8 @@ class VisioParser(ProviderParser):
         dataflows = self.__map_dataflows()
 
         otm = self.__build_otm(trustzones, components, dataflows)
-        OTMPruner(otm).prune_orphan_dataflows()
+
+        calculate_missing_trustzones_representations(otm, self.representation_id)
 
         return otm
 

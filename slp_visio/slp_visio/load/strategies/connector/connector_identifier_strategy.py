@@ -1,11 +1,11 @@
 import abc
 
+from dependency_injector import providers
+from dependency_injector.containers import DeclarativeContainer
 from vsdx import Shape
 
-from slp_visio.slp_visio.load.strategies.strategy import Strategy
 
-
-class ConnectorIdentifierStrategy(Strategy):
+class ConnectorIdentifierStrategy:
     """
     Formal Interface to check if a shape is a connector
     """
@@ -20,3 +20,10 @@ class ConnectorIdentifierStrategy(Strategy):
     def is_connector(self, shape: Shape) -> bool:
         """return True if the Shape is a connector"""
         raise NotImplementedError
+
+
+class ConnectorIdentifierStrategyContainer(DeclarativeContainer):
+    """
+    ConnectorIdentifierStrategy implementations
+    """
+    visio_strategies = providers.List()

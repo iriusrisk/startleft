@@ -1,6 +1,7 @@
 from typing import List
 
 from otm.otm.entity.dataflow import Dataflow
+from sl_util.sl_util.injection import register
 from slp_tfplan.slp_tfplan.graph.relationships_extractor import RelationshipsExtractor
 from slp_tfplan.slp_tfplan.matcher.components_and_sgs_matcher import ComponentsAndSGsMatcher
 from slp_tfplan.slp_tfplan.matcher.sgs_matcher import SGsMatcher
@@ -8,7 +9,7 @@ from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TFPlan
 from slp_tfplan.slp_tfplan.relationship.component_relationship_calculator import ComponentRelationshipCalculator
 from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_creation_strategy import DataflowCreationStrategy, \
     create_dataflow, DataflowCreationStrategyContainer
-from slp_tfplan.slp_tfplan.util.injection import register
+
 
 
 @register(DataflowCreationStrategyContainer.strategies)

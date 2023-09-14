@@ -2,7 +2,6 @@ from typing import List, Union
 from unittest.mock import MagicMock, Mock
 
 import pytest
-from pytest import fixture
 
 from slp_visio.slp_visio.load.boundary_identifier import BoundaryIdentifier
 
@@ -15,18 +14,6 @@ def mocked_strategy(result: Union[bool, Exception]):
 
 def mocked_strategies(results: List[Union[bool, Exception]]):
     return list(map(mocked_strategy, results))
-
-
-@fixture
-def strategies():
-    return []
-
-
-@fixture(autouse=True)
-def mock_get_strategies(mocker, strategies):
-    return mocker.patch(
-        'slp_visio.slp_visio.load.strategies.boundary.boundary_identifier_strategy.BoundaryIdentifierStrategy.get_strategies',
-        return_value=strategies)
 
 
 class TestBoundaryIdentifier:
@@ -45,7 +32,7 @@ class TestBoundaryIdentifier:
         shape = MagicMock(ID=1001)
 
         # WHEN we check if the shape is a boundary
-        result = BoundaryIdentifier.is_boundary(shape)
+        result = BoundaryIdentifier(strategies=strategies).is_boundary(shape)
 
         # THEN we call strategies until we find the first valid strategy
         for i in range(0, valid_strategy):

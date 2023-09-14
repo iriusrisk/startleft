@@ -2,7 +2,6 @@ from typing import List, Union
 from unittest.mock import MagicMock, Mock
 
 import pytest
-from pytest import fixture
 
 from slp_visio.slp_visio.load.connector_identifier import ConnectorIdentifier
 
@@ -15,18 +14,6 @@ def mocked_strategy(result: Union[bool, Exception]):
 
 def mocked_strategies(results: List[Union[bool, Exception]]):
     return list(map(mocked_strategy, results))
-
-
-@fixture
-def strategies():
-    return []
-
-
-@fixture(autouse=True)
-def mock_get_strategies(mocker, strategies):
-    return mocker.patch(
-        'slp_visio.slp_visio.load.strategies.connector.connector_identifier_strategy.ConnectorIdentifierStrategy.get_strategies',
-        return_value=strategies)
 
 
 class TestConnectorIdentifier:
@@ -45,7 +32,7 @@ class TestConnectorIdentifier:
         shape = MagicMock(ID=1001)
 
         # WHEN we check if the shape is a connector
-        result = ConnectorIdentifier.is_connector(shape)
+        result = ConnectorIdentifier(strategies=strategies).is_connector(shape)
 
         # THEN we call strategies until we find the first valid strategy
         for i in range(0, valid_strategy):

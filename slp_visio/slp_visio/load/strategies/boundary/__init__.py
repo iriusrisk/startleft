@@ -1,0 +1,1 @@
+from .impl.boundary_identifier_by_curved_panel import BoundaryIdentifierByCurvedPanel

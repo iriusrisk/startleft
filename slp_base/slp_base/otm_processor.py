@@ -1,6 +1,7 @@
 import abc
 
 from otm.otm.entity.otm import OTM
+from otm.otm.otm_pruner import OTMPruner
 from slp_base.slp_base.mapping import MappingLoader, MappingValidator
 from slp_base.slp_base.otm_representations_pruner import OTMRepresentationsPruner
 from slp_base.slp_base.otm_trustzone_unifier import OTMTrustZoneUnifier
@@ -37,6 +38,7 @@ class OTMProcessor(metaclass=abc.ABCMeta):
             self.get_mapping_loader().load()
 
             otm = self.get_provider_parser().build_otm()
+            OTMPruner(otm).prune_orphan_dataflows()
         finally:
             self._clean_resources()
 
