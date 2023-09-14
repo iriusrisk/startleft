@@ -1,8 +1,11 @@
 from vsdx import Shape
 
-from slp_visio.slp_visio.load.strategies.connector.connector_identifier_strategy import ConnectorIdentifierStrategy
+from sl_util.sl_util.injection import register
+from slp_visio.slp_visio.load.strategies.connector.connector_identifier_strategy import ConnectorIdentifierStrategy, \
+    ConnectorIdentifierStrategyContainer
 
 
+@register(ConnectorIdentifierStrategyContainer.visio_strategies)
 class ConnectorIdentifierByConnects(ConnectorIdentifierStrategy):
     """
     Strategy to know if a shape is a connector

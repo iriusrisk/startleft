@@ -24,7 +24,22 @@
             },
             "attributes": {
                 "default": true
-            }
+            },
+            "representations": [
+                {
+                    "name": "Public Cloud Representation",
+                    "id": "804b664a-7129-4a9e-a08c-16a99669f605-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 341,
+                        "height": 142
+                    },
+                    "position": {
+                        "x": 298,
+                        "y": 298
+                    }
+                }
+            ]
         }
     ],
     "components": [
@@ -34,7 +49,22 @@
             "type": "empty-component",
             "parent": {
                 "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-            }
+            },
+            "representations": [
+                {
+                    "name": "Amazon Redshift from AWS Analytics Representation",
+                    "id": "1-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 30,
+                        "y": 30
+                    }
+                }
+            ]
         },
         {
             "id": "13",
@@ -42,7 +72,22 @@
             "type": "redshift",
             "parent": {
                 "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-            }
+            },
+            "representations": [
+                {
+                    "name": "Amazon Redshift from AWS Database Representation",
+                    "id": "13-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 229,
+                        "y": 30
+                    }
+                }
+            ]
         }
     ],
     "dataflows": []
