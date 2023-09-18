@@ -38,6 +38,14 @@ def compare_unordered_list_or_string(a: Union[str, List], b: Union[str, List]) -
     else:
         return False
 
-      
+
 def remove_nones(list: List) -> List:
     return [e for e in list if e != None]
+
+
+def remove_keys(dictionary: dict, keys_to_remove: [str]) -> dict:
+    filtered = dictionary.copy()
+    for key_to_remove in keys_to_remove:
+        if key_to_remove in filtered:
+            filtered.pop(key_to_remove)
+    return filtered

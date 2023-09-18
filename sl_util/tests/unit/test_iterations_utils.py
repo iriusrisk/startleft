@@ -1,4 +1,4 @@
-from sl_util.sl_util.iterations_utils import remove_from_list
+from sl_util.sl_util.iterations_utils import remove_from_list, remove_keys
 
 
 def remove_function(element, original_array, removed_array):
@@ -63,3 +63,16 @@ class TestIterationUtils:
         assert len(removed_array) is 2
         assert 2 in removed_array
         assert 4 in removed_array
+
+    def test_remove_keys(self):
+        # Given a dict
+        numbers = {'1': 'One', '2': 'Two', '3': 'Three', '4': 'Four'}
+
+        # And a list with the keys to remove
+        ids = ['2', '4']
+
+        # When we remove the keys
+        result = remove_keys(numbers, ids)
+
+        # Then the result is as expected
+        assert result == {'1': 'One', '3': 'Three'}
