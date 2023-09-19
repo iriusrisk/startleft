@@ -12,6 +12,9 @@ from slp_visio.slp_visio.util.visio import get_limits
 
 DIAGRAM_LIMITS_PADDING = 2
 DEFAULT_DIAGRAM_LIMITS = DiagramLimits(((1000, 1000), (1000, 1000)))
+COMPONENT = 'component'
+BOUNDARY = 'boundary'
+CONNECTOR = 'connector'
 
 
 def load_visio_page_from_file(visio_filename: str):
@@ -69,21 +72,34 @@ class VsdxParser:
             else DEFAULT_DIAGRAM_LIMITS
 
     def _load_page_elements(self):
-            self._load_shapes(self.page.child_shapes)
+        self._classified_shapes = {CONNECTOR: [], BOUNDARY: [], COMPONENT: []}
+        self._classify_shapes(self.page.child_shapes)
+        self._load_connectors()
+        self._load_boundaries()
+        self._load_components()
 
-    def _load_shapes(self, shapes: [Shape]):
+    def _classify_shapes(self, shapes: [Shape]):
         for shape in shapes:
-            self._load_shape(shape)
+            if self.connector_identifier.is_connector(shape):
+                self._classified_shapes[CONNECTOR].append(shape)
+            elif self.boundary_identifier.is_boundary(shape):
+                self._classified_shapes[BOUNDARY].append(shape)
+            elif self.component_identifier.is_component(shape):
+                self._classified_shapes[COMPONENT].append(shape)
+            elif self._is_group(shape):
+                self._classify_shapes(shape.child_shapes)
 
-    def _load_shape(self, shape: Shape):
-        if self.connector_identifier.is_connector(shape):
-            self._add_connector(shape)
-        elif self.boundary_identifier.is_boundary(shape):
-            self._add_boundary_component(shape)
-        elif self.component_identifier.is_component(shape):
-            self._add_simple_component(shape)
-        elif self._is_group(shape):
-            self._load_shapes(shape.child_shapes)
+    def _load_connectors(self):
+        for connector in self._classified_shapes[CONNECTOR]:
+            self._add_connector(connector)
+
+    def _load_components(self):
+        for component in self._classified_shapes[COMPONENT]:
+            self._add_simple_component(component)
+
+    def _load_boundaries(self):
+        for boundary in self._classified_shapes[BOUNDARY]:
+            self._add_boundary_component(boundary)
 
     def _add_simple_component(self, component_shape: Shape):
         self._visio_components.append(
@@ -105,5 +121,5 @@ class VsdxParser:
             component.parent = ParentCalculator(component).calculate_parent(self._visio_components)
 
     @staticmethod
-    def _is_group(shape : Shape):
+    def _is_group(shape: Shape):
         return shape.shape_type == 'Group'

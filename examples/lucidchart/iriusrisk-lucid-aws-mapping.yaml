@@ -1,84 +1,371 @@
 trustzones:
-  - label:  Public Cloud
-    type:   Public Cloud
-    id:     b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - default: true
+    label: Internet (default)
+    type: f0ba7722-39b6-4c81-8290-a30a248bb8d9
 
-  - label:  Private Secured Cloud
-    type:   Private Secured
-    id:     2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
-
-  - label: AWSCloud
-    type: Public Cloud
-    id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+#  - label: Public Cloud
+#    type: Public Cloud
+#    id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+#
+#  - label: Private Secured Cloud
+#    type: Private Secured
+#    id: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+#
+#  - label: AWSCloud
+#    type: Public Cloud
+#    id: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
 components:
+  - label: [ AWSCloud, AWSCloudAlt, AWSCloudalt, AWSCloudContainer ]
+    type: empty-component
 
-  ## Visio Lucid names
-  - label: Client
-    type: generic-client
-
-  - label: AmazonCognito
-    type: cognito
-
-  - label: AmazonEC2
-    type: ec2
-
-  - label: SQLDatabaseAzure2021
-    type: CD-MICROSOFT-AZURE-SQL-DB
-
-  - label: DatabaseBlock
-    type: other-database
-
-  - label: AmazonSimpleStorageServiceS3
-    type: s3
-
-  - label: AWSIdentityandAccessManagement_IAM
-    type: iam
-
+  - label: ACAzureAutomationBlock
+    type: CD-MICROSOFT-AZURE-AUTOMATION
+  - label: [ ACMcertificatemanager, AWSCertificateManager, CertificateManager ]
+    type: CD-ACM
+  - label: ACMediaServicesBlock
+    type: CD-MICROSOFT-AZURE-MEDIA-SERVICES
+  - label: AWSAmplify
+    type: CD-AMPLIFY
+  - label: AWSAppMesh
+    type: CD-APP-MESH
+  - label: [ AWSAppSync, AWSAppSync_red ]
+    type: CD-APPSYNC
+  - label: AWSApplicationDiscoveryService
+    type: CD-APP-DISC-SERVICE
+  - label: [ AWSArtifact, Artifact ]
+    type: CD-ARTIFACT
+  - label: AWSBackup
+    type: CD-BACKUP
+  - label: AWSBatch
+    type: CD-BATCH
+  - label: AWSCLI
+    type: CD-CLI
+  - label: AWSChatbot
+    type: CD-CHATBOT
+  - label: AWSClientVPN
+    type: client-vpn
+  - label: AWSCloud9
+    type: CD-CLOUD9
+  - label: AWSCloudAWS
+    type: empty-component
+  - label: AWSCloudFormation
+    type: CD-CLOUDFORMATION
+  - label: AWSCloudHSM
+    type: CD-CLOUDHSM
+  - label: AWSCloudMap
+    type: CD-CLOUD-MAP
   - label: AWSCloudTrail
     type: cloudtrail
-
-  - label: AWSCloudTrail
-    type: cloudtrail
-
-  - label: AmazonAPIGateway_purple
-    type: api-gateway
-
-  - label: AWSGeneral_User
-    type: empty-component
-
-  - label: ImageSearchBlock2
-    type: empty-component
-
-  - label: ElasticLoadBalancingELLoadBalancer
-    type: empty-component
-
-  - label: AmazonEC2AutoScaling
-    type: empty-component
-
-  - label: AWSFargate
-    type: empty-component
-
-  - label: AmazonDynamoDB
-    type: empty-component
-
-  - label: AWSCertificateManager
-    type: empty-component
-
-  - label: AWSCodePipeline
-    type: empty-component
-
+  - label: AWSCodeArtifact
+    type: CD-AWS-CODEARTIFACT
   - label: AWSCodeBuild
+    type: CD-CODEBUILD
+  - label: AWSCodeCommit
+    type: CD-CODECOMMIT
+  - label: AWSCodeDeploy
+    type: CD-CODEDEPLOY
+  - label: AWSCodePipeline
+    type: CD-CODEPIPELINE
+  - label: AWSCodeStar
+    type: CD-CODESTAR
+  - label: AWSComputeOptimizer
+    type: CD-COMP-OPT
+  - label: AWSConfig
+    type: CD-CONFIG
+  - label: [ AWSContainersFargate, AWSFargate ]
+    type: fargate
+  - label: AWSControlTower
+    type: CD-CONTROL-TOWER
+  - label: AWSDMS
+    type: CD-DMS
+  - label: AWSDataExchange
+    type: CD-DATA-EXCHANGE
+  - label: AWSDataPipeline
+    type: CD-DATA-PIPELINE
+  - label: AWSDataSync
+    type: CD-DATASYNC
+  - label: AWSDeviceFarm
+    type: CD-DEV-FARM
+  - label: AWSDirectConnect
+    type: direct-connect
+  - label: [ AWSDirectoryService, DirectoryService ]
+    type: CD-DIR-SERVICE
+  - label: AWSElasticBeanstalk
+    type: CD-ELASTIC-BEANSTALK
+  - label: [ AWSFirewallManager, FirewallManager ]
+    type: firewall-manager
+  - label: AWSGeneral_GenericDatabase
+    type: rds
+  - label: [ AWSGeneral_User, AWSGeneral_Users ]
     type: empty-component
-
+  - label: AWSGlobalAccelerator
+    type: CD-GLOBAL-ACC
+  - label: AWSGlue
+    type: CD-GLUE
+  - label: AWSGroundStation
+    type: CD-GROUND-STATION
+  - label: [ AWSIdentityandAccessManagement_IAM, IAM ]
+    type: iam
+  - label: AWSIoT1Click
+    type: CD-IOT-1-CLICK
+  - label: AWSIoTAWSGreengrass
+    type: CD-IOT-GREENGRASS
+  - label: AWSIoTCore
+    type: CD-IOT-CORE
+  - label: AWSIoTEvents
+    type: CD-IOT-EVENTS
+  - label: AWSIoTSiteWise
+    type: CD-IOT-SITEWISE
+  - label: AWSIoTThingsGraph
+    type: CD-IOT-THINGS-GRAPH
+  - label: [ AWSIoTlambdafunction, AWSLambda, AWSLambdaLambdaFunction, AWSLambda_LambdaFunction,
+             IoT_LambdaFunction, LambdaLambdaFunction ]
+    type: aws-lambda-function
+  - label: AWSKMS
+    type: kms
+  - label: AWSLakeFormation
+    type: CD-LAKE-FORMATION
+  - label: AWSLicenseManager
+    type: CD-LICENSE-MGR
+  - label: AWSManagedServices
+    type: CD-AWS-MS
+  - label: AWSManagementConsole
+    type: CD-AWS-MANAGEMENT-CONSOLE
+  - label: AWSMarketplace
+    type: CD-MARKETPLACE
+  - label: AWSMigrationHub
+    type: CD-MIGRATION-HUB
+  - label: [ AWSNetworkFirewall, NetworkFirewall ]
+    type: CD-AWS-NETWORK-FIREWALL
+  - label: AWSOpsWorks
+    type: CD-OPSWORKS
+  - label: AWSOpsWorks_Instances
+    type: ec2
+  - label: AWSOrganizations
+    type: CD-AWS-ORGANIZATIONS
+  - label: AWSOutposts
+    type: CD-OUTPOSTS
+  - label: [ AWSPrivateLink, AmazonVPCPrivateLink ]
+    type: privatelink
+  - label: AWSRoboMaker
+    type: CD-ROBOMAKER
+  - label: [ AWSSecretsManager,SecretsManager ]
+    type: CD-SECRETS-MANAGER
+  - label: [ AWSSecurityHub, SecurityHub ]
+    type: CD-SECURITY-HUB
+  - label: AWSServerlessApplicationRepository
+    type: CD-SERVERLESS-APP-REPO
+  - label: AWSServiceCatalog
+    type: CD-SERVICE-CATALOG
+  - label: [ AWSShield, Shield ]
+    type: CD-SHIELD
+  - label: AWSSitetoSiteVPN
+    type: site-to-site-vpn
+  - label: [ AWSSnowball, AWSSnowball_green ]
+    type: CD-SNOWBALL
+  - label: [ AWSStepFunction, AWSStepFunctions ]
+    type: step-functions
+  - label: AWSStorageGateway
+    type: CD-STORAGE-GATEWAY
+  - label: AWSSystemsManager
+    type: CD-SYSTEMS-MANAGER
+  - label: AWSTransferFamily
+    type: CD-TRANSFER-FML
+  - label: AWSTransitGateway
+    type: CD-AWS-TRANSIT-GW
+  - label: AWSTrustedAdvisor
+    type: trusted-advisor
+  - label: [ AWSWAF, WAF ]
+    type: CD-WAF
+  - label: AWSWellArchitectedTool
+    type: CD-WA-TOOL
+  - label: AWSXRay
+    type: CD-XRAY
+  - label: AlexaForBusiness
+    type: CD-ALEXA-FOR-BUSINESS
+  - label: [ AmazonAPIGateway, AmazonAPIGateway_purple ]
+    type: api-gateway
+  - label: AmazonAthena
+    type: athena
+  - label: AmazonAurora
+    type: CD-AURORA
+  - label: AmazonChime
+    type: CD-CHIME
+  - label: AmazonCloudFront
+    type: cf-cloudfront
+  - label: AmazonCloudSearch
+    type: CD-CLOUDSEARCH
   - label: AmazonCloudWatch
     type: cloudwatch
-
-  - label: AWSCodeStar
+  - label: [ AmazonCognito, Cognito ]
+    type: cognito
+  - label: AmazonComprehend
+    type: CD-COMPREHEND
+  - label: AmazonConnect
+    type: CD-CONNECT
+  - label: [ AmazonContainersElasticContainerRegistry, AmazonEC2ContainerRegistry,
+             AmazonECR, AmazonElasticContainerRegistry ]
+    type: elastic-container-registry
+  - label: [ AmazonContainersElasticContainerService, AmazonECS, AmazonECSECScontainer,
+             AmazonECSECScontainerAlt1, AmazonECSECScontainerAlt2, AmazonElasticContainerService,
+             AmazonElasticContainerService_Container1, AmazonElasticContainerService_Container2,
+             AmazonElasticContainerService_Service ]
+    type: elastic-container-service
+  - label: AmazonDocumentDB
+    type: CD-DOCUMENTDB
+  - label: AmazonDynamoDB
+    type: dynamodb
+  - label: [ AmazonEBS, AmazonElasticBlockStoreEBS, ElasticBlockStore ]
+    type: elastic-block-store
+  - label: AmazonEC2
+    type: ec2
+  - label: [ AmazonEC2_M5Instance, AmazonEC2_R5Instance ]
+    type: ec2
+  - label: [ AmazonEFS, AmazonElasticFileSystem_EFS, EFS file system, EFS ]
+    type: elastic-file-system
+  - label: AmazonEMR
+    type: CD-EMR
+  - label: AmazonElastiCache
+    type: elasticache
+  - label: AmazonElasticCacheRedis
+    type: CD-ELASTICACHE-FOR-REDIS
+  - label: [ AmazonElasticContainerKubernetes, AmazonElasticContainerServiceforKubernetes ]
+    type: elastic-container-kubernetes
+  - label: AmazonElasticTranscoder
+    type: CD-ELASTIC-TRANSCODER
+  - label: AmazonElasticsearchService
+    type: elasticsearch
+  - label: AmazonEventBridge
+    type: eventbridge
+  - label: AmazonFSxforWindowsFileServer
+    type: fsx-windows-file-server
+  - label: [ AmazonForecast, Forecast ]
+    type: CD-FORECAST
+  - label: AmazonGameLift
+    type: CD-GAMELIFT
+  - label: AmazonGlacier
+    type: glacier
+  - label: [ AmazonGuardDuty, GuardDuty ]
+    type: CD-GUARDDUTY
+  - label: [ AmazonInspector, Inspector ]
+    type: CD-INSPECTOR
+  - label: [ AmazonKinesis, AmazonKinesisDataAnalytics ]
+    type: kinesis-data-analytics
+  - label: AmazonKinesisDataFirehose
+    type: kinesis-data-firehose
+  - label: AmazonKinesisDataStreams
+    type: kinesis-data-streams
+  - label: [ AmazonKinesisVideoStreams, AmazonKinesisVideoStreamsMedia, AmazonKinesisVideoStreams_orange ]
+    type: kinesis-video-streams
+  - label: [ AmazonLex, Lex ]
+    type: CD-LEX
+  - label: AmazonLightsail
+    type: CD-LIGHTSAIL
+  - label: AmazonMQ
+    type: CD-MQ
+  - label: [ AmazonMacie, Macie ]
+    type: CD-MACIE
+  - label: AmazonManagedBlockchain
+    type: CD-MANAGEDBLOCKCHAIN
+  - label: AmazonNeptune
+    type: CD-NEPTUNE
+  - label: [ AmazonPersonalize,Personalize ]
+    type: CD-PERSONALIZE
+  - label: [ AmazonPinpoint, AmazonPinpoint_red ]
+    type: CD-PINPOINT
+  - label: AmazonPolly
+    type: CD-POLLY
+  - label: AmazonQuickSight
+    type: CD-QUICKSIGHT
+  - label: [ AmazonRDS, AmazonRDSDBinstance, AmazonRDSinstancestandby, Database, Generic database, genericdatabase ]
+    type: rds
+  - label: [ AmazonRedshift, AmazonRedshift_blue ]
+    type: redshift
+  - label: [ AmazonRekognition, Rekognition ]
+    type: CD-REKOGNITION
+  - label: AmazonRoute53
+    type: route-53
+  - label: [ AmazonS3, AmazonS3bucket, AmazonS3bucketwithobjects, AmazonSimpleStorageServiceS3,  AmazonSimpleStorageServiceS3_Bucket,
+             AmazonSimpleStorageServiceS3_BucketwithObjects, S3 bucket, S3 bucket with objects,
+             SimpleStorageService, Storage ]
+    type: s3
+  - label: [ AmazonSES, AmazonSimpleEmailServiceSES_Email ]
+    type: CD-SES
+  - label: [ AmazonSNS, AmazonSimpleNotificationService, AmazonSimpleNotificationServiceSNS ]
+    type: sns
+  - label: [ AmazonSQS, AmazonSQSqueue, AmazonSimpleQueueService, AmazonSimpleQueueServiceSQS,
+             AmazonSimpleQueueServiceSQS_Queue, SQS queue ]
+    type: sqs-simple-queue-service
+  - label: AmazonSWF
+    type: swf-simple-workflow-service
+  - label: [ AmazonSageMaker, SageMaker ]
+    type: CD-SAGEMAKER
+  - label: AmazonTextract
+    type: CD-TEXTRACT
+  - label: AmazonTimestream
+    type: CD-AWS-TIMESTREAM
+  - label: [ AmazonTranscribe, Transcribe ]
+    type: CD-TRANSCRIBE
+  - label: AmazonTranslate
+    type: CD-TRANSLATE
+  - label: [ AmazonVPC, VirtualPrivateCloudContainer, VirtualPrivateCloudVPC, virtualprivatecloud ]
+    type: vpc
+  - label: [ AmazonVPC_Endpoints, AmazonVPCendpoints ]
     type: empty-component
-
-  - label: AmazonECR
+  - label: AmazonWorkDocs
+    type: CD-WORKDOCS
+  - label: AmazonWorkMail
+    type: CD-WORKMAIL
+  - label: AmazonWorkSpaces
+    type: CD-WORKSPACES
+  - label: AvailabilityZone
     type: empty-component
-
-
+  - label: AzureMediaServicesAzure2019
+    type: CD-MICROSOFT-AZURE-MEDIA-SERVICES
+  - label: [ Client, client ]
+    type: generic-client
+  - label: DataShareInvitationsAzure2021
+    type: CD-MICROSOFT-AZURE-DATA-SHARE
+  - label: DataSharesAzure2021
+    type: CD-MICROSOFT-AZURE-DATA-SHARE
+  - label: DatabaseBlock
+    type: other-database
+  - label: [ DefaultSquareBlock, FreehandBlock ]
+    type: empty-component
+  - label: [ Elastic Load Balancing Application Load Balancer, Elastic Load Balancing
+    Classic Load Balancer, ElasticLoadBalancing, ElasticLoadBalancingApplicationLoadBalancer,
+    ElasticLoadBalancingClassicLoadBalancer ]
+    type: load-balancer
+  - label: [ ElasticLoadBalancingELB, ElasticLoadBalancingELLoadBalancer, ElasticLoadBalancing_Applicationloadbalancer,
+             ElasticLoadBalancing_Classicloadbalancer, ElasticLoadBalancing_Networkloadbalancer ]
+    type: load-balancer
+  - label: GenericGroup1
+    type: empty-component
+  - label: GenericGroup2
+    type: empty-component
+  - label: Kendra
+    type: CD-KENDRA
+  - label: PrivateSubnet
+    type: empty-component
+  - label: PublicSubnet
+    type: empty-component
+  - label: Region
+    type: empty-component
+  - label: SQLDatabaseAzure2021
+    type: CD-MICROSOFT-AZURE-SQL-DB
+  - label: SimpleEmailServiceEmail
+    type: CD-SES
+  - label: Translate
+    type: CD-TRANSLATE
+  - label: [ User, Users, user, users ]
+    type: empty-component
+  - label: VPC endpoints
+    type: empty-component
+  - label: VPCSubnet
+    type: empty-component
+  - label: VirtualprivatecloudVPC
+    type: vpc
+  - label: { $regex: "^(AmazonEC2_?|EC2)a-zA-Z?[0-9]?a-z?(Instance|instance)s?$" }
+    type: ec2
 dataflows: [ ]
