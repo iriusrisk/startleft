@@ -89,7 +89,6 @@ class TestCliParseEtm:
             mock.assert_called_once()
 
     @mark.parametrize('processor_type_option, processor_type_name, mapping_file_option, mapping_file', [
-        ('', '', '--mapping-file', TESTING_MTMT_DEFAULT_VALID_MAPPING_FILENAME),
         ('--diagram-type', 'VISIO', '', ''),
         ('--iac-type', 'TERRAFORM', '', ''),
     ])
@@ -126,7 +125,6 @@ class TestCliParseEtm:
             assert result.exit_code == 2
 
             assert result.stdout.__contains__("Error: Invalid arguments: etm_type is incompatible with:")
-            assert result.stdout.__contains__("mapping_file")
             assert result.stdout.__contains__("iac_type")
             assert result.stdout.__contains__("diagram_type")
 

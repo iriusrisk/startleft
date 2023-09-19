@@ -38,7 +38,7 @@ class TestCliParseIaCTerraform:
                 # a valid IaC type
                 '--iac-type', "TERRAFORM",
                 #   and a valid mapping terraform file
-                '--mapping-file', TERRAFORM_VALID_MAPPING_FILENAME,
+                '--default-mapping-file', TERRAFORM_VALID_MAPPING_FILENAME,
                 #   and a valid project name
                 '--project-name', "test_parse_terraform_file_ok",
                 #   and a valid project id
@@ -71,7 +71,7 @@ class TestCliParseIaCTerraform:
                 # a valid IaC type
                 '--iac-type', "TERRAFORM",
                 #   and a valid mapping terraform file
-                '--mapping-file', TERRAFORM_VALID_MAPPING_FILENAME,
+                '--default-mapping-file', TERRAFORM_VALID_MAPPING_FILENAME,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -104,7 +104,7 @@ class TestCliParseIaCTerraform:
                 # a valid IaC type
                 '--iac-type', "TERRAFORM",
                 #   and a valid mapping terraform file
-                '--mapping-file', TERRAFORM_VALID_MAPPING_FILENAME,
+                '--default-mapping-file', TERRAFORM_VALID_MAPPING_FILENAME,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -138,7 +138,7 @@ class TestCliParseIaCTerraform:
                 # a valid IaC type
                 '--iac-type', "TERRAFORM",
                 #   and a valid mapping terraform file
-                '--mapping-file', TERRAFORM_VALID_MAPPING_FILENAME,
+                '--default-mapping-file', TERRAFORM_VALID_MAPPING_FILENAME,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -168,7 +168,7 @@ class TestCliParseIaCTerraform:
                 # a valid IaC type
                 '--iac-type', "TERRAFORM",
                 #   and a valid mapping terraform file
-                '--mapping-file', mapping_file,
+                '--default-mapping-file', mapping_file,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
