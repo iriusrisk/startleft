@@ -142,7 +142,7 @@ directory with identical contents to the one above.
 ```shell
 startleft parse \
 	--iac-type TERRAFORM \
-	--mapping-file ec2-mapping.yaml \
+	--default-mapping-file ec2-mapping.yaml \
 	--output-file ec2.otm \
 	--project-id "my-ec2-project" \
 	--project-name "My EC2 project" \
@@ -164,7 +164,7 @@ curl --location --request POST localhost:5000/api/v1/startleft/iac \
 --header "Accept: application/json" \
 --form iac_type="TERRAFORM" \
 --form iac_file=@"./ec2-tf.json" \
---form mapping_file=@"./ec2-mapping.yaml" \
+--form default_mapping_file=@"./ec2-mapping.yaml" \
 --form id="my-ec2-project" \
 --form name="My EC2 project"
 ```

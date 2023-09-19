@@ -72,11 +72,16 @@ Request Body:
     iac_type:                   Required. Type of the IaC file: [CLOUDFORMATION, TERRAFORM]
     id                          Required. ID of the new project
     name                        Required. Name of the new project
-    mapping_file                Required. File that contains the mapping between IaC resources and threat model resources.
+    default_mapping_file        Required. File that contains the default mapping file between the diagram resources and threat model resources
+    custom_mapping_file         Optional. File that contains the custom user mapping file between the diagram resources and threat model resources
 ```
 This endpoint accepts one or more IaC source files (currently [Cloudformation](../startleft-processors/iac/cft/CloudFormation-Quickstart.md) 
-or [Terraform](../startleft-processors/iac/tf/Terraform-Quickstart.md)) and a mapping file, and generates an OTM with 
+or [Terraform](../startleft-processors/iac/tf/Terraform-Quickstart.md)),a mapping file, and an optional custom mapping file, and generates an OTM with 
 the resulting threat modeling content.
+
+???+ warning "mapping_file parameter is DEPRECATED"
+
+    In previous version mapping_file parameter was used instead default_mapping_file, now you can send one or the other until mapping_file  parameter is definitely deleted and only default_mapping_file will be accepted.
 
 ??? example "Example"
     === "Request"
@@ -88,7 +93,8 @@ the resulting threat modeling content.
         --form iac_type="CLOUDFORMATION" \
         --form iac_file=@"./resources_cft_file.json" \
         --form iac_file=@"./networks_cft_file.json" \
-        --form mapping_file=@"./iriusrisk-cft-mapping.yaml" \
+        --form default_mapping_file=@"./default-mapping.yaml" \
+        --form custom_mapping_file=@"./custom-mapping.yaml" \
         --form id="cft-to-otm-example" \
         --form name="CFT to OTM example"
         ```

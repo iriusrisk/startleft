@@ -36,7 +36,7 @@ OTM file `multinetwork_security_groups_with_lb.otm` in the process.
 ```shell
 startleft parse \
 	--iac-type CLOUDFORMATION \
-	--mapping-file iriusrisk-cft-mapping.yaml \
+	--default-mapping-file iriusrisk-cft-mapping.yaml \
 	--output-file multinetwork_security_groups_with_lb.otm \
 	--project-name "CFT MN Security Groups with LB" \
 	--project-id "cft-mn-sg-lb" \
@@ -60,7 +60,7 @@ The following command will parse both CloudFormation source files creating an OT
 ```shell
 startleft parse \
 	--iac-type CLOUDFORMATION \
-	--mapping-file iriusrisk-cft-mapping.yaml \
+	--default-mapping-file iriusrisk-cft-mapping.yaml \
 	--output-file multinetwork_security_groups_with_lb_from_multiple_files.otm \
 	--project-name "CFT MN Security Groups with LB from multiple files" \
 	--project-id "cft-mn-sg-lb-ml-fl" \
