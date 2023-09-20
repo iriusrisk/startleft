@@ -99,34 +99,26 @@ This command is used for parsing source files into the Open Threat Model format.
 The options that it supports are:
 
 ```shell
-  -t, --iac-type [CLOUDFORMATION|TERRAFORM]
-                                  The IaC file type. NOTE: This argument
-                                  is mutually exclusive with  arguments:
-                                  [custom_mapping_file,
-                                  default_mapping_file, diagram_type].
-  -g, --diagram-type [VISIO|LUCID]      
-                                  The diagram file type. NOTE: This
-                                  argument is mutually exclusive with
-                                  arguments: [mapping_file, iac_type].
-  -m, --mapping-file TEXT         
-                                  Mapping file to parse the IaC file.
-                                  NOTE: This argument is mutually
-                                  exclusive with  arguments:
-                                  [custom_mapping_file,
-                                  default_mapping_file, diagram_type].
-  -d, --default-mapping-file TEXT
-                                  Default mapping file to parse the
-                                  diagram or ETM file. NOTE: This argument is
+   -t, --iac-type [CLOUDFORMATION|TERRAFORM|TFPLAN]
+                                  The IaC file type. NOTE: This argument is
                                   mutually exclusive with  arguments:
-                                  [mapping_file, iac_type].
-  -c, --custom-mapping-file TEXT  
-                                  Custom mapping file to parse the
-                                  diagram or ETM file.
+                                  [diagram_type, etm_type]. [required]
+  -g, --diagram-type [VISIO|LUCID]
+                                  The diagram file type. NOTE: This argument
+                                  is mutually exclusive with  arguments:
+                                  [etm_type, iac_type]. [required]
+  -e, --etm-type [MTMT]           The etm file type. NOTE: This argument is
+                                  mutually exclusive with  arguments:
+                                  [diagram_type, iac_type]. [required]
+  -d, --default-mapping-file TEXT
+                                  Default mapping file to parse the diagram
+                                  file. [required]
+  -c, --custom-mapping-file TEXT  Custom mapping file to parse the diagram
+                                  file.
   -o, --output-file TEXT          OTM output file.
   -n, --project-name TEXT         Project name.  [required]
   -i, --project-id TEXT           Project id.  [required]
   --help                          Show this message and exit.
-
 ```
 > :material-information-outline: Notice that the argument with the `IaC or diagram file name` to parse is not 
 > preceded by a parameter 

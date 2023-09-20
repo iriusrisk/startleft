@@ -73,10 +73,10 @@ class TestOTMControllerIaCCloudformation:
         assert len(otm['components']) == 5
         assert len(otm['dataflows']) == 0
 
-    @mark.parametrize('project_id,project_name,cft_filename,cft_mimetype,mapping_filename,error_type',
-                      [uc_a, uc_b, uc_c, uc_d, uc_e, uc_f, uc_h, uc_i, uc_j, uc_k])
+    @mark.parametrize('project_id,project_name,cft_filename,cft_mimetype,mapping_filename,default_mapping_file,error_type',
+                      [uc_a, uc_b, uc_c, uc_d, uc_e, uc_f, uc_h, uc_i, uc_j, uc_k, uc_l])
     def test_create_project_validation_error(self, project_id: str, project_name: str, cft_filename, cft_mimetype,
-                                             mapping_filename, error_type):
+                                             mapping_filename, default_mapping_file, error_type):
         # Given a body
         body = {'iac_type': TESTING_IAC_TYPE, 'id': project_id, 'name': project_name}
 
@@ -86,6 +86,8 @@ class TestOTMControllerIaCCloudformation:
             files['iac_file'] = (cft_filename, open(cft_filename, 'rb'), cft_mimetype)
         if mapping_filename:
             files['mapping_file'] = (mapping_filename, open(mapping_filename, 'rb'), yaml_mime)
+        if default_mapping_file:
+            files['default_mapping_file'] = (mapping_filename, open(mapping_filename, 'rb'), 'text/yaml')
 
         # When I do post on cloudformation endpoint
         response = client.post(get_url(), files=files, data=body)

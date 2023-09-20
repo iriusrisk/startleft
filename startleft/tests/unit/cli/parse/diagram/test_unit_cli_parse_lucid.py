@@ -92,7 +92,6 @@ class TestCliParseLucid:
             mock.assert_called_once()
 
     @mark.parametrize('processor_type_option, processor_type_name, mapping_file_option, mapping_file', [
-        ('', '', '--mapping-file', TESTING_LUCID_DEFAULT_VALID_MAPPING_FILENAME),
         ('--iac-type', 'TERRAFORM', '', '')
     ])
     def test_lucid_parse_incompatible_parameters_error(self, processor_type_option, processor_type_name,
@@ -127,5 +126,5 @@ class TestCliParseLucid:
             assert result.exit_code == 2
 
             assert result.stdout.__contains__("Error: Invalid arguments: diagram_type is incompatible with:")
-            assert result.stdout.__contains__("mapping_file")
+            assert result.stdout.__contains__("etm_type")
             assert result.stdout.__contains__("iac_type")
