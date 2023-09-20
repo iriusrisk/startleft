@@ -1,11 +1,9 @@
 # This workflow will perform a static code testing with semgrep
 
-name: Static Application Security Testing
+name: semgrep
 
 on:
   pull_request: {}
-  push:
-    branches: ["dev", "main"]
 
 jobs:
   semgrep:
