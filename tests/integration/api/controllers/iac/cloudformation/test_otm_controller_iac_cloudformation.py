@@ -33,17 +33,17 @@ yaml_mime = 'text/yaml'
 class TestOTMControllerIaCCloudformation:
     cft_map = default_cloudformation_mapping
     wrong_id = cloudformation_malformed_mapping_wrong_id
-    uc_a = (None, 'proj A', example_json, json_mime, cft_map, 'RequestValidationError')
-    uc_b = ('proj_B', None, example_json, json_mime, cft_map, 'RequestValidationError')
-    uc_c = ('proj_C', 'proj C', None, None, cft_map, 'RequestValidationError')
-    uc_d = ('proj_D', 'proj D', example_json, json_mime, None, 'RequestValidationError')
-    uc_e = ('proj_E', 'proj E', example_json, json_mime, wrong_id, 'MappingFileNotValidError')
-    uc_f = ('proj_F', 'proj F', None, None, None, 'RequestValidationError')
-    uc_h = ('proj_H', 'proj H', invalid_yaml, '', cft_map, 'IacFileNotValidError')
-    uc_i = ('proj_I', 'proj I', invalid_yaml, yaml_mime, cft_map, 'OTMBuildingError')
-    uc_j = ('proj_J', 'proj J', invalid_yaml, None, cft_map, 'OTMBuildingError')
-    uc_k = ('proj_K', 'proj K', cloudformation_gz, None, cft_map, 'IacFileNotValidError')
-    uc_l = ('proj_L', 'proj L', visio_aws_shapes, None, cft_map, 'IacFileNotValidError')
+    uc_a = (None, 'proj A', example_json, json_mime, cft_map, None, 'RequestValidationError')
+    uc_b = ('proj_B', None, example_json, json_mime, cft_map, None, 'RequestValidationError')
+    uc_c = ('proj_C', 'proj C', None, None, cft_map, None, 'RequestValidationError')
+    uc_d = ('proj_D', 'proj D', example_json, json_mime, None, None, 'MappingFileNotValidError')
+    uc_e = ('proj_E', 'proj E', example_json, json_mime, wrong_id, None, 'MappingFileNotValidError')
+    uc_f = ('proj_F', 'proj F', None, None, None, None, 'RequestValidationError')
+    uc_h = ('proj_H', 'proj H', invalid_yaml, '', cft_map, None, 'IacFileNotValidError')
+    uc_i = ('proj_I', 'proj I', invalid_yaml, yaml_mime, cft_map, None, 'OTMBuildingError')
+    uc_j = ('proj_J', 'proj J', invalid_yaml, None, cft_map, None, 'OTMBuildingError')
+    uc_k = ('proj_K', 'proj K', cloudformation_gz, None, cft_map, None, 'IacFileNotValidError')
+    uc_l = ('proj_L', 'proj L', example_json, json_mime, cft_map, cft_map, 'MappingFileNotValidError')
 
     @responses.activate
     def test_create_otm_ok(self):

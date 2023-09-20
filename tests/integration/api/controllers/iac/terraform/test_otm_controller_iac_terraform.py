@@ -33,17 +33,17 @@ class TestOTMControllerIaCTerraform:
     tf_file = terraform_aws_simple_components
     tf_map = terraform_iriusrisk_tf_aws_mapping
     wrong_id = terraform_malformed_mapping_wrong_id
-    uc_a = (None, 'proj A', tf_file, json_mime, tf_map, 'RequestValidationError')
-    uc_b = ('proj_B', None, tf_file, json_mime, tf_map, 'RequestValidationError')
-    uc_c = ('proj_C', 'proj C', None, None, tf_map, 'RequestValidationError')
-    uc_d = ('proj_D', 'proj D', tf_file, json_mime, None, 'RequestValidationError')
-    uc_e = ('proj_E', 'proj E', tf_file, json_mime, wrong_id, 'MappingFileNotValidError')
-    uc_f = ('proj_F', 'proj F', None, None, None, 'RequestValidationError')
-    uc_h = ('proj_H', 'proj H', invalid_tf, '', tf_map, 'IacFileNotValidError')
-    uc_i = ('proj_I', 'proj I', invalid_tf, yaml_mime, tf_map, 'IacFileNotValidError')
-    uc_j = ('proj_J', 'proj J', invalid_tf, None, tf_map, 'LoadingIacFileError')
-    uc_k = ('proj_K', 'proj K', terraform_gz, None, tf_map, 'IacFileNotValidError')
-    uc_l = ('proj_L', 'proj L', visio_aws_shapes, None, tf_map, 'IacFileNotValidError')
+    uc_a = (None, 'proj A', tf_file, json_mime, tf_map, None, 'RequestValidationError')
+    uc_b = ('proj_B', None, tf_file, json_mime, tf_map, None, 'RequestValidationError')
+    uc_c = ('proj_C', 'proj C', None, None, tf_map, None, 'RequestValidationError')
+    uc_d = ('proj_D', 'proj D', tf_file, json_mime, None, None, 'MappingFileNotValidError')
+    uc_e = ('proj_E', 'proj E', tf_file, json_mime, wrong_id, None, 'MappingFileNotValidError')
+    uc_f = ('proj_F', 'proj F', None, None, None, None, 'RequestValidationError')
+    uc_h = ('proj_H', 'proj H', invalid_tf, '', tf_map, None, 'IacFileNotValidError')
+    uc_i = ('proj_I', 'proj I', invalid_tf, yaml_mime, tf_map, None, 'IacFileNotValidError')
+    uc_j = ('proj_J', 'proj J', invalid_tf, None, tf_map, None, 'LoadingIacFileError')
+    uc_k = ('proj_K', 'proj K', terraform_gz, None, tf_map, None, 'IacFileNotValidError')
+    uc_l = ('proj_L', 'proj L', tf_file, json_mime, tf_map, tf_map, 'MappingFileNotValidError')
 
     @responses.activate
     @pytest.mark.parametrize('filename,break_line', [
