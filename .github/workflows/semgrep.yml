@@ -20,12 +20,7 @@ jobs:
         run: semgrep ci --config=p/owasp-top-ten --config=p/cwe-top-25 --config=p/gitleaks -q --exclude="tests" --exclude="*/tests" --skip-unknown-extensions --suppress-errors
         continue-on-error: true
 
-      - name: Get branch name (merge)
-        if: github.event_name != 'pull_request'
-        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
-
       - name: Get branch name (pull request)
-        if: github.event_name == 'pull_request'
         run: echo "BRANCH_NAME=${{ github.event.pull_request.base.ref }}" >> $GITHUB_ENV
 
       - name: Set failure message vars
