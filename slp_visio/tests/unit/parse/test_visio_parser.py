@@ -74,17 +74,20 @@ def get_component_mappings(mapping_type: Literal['label', 'list', 'regex']):
     def mappings():
         if mapping_type == 'label':
             return [
+                {'label': 'AWS Region: us-east-1', 'type': 'empty-component'},
                 {'label': 'EC2 instance', 'type': 'ec2'},
                 {'label': 'AmazonS32017', 'type': 's3'},
                 {'label': 'AmazonSimpleStorageServiceS3', 'type': 's3'},
             ]
         elif mapping_type == 'list':
             return [
+                {'label': 'RegionAWS2021', 'type': 'empty-component'},
                 {'label': ['AmazonEC2instance2017'], 'type': 'ec2'},
                 {'label': ['S3'], 'type': 's3'}
             ]
         else:
             return [
+                {'label': {'$regex': '^Region.*$'}, 'type': 'empty-component'},
                 {'label': {'$regex': '^AmazonEC2.*$'}, 'type': 'ec2'},
                 {'label': {'$regex': '^.*S3.*$'}, 'type': 's3'}
             ]

@@ -1,46 +1,91 @@
 {
-  "otmVersion": "0.1.0",
-  "project": {
-    "name": "project-name",
-    "id": "project-id"
-  },
-  "representations": [
-    {
-      "name": "project-id Diagram Representation",
-      "id": "project-id-diagram",
-      "type": "diagram",
-      "size": {
-        "width": 1385,
-        "height": 916
-      }
-    }
-  ],
-  "trustZones": [
-    {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
-      "name": "Public Cloud",
-      "risk": {
-        "trustRating": 10
-      }
-    }
-  ],
-  "components": [
-    {
-      "id": "1",
-      "name": "Amazon EC2",
-      "type": "ec2",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
+    "otmVersion": "0.1.0",
+    "project": {
+        "name": "project-name",
+        "id": "project-id"
     },
-    {
-      "id": "6",
-      "name": "Amazon EC2",
-      "type": "ec2",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      }
-    }
-  ],
-  "dataflows": []
+    "representations": [
+        {
+            "name": "project-id Diagram Representation",
+            "id": "project-id-diagram",
+            "type": "diagram",
+            "size": {
+                "width": 1385,
+                "height": 916
+            }
+        }
+    ],
+    "trustZones": [
+        {
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "name": "Public Cloud",
+            "risk": {
+                "trustRating": 10
+            },
+            "representations": [
+                {
+                    "name": "Public Cloud Representation",
+                    "id": "11-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 353,
+                        "height": 260
+                    },
+                    "position": {
+                        "x": 328,
+                        "y": 328
+                    }
+                }
+            ]
+        }
+    ],
+    "components": [
+        {
+            "id": "1",
+            "name": "Amazon EC2",
+            "type": "ec2",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Amazon EC2 Representation",
+                    "id": "1-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 135,
+                        "y": 67
+                    }
+                }
+            ]
+        },
+        {
+            "id": "6",
+            "name": "Amazon EC2",
+            "type": "ec2",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Amazon EC2 Representation",
+                    "id": "6-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 30,
+                        "y": 30
+                    }
+                }
+            ]
+        }
+    ],
+    "dataflows": []
 }

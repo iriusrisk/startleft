@@ -42,7 +42,7 @@ class TestApiIac:
         # WHEN the POST /iac endpoint is called with iac params AND no error is raised
         mock_provider_processor_result(mock_otm_processor, mock_get_processor, OTM_SAMPLE)
         response = controller.iac(valid_iac_file, TESTING_IAC_TYPE, 'happy_path_id', 'happy_path_name',
-                                  valid_mapping_file)
+                                  valid_mapping_file, False, False)
 
         # THEN a response with HTTP status 201 is returned
         assert response.status_code == 201
@@ -65,7 +65,7 @@ class TestApiIac:
                                              'mocked error msg 1')
             mock_provider_processor_error(mock_otm_processor, mock_get_processor, mock_error)
             controller.iac(invalid_iac_file, TESTING_IAC_TYPE, 'iac_controller_on_loading_iac_error_id',
-                           'iac_controller_on_loading_iac_error_name', valid_mapping_file)
+                           'iac_controller_on_loading_iac_error_name', valid_mapping_file, False, False)
 
         # THEN a response HTTP Status that matches the error is returned
         # AND the error_type in the response body matched the name of the exception raised
@@ -89,7 +89,7 @@ class TestApiIac:
             mock_error = IacFileNotValidError('mocked error IAC_NOT_VALID', 'mocked error detail', 'mocked error msg 2')
             mock_provider_processor_error(mock_otm_processor, mock_get_processor, mock_error)
             controller.iac(invalid_iac_file, TESTING_IAC_TYPE, 'iac_controller_on_iac_file_not_valid_error_id',
-                           'iac_controller_on_iac_file_not_valid_error_name', valid_mapping_file)
+                           'iac_controller_on_iac_file_not_valid_error_name', valid_mapping_file, False, False)
 
         # THEN a response HTTP Status that matches the error is returned
         # AND the error_type in the response body matched the name of the exception raised
@@ -115,7 +115,7 @@ class TestApiIac:
             mock_provider_processor_error(mock_otm_processor, mock_get_processor, mock_error)
             # THEN a response HTTP Status that matches the error is returned
             controller.iac(invalid_iac_file, TESTING_IAC_TYPE, 'iac_controller_on_loading_mapping_file_error_id',
-                           'iac_controller_on_loading_mapping_file_error_name', valid_mapping_file)
+                           'iac_controller_on_loading_mapping_file_error_name', valid_mapping_file, False, False)
 
         # AND the error_type in the response body matched the name of the exception raised
         assert error.value.error_code.http_status == 400
@@ -139,7 +139,7 @@ class TestApiIac:
                                           'mocked error msg 4')
             mock_provider_processor_error(mock_otm_processor, mock_get_processor, mock_error)
             controller.iac(invalid_iac_file, TESTING_IAC_TYPE, 'iac_controller_on_otm_building_error_id',
-                           'iac_controller_on_otm_building_error_name', valid_mapping_file)
+                           'iac_controller_on_otm_building_error_name', valid_mapping_file, False, False)
 
         # THEN a response HTTP Status that matches the error is returned
         # AND the error_type in the response body matched the name of the exception raised
@@ -164,7 +164,7 @@ class TestApiIac:
                                             'mocked error msg 5')
             mock_provider_processor_error(mock_otm_processor, mock_get_processor, mock_error)
             controller.iac(invalid_iac_file, TESTING_IAC_TYPE, 'iac_controller_on_otm_generation_error_id',
-                           'iac_controller_on_otm_generation_error_name', valid_mapping_file)
+                           'iac_controller_on_otm_generation_error_name', valid_mapping_file, False, False)
 
         # THEN a response HTTP Status that matches the error is returned
         # AND the error_type in the response body matched the name of the exception raised
@@ -186,7 +186,7 @@ class TestApiIac:
 
         # WHEN the POST /iac endpoint is called with iac params AND no error is raised
         mock_provider_processor_result(mock_otm_processor, mock_get_processor, OTM_SAMPLE)
-        response = controller.iac(valid_iac_files, '', 'happy_path_id', 'happy_path_name', valid_mapping_file)
+        response = controller.iac(valid_iac_files, '', 'happy_path_id', 'happy_path_name', valid_mapping_file, False, False)
 
         # THEN a response with HTTP staus 201  and json media type is returned
         assert response.status_code == 201
@@ -212,7 +212,7 @@ class TestApiIac:
             mock_error = LoadingIacFileError('mocked IAC_LOADING_ERROR', 'mocked detail', 'mocked msg 6')
             mock_provider_processor_error(mock_otm_processor, mock_get_processor, mock_error)
             controller.iac(valid_iac_files, TESTING_IAC_TYPE, 'loading_iac_error_id', 'loading_iac_error_name',
-                           valid_mapping_file)
+                           valid_mapping_file, False, False)
 
         # THEN a response HTTP Status that matches the error is returned
         # AND the type of error in the response body matched the name of the exception raised
@@ -238,7 +238,7 @@ class TestApiIac:
             mock_error = IacFileNotValidError('mocked IAC_NOT_VALID', 'mocked detail', 'mocked msg 7')
             mock_provider_processor_error(mock_otm_processor, mock_get_processor, mock_error)
             controller.iac(valid_iac_files, TESTING_IAC_TYPE, 'file_not_valid_error_id',
-                           'file_not_valid_error_name', valid_mapping_file)
+                           'file_not_valid_error_name', valid_mapping_file, False, False )
 
         # THEN a response HTTP Status that matches the error is returned
         # AND the type of error in the response body matched the name of the exception raised
