@@ -1,10 +1,11 @@
-name: Documentation Check
+name: documentation-check
 
 on: [pull_request]
 
 jobs:
 
   check-documentation:
+    name: Documentation Check
     runs-on: ubuntu-latest
 
     steps:
@@ -12,7 +13,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Config documentation environment
-        uses: ./.github/actions/documentation
+        uses: ./.github/actions/install-doc-dependencies
 
       - name: Check doc build
         run: mkdocs build
