@@ -81,5 +81,5 @@ class TestCliParseDiagram:
             assert result.exit_code == 2
 
             assert result.stdout.__contains__("Error: Invalid arguments: diagram_type is incompatible with:")
-            assert result.stdout.__contains__("mapping_file")
+            assert result.stdout.__contains__("etm_type")
             assert result.stdout.__contains__("iac_type")

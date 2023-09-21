@@ -1,112 +1,217 @@
 {
-  "components": [
-    {
-      "id": "13",
-      "name": "Bucket",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "type": "s3"
+    "otmVersion": "0.1.0",
+    "project": {
+        "name": "project-name",
+        "id": "project-id"
     },
-    {
-      "id": "19",
-      "name": "Bucket",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "type": "s3"
-    },
-    {
-      "id": "31",
-      "name": "Amazon MQ",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "type": "CD-MQ"
-    },
-    {
-      "id": "46",
-      "name": "Amazon MQ",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "type": "CD-MQ"
-    },
-    {
-      "id": "86",
-      "name": "Database",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "type": "rds"
-    },
-    {
-      "id": "99",
-      "name": "Amazon MQ",
-      "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
-      },
-      "type": "CD-MQ"
-    }
-  ],
-  "dataflows": [
-    {
-      "destination": "19",
-      "id": "94",
-      "name": "4d18cdd9-ab7a-425e-a01a-57cf2d6ad0f0",
-      "source": "31"
-    },
-    {
-      "destination": "19",
-      "id": "114",
-      "name": "25370304-37ba-42d4-a700-2df1ebd01d4e",
-      "source": "46"
-    },
-    {
-      "destination": "19",
-      "id": "115",
-      "name": "5c9fbba6-a1c4-40d9-81a5-2cbac8ac6e88",
-      "source": "99"
-    },
-    {
-      "destination": "86",
-      "id": "116",
-      "name": "3bb77afb-222c-413d-bbff-357866250dde",
-      "source": "99"
-    },
-    {
-      "destination": "13",
-      "id": "117",
-      "name": "37593e2d-399e-454a-9964-5d98065b2ec5",
-      "source": "46"
-    }
-  ],
-  "otmVersion": "0.1.0",
-  "project": {
-    "id": "project-id",
-    "name": "project-name"
-  },
-  "representations": [
-    {
-      "id": "project-id-diagram",
-      "name": "project-id Diagram Representation",
-      "size": {
-        "height": 1297,
-        "width": 1691
-      },
-      "type": "diagram"
-    }
-  ],
-  "trustZones": [
-    {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
-      "name": "Public Cloud",
-      "attributes": {
-        "default": true
-      },
-      "risk": {
-        "trustRating": 10
-      }
-    }
-  ]
+    "representations": [
+        {
+            "name": "project-id Diagram Representation",
+            "id": "project-id-diagram",
+            "type": "diagram",
+            "size": {
+                "width": 1691,
+                "height": 1297
+            }
+        }
+    ],
+    "trustZones": [
+        {
+            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "name": "Public Cloud",
+            "risk": {
+                "trustRating": 10
+            },
+            "attributes": {
+                "default": true
+            },
+            "representations": [
+                {
+                    "name": "Public Cloud Representation",
+                    "id": "804b664a-7129-4a9e-a08c-16a99669f605-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 571,
+                        "height": 701
+                    },
+                    "position": {
+                        "x": 298,
+                        "y": 298
+                    }
+                }
+            ]
+        }
+    ],
+    "components": [
+        {
+            "id": "13",
+            "name": "Bucket",
+            "type": "s3",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Bucket Representation",
+                    "id": "13-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 459,
+                        "y": 30
+                    }
+                }
+            ]
+        },
+        {
+            "id": "19",
+            "name": "Bucket",
+            "type": "s3",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Bucket Representation",
+                    "id": "19-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 250,
+                        "y": 345
+                    }
+                }
+            ]
+        },
+        {
+            "id": "31",
+            "name": "Amazon MQ",
+            "type": "CD-MQ",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Amazon MQ Representation",
+                    "id": "31-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 30,
+                        "y": 345
+                    }
+                }
+            ]
+        },
+        {
+            "id": "46",
+            "name": "Amazon MQ",
+            "type": "CD-MQ",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Amazon MQ Representation",
+                    "id": "46-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 459,
+                        "y": 263
+                    }
+                }
+            ]
+        },
+        {
+            "id": "86",
+            "name": "Database",
+            "type": "rds",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Database Representation",
+                    "id": "86-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 459,
+                        "y": 589
+                    }
+                }
+            ]
+        },
+        {
+            "id": "99",
+            "name": "Amazon MQ",
+            "type": "CD-MQ",
+            "parent": {
+                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+            },
+            "representations": [
+                {
+                    "name": "Amazon MQ Representation",
+                    "id": "99-representation",
+                    "representation": "project-id-diagram",
+                    "size": {
+                        "width": 82,
+                        "height": 82
+                    },
+                    "position": {
+                        "x": 459,
+                        "y": 435
+                    }
+                }
+            ]
+        }
+    ],
+    "dataflows": [
+        {
+            "id": "94",
+            "name": "4d18cdd9-ab7a-425e-a01a-57cf2d6ad0f0",
+            "source": "31",
+            "destination": "19"
+        },
+        {
+            "id": "114",
+            "name": "25370304-37ba-42d4-a700-2df1ebd01d4e",
+            "source": "46",
+            "destination": "19"
+        },
+        {
+            "id": "115",
+            "name": "5c9fbba6-a1c4-40d9-81a5-2cbac8ac6e88",
+            "source": "99",
+            "destination": "19"
+        },
+        {
+            "id": "116",
+            "name": "3bb77afb-222c-413d-bbff-357866250dde",
+            "source": "99",
+            "destination": "86"
+        },
+        {
+            "id": "117",
+            "name": "37593e2d-399e-454a-9964-5d98065b2ec5",
+            "source": "46",
+            "destination": "13"
+        }
+    ]
 }

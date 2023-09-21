@@ -30,7 +30,7 @@ class TestCliParseIaCCloudformation:
                 # a valid IaC type
                 '--iac-type', TESTING_IAC_TYPE,
                 #   and a valid mapping file
-                '--mapping-file', TESTING_MAPPING_FILE,
+                '--default-mapping-file', TESTING_MAPPING_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -63,7 +63,7 @@ class TestCliParseIaCCloudformation:
                 # a valid Diagram type
                 '--diagram-type', "VISIO",
                 #   and a valid mapping file
-                '--mapping-file', TESTING_MAPPING_FILE,
+                '--default-mapping-file', TESTING_MAPPING_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -80,6 +80,5 @@ class TestCliParseIaCCloudformation:
             assert result.exit_code == 2
 
             assert result.stdout.__contains__("Error: Invalid arguments: iac_type is incompatible with:")
-            assert result.stdout.__contains__("default_mapping_file")
-            assert result.stdout.__contains__("custom_mapping_file")
+            assert result.stdout.__contains__("etm_type")
             assert result.stdout.__contains__("diagram_type")
