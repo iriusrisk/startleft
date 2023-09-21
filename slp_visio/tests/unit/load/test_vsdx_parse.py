@@ -7,30 +7,34 @@ from slp_visio.slp_visio.load.objects.visio_diagram_factories import VisioCompon
 from slp_visio.slp_visio.load.vsdx_parser import VsdxParser
 from slp_visio.tests.resources import test_resource_paths
 
+
 class TestVsdxParser:
 
     def test_name_in_child_shape(self):
         # GIVEN the parser
         parser = VsdxParser(VisioComponentFactory(), VisioConnectorFactory())
         # WHEN we parse the vsdx file
-        diagram : Diagram = parser.parse(test_resource_paths.visio_complex_stencil_text)
+        diagram: Diagram = parser.parse(test_resource_paths.visio_complex_stencil_text)
         # THEN we check the components created
         assert diagram.diagram_type == DiagramType.VISIO
-        assert len( diagram.connectors) == 0
-        assert len( diagram.components) == 1
+        assert len(diagram.connectors) == 0
+        assert len(diagram.components) == 1
         assert diagram.components[0].origin == DiagramComponentOrigin.SIMPLE_COMPONENT
         assert diagram.components[0].name == 'Custom AWS Step Functions workflow name'
         assert diagram.components[0].id == '1'
+        # AND any component has parent because the parents are not calculated in VsdxParser
+        for component in diagram.components:
+            assert not component.parent
 
     def test_name_in_two_master_page_with_children(self):
         # GIVEN the parser
         parser = VsdxParser(VisioComponentFactory(), VisioConnectorFactory())
         # WHEN we parse the vsdx file
-        diagram : Diagram = parser.parse(test_resource_paths.visio_two_lambda)
+        diagram: Diagram = parser.parse(test_resource_paths.visio_two_lambda)
         # THEN we check the components created
         assert diagram.diagram_type == DiagramType.VISIO
-        assert len( diagram.connectors) == 0
-        assert len( diagram.components) == 4
+        assert len(diagram.connectors) == 0
+        assert len(diagram.components) == 4
         for component in diagram.components:
             assert component.origin == DiagramComponentOrigin.SIMPLE_COMPONENT
         assert diagram.components[0].name == 'First Lambda step-flow'
@@ -39,22 +43,21 @@ class TestVsdxParser:
         assert diagram.components[1].id == '45'
         assert diagram.components[2].name == 'Lambda Function 1'
         assert diagram.components[2].id == '35'
-        assert diagram.components[2].parent.id == '1'
         assert diagram.components[3].name == 'Lambda Function 2'
         assert diagram.components[3].id == '63'
-        assert diagram.components[3].parent.id == '45'
-
-
+        # AND any component has parent because the parents are not calculated in VsdxParser
+        for component in diagram.components:
+            assert not component.parent
 
     def test_shape_group(self):
         # GIVEN the parser
         parser = VsdxParser(VisioComponentFactory(), VisioConnectorFactory())
         # WHEN we parse the vsdx file
-        diagram : Diagram = parser.parse(test_resource_paths.visio_shape_group)
+        diagram: Diagram = parser.parse(test_resource_paths.visio_shape_group)
         # THEN we check the components created
         assert diagram.diagram_type == DiagramType.VISIO
-        assert len( diagram.connectors) == 0
-        assert len( diagram.components) == 3
+        assert len(diagram.connectors) == 0
+        assert len(diagram.components) == 3
         for component in diagram.components:
             assert component.origin == DiagramComponentOrigin.SIMPLE_COMPONENT
         assert diagram.components[0].name == 'My Cloud Menu'
@@ -63,16 +66,19 @@ class TestVsdxParser:
         assert diagram.components[1].id == '3'
         assert diagram.components[2].name == 'My Keys Menu'
         assert diagram.components[2].id == '9'
+        # AND any component has parent because the parents are not calculated in VsdxParser
+        for component in diagram.components:
+            assert not component.parent
 
     def test_children_with_same_relative_coordinates(self):
         # GIVEN the parser
         parser = VsdxParser(VisioComponentFactory(), VisioConnectorFactory())
         # WHEN we parse the vsdx file
-        diagram : Diagram = parser.parse(test_resource_paths.lucid_two_children_same_relative_coordinates)
+        diagram: Diagram = parser.parse(test_resource_paths.lucid_two_children_same_relative_coordinates)
         # THEN we check the components created
         assert diagram.diagram_type == DiagramType.VISIO
-        assert len( diagram.connectors) == 0
-        assert len( diagram.components) == 6
+        assert len(diagram.connectors) == 0
+        assert len(diagram.components) == 6
         for component in diagram.components:
             assert component.origin == DiagramComponentOrigin.SIMPLE_COMPONENT
         assert diagram.components[0].name == 'VPC1'
@@ -87,4 +93,6 @@ class TestVsdxParser:
         assert diagram.components[4].id == '20'
         assert diagram.components[5].name == 'GIT/Kubernetes ECS2'
         assert diagram.components[5].id == '23'
-
+        # AND any component has parent because the parents are not calculated in VsdxParser
+        for component in diagram.components:
+            assert not component.parent
