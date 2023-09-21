@@ -169,7 +169,7 @@ class TestVisioParser:
     def test_no_match_resource_by_dict(self, label: dict, value: str):
         assert not _match_resource_by_dict(label, value)
 
-    @pytest.mark.parametrize('components', [
+    @pytest.mark.parametrize('diagram_components', [
         pytest.param([tz1, c1, c2, c3, c4], id="big"),
         pytest.param([tz2, c1, c2, c3, c4], id="medium"),
         pytest.param([tz3, c1, c2, c3, c4], id="little"),
