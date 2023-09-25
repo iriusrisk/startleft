@@ -59,7 +59,7 @@ git checkout release/1.5.0
 
 Now, we can create the StartLeft image:
 ```shell
-docker build . -f deployment/Dockerfile.docs.application.application -t startleft
+docker build . -f deployment/Dockerfile.application -t startleft
 ```
 
 And, finally, we can run the docker container for the image we have just generated. Notice that you can select the
