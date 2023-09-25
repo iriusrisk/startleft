@@ -41,8 +41,10 @@ This configuration defines a list of resources that will never be mapped.
 ```yaml
 configuration:
   skip:
-    - aws_security_group
-    - ec2
+    - AmazonCloudWatch
+    - AmazonDynamoDB
+    - AmazonRoute53
+    - DataSharesAzure2021
 ```
 
 ## An example

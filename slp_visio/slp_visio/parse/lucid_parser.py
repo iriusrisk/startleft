@@ -4,8 +4,7 @@ from sl_util.sl_util import secure_regex
 from sl_util.sl_util.iterations_utils import remove_keys
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent, Diagram
 from slp_visio.slp_visio.load.visio_mapping_loader import VisioMappingFileLoader
-from slp_visio.slp_visio.parse.visio_parser import VisioParser
-from slp_visio.slp_visio.util.visio import normalize_label
+from slp_visio.slp_visio.parse.visio_parser import VisioParser, _match_resource
 
 AWS_REGEX = [r".*2017$", r".*AWS19$", r".*AWS2021$"]
 AZURE_REGEX = [r"^AC.*Block$", r"^AE.*Block$", r"^AGS.*Block$", r"^AVM.*Block$", r".*Azure2019$", r".*Azure2021$"]
@@ -63,11 +62,16 @@ class LucidParser(VisioParser):
     def __get_skip_config(self) -> List[str]:
         return self.mapping_loader.configuration.get('skip')
 
-    def __prune_skip_components(self, mappings):
+    def __prune_skip_components(self, mappings: dict) -> dict:
+        ids_to_skip = self.__get_ids_to_skip()
+        return remove_keys(mappings, ids_to_skip)
+
+    def __get_ids_to_skip(self) -> List[str]:
+        ids_to_skip = []
         skip_config = self.__get_skip_config()
         if skip_config:
-            skip_config_normalized = [normalize_label(s) for s in skip_config]
-            ids_to_skip = {key for key, value in mappings.items()
-                           if normalize_label(value.get('label')) in skip_config_normalized}
-            return remove_keys(mappings, ids_to_skip)
-        return mappings
+            for component in self.diagram.components:
+                for skip in skip_config:
+                    if _match_resource(component.type, skip):
+                        ids_to_skip.append(component.id)
+        return ids_to_skip

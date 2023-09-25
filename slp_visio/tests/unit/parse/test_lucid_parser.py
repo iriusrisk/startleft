@@ -135,8 +135,11 @@ class TestLucidParser:
         """
         # GIVEN a mapping loader with skip configuration
         mapping_loader = MagicMock(configuration=skip_config)
-
-        diagram = MagicMock()
+        # AND the diagram with these components
+        ec2 = MagicMock(id='5', type='AmazonEC22017')
+        apigw = MagicMock(id='19', type='AmazonAPIGatewayAWS2021')
+        diagram = MagicMock(components=[ec2, apigw])
+        # AND the parser
         lucid_parser = LucidParser(*(MagicMock(),) * 2, diagram, mapping_loader)
 
         # WHEN _get_component_mappings is called in LucidParser
@@ -171,8 +174,13 @@ class TestLucidParser:
         """
         # GIVEN a mapping loader with skip configuration
         mapping_loader = MagicMock(configuration=skip_config)
-
-        diagram = MagicMock()
+        # AND the diagram with these components
+        ec2 = MagicMock(id='5', type='AmazonEC22017')
+        datacenter = MagicMock(id='14', type='CorporateDataCenterContainer2017')
+        apigw = MagicMock(id='19', type='AmazonAPIGatewayAWS2021')
+        azure_storage = MagicMock(id='23', type='Azure Storage')
+        diagram = MagicMock(components=[ec2, datacenter, apigw, azure_storage])
+        # AND the parser
         lucid_parser = LucidParser(*(MagicMock(),) * 2, diagram, mapping_loader)
 
         # WHEN _get_component_mappings is called in LucidParser
