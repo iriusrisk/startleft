@@ -14,7 +14,7 @@ paths:
   "/health":
     get:
       tags:
-        - health
+        - Health
       summary: Health
       operationId: health_health_get
       responses:
@@ -40,7 +40,7 @@ paths:
                 - iac_type
                 - id
                 - name
-                - mapping_file
+                - default_mapping_file
               type: object
               properties:
                 iac_file:
@@ -64,11 +64,22 @@ paths:
                   example: Example project
                 mapping_file:
                   type: string
-                  description: File that contains the mapping between IaC resources and threat
+                  description: This field is DEPRECATED. Use default_mapping_file instead. File that contains the mapping between IaC resources and threat
                     model resources
+                  deprecated: true
                   format: binary
                   example:
                     externalValue: https://github.com/iriusrisk/startleft/raw/main/examples/terraform/iriusrisk-tf-aws-mapping.yaml
+                default_mapping_file:
+                  type: string
+                  description: File that contains the default mapping file
+                  format: binary
+                  example:
+                    externalValue: https://github.com/iriusrisk/startleft/raw/main/examples/terraform/iriusrisk-tf-aws-mapping.yaml
+                custom_mapping_file:
+                  type: string
+                  description: File that contains the user custom mapping file
+                  format: binary
         required: true
       responses:
         '201':
@@ -324,7 +335,7 @@ components:
         detail: OtmGenerationError
         errors: ["errorMessage": "The server encountered an error and could not process the request"]
 tags:
-  - name: health
+  - name: Health
     description: Check the service status
     externalDocs:
       url: https://iriusrisk.github.io/startleft/usage/REST-API/#health

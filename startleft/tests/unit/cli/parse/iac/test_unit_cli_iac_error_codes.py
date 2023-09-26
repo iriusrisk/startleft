@@ -31,7 +31,7 @@ class TestCliIacErrorCodes:
                 # a valid IaC type
                 '--iac-type', TESTING_IAC_TYPE,
                 #   and a valid mapping file
-                '--mapping-file', TESTING_IAC_FILE,
+                '--default-mapping-file', TESTING_IAC_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -62,7 +62,7 @@ class TestCliIacErrorCodes:
                 # a valid IaC type
                 '--iac-type', TESTING_IAC_TYPE,
                 #   and a valid mapping file
-                '--mapping-file', TESTING_IAC_FILE,
+                '--default-mapping-file', TESTING_IAC_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -93,7 +93,7 @@ class TestCliIacErrorCodes:
                 # a valid IaC type
                 '--iac-type', TESTING_IAC_TYPE,
                 #   and a valid mapping file
-                '--mapping-file', TESTING_IAC_FILE,
+                '--default-mapping-file', TESTING_IAC_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -124,7 +124,7 @@ class TestCliIacErrorCodes:
                 # a valid IaC type
                 '--iac-type', TESTING_IAC_TYPE,
                 #   and a valid mapping file
-                '--mapping-file', TESTING_IAC_FILE,
+                '--default-mapping-file', TESTING_IAC_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id
@@ -156,7 +156,7 @@ class TestCliIacErrorCodes:
                 # a valid IaC type
                 '--iac-type', TESTING_IAC_TYPE,
                 #   and a valid mapping file
-                '--mapping-file', TESTING_IAC_FILE,
+                '--default-mapping-file', TESTING_IAC_FILE,
                 #   and a valid project name
                 '--project-name', "project-name",
                 #   and a valid project id

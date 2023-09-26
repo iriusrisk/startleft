@@ -1,5 +1,5 @@
-name: Config documentation environment
-description: 'Config documentation environment'
+name: Install doc dependencies
+description: 'Install doc dependencies'
 
 runs:
   using: "composite"

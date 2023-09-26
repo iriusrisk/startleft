@@ -41,10 +41,6 @@ ETM_TYPE_SUPPORTED = ['MTMT']
 ETM_MAPPING_FILE_NAME = '--etm-mapping-file'
 ETM_MAPPING_FILE_DESC = 'External Threat Model mapping file to validate.'
 
-MAPPING_FILE_NAME = '--mapping-file'
-MAPPING_FILE_SHORTNAME = '-m'
-MAPPING_FILE_DESC = 'Mapping file to parse the IaC file.'
-
 DEFAULT_MAPPING_FILE_NAME = '--default-mapping-file'
 DEFAULT_MAPPING_FILE_SHORTNAME = '-d'
 DEFAULT_MAPPING_FILE_DESC = 'Default mapping file to parse the diagram file.'
