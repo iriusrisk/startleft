@@ -34,10 +34,7 @@ class LucidParser(VisioParser):
         mapped_ids = list(tz_mapped.keys()) + list(component_mappings.keys())
         catch_all_components = self.__get_catch_all_mappings(ids_to_skip=mapped_ids)
 
-        pruned_component_mappings = self.__prune_skip_components(component_mappings)
-        pruned_catch_all_components = self.__prune_skip_components(catch_all_components)
-
-        return {**pruned_catch_all_components, **pruned_component_mappings}
+        return self.__prune_skip_components({**catch_all_components, **component_mappings})
 
     def __get_catch_all_mappings(self, ids_to_skip) -> [dict]:
         result = {}
