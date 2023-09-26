@@ -1,9 +1,10 @@
-from typing import Union
+from typing import Union, List
 
 from sl_util.sl_util import secure_regex
+from sl_util.sl_util.iterations_utils import remove_keys
 from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent, Diagram
 from slp_visio.slp_visio.load.visio_mapping_loader import VisioMappingFileLoader
-from slp_visio.slp_visio.parse.visio_parser import VisioParser
+from slp_visio.slp_visio.parse.visio_parser import VisioParser, _match_resource
 
 AWS_REGEX = [r".*2017$", r".*AWS19$", r".*AWS2021$"]
 AZURE_REGEX = [r"^AC.*Block$", r"^AE.*Block$", r"^AGS.*Block$", r"^AVM.*Block$", r".*Azure2019$", r".*Azure2021$"]
@@ -22,22 +23,18 @@ class LucidParser(VisioParser):
     def __init__(self, project_id: str, project_name: str, diagram: Diagram, mapping_loader: VisioMappingFileLoader):
         super().__init__(project_id, project_name, diagram, mapping_loader)
 
-    def __get_ids_to_skip(self) -> [str]:
-        """
-        Returns the ids of the components that are mapped as trustzones or as components.
-        :return:
-        """
-        return list(super()._get_trustzone_mappings().keys()) + list(super()._get_component_mappings().keys())
-
     def _get_component_mappings(self) -> [dict]:
         """
         Returns the component mappings.
         After the component mappings are determined, the catch all mappings is determined.
         :return:
         """
-        component_mappings = super()._get_component_mappings()
-        catch_all_components = self.__get_catch_all_mappings(ids_to_skip=self.__get_ids_to_skip())
-        return {**catch_all_components, **component_mappings}
+        component_mappings: dict = super()._get_component_mappings()
+        tz_mapped: dict = super()._get_trustzone_mappings()
+        mapped_ids = list(tz_mapped.keys()) + list(component_mappings.keys())
+        catch_all_components = self.__get_catch_all_mappings(ids_to_skip=mapped_ids)
+
+        return self.__prune_skip_components({**catch_all_components, **component_mappings})
 
     def __get_catch_all_mappings(self, ids_to_skip) -> [dict]:
         result = {}
@@ -58,3 +55,20 @@ class LucidParser(VisioParser):
             return
 
         return catch_all.strip()
+
+    def __get_skip_config(self) -> List[str]:
+        return self.mapping_loader.configuration.get('skip')
+
+    def __prune_skip_components(self, mappings: dict) -> dict:
+        ids_to_skip = self.__get_ids_to_skip()
+        return remove_keys(mappings, ids_to_skip)
+
+    def __get_ids_to_skip(self) -> List[str]:
+        ids_to_skip = []
+        skip_config = self.__get_skip_config()
+        if skip_config:
+            for component in self.diagram.components:
+                for skip in skip_config:
+                    if _match_resource(component.type, skip):
+                        ids_to_skip.append(component.id)
+        return ids_to_skip
