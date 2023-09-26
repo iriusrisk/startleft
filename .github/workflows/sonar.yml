@@ -7,34 +7,34 @@
 # GitHub Code Scanning alerts with the vulnerabilities found.
 # Free for open source project.
 
-name: SonarCloud analysis
+name: sonar
 
 on:
-  pull_request:
-    branches: [dev,feature/*]
-  push:
-    branches: [dev]
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      python-version:
+        description: 'Python Version'
+        required: true
+        type: string
+    secrets:
+      SONAR_TOKEN:
+        required: true
 
 permissions:
   pull-requests: read # allows SonarCloud to decorate PRs with analysis results
 
 jobs:
-  Analysis:
+  run_analysis:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the project from Git
         uses: actions/checkout@v3
         with:
             fetch-depth: 0
-      - name: Setup Python 3.8
-        uses: actions/setup-python@v3
+      - name: Install StartLeft
+        uses: ./.github/actions/install-startleft
         with:
-          python-version: "3.8"
-      - name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@55fcdfa9328aed658432c22011bec2873cd8e69f # v1
-      - name: Install dependencies
-        run: pip install -e ".[setup,test]"
+          python-version: ${{ inputs.python-version }}
       - name: Run test using coverage
         run: coverage run -m pytest
       - name: Generate coverage report

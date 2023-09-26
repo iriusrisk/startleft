@@ -7,6 +7,7 @@ from vsdx import Shape
 
 from slp_visio.slp_visio.parse.shape_position_calculator import ShapePositionCalculator
 
+
 @singledispatch
 def get_shape_text(shape):
     if not shape:
@@ -18,12 +19,12 @@ def get_shape_text(shape):
 
     return (result or "").strip()
 
+
 @get_shape_text.register(list)
 def get_shape_text_from_list(shapes: [Shape]) -> str:
     if not shapes:
         return ""
     return "".join(shape.text or "" for shape in shapes)
-
 
 
 def get_master_shape_text(shape: Shape) -> str:
@@ -41,6 +42,7 @@ def get_unique_id_text(shape: Shape) -> str:
 
     unique_id = shape.master_page.master_unique_id.strip()
     return normalize_unique_id(unique_id)
+
 
 def get_width(shape: Shape) -> float:
     if 'Width' in shape.cells:
@@ -79,6 +81,7 @@ def get_limits(shape: Shape) -> tuple:
     return (center_x - (width / 2), center_y - (height / 2)), \
         (center_x + (width / 2), center_y + (height / 2))
 
+
 # These expressions are secure, so we can use the standard re lib by performance reason
 LUCID_AWS_YEARS_PATTERN = re.compile(r'_?(?:2017|AWS19|AWS19_v2|AWS2021)$')
 NON_PRINTABLE_CHARS_PATTERN = re.compile(f'[^{re.escape(string.printable)}]')
@@ -107,5 +110,22 @@ def normalize_label(label: str) -> str:
     return label
 
 
-def normalize_unique_id(unique_id):
+def normalize_unique_id(unique_id: str):
     return re.sub("[{}]", "", unique_id) if unique_id else ""
+
+
+def connector_has_arrow_in_origin(shape: Shape) -> bool:
+    begin_arrow_value = shape.cell_value('BeginArrow')
+    return begin_arrow_value is not None and str(begin_arrow_value).isnumeric() and begin_arrow_value != '0'
+
+
+def is_bidirectional_connector(shape: Shape) -> bool:
+    """
+    If its master name includes 'Double Arrow' or has arrows defined in both ends
+    """
+    if shape.master_shape and shape.master_page.name and 'Double Arrow' in shape.master_page.name:
+        return True
+    for arrow_value in [shape.cell_value(att) for att in ['BeginArrow', 'EndArrow']]:
+        if arrow_value is None or not str(arrow_value).isnumeric() or arrow_value == '0':
+            return False
+    return True
