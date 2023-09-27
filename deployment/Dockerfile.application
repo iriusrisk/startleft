@@ -1,4 +1,4 @@
-FROM python:3.8-alpine
+FROM python:3.8-alpine AS startleft-base
 
 WORKDIR /usr/src/app
 
@@ -15,9 +15,21 @@ COPY . .
 
 RUN pip install .
 
-RUN rm -r ../app/*
 
-# Remove not needed dependencies for runtime
-RUN apk del git geos-dev re2-dev py3-pybind11-dev
+FROM python:3.8-alpine
+
+WORKDIR /app
+
+RUN apk update && \
+    apk add libmagic && \
+    apk add re2 && \
+    apk add graphviz && \
+    apk add lapack && \
+    apk add cblas && \
+    apk add geos
+
+COPY --from=startleft-base /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
+
+COPY --from=startleft-base /usr/local/bin/startleft /usr/local/bin/startleft
 
 CMD ["startleft", "server", "--host", "0.0.0.0"]
