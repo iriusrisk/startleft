@@ -22,7 +22,7 @@ class TestVsdxParser:
         assert diagram.components[0].origin == DiagramComponentOrigin.SIMPLE_COMPONENT
         assert diagram.components[0].name == 'Custom AWS Step Functions workflow name'
         assert diagram.components[0].id == '1'
-        # AND any component has parent because the parents are not calculated in VsdxParser
+        # AND none component has parent because the parents are not calculated in VsdxParser
         for component in diagram.components:
             assert not component.parent
 
@@ -45,7 +45,7 @@ class TestVsdxParser:
         assert diagram.components[2].id == '35'
         assert diagram.components[3].name == 'Lambda Function 2'
         assert diagram.components[3].id == '63'
-        # AND any component has parent because the parents are not calculated in VsdxParser
+        # AND none component has parent because the parents are not calculated in VsdxParser
         for component in diagram.components:
             assert not component.parent
 
@@ -66,7 +66,7 @@ class TestVsdxParser:
         assert diagram.components[1].id == '3'
         assert diagram.components[2].name == 'My Keys Menu'
         assert diagram.components[2].id == '9'
-        # AND any component has parent because the parents are not calculated in VsdxParser
+        # AND none component has parent because the parents are not calculated in VsdxParser
         for component in diagram.components:
             assert not component.parent
 
@@ -93,6 +93,6 @@ class TestVsdxParser:
         assert diagram.components[4].id == '20'
         assert diagram.components[5].name == 'GIT/Kubernetes ECS2'
         assert diagram.components[5].id == '23'
-        # AND any component has parent because the parents are not calculated in VsdxParser
+        # AND none component has parent because the parents are not calculated in VsdxParser
         for component in diagram.components:
             assert not component.parent
