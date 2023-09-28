@@ -1,5 +1,5 @@
 {
-  "otmVersion": "0.1.0",
+  "otmVersion": "0.2.0",
   "project": {
     "name": "Example Project",
     "id": "example-project"
@@ -22,7 +22,8 @@
   ],
   "trustZones": [
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "id": "acafa4b0-f94d-4077-8a42-74b959bd0796",
+      "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "name": "Cloud",
       "risk": {
         "trustRating": 10
@@ -33,7 +34,8 @@
       }
     },
     {
-      "id": "6376d53e-6461-412b-8e04-7b3fe2b397de",
+      "id": "c99b79b6-a658-4096-9919-27946d92e23f",
+      "type": "6376d53e-6461-412b-8e04-7b3fe2b397de",
       "name": "Generic Trust Line Boundary",
       "risk": {
         "trustRating": 10
@@ -50,7 +52,7 @@
       "name": "Accounting PostgreSQL",
       "type": "CD-MICROSOFT-AZURE-DB-POSTGRESQL",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "acafa4b0-f94d-4077-8a42-74b959bd0796"
       },
       "attributes": {
         "Name": "Accounting PostgreSQL",
@@ -96,7 +98,7 @@
       "name": "Android",
       "type": "android-device-client",
       "parent": {
-        "trustZone": "6376d53e-6461-412b-8e04-7b3fe2b397de"
+        "trustZone": "c99b79b6-a658-4096-9919-27946d92e23f"
       },
       "attributes": {
         "Name": "Android",
@@ -131,7 +133,7 @@
       "name": "Public API v2",
       "type": "web-service",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "acafa4b0-f94d-4077-8a42-74b959bd0796"
       },
       "attributes": {
         "Name": "Public API v2",
@@ -808,7 +810,7 @@
       "name": "Azure File Storage",
       "type": "azure-storage",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "acafa4b0-f94d-4077-8a42-74b959bd0796"
       },
       "attributes": {
         "Name": "Azure File Storage",
@@ -896,7 +898,7 @@
       "name": "iOS",
       "type": "ios-device-client",
       "parent": {
-        "trustZone": "6376d53e-6461-412b-8e04-7b3fe2b397de"
+        "trustZone": "c99b79b6-a658-4096-9919-27946d92e23f"
       },
       "attributes": {
         "Name": "iOS",
@@ -931,7 +933,7 @@
       "name": "Browser",
       "type": "web-ui",
       "parent": {
-        "trustZone": "6376d53e-6461-412b-8e04-7b3fe2b397de"
+        "trustZone": "c99b79b6-a658-4096-9919-27946d92e23f"
       },
       "attributes": {
         "Name": "Browser",
@@ -965,7 +967,7 @@
       "name": "Web API",
       "type": "web-service",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "acafa4b0-f94d-4077-8a42-74b959bd0796"
       },
       "attributes": {
         "Name": "Web API",
@@ -1142,7 +1144,7 @@
       "name": "Azure Storage",
       "type": "azure-storage",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "acafa4b0-f94d-4077-8a42-74b959bd0796"
       },
       "attributes": {
         "Name": "Azure Storage",

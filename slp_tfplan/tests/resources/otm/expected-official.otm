@@ -1,5 +1,5 @@
 {
-  "otmVersion": "0.1.0",
+  "otmVersion": "0.2.0",
   "project": {
     "name": "name",
     "id": "id"
@@ -13,7 +13,8 @@
   ],
   "trustZones": [
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "id": "349bc818-8b17-4f6a-b084-6396d932492c",
+      "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "name": "Public Cloud",
       "risk": {
         "trustRating": 10
@@ -26,7 +27,7 @@
       "name": "click-logger-table",
       "type": "dynamodb",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "349bc818-8b17-4f6a-b084-6396d932492c"
       },
       "tags": [
         "aws_dynamodb_table"
@@ -37,7 +38,7 @@
       "name": "click_logger_firehose_delivery_stream",
       "type": "kinesis-data-firehose",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "349bc818-8b17-4f6a-b084-6396d932492c"
       },
       "tags": [
         "aws_kinesis_firehose_delivery_stream"
@@ -48,7 +49,7 @@
       "name": "lambda_clicklogger",
       "type": "aws-lambda-function",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "349bc818-8b17-4f6a-b084-6396d932492c"
       },
       "tags": [
         "aws_lambda_function"
@@ -59,7 +60,7 @@
       "name": "lambda_clicklogger_authorizer",
       "type": "aws-lambda-function",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "349bc818-8b17-4f6a-b084-6396d932492c"
       },
       "tags": [
         "aws_lambda_function"
@@ -70,7 +71,7 @@
       "name": "lambda_clicklogger_stream_consumer",
       "type": "aws-lambda-function",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "349bc818-8b17-4f6a-b084-6396d932492c"
       },
       "tags": [
         "aws_lambda_function"
@@ -81,7 +82,7 @@
       "name": "click_logger_firehose_delivery_s3_bucket",
       "type": "s3",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "349bc818-8b17-4f6a-b084-6396d932492c"
       },
       "tags": [
         "aws_s3_bucket"
@@ -92,7 +93,7 @@
       "name": "api-gateway (grouped)",
       "type": "api-gateway",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "349bc818-8b17-4f6a-b084-6396d932492c"
       },
       "tags": [
         "aws_api_gateway_authorizer",
@@ -114,7 +115,7 @@
       "name": "cloudwatch (grouped)",
       "type": "cloudwatch",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "349bc818-8b17-4f6a-b084-6396d932492c"
       },
       "tags": [
         "aws_cloudwatch_log_group"

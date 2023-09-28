@@ -1,5 +1,5 @@
 {
-    "otmVersion": "0.1.0",
+    "otmVersion": "0.2.0",
     "project": {
         "name": "project-name",
         "id": "project-id"
@@ -17,7 +17,8 @@
     ],
     "trustZones": [
         {
-            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "id": "62",
+            "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
             "name": "Public Cloud",
             "risk": {
                 "trustRating": 10
@@ -39,7 +40,8 @@
             ]
         },
         {
-            "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+            "id": "64",
+            "type": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
             "name": "Private Secured Cloud",
             "risk": {
                 "trustRating": 10
@@ -61,7 +63,8 @@
             ]
         },
         {
-            "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
+            "id": "70",
+            "type": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
             "name": "Internet",
             "risk": {
                 "trustRating": 10
@@ -89,7 +92,7 @@
             "name": "Custom machine",
             "type": "ec2",
             "parent": {
-                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+                "trustZone": "62"
             },
             "representations": [
                 {
@@ -112,7 +115,7 @@
             "name": "Private Database",
             "type": "rds",
             "parent": {
-                "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+                "trustZone": "64"
             },
             "representations": [
                 {
@@ -135,7 +138,7 @@
             "name": "Internet Machine",
             "type": "ec2",
             "parent": {
-                "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
+                "trustZone": "70"
             },
             "representations": [
                 {
