@@ -89,6 +89,7 @@ The list of commands that can be used to work in CLI mode is detailed as follows
 | validate | Validates a mapping or OTM file.                         |
 | search   | Searches source files for the given query.               |
 | server   | Launches the REST server to generate OTMs from requests. |
+| summary  | Generate a summary CSV file.                             |
 
 
 
@@ -778,3 +779,70 @@ receive one or more IaC files, process them and give back the OTM file in the re
     INFO    on - Application startup complete.
     INFO    server - Uvicorn running on http://127.0.0.1:5000 (Press CTRL+C to quit)
     ```
+
+### Summary
+
+This command **(only available for VISIO/LUCID)** returns a summary CSV which contains
+all the source elements available and their candidate OTM type by emulating the parse method.
+
+The CSV contains the following info:
+
+  - SOURCE: The source file name
+  - SOURCE_ELEMENT_TYPE: The type of the element in the source
+  - SOURCE_ELEMENT_NAME: The name of the element in the source
+  - OTM_MAPPED_TYPE: The type of the element in the OTM
+
+```shell
+Usage: startleft summary [OPTIONS] [SOURCE_FILES]...
+
+  Command-line function to process source files and generate a summary CSV file.
+
+  Args:     
+  diagram_type: Type of diagram ('VISIO', 'LUCID').
+  default_mapping_file: The default mapping file
+  custom_mapping_file: The custom mapping file     
+  output_file: Path to the output CSV file.
+  source_files: List of source file paths or an empty list.
+
+Options:
+  -g, --diagram-type [VISIO|LUCID]
+                                  The diagram file type.  [required]
+  -d, --default-mapping-file TEXT
+                                  Default mapping file to parse the diagram
+                                  file.
+  -c, --custom-mapping-file TEXT  Custom mapping file to parse the diagram
+                                  file.
+  -o, --output-file TEXT          Summary output file.
+  --help                          Show this message and exit.
+```
+
+??? example "`Lucid` example"
+
+    === "CLI execution"
+        ```shell
+        startleft summary \
+        --diagram-type LUCID \
+        --default-mapping-file examples/lucidchart/iriusrisk-lucid-aws-mapping.yaml \
+        examples/lucidchart/lucid-aws-with-tz-and-vpc.vsdx
+        ```
+    
+    === "summary.csv"
+        ```csv
+        | SOURCE                         | SOURCE_ELEMENT_TYPE          | SOURCE_ELEMENT_NAME            | OTM_MAPPED_TYPE           |
+        |--------------------------------|------------------------------|--------------------------------|---------------------------|
+        | lucid-aws-with-tz-and-vpc.vsdx | AWSCloud                     | Public Cloud                   | empty-component           |
+        | lucid-aws-with-tz-and-vpc.vsdx | AWSCloudTrail                | My CloudTrail                  | cloudtrail                |
+        | lucid-aws-with-tz-and-vpc.vsdx | AmazonAPIGateway_purple      | My API Gateway                 | api-gateway               |
+        | lucid-aws-with-tz-and-vpc.vsdx | AmazonCloudWatch             | My CloudWatch                  | cloudwatch                |
+        | lucid-aws-with-tz-and-vpc.vsdx | AmazonEC2                    | My EC2                         | ec2                       |
+        | lucid-aws-with-tz-and-vpc.vsdx | AmazonSimpleStorageServiceS3 | My Simple Storage Service (S3) | s3                        |
+        | lucid-aws-with-tz-and-vpc.vsdx | Client                       | Web browser                    | generic-client            |
+        | lucid-aws-with-tz-and-vpc.vsdx | DatabaseBlock                | My DynamoDB                    | other-database            |
+        | lucid-aws-with-tz-and-vpc.vsdx | DefaultSquareBlock           | Custom VPC                     | empty-component           |
+        | lucid-aws-with-tz-and-vpc.vsdx | DefaultSquareBlock           | Internet                       | empty-component           |
+        | lucid-aws-with-tz-and-vpc.vsdx | Mobileclient                 | Android                        |                           |
+        | lucid-aws-with-tz-and-vpc.vsdx | RectangleBlock               | Private Secured Cloud          |                           |
+        | lucid-aws-with-tz-and-vpc.vsdx | SQLDatabaseAzure2021         | SQL Database                   | CD-MICROSOFT-AZURE-SQL-DB |
+        ```
+
+

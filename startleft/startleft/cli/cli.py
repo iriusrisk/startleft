@@ -2,12 +2,13 @@ import json
 import logging
 import re
 import sys
+from typing import List, Optional
 
 import click
 
 from _sl_build.modules import PROCESSORS
 from otm.otm.entity.otm import OTM
-from sl_util.sl_util.file_utils import get_byte_data
+from sl_util.sl_util.file_utils import get_byte_data, write_list_of_dictionaries_to_csv, get_source_files
 from slp_base import CommonError
 from slp_base import DiagramType, OTMGenerationError, EtmType
 from slp_base import IacType
@@ -16,6 +17,7 @@ from slp_base.slp_base.otm_validator import OTMValidator
 from slp_base.slp_base.provider_resolver import ProviderResolver
 from slp_cft.slp_cft.cft_searcher import CloudformationSearcher
 from slp_tf.slp_tf.tf_searcher import TerraformSearcher
+from slp_visio.slp_visio.visio_summary import VisioSummary
 from startleft.startleft._version.version_loader import load_startleft_version
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.cli.clioptions.exclusion_option import Exclusion
@@ -139,6 +141,24 @@ def parse_etm(etm_type, default_mapping_file, custom_mapping_file, output_file, 
     get_otm_as_file(otm, output_file)
 
 
+def __diagram_summary(source_files: List[str], default_mapping_file: Optional[str], custom_mapping_file: Optional[str],
+                      diagram_type: str):
+    __source_files = []
+    __mapping_data_list = []
+    __type = DiagramType(diagram_type.upper()) if diagram_type else DiagramType.VISIO
+
+    for source_file in get_source_files(source_files, ['.vsdx', '.VSDX']):
+        __source_files.append(open(source_file, "r"))
+
+    if default_mapping_file:
+        __mapping_data_list.append(get_byte_data(default_mapping_file))
+
+    if custom_mapping_file:
+        __mapping_data_list.append(get_byte_data(custom_mapping_file))
+
+    return VisioSummary(__source_files, __mapping_data_list, __type).get_elements()
+
+
 @cli.command(name='parse')
 @click.option(IAC_TYPE_NAME, IAC_TYPE_SHORTNAME,
               type=click.Choice(IAC_TYPE_SUPPORTED, case_sensitive=False),
@@ -230,6 +250,38 @@ def search(iac_type, query, source_file):
     """
     logger.info("Running JMESPath search query against the IaC file")
     get_iac_searcher(iac_type, [get_byte_data(sf) for sf in source_file]).search(query)
+
+
+@cli.command(name='summary')
+@click.option(DIAGRAM_TYPE_NAME, DIAGRAM_TYPE_SHORTNAME,
+              type=click.Choice(DIAGRAM_TYPE_SUPPORTED, case_sensitive=False),
+              help=DIAGRAM_TYPE_DESC, required=True)
+@click.option(DEFAULT_MAPPING_FILE_NAME, DEFAULT_MAPPING_FILE_SHORTNAME,
+              help=DEFAULT_MAPPING_FILE_DESC,
+              required=False)
+@click.option(CUSTOM_MAPPING_FILE_NAME, CUSTOM_MAPPING_FILE_SHORTNAME,
+              help=CUSTOM_MAPPING_FILE_DESC,
+              required=False)
+@click.option(OUTPUT_FILE_NAME, OUTPUT_FILE_SHORTNAME, default='summary.csv', help=SUMMARY_FILE_DESC)
+@click.argument(SOURCE_FILES_NAME, required=False, nargs=-1)
+def summary(diagram_type: str, default_mapping_file, custom_mapping_file, output_file: str, source_files: List[str]) -> None:
+    """
+    Command-line function to process source files and generate a summary CSV file.
+
+    Args:
+        diagram_type: Type of diagram ('VISIO', 'LUCID').
+        default_mapping_file: The default mapping file
+        custom_mapping_file: The custom mapping file
+        output_file: Path to the output CSV file.
+        source_files: List of source file paths or an empty list.
+    """
+
+    elements = __diagram_summary(source_files, default_mapping_file, custom_mapping_file, diagram_type)
+
+    write_list_of_dictionaries_to_csv(
+        sorted(elements, key=lambda x: (x['SOURCE'], x['SOURCE_ELEMENT_TYPE'])),
+        elements[0].keys() if len(elements) > 0 else [],
+        output_file)
 
 
 @cli.command()
