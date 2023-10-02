@@ -266,14 +266,7 @@ def search(iac_type, query, source_file):
 @click.argument(SOURCE_FILES_NAME, required=False, nargs=-1)
 def summary(diagram_type: str, default_mapping_file, custom_mapping_file, output_file: str, source_files: List[str]) -> None:
     """
-    Command-line function to process source files and generate a summary CSV file.
-
-    Args:
-        diagram_type: Type of diagram ('VISIO', 'LUCID').
-        default_mapping_file: The default mapping file
-        custom_mapping_file: The custom mapping file
-        output_file: Path to the output CSV file.
-        source_files: List of source file paths or an empty list.
+    Generates a summary CSV file of the given source files
     """
 
     elements = __diagram_summary(source_files, default_mapping_file, custom_mapping_file, diagram_type)

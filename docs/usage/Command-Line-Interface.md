@@ -33,6 +33,7 @@ Commands:
   parse     Parses source files into Open Threat Model
   search    Searches source files for the given query
   server    Launches the REST server to generate OTMs from requests
+  summary   Generates a summary CSV file of the given source files
   validate  Validates a mapping or OTM file
 
 ```
@@ -795,14 +796,7 @@ The CSV contains the following info:
 ```shell
 Usage: startleft summary [OPTIONS] [SOURCE_FILES]...
 
-  Command-line function to process source files and generate a summary CSV file.
-
-  Args:     
-  diagram_type: Type of diagram ('VISIO', 'LUCID').
-  default_mapping_file: The default mapping file
-  custom_mapping_file: The custom mapping file     
-  output_file: Path to the output CSV file.
-  source_files: List of source file paths or an empty list.
+  Generates a summary CSV file of the given source files
 
 Options:
   -g, --diagram-type [VISIO|LUCID]
