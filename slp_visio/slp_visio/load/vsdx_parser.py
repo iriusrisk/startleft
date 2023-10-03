@@ -46,7 +46,6 @@ class VsdxParser:
         self.__zone_representer = ZoneComponentRepresenter(diagram_limits)
 
         self._load_page_elements()
-        self._calculate_parents()
 
         return Diagram(DiagramType.VISIO, self._visio_components, self._visio_connectors, diagram_limits)
 
@@ -115,10 +114,6 @@ class VsdxParser:
         visio_connector = self.connector_factory.create_connector(connector_shape)
         if visio_connector:
             self._visio_connectors.append(visio_connector)
-
-    def _calculate_parents(self):
-        for component in self._visio_components:
-            component.parent = ParentCalculator(component).calculate_parent(self._visio_components)
 
     @staticmethod
     def _is_group(shape: Shape):
