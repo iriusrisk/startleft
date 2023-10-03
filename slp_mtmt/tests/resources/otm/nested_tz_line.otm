@@ -1,5 +1,5 @@
 {
-  "otmVersion": "0.1.0",
+  "otmVersion": "0.2.0",
   "project": {
     "id": "example-project",
     "name": "Example Project"
@@ -38,7 +38,7 @@
       "id": "a38c22eb-fee8-4abd-b92c-457d6822ee86",
       "name": "Customer web client",
       "parent": {
-        "trustZone": "f0ba7722-39b6-4c81-8290-a30a248bb8d9"
+        "trustZone": "26e6fdb8-013f-4d59-bb11-208eec4d6bc9"
       },
       "type": "web-client"
     },
@@ -59,7 +59,7 @@
       "id": "eef31b72-49b3-4d5f-9452-7ae178344c6b",
       "name": "Main Application",
       "parent": {
-        "trustZone": "6376d53e-6461-412b-8e04-7b3fe2b397de"
+        "trustZone": "e3ddc2c6-83d5-4363-9acb-52655317dafd"
       },
       "type": "web-application-server-side"
     },
@@ -80,7 +80,7 @@
       "id": "4820ec3a-9841-4baf-a38c-2fa596014274",
       "name": "Sandbox Mongo",
       "parent": {
-        "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+        "trustZone": "9cbb5581-99cc-463b-a77a-c0dcae3b96d7"
       },
       "type": "other-nosql-key-value-store"
     },
@@ -101,7 +101,7 @@
       "id": "9668ae2e-403f-4182-8c4c-d83948ffc31b",
       "name": "Production Mongo",
       "parent": {
-        "trustZone": "6376d53e-6461-412b-8e04-7b3fe2b397de"
+        "trustZone": "e3ddc2c6-83d5-4363-9acb-52655317dafd"
       },
       "type": "other-nosql-key-value-store"
     }
@@ -112,13 +112,14 @@
         "Dataflow Order": "0",
         "Name": "Sandbox environment"
       },
-      "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+      "id": "9cbb5581-99cc-463b-a77a-c0dcae3b96d7",
+      "type": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
       "name": "Sandbox environment",
       "risk": {
         "trustRating": 10
       },
       "parent": {
-        "trustZone": "6376d53e-6461-412b-8e04-7b3fe2b397de"
+        "trustZone": "e3ddc2c6-83d5-4363-9acb-52655317dafd"
       }
     },
     {
@@ -128,7 +129,8 @@
         "Configurable Attributes": {},
         "Internet Boundary": {}
       },
-      "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
+      "id": "26e6fdb8-013f-4d59-bb11-208eec4d6bc9",
+      "type": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
       "name": "Internet Boundary",
       "risk": {
         "trustRating": 10
@@ -139,7 +141,8 @@
         "Generic Trust Line Boundary": {},
         "Name": "Generic Trust Line Boundary"
       },
-      "id": "6376d53e-6461-412b-8e04-7b3fe2b397de",
+      "id": "e3ddc2c6-83d5-4363-9acb-52655317dafd",
+      "type": "6376d53e-6461-412b-8e04-7b3fe2b397de",
       "name": "Generic Trust Line Boundary",
       "risk": {
         "trustRating": 10

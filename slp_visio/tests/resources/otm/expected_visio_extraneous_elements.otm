@@ -4,7 +4,7 @@
       "id": "1",
       "name": "Amazon EC2",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "47"
       },
       "representations": [
         {
@@ -27,7 +27,7 @@
       "id": "12",
       "name": "Custom machine",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "47"
       },
       "representations": [
         {
@@ -50,7 +50,7 @@
       "id": "30",
       "name": "Private Database",
       "parent": {
-        "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+        "trustZone": "48"
       },
       "representations": [
         {
@@ -73,7 +73,7 @@
       "id": "35",
       "name": "Amazon CloudWatch",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "47"
       },
       "representations": [
         {
@@ -96,7 +96,7 @@
       "id": "41",
       "name": "Custom log system",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "47"
       },
       "representations": [
         {
@@ -142,7 +142,7 @@
       "source": "12"
     }
   ],
-  "otmVersion": "0.1.0",
+  "otmVersion": "0.2.0",
   "project": {
     "id": "project-id",
     "name": "project-name"
@@ -160,7 +160,8 @@
   ],
   "trustZones": [
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "id": "47",
+      "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "name": "Public Cloud",
       "representations": [
         {
@@ -182,7 +183,8 @@
       }
     },
     {
-      "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+      "id": "48",
+      "type": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
       "name": "Private Secured Cloud",
       "representations": [
         {

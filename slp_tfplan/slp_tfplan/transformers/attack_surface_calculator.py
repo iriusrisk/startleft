@@ -35,7 +35,7 @@ def _create_client(client_id: str, variables: Dict, security_group_cidr: Securit
         component_id=client_id,
         name=_generate_client_name(security_group_cidr, variables, attack_surface_configuration.client),
         component_type=attack_surface_configuration.client,
-        parent=attack_surface_configuration.trustzone.type,
+        parent=attack_surface_configuration.trustzone.id,
         parent_type=ParentType.TRUST_ZONE,
         tags=[]
     )
@@ -191,6 +191,6 @@ class AttackSurfaceCalculator:
         return parent_name == child_name and relations == same_or_ancestor_relationships
 
     def add_attack_surface_trustzone(self):
-        if self.otm.exists_component_with_parent(self.attack_surface_configuration.trustzone.type) and \
+        if self.otm.exists_component_with_parent(self.attack_surface_configuration.trustzone.id) and \
                 not self.otm.exists_trustzone_with_type(self.attack_surface_configuration.trustzone.type):
             self.otm.trustzones.append(trustzone_to_otm(self.attack_surface_configuration.trustzone))
