@@ -68,12 +68,14 @@ class TestCreateComponentByMasterShapeName:
         pytest.param(None, '', 'Lambda1', 'Lambda1', id='In last child'),
         pytest.param('AWS ', 'Lambda', '', 'AWS Lambda', id='In two'),
         pytest.param('AWS ', 'Lambda ', 'Step functions', 'AWS Lambda Step functions', id='In all'),
+        pytest.param(None, None, None, 'AmazonAPIGateway', id='In all'),
     })
     def test_validate_with_child_shapes(self, text1, text2, text3, expected):
         # GIVEN a visio component shape
-        shape = MagicMock(ID=1001, shape_name=None, master_page=MagicMock(master_unique_id='777'),
+        shape = MagicMock(ID=1001, shape_name='com.lucidchart.AmazonAPIGatewayAWS2021',
+                          master_page=MagicMock(master_unique_id='777'),
                           center_x_y=(0.5, 2.5), cells={'Width': MagicMock(value=8), 'Height': MagicMock(value=12)})
-        shape.master_page = None
+        shape.master_page = MagicMock(name='com.lucidchart.AmazonAPIGatewayAWS2021250.abcde', master_unique_id='989')
         shape.child_shapes = [MagicMock(ID=1101), MagicMock(ID=1102), MagicMock(ID=1103)]
         shape.child_shapes[0].text = text1
         shape.child_shapes[1].text = text2
