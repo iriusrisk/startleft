@@ -1,5 +1,4 @@
-from _pytest.mark import param
-from pytest import mark
+from pytest import mark, param
 from shapely.geometry import Polygon, box
 
 from otm.otm.entity.representation import RepresentationElement
@@ -23,7 +22,7 @@ def create_component(
         origin: DiagramComponentOrigin = DiagramComponentOrigin.SIMPLE_COMPONENT,
         parent: DiagramComponent = None,
         trustzone: bool = False,
-        representation: Polygon= None,
+        representation: Polygon = None,
 ) -> DiagramComponent:
     return DiagramComponent(
         id=COMPONENT_ID,
@@ -47,7 +46,6 @@ def create_representation(xy: (), wh: ()) -> RepresentationElement:
 
 
 class TestRepresentationCalculator:
-
     LARGER_REPRESENTATION = create_representation((66, 82), (66, 33))
     MEDIUM_REPRESENTATION = create_representation((16, 32), (66, 33))
     NONE_REPRESENTATION = create_representation((82, 98), (66, 33))
@@ -139,7 +137,6 @@ class TestRepresentationCalculator:
         trustzone = create_component(
             origin=DiagramComponentOrigin.BOUNDARY,
             trustzone=True,
-            parent=None,
             representation=LARGER_SHAPE
         )
 
@@ -154,7 +151,6 @@ class TestRepresentationCalculator:
         trustzone = create_component(
             origin=DiagramComponentOrigin.SIMPLE_COMPONENT,
             trustzone=True,
-            parent=None,
             representation=LARGER_SHAPE
         )
 

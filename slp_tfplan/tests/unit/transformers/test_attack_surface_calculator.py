@@ -2,7 +2,9 @@ from typing import List, Dict
 from unittest.mock import MagicMock, Mock
 
 import pytest
+from pytest import param
 
+from otm.otm.entity.trustzone import Trustzone
 from slp_tfplan.slp_tfplan.matcher import ComponentsAndSGsMatcher
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import SecurityGroupCIDR, TFPlanComponent
 from slp_tfplan.slp_tfplan.relationship.component_relationship_calculator import ComponentRelationshipCalculator, \
@@ -202,7 +204,7 @@ class TestAttackSurfaceCalculator:
         # THE second component is the 'client' in the Internet trustzone
         assert otm.components[1].id == expected_id
         assert otm.components[1].type == 'client'
-        assert otm.components[1].parent == 'Internet'
+        assert otm.components[1].parent == 'internet-trustzone-id'
 
         # THE otm has 2 trustzones
         assert len(otm.trustzones) == 2
@@ -344,6 +346,10 @@ class TestAttackSurfaceCalculator:
         assert otm.components[1].id == expected_client_id
         assert otm.components[1].name == expected_client_name
 
+        # AND the parents are the expected
+        assert otm.components[1].parent == 'internet-trustzone-id'
+        assert otm.components[0].parent == 'default-trustzone-id'
+
         # AND the otm has 2 trustzones
         assert len(otm.trustzones) == 2
 
@@ -455,3 +461,86 @@ class TestAttackSurfaceCalculator:
 
         # AND it generates 1 dataflow
         assert len(otm.dataflows) == 1
+
+    @pytest.mark.parametrize('parent_id', [
+        param('internet-trustzone-id', id='component_with_parent_and_no_previous_tz_internet')
+    ])
+    def test_add_attack_surface_trustzone_when_needed(self, parent_id):
+        # GIVEN an extra component with custom parent id
+        generic_client = build_mocked_component({
+            'component_name': 'component_k',
+            'tf_type': 'generic-client',
+            'parent_id': parent_id
+        })
+        # AND the otm with 3 components
+        otm = build_mocked_otm([_component_a, _component_b, generic_client])
+
+        # AND the attack surface calculator
+        calculator = AttackSurfaceCalculator(
+            otm,
+            MagicMock(),
+            attack_surface_configuration)
+        # WHEN we add the attack surface trust zone
+        calculator.add_attack_surface_trustzone()
+        # THEN the trust zones are the expected
+        assert len(otm.trustzones) == 2
+        assert otm.trustzones[0].id == 'default-trustzone-id'
+        assert otm.trustzones[0].name == 'default-trustzone-name'
+        assert otm.trustzones[0].type == 'default-trustzone-type'
+        assert otm.trustzones[1].id == 'internet-trustzone-id'
+        assert otm.trustzones[1].name == 'Internet Trustzone'
+        assert otm.trustzones[1].type == 'Internet'
+        # AND the components are the expected
+        assert len(otm.components) == 3
+        assert otm.components[0].id == 'aws_type.component_a'
+        assert otm.components[0].parent == 'default-trustzone-id'
+        assert otm.components[1].id == 'aws_type.component_b'
+        assert otm.components[1].parent == 'default-trustzone-id'
+        assert otm.components[2].id == 'generic-client.component_k'
+        assert otm.components[2].parent == 'internet-trustzone-id'
+
+    @pytest.mark.parametrize('parent_id,extra_trustzone', [
+        param('internet-trustzone-id', internet_trustzone, id='component_with_parent_but_previous_tz'),
+        param('default-trustzone-id', internet_trustzone, id='no_component_with_parent_and_previous_tz'),
+        param('default-trustzone-id', None, id='no_component_with_parent_and_no_previous_tz_1tz'),
+        param('default-trustzone-id', Trustzone('99', 'dummy', type='00000'),
+              id='no_component_with_parent_and_no_previous_tz_2tz'),
+    ])
+    def test_add_attack_surface_trustzone_when_not_needed(self, parent_id, extra_trustzone: Trustzone):
+        # GIVEN a generic client with internet tz as parent
+        generic_client = build_mocked_component({
+            'component_name': 'component_k',
+            'tf_type': 'generic-client',
+            'parent_id': parent_id
+        })
+        # AND the otm with 3 components
+        otm = build_mocked_otm([_component_a, _component_b, generic_client])
+
+        # AND an extra trust zone
+        if extra_trustzone:
+            otm.trustzones.append(extra_trustzone)
+
+        # AND the attack surface calculator
+        calculator = AttackSurfaceCalculator(
+            otm,
+            MagicMock(),
+            attack_surface_configuration)
+        # WHEN we add the attack surface trust zone
+        calculator.add_attack_surface_trustzone()
+        # THEN the trust zones are the expected
+        assert len(otm.trustzones) == 2 if extra_trustzone else 1
+        assert otm.trustzones[0].id == 'default-trustzone-id'
+        assert otm.trustzones[0].name == 'default-trustzone-name'
+        assert otm.trustzones[0].type == 'default-trustzone-type'
+        if extra_trustzone:
+            assert otm.trustzones[1].id == extra_trustzone.id
+            assert otm.trustzones[1].name == extra_trustzone.name
+            assert otm.trustzones[1].type == extra_trustzone.type
+        # AND the components are the expected
+        assert len(otm.components) == 3
+        assert otm.components[0].id == 'aws_type.component_a'
+        assert otm.components[0].parent == 'default-trustzone-id'
+        assert otm.components[1].id == 'aws_type.component_b'
+        assert otm.components[1].parent == 'default-trustzone-id'
+        assert otm.components[2].id == 'generic-client.component_k'
+        assert otm.components[2].parent == parent_id
