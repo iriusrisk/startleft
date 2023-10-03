@@ -13,7 +13,7 @@ setup(
     keywords=['threat modeling', 'cyber security', 'appsec'],
     packages=find_packages(),
     include_package_data=True,
-    python_requires='>=3.8',
+    python_requires='>= 3.8, <=3.11',
     install_requires=[
         'pyyaml==6.0.1',
         'jsonschema==4.19.0',
