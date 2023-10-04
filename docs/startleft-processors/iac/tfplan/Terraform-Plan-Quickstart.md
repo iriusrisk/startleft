@@ -86,7 +86,7 @@ directory.
 ```shell
 startleft parse \
 	--iac-type TFPLAN \
-	--mapping-file ir-mappings.yaml \
+	--default-mapping-file ir-mappings.yaml \
 	--output-file output.otm \
 	--project-id "my-project" \
 	--project-name "My project" \
@@ -108,7 +108,7 @@ curl --location --request POST localhost:5000/api/v1/startleft/iac \
 --form iac_type="TFPLAN" \
 --form iac_file=@"./tf-plan.json" \
 --form iac_file=@"./tf-graph.gv" \
---form mapping_file=@"./ir-mappings.yaml" \
+--form default_mapping_file=@"./ir-mappings.yaml" \
 --form id="my-project" \
 --form name="My project"
 ```

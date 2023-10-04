@@ -34,10 +34,24 @@ echo "C:\Program Files\Graphviz\bin" >> $PATH
 ```
 
 Installing the `pygraphviz` lib setting the OS files location: 
-
 ```shell
 pip install --global-option=build_ext --global-option="-IC:\Program files\Graphviz\include" --global-option="-LC:\Program files\Graphviz\lib" pygraphviz
 ```
+
+When on MacOS the pygraphviz compilation steps may fail because it can't find the graphviz headers.
+
+First, make sure you have graphviz installed, for homebrew run:
+```shell
+brew install graphviz
+```
+
+Export the compilation flags to tell pip's build process where to find the headers:
+```shell
+export CFLAGS="-I $(brew --prefix graphviz)/include"
+export LDFLAGS="-L $(brew --prefix graphviz)/lib"
+```
+
+You can now either try installing startleft (which will pull pygraphviz as a dependency) or install pygraphviz with `pip install pygraphviz`, in the same terminal.
 
 ---
 
