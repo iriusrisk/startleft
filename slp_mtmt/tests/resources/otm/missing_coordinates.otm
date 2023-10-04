@@ -1,5 +1,5 @@
 {
-  "otmVersion": "0.1.0",
+  "otmVersion": "0.2.0",
   "project": {
     "name": "Example Project",
     "id": "example-project"
@@ -22,7 +22,8 @@
   ],
   "trustZones": [
     {
-      "id": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
+      "id": "75605184-4ca0-43be-ba4c-5fa5ad15e367",
+      "type": "f0ba7722-39b6-4c81-8290-a30a248bb8d9",
       "name": "Internet",
       "risk": {
         "trustRating": 10
@@ -33,7 +34,8 @@
       }
     },
     {
-      "id": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
+      "id": "24cdf4da-ac7f-4a35-bab0-29256d4169bf",
+      "type": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d",
       "name": "Private Secured Cloud",
       "risk": {
         "trustRating": 10
@@ -44,7 +46,8 @@
       }
     },
     {
-      "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+      "id": "185f1c6f-3879-464c-89c9-dc6f0b0c2b21",
+      "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "name": "Default trustzone",
       "risk": {
         "trustRating": 10
@@ -57,7 +60,7 @@
       "name": "Accounting PostgreSQL",
       "type": "CD-MICROSOFT-AZURE-DB-POSTGRESQL",
       "parent": {
-        "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+        "trustZone": "24cdf4da-ac7f-4a35-bab0-29256d4169bf"
       },
       "attributes": {
         "Name": "Accounting PostgreSQL",
@@ -103,7 +106,7 @@
       "name": "Mobile Client",
       "type": "android-device-client",
       "parent": {
-        "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+        "trustZone": "185f1c6f-3879-464c-89c9-dc6f0b0c2b21"
       },
       "attributes": {
         "Name": "Mobile Client",
@@ -138,7 +141,7 @@
       "name": "Public API v2",
       "type": "web-service",
       "parent": {
-        "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+        "trustZone": "24cdf4da-ac7f-4a35-bab0-29256d4169bf"
       },
       "attributes": {
         "Name": "Public API v2",
@@ -465,7 +468,7 @@
       "name": "Azure File Storage",
       "type": "azure-storage",
       "parent": {
-        "trustZone": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+        "trustZone": "24cdf4da-ac7f-4a35-bab0-29256d4169bf"
       },
       "attributes": {
         "Name": "Azure File Storage",

@@ -21,12 +21,13 @@ class CreateComponentByMasterPageName(CreateComponentStrategy):
 
     def create_component(self, shape: Shape, origin=None, representer: VisioShapeRepresenter = None) \
             -> Optional[DiagramComponent]:
-        name = get_shape_text(shape.child_shapes) or ComponentIdentifierByMasterPageName().get_master_page_name(shape)
-        if name:
+        if ComponentIdentifierByMasterPageName().get_master_page_name(shape):
+            component_type = normalize_label(self.get_component_type(shape))
+            name = get_shape_text(shape.child_shapes) or component_type
             return DiagramComponent(
                 id=shape.ID,
                 name=normalize_label(name),
-                type=normalize_label(self.get_component_type(shape)),
+                type=component_type,
                 origin=origin,
                 representation=representer.build_representation(shape),
                 unique_id=get_unique_id_text(shape))
@@ -36,4 +37,4 @@ class CreateComponentByMasterPageName(CreateComponentStrategy):
         if CreateComponentByShapeText.is_lucid(shape):
             return CreateComponentByShapeText.get_lucid_component_type(shape)
         else:
-            return ComponentIdentifierByMasterPageName().get_master_page_name(shape) #
+            return ComponentIdentifierByMasterPageName().get_master_page_name(shape)

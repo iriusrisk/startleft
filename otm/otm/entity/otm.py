@@ -1,9 +1,9 @@
 from typing import List
 
-from otm.otm.entity.component import Component
-from otm.otm.entity.dataflow import Dataflow
-from otm.otm.entity.representation import Representation, DiagramRepresentation, RepresentationType
-from otm.otm.entity.trustzone import Trustzone
+from .component import Component
+from .dataflow import Dataflow
+from .representation import Representation, DiagramRepresentation, RepresentationType
+from .trustzone import Trustzone
 
 REPRESENTATIONS_SIZE_DEFAULT_HEIGHT = 1000
 REPRESENTATIONS_SIZE_DEFAULT_WIDTH = 1000
@@ -19,7 +19,7 @@ class OTM:
         self.dataflows: List[Dataflow] = []
         self.threats = []
         self.mitigations = []
-        self.version = "0.1.0"
+        self.version = "0.2.0"
         self.__provider = provider
 
         self.add_default_representation()
@@ -71,13 +71,13 @@ class OTM:
                       attributes=None, tags=None):
         self.components.append(
             Component(component_id=id, name=name, component_type=type, parent=parent, parent_type=parent_type,
-                         source=source, attributes=attributes, tags=tags))
+                      source=source, attributes=attributes, tags=tags))
 
     def add_dataflow(self, id, name, source_node, destination_node, bidirectional=None,
                      source=None, attributes=None, tags=None):
         self.dataflows.append(Dataflow(dataflow_id=id, name=name, bidirectional=bidirectional, source_node=source_node,
-                                          destination_node=destination_node, source=source, attributes=attributes,
-                                          tags=tags))
+                                       destination_node=destination_node, source=source, attributes=attributes,
+                                       tags=tags))
 
     def add_representation(self, id_=None, name=None, type_=None):
         self.representations.append(Representation(id_=id_, name=name, type_=type_))
@@ -86,7 +86,7 @@ class OTM:
         self.representations.append(DiagramRepresentation(id_=id_, name=name, type_=type_, size=size))
 
     def add_default_representation(self):
-        if not self.__provider.provider_type == RepresentationType.DIAGRAM:
+        if self.__provider.provider_type != RepresentationType.DIAGRAM:
             self.add_representation(id_=self.__provider.provider_name,
                                     name=self.__provider.provider_name,
                                     type_=self.__provider.provider_type)
