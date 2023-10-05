@@ -22,8 +22,8 @@ class CreateComponentByMasterPageName(CreateComponentStrategy):
     def create_component(self, shape: Shape, origin=None, representer: VisioShapeRepresenter = None) \
             -> Optional[DiagramComponent]:
         if ComponentIdentifierByMasterPageName().get_master_page_name(shape):
-            component_type = normalize_label(self.get_component_type(shape))
-            name = get_shape_text(shape.child_shapes) or component_type
+            component_type = self.get_component_type(shape)
+            name = get_shape_text(shape.child_shapes) or normalize_label(component_type)
             return DiagramComponent(
                 id=shape.ID,
                 name=normalize_label(name),

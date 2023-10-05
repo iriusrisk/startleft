@@ -7,6 +7,7 @@ from slp_visio.slp_visio.load.visio_loader import VisioLoader
 from slp_visio.slp_visio.load.visio_mapping_loader import VisioMappingFileLoader
 from slp_visio.slp_visio.lucid.load.lucid_loader import LucidLoader
 from slp_visio.slp_visio.lucid.validate.lucid_validator import LucidValidator
+from slp_visio.slp_visio.parse.lucid_parser import LucidParser
 from slp_visio.slp_visio.parse.visio_parser import VisioParser
 from slp_visio.slp_visio.validate.visio_mapping_file_validator import VisioMappingFileValidator
 from slp_visio.slp_visio.validate.visio_validator import VisioValidator
@@ -48,7 +49,8 @@ class VisioProcessor(OTMProcessor):
         return self.mapping_loader
 
     def get_provider_parser(self) -> ProviderParser:
-        return VisioParser(self.project_id, self.project_name, self.loader.get_visio(), self.mapping_loader)
+        provider_parser = LucidParser if self.diag_type == DiagramType.LUCID else VisioParser
+        return provider_parser(self.project_id, self.project_name, self.loader.get_visio(), self.mapping_loader)
 
     def _clean_resources(self):
         if self.is_temporary_source:

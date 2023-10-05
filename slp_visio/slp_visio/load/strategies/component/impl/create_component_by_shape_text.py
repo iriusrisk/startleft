@@ -25,7 +25,7 @@ class CreateComponentByShapeText(CreateComponentStrategy):
             return DiagramComponent(
                 id=shape.ID,
                 name=normalize_label(name),
-                type=normalize_label(self.get_component_type(shape)),
+                type=self.get_component_type(shape),
                 origin=origin,
                 representation=representer.build_representation(shape),
                 unique_id=get_unique_id_text(shape))
