@@ -3,7 +3,7 @@ from unittest.mock import Mock
 
 from pytest import mark, param
 
-from slp_tfplan.slp_tfplan.matcher.strategies.component_security_group_match_strategies import \
+from slp_tfplan.slp_tfplan.matcher.strategies.component_sg_match_strategies import \
     ComponentMatchStrategySecurityGroupByGraphStrategy, ComponentSecurityGroupByLaunchTemplateStrategyMatchStrategy
 
 

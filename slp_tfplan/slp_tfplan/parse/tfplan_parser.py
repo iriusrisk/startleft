@@ -59,7 +59,7 @@ class TFPlanParser(ProviderParser):
         TFPlanMapper(self.otm, self.tfplan, self.mapping).map()
 
     def __load_auxiliary_resources(self):
-        SecurityGroupsLoader(self.otm, self.tfplan).load()
+        SecurityGroupsLoader(self.otm, self.tfplan, self.tfgraph).load()
         LaunchTemplatesLoader(self.otm, self.tfplan).load()
         VariablesLoader(self.otm, self.tfplan).load()
 
