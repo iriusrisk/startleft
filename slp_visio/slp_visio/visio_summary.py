@@ -5,6 +5,7 @@ from typing import List
 from otm.otm.entity.otm import OTM
 from slp_base import DiagramType
 from slp_visio import VisioProcessor
+from slp_visio.slp_visio.util.visio import normalize_label
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +59,8 @@ class VisioSummary:
                 if self.__exists_mappings():
                     otm = processor.process()
                 for c in _get_visio_components(processor):
-                    element = {'SOURCE': file_name, 'SOURCE_ELEMENT_TYPE': c.type, 'SOURCE_ELEMENT_NAME': c.name}
+                    element = {'SOURCE': file_name, 'SOURCE_ELEMENT_TYPE': normalize_label(c.type),
+                               'SOURCE_ELEMENT_NAME': c.name}
                     if self.__exists_mappings():
                         otm_c = _find_otm_component_by_id(otm, c.id)
                         otm_z = _find_otm_tz_by_id(otm, c.id)
