@@ -9,6 +9,7 @@ from otm.otm.entity.trustzone import Trustzone
 from otm.otm.otm_builder import OTMBuilder
 from slp_base import ProviderParser
 from slp_visio.slp_visio.load.objects.diagram_objects import Diagram, DiagramComponent
+from slp_visio.slp_visio.load.parent_calculator import ParentCalculator
 from slp_visio.slp_visio.load.visio_mapping_loader import VisioMappingFileLoader
 from slp_visio.slp_visio.parse.diagram_pruner import DiagramPruner
 from slp_visio.slp_visio.parse.mappers.diagram_component_mapper import DiagramComponentMapper
@@ -103,13 +104,14 @@ class VisioParser(ProviderParser):
         self.__component_mappings = {}
 
     def build_otm(self):
-        self.__trustzone_mappings = self.__get_trustzone_mappings()
-        self.__component_mappings = self.__get_component_mappings()
+        self.__trustzone_mappings = self._get_trustzone_mappings()
+        self.__component_mappings = self._get_component_mappings()
         # Remove from __component_mappings the trustzones
         for key in self.__trustzone_mappings.keys():
             self.__component_mappings.pop(key, None)
 
         self.__prune_diagram()
+        self._calculate_parents()
 
         components = self.__map_components()
         trustzones = self.__map_trustzones()
@@ -121,10 +123,10 @@ class VisioParser(ProviderParser):
 
         return otm
 
-    def __get_trustzone_mappings(self) -> Dict[str, dict]:
+    def _get_trustzone_mappings(self) -> Dict[str, dict]:
         return self.__get_shape_mappings(self.mapping_loader.get_trustzone_mappings())
 
-    def __get_component_mappings(self) -> Dict[str, dict]:
+    def _get_component_mappings(self) -> Dict[str, dict]:
         return self.__get_shape_mappings(self.mapping_loader.get_component_mappings())
 
     def __get_shape_mappings(self, mappings: [dict]) -> Dict[str, dict]:
@@ -179,3 +181,7 @@ class VisioParser(ProviderParser):
                     and component.parent == self.__default_trustzone.id:
                 return True
         return False
+
+    def _calculate_parents(self):
+        for component in self.diagram.components:
+            component.parent = ParentCalculator(component).calculate_parent(self.diagram.components)

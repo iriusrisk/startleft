@@ -286,5 +286,3 @@ components:
 
   - label:  Bucket
     type:   s3
-
-dataflows: []

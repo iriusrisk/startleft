@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
 
 import pytest
-from _pytest.mark import param
+from pytest import param
 
 from slp_visio.slp_visio.load.representation.simple_component_representer import SimpleComponentRepresenter
 from slp_visio.slp_visio.load.strategies.component.impl.create_component_by_shape_text import CreateComponentByShapeText
@@ -68,5 +68,30 @@ class TestCreateComponentByShapeText:
         strategy = CreateComponentByShapeText()
         component_type = strategy.get_lucid_component_type(shape)
 
-        # THEN no diagram is returned
+        # THEN the component type is as expected
         assert component_type == expected
+
+    @pytest.mark.parametrize('shape_name,expected', {
+        param('com.lucidchart.AmazonElasticContainerServiceAWS19.121', 'AmazonElasticContainerServiceAWS19',
+              id='id==tail'),
+        param('com.lucidchart.AmazonElasticContainerServiceAWS19', 'AmazonElasticContainerServiceAWS19',
+              id='no tail'),
+        param('com.lucidchart.AmazonElasticContainerServiceAWS19.121', 'AmazonElasticContainerServiceAWS19',
+              id='id!=tail'),
+        param('com.lucidchart.AmazonElasticContainerServiceAWS19.121.44', 'AmazonElasticContainerServiceAWS19',
+              id='double tail')
+    })
+    def test_create_component_lucid(self, shape_name, expected):
+        # GIVEN a visio component shape
+        shape = MagicMock(ID='10', shape_name=shape_name, text='My Elastic Container',
+                          master_shape=MagicMock(text='Elastic Container Master'),
+                          master_page=MagicMock(master_unique_id='777'), center_x_y=(0.5, 2.5),
+                          cells={'Width': MagicMock(value=8), 'Height': MagicMock(value=12)})
+
+        # WHEN the component is created
+        strategy = CreateComponentByShapeText()
+        component = strategy.create_component(shape, representer=SimpleComponentRepresenter())
+
+        # THEN the component is as expected
+        assert component.type == expected
+        assert component.name == 'My Elastic Container'

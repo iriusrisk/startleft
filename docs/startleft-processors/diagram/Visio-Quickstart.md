@@ -100,8 +100,6 @@ components:
 
   - label:  Database
     type:   rds
-
-dataflows: []
 ```
 
 On the other hand, for this specific request, you need to provide a **custom mapping file** which contains the 
@@ -119,8 +117,6 @@ components:
 
   - label:  My Custom VPC
     type:   empty-component
-
-dataflows: []
 ```
 
 The result of sending to StartLeft this diagram with these mapping files would be an OTM with all the components we 

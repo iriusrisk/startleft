@@ -368,4 +368,8 @@ components:
     type: vpc
   - label: { $regex: "^(AmazonEC2_?|EC2)a-zA-Z?[0-9]?a-z?(Instance|instance)s?$" }
     type: ec2
+
 dataflows: [ ]
+
+configuration:
+  catch_all: empty-component

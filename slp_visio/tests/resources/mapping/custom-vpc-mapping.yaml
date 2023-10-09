@@ -12,5 +12,3 @@ components:
 
   - label: Custom web server
     type: empty-component
-
-dataflows: []
