@@ -36,5 +36,5 @@ class DrawioProcessor(OTMProcessor):
 
     def get_provider_parser(self) -> ProviderParser:
         drawio = self.loader.get_diagram()
-        drawio_mapping = self.mapping_loader.get_drawio_mapping()
+        drawio_mapping = self.mapping_loader.get_mappings()
         return DrawioParser(self.project_id, self.project_name, drawio, drawio_mapping)
