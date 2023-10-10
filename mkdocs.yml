@@ -47,6 +47,7 @@ nav:
           - Visio Mapping: startleft-processors/diagram/Visio-Mapping.md
           - Visio TrustZones Mapping: startleft-processors/diagram/Visio-TrustZones-Mapping.md
           - Visio Representations: startleft-processors/diagram/Visio-Representations.md
+          - Visio Summary: startleft-processors/diagram/Visio-Summary.md
           - Lucidchart Support: startleft-processors/diagram/Lucidchart-support.md
   - Troubleshooting: Troubleshooting.md
 
