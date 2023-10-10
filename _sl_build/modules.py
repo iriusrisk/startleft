@@ -19,7 +19,9 @@ PROCESSORS = [
     {'name': 'slp_tfplan', 'type': 'processor', 'provider_type': 'TFPLAN', 'allowed_imports': _slp_allowed_imports},
     {'name': 'slp_visio', 'type': 'processor', 'provider_type': 'VISIO', 'allowed_imports': _slp_allowed_imports},
     {'name': 'slp_visio', 'type': 'processor', 'provider_type': 'LUCID', 'allowed_imports': _slp_allowed_imports},
-    {'name': 'slp_mtmt', 'type': 'processor', 'provider_type': 'MTMT', 'allowed_imports': _slp_allowed_imports}
+    {'name': 'slp_mtmt', 'type': 'processor', 'provider_type': 'MTMT', 'allowed_imports': _slp_allowed_imports},
+    # TODO Set type to processor to make the endpoint available
+    {'name': 'slp_drawio', 'provider_type': 'DRAWIO', 'allowed_imports': _slp_allowed_imports}
 ]
 
 """
