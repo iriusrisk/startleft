@@ -1,5 +1,4 @@
 from otm.otm.entity.otm import OTM
-from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
 from otm.otm.otm_builder import OTMBuilder
 
 from slp_base.slp_base.provider_parser import ProviderParser
@@ -19,14 +18,6 @@ class DrawioParser(ProviderParser):
         self.mapping = mapping
         self.project_id = project_id
         self.project_name = project_name
-        self.representations = [
-            DiagramRepresentation(
-                id_=f'{self.project_id}-diagram',
-                name=f'{self.project_id} Diagram Representation',
-                type_=RepresentationType.DIAGRAM,
-                size={'width': 2000, 'height': 2000}
-            )
-        ]
 
     def build_otm(self) -> OTM:
         self.map_components_and_trustzones()
@@ -43,6 +34,7 @@ class DrawioParser(ProviderParser):
     def __build_otm(self):
         otm = OTMBuilder(self.project_id, self.project_name, DiagramType.DRAWIO).build()
 
+        otm.representations = [self.diagram.representation.otm]
         otm.components = [c.otm for c in self.diagram.components]
         otm.dataflows = [d.otm for d in self.diagram.dataflows]
         otm.trustzones = [t.otm for t in self.diagram.trustzones]

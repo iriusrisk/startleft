@@ -24,7 +24,7 @@ class DrawioProcessor(OTMProcessor):
         return DrawioValidator(self.source)
 
     def get_provider_loader(self) -> ProviderLoader:
-        self.loader = DrawioLoader(self.source)
+        self.loader = DrawioLoader(self.project_id, self.source)
         return self.loader
 
     def get_mapping_validator(self) -> MappingValidator:

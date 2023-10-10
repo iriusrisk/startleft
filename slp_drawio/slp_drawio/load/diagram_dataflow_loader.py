@@ -6,5 +6,5 @@ class DiagramDataflowLoader:
     def __init__(self, source: dict):
         self.source: dict = source
 
-    def load_dataflows(self) -> [DiagramDataflow]:
+    def load(self) -> [DiagramDataflow]:
         return []
