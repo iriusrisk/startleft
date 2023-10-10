@@ -49,7 +49,7 @@ class RepresentationCalculator(metaclass=abc.ABCMeta):
         if not x or not y or not width or not height:
             return
         representation_id = self.element.id + '-representation'
-        representation_name = self.element.name + ' Representation'
+        representation_name = (self.element.name or self.element.id) + ' Representation'
         position = {"x": x, "y": y}
         size = {"width": width, "height": height}
         return RepresentationElement(id_=representation_id, name=representation_name,
