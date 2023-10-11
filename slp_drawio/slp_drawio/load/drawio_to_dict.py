@@ -1,12 +1,16 @@
+import logging
 from tempfile import SpooledTemporaryFile
+
+from slp_drawio.slp_drawio.load.objects.drawio_wrapper import DrawioWrapper
+
+logger = logging.getLogger(__name__)
 
 
 class DrawIOToDict:
 
     def __init__(self, source):
         file: SpooledTemporaryFile = source.file
-        content: bytes = file.read()
-        self.source = content.decode()
+        self.wrapper = DrawioWrapper(file.read())
 
     def to_dict(self) -> dict:
-        return {}
+        return self.wrapper.json()
