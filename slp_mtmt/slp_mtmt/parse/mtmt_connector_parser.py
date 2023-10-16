@@ -22,7 +22,7 @@ class MTMTConnectorParser:
         source_node_id = line.source_guid
         target_node_id = line.target_guid
         return Dataflow(dataflow_id=line.id,
-                           name=line.name,
+                           name=line.name or '',
                            attributes=line.properties,
                            source_node=source_node_id,
                            destination_node=target_node_id,
