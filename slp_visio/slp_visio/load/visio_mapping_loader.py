@@ -31,6 +31,7 @@ class VisioMappingFileLoader(MappingLoader):
     def __init__(self, mapping_files):
         self.component_mappings = None
         self.trustzone_mappings = None
+        self.configuration = None
         self.default_otm_trustzone = None
         mapping = MappingFileLoader(mapping_files).load()
         self.mappings = load_mappings(mapping)
@@ -39,6 +40,7 @@ class VisioMappingFileLoader(MappingLoader):
         self.default_otm_trustzone = self.__load_default_otm_trustzone()
         self.trustzone_mappings = self.mappings['trustzones']
         self.component_mappings = self.mappings['components']
+        self.configuration = self.mappings.get('configuration', {})
 
     def __load_default_otm_trustzone(self):
         trustzone_mappings_list = jmespath.search("trustzones", self.mappings)
@@ -59,3 +61,6 @@ class VisioMappingFileLoader(MappingLoader):
 
     def get_component_mappings(self):
         return self.component_mappings
+
+    def get_configuration(self):
+        return self.configuration

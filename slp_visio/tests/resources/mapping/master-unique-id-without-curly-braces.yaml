@@ -10,5 +10,3 @@ components:
   - label:  Amazon Redshift
     id:     0508F4C7-001F-0000-8E40-00608CF305B2
     type:   empty-component
-
-dataflows: []

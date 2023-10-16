@@ -23,6 +23,7 @@ CANNOT_RECOGNIZE_GIVEN_DIAGRAM_TYPE = 'Cannot recognize given diagram type'
 
 # CLI
 SOURCE_FILE_NAME = 'source-file'
+SOURCE_FILES_NAME = 'source-files'
 
 IAC_TYPE_NAME = '--iac-type'
 IAC_TYPE_SHORTNAME = '-t'
@@ -53,6 +54,7 @@ OUTPUT_FILE_NAME = '--output-file'
 OUTPUT_FILE_SHORTNAME = '-o'
 OUTPUT_FILE_DESC = 'OTM output file.'
 OUTPUT_FILE = 'threatmodel.otm'
+SUMMARY_FILE_DESC = 'Summary output file.'
 
 PROJECT_NAME_NAME = '--project-name'
 PROJECT_NAME_SHORTNAME = '-n'

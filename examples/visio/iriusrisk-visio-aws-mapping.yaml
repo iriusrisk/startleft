@@ -1678,5 +1678,3 @@ components:
 
   - label: VPC Access Points
     type: empty-component
-
-dataflows: []

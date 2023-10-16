@@ -8,7 +8,7 @@ from slp_visio.tests.resources import test_resource_paths
 
 SCHEMA_FILENAME = VisioMappingFileValidator.schema_filename
 VALID_MAPPING_FILE = test_resource_paths.default_visio_mapping
-INVALID_MAPPING_FILE = test_resource_paths.invalid_no_dataflows
+INVALID_MAPPING_FILE = test_resource_paths.invalid_no_components
 
 
 class TestSchema(TestCase):
@@ -38,4 +38,4 @@ class TestSchema(TestCase):
         mapping_file_schema.validate(mapping_file_data)
 
         assert not mapping_file_schema.valid
-        assert mapping_file_schema.errors == "'dataflows' is a required property"
+        assert mapping_file_schema.errors == "'components' is a required property"

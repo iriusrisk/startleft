@@ -72,6 +72,7 @@ terraform_aws_simple_components_otm_expected = f'{path}/terraform/aws_simple_com
 
 
 # VISIO
+visio_aws_vsdx_folder = f'{path}/visio/'
 visio_aws_with_tz_and_vpc = f'{path}/visio/aws-with-tz-and-vpc.vsdx'
 visio_aws_shapes = f'{path}/visio/aws-shapes.vsdx'
 visio_aws_stencils = f'{path}/visio/aws-stencils.vsdx'
@@ -108,8 +109,10 @@ MTMT_multiple_trustzones_same_type_ID = f'{path}/otm/MTMT_multiple_trustzones_sa
 MTMT_multiple_trustzones_same_type_TYPE = f'{path}/otm/MTMT_multiple_trustzones_same_type_TYPE.otm'
 
 # LUCID
+lucid_aws_vsdx_folder = f'{path}/lucid/'
 lucid_aws_with_tz = f'{path}/lucid/lucid-aws-with-tz.vsdx'
 lucid_aws_with_tz_and_vpc = f'{path}/lucid/lucid-aws-with-tz-and-vpc.vsdx'
+lucid_summary_expected_summary = f'{path}/lucid/summary-expected-summary.csv'
 # mapping
 default_lucid_mapping = f'{path}/lucid/default-lucid-mapping.yaml'
 lucid_aws_with_tz_mapping = f'{path}/lucid/lucid-aws-with-tz.yaml'
