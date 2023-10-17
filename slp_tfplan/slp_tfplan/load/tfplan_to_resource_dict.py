@@ -3,18 +3,6 @@ from typing import Dict, List
 import sl_util.sl_util.secure_regex as re
 
 
-def map_resource_properties(resource: Dict) -> {}:
-    return {
-        'resource_mode': resource['mode'],
-        'resource_provider_name': resource['provider_name'],
-        'resource_schema_version': resource['schema_version'],
-        'resource_address': resource['address'],
-        # Sensitive and usual values may be overlapped
-        **resource.get('sensitive_values', {}),
-        **resource.get('values', {})
-    }
-
-
 def is_not_cloned_resource(resource: Dict) -> bool:
     return 'index' not in resource or resource['index'] == '0' or resource['index'] == 'zero'
 
@@ -78,16 +66,14 @@ class TfplanToResourceDict:
             'resource_id': get_resource_id(resource),
             'resource_name': get_resource_name(resource, parent),
             'resource_type': resource['type'],
-            'resource_properties': self.__get_resource_properties(resource)
+            'resource_values': resource.get('values', {}),
+            'resource_configuration': {
+                'expressions': self.__get_resource_configuration_expressions(resource)
+            }
         }
 
-    def __get_resource_properties(self, resource: Dict) -> Dict:
-        _resource_configuration = self.__get_resource_configuration(resource['address'])
-        _resource_properties = map_resource_properties(resource)
-        if _resource_configuration:
-            _resource_configuration["planned_values"] = _resource_properties
+    def __get_resource_configuration_expressions(self, resource: Dict) -> Dict:
+        return self.__get_resource_configuration(resource).get('expressions', {})
 
-        return _resource_configuration or _resource_properties
-
-    def __get_resource_configuration(self, resource_address: str) -> Dict:
-        return next(filter(lambda r: r['address'] == resource_address, self.resources_configuration), None)
+    def __get_resource_configuration(self, resource: Dict) -> Dict:
+        return next(filter(lambda r: r['address'] == resource['address'], self.resources_configuration), {})
