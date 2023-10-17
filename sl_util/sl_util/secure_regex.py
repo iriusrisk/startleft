@@ -19,3 +19,7 @@ def findall(regex, string, options=None):
 
 def split(pattern, text, maxsplit=0, options=None):
     return re2.split(pattern, text, maxsplit, options)
+
+
+def compile(pattern, options=None):
+    return re2.compile(pattern, options)

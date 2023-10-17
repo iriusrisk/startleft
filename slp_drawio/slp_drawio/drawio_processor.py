@@ -1,5 +1,4 @@
-from slp_base import OTMProcessor, ProviderValidator, ProviderLoader, MappingValidator, MappingLoader, ProviderParser, \
-    DiagramType
+from slp_base import OTMProcessor, ProviderValidator, ProviderLoader, MappingValidator, MappingLoader, ProviderParser
 from slp_drawio.slp_drawio.load.drawio_loader import DrawioLoader
 from slp_drawio.slp_drawio.load.drawio_mapping_file_loader import DrawioMappingFileLoader
 from slp_drawio.slp_drawio.parse.drawio_parser import DrawioParser
@@ -12,7 +11,7 @@ class DrawioProcessor(OTMProcessor):
     Drawio implementation of OTMProcessor
     """
 
-    def __init__(self, project_id: str, project_name: str, source, mappings: [bytes],  diag_type=DiagramType.DRAWIO):
+    def __init__(self, project_id: str, project_name: str, source, mappings: [bytes],  diag_type=None):
         self.project_id = project_id
         self.project_name = project_name
         self.source = source
