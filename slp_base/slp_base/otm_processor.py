@@ -38,6 +38,7 @@ class OTMProcessor(metaclass=abc.ABCMeta):
 
             otm = self.get_provider_parser().build_otm()
             OTMPruner(otm).prune_orphan_dataflows()
+            OTMPruner(otm).prune_self_reference_dataflows()
         finally:
             self._clean_resources()
 
