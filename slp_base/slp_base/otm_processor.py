@@ -10,6 +10,13 @@ from slp_base.slp_base.provider_parser import ProviderParser
 from slp_base.slp_base.provider_validator import ProviderValidator
 
 
+def _prune_otm(otm: OTM):
+    pruner = OTMPruner(otm)
+    pruner.prune_orphan_dataflows()
+    pruner.prune_self_reference_dataflows()
+    OTMRepresentationsPruner(otm).prune()
+
+
 class OTMProcessor(metaclass=abc.ABCMeta):
     """
     Formal Interface to manage all the flow from the input data to the OTM output
@@ -37,12 +44,10 @@ class OTMProcessor(metaclass=abc.ABCMeta):
             self.get_mapping_loader().load()
 
             otm = self.get_provider_parser().build_otm()
-            OTMPruner(otm).prune_orphan_dataflows()
-            OTMPruner(otm).prune_self_reference_dataflows()
         finally:
             self._clean_resources()
 
-        OTMRepresentationsPruner(otm).prune()
+        _prune_otm(otm)
         OTMValidator().validate(otm.json())
 
         return otm
