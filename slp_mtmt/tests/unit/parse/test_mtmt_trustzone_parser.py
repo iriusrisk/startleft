@@ -158,4 +158,17 @@ class TestMTMTTrustzoneParser:
         assert trustzones[0].name == 'The TrustZone'
         assert trustzones[0].type == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
 
+    def test_model_trustzones_without_name(self):
+        # GIVEN the Mtmt data with one trustzone
+        mtmt = get_mtmt_from_file(test_resource_paths.model_with_figures_without_name_file)
+
+        # AND the mapping data without the mapping of the trustzone
+        mtmt_mapping = get_mapping_from_file(mtmt_default_mapping)
+
+        # THEN a MtmtMapping is returned with the default trustzone
+        trustzones = MTMTTrustzoneParser(mtmt, mtmt_mapping, diagram_representation.id).parse()
+
+        # THEN no trustzone has None as name
+        for tz in trustzones:
+            assert tz.name is not None
 
