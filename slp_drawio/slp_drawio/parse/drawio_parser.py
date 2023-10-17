@@ -29,7 +29,7 @@ class DrawioParser(ProviderParser):
         return otm
 
     def map_components_and_trustzones(self):
-        DiagramMapper(self.diagram, self.mapping).map()
+        DiagramMapper(self.project_id, self.diagram, self.mapping).map()
 
     def __build_otm(self):
         otm = OTMBuilder(self.project_id, self.project_name, DiagramType.DRAWIO).build()
@@ -40,4 +40,3 @@ class DrawioParser(ProviderParser):
         otm.trustzones = [t.otm for t in self.diagram.trustzones]
 
         return otm
-
