@@ -43,7 +43,7 @@ def add_children(children, tag_name, separated_attributes):
     return {tag_name: {k: v[0] if len(v) == 1 else v for k, v in dd.items()}}
 
 
-def xml2dict(t, separated_attributes=False):
+def xml2dict(t, separated_attributes=False) -> dict:
     tag_name = get_tag(t)
     d = {tag_name: {} if t.attrib else None}
     children = list(t)
@@ -61,11 +61,11 @@ def xml2dict(t, separated_attributes=False):
     return d
 
 
-class XmlToJson:
+class XmlToDict:
 
     def __init__(self, xml: str):
         self.xml = xml
 
-    def to_json(self):
+    def to_dict(self) -> dict:
         xml_data = ElementTree.XML(self.xml)
         return xml2dict(xml_data)
