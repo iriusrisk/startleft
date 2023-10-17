@@ -12,7 +12,7 @@ class DrawioProcessor(OTMProcessor):
     Drawio implementation of OTMProcessor
     """
 
-    def __init__(self, project_id: str, project_name: str, source, mappings: [bytes],  diag_type=DiagramType.DRAWIO):
+    def __init__(self, project_id: str, project_name: str, source, mappings: [bytes],  diag_type=None):
         self.project_id = project_id
         self.project_name = project_name
         self.source = source

@@ -53,4 +53,5 @@ model_mtmt_mvp_otm = f'{path}/otm/MTMT_MVP.otm'
 missing_position_otm = f'{path}/otm/missing_coordinates.otm'
 nested_trustzones_otm = f'{path}/otm/nested_tz.otm'
 nested_trustzones_line_otm = f'{path}/otm/nested_tz_line.otm'
+model_mtmt_source_file_otm = f'{path}/otm/test_model_tm7.otm'
 
