@@ -3,7 +3,7 @@ from otm.otm.entity.threat import ThreatInstance
 
 
 class Component:
-    def __init__(self, component_id, name, component_type, parent, parent_type: ParentType, source=None,
+    def __init__(self, component_id, name, component_type=None, parent=None, parent_type: ParentType = None, source=None,
                  attributes=None, tags=None, threats: [ThreatInstance] = None, representations=None):
         self.id = component_id
         self.name = name

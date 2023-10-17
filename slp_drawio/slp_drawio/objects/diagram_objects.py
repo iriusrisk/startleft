@@ -7,11 +7,10 @@ from otm.otm.entity.representation import RepresentationType
 from otm.otm.entity.trustzone import Trustzone
 
 
-
-
 class DiagramTrustZone:
-    def __init__(self, id: str, name: str):
-        self.otm: Trustzone = Trustzone(trustzone_id=id, name=name or '')
+    def __init__(self, type: str, id: str = None, name: str = None, default: bool = False):
+        self.otm: Trustzone = Trustzone(trustzone_id=id, name=name or '', type=type)
+        self.default = default
 
 
 class DiagramComponent:
@@ -23,7 +22,6 @@ class DiagramComponent:
                                         component_type=None,
                                         parent_type=ParentType.TRUST_ZONE,
                                         parent=None)
-
 
     def __str__(self) -> str:
         return '{otm: ' + str(self.otm) + '}'
@@ -49,11 +47,13 @@ class DiagramRepresentation:
 
 class Diagram:
     def __init__(self,
-                 representation: [DiagramRepresentation],
-                 components: [DiagramComponent],
-                 dataflows: [DiagramDataflow],
-                 trustzones: [DiagramTrustZone] = None):
+                 representation: [DiagramRepresentation] = None,
+                 components: [DiagramComponent] = None,
+                 dataflows: [DiagramDataflow] = None,
+                 trustzones: [DiagramTrustZone] = None,
+                 default_trustzone: DiagramTrustZone = None):
         self.representation = representation
-        self.components = components
-        self.dataflows = dataflows
+        self.components = components or []
+        self.dataflows = dataflows or []
         self.trustzones = trustzones or []
+        self.default_trustzone = default_trustzone

@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 from otm.otm.entity.component import Component
 from otm.otm.entity.otm import OTM
@@ -25,20 +25,20 @@ def calculate_missing_trustzones_representations(otm: OTM, representation_id):
 
 
 class TrustZoneRepresentationCalculator:
-    def __init__(self, representation_id: str, trustzone: Trustzone, trustzone_components: List[Component]):
+    def __init__(self, representation_id: str, trustzone: Trustzone, children: List[Union[Component, Trustzone]]):
         self.representation_id = representation_id
         self.trustzone = trustzone
-        self.components = trustzone_components
+        self.children = children
 
-        self.component_representations = list(filter(lambda r: r, map(_get_first_representation, trustzone_components)))
+        self.child_representation = list(filter(lambda r: r, map(_get_first_representation, children)))
 
     def calculate(self):
-        if self.component_representations:
-            self.trustzone.representations = [self.__calculate_trustzone_representation_by_components()]
+        if self.child_representation:
+            self.trustzone.representations = [self.__calculate_trustzone_representation_by_children()]
             self.__make_components_representations_relative()
 
-    def __calculate_trustzone_representation_by_components(self):
-        left_x, right_x, top_y, bottom_y = self.__calculate_trustzone_limits_by_components()
+    def __calculate_trustzone_representation_by_children(self):
+        left_x, right_x, top_y, bottom_y = self.__calculate_trustzone_limits_by_children()
 
         return RepresentationElement(
             id_=f'{self.trustzone.id}-representation',
@@ -48,14 +48,14 @@ class TrustZoneRepresentationCalculator:
             size=build_size(left_x, right_x, top_y, bottom_y, TZ_PADDING)
         )
 
-    def __calculate_trustzone_limits_by_components(self) -> Tuple:
+    def __calculate_trustzone_limits_by_children(self) -> Tuple:
         """
         Calculate the trustzone representation by the position of its children components.
         The coordinates x, y starts as 0,0 in the top left corner of the diagram
         """
         left_x, right_x, top_y, bottom_y = (None,) * 4
 
-        for representation in self.component_representations:
+        for representation in self.child_representation:
             x, y = representation.position['x'], representation.position['y']
             width, height = representation.size['width'], representation.size['height']
 
@@ -73,5 +73,5 @@ class TrustZoneRepresentationCalculator:
 
     def __make_components_representations_relative(self):
         tz_position = self.trustzone.representations[0].position
-        for component in self.components:
-            make_relative(_get_first_representation(component), tz_position)
+        for child in self.children:
+            make_relative(_get_first_representation(child), tz_position)
