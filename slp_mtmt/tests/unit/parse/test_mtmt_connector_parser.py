@@ -1,6 +1,7 @@
+from unittest.mock import MagicMock
+
 from pytest import mark
 
-from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
 from sl_util.sl_util.file_utils import get_byte_data
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_line import MTMLine
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
@@ -95,3 +96,15 @@ class TestMTMTConnectorParser:
 
         # Then we check the otm dataflows created
         assert len(dataflows) == expected
+
+    def test_model_dataflow_without_name_file(self):
+        # GIVEN a line without name
+        line = MagicMock()
+        line.name = None
+        mtmt = MTMT(None, [line], None, None)
+
+        # WHEN MTMTConnectorParser::parse is invoked
+        dataflows = MTMTConnectorParser(mtmt).parse()
+
+        # THEN no dataflow has None as name
+        assert dataflows[0].name is not None

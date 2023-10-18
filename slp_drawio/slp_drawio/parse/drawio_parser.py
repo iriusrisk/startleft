@@ -40,3 +40,4 @@ class DrawioParser(ProviderParser):
         otm.trustzones = [t.otm for t in self.diagram.trustzones]
 
         return otm
+

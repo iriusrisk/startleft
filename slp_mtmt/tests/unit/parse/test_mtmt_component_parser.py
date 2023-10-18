@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+
 from otm.otm.entity.representation import DiagramRepresentation, RepresentationType
 from sl_util.sl_util.file_utils import get_byte_data
 from slp_mtmt.slp_mtmt.mtmt_loader import MTMTLoader
@@ -6,7 +8,7 @@ from slp_mtmt.slp_mtmt.parse.mtmt_component_parser import MTMTComponentParser
 from slp_mtmt.slp_mtmt.parse.mtmt_trustzone_parser import MTMTTrustzoneParser
 from slp_mtmt.tests.resources import test_resource_paths
 from slp_mtmt.tests.resources.test_resource_paths import mtmt_default_mapping, \
-    nested_trustzones_tm7
+    nested_trustzones_tm7, model_with_figures_without_name_file
 
 diagram_representation = DiagramRepresentation(id_='project-test-diagram',
                                                name='Project Test Diagram Representation',
@@ -164,3 +166,25 @@ class TestMTMTComponentParser:
         assert current.id == '9668ae2e-403f-4182-8c4c-d83948ffc31b'
         assert current.parent == '351f4038-244d-4de5-bfa0-00c17f2a1fa2'
         assert current.parent_type == 'trustZone'
+
+    def test_model_components_without_name_file(self):
+        # GIVEN the provider loader
+        source_file = get_byte_data(model_with_figures_without_name_file)
+        mtmt: MTMTLoader = MTMTLoader(source_file)
+        mtmt.load()
+
+        # AND a valid MTMT mapping file
+        mapping_file = get_byte_data(mtmt_default_mapping)
+
+        # AND the mapping file loaded
+        mtmt_mapping_file_loader = MTMTMappingFileLoader([mapping_file])
+        mtmt_mapping_file_loader.load()
+
+        # WHEN we parse the components
+        mtmt_mapping = mtmt_mapping_file_loader.get_mtmt_mapping()
+        mtmt_data = mtmt.get_mtmt()
+        component_parser = MTMTComponentParser(mtmt_data, mtmt_mapping, MagicMock(), diagram_representation.id)
+        components = component_parser.parse()
+        # THEN no component has None as name
+        for c in components:
+            assert c.name is not None

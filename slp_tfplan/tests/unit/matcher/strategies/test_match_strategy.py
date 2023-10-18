@@ -19,11 +19,16 @@ class TestMatchStrategy:
         component_sg_match_strategy_instances = match_strategy_container.component_sg_match_strategies
 
         # AND all the instances for sg_match_strategies in MatchStrategyContainer
-        sg_match_strategy_instances = match_strategy_container.sg_match_strategies
+        sg_match_strategy_instances = match_strategy_container.sg_sg_match_strategies
+
+        # AND all the instances for sg_rule_match_strategies in MatchStrategyContainer
+        sg_rule_match_strategy_instances = match_strategy_container.sg_sg_rule_match_strategies
 
         # WHEN we merge all instances and extract their classes
-        all_instance_classes = get_instance_classes(component_sg_match_strategy_instances) + \
-                               get_instance_classes(sg_match_strategy_instances)
+        all_instance_classes = \
+            get_instance_classes(component_sg_match_strategy_instances) + \
+            get_instance_classes(sg_match_strategy_instances) + \
+            get_instance_classes(sg_rule_match_strategy_instances)
 
         # THEN the subclasses and the instances match
         assert match_strategy_subclasses == all_instance_classes
