@@ -4,11 +4,13 @@ import pytest
 from starlette.datastructures import UploadFile, Headers
 
 from sl_util.sl_util import secure_regex as re
+from sl_util.tests.util.file_utils import get_upload_file
+
 from slp_base import DiagramFileNotValidError, CommonError
 from slp_drawio.slp_drawio.validate.drawio_validator import DrawioValidator
 from slp_drawio.tests.resources.test_resource_paths import wrong_mxgraphmodel_drawio, wrong_mxfile_drawio, \
-    wrong_mxcell_drawio, wrong_root_drawio, aws_minimal_drawio, aws_minimal_drawio_xml, not_xml
-from slp_visio.tests.util.files import get_upload_file
+    wrong_mxcell_drawio, wrong_root_drawio, aws_minimal_drawio, aws_minimal_xml, not_xml
+
 
 filename_pattern = re.compile('^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}\\.[drawio|xml]')
 
@@ -71,7 +73,7 @@ class TestDrawioValidator:
 
     @pytest.mark.parametrize('mime, size, filepath', [
         pytest.param('application/octet-stream', 10, aws_minimal_drawio, id='encoded-tiny-binary'),
-        pytest.param('application/xml', 10 * 1024 * 1024, aws_minimal_drawio_xml, id='xml-big-xml'),
+        pytest.param('application/xml', 10 * 1024 * 1024, aws_minimal_xml, id='xml-big-xml'),
         pytest.param('text/plain', 10 * 1024 * 1024, aws_minimal_drawio, id='encoded-big-text')
     ])
     def test_valid_file(self, mime: str, size: int, filepath: str):
