@@ -17,13 +17,18 @@ class DrawioLoader(ProviderLoader):
     Builder for a drawio class from the xml data
     """
 
+    def __init__(self, project_id: str, source):
+        self.project_id = project_id
+        self.source = source
+        self.diagram = None
+
     def load(self):
         try:
-            source = DrawIOToDict(self.source).to_dict()
+            source_dict = DrawIOToDict(self.source).to_dict()
 
-            representation: DiagramRepresentation = DiagramRepresentationLoader(self.project_id, source).load()
-            components: [DiagramComponent] = DiagramComponentLoader(source).load()
-            dataflows: [DiagramDataflow] = DiagramDataflowLoader(source).load()
+            representation: DiagramRepresentation = DiagramRepresentationLoader(self.project_id, source_dict).load()
+            components: [DiagramComponent] = DiagramComponentLoader(source_dict).load()
+            dataflows: [DiagramDataflow] = DiagramDataflowLoader(source_dict).load()
 
             self.diagram: Diagram = Diagram(representation, components, dataflows)
         except Exception as e:
@@ -31,11 +36,6 @@ class DrawioLoader(ProviderLoader):
             detail = e.__class__.__name__
             message = e.__str__()
             raise LoadingSourceFileError('Source file cannot be loaded', detail, message)
-
-    def __init__(self, project_id: str, source):
-        self.project_id = project_id
-        self.source = source
-        self.diagram = None
 
     def get_diagram(self) -> Diagram:
         return self.diagram

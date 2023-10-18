@@ -37,5 +37,6 @@ class MatchStrategyContainer(DeclarativeContainer):
     Here are defined a list of instances for each of these groups.
     """
 
-    sg_match_strategies = List()
+    sg_sg_match_strategies = List()
+    sg_sg_rule_match_strategies = List()
     component_sg_match_strategies = List()

@@ -1,0 +1,98 @@
+{
+  "mxfile": {
+    "agent": "5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/19.0.3 Chrome/102.0.5005.63 Electron/19.0.3 Safari/537.36",
+    "diagram": {
+      "id": "pOeIjdqQ_qid1hbLa7JX",
+      "mxGraphModel": {
+        "arrows": "1",
+        "connect": "1",
+        "dx": "1421",
+        "dy": "904",
+        "fold": "1",
+        "grid": "1",
+        "gridSize": "10",
+        "guides": "1",
+        "math": "0",
+        "page": "1",
+        "pageHeight": "1169",
+        "pageScale": "1",
+        "pageWidth": "827",
+        "root": {
+          "mxCell": [
+            {
+              "id": "0"
+            },
+            {
+              "id": "1",
+              "parent": "0"
+            },
+            {
+              "id": "5i7VU8sxTlh_DojUgWXD-1",
+              "mxGeometry": {
+                "as": "geometry",
+                "height": "130",
+                "width": "130",
+                "x": "210",
+                "y": "230"
+              },
+              "parent": "1",
+              "style": "points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;",
+              "value": "AWS Cloud",
+              "vertex": "1"
+            },
+            {
+              "id": "xUHJV5QXkyTOu5aMK-rF-2",
+              "mxGeometry": {
+                "as": "geometry",
+                "height": "80",
+                "width": "80",
+                "x": "25",
+                "y": "40"
+              },
+              "parent": "5i7VU8sxTlh_DojUgWXD-1",
+              "style": "image;html=1;image=img/lib/clip_art/computers/Database_128x128.png",
+              "value": "",
+              "vertex": "1"
+            },
+            {
+              "id": "5i7VU8sxTlh_DojUgWXD-2",
+              "mxGeometry": {
+                "as": "geometry",
+                "height": "130",
+                "width": "130",
+                "x": "440",
+                "y": "230"
+              },
+              "parent": "1",
+              "style": "points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_region;strokeColor=#147EBA;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#147EBA;dashed=1;",
+              "value": "Region",
+              "vertex": "1"
+            },
+            {
+              "id": "xUHJV5QXkyTOu5aMK-rF-3",
+              "mxGeometry": {
+                "as": "geometry",
+                "height": "93",
+                "width": "76.5",
+                "x": "26.75",
+                "y": "27"
+              },
+              "parent": "5i7VU8sxTlh_DojUgWXD-2",
+              "style": "outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.ec2;fillColor=#F58534;gradientColor=none;",
+              "value": "",
+              "vertex": "1"
+            }
+          ]
+        },
+        "shadow": "0",
+        "tooltips": "1"
+      },
+      "name": "Page-1"
+    },
+    "etag": "IaZ6VWqQhPlsWStpV9DA",
+    "host": "Electron",
+    "modified": "2023-10-10T12:38:11.657Z",
+    "type": "device",
+    "version": "19.0.3"
+  }
+}
