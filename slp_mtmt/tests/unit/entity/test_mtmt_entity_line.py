@@ -1,12 +1,12 @@
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_line import MTMLine
-from slp_mtmt.slp_mtmt.tm7_to_json import Tm7ToJson
+from slp_mtmt.slp_mtmt.tm7_to_dict import Tm7ToDict
 from slp_mtmt.tests.resources import test_resource_paths
 
 
 def extract_lines(filepath):
     with open(filepath, 'r') as file:
         xml = file.read()
-    json = Tm7ToJson(xml).to_json()
+    json = Tm7ToDict(xml).to_dict()
     lines = []
     for line in json['ThreatModel']['DrawingSurfaceList']['DrawingSurfaceModel']['Lines']['KeyValueOfguidanyType']:
         lines.append(MTMLine(line))
@@ -14,23 +14,26 @@ def extract_lines(filepath):
 
 
 class TestMTMTLine:
+    internet_boundary = 'Internet Boundary'
+    test_boundary = 'Test Boundary'
     line_fields_expected_results = [
         {'id': '264aa048-3595-4d94-b7b4-53ac7f447c6a', 'name': 'SQL Server Replication',
          'description': 'TLS', 'type': 'Connector', 'is_trustzone': False, 'is_dataflow': True},
-        {'id': 'c5c861dd-02be-4817-ab7f-bc6ded1ab80a', 'name': 'Internet Boundary',
-         'description': 'Internet Boundary', 'type': 'LineBoundary', 'is_trustzone': True, 'is_dataflow': False},
-        {'id': 'c5c861ff-02ge-4817-ab7f-bc6ded1cd90a', 'name': 'Test Boundary',
-         'description': 'Test Boundary', 'type': 'LineBoundary', 'is_trustzone': True, 'is_dataflow': False}
+        {'id': 'c5c861dd-02be-4817-ab7f-bc6ded1ab80a', 'name': internet_boundary,
+         'description': internet_boundary, 'type': 'LineBoundary', 'is_trustzone': True, 'is_dataflow': False},
+        {'id': 'c5c861ff-02ge-4817-ab7f-bc6ded1cd90a', 'name': test_boundary,
+         'description': test_boundary, 'type': 'LineBoundary', 'is_trustzone': True, 'is_dataflow': False}
     ]
 
+    configurable_attributes = 'Configurable Attributes'
     line_properties_expected_results = [
         {'TLS': {}, 'Name': 'SQL Server Replication', 'Dataflow Order': '0', 'Out Of Scope': 'false',
-         'Reason For Out Of Scope': {}, 'Configurable Attributes': {}, 'access vector': 'Physical',
+         'Reason For Out Of Scope': {}, configurable_attributes: {}, 'access vector': 'Physical',
          'As Generic Communication': {}, 'has authentication': 'no'},
-        {'Internet Boundary': {}, 'Name': 'Internet Boundary', 'Configurable Attributes': {},
+        {internet_boundary: {}, 'Name': internet_boundary, configurable_attributes: {},
          'As Generic Trust Line Boundary': {}},
-        {'As Generic Trust Line Boundary': {}, 'Configurable Attributes': {}, 'Name': 'Test Boundary',
-         'TLS Version': '1 3', 'Test Boundary': {}}
+        {'As Generic Trust Line Boundary': {}, configurable_attributes: {}, 'Name': test_boundary,
+         'TLS Version': '1 3', test_boundary: {}}
     ]
 
     def test_mtmt_line(self):

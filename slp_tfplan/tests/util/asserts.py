@@ -24,13 +24,6 @@ def assert_parent(component: TFPlanComponent, parent_id: str = None):
 ##########
 # TFPLAN #
 ##########
-def assert_common_properties(properties: {}):
-    assert properties['resource_mode'] == 'managed'
-    assert properties['resource_provider_name'] == 'registry.terraform.io/hashicorp/aws'
-    assert properties['resource_schema_version'] == 0
+def assert_resource_values(properties: {}):
     assert properties['val1'] == 'value1'
-    assert properties['senval1'] == 'value1'
-
-
-def assert_resource_id(resource: {}):
-    assert resource['resource_id'] == resource['properties']['resource_address']
+    assert properties['val2'] == 'value2'

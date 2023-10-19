@@ -32,12 +32,7 @@ class DrawioParser(ProviderParser):
         DiagramMapper(self.diagram, self.mapping).map()
 
     def __build_otm(self):
-        otm = OTMBuilder(self.project_id, self.project_name, DiagramType.DRAWIO).build()
+        # TODO waiting the parser implementation
+        pass
 
-        otm.representations = [self.diagram.representation.otm]
-        otm.components = [c.otm for c in self.diagram.components]
-        otm.dataflows = [d.otm for d in self.diagram.dataflows]
-        otm.trustzones = [t.otm for t in self.diagram.trustzones]
-
-        return otm
 
