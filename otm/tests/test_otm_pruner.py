@@ -53,3 +53,22 @@ class TestIterationUtils:
         # we have the expected dataflows and components
         assert len(otm.dataflows) == 3
         assert len(otm.components) == 5
+
+    def test_prune_self_reference_dataflows(self):
+        # GIVEN an otm with some self reference dataflows
+        otm: OTM = OTM('test', 'test', DummyProvider.DUMMY)
+        otm.dataflows = [
+            Dataflow('A', None, '1001', '2002'),
+            Dataflow('B', None, '2002', '2002'),
+            Dataflow('C', None, '2002', '1001')
+        ]
+
+        # WHEN we call prune_self_reference_dataflows
+        OTMPruner(otm).prune_self_reference_dataflows()
+
+        # THEN we have the expected dataflows
+        assert len(otm.dataflows) == 2
+        assert otm.dataflows[0].id == 'A'
+        assert otm.dataflows[1].id == 'C'
+
+

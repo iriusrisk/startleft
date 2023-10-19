@@ -20,3 +20,6 @@ class OTMPruner:
                 logger.warning(f'The dataflow {df} has been removed because connects an element that is not a '
                                f'component')
         self.otm.dataflows = dataflows
+
+    def prune_self_reference_dataflows(self):
+        self.otm.dataflows = list(filter(lambda x: x.source_node != x.destination_node, self.otm.dataflows))
