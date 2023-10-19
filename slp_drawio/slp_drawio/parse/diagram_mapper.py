@@ -7,7 +7,7 @@ class DiagramMapper:
         self.project_id = project_id
         self.diagram = diagram
         self.mapping = mapping
-        self.size = {'x': 1000, 'y': 1000}
+        self.size = {'width': 1000, 'height': 1000}
 
     def map(self):
         self.diagram.representation = DiagramRepresentation(self.project_id, self.size)
