@@ -30,10 +30,10 @@ class TrustZoneRepresentationCalculator:
         self.trustzone = trustzone
         self.children = children
 
-        self.child_representation = list(filter(lambda r: r, map(_get_first_representation, children)))
+        self.children_representations = list(filter(lambda r: r, map(_get_first_representation, children)))
 
     def calculate(self):
-        if self.child_representation:
+        if self.children_representations:
             self.trustzone.representations = [self.__calculate_trustzone_representation_by_children()]
             self.__make_components_representations_relative()
 
@@ -55,7 +55,7 @@ class TrustZoneRepresentationCalculator:
         """
         left_x, right_x, top_y, bottom_y = (None,) * 4
 
-        for representation in self.child_representation:
+        for representation in self.children_representations:
             x, y = representation.position['x'], representation.position['y']
             width, height = representation.size['width'], representation.size['height']
 
