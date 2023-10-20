@@ -39,8 +39,14 @@ class TestDefaultTrustZoneTransformer:
         # GIVEN a Diagram with default trustzone
         default_trustzone = DEFAULT_TRUSTZONE
 
-        # AND other trustzones
-        trustzones = [DiagramTrustZone('tz1', 'tz1'), DiagramTrustZone('tz2', 'tz2')]
+        # AND a trustzone with a nested trustzone
+        trustzone = DiagramTrustZone('tz', 'tz')
+
+        nested_trustzone = DiagramTrustZone('ntz', 'ntz')
+        nested_trustzone.otm.parent = trustzone.otm.id
+        nested_trustzone.otm.parent_type = ParentType.TRUST_ZONE
+
+        trustzones = [trustzone, nested_trustzone]
 
         # AND some DiagramComponents with parents and others without
         components_with_parent = _create_components(count=5, orphan=False)
@@ -57,9 +63,17 @@ class TestDefaultTrustZoneTransformer:
         # THEN the default trustzone is added to the diagram
         assert DEFAULT_TRUSTZONE in diagram.trustzones
 
+        # AND the nested trustzone remains without changes
+        assert nested_trustzone.otm.parent == trustzone.otm.id
+        assert nested_trustzone.otm.parent_type == ParentType.TRUST_ZONE
+
         # AND the components with parents remain without changes
         assert len(diagram.components) == 10
         assert diagram.components[:5] == components_with_parent
+
+        # AND the orphan trustzone is now child of the default one
+        assert trustzone.otm.parent == default_trustzone.otm.id
+        assert trustzone.otm.parent_type == ParentType.TRUST_ZONE
 
         # AND all the orphan DiagramComponents in the Diagram have now the default DiagramTrustZone as the parent
         for orphan_component in orphan_components:
@@ -69,7 +83,7 @@ class TestDefaultTrustZoneTransformer:
         # AND a representation is calculated for the DiagramTrustZone matching the limits of its children
         expected_representation_id = diagram.representation.id
         orphan_components_otms = [c.otm for c in orphan_components]
-        orphan_trustzones_otms = [tz.otm for tz in trustzones if tz.otm.id != default_trustzone.otm.id]
+        orphan_trustzones_otms = [trustzone.otm]
 
         repr_calc_mock.assert_called_once_with(
             representation_id=expected_representation_id,

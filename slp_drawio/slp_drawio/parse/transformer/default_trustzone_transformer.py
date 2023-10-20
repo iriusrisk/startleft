@@ -47,6 +47,4 @@ class DefaultTrustZoneTransformer(Transformer):
                                           children=[c.otm for c in children]).calculate()
 
     def __get_orphan_trustzones_excluding_default(self) -> List[DiagramTrustZone]:
-        return list(filter(
-            lambda tz: not tz.otm.parent and tz.otm.id != self.default_trustzone.otm.id,
-            self.diagram.trustzones))
+        return list(filter(lambda tz: not tz.otm.parent and tz != self.default_trustzone, self.diagram.trustzones))
