@@ -5,7 +5,6 @@ from slp_visio.slp_visio.load.boundary_identifier import BoundaryIdentifier
 from slp_visio.slp_visio.load.component_identifier import ComponentIdentifier
 from slp_visio.slp_visio.load.connector_identifier import ConnectorIdentifier
 from slp_visio.slp_visio.load.objects.diagram_objects import Diagram, DiagramComponentOrigin, DiagramLimits
-from slp_visio.slp_visio.load.parent_calculator import ParentCalculator
 from slp_visio.slp_visio.load.representation.simple_component_representer import SimpleComponentRepresenter
 from slp_visio.slp_visio.load.representation.zone_component_representer import ZoneComponentRepresenter
 from slp_visio.slp_visio.util.visio import get_limits
