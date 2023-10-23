@@ -34,6 +34,7 @@ setup(
         'networkx==3.1',
         'dependency-injector==4.41.0',
         'google-re2==1.0',
+        'xmlschema==2.5.0',
         # Do not upgrade pygraphviz unless security issues because it is heavily dependent on the underlying OS
         'pygraphviz==1.10'
     ],

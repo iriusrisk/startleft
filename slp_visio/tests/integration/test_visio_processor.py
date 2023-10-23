@@ -14,7 +14,7 @@ from slp_visio.tests.resources.test_resource_paths import expected_aws_shapes, e
     expected_visio_aws_with_tz_and_vpc, expected_visio_orphan_dataflows, expected_visio_bidirectional_connectors, \
     expected_visio_modified_single_connectors, visio_nested_tzs, expected_visio_nested_tzs, default_visio_mapping, \
     visio_nested_tzs_inside_component, expected_visio_nested_tzs_inside_component
-from slp_visio.tests.util.files import file_exists, get_upload_file
+from sl_util.tests.util.file_utils import file_exists, get_upload_file
 
 
 class TestVisioProcessor:
