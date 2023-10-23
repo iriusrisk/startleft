@@ -49,3 +49,8 @@ def remove_keys(dictionary: dict, keys_to_remove: [str]) -> dict:
         if key_to_remove in filtered:
             filtered.pop(key_to_remove)
     return filtered
+
+
+def append_if_not_exists(element, _list: List):
+    if element not in _list:
+        _list.append(element)
