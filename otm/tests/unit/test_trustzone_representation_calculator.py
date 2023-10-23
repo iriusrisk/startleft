@@ -1,7 +1,9 @@
 from unittest.mock import MagicMock, Mock, patch
 
-from slp_visio.slp_visio.parse.representation import trustzone_representation_calculator
-from slp_visio.slp_visio.parse.representation.trustzone_representation_calculator import \
+from otm.otm import trustzone_representation_calculator
+from otm.otm.entity.component import Component
+from otm.otm.entity.trustzone import Trustzone
+from otm.otm.trustzone_representation_calculator import \
     TrustZoneRepresentationCalculator, _get_trustzone_components, calculate_missing_trustzones_representations
 
 MODULE_NAME = trustzone_representation_calculator.__name__
@@ -24,15 +26,24 @@ def mock_trustzone():
     return trustzone
 
 
-def mock_component(start_position: int = 100):
-    return MagicMock(
-        representations=[
-            MagicMock(
-                position={'x': start_position, 'y': start_position},
-                size={'width': 50, 'height': 50}
-            )
-        ]
-    )
+def mock_component(start_position: int = 100) -> Component:
+    return Component(component_id='id', name='name',
+                     representations=[
+                         MagicMock(
+                             position={'x': start_position, 'y': start_position},
+                             size={'width': 50, 'height': 50}
+                         )
+                     ]
+                     )
+
+
+def mock_trustzone_repr(start_position: int = 100) -> Trustzone:
+    return Trustzone(trustzone_id='id', name='tz', representations=[
+        MagicMock(
+            position={'x': start_position, 'y': start_position},
+            size={'width': 50, 'height': 50}
+        )
+    ])
 
 
 class TestTrustZoneRepresentationCalculator:
@@ -76,7 +87,7 @@ class TestTrustZoneRepresentationCalculator:
 
         # AND two components inside the trustzone
         tz_component_1 = mock_component(start_position=100)
-        tz_component_2 = mock_component(start_position=200)
+        tz_component_2 = mock_trustzone_repr(start_position=200)
         trustzone_components = [tz_component_1, tz_component_2]
 
         # WHEN TrustZoneRepresentationCalculator::calculate is invoked
