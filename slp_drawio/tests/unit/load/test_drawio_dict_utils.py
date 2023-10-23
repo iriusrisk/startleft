@@ -23,18 +23,19 @@ def test_get_attributes_mx_cell_without_style_attr():
 def test_get_attributes():
     # GIVEN a mx_cell with style attr
     mx_cell = {
-        "style": "outlineConnect=0;dashed=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;"
+        "style": "outlineConnect=0;dashed=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;image=as="
     }
 
     # WHEN drawio_dict_utils::get_attributes
     attributes = drawio_dict_utils.get_attributes(mx_cell)
 
     # THEN attributes has the following data
-    assert len(attributes) == 4
+    assert len(attributes) == 5
     assert attributes.get('outlineConnect') == "0"
     assert attributes.get('dashed') == "0"
     assert attributes.get('shape') == "mxgraph.aws4.group"
     assert attributes.get('grIcon') == "mxgraph.aws4.group_aws_cloud_alt"
+    assert attributes.get('image') == "as="
 
 
 @pytest.mark.parametrize('source, expected', [

@@ -1,6 +1,6 @@
 import logging
 
-from slp_base import LoadingSourceFileError
+from slp_base import LoadingSourceFileError, CommonError
 from slp_base.slp_base.provider_loader import ProviderLoader
 from slp_drawio.slp_drawio.load.diagram_component_loader import DiagramComponentLoader
 from slp_drawio.slp_drawio.load.diagram_dataflow_loader import DiagramDataflowLoader
@@ -27,10 +27,12 @@ class DrawioLoader(ProviderLoader):
             source_dict = DrawIOToDict(self.source).to_dict()
 
             representation: DiagramRepresentation = DiagramRepresentationLoader(self.project_id, source_dict).load()
-            components: [DiagramComponent] = DiagramComponentLoader(source_dict).load()
+            components: [DiagramComponent] = DiagramComponentLoader(self.project_id, source_dict).load()
             dataflows: [DiagramDataflow] = DiagramDataflowLoader(source_dict).load()
 
             self.diagram: Diagram = Diagram(representation, components, dataflows)
+        except CommonError as e:
+            raise e
         except Exception as e:
             logger.error(f'{e}')
             detail = e.__class__.__name__

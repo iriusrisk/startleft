@@ -52,7 +52,7 @@ def get_attributes(mx_cell: Dict) -> Dict[str, Any]:
             continue
         key, value = style, None
         if '=' in style:
-            key, value = style.split('=')
+            key, value = style.split('=', 1)
         attributes[key] = value
 
     return attributes
