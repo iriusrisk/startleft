@@ -8,6 +8,7 @@ from sl_util.sl_util.file_utils import get_byte_data
 from slp_base import LoadingDiagramFileError
 from slp_drawio.slp_drawio.load import diagram_component_loader
 from slp_drawio.slp_drawio.load.diagram_component_loader import DiagramComponentLoader
+from slp_drawio.slp_drawio.load.drawio_dict_utils import get_size, get_position
 from slp_drawio.tests.resources import test_resource_paths
 
 
@@ -132,7 +133,9 @@ class TestDiagramComponentLoader:
         assert len(diagram_components[3].otm.representations) == 1
         assert list(diagram_components[3].otm.representations[0].attributes.keys()) == ['style']
 
-    def test_get_representation_element(self):
+    @patch('slp_drawio.slp_drawio.load.diagram_component_loader.get_size', wraps=get_size)
+    @patch('slp_drawio.slp_drawio.load.diagram_component_loader.get_position', wraps=get_position)
+    def test_get_representation_element(self, get_size_wrapper, get_position_wrapper):
         # GIVEN the mx_cell with the following attributes
         mx_cell = {
             'id': 'mx-cell-identifier',
@@ -144,6 +147,9 @@ class TestDiagramComponentLoader:
         representation_element = DiagramComponentLoader(self.PROJECT_ID, {})._get_representation_element(mx_cell)
 
         # THEN the representation is as expected
+        get_size_wrapper.assert_called_once()
+        get_position_wrapper.assert_called_once()
+
         assert representation_element.id == "mx-cell-identifier-diagram"
         assert representation_element.name == "mx-cell-identifier Representation"
         assert representation_element.representation == f"{self.PROJECT_ID}-diagram"

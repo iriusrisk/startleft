@@ -1,6 +1,6 @@
 import logging
 
-from slp_base import LoadingSourceFileError, CommonError
+from slp_base import LoadingDiagramFileError
 from slp_base.slp_base.provider_loader import ProviderLoader
 from slp_drawio.slp_drawio.load.diagram_component_loader import DiagramComponentLoader
 from slp_drawio.slp_drawio.load.diagram_dataflow_loader import DiagramDataflowLoader
@@ -31,13 +31,13 @@ class DrawioLoader(ProviderLoader):
             dataflows: [DiagramDataflow] = DiagramDataflowLoader(source_dict).load()
 
             self.diagram: Diagram = Diagram(representation, components, dataflows)
-        except CommonError as e:
+        except LoadingDiagramFileError as e:
             raise e
         except Exception as e:
             logger.error(f'{e}')
             detail = e.__class__.__name__
             message = e.__str__()
-            raise LoadingSourceFileError('Source file cannot be loaded', detail, message)
+            raise LoadingDiagramFileError('Source file cannot be loaded', detail, message)
 
     def get_diagram(self) -> Diagram:
         return self.diagram

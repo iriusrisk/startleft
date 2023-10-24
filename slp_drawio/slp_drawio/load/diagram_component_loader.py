@@ -3,8 +3,8 @@ from typing import List, Dict
 
 from otm.otm.entity.representation import RepresentationElement
 from slp_base import LoadingDiagramFileError
-from slp_drawio.slp_drawio.load.drawio_dict_utils import get_components_from_source, is_multiple_pages, \
-    get_attributes, get_component_position, get_component_size
+from slp_drawio.slp_drawio.load.drawio_dict_utils import is_multiple_pages, \
+    get_attributes, get_position, get_size, get_mx_cell_components
 from slp_drawio.slp_drawio.objects.diagram_objects import DiagramComponent
 
 __CALCULATE_SHAPE_TYPE_EQUIVALENCES = resource_types_equivalences = {
@@ -41,9 +41,9 @@ def _calculate_shape_type(mx_cell: Dict, attr: str = 'shape'):
     return shape_type
 
 
-def _get_shape_parent_id(mx_cell: Dict, components_from_source):
+def _get_shape_parent_id(mx_cell: Dict, mx_cell_components: List[Dict]):
     return mx_cell.get('parent') \
-        if any(item.get('id') == mx_cell.get('parent') for item in components_from_source) else None
+        if any(item.get('id') == mx_cell.get('parent') for item in mx_cell_components) else None
 
 
 def _get_shape_name(mx_cell: Dict):
@@ -67,7 +67,6 @@ class DiagramComponentLoader:
         self._source: dict = source
 
     def load(self) -> [DiagramComponent]:
-
         if is_multiple_pages(self._source):
             raise LoadingDiagramFileError(
                 'Diagram file is not valid', 'Diagram File is not compatible',
@@ -75,13 +74,13 @@ class DiagramComponentLoader:
 
         result: List[DiagramComponent] = []
 
-        components_from_source = get_components_from_source(self._source)
-        for mx_cell in components_from_source:
+        mx_cell_components = get_mx_cell_components(self._source)
+        for mx_cell in mx_cell_components:
             result.append(DiagramComponent(
                 id=mx_cell.get('id'),
                 name=_get_shape_name(mx_cell),
                 shape_type=_calculate_shape_type(mx_cell),
-                shape_parent_id=_get_shape_parent_id(mx_cell, components_from_source),
+                shape_parent_id=_get_shape_parent_id(mx_cell, mx_cell_components),
                 representations=[self._get_representation_element(mx_cell)]
             ))
 
@@ -92,7 +91,7 @@ class DiagramComponentLoader:
             id_=f"{mx_cell.get('id')}-diagram",
             name=f"{mx_cell.get('id')} Representation",
             representation=f"{self._project_id}-diagram",
-            position=get_component_position(mx_cell),
-            size=get_component_size(mx_cell),
+            position=get_position(mx_cell),
+            size=get_size(mx_cell),
             attributes={'style': mx_cell.get('style')}
         )

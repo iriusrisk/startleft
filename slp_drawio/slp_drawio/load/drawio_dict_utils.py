@@ -31,11 +31,11 @@ def __get_mx_cell_from_source(source):
     return source.get("mxfile", {}).get("diagram", {}).get("mxGraphModel", {}).get("root", {}).get("mxCell", [])
 
 
-def get_components_from_source(source) -> List[Dict]:
+def get_mx_cell_components(source) -> List[Dict]:
     return list(filter(lambda c: __is_mx_cell_component(c), __get_mx_cell_from_source(source)))
 
 
-def get_dataflows_from_source(source) -> List[Dict]:
+def get_mxcell_dataflows(source) -> List[Dict]:
     return list(filter(lambda c: __is_mx_cell_dataflow(c), __get_mx_cell_from_source(source)))
 
 
@@ -62,7 +62,7 @@ def __str_to_int(value: str):
     return int(round(float(value), 0))
 
 
-def get_component_position(mx_cell: Dict) -> Dict[str, float]:
+def get_position(mx_cell: Dict) -> Dict[str, float]:
     mx_geometry = mx_cell.get('mxGeometry', {})
     return {
         'x': __str_to_int(mx_geometry.get('x', 0)),
@@ -70,7 +70,7 @@ def get_component_position(mx_cell: Dict) -> Dict[str, float]:
     }
 
 
-def get_component_size(mx_cell: Dict) -> Dict[str, float]:
+def get_size(mx_cell: Dict) -> Dict[str, float]:
     mx_geometry = mx_cell.get('mxGeometry', {})
     return {
         'height': __str_to_int(mx_geometry.get('height')),
