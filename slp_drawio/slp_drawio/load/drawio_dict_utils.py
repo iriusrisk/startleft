@@ -56,3 +56,23 @@ def get_attributes(mx_cell: Dict) -> Dict[str, Any]:
         attributes[key] = value
 
     return attributes
+
+
+def __str_to_int(value: str):
+    return int(round(float(value), 0))
+
+
+def get_component_position(mx_cell: Dict) -> Dict[str, float]:
+    mx_geometry = mx_cell.get('mxGeometry', {})
+    return {
+        'x': __str_to_int(mx_geometry.get('x', 0)),
+        'y': __str_to_int(mx_geometry.get('y', 0)),
+    }
+
+
+def get_component_size(mx_cell: Dict) -> Dict[str, float]:
+    mx_geometry = mx_cell.get('mxGeometry', {})
+    return {
+        'height': __str_to_int(mx_geometry.get('height')),
+        'width': __str_to_int(mx_geometry.get('width')),
+    }

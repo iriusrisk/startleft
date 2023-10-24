@@ -66,3 +66,34 @@ def test_get_dataflows_from_source():
 
     # THEN it returns 5 dataflows
     assert len(dataflows) == 5
+
+
+@pytest.mark.parametrize('mx_geometry, expected', [
+    pytest.param({}, {'x': 0, 'y': 0}, id="without position"),
+    pytest.param({'x': '10'}, {'x': 10, 'y': 0}, id="only with x value"),
+    pytest.param({'y': '10'}, {'x': 0, 'y': 10}, id="only with y value"),
+    pytest.param({'x': '10.1', 'y': '20.9'}, {'x': 10, 'y': 21}, id="with x, y value"),
+])
+def test_get_component_position(mx_geometry, expected):
+    # GIVEN a mx_cell with the given mxGeometry
+    mx_cell = {"mxGeometry": mx_geometry}
+
+    # WHEN drawio_dict_utils::get_component_position
+    position = drawio_dict_utils.get_component_position(mx_cell)
+
+    # THEN position has the following data
+    assert position == expected
+
+
+@pytest.mark.parametrize('mx_geometry, expected', [
+    pytest.param({'height': '10.1', 'width': '20.9'}, {'height': 10, 'width': 21}, id="with height, width value"),
+])
+def test_get_component_size(mx_geometry, expected):
+    # GIVEN a mx_cell with the given mxGeometry
+    mx_cell = {"mxGeometry": mx_geometry}
+
+    # WHEN drawio_dict_utils::get_component_size
+    size = drawio_dict_utils.get_component_size(mx_cell)
+
+    # THEN attributes has the following data
+    assert size == expected

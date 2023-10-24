@@ -4,7 +4,7 @@ from typing import List, Dict
 from otm.otm.entity.representation import RepresentationElement
 from slp_base import LoadingDiagramFileError
 from slp_drawio.slp_drawio.load.drawio_dict_utils import get_components_from_source, is_multiple_pages, \
-    get_attributes
+    get_attributes, get_component_position, get_component_size
 from slp_drawio.slp_drawio.objects.diagram_objects import DiagramComponent
 
 __CALCULATE_SHAPE_TYPE_EQUIVALENCES = resource_types_equivalences = {
@@ -53,6 +53,10 @@ def _get_shape_name(mx_cell: Dict):
         if '.' in name:
             name = name.split('.')[-1]
         name = name.replace('_', ' ')
+    if not name:
+        name = 'N/A'
+    if len(name) == 1:
+        name = f'_{name}'
     return name
 
 
@@ -84,12 +88,11 @@ class DiagramComponentLoader:
         return result
 
     def _get_representation_element(self, mx_cell: Dict) -> RepresentationElement:
-        mx_geometry = mx_cell.get('mxGeometry', {})
         return RepresentationElement(
             id_=f"{mx_cell.get('id')}-diagram",
             name=f"{mx_cell.get('id')} Representation",
             representation=f"{self._project_id}-diagram",
-            position={'x': mx_geometry.get('x'), 'y': mx_geometry.get('y')},
-            size={'height': mx_geometry.get('height'), 'width': mx_geometry.get('width')},
+            position=get_component_position(mx_cell),
+            size=get_component_size(mx_cell),
             attributes={'style': mx_cell.get('style')}
         )

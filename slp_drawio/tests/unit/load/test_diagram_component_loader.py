@@ -53,8 +53,9 @@ def test_get_shape_parent_id(mx_cell: Dict, components: List, expected):
 
 @patch('slp_drawio.slp_drawio.load.diagram_component_loader._calculate_shape_type')
 @pytest.mark.parametrize('mx_cell, shape_type, expected', [
-    pytest.param({}, None, '', id="with mxCell without value and type"),
+    pytest.param({}, None, 'N/A', id="with mxCell without value and type"),
     pytest.param({'value': 'name'}, None, 'name', id="with mxCell with value"),
+    pytest.param({'value': '1'}, None, '_1', id="with mxCell with len(value) is 1"),
     pytest.param({}, 'type', 'type', id="with mxCell without value, shape_type without dots"),
     pytest.param({}, 'type', 'type', id="with mxCell without value, shape_type with dot and underscore"),
     pytest.param({}, 'aws.type', 'type', id="with mxCell without value, shape_type with dot but without underscore"),
@@ -111,7 +112,7 @@ class TestDiagramComponentLoader:
         assert list(diagram_components[0].otm.representations[0].attributes.keys()) == ['style']
 
         assert diagram_components[1].otm.id == "xUHJV5QXkyTOu5aMK-rF-2"
-        assert diagram_components[1].otm.name == ""
+        assert diagram_components[1].otm.name == "N/A"
         assert diagram_components[1].shape_type is None
         assert diagram_components[1].shape_parent_id == "5i7VU8sxTlh_DojUgWXD-1"
         assert len(diagram_components[1].otm.representations) == 1
@@ -146,6 +147,6 @@ class TestDiagramComponentLoader:
         assert representation_element.id == "mx-cell-identifier-diagram"
         assert representation_element.name == "mx-cell-identifier Representation"
         assert representation_element.representation == f"{self.PROJECT_ID}-diagram"
-        assert representation_element.position == {'x': '100', 'y': '200'}
-        assert representation_element.size == {'height': '10', 'width': '20'}
+        assert representation_element.position == {'x': 100, 'y': 200}
+        assert representation_element.size == {'height': 10, 'width': 20}
         assert representation_element.attributes['style'] == "spacingLeft=30;fontColor=#232F3E;dashed=0"
