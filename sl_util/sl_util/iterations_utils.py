@@ -29,16 +29,17 @@ def remove_duplicates(duplicated_list: List) -> List:
 
 
 def compare_unordered_list_or_string(a: Union[str, List], b: Union[str, List]) -> bool:
-    result = False
     try:
         if isinstance(a, str) and isinstance(b, str):
-            result = a == b
+            return a == b
         elif isinstance(a, str) and isinstance(b, list):
-            result = sorted([a]) == sorted(b)
+            return sorted([a]) == sorted(b)
+        elif isinstance(a, list) and isinstance(b, str):
+            return sorted(a) == sorted([b])
         elif isinstance(a, list) and isinstance(b, list):
-            result = sorted(a) == sorted(b)
-    finally:
-        return result
+            return sorted(a) == sorted(b)
+    except TypeError:
+        return False
 
 
 def remove_nones(list: List) -> List:
