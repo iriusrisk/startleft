@@ -9,7 +9,7 @@ from slp_base import OTMBuildingError
 from slp_drawio.slp_drawio.objects.diagram_objects import Diagram, DiagramTrustZone, DiagramComponent
 from slp_drawio.slp_drawio.parse.transformer.default_trustzone_transformer import DefaultTrustZoneTransformer
 
-DEFAULT_TRUSTZONE: DiagramTrustZone = DiagramTrustZone('dtz', 'Default TrustZone', True)
+DEFAULT_TRUSTZONE: DiagramTrustZone = DiagramTrustZone('dtz', 'Default TrustZone', default=True)
 
 
 def _create_diagram(default_trustzone: DiagramTrustZone = None, trustzones: List[DiagramTrustZone] = None,
@@ -98,7 +98,7 @@ class TestDefaultTrustZoneTransformer:
     def test_no_orphan_components(self, default_trustzone: DiagramTrustZone):
         # GIVEN a Diagram with a DiagramTrustZone set as default
         # AND some DiagramComponents all of them with the parent set
-        trustzone = DiagramTrustZone(id='tz', name='tz', type='tzt')
+        trustzone = DiagramTrustZone(id_='tz', name='tz', type_='tzt')
         components = [_create_component(component_id='c', parent_id=trustzone.otm.id)]
         diagram = _create_diagram(
             components=components,
@@ -116,7 +116,7 @@ class TestDefaultTrustZoneTransformer:
         assert DEFAULT_TRUSTZONE not in diagram.trustzones
 
     @mark.parametrize('trustzones', [
-        param([DiagramTrustZone('tz')] , id='with trustzones'),
+        param([DiagramTrustZone('tz')], id='with trustzones'),
         param(None, id='without trustzones')
     ])
     def test_orphan_components_and_no_default_trustzone(self, trustzones: List[DiagramTrustZone]):
