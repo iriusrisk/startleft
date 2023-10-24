@@ -24,6 +24,7 @@ class DrawioParser(ProviderParser):
         self.map_components_and_trustzones()
 
         # TODO Implement and call Transformers here
+        ParentCalculatorTransformer(self.diagram).transform()
 
         otm = self.__build_otm()
 
@@ -34,8 +35,6 @@ class DrawioParser(ProviderParser):
 
     def __build_otm(self):
         otm = OTMBuilder(self.project_id, self.project_name, DiagramType.DRAWIO).build()
-
-        ParentCalculatorTransformer(self.diagram).transform()
 
         otm.representations = [self.diagram.representation.otm]
         otm.components = [c.otm for c in self.diagram.components]
