@@ -5,8 +5,10 @@ from otm.otm.entity.component import Component
 from otm.otm.entity.dataflow import Dataflow
 from otm.otm.entity.representation import RepresentationType, RepresentationElement
 from otm.otm.entity.trustzone import Trustzone
+from sl_util.sl_util.lang_utils import auto_repr
 
 
+@auto_repr
 class DiagramTrustZone:
     def __init__(self, type_: str, id_: str = None, name: str = None, default: bool = False, shape_parent_id=None):
         self.otm: Trustzone = Trustzone(trustzone_id=id_, name=name or '', type=type_)
@@ -14,6 +16,7 @@ class DiagramTrustZone:
         self.shape_parent_id = shape_parent_id
 
 
+@auto_repr
 class DiagramComponent:
 
     def __init__(self,
@@ -25,23 +28,22 @@ class DiagramComponent:
                  ):
         self.otm: Component = Component(component_id=id,
                                         name=name or '',
-                                        representations=representations,
+                                        representations=representations
                                         )
         self.shape_type = shape_type
         self.shape_parent_id = shape_parent_id
 
     def __str__(self) -> str:
-        return '{otm: ' + str(self.otm) + '}'
-
-    def __repr__(self) -> str:
-        return '{otm: ' + str(self.otm) + '}'
+        return f'{{otm: {str(self.otm)}, shape_type: {self.shape_type}, shape_parent_id: {self.shape_parent_id}}}'
 
 
+@auto_repr
 class DiagramDataflow:
     def __init__(self, id: str):
         self.otm = Dataflow(dataflow_id=id, name='', source_node=None, destination_node=None)
 
 
+@auto_repr
 class DiagramRepresentation:
     def __init__(self, project_id: str, size: dict):
         self.otm = representation.DiagramRepresentation(
@@ -52,6 +54,7 @@ class DiagramRepresentation:
         )
 
 
+@auto_repr
 class Diagram:
     def __init__(self,
                  representation: [DiagramRepresentation] = None,

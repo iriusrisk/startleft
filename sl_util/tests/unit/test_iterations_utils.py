@@ -1,4 +1,6 @@
-from sl_util.sl_util.iterations_utils import remove_from_list, remove_keys
+import pytest
+
+from sl_util.sl_util.iterations_utils import remove_from_list, remove_keys, compare_unordered_list_or_string
 
 
 def remove_function(element, original_array, removed_array):
@@ -76,3 +78,18 @@ class TestIterationUtils:
 
         # Then the result is as expected
         assert result == {'1': 'One', '3': 'Three'}
+
+    @pytest.mark.parametrize('a, b, result', [
+        pytest.param('a', 'a', True, id="eq string"),
+        pytest.param('a', 'b', False, id="not eq string"),
+        pytest.param(['a'], 'a', True, id="eq list and string"),
+        pytest.param(['a'], 'b', False, id="not eq list and string"),
+        pytest.param('a', ['a'], True, id="eq string and list"),
+        pytest.param('a', ['b'], False, id="not eq string and list"),
+        pytest.param(['a'], ['a'], True, id="eq list"),
+        pytest.param(['a'], ['b'], False, id="not eq list"),
+        pytest.param(['b', 'a'], ['a', 'b'], True, id="eq unordered list"),
+        pytest.param([{'a': 'a'}, {'a2': 'a2'}], [{'b': 'b'}], False, id="edge case List of Dictionaries")
+    ])
+    def test_compare_unordered_list_or_string(self, a, b, result):
+        assert compare_unordered_list_or_string(a, b) == result

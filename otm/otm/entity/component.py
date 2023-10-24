@@ -1,4 +1,7 @@
+from typing import List
+
 from otm.otm.entity.parent_type import ParentType
+from otm.otm.entity.representation import RepresentationElement
 from otm.otm.entity.threat import ThreatInstance
 
 
@@ -14,7 +17,7 @@ class Component:
         self.attributes = attributes
         self.tags = tags
         self.threats: [ThreatInstance] = threats or []
-        self.representations = representations
+        self.representations: List[RepresentationElement] = representations
 
     def add_threat(self, threat: ThreatInstance):
         self.threats.append(threat)
