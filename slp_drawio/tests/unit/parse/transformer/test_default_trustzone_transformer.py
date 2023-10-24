@@ -77,7 +77,7 @@ class TestDefaultTrustZoneTransformer:
     def test_no_orphan_components(self, default_trustzone: DiagramTrustZone):
         # GIVEN a Diagram with a DiagramTrustZone set as default
         # AND some DiagramComponents all of them with the parent set
-        trustzone = DiagramTrustZone(id='tz', name='tz', type='tzt')
+        trustzone = DiagramTrustZone(id_='tz', name='tz', type_='tzt')
         components = [build_component(component_id='c', parent_id=trustzone.otm.id)]
         diagram = build_diagram(
             components=components,
@@ -95,7 +95,7 @@ class TestDefaultTrustZoneTransformer:
         assert DEFAULT_TRUSTZONE not in diagram.trustzones
 
     @mark.parametrize('trustzones', [
-        param([DiagramTrustZone('tz')] , id='with trustzones'),
+        param([DiagramTrustZone('tz')], id='with trustzones'),
         param(None, id='without trustzones')
     ])
     def test_orphan_components_and_no_default_trustzone(self, trustzones: List[DiagramTrustZone]):
