@@ -4,33 +4,12 @@ from unittest.mock import patch
 from pytest import mark, param, raises
 
 from otm.otm.entity.parent_type import ParentType
-from otm.otm.entity.representation import RepresentationElement
 from slp_base import OTMBuildingError
-from slp_drawio.slp_drawio.objects.diagram_objects import Diagram, DiagramTrustZone, DiagramComponent
+from slp_drawio.slp_drawio.objects.diagram_objects import DiagramTrustZone
 from slp_drawio.slp_drawio.parse.transformer.default_trustzone_transformer import DefaultTrustZoneTransformer
+from slp_drawio.tests.util.builders import build_component, build_diagram, build_components
 
-DEFAULT_TRUSTZONE: DiagramTrustZone = DiagramTrustZone('dtz', 'Default TrustZone', True)
-
-
-def _create_diagram(default_trustzone: DiagramTrustZone = None, trustzones: List[DiagramTrustZone] = None,
-                    components: List[DiagramComponent] = None):
-    return Diagram(
-        default_trustzone=default_trustzone,
-        trustzones=trustzones,
-        components=components,
-        representation=RepresentationElement('repr-id', 'repr-name', 'repr-id'))
-
-
-def _create_components(count: int, orphan: bool = False) -> List[DiagramComponent]:
-    return list(map(
-        lambda c_id: _create_component(f'{c_id}', None if orphan else f'p-{c_id}'),
-        range(1, count + 1)))
-
-
-def _create_component(component_id: str, parent_id: str = None) -> DiagramComponent:
-    component = DiagramComponent(id=component_id, name=component_id)
-    component.otm.parent = parent_id
-    return component
+DEFAULT_TRUSTZONE: DiagramTrustZone = DiagramTrustZone(type='dtz', id='dtz', name='Default TrustZone', default=True)
 
 
 class TestDefaultTrustZoneTransformer:
@@ -49,10 +28,10 @@ class TestDefaultTrustZoneTransformer:
         trustzones = [trustzone, nested_trustzone]
 
         # AND some DiagramComponents with parents and others without
-        components_with_parent = _create_components(count=5, orphan=False)
-        orphan_components = _create_components(count=5, orphan=True)
+        components_with_parent = build_components(count=5, orphan=False)
+        orphan_components = build_components(count=5, orphan=True)
 
-        diagram = _create_diagram(
+        diagram = build_diagram(
             default_trustzone=default_trustzone,
             trustzones=trustzones,
             components=components_with_parent + orphan_components)
@@ -99,8 +78,8 @@ class TestDefaultTrustZoneTransformer:
         # GIVEN a Diagram with a DiagramTrustZone set as default
         # AND some DiagramComponents all of them with the parent set
         trustzone = DiagramTrustZone(id='tz', name='tz', type='tzt')
-        components = [_create_component(component_id='c', parent_id=trustzone.otm.id)]
-        diagram = _create_diagram(
+        components = [build_component(component_id='c', parent_id=trustzone.otm.id)]
+        diagram = build_diagram(
             components=components,
             default_trustzone=default_trustzone,
             trustzones=[trustzone]
@@ -122,7 +101,7 @@ class TestDefaultTrustZoneTransformer:
     def test_orphan_components_and_no_default_trustzone(self, trustzones: List[DiagramTrustZone]):
         # GIVEN a Diagram with no TrustZones
         # AND some orphan components
-        diagram = _create_diagram(trustzones=trustzones, components=_create_components(count=5, orphan=True))
+        diagram = build_diagram(trustzones=trustzones, components=build_components(count=5, orphan=True))
 
         # WHEN DefaultTrustZoneTransformer::transform is invoked
         # THEN an error is raised

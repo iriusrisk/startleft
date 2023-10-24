@@ -1,5 +1,5 @@
 from slp_drawio.slp_drawio.load.drawio_mapping_file_loader import DrawioMapping
-from slp_drawio.slp_drawio.objects.diagram_objects import Diagram, DiagramRepresentation
+from slp_drawio.slp_drawio.objects.diagram_objects import Diagram
 
 
 class DiagramMapper:
@@ -7,7 +7,6 @@ class DiagramMapper:
         self.project_id = project_id
         self.diagram = diagram
         self.mapping = mapping
-        self.size = {'width': 1000, 'height': 1000}
 
     def map(self):
-        self.diagram.representation = DiagramRepresentation(self.project_id, self.size)
+        pass
