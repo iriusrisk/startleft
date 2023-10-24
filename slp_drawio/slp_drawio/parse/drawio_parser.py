@@ -6,6 +6,7 @@ from slp_base.slp_base.provider_type import DiagramType
 from slp_drawio.slp_drawio.load.drawio_mapping_file_loader import DrawioMapping
 from slp_drawio.slp_drawio.objects.diagram_objects import Diagram
 from slp_drawio.slp_drawio.parse.diagram_mapper import DiagramMapper
+from slp_drawio.slp_drawio.parse.tranformers.parent_calculator_transformer import ParentCalculatorTransformer
 
 
 class DrawioParser(ProviderParser):
@@ -33,6 +34,8 @@ class DrawioParser(ProviderParser):
 
     def __build_otm(self):
         otm = OTMBuilder(self.project_id, self.project_name, DiagramType.DRAWIO).build()
+
+        ParentCalculatorTransformer(self.diagram).transform()
 
         otm.representations = [self.diagram.representation.otm]
         otm.components = [c.otm for c in self.diagram.components]

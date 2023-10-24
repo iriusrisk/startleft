@@ -8,9 +8,10 @@ from otm.otm.entity.trustzone import Trustzone
 
 
 class DiagramTrustZone:
-    def __init__(self, type: str, id: str = None, name: str = None, default: bool = False):
-        self.otm: Trustzone = Trustzone(trustzone_id=id, name=name or '', type=type)
+    def __init__(self, type_: str, id_: str = None, name: str = None, default: bool = False, shape_parent_id=None):
+        self.otm: Trustzone = Trustzone(trustzone_id=id_, name=name or '', type=type_)
         self.default = default
+        self.shape_parent_id = shape_parent_id
 
 
 class DiagramComponent:
