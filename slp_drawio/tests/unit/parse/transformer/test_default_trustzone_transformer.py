@@ -9,7 +9,7 @@ from slp_drawio.slp_drawio.objects.diagram_objects import DiagramTrustZone
 from slp_drawio.slp_drawio.parse.transformer.default_trustzone_transformer import DefaultTrustZoneTransformer
 from slp_drawio.tests.util.builders import build_component, build_diagram, build_components
 
-DEFAULT_TRUSTZONE: DiagramTrustZone = DiagramTrustZone(type='dtz', id='dtz', name='Default TrustZone', default=True)
+DEFAULT_TRUSTZONE: DiagramTrustZone = DiagramTrustZone(type_='dtz', id_='dtz', name='Default TrustZone', default=True)
 
 
 class TestDefaultTrustZoneTransformer:
@@ -60,7 +60,7 @@ class TestDefaultTrustZoneTransformer:
             assert orphan_component.otm.parent == DEFAULT_TRUSTZONE.otm.id
 
         # AND a representation is calculated for the DiagramTrustZone matching the limits of its children
-        expected_representation_id = diagram.representation.id
+        expected_representation_id = diagram.representation.otm.id
         orphan_components_otms = [c.otm for c in orphan_components]
         orphan_trustzones_otms = [trustzone.otm]
 

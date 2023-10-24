@@ -1,7 +1,7 @@
 from typing import List
 
-from otm.otm.entity.representation import RepresentationElement
-from slp_drawio.slp_drawio.objects.diagram_objects import DiagramComponent, Diagram, DiagramTrustZone
+from slp_drawio.slp_drawio.objects.diagram_objects import DiagramComponent, Diagram, DiagramTrustZone, \
+    DiagramRepresentation
 
 
 def build_diagram(default_trustzone: DiagramTrustZone = None, trustzones: List[DiagramTrustZone] = None,
@@ -10,7 +10,7 @@ def build_diagram(default_trustzone: DiagramTrustZone = None, trustzones: List[D
         default_trustzone=default_trustzone,
         trustzones=trustzones,
         components=components,
-        representation=RepresentationElement('repr-id', 'repr-name', 'repr-id'))
+        representation=DiagramRepresentation('repr-id', {'heigh': 1000, 'width': 1000}))
 
 
 def build_trustzone(trustzone_id: str = 'tz-id', type: str = 'tz-type', name: str = None, default: bool = False):

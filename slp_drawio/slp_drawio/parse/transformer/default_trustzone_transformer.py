@@ -42,7 +42,7 @@ class DefaultTrustZoneTransformer(Transformer):
             orphan.otm.parent = self.default_trustzone.otm.id
 
     def __recalculate_representations(self, children: List[Union[DiagramComponent, DiagramTrustZone]]):
-        TrustZoneRepresentationCalculator(representation_id=self.diagram.representation.id,
+        TrustZoneRepresentationCalculator(representation_id=self.diagram.representation.otm.id,
                                           trustzone=self.default_trustzone.otm,
                                           children=[c.otm for c in children]).calculate()
 

@@ -1,4 +1,4 @@
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 
 
 def __get_as_mx_point_in_mx_geometry(attr: str, mx_geometry: Dict):
@@ -37,6 +37,15 @@ def get_mx_cell_components(source) -> List[Dict]:
 
 def get_mxcell_dataflows(source) -> List[Dict]:
     return list(filter(lambda c: __is_mx_cell_dataflow(c), __get_mx_cell_from_source(source)))
+
+
+def get_diagram_size(source) -> Optional[Dict]:
+    model = source.get("mxfile", {}).get("diagram", {}).get("mxGraphModel", {})
+    if model:
+        height = model.get('pageHeight', None)
+        width = model.get('pageWidth', None)
+
+        return {'width': width, 'height': height} if height and width else None
 
 
 def is_multiple_pages(source):
