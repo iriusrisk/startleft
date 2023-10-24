@@ -6,6 +6,7 @@ from slp_base.slp_base.provider_type import DiagramType
 from slp_drawio.slp_drawio.load.drawio_mapping_file_loader import DrawioMapping
 from slp_drawio.slp_drawio.objects.diagram_objects import Diagram
 from slp_drawio.slp_drawio.parse.diagram_mapper import DiagramMapper
+from slp_drawio.slp_drawio.parse.tranformers.parent_calculator_transformer import ParentCalculatorTransformer
 
 
 class DrawioParser(ProviderParser):
@@ -23,6 +24,7 @@ class DrawioParser(ProviderParser):
         self.map_components_and_trustzones()
 
         # TODO Implement and call Transformers here
+        ParentCalculatorTransformer(self.diagram).transform()
 
         otm = self.__build_otm()
 

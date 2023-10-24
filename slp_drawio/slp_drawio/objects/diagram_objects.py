@@ -1,27 +1,34 @@
-from otm.otm.entity import representation
+from typing import List
 
+from otm.otm.entity import representation
 from otm.otm.entity.component import Component
 from otm.otm.entity.dataflow import Dataflow
-from otm.otm.entity.parent_type import ParentType
-from otm.otm.entity.representation import RepresentationType
+from otm.otm.entity.representation import RepresentationType, RepresentationElement
 from otm.otm.entity.trustzone import Trustzone
 
 
 class DiagramTrustZone:
-    def __init__(self, type: str, id: str = None, name: str = None, default: bool = False):
-        self.otm: Trustzone = Trustzone(trustzone_id=id, name=name or '', type=type)
+    def __init__(self, type_: str, id_: str = None, name: str = None, default: bool = False, shape_parent_id=None):
+        self.otm: Trustzone = Trustzone(trustzone_id=id_, name=name or '', type=type_)
         self.default = default
+        self.shape_parent_id = shape_parent_id
 
 
 class DiagramComponent:
+
     def __init__(self,
                  id: str = None,
-                 name: str = None):
+                 name: str = None,
+                 shape_type: str = None,
+                 shape_parent_id: str = None,
+                 representations: List[RepresentationElement] = None
+                 ):
         self.otm: Component = Component(component_id=id,
                                         name=name or '',
-                                        component_type=None,
-                                        parent_type=ParentType.TRUST_ZONE,
-                                        parent=None)
+                                        representations=representations,
+                                        )
+        self.shape_type = shape_type
+        self.shape_parent_id = shape_parent_id
 
     def __str__(self) -> str:
         return '{otm: ' + str(self.otm) + '}'
