@@ -169,6 +169,7 @@ class TestMTMTTrustzoneParser:
         trustzones = MTMTTrustzoneParser(mtmt, mtmt_mapping, diagram_representation.id).parse()
 
         # THEN no trustzone has None as name
-        for tz in trustzones:
-            assert tz.name is not None
+        assert trustzones[0].name == 'Generic Trust Border Boundary'
+        assert trustzones[1].name == 'Azure Trust Boundary'
+        assert trustzones[2].name == 'DB Boundary'
 

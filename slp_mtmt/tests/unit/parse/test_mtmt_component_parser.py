@@ -186,5 +186,7 @@ class TestMTMTComponentParser:
         component_parser = MTMTComponentParser(mtmt_data, mtmt_mapping, MagicMock(), diagram_representation.id)
         components = component_parser.parse()
         # THEN no component has None as name
-        for c in components:
-            assert c.name is not None
+        assert components[0].name == 'Generic External Interactor'
+        assert components[1].name == 'Azure Traffic Manager'
+        assert components[2].name == 'Database'
+        assert components[3].name == 'Web Application'
