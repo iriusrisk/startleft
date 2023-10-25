@@ -1,6 +1,7 @@
 
 # class TestDrawioDictUtils:
 import json
+from unittest.mock import patch
 
 import pytest
 
@@ -48,7 +49,7 @@ def test_is_multiple_pages(source, expected):
 
 def test_get_mx_cell_components():
     # GIVEN a DrawIO with one component and Dataflow with multiple configurations
-    source = json.loads(get_byte_data(test_resource_paths.aws_two_component_multiple_dataflows))
+    source = json.loads(get_byte_data(test_resource_paths.aws_two_component_multiple_dataflows_as_json))
 
     # WHEN drawio_dict_utils::get_components_from_source
     components = drawio_dict_utils.get_mx_cell_components(source)
@@ -59,13 +60,34 @@ def test_get_mx_cell_components():
 
 def test_get_mx_cell_dataflows():
     # GIVEN a DrawIO with one component and Dataflow with multiple configurations
-    source = json.loads(get_byte_data(test_resource_paths.aws_two_component_multiple_dataflows))
+    source = json.loads(get_byte_data(test_resource_paths.aws_two_component_multiple_dataflows_as_json))
 
     # WHEN drawio_dict_utils::get_components_from_source
-    dataflows = drawio_dict_utils.get_mxcell_dataflows(source)
+    dataflows = drawio_dict_utils.get_mx_cell_dataflows(source)
 
     # THEN it returns 5 dataflows
     assert len(dataflows) == 5
+
+
+@patch('slp_drawio.slp_drawio.load.drawio_dict_utils.__get_mx_cells')
+@pytest.mark.parametrize('dataflow_id, source, expected', [
+    pytest.param('1', [], [], id="tags are empty"),
+    pytest.param('1', [{'parent': '2'}, {'parent': '1', 'value': 'tag'}], ['tag'], id="tags has one value"),
+    pytest.param('1', [{'parent': '1', 'value': 'tag'}, {'parent': '1', 'value': 'tag2'}], ['tag', 'tag2'],
+                 id="tags has two values"),
+    pytest.param('1', [{'parent': '2', 'value': 'tag'}], [], id="tags is empty as not child exists"),
+    pytest.param('1', [{'parent': '1'}], [], id="tags is empty as not value exists"),
+])
+def test_get_dataflow_tags(__get_mx_cells_mock, dataflow_id: str, source, expected):
+    # GIVEN the dataflow_id
+    # AND the get_mx_cells returning the given source
+    __get_mx_cells_mock.return_value = source
+
+    # WHEN drawio_dict_utils::get_dataflow_tags
+    tags = drawio_dict_utils.get_dataflow_tags(dataflow_id, {})
+
+    # THEN the tags are as expected
+    assert tags == expected
 
 
 @pytest.mark.parametrize('mx_geometry, expected', [
