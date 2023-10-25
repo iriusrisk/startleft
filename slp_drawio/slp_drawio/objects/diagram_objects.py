@@ -39,8 +39,20 @@ class DiagramComponent:
 
 @auto_repr
 class DiagramDataflow:
-    def __init__(self, id: str):
-        self.otm = Dataflow(dataflow_id=id, name='', source_node=None, destination_node=None)
+    def __init__(self,
+                 dataflow_id: str,
+                 name: str = '',
+                 source_node: str = None,
+                 destination_node: str = None,
+                 tags: List[str] = None
+                 ):
+        self.otm = Dataflow(
+            dataflow_id=dataflow_id,
+            name=name,
+            source_node=source_node,
+            destination_node=destination_node,
+            tags=tags
+        )
 
 
 @auto_repr
