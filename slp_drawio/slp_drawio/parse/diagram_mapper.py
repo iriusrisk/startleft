@@ -16,13 +16,13 @@ def __match(mapping_label, component_label: str) -> bool:
 
 
 @__match.register(list)
-def __match_by_list(label: List[str], component_identifier: str) -> bool:
-    return component_identifier in label
+def __match_by_list(mapping_label: List[str], component_label: str) -> bool:
+    return component_label in mapping_label
 
 
 @__match.register(dict)
-def __match_by_dict(label: dict, component_identifier: str) -> bool:
-    return bool(re.match(label.get('$regex'), component_identifier))
+def __match_by_dict(mapping_label: dict, component_label: str) -> bool:
+    return bool(re.match(mapping_label.get('$regex'), component_label))
 
 
 def _find_mapping(label: str, mappings: List[Dict]) -> Dict:
