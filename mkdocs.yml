@@ -43,12 +43,14 @@ nav:
           - Terraform Plan Examples:
               - Ingesting Web Application Click Logs into AWS (by HashiCorp): startleft-processors/iac/tfplan/examples/aws-ingesting-click-logs-using-terraform.md
       - Visio:
-          - Visio Quickstart: startleft-processors/diagram/Visio-Quickstart.md
-          - Visio Mapping: startleft-processors/diagram/Visio-Mapping.md
-          - Visio TrustZones Mapping: startleft-processors/diagram/Visio-TrustZones-Mapping.md
-          - Visio Representations: startleft-processors/diagram/Visio-Representations.md
-          - Visio Summary: startleft-processors/diagram/Visio-Summary.md
-          - Lucidchart Support: startleft-processors/diagram/Lucidchart-support.md
+          - Visio Quickstart: startleft-processors/diagram/visio/Visio-Quickstart.md
+          - Visio Mapping: startleft-processors/diagram/visio/Visio-Mapping.md
+          - Visio TrustZones Mapping: startleft-processors/diagram/visio/Visio-TrustZones-Mapping.md
+          - Visio Representations: startleft-processors/diagram/visio/Visio-Representations.md
+          - Visio Summary: startleft-processors/diagram/visio/Visio-Summary.md
+          - Lucidchart Support: startleft-processors/diagram/visio/Lucidchart-support.md
+      - Drawio:
+          - Drawio Quickstart: startleft-processors/diagram/drawio/Drawio-Quickstart.md
   - Troubleshooting: Troubleshooting.md
 
 theme:
