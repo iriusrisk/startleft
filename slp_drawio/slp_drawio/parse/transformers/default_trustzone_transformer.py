@@ -6,7 +6,7 @@ from otm.otm.trustzone_representation_calculator import \
 from sl_util.sl_util.iterations_utils import append_if_not_exists
 from slp_base import OTMBuildingError
 from slp_drawio.slp_drawio.objects.diagram_objects import Diagram, DiagramTrustZone, DiagramComponent
-from slp_drawio.slp_drawio.parse.transformer.transformer import Transformer
+from slp_drawio.slp_drawio.parse.transformers.transformer import Transformer
 
 
 def _find_orphan_components(components: List[DiagramComponent]) -> List[DiagramComponent]:

@@ -6,14 +6,14 @@ from pytest import mark, param, raises
 from otm.otm.entity.parent_type import ParentType
 from slp_base import OTMBuildingError
 from slp_drawio.slp_drawio.objects.diagram_objects import DiagramTrustZone
-from slp_drawio.slp_drawio.parse.transformer.default_trustzone_transformer import DefaultTrustZoneTransformer
+from slp_drawio.slp_drawio.parse.transformers.default_trustzone_transformer import DefaultTrustZoneTransformer
 from slp_drawio.tests.util.builders import build_component, build_diagram, build_components
 
 DEFAULT_TRUSTZONE: DiagramTrustZone = DiagramTrustZone(type_='dtz', id_='dtz', name='Default TrustZone', default=True)
 
 
 class TestDefaultTrustZoneTransformer:
-    @patch('slp_drawio.slp_drawio.parse.transformer.default_trustzone_transformer.TrustZoneRepresentationCalculator')
+    @patch('slp_drawio.slp_drawio.parse.transformers.default_trustzone_transformer.TrustZoneRepresentationCalculator')
     def test_some_orphan_components(self, repr_calc_mock):
         # GIVEN a Diagram with default trustzone
         default_trustzone = DEFAULT_TRUSTZONE
