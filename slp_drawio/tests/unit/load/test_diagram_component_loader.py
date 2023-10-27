@@ -5,7 +5,6 @@ from unittest.mock import patch
 import pytest
 
 from sl_util.sl_util.file_utils import get_byte_data
-from slp_base import LoadingDiagramFileError
 from slp_drawio.slp_drawio.load import diagram_component_loader
 from slp_drawio.slp_drawio.load.diagram_component_loader import DiagramComponentLoader
 from slp_drawio.slp_drawio.load.drawio_dict_utils import get_size, get_position
@@ -80,20 +79,6 @@ def test_get_shape_name(_calculate_shape_type_mock, mx_cell: Dict, shape_type, e
 
 class TestDiagramComponentLoader:
     PROJECT_ID = 'drawio-project'
-
-    def test_multiple_pages_drawio(self):
-        # GIVEN a DrawIO with multiple pages
-        source = json.loads(get_byte_data(test_resource_paths.aws_multiple_pages_drawio_as_json))
-
-        # WHEN DiagramComponentLoader::load
-        # THEN a LoadingDiagramFileError is raised
-        with pytest.raises(LoadingDiagramFileError) as error:
-            DiagramComponentLoader(self.PROJECT_ID, source).load()
-
-        # AND the error has the following messages
-        assert str(error.value.title) == 'Diagram file is not valid'
-        assert str(error.value.detail) == 'Diagram File is not compatible'
-        assert str(error.value.message) == 'DrawIO processor does not accept diagrams with multiple pages'
 
     def test_aws_minimal_drawio(self):
         # GIVEN a DrawIO

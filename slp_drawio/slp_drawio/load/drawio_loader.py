@@ -21,7 +21,8 @@ class DrawioLoader(ProviderLoader):
     def __init__(self, project_id: str, source):
         self.project_id = project_id
         self.source = source
-        self.diagram = None
+
+        self._diagram = None
 
     def load(self):
         try:
@@ -36,7 +37,7 @@ class DrawioLoader(ProviderLoader):
             components: [DiagramComponent] = DiagramComponentLoader(self.project_id, source_dict).load()
             dataflows: [DiagramDataflow] = DiagramDataflowLoader(source_dict).load()
 
-            self.diagram: Diagram = Diagram(representation, components, dataflows)
+            self._diagram: Diagram = Diagram(representation, components, dataflows)
         except LoadingDiagramFileError as e:
             raise e
         except Exception as e:
@@ -46,4 +47,4 @@ class DrawioLoader(ProviderLoader):
             raise LoadingDiagramFileError('Source file cannot be loaded', detail, message)
 
     def get_diagram(self) -> Diagram:
-        return self.diagram
+        return self._diagram
