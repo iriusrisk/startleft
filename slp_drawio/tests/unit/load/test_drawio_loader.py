@@ -34,6 +34,9 @@ class TestDrawioLoader:
         # AND the dataflows are loaded
         load_dataflows_mock.assert_called_once()
 
+        # AND a Diagram is created
+        assert loader.get_diagram()
+
     @patch('slp_drawio.slp_drawio.load.drawio_loader.DrawIOToDict.to_dict')
     def test_multiple_pages_drawio(self, to_dict_mock):
         # GIVEN a DrawIO with multiple pages

@@ -31,8 +31,8 @@ def _decode_diagram(content: str) -> str:
         return ElementTree.tostring(tree, encoding=DEFAULT_ENCODING)
 
 
-def _get_file_content(source: SpooledTemporaryFile) -> str:
-    content = source.read()
+def _get_file_content(file: SpooledTemporaryFile) -> str:
+    content = file.read()
     if content:
         return content.decode(encoding=DEFAULT_ENCODING)
 
