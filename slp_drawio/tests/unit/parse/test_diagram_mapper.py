@@ -128,6 +128,7 @@ class TestDiagramMapper:
         assert trustzone.otm.id == component.otm.id
         assert trustzone.otm.name == component.otm.name
         assert trustzone.otm.type == expected_type
+        assert component.otm.representations == trustzone.otm.representations
         assert component.shape_parent_id == trustzone.shape_parent_id
         assert component.shape_type == trustzone.shape_type
 

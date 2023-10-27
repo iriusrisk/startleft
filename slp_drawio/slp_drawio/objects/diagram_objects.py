@@ -11,8 +11,8 @@ from sl_util.sl_util.lang_utils import auto_repr
 @auto_repr
 class DiagramTrustZone:
     def __init__(self, type_: str, id_: str = None, name: str = None, default: bool = False, shape_parent_id=None,
-                 shape_type: str = None):
-        self.otm: Trustzone = Trustzone(trustzone_id=id_, name=name or '', type=type_)
+                 shape_type: str = None, representations: List[RepresentationElement] = None):
+        self.otm: Trustzone = Trustzone(trustzone_id=id_, name=name or '', type=type_, representations=representations)
         self.default = default
         self.shape_parent_id = shape_parent_id
         self.shape_type = shape_type

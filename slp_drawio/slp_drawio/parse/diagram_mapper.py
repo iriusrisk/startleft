@@ -43,6 +43,7 @@ def _create_trustzone_from_component(component: DiagramComponent) -> DiagramTrus
         type_=component.otm.type,
         id_=component.otm.id,
         name=component.otm.name,
+        representations=component.otm.representations,
         default=False,
         shape_type=component.shape_type,
         shape_parent_id=component.shape_parent_id
@@ -63,21 +64,19 @@ class DiagramMapper:
             self._set_default_type_to_unmapped_components()
 
     def _add_default_trustzone(self):
-        default_trustzone_mapping = next(filter(lambda tz: tz.get('default', False), self._mapping.trustzones),
-                                         self._mapping.trustzones[0])
-        if default_trustzone_mapping:
-            self._diagram.default_trustzone = _create_default_trustzone(default_trustzone_mapping)
+        self._diagram.default_trustzone = _create_default_trustzone(
+            next(filter(lambda tz: tz.get('default', False), self._mapping.trustzones), self._mapping.trustzones[0]))
 
     def _map_components(self):
         mappings = self.__merge_mappings()
-        new_trustzones = []
 
         for component in self._diagram.components:
             mapping = _find_mapping(component.otm.name, mappings) or _find_mapping(component.shape_type, mappings)
             if mapping:
-                self.__change_component_type(component, mapping, new_trustzones)
+                self.__change_component_type(component, mapping)
 
-        remove_from_list(self._diagram.components, filter_function=lambda c: c in new_trustzones)
+        remove_from_list(self._diagram.components,
+                         filter_function=lambda c: c.otm.id in [tz.otm.id for tz in self._diagram.trustzones])
 
     def _set_default_type_to_unmapped_components(self):
         for component in self._diagram.components:
@@ -88,8 +87,7 @@ class DiagramMapper:
         trustzone_mappings = [{**m, 'trustzone': True} for m in self._mapping.trustzones]
         return trustzone_mappings + self._mapping.components
 
-    def __change_component_type(self, component: DiagramComponent, mapping: Dict, new_trustzones: List):
+    def __change_component_type(self, component: DiagramComponent, mapping: Dict):
         component.otm.type = mapping['type']
         if mapping.get('trustzone', False):
             self._diagram.trustzones.append(_create_trustzone_from_component(component))
-            new_trustzones.append(component)

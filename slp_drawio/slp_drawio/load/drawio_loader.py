@@ -5,6 +5,7 @@ from slp_base.slp_base.provider_loader import ProviderLoader
 from slp_drawio.slp_drawio.load.diagram_component_loader import DiagramComponentLoader
 from slp_drawio.slp_drawio.load.diagram_dataflow_loader import DiagramDataflowLoader
 from slp_drawio.slp_drawio.load.diagram_representation_loader import DiagramRepresentationLoader
+from slp_drawio.slp_drawio.load.drawio_dict_utils import is_multiple_pages
 from slp_drawio.slp_drawio.load.drawio_to_dict import DrawIOToDict
 from slp_drawio.slp_drawio.objects.diagram_objects import Diagram, DiagramDataflow, DiagramComponent, \
     DiagramRepresentation
@@ -25,6 +26,11 @@ class DrawioLoader(ProviderLoader):
     def load(self):
         try:
             source_dict = DrawIOToDict(self.source).to_dict()
+
+            if is_multiple_pages(source_dict):
+                raise LoadingDiagramFileError(
+                    'Diagram file is not valid', 'Diagram File is not compatible',
+                    'DrawIO processor does not accept diagrams with multiple pages')
 
             representation: DiagramRepresentation = DiagramRepresentationLoader(self.project_id, source_dict).load()
             components: [DiagramComponent] = DiagramComponentLoader(self.project_id, source_dict).load()
