@@ -18,10 +18,7 @@ from slp_drawio.tests.resources.test_resource_paths import aws_minimal_drawio, a
 ])
 def test_get_file_content(content: str, expected):
     # GIVEN a mocked SpooledTemporaryFile read method
-    def read_mock():
-        return content
-
-    file_mock = Mock(read=read_mock)
+    file_mock = Mock(read=lambda: content)
 
     # WHEN _get_file_content is invoked
     # THEN it returns the content of the file
