@@ -2,7 +2,7 @@ from typing import Optional
 
 from otm.otm.entity.parent_type import ParentType
 from slp_drawio.slp_drawio.objects.diagram_objects import DiagramComponent, DiagramTrustZone
-from slp_drawio.slp_drawio.parse.transformer.transformer import Transformer
+from slp_drawio.slp_drawio.parse.transformers.transformer import Transformer
 
 PARENT_TYPES = {
     DiagramComponent: ParentType.COMPONENT,
@@ -30,7 +30,6 @@ class ParentCalculatorTransformer(Transformer):
                 parent = self.__find_by_id(parent_id)
                 parent_type = get_parent_type(parent)
                 element.otm.parent_type = parent_type
-                a = element
 
     def __find_by_id(self, id_: str):
         for element in self.diagram.components + self.diagram.trustzones:

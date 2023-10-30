@@ -1,0 +1,371 @@
+trustzones:
+  - default: true
+    label: Internet (default)
+    type: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+
+components:
+  - label: android.phone2
+    type: android-device-client
+  - label: aws.alexa_for_business
+    type: CD-ALEXA-FOR-BUSINESS
+  - label: aws.amplify
+    type: CD-AMPLIFY
+  - label: aws.api_gateway
+    type: api-gateway
+  - label: aws.app_mesh
+    type: CD-APP-MESH
+  - label: aws.appflow
+    type: CD-APPFLOW
+  - label: aws.application_discovery_service
+    type: CD-APP-DISC-SERVICE
+  - label: aws.application_load_balancer
+    type: CD-AWS-APPLICATION-LOAD-BALANCER
+  - label: aws.appsync
+    type: CD-APPSYNC
+  - label: aws.artifact
+    type: CD-ARTIFACT
+  - label: aws.athena
+    type: athena
+  - label: aws.aurora
+    type: CD-AURORA
+  - label: aws.backup
+    type: CD-BACKUP
+  - label: aws.batch
+    type: CD-BATCH
+  - label: aws.braket
+    type: CD-BRAKET
+  - label: aws.chatbot
+    type: CD-CHATBOT
+  - label: aws.chime
+    type: CD-CHIME
+  - label: aws.cli
+    type: CD-CLI
+  - label: aws.client_vpn
+    type: client-vpn
+  - label: aws.cloud9
+    type: CD-CLOUD9
+  - label: aws.cloud_map
+    type: CD-CLOUD-MAP
+  - label: aws.cloudformation
+    type: CD-CLOUDFORMATION
+  - label: aws.cloudfront
+    type: cf-cloudfront
+  - label: aws.cloudhsm
+    type: CD-CLOUDHSM
+  - label: aws.cloudsearch
+    type: CD-CLOUDSEARCH
+  - label: aws.cloudtrail
+    type: cloudtrail
+  - label: aws.cloudwatch
+    type: cloudwatch
+  - label: aws.codeartifact
+    type: CD-AWS-CODEARTIFACT
+  - label: aws.codebuild
+    type: CD-CODEBUILD
+  - label: aws.codecommit
+    type: CD-CODECOMMIT
+  - label: aws.codedeploy
+    type: CD-CODEDEPLOY
+  - label: aws.codeguru
+    type: CD-CODEGURU
+  - label: aws.codepipeline
+    type: CD-CODEPIPELINE
+  - label: aws.codestar
+    type: CD-CODESTAR
+  - label: aws.cognito
+    type: cognito
+  - label: aws.comprehend
+    type: CD-COMPREHEND
+  - label: aws.compute_optimizer
+    type: CD-COMP-OPT
+  - label: aws.config
+    type: CD-CONFIG
+  - label: aws.connect
+    type: CD-CONNECT
+  - label: aws.control_tower
+    type: CD-CONTROL-TOWER
+  - label: aws.cost_management
+    type: CD-COST-MGMT
+  - label: aws.data_exchange
+    type: CD-DATA-EXCHANGE
+  - label: aws.data_pipeline
+    type: CD-DATA-PIPELINE
+  - label: aws.datasync
+    type: CD-DATASYNC
+  - label: aws.deepcomposer
+    type: CD-DEEPCOMPOSER
+  - label: aws.deeplens
+    type: CD-DEEPLENS
+  - label: aws.deepracer
+    type: CD-DEEPRACER
+  - label: aws.detective
+    type: CD-DETECTIVE
+  - label: aws.device_farm
+    type: CD-DEV-FARM
+  - label: aws.direct_connect
+    type: direct-connect
+  - label: aws.directory_service
+    type: CD-DIR-SERVICE
+  - label:
+    - aws.dynamo_db
+    - aws.dynamodb
+    type: dynamodb
+  - label:
+    - aws.ec2
+    - aws.ec2_aws_microservice_extractor_for_net
+    - aws.ec2_c6a_instance
+    - aws.ec2_c6gn_instance
+    - aws.ec2_c6i_instance
+    - aws.ec2_c6in_instance
+    - aws.ec2_c7g_instance
+    - aws.ec2_c7gn_instance
+    - aws.ec2_compute_container
+    - aws.ec2_compute_container_2
+    - aws.ec2_compute_container_3
+    - aws.ec2_dl1_instance
+    - aws.ec2_g5_instance
+    - aws.ec2_g5g_instance
+    - aws.ec2_hpc6a_instance
+    - aws.ec2_hpc6id_instance
+    - aws.ec2_i4i_instance
+    - aws.ec2_im4gn_instance
+    - aws.ec2_inf2_instance
+    - aws.ec2_is4gen_instance
+    - aws.ec2_m1_mac_instance
+    - aws.ec2_m6a_instance
+    - aws.ec2_m6i_instance
+    - aws.ec2_m6idn_instance
+    - aws.ec2_m6in_instance
+    - aws.ec2_p4de_instance
+    - aws.ec2_r6a_instance
+    - aws.ec2_r6i_instance
+    - aws.ec2_r6idn_instance
+    - aws.ec2_r6in_instance
+    - aws.ec2_r7iz_instance
+    - aws.ec2_trn1_instance
+    - aws.ec2_vt1_instance
+    - aws.ec2_x2gd_instance
+    - aws.ec2_x2idn_instance
+    - aws.ec2_x2iedn_instance
+    - aws.ec2_x2iezn_instance
+    type: ec2
+  - label: aws.ec2_image_builder
+    type: CD-EC2-IMAGE-BUILDER
+  - label: aws.ecr
+    type: elastic-container-registry
+  - label: aws.ecs
+    type: elastic-container-service
+  - label:
+    - aws.efs
+    - aws.elastic_file_system
+    type: elastic-file-system
+  - label: aws.eks
+    type: elastic-container-kubernetes
+  - label: aws.elastic_beanstalk
+    type: CD-ELASTIC-BEANSTALK
+  - label: aws.elastic_block_store
+    type: elastic-block-store
+  - label: aws.elastic_transcoder
+    type: CD-ELASTIC-TRANSCODER
+  - label: aws.elasticache
+    type: elasticache
+  - label: aws.elasticache_for_redis
+    type: CD-ELASTICACHE-FOR-REDIS
+  - label: aws.elasticsearch_service
+    type: elasticsearch
+  - label: aws.emr
+    type: CD-EMR
+  - label: aws.eventbridge
+    type: eventbridge
+  - label: aws.fargate
+    type: fargate
+  - label: aws.firewall_manager
+    type: firewall-manager
+  - label: aws.forecast
+    type: CD-FORECAST
+  - label: aws.fraud_detector
+    type: CD-FRAUD-DETECTOR
+  - label: aws.freertos
+    type: CD-FREERTOS
+  - label: aws.fsx_for_windows_file_server
+    type: fsx-windows-file-server
+  - label: aws.gamelift
+    type: CD-GAMELIFT
+  - label: aws.glacier
+    type: glacier
+  - label: aws.global_accelerator
+    type: CD-GLOBAL-ACC
+  - label: aws.glue
+    type: CD-GLUE
+  - label: aws.ground_station
+    type: CD-GROUND-STATION
+  - label:
+    - aws.group_vpc
+    - aws.vpc
+    type: vpc
+  - label: aws.guardduty
+    type: CD-GUARDDUTY
+  - label: aws.iam
+    type: CD-AWS-IAM
+  - label: aws.inspector
+    type: CD-INSPECTOR
+  - label: aws.iot_1click
+    type: CD-IOT-1-CLICK
+  - label: aws.iot_analytics
+    type: CD-IOT-ANALYTICS
+  - label: aws.iot_core
+    type: CD-IOT-CORE
+  - label: aws.iot_device_defender
+    type: CD-IOT-DEV-DEF
+  - label: aws.iot_device_management
+    type: CD-IOT-DEV-MAN
+  - label: aws.iot_events
+    type: CD-IOT-EVENTS
+  - label: aws.iot_sitewise
+    type: CD-IOT-SITEWISE
+  - label: aws.iot_things_graph
+    type: CD-IOT-THINGS-GRAPH
+  - label: aws.iq
+    type: CD-IQ
+  - label: aws.kendra
+    type: CD-KENDRA
+  - label: aws.keyspaces
+    type: CD-KEYSPACES
+  - label: aws.kinesis_data_analytics
+    type: kinesis-data-analytics
+  - label: aws.kinesis_data_firehose
+    type: kinesis-data-firehose
+  - label: aws.kinesis_data_streams
+    type: kinesis-data-streams
+  - label: aws.kinesis_video_streams
+    type: kinesis-video-streams
+  - label: aws.kms
+    type: kms
+  - label: aws.lake_formation
+    type: CD-LAKE-FORMATION
+  - label:
+    - aws.lambda
+    - aws.lambda_function
+    type: aws-lambda-function
+  - label: aws.lex
+    type: CD-LEX
+  - label: aws.license_manager
+    type: CD-LICENSE-MGR
+  - label: aws.lightsail
+    type: CD-LIGHTSAIL
+  - label: aws.location_service
+    type: CD-AWS-LOCATION-SERVICE
+  - label: aws.macie
+    type: CD-MACIE
+  - label: aws.managed_blockchain
+    type: CD-MANAGEDBLOCKCHAIN
+  - label: aws.managed_services
+    type: CD-AWS-MS
+  - label: aws.management_console
+    type: CD-AWS-MANAGEMENT-CONSOLE
+  - label: aws.marketplace
+    type: CD-MARKETPLACE
+  - label: aws.migration_hub
+    type: CD-MIGRATION-HUB
+  - label: aws.mq
+    type: CD-MQ
+  - label: aws.nat_gateway
+    type: CD-AWS-NAT-GATEWAY
+  - label: aws.neptune
+    type: CD-NEPTUNE
+  - label: aws.network_firewall
+    type: CD-AWS-NETWORK-FIREWALL
+  - label: aws.opsworks
+    type: CD-OPSWORKS
+  - label: aws.organizations
+    type: CD-AWS-ORGANIZATIONS
+  - label: aws.outposts
+    type: CD-OUTPOSTS
+  - label: aws.parallel_cluster
+    type: CD-AWS-PARALLELCLUSTER
+  - label: aws.personalize
+    type: CD-PERSONALIZE
+  - label: aws.pinpoint
+    type: CD-PINPOINT
+  - label: aws.polly
+    type: CD-POLLY
+  - label: aws.private_certificate_authority
+    type: CD-AWS-PRIVATE-CERTIFICATE-AUTHORITY
+  - label: aws.privatelink
+    type: privatelink
+  - label: aws.quicksight
+    type: CD-QUICKSIGHT
+  - label: aws.rds
+    type: rds
+  - label: aws.redshift
+    type: redshift
+  - label: aws.rekognition
+    type: CD-REKOGNITION
+  - label: aws.robomaker
+    type: CD-ROBOMAKER
+  - label: aws.route_53
+    type: route-53
+  - label: aws.s3
+    type: s3
+  - label: aws.sagemaker
+    type: CD-SAGEMAKER
+  - label: aws.secrets_manager
+    type: CD-SECRETS-MANAGER
+  - label: aws.security_hub
+    type: CD-SECURITY-HUB
+  - label: aws.serverless_application_repository
+    type: CD-SERVERLESS-APP-REPO
+  - label: aws.service_catalog
+    type: CD-SERVICE-CATALOG
+  - label: aws.ses
+    type: CD-SES
+  - label: aws.shield
+    type: CD-SHIELD
+  - label: aws.site_to_site_vpn
+    type: site-to-site-vpn
+  - label: aws.snowball
+    type: CD-SNOWBALL
+  - label: aws.sns
+    type: sns
+  - label: aws.sqs
+    type: sqs-simple-queue-service
+  - label: aws.step_functions
+    type: step-functions
+  - label: aws.storage_gateway
+    type: CD-STORAGE-GATEWAY
+  - label: aws.sumerian
+    type: CD-SUMERIAN
+  - label: aws.support
+    type: CD-SUPPORT
+  - label: aws.swf
+    type: swf-simple-workflow-service
+  - label: aws.systems_manager
+    type: CD-SYSTEMS-MANAGER
+  - label: aws.textract
+    type: CD-TEXTRACT
+  - label: aws.timestream
+    type: CD-AWS-TIMESTREAM
+  - label: aws.transcribe
+    type: CD-TRANSCRIBE
+  - label: aws.transfer_family
+    type: CD-TRANSFER-FML
+  - label: aws.transit_gateway
+    type: CD-AWS-TRANSIT-GW
+  - label: aws.translate
+    type: CD-TRANSLATE
+  - label: aws.trusted_advisor
+    type: trusted-advisor
+  - label: aws.waf
+    type: CD-WAF
+  - label: aws.workdocs
+    type: CD-WORKDOCS
+  - label: aws.worklink
+    type: CD-WORKLINK
+  - label: aws.workmail
+    type: CD-WORKMAIL
+  - label: aws.workspaces
+    type: CD-WORKSPACES
+  - label:
+    - aws.x_ray
+    - aws.xray
+    type: CD-XRAY
