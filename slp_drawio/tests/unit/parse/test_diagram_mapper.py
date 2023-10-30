@@ -26,7 +26,9 @@ def _tz_mapping(label: str = 'label', _type: str = 'type', default: bool = False
     param('regex-label-1', {'label': {'$regex': r'regex-label(-1)?'}}, True, id='by regex'),
     param('no-match', {'label': {'$regex': r'regex-label(-1)?'}}, False, id='no match regex'),
     param('label-1', {'label': ['label-1', 'label-2']}, True, id='by list'),
-    param('no-match', {'label': ['label-1', 'label-2']}, False, id='no match list')
+    param('no-match', {'label': ['label-1', 'label-2']}, False, id='no match list'),
+    param('', {'label': {'$regex': r'regex-label(-1)?'}}, False, id='empty label regex'),
+    param(None, {'label': {'$regex': r'regex-label(-1)?'}}, False, id='none label regex')
 ])
 def test_find_mapping(component_label: str, mapping: Dict, expected_match: bool):
     # GIVEN a component label
