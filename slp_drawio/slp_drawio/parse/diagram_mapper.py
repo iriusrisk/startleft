@@ -26,7 +26,9 @@ def __match_by_dict(mapping_label: dict, component_label: str) -> bool:
 
 
 def _find_mapping(label: str, mappings: List[Dict]) -> Dict:
-    return next(filter(lambda m: __match(m['label'], label), mappings), None)
+    for mapping in mappings:
+        if __match(mapping['label'], label):
+            return mapping
 
 
 def _create_default_trustzone(trustzone_mapping: Dict) -> DiagramTrustZone:
