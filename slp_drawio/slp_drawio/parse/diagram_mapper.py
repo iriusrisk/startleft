@@ -1,6 +1,6 @@
 import re
 from functools import singledispatch
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 from sl_util.sl_util.iterations_utils import remove_from_list
 from sl_util.sl_util.str_utils import deterministic_uuid
@@ -25,7 +25,10 @@ def __match_by_dict(mapping_label: dict, component_label: str) -> bool:
     return bool(re.match(mapping_label.get('$regex'), component_label))
 
 
-def _find_mapping(label: str, mappings: List[Dict]) -> Dict:
+def _find_mapping(label: str, mappings: List[Dict]) -> Optional[Dict]:
+    if not label:
+        return
+
     for mapping in mappings:
         if __match(mapping['label'], label):
             return mapping
