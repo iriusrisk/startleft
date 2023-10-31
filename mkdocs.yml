@@ -51,6 +51,7 @@ nav:
           - Lucidchart Support: startleft-processors/diagram/visio/Lucidchart-support.md
       - Drawio:
           - Drawio Quickstart: startleft-processors/diagram/drawio/Drawio-Quickstart.md
+          - Drawio Mapping: startleft-processors/diagram/drawio/Drawio-Mapping.md
           - Drawio Calculating Shape Type: startleft-processors/diagram/drawio/Drawio-Calculating-Shape-Type.md
   - Troubleshooting: Troubleshooting.md
 

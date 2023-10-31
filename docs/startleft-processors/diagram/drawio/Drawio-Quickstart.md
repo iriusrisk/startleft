@@ -2,21 +2,20 @@
 
 ---
 
-[Drawio](https://www.drawio.com/) is another tool that enables its users to freely draw diagrams with generic or predefined shapes.
+[Drawio](https://www.drawio.com/) is a tool that enables its users to freely draw diagrams with generic or predefined shapes.
 
-It is a common tool used by users for drawing a infrastructure or a threat model, so it is a candidate to convert into 
-an OTM Threat Model.
-Despite the fact that Drawio gives their users complete freedom to build whatever they want in the diagram,
-architecture or threat modeling diagrams tend to share a more or less common structure and StartLeft pretends to
-take advantage of this in order to automatize the processing of the diagrams to create threat models in the OTM format.
+It is a common tool used by users for drawing an infrastructure or a threat model, so it is a candidate to convert into
+an OTM Threat Model. Even though Drawio gives their users complete freedom to build whatever they want in the diagram, 
+architecture or threat modeling diagrams tend to share a more or less common structure and StartLeft pretends to take 
+advantage of this to automatize the processing of the diagrams to create threat models in the OTM format.
 
 
 ### Drawio Shapes
-Drawio Shapes have predefined shapes that can be reused in every diagram. StartLeft is able to identify this kind of 
+Drawio provides the users with predefined shapes that can be reused in every diagram. StartLeft is able to identify this kind of 
 shapes so that their mappings can be also reused for converting different diagrams. This is the case, for example, of 
 the
 [Drawio AWS shapes](https://www.drawio.com/blog/aws-diagrams),
-that are prebuilt shapes which represent a bunch of reusable AWS components. This feature allows StartLeft clients
+a library of reusable AWS components. This feature allows StartLeft clients
 like [IriusRisk](https://iriusrisk.com) to define a 
 [default mapping file with all these stencils](https://github.com/iriusrisk/startleft/blob/main/examples/drawio/iriusrisk-drawio-mapping.yaml) 
 and send it in every request to StartLeft so the user could reuse this mapping file for every drawio file with predefined shapes
@@ -43,7 +42,7 @@ in both mapping files, the mapping in the custom mapping file has preference ove
   mappings for everything you want to be processed.
 
 Regarding the usage of StartLeft to converting Drawio files,
-you can check the manuals for the [REST API](../../usage/REST-API.md).
+you can check the manuals for the [REST API](../../../usage/REST-API.md).
 
 ## Accepted formats
 ---
@@ -57,7 +56,7 @@ You can parse drawio on both formats:
 
 ---
 Suppose you have an architecture diagram like the one below, that contains some predefined AWS shapes: 
-VPC, EC2, SQS and Aurora DDBB.
+VPC, EC2, SQS and Aurora DB.
 
 ![img/drawio-basic-example.png](img/drawio-basic-example.png)
 
