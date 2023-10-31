@@ -1,33 +1,19 @@
 from typing import Dict
-from unittest.mock import MagicMock, Mock
+from unittest.mock import MagicMock
 
 import pytest
 from pytest import mark, param, fixture
 
 from sl_util.sl_util.dict_utils import compare_dict
 from sl_util.sl_util.file_utils import get_as_str, get_as_dict
-from slp_drawio.slp_drawio.load.drawio_to_dict import DrawIOToDict, _get_file_content
+from slp_drawio.slp_drawio.load.drawio_to_dict import DrawIOToDict
 from slp_drawio.tests.resources.test_resource_paths import aws_minimal_drawio, aws_minimal_xml, \
     aws_minimal_drawio_as_json
 
 
-@mark.parametrize('content,expected', [
-    param(b'something', 'something', id='right content'),
-    param(b'', None, id='empty content'),
-    param(None, None, id='no content'),
-])
-def test_get_file_content(content: str, expected):
-    # GIVEN a mocked SpooledTemporaryFile read method
-    file_mock = Mock(read=lambda: content)
-
-    # WHEN _get_file_content is invoked
-    # THEN it returns the content of the file
-    assert _get_file_content(file_mock) == expected
-
-
 @fixture(autouse=True)
 def read_mock(mocker, content):
-    mocker.patch('slp_drawio.slp_drawio.load.drawio_to_dict._get_file_content', side_effect=[content])
+    mocker.patch('slp_drawio.slp_drawio.load.drawio_to_dict.read_byte_data', side_effect=[content])
 
 
 class TestDrawioToDict:

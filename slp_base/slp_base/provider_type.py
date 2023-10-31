@@ -3,6 +3,7 @@ from otm.otm.provider import Provider
 
 application_json = 'application/json'
 text_plain = 'text/plain'
+text_xml = 'text/xml'
 application_octet_stream = 'application/octet-stream'
 application_xml = 'application/xml'
 
@@ -22,7 +23,7 @@ class DiagramType(str, Provider):
     LUCID = ("LUCID", "Lucidchart", RepresentationType.DIAGRAM,
              ['application/vnd.ms-visio.drawing.main+xml', application_octet_stream, 'application/zip'])
     DRAWIO = ("DRAWIO", "Drawio", RepresentationType.DIAGRAM,
-              [application_octet_stream, application_xml, text_plain])
+              [application_octet_stream, application_xml, text_xml, text_plain])
 
 
 class EtmType(str, Provider):
