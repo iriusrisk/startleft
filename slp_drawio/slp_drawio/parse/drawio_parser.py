@@ -1,12 +1,17 @@
+import logging
+
 from otm.otm.entity.otm import OTM
 from otm.otm.otm_builder import OTMBuilder
-
+from slp_base import OTMBuildingError
 from slp_base.slp_base.provider_parser import ProviderParser
 from slp_base.slp_base.provider_type import DiagramType
 from slp_drawio.slp_drawio.load.drawio_mapping_file_loader import DrawioMapping
 from slp_drawio.slp_drawio.objects.diagram_objects import Diagram
 from slp_drawio.slp_drawio.parse.diagram_mapper import DiagramMapper
-from slp_drawio.slp_drawio.parse.tranformers.parent_calculator_transformer import ParentCalculatorTransformer
+from slp_drawio.slp_drawio.parse.transformers.default_trustzone_transformer import DefaultTrustZoneTransformer
+from slp_drawio.slp_drawio.parse.transformers.parent_calculator_transformer import ParentCalculatorTransformer
+
+logger = logging.getLogger(__name__)
 
 
 class DrawioParser(ProviderParser):
@@ -15,23 +20,26 @@ class DrawioParser(ProviderParser):
     """
 
     def __init__(self, project_id: str, project_name: str, diagram: Diagram, mapping: DrawioMapping):
-        self.diagram = diagram
-        self.mapping = mapping
         self.project_id = project_id
         self.project_name = project_name
+        self.diagram = diagram
+        self.mapping = mapping
 
     def build_otm(self) -> OTM:
-        self.map_components_and_trustzones()
+        try:
+            DiagramMapper(self.diagram, self.mapping).map()
 
-        # TODO Implement and call Transformers here
-        ParentCalculatorTransformer(self.diagram).transform()
+            ParentCalculatorTransformer(self.diagram).transform()
+            DefaultTrustZoneTransformer(self.diagram).transform()
 
-        otm = self.__build_otm()
-
-        return otm
-
-    def map_components_and_trustzones(self):
-        DiagramMapper(self.project_id, self.diagram, self.mapping).map()
+            return self.__build_otm()
+        except OTMBuildingError as e:
+            raise e
+        except Exception as e:
+            logger.error(f'{e}')
+            detail = e.__class__.__name__
+            message = e.__str__()
+            raise OTMBuildingError('Error building the threat model with the given files', detail, message)
 
     def __build_otm(self):
         otm = OTMBuilder(self.project_id, self.project_name, DiagramType.DRAWIO).build()
@@ -42,4 +50,3 @@ class DrawioParser(ProviderParser):
         otm.trustzones = [t.otm for t in self.diagram.trustzones]
 
         return otm
-

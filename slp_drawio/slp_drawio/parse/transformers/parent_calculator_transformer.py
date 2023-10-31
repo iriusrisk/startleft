@@ -2,7 +2,7 @@ from typing import Optional
 
 from otm.otm.entity.parent_type import ParentType
 from slp_drawio.slp_drawio.objects.diagram_objects import DiagramComponent, DiagramTrustZone
-from slp_drawio.slp_drawio.parse.transformer.transformer import Transformer
+from slp_drawio.slp_drawio.parse.transformers.transformer import Transformer
 
 PARENT_TYPES = {
     DiagramComponent: ParentType.COMPONENT,

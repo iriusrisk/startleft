@@ -1,4 +1,5 @@
 import csv
+import json
 import os
 import tempfile
 from typing import List
@@ -14,6 +15,15 @@ def copy_to_disk(diag_file: tempfile.SpooledTemporaryFile, suffix: str):
 
 def delete(filename: str):
     os.unlink(filename)
+
+
+def get_as_str(filename: str) -> str:
+    with open(filename, 'r') as file:
+        return file.read()
+
+
+def get_as_dict(filename: str):
+    return json.loads(get_byte_data(filename))
 
 
 def get_byte_data(filename: str) -> bytes:

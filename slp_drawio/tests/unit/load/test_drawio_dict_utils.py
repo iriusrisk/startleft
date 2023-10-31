@@ -1,4 +1,3 @@
-
 # class TestDrawioDictUtils:
 import json
 from unittest.mock import patch
@@ -45,6 +44,22 @@ def test_get_attributes():
 ])
 def test_is_multiple_pages(source, expected):
     assert drawio_dict_utils.is_multiple_pages(source) == expected
+
+
+@pytest.mark.parametrize('source,expected', [
+    pytest.param({'mxfile': {'diagram': {'mxGraphModel': {'pageHeight': 123, 'pageWidth': 456}}}},
+                 {'height': 123, 'width': 456},
+                 id='exists size'),
+    pytest.param({'mxfile': {'diagram': {'mxGraphModel': {}}}}, None, id='not dimensions'),
+    pytest.param({}, None, id='not model')
+])
+def test_get_diagram_size(source, expected):
+    # GIVEN a mxfile diagram
+    # WHEN drawio_dict_utils::test_get_diagram_size is called
+    size = drawio_dict_utils.get_diagram_size(source)
+
+    # THEN the size of the diagram or the default is returned
+    assert size == expected
 
 
 def test_get_mx_cell_components():

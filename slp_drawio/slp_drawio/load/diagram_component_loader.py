@@ -2,9 +2,7 @@ import re
 from typing import List, Dict
 
 from otm.otm.entity.representation import RepresentationElement
-from slp_base import LoadingDiagramFileError
-from slp_drawio.slp_drawio.load.drawio_dict_utils import is_multiple_pages, \
-    get_attributes, get_position, get_size, get_mx_cell_components
+from slp_drawio.slp_drawio.load.drawio_dict_utils import get_attributes, get_position, get_size, get_mx_cell_components
 from slp_drawio.slp_drawio.objects.diagram_objects import DiagramComponent
 
 __CALCULATE_SHAPE_TYPE_EQUIVALENCES = resource_types_equivalences = {
@@ -67,11 +65,6 @@ class DiagramComponentLoader:
         self._source: dict = source
 
     def load(self) -> [DiagramComponent]:
-        if is_multiple_pages(self._source):
-            raise LoadingDiagramFileError(
-                'Diagram file is not valid', 'Diagram File is not compatible',
-                'DrawIO processor does not accept diagrams with multiple pages')
-
         result: List[DiagramComponent] = []
 
         mx_cell_components = get_mx_cell_components(self._source)
