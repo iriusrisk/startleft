@@ -7,7 +7,7 @@
 This tool can retrieve all the shapes' information available (type, name) 
 and their candidate OTM type by emulating the parse method. 
 
-You can find [here](../../usage/Command-Line-Interface.md#summary) a complete explanation of this CLI function.
+You can find [here](../../../usage/Command-Line-Interface.md#summary) a complete explanation of this CLI function.
 
 ## Summary Options
 This summary tool can be executed with multiple configurations:
