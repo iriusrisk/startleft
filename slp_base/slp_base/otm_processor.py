@@ -4,7 +4,6 @@ from otm.otm.entity.otm import OTM
 from otm.otm.otm_pruner import OTMPruner
 from slp_base.slp_base.mapping import MappingLoader, MappingValidator
 from slp_base.slp_base.otm_representations_pruner import OTMRepresentationsPruner
-from slp_base.slp_base.otm_trustzone_unifier import OTMTrustZoneUnifier
 from slp_base.slp_base.otm_validator import OTMValidator
 from slp_base.slp_base.provider_loader import ProviderLoader
 from slp_base.slp_base.provider_parser import ProviderParser
@@ -43,7 +42,6 @@ class OTMProcessor(metaclass=abc.ABCMeta):
             self._clean_resources()
 
         OTMRepresentationsPruner(otm).prune()
-        OTMTrustZoneUnifier(otm).unify()
         OTMValidator().validate(otm.json())
 
         return otm

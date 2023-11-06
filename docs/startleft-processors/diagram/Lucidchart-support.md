@@ -28,6 +28,25 @@ About the parsing logic:
 * Dataflows are calculated based on their position, what means that they do not necessarily need to _touch_ origin 
   or target shapes, but they have some tolerance.
 
+## Catch All Configuration
+This processor includes an exclusive functionality to activate the mapping for all the shapes not included in the components' mapper section.
+All the unknown shapes will be mapped to the type defined under the `catch_all` property
+```yaml
+configuration:
+  catch_all: empty-component
+```
+
+#### Skip
+This configuration defines a list of resources that will never be mapped.
+```yaml
+configuration:
+  skip:
+    - AmazonCloudWatch
+    - AmazonDynamoDB
+    - AmazonRoute53
+    - DataSharesAzure2021
+```
+
 ## An example
 
 In this example, we can see a Lucidchart diagram which includes different types of elements.
@@ -68,8 +87,6 @@ Then, we can map the generic shapes by name in a custom mapping file:
         
       - label: Android
         type: android-device-client
-
-    dataflows: []
     ```
 
 The expected result for this case should be an OTM like this:
@@ -254,7 +271,7 @@ curl --location --request POST localhost:5000/api/v1/startleft/diagram \
 ### Command line usage
 You can also use the Command Line option for this example, with the files downloaded in the previous section.
 
-Make sure StartLeft is [properly installed](../../../Quickstart-Guide-for-Beginners/#install-startleft) 
+Make sure StartLeft is [properly installed](../../Quickstart-Guide-for-Beginners.md#install-startleft) 
 and execute the following command:
 
 ```shell

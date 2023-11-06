@@ -16,6 +16,8 @@ class DiagramType(str, Provider):
              ['application/vnd.ms-visio.drawing.main+xml', 'application/octet-stream'])
     LUCID = ("LUCID", "Lucidchart", RepresentationType.DIAGRAM,
              ['application/vnd.ms-visio.drawing.main+xml', 'application/octet-stream', 'application/zip'])
+    # DRAWIO = ("DRAWIO", "Drawio", RepresentationType.DIAGRAM,
+    #           ['application/octet-stream', 'application/xml', 'text/plain'])
 
 
 class EtmType(str, Provider):

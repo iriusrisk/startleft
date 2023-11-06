@@ -1,0 +1,13 @@
+SOURCE,SOURCE_ELEMENT_TYPE,SOURCE_ELEMENT_NAME,OTM_MAPPED_TYPE
+lucid-aws-with-tz.vsdx,AWSCloud,Public Cloud,Trustzone[Public Cloud]
+lucid-aws-with-tz.vsdx,AWSCloudTrail,My CloudTrail,cloudtrail
+lucid-aws-with-tz.vsdx,AmazonAPIGateway_purple,My API Gateway,api-gateway
+lucid-aws-with-tz.vsdx,AmazonCloudWatch,My CloudWatch,cloudwatch
+lucid-aws-with-tz.vsdx,AmazonEC2,My EC2,ec2
+lucid-aws-with-tz.vsdx,AmazonSimpleStorageServiceS3,My Simple Storage Service (S3),s3
+lucid-aws-with-tz.vsdx,Client,Web browser,generic-client
+lucid-aws-with-tz.vsdx,DatabaseBlock,My DynamoDB,dynamodb
+lucid-aws-with-tz.vsdx,DefaultSquareBlock,Internet,Trustzone[Internet]
+lucid-aws-with-tz.vsdx,Mobileclient,Android,android-device-client
+lucid-aws-with-tz.vsdx,RectangleBlock,Private Secured Cloud,Trustzone[Private Secured Cloud]
+lucid-aws-with-tz.vsdx,SQLDatabaseAzure2021,SQL Database,CD-MICROSOFT-AZURE-SQL-DB

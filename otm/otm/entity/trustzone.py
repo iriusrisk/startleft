@@ -28,6 +28,7 @@ class Trustzone:
         json = {
             "id": self.id,
             "name": self.name,
+            "type": self.type,
             "risk": {
                 "trustRating": self.trustrating
             }

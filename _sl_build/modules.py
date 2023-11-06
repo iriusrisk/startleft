@@ -4,7 +4,8 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 STARTLEFT_MODULE = {'name': 'startleft', 'type': 'general', 'allowed_imports': ['slp_base', 'otm', 'sl_util']}
 # TODO Startleft needs to depend on TF and CFT processors until a decision is token about the search function
-STARTLEFT_MODULE['allowed_imports'].extend(['slp_cft', 'slp_tf'])
+# TODO Startleft needs to depend on VISIO processors until a decision is token about the summary function
+STARTLEFT_MODULE['allowed_imports'].extend(['slp_cft', 'slp_tf', 'slp_visio'])
 
 # TODO Dependency between otm and sl_util must be removed
 OTM_MODULE = {'name': 'otm', 'type': 'general', 'allowed_imports': ['sl_util']}
@@ -19,7 +20,9 @@ PROCESSORS = [
     {'name': 'slp_tfplan', 'type': 'processor', 'provider_type': 'TFPLAN', 'allowed_imports': _slp_allowed_imports},
     {'name': 'slp_visio', 'type': 'processor', 'provider_type': 'VISIO', 'allowed_imports': _slp_allowed_imports},
     {'name': 'slp_visio', 'type': 'processor', 'provider_type': 'LUCID', 'allowed_imports': _slp_allowed_imports},
-    {'name': 'slp_mtmt', 'type': 'processor', 'provider_type': 'MTMT', 'allowed_imports': _slp_allowed_imports}
+    {'name': 'slp_mtmt', 'type': 'processor', 'provider_type': 'MTMT', 'allowed_imports': _slp_allowed_imports},
+    # TODO Set type to processor to make the endpoint available
+    {'name': 'slp_drawio', 'provider_type': 'DRAWIO', 'allowed_imports': _slp_allowed_imports}
 ]
 
 """

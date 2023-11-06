@@ -1,5 +1,5 @@
 {
-    "otmVersion": "0.1.0",
+    "otmVersion": "0.2.0",
     "project": {
         "name": "name",
         "id": "id"
@@ -13,7 +13,8 @@
     ],
     "trustZones": [
         {
-            "id": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
+            "id": "349bc818-8b17-4f6a-b084-6396d932492c",
+            "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
             "name": "Public Cloud",
             "risk": {
                 "trustRating": 10
@@ -59,7 +60,7 @@
             "name": "foo",
             "type": "vpc",
             "parent": {
-                "trustZone": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+                "trustZone": "349bc818-8b17-4f6a-b084-6396d932492c"
             },
             "tags": [
                 "aws_vpc"

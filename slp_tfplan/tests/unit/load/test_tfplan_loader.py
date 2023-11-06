@@ -7,12 +7,12 @@ from unittest.mock import patch, Mock
 from networkx import DiGraph
 from pytest import raises, mark, param, fixture
 
+from sl_util.sl_util.str_utils import get_bytes
+from slp_base import LoadingIacFileError
 from slp_tfplan.slp_tfplan.load.tfplan_loader import TFPlanLoader
 from slp_tfplan.tests.resources import test_resource_paths
-from slp_base import LoadingIacFileError
+from slp_tfplan.tests.util.asserts import assert_resource_values
 from slp_tfplan.tests.util.builders import build_tfplan, generate_resources, generate_child_modules
-from slp_tfplan.tests.util.asserts import assert_common_properties
-from sl_util.sl_util.str_utils import get_bytes
 
 INVALID_YAML = test_resource_paths.invalid_yaml
 TF_FILE_YAML_EXCEPTION = JSONDecodeError('HLC2 cannot be processed as JSON', doc='sample-doc', pos=0)
@@ -77,9 +77,7 @@ class TestTFPlanLoader:
             assert resource['resource_type'] == f'r{i}-type'
             assert resource['resource_name'] == f'r{i}-name'
 
-            properties = resource['resource_properties']
-            assert_common_properties(properties)
-            assert properties['resource_address'] == f'r{i}-addr'
+            assert_resource_values(resource['resource_values'])
 
     @patch('yaml.load')
     def test_load_only_modules(self, yaml_mock):
@@ -108,9 +106,7 @@ class TestTFPlanLoader:
                 assert resource['resource_type'] == f'r{child_index}-type'
                 assert resource['resource_name'] == f'{module_address}.r{child_index}-name'
 
-                properties = resource['resource_properties']
-                assert properties['resource_address'] == f'r{child_index}-addr'
-                assert_common_properties(properties)
+                assert_resource_values(resource['resource_values'])
 
                 resource_index += 1
 
@@ -138,9 +134,7 @@ class TestTFPlanLoader:
         assert resource['resource_type'] == 'r1-type'
         assert resource['resource_name'] == 'cm1-addr.cm1-addr.r1-name'
 
-        properties = resource['resource_properties']
-        assert properties['resource_address'] == 'r1-addr'
-        assert_common_properties(properties)
+        assert_resource_values(resource['resource_values'])
 
     @patch('yaml.load')
     def test_load_complex_structure(self, yaml_mock):
@@ -165,9 +159,7 @@ class TestTFPlanLoader:
         assert resource['resource_type'] == 'r1-type'
         assert resource['resource_name'] == 'r1-name'
 
-        properties = resource['resource_properties']
-        assert properties['resource_address'] == 'r1-addr'
-        assert_common_properties(properties)
+        assert_resource_values(resource['resource_values'])
 
         # AND resource_type, resource_name and resource_properties from child modules are right
         resource = resources[1]
@@ -175,9 +167,7 @@ class TestTFPlanLoader:
         assert resource['resource_type'] == 'r1-type'
         assert resource['resource_name'] == 'cm1-addr.r1-name'
 
-        properties = resource['resource_properties']
-        assert properties['resource_address'] == 'r1-addr'
-        assert_common_properties(properties)
+        assert_resource_values(resource['resource_values'])
 
     @patch('yaml.load')
     def test_load_resources_same_name(self, yaml_mock):

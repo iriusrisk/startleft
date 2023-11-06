@@ -54,10 +54,15 @@ class ResourcesMatcherContainer(DeclarativeContainer):
 
     sgs_matcher = providers.Singleton(
         ResourceMatcher,
-        strategies=MatchStrategyContainer.sg_match_strategies
+        strategies=MatchStrategyContainer.sg_sg_match_strategies
     )
 
     component_sg_matcher = providers.Singleton(
         ResourceMatcher,
         strategies=MatchStrategyContainer.component_sg_match_strategies
+    )
+
+    sg_rule_matcher = providers.Singleton(
+        ResourceMatcher,
+        strategies=MatchStrategyContainer.sg_sg_rule_match_strategies
     )

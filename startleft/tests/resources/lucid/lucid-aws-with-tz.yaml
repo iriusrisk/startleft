@@ -21,6 +21,3 @@ components:
     
   - label: My DynamoDB
     type: dynamodb
-
-
-dataflows: []
