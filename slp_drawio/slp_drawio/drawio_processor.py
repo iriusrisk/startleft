@@ -1,3 +1,6 @@
+from starlette.datastructures import UploadFile
+
+from sl_util.sl_util.file_utils import get_byte_data, get_byte_data_from_upload_file
 from slp_base import OTMProcessor, ProviderValidator, ProviderLoader, MappingValidator, MappingLoader, ProviderParser
 from slp_drawio.slp_drawio.load.drawio_loader import DrawioLoader
 from slp_drawio.slp_drawio.load.drawio_mapping_file_loader import DrawioMappingFileLoader
@@ -14,7 +17,8 @@ class DrawioProcessor(OTMProcessor):
     def __init__(self, project_id: str, project_name: str, source, mappings: [bytes],  diag_type=None):
         self.project_id = project_id
         self.project_name = project_name
-        self.source = source
+        self.source: bytes = \
+            get_byte_data_from_upload_file(source) if isinstance(source, UploadFile) else get_byte_data(source.name)
         self.mappings = mappings
         self.loader = None
         self.mapping_loader = None

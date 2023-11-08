@@ -1,12 +1,12 @@
 import base64
 import logging
 import zlib
-from tempfile import SpooledTemporaryFile
 from typing import List
 from urllib.parse import unquote
 
 from defusedxml import ElementTree
 
+from sl_util.sl_util.file_utils import read_byte_data
 from sl_util.sl_util.xml_to_dict import XmlToDict
 
 logger = logging.getLogger(__name__)
@@ -31,19 +31,13 @@ def _decode_diagram(content: str) -> str:
         return ElementTree.tostring(tree, encoding=DEFAULT_ENCODING)
 
 
-def _get_file_content(file: SpooledTemporaryFile) -> str:
-    content = file.read()
-    if content:
-        return content.decode(encoding=DEFAULT_ENCODING)
-
-
 class DrawIOToDict:
 
     def __init__(self, source):
         self.source = source
 
     def to_dict(self) -> dict:
-        content = _get_file_content(self.source.file)
+        content = read_byte_data(self.source)
         if not content:
             return {}
 
