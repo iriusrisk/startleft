@@ -38,7 +38,7 @@ class MTMTComponentParser(MTMTGeneralParser):
         representation = calculator.calculate_representation()
         if mtmt_type is not None:
             component = Component(component_id=border.id,
-                                  name=border.name or '',
+                                  name=border.name or border.stencil_name,
                                   component_type=mtmt_type,
                                   parent_type=parent_type,
                                   parent=parent_id,

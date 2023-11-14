@@ -48,7 +48,7 @@ class MTMTTrustzoneParser(MTMTGeneralParser):
             calculator = TrustzoneRepresentationCalculator(self.diagram_representation, border)
             representations = calculator.calculate_representation()
             tz = Trustzone(trustzone_id=border.id,
-                           name=border.name or '',
+                           name=border.name or border.stencil_name,
                            type=mtmt_type,
                            parent_type=parent_type,
                            parent=parent_id,
