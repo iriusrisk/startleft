@@ -1,41 +1,46 @@
 import base64
 import logging
 import zlib
-from tempfile import SpooledTemporaryFile
+from typing import List
 from urllib.parse import unquote
 
 from defusedxml import ElementTree
 
+from sl_util.sl_util.file_utils import read_byte_data
 from sl_util.sl_util.xml_to_dict import XmlToDict
 
 logger = logging.getLogger(__name__)
 
 DEFAULT_ENCODING = 'utf8'
-DIAGRAM_TAG = 'diagram'
+
+
+def __is_diagram_encoded(diagram_tags: List) -> bool:
+    return len(diagram_tags) <= 1
+
+
+def _decode_diagram(content: str) -> str:
+    tree = ElementTree.XML(content)
+    tree_tag = tree.find('diagram')
+    if __is_diagram_encoded(list(tree_tag.iter())):
+        data = base64.b64decode(tree_tag.text, validate=True)
+        xml = zlib.decompress(data, wbits=-15).decode()
+        xml = unquote(xml)
+        diagram_tree = ElementTree.fromstring(xml)
+        tree_tag.append(diagram_tree)
+        tree_tag.text = None
+        return ElementTree.tostring(tree, encoding=DEFAULT_ENCODING)
 
 
 class DrawIOToDict:
 
     def __init__(self, source):
-        file: SpooledTemporaryFile = source.file
-        self.encoding = 'utf8'
-        self.content: str = file.read().decode()
-        self.decode_b64_tag('diagram')
+        self.source = source
 
     def to_dict(self) -> dict:
-        return XmlToDict(self.content).to_dict()
+        content = read_byte_data(self.source)
+        if not content:
+            return {}
 
-    def decode_b64_tag(self, tag):
-        tree = ElementTree.XML(self.content)
-        tree_tag = tree.find(tag)
-        children = list(tree_tag.iter())
-        if len(children) <= 1:
-            logger.debug(f'{tag} tag is encoded')
-            data = base64.b64decode(tree_tag.text, validate=True)
-            xml = zlib.decompress(data, wbits=-15).decode()
-            xml = unquote(xml)
-            diagram_tree = ElementTree.fromstring(xml)
-            tree_tag.append(diagram_tree)
-            tree_tag.text = None
-            self.content = ElementTree.tostring(tree, encoding=self.encoding)
-            logger.debug(f'{tag} tag decoded successfully')
+        diagram = _decode_diagram(content) or content
+
+        return XmlToDict(diagram).to_dict()

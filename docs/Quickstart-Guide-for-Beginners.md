@@ -145,7 +145,7 @@ If we take the same mapping file we have downloaded for the `parse` command, we 
 
 #### **Diagram mapping files**
 Also described in the processors' documentation, allows you to validate the format of mapping
-files used for diagram conversions as Visio and Lucidchart. 
+files used for diagram conversions as Visio, Lucidchart and Drawio. 
     
 Let's download the IriusRisk's Visio mapping file located in the `examples/visio` folder:
 ```shell
@@ -162,6 +162,12 @@ You can also validate Lucidchart mapping files like it is shown in this example:
 
     ```shell
     startleft validate --mapping-file iriusrisk-lucid-aws-mapping.yaml --mapping-type LUCID
+    ```
+To validate the  IriusRisk's Drawio mapping file located in the `examples/drawio` folder:
+???+ example "Drawio example"
+
+    ```shell
+    startleft validate --mapping-file iriusrisk-drawio-mapping.yaml --mapping-type DRAWIO
     ```
 #### **External Threat Model mapping files**
 The last type of mapping file we can validate is External Threat Model. This allows you to validate the format of mapping

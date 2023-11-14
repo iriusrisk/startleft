@@ -1,6 +1,6 @@
 from otm.otm.entity.parent_type import ParentType
 from slp_drawio.slp_drawio.objects.diagram_objects import Diagram, DiagramComponent, DiagramTrustZone, DiagramDataflow
-from slp_drawio.slp_drawio.parse.tranformers.parent_calculator_transformer import ParentCalculatorTransformer, \
+from slp_drawio.slp_drawio.parse.transformers.parent_calculator_transformer import ParentCalculatorTransformer, \
     get_parent_type
 
 

@@ -1,9 +1,11 @@
 import csv
+import json
 import os
 import tempfile
 from typing import List
 
 from magic import Magic
+from starlette.datastructures import UploadFile
 
 
 def copy_to_disk(diag_file: tempfile.SpooledTemporaryFile, suffix: str):
@@ -16,10 +18,23 @@ def delete(filename: str):
     os.unlink(filename)
 
 
+def get_as_str(filename: str) -> str:
+    with open(filename, 'r') as file:
+        return file.read()
+
+
+def get_as_dict(filename: str):
+    return json.loads(get_byte_data(filename))
+
+
 def get_byte_data(filename: str) -> bytes:
     with open(filename, 'rb') as f:
         iac_data = f.read()
     return iac_data
+
+
+def get_byte_data_from_upload_file(upload_file: UploadFile) -> bytes:
+    return upload_file.file.read()
 
 
 def read_byte_data(data: bytes, encoding: str = 'utf-8') -> str:

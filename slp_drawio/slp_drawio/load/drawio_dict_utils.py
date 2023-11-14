@@ -1,4 +1,4 @@
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 
 
 def __get_as_mx_point_in_mx_geometry(attr: str, mx_geometry: Dict):
@@ -22,21 +22,41 @@ def __is_mx_cell_dataflow(mx_cell):
 
 
 def __is_mx_cell_component(mx_cell: Dict):
-    if 'mxGeometry' not in mx_cell:
+    mx_geometry = mx_cell.get('mxGeometry', {})
+    if not all(key in mx_geometry for key in ['height', 'width']):
         return False
     return not __is_mx_cell_dataflow(mx_cell)
 
 
-def __get_mx_cell_from_source(source):
+def __get_mx_cells(source) -> List[Dict]:
     return source.get("mxfile", {}).get("diagram", {}).get("mxGraphModel", {}).get("root", {}).get("mxCell", [])
 
 
 def get_mx_cell_components(source) -> List[Dict]:
-    return list(filter(lambda c: __is_mx_cell_component(c), __get_mx_cell_from_source(source)))
+    return list(filter(lambda c: __is_mx_cell_component(c), __get_mx_cells(source)))
 
 
-def get_mxcell_dataflows(source) -> List[Dict]:
-    return list(filter(lambda c: __is_mx_cell_dataflow(c), __get_mx_cell_from_source(source)))
+def get_mx_cell_dataflows(source) -> List[Dict]:
+    return list(filter(lambda c: __is_mx_cell_dataflow(c), __get_mx_cells(source)))
+
+
+def get_dataflow_tags(dataflow_id: str, source) -> List[str]:
+    tags: List[str] = []
+
+    for mx_cell in __get_mx_cells(source):
+        if dataflow_id == mx_cell.get('parent') and 'value' in mx_cell:
+            tags.append(mx_cell['value'])
+
+    return tags
+
+
+def get_diagram_size(source) -> Optional[Dict]:
+    model = source.get("mxfile", {}).get("diagram", {}).get("mxGraphModel", {})
+    if model:
+        height = model.get('pageHeight', None)
+        width = model.get('pageWidth', None)
+
+        return {'width': width, 'height': height} if height and width else None
 
 
 def is_multiple_pages(source):
