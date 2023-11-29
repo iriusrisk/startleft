@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="mxfile" type="mxfileType"/>
+    <xs:complexType name="mxCellType" mixed="true">
+        <xs:sequence>
+            <xs:element type="mxGeometryType" name="mxGeometry" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="id"/>
+        <xs:attribute type="xs:string" name="parent"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="style"/>
+        <xs:attribute type="xs:string" name="vertex"/>
+        <xs:attribute type="xs:string" name="source"/>
+        <xs:attribute type="xs:string" name="target"/>
+        <xs:attribute type="xs:string" name="edge"/>
+        <xs:attribute type="xs:string" name="connectable"/>
+    </xs:complexType>
+    <xs:complexType name="mxGeometryType" mixed="true">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element type="ArrayType" name="Array" minOccurs="0"/>
+            <xs:element type="mxPointType" name="mxPoint" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="x"/>
+        <xs:attribute type="xs:string" name="y"/>
+        <xs:attribute type="xs:string" name="width"/>
+        <xs:attribute type="xs:string" name="height"/>
+        <xs:attribute type="xs:string" name="as"/>
+        <xs:attribute type="xs:string" name="relative"/>
+    </xs:complexType>
+    <xs:complexType name="mxPointType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="x"/>
+                <xs:attribute type="xs:string" name="y"/>
+                <xs:attribute type="xs:string" name="as"/>
+            </xs:extension>
+        </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="ArrayType">
+    <xs:sequence>
+      <xs:element type="mxPointType" name="mxPoint" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="as"/>
+    </xs:complexType>
+    <xs:complexType name="rootType">
+        <xs:sequence>
+            <xs:element type="mxCellType" name="mxCell" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="mxGraphModelType">
+        <xs:sequence>
+            <xs:element type="rootType" name="root"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="dx"/>
+        <xs:attribute type="xs:string" name="dy"/>
+        <xs:attribute type="xs:string" name="grid"/>
+        <xs:attribute type="xs:string" name="gridSize"/>
+        <xs:attribute type="xs:string" name="guides"/>
+        <xs:attribute type="xs:string" name="tooltips"/>
+        <xs:attribute type="xs:string" name="connect"/>
+        <xs:attribute type="xs:string" name="arrows"/>
+        <xs:attribute type="xs:string" name="fold"/>
+        <xs:attribute type="xs:string" name="page"/>
+        <xs:attribute type="xs:string" name="pageScale"/>
+        <xs:attribute type="xs:string" name="pageWidth"/>
+        <xs:attribute type="xs:string" name="pageHeight"/>
+        <xs:attribute type="xs:string" name="math"/>
+        <xs:attribute type="xs:string" name="shadow"/>
+    </xs:complexType>
+    <xs:complexType name="diagramType" mixed="true">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element type="mxGraphModelType" name="mxGraphModel"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="id"/>
+        <xs:attribute type="xs:string" name="name"/>
+    </xs:complexType>
+    <xs:complexType name="mxfileType">
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element type="diagramType" name="diagram" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="host"/>
+        <xs:attribute type="xs:string" name="modified"/>
+        <xs:attribute type="xs:string" name="agent"/>
+        <xs:attribute type="xs:string" name="etag"/>
+        <xs:attribute type="xs:string" name="version"/>
+        <xs:attribute type="xs:string" name="type"/>
+        <xs:attribute type="xs:string" name="pages"/>
+    </xs:complexType>
+</xs:schema>

@@ -8,7 +8,6 @@ logger = logging.getLogger(__name__)
 
 class DrawioMapping:
     def __init__(self, trustzones: List[Dict], components: List[Dict]):
-        self.default_trustzone: Dict = next(filter(lambda tz: tz.get('default'), trustzones), trustzones[0])
         self.trustzones: List[Dict] = trustzones
         self.components: List[Dict] = components
 

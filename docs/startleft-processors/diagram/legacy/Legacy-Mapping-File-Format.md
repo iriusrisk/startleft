@@ -1,7 +1,7 @@
 ## Mapping file legacy format 
 
 Due to a backward compatibility StartLeft accepts the legacy mapping file format.
-For the current mapping file format, please read [Visio-Mapping](../Visio-Mapping.md)
+For the current mapping file format, please read [Visio-Mapping](../visio/Visio-Mapping.md)
 
 
 

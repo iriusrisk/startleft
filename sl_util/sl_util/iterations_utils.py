@@ -29,13 +29,16 @@ def remove_duplicates(duplicated_list: List) -> List:
 
 
 def compare_unordered_list_or_string(a: Union[str, List], b: Union[str, List]) -> bool:
-    if isinstance(a, str) and isinstance(b, str):
-        return a == b
-    elif isinstance(a, str) and isinstance(b, list):
-        return sorted([a]) == sorted(b)
-    elif isinstance(a, list) and isinstance(b, list):
-        return sorted(a) == sorted(b)
-    else:
+    try:
+        if isinstance(a, str) and isinstance(b, str):
+            return a == b
+        elif isinstance(a, str) and isinstance(b, list):
+            return sorted([a]) == sorted(b)
+        elif isinstance(a, list) and isinstance(b, str):
+            return sorted(a) == sorted([b])
+        elif isinstance(a, list) and isinstance(b, list):
+            return sorted(a) == sorted(b)
+    except TypeError:
         return False
 
 
@@ -49,3 +52,8 @@ def remove_keys(dictionary: dict, keys_to_remove: [str]) -> dict:
         if key_to_remove in filtered:
             filtered.pop(key_to_remove)
     return filtered
+
+
+def append_if_not_exists(element, _list: List):
+    if element not in _list:
+        _list.append(element)

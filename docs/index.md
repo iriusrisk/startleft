@@ -44,6 +44,7 @@ Split by type, the currently supported input formats are:
 
 * **Diagram**:
     * Microsoft Visio (including diagrams exported from Lucidchart).
+    * Drawio
 
 * **Threat Model**:
     * Microsoft Threat Modeling Tool (MTMT).

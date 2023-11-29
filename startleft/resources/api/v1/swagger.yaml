@@ -314,6 +314,7 @@ components:
       enum:
         - VISIO
         - LUCID
+        - DRAWIO
       type: string
       description: Type of Diagram file
       example: VISIO

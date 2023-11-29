@@ -14,6 +14,11 @@ def generate_size_error(provider: Provider, source_file_name: str, exception=Sou
                      message=f'Provided {source_file_name} is not valid. Invalid size')
 
 
+def generate_schema_error(provider: Provider, source_file_name: str, exception=SourceFileNotValidError):
+    return exception(title=f'{provider.provider_name} file is not valid',
+                     message=f'Provided {source_file_name} is not valid. It does not comply with schema')
+
+
 class ProviderValidator(metaclass=abc.ABCMeta):
     """
     Formal Interface to validate the provider source data

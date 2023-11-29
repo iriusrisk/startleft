@@ -100,6 +100,7 @@ class TestMTMTConnectorParser:
     def test_model_dataflow_without_name_file(self):
         # GIVEN a line without name
         line = MagicMock()
+        line.id = 'id'
         line.name = None
         mtmt = MTMT(None, [line], None, None)
 
@@ -107,4 +108,4 @@ class TestMTMTConnectorParser:
         dataflows = MTMTConnectorParser(mtmt).parse()
 
         # THEN no dataflow has None as name
-        assert dataflows[0].name is not None
+        assert dataflows[0].name == 'id-dataflow'

@@ -63,7 +63,7 @@ particular behavior for the processor.
 Also note that all three are mandatory and have to be included in each mapping file, even if they only contain an empty array.
 
 ### Mapping TrustZones 
-The [OTM standard](../../Open-Threat-Model-(OTM).md) defines that every component in the threat model must have a 
+The [OTM standard](../../../Open-Threat-Model-(OTM).md) defines that every component in the threat model must have a 
 parent, so you must make sure that the mapping file contains a mapping entry for all the TrustZones present in the 
 diagram as well as a default one so, if no parent can be calculated for a component, it can fall into this default 
 TrustZone.
@@ -191,7 +191,7 @@ the id in the Visio file
 
 
 >Due to a backward compatibility StartLeft accepts as well the legacy mapping file format.
->Please read [Legacy-Mapping-File-Format](legacy/Legacy-Mapping-File-Format.md)
+>Please read [Legacy-Mapping-File-Format](../legacy/Legacy-Mapping-File-Format.md)
 
 
 #### Default TrustZone not defined
