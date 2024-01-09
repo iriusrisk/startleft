@@ -70,7 +70,7 @@ components:
   - label: cloudflare_record
     type: empty-component
 
-  - label: aws_s3_bucket
+  - label: [aws_s3_bucket, aws_s3_bucket_object]
     type: s3
 
   - label: aws_secretsmanager_secret
@@ -153,7 +153,7 @@ components:
   - label: {$regex: ^aws_sfn_\w*$}
     type: step-functions
 
-  - label: {$regex: ^aws_waf_\w*$}
+  - label: {$regex: ^aws_waf(.*)_\w*$}
     type: CD-WAF
     $singleton: true
 
@@ -168,6 +168,118 @@ components:
   - label: {$regex: ^aws_kinesis_firehose_\w*$}
     type: kinesis-data-firehose
     $singleton: true
+
+  - label: {$regex: ^aws_iam_\w*$}
+    type: CD-AWS-IAM
+    $singleton: true
+
+  - label: {$regex: ^aws_cloudwatch_event_\w*$}
+    type: eventbridge
+    $singleton: true
+
+  - label: {$regex: ^aws_codebuild_\w*$}
+    type: CD-CODEBUILD
+    $singleton: true
+
+  - label: {$regex: ^aws_codepipeline\w*$}
+    type: CD-CODEPIPELINE
+    $singleton: true
+
+  - label: aws_ebs_volume
+    type: elastic-block-store
+
+  - label: {$regex: ^aws_shield_\w*$}
+    type: CD-SHIELD
+    $singleton: true
+
+  - label: {$regex: ^aws_cloudformation_\w*$}
+    type: CD-CLOUDFORMATION
+    $singleton: true
+
+  - label: aws_glue_job
+    type: CD-GLUE
+
+  - label: aws_glue_registry
+    type: CD-GLUE-SCHEMA-REGISTRY
+
+  - label: aws_efs_file_system
+    type: elastic-file-system
+
+  - label: aws_transfer_server
+    type: CD-TRANSFER-FML
+
+  - label: aws_codecommit_repository
+    type: CD-CODECOMMIT
+
+  - label: aws_globalaccelerator_accelerator
+    type: CD-GLOBAL-ACC
+
+  - label: {$regex: ^aws_dms_\w*$}
+    type: CD-DMS
+    $singleton: true
+
+  - label: {$regex: ^aws_iot_\w*$}
+    type: CD-IOT-CORE
+    $singleton: true
+
+  - label: {$regex: ^aws_medialive_\w*$}
+    type: CD-MEDIALIVE
+    $singleton: true
+
+  - label: {$regex: ^aws_gamelift_\w*$}
+    type: CD-GAMELIFT
+    $singleton: true
+
+  - label: {$regex: ^aws_directory_service_\w*$}
+    type: CD-DIR-SERVICE
+    $singleton: true
+
+  - label: {$regex: ^aws_appsync_\w*$}
+    type: CD-APPSYNC
+    $singleton: true
+
+  - label: {$regex: ^aws_fms_\w*$}
+    type: firewall-manager
+    $singleton: true
+
+  - label: aws_neptune_cluster
+    type: CD-NEPTUNE
+
+  - label: aws_ec2_transit_gateway
+    type: CD-AWS-TRANSIT-GW
+
+  - label: {$regex: ^aws_batch_\w*$}
+    type: CD-BATCH
+    $singleton: true
+
+  - label: aws_elastic_beanstalk_application
+    type: CD-ELASTIC-BEANSTALK
+
+  - label: {$regex: ^aws_dx_\w*$}
+    type: direct-connect
+    $singleton: true
+
+  - label: aws_emr_cluster
+    type: CD-EMR
+
+  - label: aws_msk_cluster
+    type: CD-MSK
+
+  - label: aws_elastictranscoder_pipeline
+    type: CD-ELASTIC-TRANSCODER
+
+  - label: aws_sagemaker_app
+    type: CD-SAGEMAKER
+
+  # AZURE
+  - label: [ "azurerm_data_share", "azurerm_data_share_account" ]
+    type: CD-MICROSOFT-AZURE-DATA-SHARE
+
+  - label: azurerm_elastic_cloud_elasticsearch
+    type: CD-MICROSOFT-AZURE-ELASTICSEARCH
+
+  - label: [ "azurerm_media_services_account", "azurerm_media_services_account_filter" ]
+    type: CD-MICROSOFT-AZURE-MEDIA-SERVICES
 
 configuration:
   attack_surface:
