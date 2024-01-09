@@ -140,6 +140,14 @@ components:
     tags:
       - { $path: "Type" }
 
+  - id: { $format: "{name}" }
+    type: aws-lambda-function
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::Serverless::Function']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
   - id:     {$format: "{name}"}
     type:   cloudwatch
     name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "cloudwatch (grouped)" }}}
@@ -375,6 +383,86 @@ components:
     tags:
       - { $path: "Type" }
 
+  - id: { $format: "{name}" }
+    type: CD-AWS-IAM
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::IAM::Role']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: CD-CODEBUILD
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::CodeBuild::Project']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: CD-CODEPIPELINE
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::CodePipeline::Pipeline']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: eventbridge
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::Events::Rule']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: CD-CLOUDFORMATION
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::CloudFormation::Stack']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: CD-GLUE
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::Glue::Table']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: CD-DMS
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::DMS::ReplicationTask']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: api-gateway
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::Serverless::Api']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: CD-EC2-AUTO-SCALING
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::AutoScaling::AutoScalingGroup']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: elastic-file-system
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::EFS::MountTarget']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
   - id:     {$format: "{name}"}
     type:   CD-SES
     name:   {$numberOfSources: {oneSource:{$path: "_key"}, multipleSource:{ $format: "CD-SES (grouped)" }}}
@@ -396,6 +484,14 @@ components:
     name:   {$path: "_key"}
     $source: {$root: "Resources|squash(@)[?starts_with(Type, 'AWS::StepFunctions::StateMachine')]"}
     parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+  - id: { $format: "{name}" }
+    type: step-functions
+    name: { $path: "_key" }
+    $source: { $root: "Resources|squash(@)[?Type=='AWS::Serverless::StateMachine']" }
+    parent: b61d6911-338d-46a8-9f39-8dcd24abfe91
     tags:
       - { $path: "Type" }
 
