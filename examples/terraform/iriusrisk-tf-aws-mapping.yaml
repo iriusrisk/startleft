@@ -43,8 +43,8 @@ components:
   - type:        empty-component
     $source:     {$type: "aws_vpc_endpoint"}
     parent:      {$path: "resource_properties.subnet_ids"}
-#   (Previous) parent:      {$findFirst: ["*.subnet_ids[]", "*.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('aws_[\\w-]+\\.', '', @) | re_sub('\\.id', '', @)"]}
-#   This findFirst never executes the second condition as *.subnet_ids[] always will return an array (maybe empty) and findFirst only works with None
+  #   (Previous) parent:      {$findFirst: ["*.subnet_ids[]", "*.vpc_id | [0] | re_sub('[\\$\\{\\}]', '', @) | re_sub('aws_[\\w-]+\\.', '', @) | re_sub('\\.id', '', @)"]}
+  #   This findFirst never executes the second condition as *.subnet_ids[] always will return an array (maybe empty) and findFirst only works with None
 
 
   - type:        empty-component
@@ -209,6 +209,15 @@ components:
 
   - type: load-balancer
     $source: {$module: "terraform-aws-modules/alb/aws"}
+
+  - type: CD-MICROSOFT-AZURE-DATA-SHARE
+    $source: { $type: [ "azurerm_data_share", "azurerm_data_share_account" ] }
+
+  - type:        CD-MICROSOFT-AZURE-ELASTICSEARCH
+    $source:     {$type: "azurerm_elastic_cloud_elasticsearch"}
+
+  - type:        CD-MICROSOFT-AZURE-MEDIA-SERVICES
+    $source:     {$type: [ "azurerm_media_services_account", "azurerm_media_services_account_filter" ]}
 
 dataflows:
   #### Security Groups ####

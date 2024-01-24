@@ -3,22 +3,16 @@ trustzones:
     label: Internet (default)
     type: f0ba7722-39b6-4c81-8290-a30a248bb8d9
 
-#  - label: Public Cloud
-#    type: Public Cloud
-#    id: b61d6911-338d-46a8-9f39-8dcd24abfe91
-#
-#  - label: Private Secured Cloud
-#    type: Private Secured
-#    id: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
-#
-#  - label: AWSCloud
-#    type: Public Cloud
-#    id: b61d6911-338d-46a8-9f39-8dcd24abfe91
+  - label: Public Cloud
+    type: b61d6911-338d-46a8-9f39-8dcd24abfe91
+
+  - label: Private Secured Cloud
+    type: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+
+  - label: [ AWSCloud, AWSCloudAlt, AWSCloudalt, AWSCloudContainer ]
+    type: b61d6911-338d-46a8-9f39-8dcd24abfe91
 
 components:
-  - label: [ AWSCloud, AWSCloudAlt, AWSCloudalt, AWSCloudContainer ]
-    type: empty-component
-
   - label: ACAzureAutomationBlock
     type: CD-MICROSOFT-AZURE-AUTOMATION
   - label: [ ACMcertificatemanager, AWSCertificateManager, CertificateManager ]
@@ -368,8 +362,3 @@ components:
     type: vpc
   - label: { $regex: "^(AmazonEC2_?|EC2)a-zA-Z?[0-9]?a-z?(Instance|instance)s?$" }
     type: ec2
-
-dataflows: [ ]
-
-configuration:
-  catch_all: empty-component
