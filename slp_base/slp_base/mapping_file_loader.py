@@ -5,6 +5,7 @@ from deepmerge import always_merger
 
 from slp_base import LoadingMappingFileError
 from slp_base.slp_base.mapping import validate_size, MappingLoader
+from slp_base.slp_base.mapping_file_sorter import MappingFileSorter
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +24,7 @@ class MappingFileLoader(MappingLoader):
         validate_size(self.mapping_files[0])
 
         try:
-            for mapping_file_data in self.mapping_files:
+            for mapping_file_data in MappingFileSorter(self.mapping_files).sort():
                 if not mapping_file_data:
                     continue
                 logger.info('Loading mapping data')
