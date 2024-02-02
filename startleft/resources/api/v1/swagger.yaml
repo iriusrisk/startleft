@@ -315,6 +315,7 @@ components:
         - VISIO
         - LUCID
         - DRAWIO
+        - ABACUS
       type: string
       description: Type of Diagram file
       example: VISIO

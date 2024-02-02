@@ -24,6 +24,8 @@ class DiagramType(str, Provider):
              ['application/vnd.ms-visio.drawing.main+xml', application_octet_stream, 'application/zip'])
     DRAWIO = ("DRAWIO", "Drawio", RepresentationType.DIAGRAM,
               [application_octet_stream, application_xml, text_xml, text_plain])
+    ABACUS = ("ABACUS", "Abacus", RepresentationType.DIAGRAM,
+              [application_octet_stream, application_json, text_plain, text_plain])
 
 
 class EtmType(str, Provider):
