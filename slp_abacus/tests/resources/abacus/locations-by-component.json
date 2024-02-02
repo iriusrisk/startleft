@@ -1,0 +1,48 @@
+
+// https://santander.avolutionsoftware.com/api/Components(258631)/InConnections?$filter=ConnectionTypeEEID eq 13890
+
+// getting locations filtered by a specfic component using the connection 'hosts' which has ID 13890 for the component "SST PoC Webpage" which has the ID 257831
+
+{
+    "@odata.context": "https://santander.avolutionsoftware.com/api/$metadata#Connections",
+    "value": [
+        {
+            "EEID": 259247,
+            "Description": "",
+            "Name": "Hosts",
+            "BaselineElementEEID": 259247,
+            "Created": "2023-04-25T21:00:34Z",
+            "CreatedBy": "Gabriel.Rensi.Silva",
+            "Modified": "2023-04-25T21:00:34Z",
+            "ModifiedBy": "Gabriel.Rensi.Silva",
+            "ConnectionTypeEEID": 13890,
+            "ConnectionTypeName": "Hosts",
+            "ArchitectureEEID": 5,
+            "ArchitectureName": "F1RST",
+            "ParentEEID": 259251,
+            "SourceComponentEEID": 259244,
+            "SourceComponentName": "Azure - IFA - Zona 1 (PoC Irius Risk)",
+            "SinkComponentEEID": 258631,
+            "SinkComponentName": "SST PoC Webpage"
+        },
+        {
+            "EEID": 259258,
+            "Description": "",
+            "Name": "Hosts",
+            "BaselineElementEEID": 259258,
+            "Created": "2023-04-25T21:01:08Z",
+            "CreatedBy": "Gabriel.Rensi.Silva",
+            "Modified": "2023-04-25T21:01:08Z",
+            "ModifiedBy": "Gabriel.Rensi.Silva",
+            "ConnectionTypeEEID": 13890,
+            "ConnectionTypeName": "Hosts",
+            "ArchitectureEEID": 5,
+            "ArchitectureName": "F1RST",
+            "ParentEEID": 259262,
+            "SourceComponentEEID": 259255,
+            "SourceComponentName": "Azure - IFA - Zona 2 (PoC Irius Risk)",
+            "SinkComponentEEID": 258631,
+            "SinkComponentName": "SST PoC Webpage"
+        }
+    ]
+}

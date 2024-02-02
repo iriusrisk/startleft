@@ -1,0 +1,122 @@
+
+// https://santander.avolutionsoftware.com/api/Components?$filter=ArchitectureName eq 'F1RST' and ComponentTypeName eq 'Project' and Name eq 'POC00012023'&$expand=OutConnections($filter=SinkComponent/ComponentTypeName eq 'Digital Touchpoint' OR SinkComponent/ComponentTypeName eq 'Technical Component' OR SinkComponent/ComponentTypeName eq 'Repository'OR SinkComponent/ComponentTypeName eq 'Load Balancer')
+
+// get in f1rst architecture, for the project POC00012023 filtered by types 'Technical Component', 'Touchpoints' and 'Repositories'
+
+{
+    "@odata.context": "https://santander.avolutionsoftware.com/api/$metadata#Components",
+    "value": [
+        {
+            "EEID": 258635,
+            "Description": "This is a project  used for Irius Risk and Abacus integration purposes",
+            "Name": "POC00012023",
+            "BaselineElementEEID": 258635,
+            "Created": "2023-04-25T19:09:26Z",
+            "CreatedBy": "Gabriel.Rensi.Silva",
+            "Modified": "2023-05-03T12:39:25Z",
+            "ModifiedBy": "Gabriel.Rensi.Silva",
+            "ComponentTypeEEID": 153,
+            "ComponentTypeName": "Project",
+            "ArchitectureEEID": 5,
+            "ArchitectureName": "F1RST",
+            "ParentEEID": 59571,
+            "OutConnections": [
+                {
+                    "EEID": 258636,
+                    "Description": "",
+                    "Name": "Impacts",
+                    "BaselineElementEEID": 258636,
+                    "Created": "2023-04-25T19:10:03Z",
+                    "CreatedBy": "Gabriel.Rensi.Silva",
+                    "Modified": "2023-04-25T19:10:03Z",
+                    "ModifiedBy": "Gabriel.Rensi.Silva",
+                    "ConnectionTypeEEID": 173,
+                    "ConnectionTypeName": "Impacts",
+                    "ArchitectureEEID": 5,
+                    "ArchitectureName": "F1RST",
+                    "ParentEEID": -1,
+                    "SourceComponentEEID": 258635,
+                    "SourceComponentName": "POC00012023",
+                    "SinkComponentEEID": 258631,
+                    "SinkComponentName": "SST PoC Webpage"
+                },
+                {
+                    "EEID": 258642,
+                    "Description": "",
+                    "Name": "Impacts",
+                    "BaselineElementEEID": 258642,
+                    "Created": "2023-04-25T19:19:05Z",
+                    "CreatedBy": "Gabriel.Rensi.Silva",
+                    "Modified": "2023-04-25T19:19:05Z",
+                    "ModifiedBy": "Gabriel.Rensi.Silva",
+                    "ConnectionTypeEEID": 173,
+                    "ConnectionTypeName": "Impacts",
+                    "ArchitectureEEID": 5,
+                    "ArchitectureName": "F1RST",
+                    "ParentEEID": -1,
+                    "SourceComponentEEID": 258635,
+                    "SourceComponentName": "POC00012023",
+                    "SinkComponentEEID": 258639,
+                    "SinkComponentName": "SST PoC Integrator"
+                },
+                {
+                    "EEID": 258646,
+                    "Description": "",
+                    "Name": "Impacts",
+                    "BaselineElementEEID": 258646,
+                    "Created": "2023-04-25T19:20:28Z",
+                    "CreatedBy": "Gabriel.Rensi.Silva",
+                    "Modified": "2023-04-25T19:20:28Z",
+                    "ModifiedBy": "Gabriel.Rensi.Silva",
+                    "ConnectionTypeEEID": 173,
+                    "ConnectionTypeName": "Impacts",
+                    "ArchitectureEEID": 5,
+                    "ArchitectureName": "F1RST",
+                    "ParentEEID": -1,
+                    "SourceComponentEEID": 258635,
+                    "SourceComponentName": "POC00012023",
+                    "SinkComponentEEID": 258643,
+                    "SinkComponentName": "SST PoC Backend"
+                },
+                {
+                    "EEID": 258650,
+                    "Description": "",
+                    "Name": "Impacts",
+                    "BaselineElementEEID": 258650,
+                    "Created": "2023-04-25T19:22:10Z",
+                    "CreatedBy": "Gabriel.Rensi.Silva",
+                    "Modified": "2023-04-25T19:22:10Z",
+                    "ModifiedBy": "Gabriel.Rensi.Silva",
+                    "ConnectionTypeEEID": 173,
+                    "ConnectionTypeName": "Impacts",
+                    "ArchitectureEEID": 5,
+                    "ArchitectureName": "F1RST",
+                    "ParentEEID": -1,
+                    "SourceComponentEEID": 258635,
+                    "SourceComponentName": "POC00012023",
+                    "SinkComponentEEID": 258647,
+                    "SinkComponentName": "SST PoC Database"
+                },
+                {
+                    "EEID": 258665,
+                    "Description": "",
+                    "Name": "Impacts",
+                    "BaselineElementEEID": 258665,
+                    "Created": "2023-04-25T19:48:54Z",
+                    "CreatedBy": "Gabriel.Rensi.Silva",
+                    "Modified": "2023-04-25T19:48:54Z",
+                    "ModifiedBy": "Gabriel.Rensi.Silva",
+                    "ConnectionTypeEEID": 173,
+                    "ConnectionTypeName": "Impacts",
+                    "ArchitectureEEID": 5,
+                    "ArchitectureName": "F1RST",
+                    "ParentEEID": -1,
+                    "SourceComponentEEID": 258635,
+                    "SourceComponentName": "POC00012023",
+                    "SinkComponentEEID": 258662,
+                    "SinkComponentName": "SST PoC Static Content"
+                }
+            ]
+        }
+    ]
+}
