@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://iriusrisk.com/schema/otm-0.1.0.schema.json",
+    "$id": "https://iriusrisk.com/schema/otm-0.2.0.schema.json",
     "title": "Open Threat Model Specification",
     "$comment" : "Open Threat Model JSON schema is published under the terms of the Apache License 2.0.",
     "type": "object",
@@ -29,41 +29,47 @@
         },
         "representations": {
             "type": ["array", "null"],
-            "required": ["name", "id", "type"],
-            "properties": {
-                "name": {"type": "string"},
-                "id": {"type": "string"},
-                "type": {"type": "string"},
-                "description": {"type": ["string", "null"]},
-                "size": {"$ref": "#/definitions/size"},
-                "repository": {
-                    "type": ["object", "null"],
-                    "required": ["url"],
-                    "properties": {
-                        "url": {"type": ["string", "null"]}
-                    }
-                },
-                "attributes": {"type": ["object", "null"]}
+            "items": {
+                "type": "object",
+                "required": ["name", "id", "type"],
+                "properties": {
+                    "name": {"type": "string"},
+                    "id": {"type": "string"},
+                    "type": {"type": "string"},
+                    "description": {"type": ["string", "null"]},
+                    "size": {"$ref": "#/definitions/size"},
+                    "repository": {
+                        "type": ["object", "null"],
+                        "required": ["url"],
+                        "properties": {
+                            "url": {"type": ["string", "null"]}
+                        }
+                    },
+                    "attributes": {"type": ["object", "null"]}
+                }
             }
         },
         "assets": {
             "type": ["array", "null"],
-            "required": ["name", "id", "risk"],
-            "properties": {
-                "name": {"type": "string"},
-                "id": {"type": "string"},
-                "description": {"type": ["string", "null"]},
-                "risk": {
-                    "type": "object",
-                    "required": ["confidentiality", "integrity", "availability"],
-                    "properties": {
-                        "confidentiality": {"type": "number"},
-                        "integrity": {"type": "number"},
-                        "availability": {"type": "number"},
-                        "comment": {"type": ["string", "null"]}
-                    }
-                },
-                "attributes": {"type": ["object", "null"]}
+            "items": {
+                "type": "object",
+                "required": ["name", "id", "risk"],
+                "properties": {
+                    "name": {"type": "string"},
+                    "id": {"type": "string"},
+                    "description": {"type": ["string", "null"]},
+                    "risk": {
+                        "type": "object",
+                        "required": ["confidentiality", "integrity", "availability"],
+                        "properties": {
+                            "confidentiality": {"type": "number"},
+                            "integrity": {"type": "number"},
+                            "availability": {"type": "number"},
+                            "comment": {"type": ["string", "null"]}
+                        }
+                    },
+                    "attributes": {"type": ["object", "null"]}
+                }
             }
         },
         "trustZones": {

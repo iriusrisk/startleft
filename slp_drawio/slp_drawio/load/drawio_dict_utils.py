@@ -56,7 +56,10 @@ def get_diagram_size(source) -> Optional[Dict]:
         height = model.get('pageHeight', None)
         width = model.get('pageWidth', None)
 
-        return {'width': width, 'height': height} if height and width else None
+        try:
+            return {'width': int(width), 'height': int(height)} if height and width else None
+        except ValueError:
+            return None
 
 
 def is_multiple_pages(source):
