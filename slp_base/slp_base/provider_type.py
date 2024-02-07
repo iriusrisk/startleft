@@ -6,11 +6,21 @@ text_plain = 'text/plain'
 text_xml = 'text/xml'
 application_octet_stream = 'application/octet-stream'
 application_xml = 'application/xml'
+VALID_YAML_MIME_TYPES = [
+    "text/yml",
+    "text/yaml",
+    "text/x-yml",
+    "text/x-yaml",
+    "application/yml",
+    "application/yaml",
+    "application/x-yml",
+    "application/x-yaml"
+]
 
 
 class IacType(str, Provider):
     CLOUDFORMATION = ("CLOUDFORMATION", "CloudFormation", RepresentationType.CODE,
-                      [application_json, 'text/yaml', text_plain, application_octet_stream])
+                      [application_json, text_plain, application_octet_stream] + VALID_YAML_MIME_TYPES)
     TERRAFORM = ("TERRAFORM", "Terraform", RepresentationType.CODE,
                  [text_plain, application_octet_stream, application_json])
     TFPLAN = ("TFPLAN", "Terraform Plan", RepresentationType.CODE,
@@ -27,6 +37,5 @@ class DiagramType(str, Provider):
 
 
 class EtmType(str, Provider):
-
     MTMT = ("MTMT", "Microsoft Threat Modeling Tool", RepresentationType.THREAT_MODEL,
             [application_octet_stream, application_xml, text_plain])
