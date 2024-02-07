@@ -13,5 +13,5 @@ class AbacusMappingFileValidator(MultipleMappingFileValidator):
         super(AbacusMappingFileValidator, self).__init__(
             Schema.from_package('slp_abacus', self.schema_filename), mappings_data)
 
-    def validate(self):
-        logger.debug('Validating mapping files')
+    # def validate(self):
+    #     logger.debug('Validating mapping files')

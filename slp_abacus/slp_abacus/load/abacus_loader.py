@@ -27,14 +27,10 @@ class AbacusLoader(ProviderLoader):
             # Parse JSON and YAML data
             out_connections = json.loads(read_byte_data(self.abacus_source))["OutConnections"]
 
-            abacus_mapping: str = read_byte_data(self.mapping_files[0])
-            component_mappings = yaml.safe_load(abacus_mapping)['components']
-
             # Perform the mapping
-
             representation: DiagramRepresentation = DiagramRepresentation(self.project_id,
                                                                           {'width': 1000, 'height': 1000})
-            diagram_components = self.map_to_diagram_components(out_connections, component_mappings)
+            diagram_components = self.map_to_diagram_components(out_connections)
 
             # Output the list of DiagramComponent objects
             for component in diagram_components:
@@ -52,12 +48,13 @@ class AbacusLoader(ProviderLoader):
             raise LoadingDiagramFileError('Source file cannot be loaded', detail, message)
 
     # Function to map JSON data to DiagramComponent objects
-    def map_to_diagram_components(self, out_connections: [dict], component_mappings: [dict]):
+    def map_to_diagram_components(self, out_connections: [dict]):
         diagram_components = []
 
         for connection in out_connections:
             # for mapping in component_mappings:
             id_str: str = str(connection["EEID"])
+            # escape duplications
             if not any(c.otm.id == id_str for c in diagram_components):
                 diagram_components.append(
                     DiagramComponent(id=str(connection["EEID"]), name=connection["SinkComponentName"],

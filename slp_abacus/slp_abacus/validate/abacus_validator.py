@@ -16,6 +16,6 @@ class AbacusValidator(ProviderValidator):
         super(AbacusValidator, self).__init__()
 
 
-    def validate(self):
-        logger.info('Validating Abacus file')
+    # def validate(self):
+    #     logger.info('Validating Abacus file')
 
