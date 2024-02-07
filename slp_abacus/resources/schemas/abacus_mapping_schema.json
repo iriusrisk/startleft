@@ -2,16 +2,25 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Mapping File",
   "type": "object",
-  "required": ["trustzones", "components"],
+  "required": [
+    "trustzones",
+    "components"
+  ],
   "properties": {
     "trustzones": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["label"],
+        "required": [
+          "label"
+        ],
         "properties": {
-          "label": {"$ref": "#/definitions/LabelUnion"},
-          "type": {"$ref": "#/definitions/query"}
+          "label": {
+            "$ref": "#/definitions/LabelUnion"
+          },
+          "type": {
+            "$ref": "#/definitions/query"
+          }
         }
       }
     },
@@ -19,10 +28,16 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["label"],
+        "required": [
+          "label"
+        ],
         "properties": {
-          "label": {"$ref": "#/definitions/LabelUnion"},
-          "type": {"$ref": "#/definitions/query"}
+          "label": {
+            "$ref": "#/definitions/LabelUnion"
+          },
+          "type": {
+            "$ref": "#/definitions/query"
+          }
         }
       }
     }
@@ -35,35 +50,35 @@
         }
       ]
     },
-    "LabelUnion":{
-      "anyOf":[
+    "LabelUnion": {
+      "anyOf": [
         {
-          "type":"array",
-          "items":{
-            "type":"string"
+          "type": "array",
+          "items": {
+            "type": "string"
           }
         },
         {
-          "$ref":"#/definitions/RegExClass"
+          "$ref": "#/definitions/RegExClass"
         },
         {
-          "type":"string"
+          "type": "string"
         }
       ],
-      "title":"LabelUnion"
+      "title": "LabelUnion"
     },
-    "RegExClass":{
-      "type":"object",
-      "additionalProperties":false,
-      "properties":{
-        "$regex":{
-          "type":"string"
+    "RegExClass": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$regex": {
+          "type": "string"
         }
       },
-      "required":[
+      "required": [
         "$regex"
       ],
-      "title":"RegExClass"
+      "title": "RegExClass"
     }
   }
 }

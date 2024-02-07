@@ -1,6 +1,5 @@
 import json
 import logging
-import yaml
 
 from sl_util.sl_util.file_utils import read_byte_data
 from slp_abacus.slp_abacus.objects.diagram_objects import Diagram, DiagramComponent, DiagramRepresentation

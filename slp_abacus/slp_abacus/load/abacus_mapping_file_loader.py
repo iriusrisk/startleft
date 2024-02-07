@@ -12,7 +12,6 @@ class AbacusMapping:
         self.components: List[Dict] = components
 
 
-
 class AbacusMappingFileLoader(MappingFileLoader):
 
     def __init__(self, mapping_data_list: List[bytes]):
