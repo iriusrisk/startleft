@@ -109,7 +109,7 @@ class AttackSurfaceCalculator:
         Add the clients, trustzones and dataflows to the otm indicating the inbound attack surface
         :return:
         """
-        if not self.attack_surface_configuration.client:
+        if not self.attack_surface_configuration or not self.attack_surface_configuration.client:
             return
 
         self.add_clients_and_dataflows()
