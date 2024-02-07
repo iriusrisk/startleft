@@ -9,7 +9,6 @@ from slp_abacus.slp_abacus.load.abacus_mapping_file_loader import AbacusMapping
 from slp_abacus.slp_abacus.objects.diagram_objects import Diagram
 from slp_abacus.slp_abacus.parse.diagram_mapper import DiagramMapper
 from slp_abacus.slp_abacus.parse.transformers.default_trustzone_transformer import DefaultTrustZoneTransformer
-from slp_abacus.slp_abacus.parse.transformers.parent_calculator_transformer import ParentCalculatorTransformer
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +28,6 @@ class AbacusParser(ProviderParser):
         try:
             DiagramMapper(self.diagram, self.mapping).map()
 
-            ParentCalculatorTransformer(self.diagram).transform()
             DefaultTrustZoneTransformer(self.diagram).transform()
 
             return self.__build_otm()

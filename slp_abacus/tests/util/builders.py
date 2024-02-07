@@ -1,6 +1,6 @@
 from typing import List
 
-from slp_drawio.slp_drawio.objects.diagram_objects import DiagramComponent, Diagram, DiagramTrustZone, \
+from slp_abacus.slp_abacus.objects.diagram_objects import DiagramComponent, Diagram, DiagramTrustZone, \
     DiagramRepresentation
 
 

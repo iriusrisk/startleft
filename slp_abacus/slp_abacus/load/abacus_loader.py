@@ -32,7 +32,8 @@ class AbacusLoader(ProviderLoader):
 
             # Perform the mapping
 
-            representation: DiagramRepresentation = DiagramRepresentation(self.project_id, {'width': 1000, 'height': 1000})
+            representation: DiagramRepresentation = DiagramRepresentation(self.project_id,
+                                                                          {'width': 1000, 'height': 1000})
             diagram_components = self.map_to_diagram_components(out_connections, component_mappings)
 
             # Output the list of DiagramComponent objects
@@ -56,12 +57,11 @@ class AbacusLoader(ProviderLoader):
 
         for connection in out_connections:
             # for mapping in component_mappings:
-                # if connection["ConnectionTypeName"] == mapping["ConnectionTypeName"] and connection[
-                #     "SinkComponentName"] == mapping["SinkComponentName"]:
-            id_str:str = str(connection["EEID"])
+            id_str: str = str(connection["EEID"])
             if not any(c.otm.id == id_str for c in diagram_components):
-                     diagram_components.append(
-                        DiagramComponent(id=str(connection["EEID"]), name=connection["SinkComponentName"], shape_type=connection["ConnectionTypeName"]))
+                diagram_components.append(
+                    DiagramComponent(id=str(connection["EEID"]), name=connection["SinkComponentName"],
+                                     shape_type=connection["ConnectionTypeName"]))
 
         return diagram_components
 

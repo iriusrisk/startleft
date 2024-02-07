@@ -15,23 +15,3 @@ def get_parent_type(element) -> Optional[ParentType]:
         return PARENT_TYPES[element.__class__]
     except KeyError:
         return None
-
-
-class ParentCalculatorTransformer(Transformer):
-
-    def transform(self):
-        self.set_otm_parents()
-
-    def set_otm_parents(self):
-        for element in self.diagram.components + self.diagram.trustzones:
-            parent_id = element.shape_parent_id
-            if parent_id:
-                element.otm.parent = parent_id
-                parent = self.__find_by_id(parent_id)
-                parent_type = get_parent_type(parent)
-                element.otm.parent_type = parent_type
-
-    def __find_by_id(self, id_: str):
-        for element in self.diagram.components + self.diagram.trustzones:
-            if element.otm.id == id_:
-                return element

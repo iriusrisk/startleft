@@ -19,8 +19,7 @@ class AbacusProcessor(OTMProcessor):
         self.project_name = project_name
         self.source: bytes = \
             get_byte_data_from_upload_file(source) if isinstance(source, UploadFile) else get_byte_data(source.name)
-        self.mappings =  mappings
-            # \ get_byte_data_from_upload_file(mappings[0]) if isinstance(mappings[0], UploadFile) else read_byte_data(mappings[0])
+        self.mappings = mappings
         self.loader = None
         self.mapping_loader = None
 
