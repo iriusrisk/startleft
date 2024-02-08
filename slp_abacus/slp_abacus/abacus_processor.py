@@ -24,7 +24,7 @@ class AbacusProcessor(OTMProcessor):
         self.mapping_loader = None
 
     def get_provider_validator(self) -> ProviderValidator:
-        return AbacusValidator()
+        return AbacusValidator(self.source)
 
     def get_provider_loader(self) -> ProviderLoader:
         self.loader = AbacusLoader(self.project_id, self.source, self.mappings)
