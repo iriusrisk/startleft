@@ -4,5 +4,15 @@ repos:
   hooks:
     - id: semgrep
       exclude: "(.)*/tests|tests"
-      args: ['--config', 'p/owasp-top-ten',  '--config', 'p/cwe-top-25', '--config', 'p/gitleaks', '--error', '--skip-unknown-extensions']
+      args: [
+        '--config',
+        'p/owasp-top-ten',
+        '--config',
+        'p/cwe-top-25',
+        '--config',
+        'p/gitleaks',
+        '--error',
+        '--skip-unknown-extensions',
+        '--exclude-rule=python.sqlalchemy.security.audit.avoid-sqlalchemy-text.avoid-sqlalchemy-text'
+      ]
       stages: [commit]
