@@ -1,6 +1,8 @@
 import logging
 from typing import List, Dict
 
+import yaml
+
 from slp_base.slp_base.mapping_file_loader import MappingFileLoader
 
 logger = logging.getLogger(__name__)
@@ -11,6 +13,12 @@ class AbacusMapping:
         self.trustzones: List[Dict] = trustzones
         self.components: List[Dict] = components
 
+    @classmethod
+    def from_yaml(cls, yaml_content: str):
+        yaml_data = yaml.safe_load(yaml_content)
+        trustzones = yaml_data.get('trustzones', [])
+        components = yaml_data.get('components', [])
+        return cls(trustzones, components)
 
 
 class AbacusMappingFileLoader(MappingFileLoader):

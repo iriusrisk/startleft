@@ -1,6 +1,5 @@
 import json
 import logging
-import yaml
 
 from sl_util.sl_util.file_utils import read_byte_data
 from slp_abacus.slp_abacus.objects.diagram_objects import Diagram, DiagramComponent, DiagramRepresentation
@@ -27,13 +26,10 @@ class AbacusLoader(ProviderLoader):
             # Parse JSON and YAML data
             out_connections = json.loads(read_byte_data(self.abacus_source))["OutConnections"]
 
-            abacus_mapping: str = read_byte_data(self.mapping_files[0])
-            component_mappings = yaml.safe_load(abacus_mapping)['components']
-
             # Perform the mapping
-
-            representation: DiagramRepresentation = DiagramRepresentation(self.project_id, {'width': 1000, 'height': 1000})
-            diagram_components = self.map_to_diagram_components(out_connections, component_mappings)
+            representation: DiagramRepresentation = DiagramRepresentation(self.project_id,
+                                                                          {'width': 1000, 'height': 1000})
+            diagram_components = self.map_to_diagram_components(out_connections)
 
             # Output the list of DiagramComponent objects
             for component in diagram_components:
@@ -51,17 +47,17 @@ class AbacusLoader(ProviderLoader):
             raise LoadingDiagramFileError('Source file cannot be loaded', detail, message)
 
     # Function to map JSON data to DiagramComponent objects
-    def map_to_diagram_components(self, out_connections: [dict], component_mappings: [dict]):
+    def map_to_diagram_components(self, out_connections: [dict]):
         diagram_components = []
 
         for connection in out_connections:
             # for mapping in component_mappings:
-                # if connection["ConnectionTypeName"] == mapping["ConnectionTypeName"] and connection[
-                #     "SinkComponentName"] == mapping["SinkComponentName"]:
-            id_str:str = str(connection["EEID"])
+            id_str: str = str(connection["EEID"])
+            # escape duplications
             if not any(c.otm.id == id_str for c in diagram_components):
-                     diagram_components.append(
-                        DiagramComponent(id=str(connection["EEID"]), name=connection["SinkComponentName"], shape_type=connection["ConnectionTypeName"]))
+                diagram_components.append(
+                    DiagramComponent(id=str(connection["EEID"]), name=connection["SinkComponentName"],
+                                     shape_type=connection["ConnectionTypeName"]))
 
         return diagram_components
 

@@ -1,6 +1,6 @@
 from typing import List
 
-from slp_drawio.slp_drawio.objects.diagram_objects import DiagramComponent, Diagram, DiagramTrustZone, \
+from slp_abacus.slp_abacus.objects.diagram_objects import DiagramComponent, Diagram, DiagramTrustZone, \
     DiagramRepresentation
 
 
@@ -17,7 +17,8 @@ def build_trustzone(trustzone_id: str = 'tz-id', type: str = 'tz-type', name: st
     return DiagramTrustZone(id=trustzone_id, name=name or f'{trustzone_id} name', type=type, default=default)
 
 
-def build_component(component_id: str = 'c-id', parent_id: str = None, name: str = None, shape_type: str = None) -> DiagramComponent:
+def build_component(component_id: str = 'c-id', parent_id: str = None, name: str = None,
+                    shape_type: str = None) -> DiagramComponent:
     component = DiagramComponent(id=component_id, name=name or component_id)
     component.otm.parent = parent_id
     component.shape_type = shape_type
