@@ -22,4 +22,4 @@ class ErrorResponse(BaseModel):
         if messages:
             for message in messages:
                 items.append(ErrorResponseItem(message))
-        super().__init__(status=status, error_type=error_type, title=title, detail=detail, errors=items)
+        super().__init__(status=status, error_type=str(error_type), title=title, detail=detail, errors=items)
