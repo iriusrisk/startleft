@@ -51,7 +51,6 @@ class AbacusLoader(ProviderLoader):
         diagram_components = []
 
         for connection in out_connections:
-            # for mapping in component_mappings:
             id_str: str = str(connection["EEID"])
             # escape duplications
             if not any(c.otm.id == id_str for c in diagram_components):
