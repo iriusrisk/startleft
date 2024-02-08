@@ -124,6 +124,6 @@ def get_error(error: Dict[str, Any]) -> str:
 
 
 def common_response_handler(status_code: int, type_: str, title: str, detail: str, messages: List[str] = []):
-    error_response = ErrorResponse(error_type=type_, status=status_code, title=title, detail=detail, messages=messages)
+    error_response = ErrorResponse(error_type=type_, status=str(status_code), title=title, detail=detail, messages=messages)
 
     return JSONResponse(status_code=status_code, content=jsonable_encoder(error_response))
