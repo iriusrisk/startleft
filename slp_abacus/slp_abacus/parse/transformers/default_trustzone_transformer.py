@@ -4,9 +4,9 @@ from otm.otm.entity.parent_type import ParentType
 from otm.otm.trustzone_representation_calculator import \
     TrustZoneRepresentationCalculator
 from sl_util.sl_util.iterations_utils import append_if_not_exists
-from slp_base import OTMBuildingError
 from slp_abacus.slp_abacus.objects.diagram_objects import Diagram, DiagramTrustZone, DiagramComponent
 from slp_abacus.slp_abacus.parse.transformers.transformer import Transformer
+from slp_base import OTMBuildingError
 
 
 def _find_orphan_components(components: List[DiagramComponent]) -> List[DiagramComponent]:
@@ -25,7 +25,8 @@ class DefaultTrustZoneTransformer(Transformer):
             return
 
         if not self.default_trustzone:
-            raise OTMBuildingError(title='Invalid configuration', message='A default trust zone is required with orphan components')
+            raise OTMBuildingError(title='Invalid configuration',
+                                   message='A default trust zone is required with orphan components')
 
         self.__use_default_trustzone_as_global_parent()
 

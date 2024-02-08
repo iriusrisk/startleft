@@ -2,7 +2,6 @@ from typing import Optional
 
 from otm.otm.entity.parent_type import ParentType
 from slp_abacus.slp_abacus.objects.diagram_objects import DiagramComponent, DiagramTrustZone
-from slp_abacus.slp_abacus.parse.transformers.transformer import Transformer
 
 PARENT_TYPES = {
     DiagramComponent: ParentType.COMPONENT,
