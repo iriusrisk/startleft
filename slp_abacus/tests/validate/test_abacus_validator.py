@@ -5,8 +5,7 @@ import pytest
 from sl_util.sl_util import secure_regex as re
 from sl_util.sl_util.file_utils import get_byte_data
 from slp_abacus.slp_abacus.validate.abacus_validator import AbacusValidator
-from slp_abacus.tests.resources.test_resource_paths import wrong_root_abacus, wrong_mxcell_abacus, wrong_mxfile_abacus, \
-    wrong_mxgraphmodel_abacus, not_xml, abacus_merged
+from slp_abacus.tests.resources.test_resource_paths import abacus_merged
 from slp_base import DiagramFileNotValidError, CommonError
 
 filename_pattern = re.compile('^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}\\.[abacus|xml]')
