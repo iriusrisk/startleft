@@ -13,8 +13,8 @@ from slp_base.slp_base.schema import Schema
 logger = logging.getLogger(__name__)
 
 MIN_FILE_SIZE = 20
-MAX_TFPLAN_FILE_SIZE = 5 * 1024 * 1024  # 5MB
-MAX_TFGRAPH_FILE_SIZE = 2 * 1024 * 1024  # 2MB
+MAX_TFPLAN_FILE_SIZE = 20 * 1024 * 1024  # 20MB
+MAX_TFGRAPH_FILE_SIZE = 20 * 1024 * 1024  # 20MB
 
 TFPLAN_MIME_TYPE = 'application/json'
 TFGRAPH_MIME_TYPE = 'text/plain'
