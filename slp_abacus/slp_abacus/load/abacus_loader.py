@@ -31,10 +31,6 @@ class AbacusLoader(ProviderLoader):
                                                                           {'width': 1000, 'height': 1000})
             diagram_components = self.map_to_diagram_components(out_connections)
 
-            # Output the list of DiagramComponent objects
-            for component in diagram_components:
-                print(component)
-
             self._diagram: Diagram = Diagram(representation, diagram_components, {})
             return diagram_components
 
