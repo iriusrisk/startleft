@@ -1,87 +1,73 @@
-# ABACUS Mapping
 
----
+# ABACUS Mapping  Guide
 
-??? note "This mapping configuration only applies to the ABACUS Processor."
+**Important**: This guide is specific to the ABACUS Processor. If you're working with a different processor, please consult the appropriate documentation available in the "StartLeft Processors (SLP)" section accessible from the left navigation menu.
 
-    Please refer to another mapping file configuration documentation if needed. 
-    You can locate each processor's documentation in the left menu under the "StartLeft Processors (SLP)" section.
+## Overview
 
-A source mapping file (or 'mapping file' for short) describes how to find and map components and
-trust zones in the source ABACUS file.
+This document provides instructions for configuring mapping files for the ABACUS Processor. Mapping files are essential for identifying and assigning components and trust zones within an ABACUS source file.
 
-This mapping file is divided into two sections. The syntax and available functions used to define trust zone and
-component mappings are identical.
+Mapping files are organized into two main sections:
 
-* `trustzones`.
-* `components`.
+- **Trust Zones**
+- **Components**
 
-## How mapping works?
+Both sections utilize the same syntax and functions for defining mappings.
 
-Every element in the ABACUS model is loaded by the ABACUS processor along with its name and internal ABACUS type.
+## How Mapping Works
 
-Once the elements are loaded, the mapping files are used to change the type of the components to the one expected in the
-OTM file. If no coincidence is found, a default type (`empty-component`) is set.
+When an ABACUS model is processed, each element—along with its name and internal ABACUS type—is loaded. The mapping files then adjust the component types to match those expected in the OTM file. Absent a matching type, the element is assigned a default type of `empty-component`.
 
-### Mapping preference
+### Mapping Hierarchy
 
-There are two mapping files, the default and the custom ones. Inside them, there are trust zone and component mappings.
-The elements in the ABACUS files can be mapped by its type or name. The preference is the following:
+Mapping files can be either default or custom, with the following precedence rules:
 
-1. Custom mappings prevail over default mappings.
-2. Name matches during mapping prevail over type matches.
-3. Trust zone mappings prevail over component mappings.
+1. **Custom Mappings:** Take precedence over default mappings.
+2. **Name-based Mappings:** Have priority over type-based mappings.
+3. **Trust Zone Mappings:** Override component mappings.
 
-### Mapping functions
+### Defining Mappings
 
-Both for components or trust zones, there are different ways to define mappings. A set of functions are available to
-simplify the creation of the mapping file. These functions work for mapping by name or type.
+Mappings can be established by name or type, using a variety of functions to facilitate this process.
 
-#### Mapping by exact match
+#### Exact Match Mapping
 
-The simplest case, when the `label` in the mapping file matches exactly the component name or type.
+For direct matches between the mapping file `label` and the component name or type:
 
 ```yaml
-  - label: abacus.application
-    type: application
-
+- label: abacus.application
+  type: application
 ```
 
-#### Mapping by a Regex
+#### Regex Mapping
 
-Instead of searching for an exact match, a regex can be used to leverage the mapping capabilities.
+To match components or trust zones using regular expressions:
 
 ```yaml
-  - label: { $regex: ^abacus.application\_.*$ }
-    type: application
+- label: { $regex: ^abacus.application\_.*$ }
+  type: application
 ```
 
-#### Mapping by list
+#### List Mapping
 
-It is used when a group of name or types must be mapped to the same type in the OTM.
+To map multiple names or types to a single type in the OTM file:
 
 ```yaml
-  - label:
-      - abacus.server
-      - abacus.database
-      - abacus.network
-    type: infrastructure
+- label:
+    - abacus.server
+    - abacus.database
+    - abacus.network
+  type: infrastructure
 ```
 
-### The Default Trust Zone
+### Default Trust Zone Handling
 
-The [OTM standard](../../../Open-Threat-Model-(OTM).md) defines that every component in the threat model must have a
-parent.
-Frequently, the original ABACUS model has elements that are not nested inside any parent.
-In those cases, the trust zone set as a default in the mapping file is included in the OTM as their parent.
+Per the OTM standard [OTM standard](../../../Open-Threat-Model-(OTM).md), each component must be associated with a parent trust zone. For elements in the ABACUS model not nested within a trust zone, a default trust zone specified in the mapping file will be used as their parent in the OTM.
 
 ```yaml
-  - label: Data Center
-    type: data-center
-    default: true
+- label: Data Center
+  type: data-center
+  default: true
 ```
 
-!!! note "" Notice that this Trust Zone can be created more than once.
-If there is a component in the original ABACUS model called "Data Center",
-a Trust Zone object will be created in the OTM. Then, if there are some missing components,
-a default Trust Zone of the same type will be created again to gather them.
+**Note**: It's possible to create multiple instances of this default Trust Zone. For example, if there's an actual component named "Data Center" in the ABACUS model, it will be recognized as a Trust Zone in the OTM. Additionally, if there are unassociated components, a new default Trust Zone of the same type will be created to encompass them.
