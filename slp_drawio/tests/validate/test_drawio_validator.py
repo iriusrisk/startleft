@@ -1,11 +1,9 @@
 from unittest.mock import patch, MagicMock
 
 import pytest
-from starlette.datastructures import UploadFile, Headers
 
 from sl_util.sl_util import secure_regex as re
 from sl_util.sl_util.file_utils import get_byte_data
-from sl_util.tests.util.file_utils import get_upload_file
 from slp_base import DiagramFileNotValidError, CommonError
 from slp_drawio.slp_drawio.validate.drawio_validator import DrawioValidator
 from slp_drawio.tests.resources.test_resource_paths import wrong_mxgraphmodel_drawio, wrong_mxfile_drawio, \
