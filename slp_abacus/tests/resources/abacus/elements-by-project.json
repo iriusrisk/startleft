@@ -1,9 +1,5 @@
-// https://santander.avolutionsoftware.com/api/Components?$filter=ArchitectureName eq 'F1RST' and ComponentTypeName eq 'Project' and Name eq 'POC00012023'&$expand=OutConnections($filter=SinkComponent/ComponentTypeName eq 'Digital Touchpoint' OR SinkComponent/ComponentTypeName eq 'Technical Component' OR SinkComponent/ComponentTypeName eq 'Repository'OR SinkComponent/ComponentTypeName eq 'Load Balancer')
-
-// get in f1rst architecture, for the project POC00012023 filtered by types 'Technical Component', 'Touchpoints' and 'Repositories'
-
 {
-  "@odata.context": "https://santander.avolutionsoftware.com/api/$metadata#Components",
+  "@odata.context": "https://client.avolutionsoftware.com/api/$metadata#Components",
   "value": [
     {
       "EEID": 258635,

@@ -1,6 +1,6 @@
+## What is Abacus?
 
-## Enhanced ABACUS Integration with StartLeft for OTM Conversion
-
+---
 Integrating ABACUS, a premier enterprise architecture tool, with StartLeft's OTM (Open Threat Model) format enriches threat modeling with advanced automation. This synergy combines ABACUS's detailed architectural insights with StartLeft's streamlined threat modeling, offering a comprehensive security analysis framework.
 
 ### Leveraging ABACUS Models in StartLeft
@@ -8,6 +8,8 @@ Integrating ABACUS, a premier enterprise architecture tool, with StartLeft's OTM
 ABACUS's extensive collection of predefined components and shapes enables intricate architectural designs. Through StartLeft, these elements are precisely translated into the OTM format, ensuring a smooth transition from architectural designs to detailed threat models. This integration highlights the structured modeling of ABACUS, making complex architectures easily interpretable in threat modeling contexts.
 
 ## The `slp_abacus` Module: Bridging Architectures with Threat Models
+
+---
 
 The `slp_abacus` module within StartLeft focuses on converting ABACUS files into OTM format, akin to its Drawio integration. This module facilitates the conversion of architectural diagrams into actionable threat models, thereby enhancing security planning.
 
@@ -22,11 +24,15 @@ Refer to the [REST API Manual](../../../usage/REST-API.md) for comprehensive ins
 
 ## Supported Formats by StartLeft
 
+---
+
 StartLeft is capable of processing ABACUS diagrams in JSON format:
 
 - **`*.json`**: Exports directly from ABACUS for conversion.
 
 ## Conversion Example: From ABACUS to OTM
+
+---
 
 Imagine converting an ABACUS diagram featuring a PoC Integrator, Webpage, Database, Static Content, Backend, and an Angular Client into a threat model. The process involves using a **default mapping file** to define mappings for these components, facilitating their translation into the OTM format:
 

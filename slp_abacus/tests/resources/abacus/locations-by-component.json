@@ -1,9 +1,5 @@
-// https://santander.avolutionsoftware.com/api/Components(258631)/InConnections?$filter=ConnectionTypeEEID eq 13890
-
-// getting locations filtered by a specfic component using the connection 'hosts' which has ID 13890 for the component "SST PoC Webpage" which has the ID 257831
-
 {
-  "@odata.context": "https://santander.avolutionsoftware.com/api/$metadata#Connections",
+  "@odata.context": "https://client.avolutionsoftware.com/api/$metadata#Connections",
   "value": [
     {
       "EEID": 259247,
