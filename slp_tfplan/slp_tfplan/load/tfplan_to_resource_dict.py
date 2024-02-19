@@ -4,7 +4,7 @@ import sl_util.sl_util.secure_regex as re
 
 
 def is_not_cloned_resource(resource: Dict) -> bool:
-    return 'index' not in resource or resource['index'] == '0' or resource['index'] == 'zero'
+    return 'index' not in resource or resource['index'] == '0' or resource['index'] == 0 or resource['index'] == 'zero'
 
 
 def get_resource_id(resource: Dict) -> str:
