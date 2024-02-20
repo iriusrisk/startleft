@@ -7,6 +7,8 @@ from typing import List
 from magic import Magic
 from starlette.datastructures import UploadFile
 
+SUPPORTED_ENCODINGS = ['utf-8', 'utf-16', 'utf-8-ignore']
+
 
 def copy_to_disk(diag_file: tempfile.SpooledTemporaryFile, suffix: str):
     with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as ntf:
@@ -37,8 +39,14 @@ def get_byte_data_from_upload_file(upload_file: UploadFile) -> bytes:
     return upload_file.file.read()
 
 
-def read_byte_data(data: bytes, encoding: str = 'utf-8') -> str:
-    return data.decode(encoding)
+def read_byte_data(data: bytes) -> str:
+    for encoding in SUPPORTED_ENCODINGS:
+        try:
+            return data.decode(encoding=encoding)
+        except UnicodeError:
+            pass
+
+    raise UnicodeError(f'File content cannot be decoded, supported encodings: {SUPPORTED_ENCODINGS}')
 
 
 def get_file_type_by_content(file_content: bytes) -> str:
