@@ -21,7 +21,8 @@ PROCESSORS = [
     {'name': 'slp_visio', 'type': 'processor', 'provider_type': 'VISIO', 'allowed_imports': _slp_allowed_imports},
     {'name': 'slp_visio', 'type': 'processor', 'provider_type': 'LUCID', 'allowed_imports': _slp_allowed_imports},
     {'name': 'slp_mtmt', 'type': 'processor', 'provider_type': 'MTMT', 'allowed_imports': _slp_allowed_imports},
-    {'name': 'slp_drawio', 'type': 'processor', 'provider_type': 'DRAWIO', 'allowed_imports': _slp_allowed_imports}
+    {'name': 'slp_drawio', 'type': 'processor', 'provider_type': 'DRAWIO', 'allowed_imports': _slp_allowed_imports},
+    {'name': 'slp_abacus', 'type': 'processor', 'provider_type': 'ABACUS', 'allowed_imports': _slp_allowed_imports}
 ]
 
 """

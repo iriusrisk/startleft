@@ -1,0 +1,24 @@
+{
+  "@odata.context": "https://client.avolutionsoftware.com/api/$metadata#Connections",
+  "value": [
+    {
+      "EEID": 258632,
+      "Description": "",
+      "Name": "Requires",
+      "BaselineElementEEID": 258632,
+      "Created": "2023-04-25T19:07:36Z",
+      "CreatedBy": "Gabriel.Rensi.Silva",
+      "Modified": "2023-04-25T19:07:36Z",
+      "ModifiedBy": "Gabriel.Rensi.Silva",
+      "ConnectionTypeEEID": 141,
+      "ConnectionTypeName": "Requires",
+      "ArchitectureEEID": 5,
+      "ArchitectureName": "F1RST",
+      "ParentEEID": -1,
+      "SourceComponentEEID": 258631,
+      "SourceComponentName": "SST PoC Webpage",
+      "SinkComponentEEID": 51534,
+      "SinkComponentName": "Angular v12.0.0"
+    }
+  ]
+}
