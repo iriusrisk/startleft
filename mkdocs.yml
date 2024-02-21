@@ -53,6 +53,9 @@ nav:
           - Drawio Quickstart: startleft-processors/diagram/drawio/Drawio-Quickstart.md
           - Drawio Mapping: startleft-processors/diagram/drawio/Drawio-Mapping.md
           - Drawio Calculating Shape Type: startleft-processors/diagram/drawio/Drawio-Calculating-Shape-Type.md
+      - Abacus:
+          - Abacus Quickstart: startleft-processors/diagram/abacus/Abacus-Quickstart.md
+          - Abacus Mapping: startleft-processors/diagram/abacus/Abacus-Mapping.md
   - Troubleshooting: Troubleshooting.md
 
 theme:

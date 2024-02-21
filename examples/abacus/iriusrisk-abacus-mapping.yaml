@@ -1,0 +1,20 @@
+trustzones:
+  - label:  Public Cloud
+    type:   b61d6911-338d-46a8-9f39-8dcd24abfe91
+    default: true
+
+components:
+  - label: SST PoC Integrator
+    type: CD-MSG-BROKER
+  - label: SST PoC Webpage
+    type: compact-server-side-web-application
+  - label: SST PoC Database
+    type: other-database
+  - label: SST PoC Static Content
+    type: CD-CONTENT-DELIVERY-NETWORK
+  - label: SST PoC Backend
+    type: back-end-server
+  - label: Angular v12.0.0
+    type: web-client
+  - label: SST PoC Webpage
+    type: compact-server-side-web-application
