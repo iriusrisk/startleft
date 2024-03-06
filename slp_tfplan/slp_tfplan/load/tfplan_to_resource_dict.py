@@ -1,10 +1,11 @@
 from typing import Dict, List
 
 import sl_util.sl_util.secure_regex as re
+from sl_util.sl_util.str_utils import to_number
 
 
 def is_not_cloned_resource(resource: Dict) -> bool:
-    return 'index' not in resource or resource['index'] == '0' or resource['index'] == 0 or resource['index'] == 'zero'
+    return to_number(resource['index']) == 0 if 'index' in resource else True
 
 
 def get_resource_id(resource: Dict) -> str:
