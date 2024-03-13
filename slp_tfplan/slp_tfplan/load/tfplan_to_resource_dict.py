@@ -9,9 +9,7 @@ def is_not_cloned_resource(resource: Dict) -> bool:
 
 
 def get_resource_id(resource: Dict) -> str:
-    return parse_address(resource['address']) \
-        if 'index' in resource \
-        else resource['address']
+    return parse_address(resource['address']) if 'address' in resource else None
 
 
 def get_resource_name(resource: Dict, parent: str) -> str:
