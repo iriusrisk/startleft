@@ -107,7 +107,8 @@ def build_security_group_mock(id: str,
 
 def build_security_group_cidr_mock(cidr_blocks: List[str], description: str = None, from_port: int = None,
                                    to_port: int = None, protocol: str = None):
-    return Mock(cidr_blocks=cidr_blocks, description=description, type=SecurityGroupCIDRType.INGRESS, from_port=from_port, to_port=to_port,
+    return Mock(cidr_blocks=cidr_blocks, description=description, type=SecurityGroupCIDRType.INGRESS,
+                from_port=from_port, to_port=to_port,
                 protocol=protocol)
 
 
@@ -142,11 +143,14 @@ def build_tfplan(resources: List[Dict] = None, child_modules: List[Dict] = None)
 def generate_resources(resource_count: int, module_child: bool = False) -> List[Dict]:
     resources = []
     for i in range(1, resource_count + 1):
+        resource_name = f'r{i}-name'
+        resource_type = f'r{i}-type'
+
         resource = {
-            'address': f'r{i}-addr',
+            'address': f'{resource_type}.{resource_name}',
             'mode': 'managed',
-            'type': f'r{i}-type',
-            'name': f'r{i}-name',
+            'type': resource_type,
+            'name': resource_name,
             'provider_name': 'registry.terraform.io/hashicorp/aws',
             'schema_version': 0,
             'values': {
@@ -167,6 +171,35 @@ def generate_resources(resource_count: int, module_child: bool = False) -> List[
     return resources
 
 
+def generate_resources_for_module(resource_count: int, module_name: str) -> List[Dict]:
+    resources = []
+    for i in range(1, resource_count + 1):
+        resource_name = f'r{i}-name'
+        resource_type = f'r{i}-type'
+        resource_address = f'{module_name}.{resource_type}.{resource_name}'
+
+        resource = {
+            'address': resource_address,
+            'mode': 'managed',
+            'type': resource_type,
+            'name': resource_name,
+            'provider_name': 'registry.terraform.io/hashicorp/aws',
+            'schema_version': 0,
+            'values': {
+                'val1': 'value1',
+                'val2': 'value2',
+            },
+            'sensitive_values': {
+                'senval1': 'value1',
+                'senval2': 'value2',
+            }
+        }
+
+        resources.append(resource)
+
+    return resources
+
+
 def generate_child_modules(module_count: int,
                            child_modules: List[Dict] = None,
                            resource_count: int = None) -> List[Dict]:
@@ -181,6 +214,27 @@ def generate_child_modules(module_count: int,
 
         if resource_count:
             module['resources'] = generate_resources(resource_count, True)
+
+        modules.append(module)
+
+    return modules
+
+
+def generate_child_modules_instances(module_count: int,
+                                     child_modules: List[Dict] = None,
+                                     resource_count: int = None) -> List[Dict]:
+    modules = []
+    for i in range(1, module_count + 1):
+        module_name = f'cm-addr[instance-{chr(96 + i)}]'
+        module = {
+            'address': module_name,
+        }
+
+        if child_modules:
+            module['child_modules'] = child_modules
+
+        if resource_count:
+            module['resources'] = generate_resources_for_module(resource_count, module_name)
 
         modules.append(module)
 

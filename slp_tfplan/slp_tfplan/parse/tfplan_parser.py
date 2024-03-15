@@ -2,6 +2,7 @@ import logging
 
 from networkx import DiGraph
 
+from sl_util.sl_util.iterations_utils import remove_duplicates
 from slp_base import ProviderParser, OTMBuildingError
 from slp_tfplan.slp_tfplan.load.launch_templates_loader import LaunchTemplatesLoader
 from slp_tfplan.slp_tfplan.load.security_groups_loader import SecurityGroupsLoader
@@ -46,6 +47,7 @@ class TFPlanParser(ProviderParser):
             self.__calculate_dataflows()
             self.__calculate_attack_surface()
             self.__calculate_singletons()
+            self.__remove_duplicates()
 
         except Exception as e:
             logger.error(f'{e}')
@@ -77,3 +79,6 @@ class TFPlanParser(ProviderParser):
 
     def __calculate_singletons(self):
         SingletonTransformer(self.otm).transform()
+
+    def __remove_duplicates(self):
+        self.otm.components = remove_duplicates(self.otm.components)
