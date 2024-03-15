@@ -17,9 +17,7 @@ def get_resource_name(resource: Dict, parent: str) -> str:
 
 
 def get_module_address(module: Dict, parent: str) -> str:
-    if 'address' in module:
-        module_address = parse_address(module['address'])
-        return f'{parent}.{module_address}' if parent else module_address
+    return parse_address(module['address']) if 'address' in module else parent
 
 
 def parse_address(address: str) -> str:

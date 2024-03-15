@@ -133,7 +133,7 @@ class TestTFPlanLoader:
 
         assert resource['resource_id'] == 'r1-type.r1-name'
         assert resource['resource_type'] == 'r1-type'
-        assert resource['resource_name'] == 'cm1-addr.cm1-addr.r1-name'
+        assert resource['resource_name'] == 'cm1-addr.r1-name'
 
         assert_resource_values(resource['resource_values'])
 
@@ -258,8 +258,7 @@ class TestTFPlanLoader:
             for child_index in range(1, 3):
                 resource = resources[resource_index]
 
-                assert (resource['resource_id'] ==
-                        f'{module_address}[instance-{chr(96 + module_index)}].r{child_index}-type.r{child_index}-name')
+                assert (resource['resource_id'] == f'{module_address}.r{child_index}-type.r{child_index}-name')
                 assert resource['resource_type'] == f'r{child_index}-type'
                 assert resource['resource_name'] == f'{module_address}.r{child_index}-name'
 
@@ -303,8 +302,7 @@ class TestTFPlanLoader:
             for child_index in range(1, 2):
                 resource = resources[resource_index]
 
-                assert (resource['resource_id'] ==
-                        f'{module_address}[instance-{chr(96 + module_index)}].r{child_index}-type.r{child_index}-name')
+                assert (resource['resource_id'] == f'{module_address}.r{child_index}-type.r{child_index}-name')
                 assert resource['resource_type'] == f'r{child_index}-type'
                 assert resource['resource_name'] == f'{module_address}.r{child_index}-name'
 
