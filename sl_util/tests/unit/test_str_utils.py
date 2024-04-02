@@ -1,6 +1,6 @@
 from pytest import mark
 
-from sl_util.sl_util.str_utils import deterministic_uuid
+from sl_util.sl_util.str_utils import deterministic_uuid, to_number
 
 
 class TestStrUtils:
@@ -28,3 +28,49 @@ class TestStrUtils:
         uuid2 = deterministic_uuid(source)
         # Then we obtain two different values
         assert uuid1 != uuid2
+
+    @mark.parametrize('source', [0, '0', 'zero'])
+    def test_number_conversions_to_zero(self, source):
+        # Given the source
+        # when passed 0 to function
+        number1 = to_number(source)
+        # when passed '0' to function
+        number2 = to_number(source)
+        # when passed 'zero' to function
+        number3 = to_number(source)
+        # Then we obtain 0
+        assert number1 == number2 == number3 == 0
+
+    @mark.parametrize('source', [1, '1', 'one'])
+    def test_number_conversions_to_one(self, source):
+        # Given the source
+        # when passed 1 to function
+        number1 = to_number(source)
+        # when passed '1' to function
+        number2 = to_number(source)
+        # when passed 'one' to function
+        number3 = to_number(source)
+        # Then we obtain 1
+        assert number1 == number2 == number3 == 1
+
+    @mark.parametrize('source', [2, '2', 'two'])
+    def test_number_conversions_to_two(self, source):
+        # Given the source
+        # when passed 2 to function
+        number1 = to_number(source)
+        # when passed '2' to function
+        number2 = to_number(source)
+        # when passed 'two' to function
+        number3 = to_number(source)
+        # Then we obtain 2
+        assert number1 == number2 == number3 == 2
+
+    @mark.parametrize('source', ['sandbox', ''])
+    def test_number_conversions_to_alphanumeric(self, source):
+        # Given the source
+        # when passed an alphanumeric to function
+        number1 = to_number(source)
+        # when passed an empty string to function
+        number2 = to_number(source)
+        # Then we obtain default value 0
+        assert number1 == number2 == 0
