@@ -251,9 +251,9 @@ class TestTFPlanLoader:
 
         # AND resource_id, resource_type, resource_name and resource_properties are right
         resource_index = 0
-        for module_index in range(1, 2):
+        for _ in range(1, 2):
 
-            module_address = f'cm-addr'
+            module_address = 'cm-addr'
 
             for child_index in range(1, 3):
                 resource = resources[resource_index]
@@ -295,9 +295,9 @@ class TestTFPlanLoader:
 
         resource_index = 1
 
-        for module_index in range(1, 2):
+        for _ in range(1, 2):
 
-            module_address = f'cm-addr'
+            module_address = 'cm-addr'
 
             for child_index in range(1, 2):
                 resource = resources[resource_index]
