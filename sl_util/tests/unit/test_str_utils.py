@@ -1,5 +1,6 @@
 from pytest import mark
-
+from random import randint
+from unittest.mock import patch
 from sl_util.sl_util.str_utils import deterministic_uuid, to_number
 
 
@@ -29,41 +30,39 @@ class TestStrUtils:
         # Then we obtain two different values
         assert uuid1 != uuid2
 
-    @mark.parametrize('source', [0, '0', 'zero'])
-    def test_number_conversions_to_zero(self, source):
-        # Given the source
-        # when passed 0 to function
-        number1 = to_number(source)
-        # when passed '0' to function
-        number2 = to_number(source)
-        # when passed 'zero' to function
-        number3 = to_number(source)
-        # Then we obtain 0
-        assert number1 == number2 == number3 == 0
+    @mark.parametrize('source', [randint(0, 100), str(randint(0, 100))])
+    def test_to_number(self, source):
+        # GIVEN a random integer
 
-    @mark.parametrize('source', [1, '1', 'one'])
-    def test_number_conversions_to_one(self, source):
-        # Given the source
-        # when passed 1 to function
-        number1 = to_number(source)
-        # when passed '1' to function
-        number2 = to_number(source)
-        # when passed 'one' to function
-        number3 = to_number(source)
-        # Then we obtain 1
-        assert number1 == number2 == number3 == 1
+        # WHEN it is transformed to a number
+        result = to_number(source)
 
-    @mark.parametrize('source', [2, '2', 'two'])
-    def test_number_conversions_to_two(self, source):
-        # Given the source
-        # when passed 2 to function
-        number1 = to_number(source)
-        # when passed '2' to function
-        number2 = to_number(source)
-        # when passed 'two' to function
-        number3 = to_number(source)
-        # Then we obtain 2
-        assert number1 == number2 == number3 == 2
+        # THEN we obtain the original number
+        assert result == int(source)
+
+    @patch('sl_util.sl_util.str_utils.w2n.word_to_num', return_value=2)
+    def test_text_to_number(self, mocked_word_to_otm):
+        # GIVEN a text number
+        source = 'two'
+
+        # WHEN it is transformed to a number
+        result = to_number(source)
+
+        # THEN we obtain the number
+        assert result == 2
+
+    def test_unknown_to_number(self):
+        # GIVEN an unkown
+        source = 'unknown'
+
+        # AND a default value
+        default_value = 5
+
+        # WHEN it is transformed to a number
+        result = to_number(source, default_value)
+
+        # THEN we obtain the default value
+        assert result == 5
 
     @mark.parametrize('source', ['sandbox', ''])
     def test_number_conversions_to_alphanumeric(self, source):
