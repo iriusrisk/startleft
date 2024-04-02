@@ -1,4 +1,4 @@
-from pytest import mark
+from pytest import mark, param
 import random
 from unittest.mock import patch
 from sl_util.sl_util.str_utils import deterministic_uuid, to_number
@@ -30,8 +30,11 @@ class TestStrUtils:
         # Then we obtain two different values
         assert uuid1 != uuid2
 
-    @mark.parametrize('source', [random.randint(0, 100), str(random.randint(0, 100))])
-    def test_to_number(self, source):
+    @mark.parametrize('source', [
+        param(random.randint(0, 100)),
+        param(str(random.randint(0, 100)))
+    ])
+    def test_to_number(self, source: any):
         # GIVEN a random integer
 
         # WHEN it is transformed to a number
