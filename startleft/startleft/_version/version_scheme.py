@@ -20,6 +20,8 @@ def choose_strategy_by_branch(branch_name: str, exact: bool) -> callable:
         return _tag_version_strategy
     elif 'hotfix/' in branch_name:
         return _patch_version_dev_commit_strategy
+    elif 'supfix/' in branch_name:
+        return _patch_version_dev_commit_strategy
     elif 'bugfix' in branch_name:
         return _tag_version_dev_commit_strategy
     else:

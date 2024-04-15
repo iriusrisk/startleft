@@ -21,6 +21,8 @@ class TestVersionScheme:
         ('hotfix/XXX-000', '_patch_version_dev_commit_strategy'),
         ('release/1.5.0', '_tag_version_strategy'),
         ('bugfix/XXX-000', '_tag_version_dev_commit_strategy'),
+        ('support/1.19', '_tag_version_strategy'),
+        ('supfix/XXX-000', '_patch_version_dev_commit_strategy'),
         ('dev', '_minor_version_dev_commit_strategy'),
         ('feature/XXX-000', '_minor_version_dev_commit_strategy'),
         ('UNKNOWN_BRANCH_PATTERN', '_minor_version_dev_commit_strategy'),
@@ -60,6 +62,11 @@ class TestVersionScheme:
         param(RELEASE_VERSION_BUGFIX, '1.6.0rc1', id='test_release_version_bugfix'),
         # BUGFIX
         param(BUGFIX_VERSION, '1.6.0rc1.dev1', id='test_bugfix_version'),
+        # SUPPORT
+        param(SUPPORT_VERSION_NO_SUPFIX, '1.19.0', id='test_support_version_no_supfix'),
+        param(SUPPORT_VERSION_SUPFIX, '1.19.1', id='test_support_version_supfix'),
+        # SUPFIX
+        param(SUPFIX_VERSION, '1.19.1.dev1', id='test_supfix_version'),
         # DEV
         param(DEV_RTP_VERSION, '1.7.0.dev19', id='test_dev_rtp_version'),
         param(DEV_RTP_NO_DISTANCE_VERSION, '1.7.0', id='test_dev_rtp_no_distance_version'),
