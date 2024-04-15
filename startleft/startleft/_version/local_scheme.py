@@ -7,7 +7,7 @@ def choose_strategy_by_branch(branch_name: str) -> callable:
     :param branch_name: The name of the branch for which the version is being calculated
     :return: The callable for the version strategy calculation
     """
-    if branch_name == 'main' or 'release/' in branch_name:
+    if branch_name == 'main' or 'release/' in branch_name or 'support/' in branch_name:
         return _no_local_version_strategy
     else:
         return _node_strategy

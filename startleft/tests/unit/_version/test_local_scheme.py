@@ -15,6 +15,8 @@ class TestLocalScheme:
         ('hotfix/XXX-000', '_node_strategy'),
         ('release/1.5.0', '_no_local_version_strategy'),
         ('bugfix/XXX-000', '_node_strategy'),
+        ('support/1.19', '_no_local_version_strategy'),
+        ('supfix/XXX-000', '_node_strategy'),
         ('dev', '_node_strategy'),
         ('feature/XXX-000', '_node_strategy'),
         ('UNKNOWN_BRANCH_PATTERN', '_node_strategy'),
@@ -38,6 +40,8 @@ class TestLocalScheme:
         param(RELEASE_VERSION_BUGFIX, '', id='test_release_version_bugfix'),
         # BUGFIX
         param(BUGFIX_VERSION, '+g6cda015', id='test_bugfix_version'),
+        # SUPFIX
+        param(SUPFIX_VERSION, '+g6cda015', id='test_supfix_version'),
         # DEV
         param(DEV_RTP_VERSION, '+g17d9f68', id='test_dev_rtp_version'),
         param(DEV_RP_VERSION, '+g3e49113', id='test_dev_rp_version'),
