@@ -16,7 +16,7 @@ def choose_strategy_by_branch(branch_name: str, exact: bool) -> callable:
     :param branch_name: The name of the branch for which the version is being calculated
     :return: The callable for the version strategy calculation
     """
-    if branch_name == 'main' or 'release/' or 'support/' in branch_name or __is_tag_commit(branch_name, exact):
+    if branch_name == 'main' or 'release/' in branch_name or 'support/' in branch_name or __is_tag_commit(branch_name, exact):
         return _tag_version_strategy
     elif 'hotfix/' in branch_name:
         return _patch_version_dev_commit_strategy
