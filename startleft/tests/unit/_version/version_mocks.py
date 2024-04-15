@@ -38,6 +38,25 @@ RELEASE_VERSION_BUGFIX = Mock(
 BUGFIX_VERSION = Mock(
     branch='bugfix/XXX-000', tag='1.6.0rc1', distance=1, exact=False, node='g6cda015')
 
+
+###########
+# SUPPORT #
+###########
+
+SUPPORT_VERSION_NO_SUPFIX = Mock(
+    branch='support/1.19', tag='1.19.0', distance=None, exact=True, node='g05febfb'
+)
+
+SUPPORT_VERSION_SUPFIX = Mock(
+    branch='support/1.19', tag='1.19.1', distance=3, exact=False, node='ga1d748e'
+)
+
+##########
+# SUPFIX #
+##########
+SUPFIX_VERSION = Mock(
+    branch='supfix/XXX-000', tag='1.19.0', distance=1, exact=False, node='g6cda015')
+
 #######
 # DEV #
 #######
