@@ -1,12 +1,19 @@
 import logging
 
 import yaml
-from deepmerge import always_merger
+from deepmerge import Merger
 
 from slp_base import LoadingMappingFileError
 from slp_base.slp_base.mapping import validate_size, MappingLoader
 
 logger = logging.getLogger(__name__)
+
+mapping_merger = Merger(
+    [(list, "prepend"),
+     (dict, "merge"),
+     (set, "union")],
+    ["override"], ["override"]
+)
 
 
 class MappingFileLoader(MappingLoader):
@@ -41,4 +48,4 @@ class MappingFileLoader(MappingLoader):
         return self.map
 
     def __load(self, mapping):
-        always_merger.merge(self.map, mapping)
+        mapping_merger.merge(self.map, mapping)

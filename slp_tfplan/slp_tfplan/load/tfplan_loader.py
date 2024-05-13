@@ -4,14 +4,14 @@ import pygraphviz
 from networkx import nx_agraph, DiGraph
 
 from sl_util.sl_util.file_utils import read_byte_data
-from sl_util.sl_util.json_utils import yaml_reader
+from sl_util.sl_util.json_utils import read_json
 from slp_base import ProviderLoader, LoadingIacFileError
 from slp_tfplan.slp_tfplan.load.tfplan_to_resource_dict import TfplanToResourceDict
 
 
 def load_tfplan(source: bytes) -> Dict:
     try:
-        return yaml_reader(source)
+        return read_json(source)
     except Exception:
         pass
 

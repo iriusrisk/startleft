@@ -1,16 +1,15 @@
 from typing import Dict, List
 
 import sl_util.sl_util.secure_regex as re
+from sl_util.sl_util.str_utils import to_number
 
 
 def is_not_cloned_resource(resource: Dict) -> bool:
-    return 'index' not in resource or resource['index'] == '0' or resource['index'] == 'zero'
+    return to_number(resource['index']) == 0 if 'index' in resource else True
 
 
 def get_resource_id(resource: Dict) -> str:
-    return parse_address(resource['address']) \
-        if 'index' in resource \
-        else resource['address']
+    return parse_address(resource['address']) if 'address' in resource else None
 
 
 def get_resource_name(resource: Dict, parent: str) -> str:
@@ -18,9 +17,7 @@ def get_resource_name(resource: Dict, parent: str) -> str:
 
 
 def get_module_address(module: Dict, parent: str) -> str:
-    if 'address' in module:
-        module_address = parse_address(module['address'])
-        return f'{parent}.{module_address}' if parent else module_address
+    return parse_address(module['address']) if 'address' in module else parent
 
 
 def parse_address(address: str) -> str:

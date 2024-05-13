@@ -1,6 +1,7 @@
-from pytest import mark
-
-from sl_util.sl_util.str_utils import deterministic_uuid
+from pytest import mark, param
+import random
+from unittest.mock import patch
+from sl_util.sl_util.str_utils import deterministic_uuid, to_number
 
 
 class TestStrUtils:
@@ -28,3 +29,50 @@ class TestStrUtils:
         uuid2 = deterministic_uuid(source)
         # Then we obtain two different values
         assert uuid1 != uuid2
+
+    @mark.parametrize('source', [
+        param(random.randint(0, 100)),
+        param(str(random.randint(0, 100)))
+    ])
+    def test_to_number(self, source: any):
+        # GIVEN a random integer
+
+        # WHEN it is transformed to a number
+        result = to_number(source)
+
+        # THEN we obtain the original number
+        assert result == int(source)
+
+    @patch('sl_util.sl_util.str_utils.w2n.word_to_num', return_value=2)
+    def test_text_to_number(self, mocked_word_to_otm):
+        # GIVEN a text number
+        source = 'two'
+
+        # WHEN it is transformed to a number
+        result = to_number(source)
+
+        # THEN we obtain the number
+        assert result == 2
+
+    def test_unknown_to_number(self):
+        # GIVEN an unkown
+        source = 'unknown'
+
+        # AND a default value
+        default_value = 5
+
+        # WHEN it is transformed to a number
+        result = to_number(source, default_value)
+
+        # THEN we obtain the default value
+        assert result == 5
+
+    @mark.parametrize('source', ['sandbox', ''])
+    def test_number_conversions_to_alphanumeric(self, source):
+        # Given the source
+        # when passed an alphanumeric to function
+        number1 = to_number(source)
+        # when passed an empty string to function
+        number2 = to_number(source)
+        # Then we obtain default value 0
+        assert number1 == number2 == 0

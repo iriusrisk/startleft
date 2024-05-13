@@ -12,7 +12,8 @@ from slp_base import LoadingIacFileError
 from slp_tfplan.slp_tfplan.load.tfplan_loader import TFPlanLoader
 from slp_tfplan.tests.resources import test_resource_paths
 from slp_tfplan.tests.util.asserts import assert_resource_values
-from slp_tfplan.tests.util.builders import build_tfplan, generate_resources, generate_child_modules
+from slp_tfplan.tests.util.builders import build_tfplan, generate_resources, generate_child_modules, \
+    generate_child_modules_instances
 
 INVALID_YAML = test_resource_paths.invalid_yaml
 TF_FILE_YAML_EXCEPTION = JSONDecodeError('HLC2 cannot be processed as JSON', doc='sample-doc', pos=0)
@@ -36,7 +37,7 @@ def mock_load_graph(mocker, mocked_graph):
 class TestTFPlanLoader:
 
     @patch('slp_tfplan.slp_tfplan.load.tfplan_loader.load_tfgraph')
-    @patch('yaml.load')
+    @patch('json.loads')
     def test_load_tfplan_and_graph(self, yaml_mock, from_agraph_mock):
         # GIVEN a valid plain Terraform Plan file with no modules
         yaml_mock.side_effect = [build_tfplan(resources=generate_resources(2))]
@@ -55,7 +56,7 @@ class TestTFPlanLoader:
         # AND the TFGRAPH is also loaded
         assert tfplan_loader.get_tfgraph().graph['label'] == graph_label
 
-    @patch('yaml.load')
+    @patch('json.loads')
     def test_load_no_modules(self, yaml_mock):
         # GIVEN a valid plain Terraform Plan file with no modules
         yaml_mock.side_effect = [build_tfplan(resources=generate_resources(2))]
@@ -73,13 +74,13 @@ class TestTFPlanLoader:
 
         for i, resource in enumerate(resources):
             i += 1
-            assert resource['resource_id'] == f'r{i}-addr'
+            assert resource['resource_id'] == f'r{i}-type.r{i}-name'
             assert resource['resource_type'] == f'r{i}-type'
             assert resource['resource_name'] == f'r{i}-name'
 
             assert_resource_values(resource['resource_values'])
 
-    @patch('yaml.load')
+    @patch('json.loads')
     def test_load_only_modules(self, yaml_mock):
         # GIVEN a valid plain Terraform Plan file with only modules
         yaml_mock.side_effect = [build_tfplan(
@@ -102,7 +103,7 @@ class TestTFPlanLoader:
             for child_index in range(1, 3):
                 resource = resources[resource_index]
 
-                assert resource['resource_id'] == f'r{child_index}-addr'
+                assert resource['resource_id'] == f'r{child_index}-type.r{child_index}-name'
                 assert resource['resource_type'] == f'r{child_index}-type'
                 assert resource['resource_name'] == f'{module_address}.r{child_index}-name'
 
@@ -110,7 +111,7 @@ class TestTFPlanLoader:
 
                 resource_index += 1
 
-    @patch('yaml.load')
+    @patch('json.loads')
     def test_load_nested_modules(self, yaml_mock):
         # GIVEN a valid plain Terraform Plan file with nested modules
         yaml_mock.side_effect = [build_tfplan(
@@ -130,13 +131,13 @@ class TestTFPlanLoader:
         # AND resource_id, resource_type, resource_name and resource_properties are right
         assert len(resources) == 1
 
-        assert resource['resource_id'] == 'r1-addr'
+        assert resource['resource_id'] == 'r1-type.r1-name'
         assert resource['resource_type'] == 'r1-type'
-        assert resource['resource_name'] == 'cm1-addr.cm1-addr.r1-name'
+        assert resource['resource_name'] == 'cm1-addr.r1-name'
 
         assert_resource_values(resource['resource_values'])
 
-    @patch('yaml.load')
+    @patch('json.loads')
     def test_load_complex_structure(self, yaml_mock):
         # GIVEN a valid plain Terraform Plan file with modules and root-level resources
         yaml_mock.side_effect = [build_tfplan(
@@ -155,7 +156,7 @@ class TestTFPlanLoader:
         # AND resource_type, resource_name and resource_properties from top level are right
         resource = resources[0]
 
-        assert resource['resource_id'] == 'r1-addr'
+        assert resource['resource_id'] == 'r1-type.r1-name'
         assert resource['resource_type'] == 'r1-type'
         assert resource['resource_name'] == 'r1-name'
 
@@ -163,13 +164,13 @@ class TestTFPlanLoader:
 
         # AND resource_type, resource_name and resource_properties from child modules are right
         resource = resources[1]
-        assert resource['resource_id'] == 'r1-addr'
+        assert resource['resource_id'] == 'r1-type.r1-name'
         assert resource['resource_type'] == 'r1-type'
         assert resource['resource_name'] == 'cm1-addr.r1-name'
 
         assert_resource_values(resource['resource_values'])
 
-    @patch('yaml.load')
+    @patch('json.loads')
     def test_load_resources_same_name(self, yaml_mock):
         # GIVEN a valid plain Terraform Plan file with only one module
         tfplan = build_tfplan(
@@ -193,10 +194,10 @@ class TestTFPlanLoader:
         assert len(resources) == 1
 
         # AND The duplicated resource is unified and the index is no present in name or id
-        assert resources[0]['resource_id'] == 'r1-addr'
+        assert resources[0]['resource_id'] == 'r1-type.r1-name'
         assert resources[0]['resource_name'] == 'cm1-addr.r1-name'
 
-    @patch('yaml.load')
+    @patch('json.loads')
     def test_load_modules_same_name(self, yaml_mock):
         # GIVEN a valid plain Terraform Plan file with only one module
         tfplan = build_tfplan(
@@ -230,10 +231,86 @@ class TestTFPlanLoader:
         assert len(resources) == 1
 
         # AND The duplicated resource is unified and the index is not present in name or id
-        assert resources[0]['resource_id'] == 'cm1-addr.r1-addr'
+        assert resources[0]['resource_id'] == 'cm1-addr.r1-type.r1-name'
         assert resources[0]['resource_name'] == 'cm1-addr.r1-name'
 
-    @patch('yaml.load')
+    @patch('json.loads')
+    def test_load_modules_instances(self, yaml_mock):
+        # GIVEN a valid plain Terraform Plan file with only modules
+        yaml_mock.side_effect = [build_tfplan(
+            child_modules=generate_child_modules_instances(module_count=2, resource_count=2))]
+
+        # WHEN TFPlanLoader::load is invoked
+        tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
+        tfplan_loader.load()
+
+        # THEN TF contents are loaded in TfplanLoader.terraform
+        assert tfplan_loader.terraform
+        resources = tfplan_loader.terraform['resource']
+        assert len(resources) == 2
+
+        # AND resource_id, resource_type, resource_name and resource_properties are right
+        resource_index = 0
+        for _ in range(1, 2):
+
+            module_address = 'cm-addr'
+
+            for child_index in range(1, 3):
+                resource = resources[resource_index]
+
+                assert (resource['resource_id'] == f'{module_address}.r{child_index}-type.r{child_index}-name')
+                assert resource['resource_type'] == f'r{child_index}-type'
+                assert resource['resource_name'] == f'{module_address}.r{child_index}-name'
+
+                assert_resource_values(resource['resource_values'])
+
+                resource_index += 1
+
+    @patch('json.loads')
+    def test_load_modules_mixed(self, yaml_mock):
+        # GIVEN a valid plain Terraform Plan file with two instances of a module and two resources each
+        mixed_modules = generate_child_modules(module_count=1, resource_count=1)
+        module_instances = generate_child_modules_instances(module_count=2, resource_count=2)
+        mixed_modules.append(module_instances[0])
+        mixed_modules.append(module_instances[1])
+
+        tfplan = build_tfplan(child_modules=mixed_modules)
+
+        # GIVEN a valid plain Terraform Plan file with only modules
+        yaml_mock.side_effect = [tfplan]
+
+        # WHEN TFPlanLoader::load is invoked
+        tfplan_loader = TFPlanLoader(sources=[b'MOCKED', b'MOCKED'])
+        tfplan_loader.load()
+
+        # THEN TF contents are loaded in TfplanLoader.terraform
+        assert tfplan_loader.terraform
+        resources = tfplan_loader.terraform['resource']
+        assert len(resources) == 3
+
+        # AND resource_id, resource_type, resource_name and resource_properties are right
+
+        assert resources[0]['resource_id'] == 'r1-type.r1-name'
+        assert resources[0]['resource_name'] == 'cm1-addr.r1-name'
+
+        resource_index = 1
+
+        for _ in range(1, 2):
+
+            module_address = 'cm-addr'
+
+            for child_index in range(1, 2):
+                resource = resources[resource_index]
+
+                assert (resource['resource_id'] == f'{module_address}.r{child_index}-type.r{child_index}-name')
+                assert resource['resource_type'] == f'r{child_index}-type'
+                assert resource['resource_name'] == f'{module_address}.r{child_index}-name'
+
+                assert_resource_values(resource['resource_values'])
+
+                resource_index += 1
+
+    @patch('json.loads')
     def test_load_no_resources(self, yaml_mock):
         # GIVEN a valid Terraform Plan file with no resources
         yaml_mock.side_effect = [{'planned_values': {'root_module': {}}}]
@@ -245,7 +322,7 @@ class TestTFPlanLoader:
         # THEN TfplanLoader.terraform is an empty dictionary
         assert tfplan_loader.terraform == {}
 
-    @patch('yaml.load')
+    @patch('json.loads')
     def test_load_empty_tfplan(self, yaml_mock):
         # GIVEN an empty TFPLAN
         yaml_mock.side_effect = [{}]
