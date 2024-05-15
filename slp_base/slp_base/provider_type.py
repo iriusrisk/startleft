@@ -35,7 +35,7 @@ class DiagramType(str, Provider):
     DRAWIO = ("DRAWIO", "Drawio", RepresentationType.DIAGRAM,
               [application_octet_stream, application_xml, text_xml, text_plain])
     ABACUS = ("ABACUS", "Abacus", RepresentationType.DIAGRAM,
-              [application_octet_stream, application_json])
+              [application_octet_stream, application_json, text_plain])
 
 
 class EtmType(str, Provider):
