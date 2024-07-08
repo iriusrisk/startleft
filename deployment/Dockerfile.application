@@ -13,6 +13,8 @@ RUN apk --no-cache add lapack libstdc++ libmagic geos-dev && \
 
 COPY . .
 
+RUN pip install --upgrade pip
+
 RUN pip install .
 
 
@@ -23,10 +25,13 @@ WORKDIR /app
 RUN apk update && \
     apk add libmagic && \
     apk add re2 && \
-    apk add graphviz && \
     apk add lapack && \
     apk add cblas && \
     apk add geos
+
+# Due to CVE-2023-46045 detected in v9.x.y of graphviz and lower ones,
+# we need to install the latest version of graphviz from the alpine edge repository
+RUN apk add graphviz --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community
 
 COPY --from=startleft-base /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
 

@@ -20,7 +20,7 @@ setup(
         'deepmerge==1.1.0',
         'jmespath==1.0.1',
         'python-hcl2==4.3.2',
-        'requests==2.31.0',
+        'requests==2.32.3',
         'fastapi==0.109.2',
         'python-multipart==0.0.7',
         'click==8.1.7',
