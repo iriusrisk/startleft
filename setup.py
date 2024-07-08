@@ -37,10 +37,10 @@ setup(
         'xmlschema==2.5.0',
         'word2number==1.1',
         # Do not upgrade pygraphviz unless security issues because it is heavily dependent on the underlying OS
-        'pygraphviz==1.10'
+        'pygraphviz==1.10',
         # Numpy is a transitive dependency of fastapi, requests and python-multipart
         # They require different v1 versions, while v2 versions lead to import errors
-        'numpy<2.0',
+        'numpy<2.0'
     ],
     use_scm_version={
         'write_to': 'startleft/version.py',
