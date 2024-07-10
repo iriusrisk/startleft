@@ -13,6 +13,8 @@ RUN apk --no-cache add lapack libstdc++ libmagic geos-dev && \
 
 COPY . .
 
+RUN pip install --upgrade pip
+
 RUN pip install .
 
 
@@ -21,12 +23,7 @@ FROM python:3.8-alpine
 WORKDIR /app
 
 RUN apk update && \
-    apk add libmagic && \
-    apk add re2 && \
-    apk add graphviz && \
-    apk add lapack && \
-    apk add cblas && \
-    apk add geos
+    apk add libmagic re2 lapack cblas geos graphviz-dev
 
 COPY --from=startleft-base /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
 
