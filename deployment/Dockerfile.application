@@ -13,6 +13,8 @@ RUN apk --no-cache add lapack libstdc++ libmagic geos-dev && \
 
 COPY . .
 
+RUN pip install --upgrade pip
+
 RUN pip install .
 
 RUN rm -r ../app/*
