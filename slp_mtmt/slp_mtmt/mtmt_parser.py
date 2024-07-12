@@ -11,7 +11,7 @@ from slp_mtmt.slp_mtmt.parse.mtmt_component_parser import MTMTComponentParser
 from slp_mtmt.slp_mtmt.parse.mtmt_connector_parser import MTMTConnectorParser
 from slp_mtmt.slp_mtmt.parse.mtmt_threat_parser import MTMThreatParser
 from slp_mtmt.slp_mtmt.parse.mtmt_trustzone_parser import MTMTTrustzoneParser
-from trustzone_representation_calculator import calculate_missing_trustzones_representations
+from otm.otm.trustzone_representation_calculator import calculate_missing_trustzones_representations
 
 
 class MTMTParser(ProviderParser):
