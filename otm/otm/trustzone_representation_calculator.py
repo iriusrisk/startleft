@@ -9,7 +9,7 @@ from otm.otm.util.representation import build_size, build_position, make_relativ
 TZ_PADDING = 30
 
 
-def _get_trustzone_components(trustzone_id: str, components: List[Component]):
+def _get_trustzone_components(trustzone_id: str, components: List[Union[Component, Trustzone]]):
     return list(filter(lambda component: component.parent == trustzone_id, components))
 
 
@@ -20,7 +20,7 @@ def _get_first_representation(component: Component):
 def calculate_missing_trustzones_representations(otm: OTM, representation_id):
     for trustzone in otm.trustzones:
         if not trustzone.representations:
-            tz_components = _get_trustzone_components(trustzone.id, otm.components)
+            tz_components = _get_trustzone_components(trustzone.id, otm.components + otm.trustzones)
             TrustZoneRepresentationCalculator(representation_id, trustzone, tz_components).calculate()
 
 
