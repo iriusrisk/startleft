@@ -38,12 +38,12 @@ class MTMTLoader(ProviderLoader):
         model_ = json_['ThreatModel']
         list_ = model_['DrawingSurfaceList']
         surface_model_ = list_['DrawingSurfaceModel']
-        surface_model_array \
-            = surface_model_ if isinstance(surface_model_, collections.abc.Sequence) else [surface_model_]
+        surface_model_ \
+            = surface_model_[0] if isinstance(surface_model_, collections.abc.Sequence) else surface_model_
 
-        for surface_model in surface_model_array:
-            self.add_borders(surface_model)
-            self.add_lines(surface_model)
+        # Only the first tab of the MTMT file is processed
+        self.add_borders(surface_model_)
+        self.add_lines(surface_model_)
 
         self.add_threats(model_)
         self.know_base = MTMKnowledge(model_['KnowledgeBase'])

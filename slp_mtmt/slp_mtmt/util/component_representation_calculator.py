@@ -5,15 +5,13 @@ from slp_mtmt.slp_mtmt.util.representation_calculator import RepresentationCalcu
 class ComponentRepresentationCalculator(RepresentationCalculator):
 
     def get_position(self) -> (int, int):
-        if isinstance(self.parent, MTMBorder):
-            return self.__get_border_position()
-        return None, None
+        return self.__get_border_position()
 
     def get_size(self) -> (int, int):
         return self.element.width, self.element.height
 
     def __get_border_position(self):
-        if self.parent:
+        if isinstance(self.parent, MTMBorder):
             x = self.element.left - self.parent.left
             y = self.element.top - self.parent.top
         else:

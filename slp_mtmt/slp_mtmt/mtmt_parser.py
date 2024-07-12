@@ -11,6 +11,7 @@ from slp_mtmt.slp_mtmt.parse.mtmt_component_parser import MTMTComponentParser
 from slp_mtmt.slp_mtmt.parse.mtmt_connector_parser import MTMTConnectorParser
 from slp_mtmt.slp_mtmt.parse.mtmt_threat_parser import MTMThreatParser
 from slp_mtmt.slp_mtmt.parse.mtmt_trustzone_parser import MTMTTrustzoneParser
+from trustzone_representation_calculator import calculate_missing_trustzones_representations
 
 
 class MTMTParser(ProviderParser):
@@ -62,14 +63,17 @@ class MTMTParser(ProviderParser):
 
     def build_otm(self) -> OTM:
         threats, mitigations = self.__get_mtmt_threats_and_mitigations(self.__get_mtmt_components())
+        otm_representations = self.__get_mtmt_representations()
 
         otm = OTMBuilder(self.project_id, self.project_name, EtmType.MTMT) \
-            .add_representations(self.__get_mtmt_representations()) \
+            .add_representations(otm_representations) \
             .add_trustzones(self.__get_mtmt_trustzones()) \
             .add_components(self.__get_mtmt_components()) \
             .add_dataflows(self.__get_mtmt_dataflows()) \
             .add_threats(threats) \
             .add_mitigations(mitigations) \
             .build()
+
+        calculate_missing_trustzones_representations(otm, otm_representations[0].id)
 
         return otm
