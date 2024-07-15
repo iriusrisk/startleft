@@ -20,7 +20,7 @@ def _get_first_representation(component: Component):
 def calculate_missing_trustzones_representations(otm: OTM, representation_id):
     for trustzone in otm.trustzones:
         if not trustzone.representations:
-            tz_components = _get_trustzone_components(trustzone.id, otm.components + otm.trustzones)
+            tz_components = _get_trustzone_components(trustzone.id, otm.trustzones + otm.components)
             TrustZoneRepresentationCalculator(representation_id, trustzone, tz_components).calculate()
 
 
