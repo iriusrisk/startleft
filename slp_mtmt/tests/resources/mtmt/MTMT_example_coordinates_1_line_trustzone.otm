@@ -25,6 +25,19 @@
       "id": "acafa4b0-f94d-4077-8a42-74b959bd0796",
       "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91",
       "name": "Cloud",
+      "representations": [{
+        "id": "acafa4b0-f94d-4077-8a42-74b959bd0796-representation",
+        "name": "Cloud Representation",
+        "position": {
+          "x": 734,
+          "y": 88
+        },
+        "representation": "example-project-diagram",
+        "size": {
+          "height": 488,
+          "width": 535
+        }
+      }],
       "risk": {
         "trustRating": 10
       },
@@ -37,6 +50,19 @@
       "id": "c99b79b6-a658-4096-9919-27946d92e23f",
       "type": "6376d53e-6461-412b-8e04-7b3fe2b397de",
       "name": "Generic Trust Line Boundary",
+      "representations": [{
+        "id": "c99b79b6-a658-4096-9919-27946d92e23f-representation",
+        "name": "Generic Trust Line Boundary Representation",
+        "position": {
+          "x": 86,
+          "y": 109
+        },
+        "representation": "example-project-diagram",
+        "size": {
+          "height": 445,
+          "width": 432
+        }
+      }],
       "risk": {
         "trustRating": 10
       },
@@ -54,6 +80,19 @@
       "parent": {
         "trustZone": "acafa4b0-f94d-4077-8a42-74b959bd0796"
       },
+      "representations": [{
+        "id": "53245f54-0656-4ede-a393-357aeaa2e20f-representation",
+        "name": "Accounting PostgreSQL Representation",
+        "position": {
+          "x": 334,
+          "y": 45
+        },
+        "representation": "example-project-diagram",
+        "size": {
+          "height": 82,
+          "width": 82
+        }
+      }],
       "attributes": {
         "Name": "Accounting PostgreSQL",
         "Out Of Scope": "false",
@@ -100,6 +139,19 @@
       "parent": {
         "trustZone": "c99b79b6-a658-4096-9919-27946d92e23f"
       },
+      "representations": [{
+        "id": "6183b7fa-eba5-4bf8-a0af-c3e30d144a10-representation",
+        "name": "Android Representation",
+        "position": {
+          "x": 320,
+          "y": 30
+        },
+        "representation": "example-project-diagram",
+        "size": {
+          "height": 82,
+          "width": 82
+        }
+      }],
       "attributes": {
         "Name": "Android",
         "Out Of Scope": "false",
@@ -135,6 +187,19 @@
       "parent": {
         "trustZone": "acafa4b0-f94d-4077-8a42-74b959bd0796"
       },
+      "representations": [{
+        "id": "5d15323e-3729-4694-87b1-181c90af5045-representation",
+        "name": "Public API v2 Representation",
+        "position": {
+          "x": 31,
+          "y": 155
+        },
+        "representation": "example-project-diagram",
+        "size": {
+          "height": 82,
+          "width": 82
+        }
+      }],
       "attributes": {
         "Name": "Public API v2",
         "Out Of Scope": "false",
@@ -812,6 +877,19 @@
       "parent": {
         "trustZone": "acafa4b0-f94d-4077-8a42-74b959bd0796"
       },
+      "representations": [{
+        "id": "91882aca-8249-49a7-96f0-164b68411b48-representation",
+        "name": "Azure File Storage Representation",
+        "position": {
+          "x": 300,
+          "y": 161
+        },
+        "representation": "example-project-diagram",
+        "size": {
+          "height": 82,
+          "width": 82
+        }
+      }],
       "attributes": {
         "Name": "Azure File Storage",
         "Out Of Scope": "false",
@@ -900,6 +978,19 @@
       "parent": {
         "trustZone": "c99b79b6-a658-4096-9919-27946d92e23f"
       },
+      "representations": [{
+        "id": "91c41c08-87c3-4740-a9fa-a37975717e93-representation",
+        "name": "iOS Representation",
+        "position": {
+          "x": 30,
+          "y": 155
+        },
+        "representation": "example-project-diagram",
+        "size": {
+          "height": 82,
+          "width": 82
+        }
+      }],
       "attributes": {
         "Name": "iOS",
         "Out Of Scope": "false",
@@ -935,6 +1026,19 @@
       "parent": {
         "trustZone": "c99b79b6-a658-4096-9919-27946d92e23f"
       },
+      "representations": [{
+        "id": "40560275-0a84-4e52-b67f-f9008519e608-representation",
+        "name": "Browser Representation",
+        "position": {
+          "x": 313,
+          "y": 333
+        },
+        "representation": "example-project-diagram",
+        "size": {
+          "height": 82,
+          "width": 82
+        }
+      }],
       "attributes": {
         "Name": "Browser",
         "Out Of Scope": "false"
@@ -969,6 +1073,19 @@
       "parent": {
         "trustZone": "acafa4b0-f94d-4077-8a42-74b959bd0796"
       },
+      "representations": [{
+        "id": "b56070fb-682d-4af7-8262-a31064d85ba1-representation",
+        "name": "Web API Representation",
+        "position": {
+          "x": 155,
+          "y": 297
+        },
+        "representation": "example-project-diagram",
+        "size": {
+          "height": 82,
+          "width": 82
+        }
+      }],
       "attributes": {
         "Name": "Web API",
         "Out Of Scope": "false",
@@ -1146,6 +1263,19 @@
       "parent": {
         "trustZone": "acafa4b0-f94d-4077-8a42-74b959bd0796"
       },
+      "representations": [{
+        "id": "07d453bf-8157-4623-a0e9-5107cc3ca0a5-representation",
+        "name": "Azure Storage Representation",
+        "position": {
+          "x": 341,
+          "y": 293
+        },
+        "representation": "example-project-diagram",
+        "size": {
+          "height": 82,
+          "width": 82
+        }
+      }],
       "attributes": {
         "Name": "Azure Storage",
         "Out Of Scope": "false",
