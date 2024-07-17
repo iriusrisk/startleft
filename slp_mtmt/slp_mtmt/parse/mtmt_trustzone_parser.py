@@ -45,7 +45,7 @@ class MTMTTrustzoneParser(MTMTGeneralParser):
             parent_id, parent_type = None, None
         mtmt_type = self.__calculate_otm_type(border)
         if mtmt_type is not None:
-            calculator = TrustzoneRepresentationCalculator(self.diagram_representation, border)
+            calculator = TrustzoneRepresentationCalculator(self.diagram_representation, border, parent)
             representations = calculator.calculate_representation()
             tz = Trustzone(trustzone_id=border.id,
                            name=border.name or border.stencil_name,
