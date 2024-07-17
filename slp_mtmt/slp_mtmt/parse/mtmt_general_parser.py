@@ -1,3 +1,5 @@
+from typing import Union
+
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_border import MTMBorder
 from slp_mtmt.slp_mtmt.entity.mtmt_entity_line import MTMLine
 from slp_mtmt.slp_mtmt.mtmt_entity import MTMT
@@ -16,7 +18,7 @@ def is_parent(parent, child):
     return False
 
 
-def get_the_child(parents):
+def get_the_child(parents) -> Union[MTMBorder, MTMLine, None]:
     if len(parents) == 0:
         return None
     if len(parents) == 1:
@@ -43,7 +45,7 @@ class MTMTGeneralParser:
         self.mapping = mapping
         self.diagram_representation = diagram_representation
 
-    def _get_parent(self, border: MTMBorder):
+    def _get_parent(self, border: MTMBorder)  -> Union[MTMBorder, MTMLine, None]:
         parents = []
         for candidate in self.source.borders + self.source.lines:
             if is_parent(candidate, border):
