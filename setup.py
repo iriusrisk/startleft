@@ -20,7 +20,7 @@ setup(
         'deepmerge==1.1.0',
         'jmespath==1.0.1',
         'python-hcl2==4.3.2',
-        'requests==2.31.0',
+        'requests==2.32.3',
         'fastapi==0.109.2',
         'python-multipart==0.0.7',
         'click==8.1.7',
@@ -28,8 +28,8 @@ setup(
         'shapely==2.0.1',
         'vsdx==0.5.13',
         'python-magic==0.4.27',
-        'setuptools==67.8.0',
-        'setuptools-scm==8.0.2',
+        'setuptools==70.3.0',
+        'setuptools-scm==8.1.0',
         'defusedxml==0.7.1',
         'networkx==3.1',
         'dependency-injector==4.41.0',
@@ -37,7 +37,10 @@ setup(
         'xmlschema==2.5.0',
         'word2number==1.1',
         # Do not upgrade pygraphviz unless security issues because it is heavily dependent on the underlying OS
-        'pygraphviz==1.10'
+        'pygraphviz==1.10',
+        # Numpy is a transitive dependency of fastapi, requests and python-multipart
+        # They require different v1 versions, while v2 versions lead to import errors
+        'numpy<2.0'
     ],
     use_scm_version={
         'write_to': 'startleft/version.py',

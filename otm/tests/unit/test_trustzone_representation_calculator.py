@@ -70,7 +70,8 @@ class TestTrustZoneRepresentationCalculator:
             calculate_missing_trustzones_representations(otm, REPRESENTATION_ID)
 
         # THEN the components are retrieved for the trustzone_without_representation
-        get_trustzone_components_mock.assert_called_with(trustzone_without_representation.id, trustzone_components)
+        get_trustzone_components_mock.assert_called_with(
+            trustzone_without_representation.id, otm.trustzones + trustzone_components)
 
         # AND the trustzone representation is calculated for the trustzone_without_representation
         trustzone_calculator_mock.assert_called_with(REPRESENTATION_ID,
