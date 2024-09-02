@@ -1,4 +1,4 @@
-FROM python:$3.11-alpine AS startleft-base
+FROM python:3.11-alpine AS startleft-base
 
 WORKDIR /usr/src/app
 
