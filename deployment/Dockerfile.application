@@ -1,25 +1,22 @@
-FROM python:3.8-alpine
+FROM python:3.11-alpine
 
 WORKDIR /usr/src/app
 
 RUN apk update && \
     apk upgrade && \
-    apk add git && \
-    apk add geos && \
-    apk add graphviz-dev
-
-RUN apk --no-cache add lapack libstdc++ libmagic geos-dev && \
-    apk --no-cache add --virtual .builddeps g++ gcc gfortran musl-dev lapack-dev re2 re2-dev py3-pybind11-dev
+    apk --no-cache add geos geos-dev git graphviz-dev lapack libmagic libstdc++ && \
+    apk --no-cache add --virtual .builddeps g++ gcc gfortran lapack-dev musl-dev py3-pybind11-dev re2 re2-dev
 
 COPY . .
 
-RUN pip install --upgrade pip
-
-RUN pip install .
+RUN pip install --upgrade pip && install .
 
 RUN rm -r ../app/*
 
-# Remove not needed dependencies for runtime
-RUN apk del git geos-dev re2-dev py3-pybind11-dev
+# Remove not needed dependencies for runtime and add a user
+RUN apk del geos-dev git py3-pybind11-dev re2-dev && \
+    adduser --disabled-password  --no-create-home startleft
+
+USER startleft
 
 CMD ["startleft", "server", "--host", "0.0.0.0"]
