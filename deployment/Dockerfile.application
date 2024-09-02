@@ -4,18 +4,12 @@ WORKDIR /usr/src/app
 
 RUN apk update && \
     apk upgrade && \
-    apk add git && \
-    apk add geos && \
-    apk add graphviz-dev
-
-RUN apk --no-cache add lapack libstdc++ libmagic geos-dev && \
-    apk --no-cache add --virtual .builddeps g++ gcc gfortran musl-dev lapack-dev re2 re2-dev py3-pybind11-dev
+    apk --no-cache add geos geos-dev git graphviz-dev lapack libmagic libstdc++ && \
+    apk --no-cache add --virtual .builddeps g++ gcc gfortran lapack-dev musl-dev py3-pybind11-dev re2 re2-dev
 
 COPY . .
 
-RUN pip install --upgrade pip
-
-RUN pip install .
+RUN pip install --upgrade pip && pip install .
 
 
 FROM python:3.11-alpine
@@ -23,9 +17,8 @@ FROM python:3.11-alpine
 WORKDIR /app
 
 RUN apk update && \
-    apk add libmagic re2 lapack cblas geos graphviz-dev
-
-RUN adduser --disabled-password  --no-create-home startleft
+    apk --no-cache add cblas geos graphviz-dev lapack libmagic re2 && \
+    adduser --disabled-password  --no-create-home startleft
 
 COPY --from=startleft-base /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 
