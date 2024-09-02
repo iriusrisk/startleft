@@ -14,7 +14,7 @@ jobs:
     name: SonarCloud Analysis
     uses: ./.github/workflows/sonar.yml
     with:
-      python-version: "3.8"
+      python-version: "3.11"
     secrets: inherit
   test:
     name: StartLeft Tests
