@@ -14,14 +14,14 @@ jobs:
     name: SonarCloud Analysis
     uses: ./.github/workflows/sonar.yml
     with:
-      python-version: "3.11"
+      python-version: "3.8"
     secrets: inherit
   test:
     name: StartLeft Tests
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest ]
-        python-version: [ "3.9", "3.10", "3.11", "3.12" ]
+        python-version: [ "3.9", "3.10", "3.11" ]
     uses: ./.github/workflows/test.yml
     with:
       os: ${{ matrix.os }}
