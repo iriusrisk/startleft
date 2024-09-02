@@ -1,4 +1,4 @@
-FROM python:3.8-alpine AS startleft-base
+FROM python:$3.11-alpine AS startleft-base
 
 WORKDIR /usr/src/app
 
@@ -18,15 +18,19 @@ RUN pip install --upgrade pip
 RUN pip install .
 
 
-FROM python:3.8-alpine
+FROM python:3.11-alpine
 
 WORKDIR /app
 
 RUN apk update && \
     apk add libmagic re2 lapack cblas geos graphviz-dev
 
-COPY --from=startleft-base /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
+RUN adduser --disabled-password  --no-create-home startleft
+
+COPY --from=startleft-base /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 
 COPY --from=startleft-base /usr/local/bin/startleft /usr/local/bin/startleft
+
+USER startleft
 
 CMD ["startleft", "server", "--host", "0.0.0.0"]
