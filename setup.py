@@ -13,7 +13,7 @@ setup(
     keywords=['threat modeling', 'cyber security', 'appsec'],
     packages=find_packages(),
     include_package_data=True,
-    python_requires='>=3.8',
+    python_requires='>= 3.9, <= 3.12',
     install_requires=[
         'pyyaml==6.0.1',
         'jsonschema==4.19.0',
@@ -69,7 +69,7 @@ setup(
         'Intended Audience :: Developers',
         'Topic :: Security',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9'
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11'
     ]
 )
