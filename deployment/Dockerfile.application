@@ -9,7 +9,7 @@ RUN apk update && \
 
 COPY . .
 
-RUN pip install --upgrade pip && install .
+RUN pip install --upgrade pip && pip install .
 
 RUN rm -r ../app/*
 
