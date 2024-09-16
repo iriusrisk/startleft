@@ -5,10 +5,10 @@ runs:
   using: "composite"
   steps:
 
-    - name: Set up Python 3.8
+    - name: Set up Python 3.11
       uses: actions/setup-python@v3
       with:
-        python-version: "3.8"
+        python-version: "3.11"
 
     - name: Configure git username
       run: git config user.name 'github-actions[bot]' && git config user.email 'github-actions[bot]@users.noreply.github.com'
