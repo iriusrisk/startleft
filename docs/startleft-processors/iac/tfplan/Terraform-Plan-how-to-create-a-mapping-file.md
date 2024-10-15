@@ -86,12 +86,14 @@ A mapping list must be defined in the `components` section to find and configure
   - label: aws_cloudwatch_metric_alarm
     type: cloudwatch
     $singleton: true
+    $category: CloudWatch
 ```
 
 !!! note ""
 
     This configuration maps all the available components of type `aws_cloudwatch_metric_alarm` to a 
-    **unique component** of type `cloudwatch`
+    **unique component** of type `cloudwatch`. 
+    The `$category` is used to name the group of components in the Threat Model.
 
 #### Mapping by a Regex
 
@@ -99,12 +101,14 @@ A mapping list must be defined in the `components` section to find and configure
   - label: {$regex: ^aws_api_gateway_\w*$}
     type: api-gateway
     $singleton: true
+    $category: API Gateway
 ```
 
 !!! note ""
 
     This configuration maps all the components whose type matches the regex `^aws_api_gateway\w*$`.
     It may be used along `$singleton` to create a **unique component** of type `api-gateway`
+    The `$category` is used to name the group of components in the Threat Model.
 
 ### Mapping Configuration
 

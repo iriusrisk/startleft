@@ -26,6 +26,14 @@ def _find_equivalent_dataflows(dataflow: Dataflow, dataflows: List[Dataflow]) ->
     return equivalent_dataflows
 
 
+def _are_sibling(component, sibling):
+    if component.category and sibling.category:
+        return component.category == sibling.category
+    if not component.category and not sibling.category:
+        return component.type == sibling.type
+    return False
+
+
 def _are_equivalent_dataflows(dataflow_1: Dataflow, dataflow_2: Dataflow) -> bool:
     is_same_dataflow = (dataflow_1.source_node == dataflow_2.source_node
                     and dataflow_1.destination_node == dataflow_2.destination_node)
@@ -58,6 +66,8 @@ def _merge_dataflows(origin_dataflow: Dataflow, dataflows: List[Dataflow]) -> Da
 
     return origin_dataflow
 
+def __build_singleton_name(otm_components: TFPlanComponent):
+    return otm_components.category if otm_components.category else f"{otm_components.type} (grouped)"
 
 def _build_singleton_component(otm_components: List[TFPlanComponent]) -> TFPlanComponent:
     tags = list(set(itertools.chain.from_iterable([c.tags or [] for c in otm_components])))
@@ -65,7 +75,7 @@ def _build_singleton_component(otm_components: List[TFPlanComponent]) -> TFPlanC
     component_id = otm_components[0].id
     return TFPlanComponent(
         component_id=component_id,
-        name=f"{otm_components[0].type} (grouped)",
+        name=__build_singleton_name(otm_components[0]),
         component_type=otm_components[0].type,
         parent=otm_components[0].parent,
         parent_type=otm_components[0].parent_type,
@@ -91,7 +101,7 @@ class SingletonTransformer(Transformer):
     def __populate_singleton_component_relations(self):
         for component in self.otm_components:
             if component.is_singleton and self.__is_not_parent(component):
-                sibling_components = self.__find_siblings_components(component.type, component.parent)
+                sibling_components = self.__find_siblings_components(component)
                 if len(sibling_components) > 1:
                     self.singleton_component_relations[component.id] = \
                         self.singleton_component_relations.get(sibling_components[0].id) \
@@ -100,20 +110,19 @@ class SingletonTransformer(Transformer):
     def __is_not_parent(self, component: TFPlanComponent):
         return not any(c.parent == component.id for c in self.otm_components)
 
-    def __find_siblings_components(self, component_type: str, parent_id: str):
+    def __find_siblings_components(self, component: TFPlanComponent):
         """
         Returns all the component marked as singleton with the given type and parent identifier
-        :param component_type: Type of the component
-        :param parent_id:  Identifier of the parent component
+        :param component: The component type to search
         :return: A list with all the related components
         """
         found_components = []
-        for component in self.otm_components:
-            if (component.is_singleton
-                    and self.__is_not_parent(component)
-                    and component.type == component_type
-                    and component.parent == parent_id):
-                found_components.append(component)
+        for sibling in self.otm_components:
+            if (sibling.is_singleton
+                    and self.__is_not_parent(sibling)
+                    and _are_sibling(component, sibling)
+                    and sibling.parent == component.parent):
+                found_components.append(sibling)
 
         return found_components
 
