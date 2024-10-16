@@ -1,3 +1,4 @@
+import logging
 from typing import Union, List
 
 import networkx as nx
@@ -6,6 +7,7 @@ from networkx import DiGraph
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent
 from slp_tfplan.slp_tfplan.load.tfplan_to_resource_dict import remove_name_prefix
 
+logger = logging.getLogger(__name__)
 
 class RelationshipsExtractor:
 
@@ -48,7 +50,8 @@ class RelationshipsExtractor:
 
         shortest_path = None
         if nx.has_path(self.graph, source_node, target_node):
-            for path in nx.all_simple_paths(self.graph, source=source_node, target=target_node):
+            paths = self.__get_all_simple_paths(source_node, target_node)
+            for path in paths:
                 if self.__is_straight_path(path):
                     if not shortest_path or len(shortest_path) > len(path):
                         shortest_path = path
@@ -65,3 +68,17 @@ class RelationshipsExtractor:
 
     def __nodes_to_labels(self, path: []) -> set:
         return set(filter(lambda x: x is not None, map(lambda p: remove_name_prefix(self.nodes_labels[p]), path)))
+
+    def __get_all_simple_paths(self, source_node, target_node):
+        hop_limit = 100
+        for max_hops in range(1, hop_limit):
+            paths = list(nx.all_simple_paths(self.graph, source_node, target_node, cutoff=max_hops))
+            if paths:
+                return paths
+        logger.warning(f"Reached limit of {hop_limit} hops to find a path. "
+                       f"We did not find a path between {source_node} and {target_node} "
+                       f"with less than {hop_limit} hops.")
+        return []
+
+
+
