@@ -76,7 +76,7 @@ class RelationshipsExtractor:
             if paths:
                 return paths
         logger.warning(f"Reached limit of {hop_limit} hops to find a path. "
-                       f"We did not find a path between {source_node} and {target_node} "
+                       f"Path not found between {source_node} and {target_node} "
                        f"with less than {hop_limit} hops.")
         return []
 
