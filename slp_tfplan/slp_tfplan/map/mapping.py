@@ -22,7 +22,8 @@ class ComponentMapping:
     @property
     def configuration(self) -> dict:
         return {
-            '$singleton': self.__component.get('$singleton', False)
+            '$singleton': self.__component.get('$singleton', False),
+            '$category': self.__component.get('$category', None),
         }
 
     def __str__(self) -> str:

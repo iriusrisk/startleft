@@ -26,31 +26,35 @@ def _create_trustzone(value: str, default: bool = False, trust_rating: int = Non
     return trustzone
 
 
-def _create_component(value: str, singleton: bool = False) -> dict:
+def _create_component(value: str, singleton: bool = False, category: str = None) -> dict:
     component = {
         'label': f'{value}',
         'type': f'type-{value}'
     }
     if singleton:
         component['$singleton'] = singleton
+    if category:
+        component['$category'] = category
     return component
 
 
 class TestComponentMapping:
 
-    @pytest.mark.parametrize('component_id, singleton', [
-        pytest.param(1, False, id='not singleton component'),
-        pytest.param(2, True, id='singleton component'),
+    @pytest.mark.parametrize('component_id, singleton, category', [
+        pytest.param(1, False, None, id='not singleton component'),
+        pytest.param(2, True, None, id='singleton component'),
+        pytest.param(3, False, 'Category', id='category component'),
     ])
-    def test_component_mapping(self, component_id: str, singleton: bool):
+    def test_component_mapping(self, component_id: str, singleton: bool, category: str):
         # GIVEN a component dictionary
-        component_dict = _create_component(component_id, singleton)
+        component_dict = _create_component(component_id, singleton, category)
         # WHEN loading the ComponentMapping
         component_mapping = ComponentMapping(component_dict)
         # THEN attributes are mapped correctly
         assert component_mapping.label == component_dict['label']
         assert component_mapping.type == component_dict['type']
         assert component_mapping.configuration.get('$singleton') == singleton
+        assert component_mapping.configuration.get('$category') == category
         assert len(component_mapping.__str__())
 
 

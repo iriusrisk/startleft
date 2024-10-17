@@ -59,6 +59,9 @@
             },
             "$singleton":{
                "type":"boolean"
+            },
+            "$category":{
+               "type":"string"
             }
          },
          "required":[

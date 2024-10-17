@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Dict, Union
+from typing import List, Dict, Union, Optional
 
 from otm.otm.entity.component import Component
 from otm.otm.entity.dataflow import Dataflow
@@ -38,6 +38,10 @@ class TFPlanComponent(Component):
     @property
     def is_singleton(self) -> bool:
         return self.configuration.get('$singleton', False)
+
+    @property
+    def category(self) -> Optional[str]:
+        return self.configuration.get('$category', None)
 
     def __eq__(self, other):
         """Overrides the default implementation"""

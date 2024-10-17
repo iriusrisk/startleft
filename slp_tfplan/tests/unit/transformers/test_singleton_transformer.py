@@ -6,7 +6,7 @@ from slp_tfplan.tests.util.builders import DEFAULT_TRUSTZONE, build_otm_type, \
     build_mocked_component, build_mocked_otm
 
 SINGLETON_CONFIG = "$singleton"
-
+CATEGORY_CONFIG = "$category"
 
 def _merge_component_configurations(components) -> {}:
     merge_configuration = {}
@@ -391,3 +391,107 @@ class TestSingletonTransformer:
         assert otm.components[0].tf_resource_id is None
         assert otm.components[0].tf_type is None
         assert otm.components[0].configuration == expected_configuration
+
+    def test_singleton_is_grouped_by_category(self):
+        """
+        Given an otm with two singleton components with same type and parent
+        And with the same category
+        Singleton logic should unify them
+        """
+
+        # Given an otm with two singleton components with same type and parent
+        component_a = build_mocked_component({
+            'component_name': 'component_a',
+            'tf_type': 'aws_type',
+            'configuration': {SINGLETON_CONFIG: True, CATEGORY_CONFIG: 'Category Name'}
+        })
+
+        component_b = build_mocked_component({
+            'component_name': 'component_b',
+            'tf_type': 'aws_type',
+            'configuration': {SINGLETON_CONFIG: True, CATEGORY_CONFIG: 'Category Name'}
+        })
+
+        otm = build_mocked_otm([component_a, component_b])
+
+        # WHEN SingletonTransformer::transform is invoked
+        SingletonTransformer(otm).transform()
+
+        # THEN Singleton logic should unify only (A,B)
+        assert len(otm.components) == 1
+        assert otm.components[0].id == component_a.id
+        assert otm.components[0].name == f'Category Name'
+        assert otm.components[0].type == component_a.type
+        assert otm.components[0].parent == component_a.parent
+        assert otm.components[0].parent_type == component_a.parent_type
+
+    def test_singleton_is_not_grouped_due_diff_category(self):
+        """
+        Given an otm with two singleton components with same type and parent
+        And with different category
+        Singleton logic should not unify them
+        """
+
+        # Given an otm with two singleton components with same type and parent
+        component_a = build_mocked_component({
+            'component_name': 'component_a',
+            'tf_type': 'aws_type',
+            'configuration': {SINGLETON_CONFIG: True, CATEGORY_CONFIG: 'Category Name'}
+        })
+
+        component_b = build_mocked_component({
+            'component_name': 'component_b',
+            'tf_type': 'aws_type',
+            'configuration': {SINGLETON_CONFIG: True, CATEGORY_CONFIG: 'Diff Category Name'}
+        })
+
+        otm = build_mocked_otm([component_a, component_b])
+
+        # WHEN SingletonTransformer::transform is invoked
+        SingletonTransformer(otm).transform()
+
+        # THEN Singleton logic should not unify
+        assert len(otm.components) == 2
+
+    def test_singleton_by_group_and_type_works_mixed(self):
+        """
+        Given an otm with two singleton components with same type and parent
+        Some of them are grouped by category and some by type
+        Singleton logic should unify them in two groups
+        """
+
+        # Given an otm with four singleton components with same type and parent
+        # Some of them are grouped by category and some by type
+        component_a = build_mocked_component({
+            'component_name': 'component_a',
+            'tf_type': 'aws_type',
+            'configuration': {SINGLETON_CONFIG: True, CATEGORY_CONFIG: 'Category Name'}
+        })
+
+        component_b = build_mocked_component({
+            'component_name': 'component_b',
+            'tf_type': 'aws_type',
+            'configuration': {SINGLETON_CONFIG: True, CATEGORY_CONFIG: 'Category Name'}
+        })
+
+        component_c = build_mocked_component({
+            'component_name': 'component_c',
+            'tf_type': 'aws_type',
+            'configuration': {SINGLETON_CONFIG: True}
+        })
+
+        component_d = build_mocked_component({
+            'component_name': 'component_d',
+            'tf_type': 'aws_type',
+            'configuration': {SINGLETON_CONFIG: True}
+        })
+
+        otm = build_mocked_otm([component_a, component_b, component_c, component_d])
+
+        # WHEN SingletonTransformer::transform is invoked
+        SingletonTransformer(otm).transform()
+
+        # THEN Singleton logic should unify only (A,B) and (C,D)
+        assert len(otm.components) == 2
+        assert otm.components[0].id == component_a.id
+        assert otm.components[1].id == component_c.id
