@@ -19,6 +19,7 @@ ingress_multiple_cidr_from_property = path + \
                                       '/tfplan/resources/ingress-multiple-cidr-from-property-tfplan-resources.json'
 ingress_multiple_cidr_from_rule = path + '/tfplan/resources/ingress-multiple-cidr-from-rule-tfplan-resources.json'
 ingress_multiple_security_groups = path + '/tfplan/resources/ingress-multiple-security-groups-tfplan-resources.json'
+aws_ingesting_click_logs = path + '/tfplan/resources/aws-ingesting-click-logs-using-terraform.gv'
 
 
 # mapping
