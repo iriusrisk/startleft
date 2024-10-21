@@ -1,0 +1,20 @@
+trustzones:
+  - type: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+    risk:
+      trust_rating: 10
+    $default: true
+
+components:
+
+  - $category: 'API Gateway'
+    label: {$regex: ^aws_api_gateway_\w*$}
+    type: api-gateway
+    $singleton: true
+
+  - $category: 'CloudWatch'
+    label:
+      - aws_cloudwatch_log_group
+      - aws_cloudwatch_log_stream
+    type: cloudwatch
+    $singleton: true

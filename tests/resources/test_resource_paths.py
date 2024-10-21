@@ -125,3 +125,9 @@ lucid_aws_with_tz_and_vpc_otm = f'{path}/lucid/lucid-aws-with-tz-and-vpc.otm'
 # MTMT
 mtmt_mapping_file_valid = f'{path}/mtmt/mapping_example.yaml'
 mtmt_mapping_file_invalid = f'{path}/mtmt/mapping_example_invalid.yaml'
+
+# TFPLAN
+tfplan_ingesting_logs_plan = f'{path}/tfplan/aws-ingesting-click-logs-using-terraform.json'
+tfplan_ingesting_logs_graph = f'{path}/tfplan/aws-ingesting-click-logs-using-terraform.gv'
+tfplan_singleton_behaviour = f'{path}/tfplan/singleton-behaviour-mapping.yaml'
+tfplan_singleton_behaviour_group_by_category = f'{path}/tfplan/singleton-behaviour-group-by-category-mapping.yaml'
