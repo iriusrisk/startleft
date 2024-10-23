@@ -66,8 +66,8 @@ def _merge_dataflows(origin_dataflow: Dataflow, dataflows: List[Dataflow]) -> Da
 
     return origin_dataflow
 
-def __build_singleton_name(otm_components: TFPlanComponent):
-    return otm_components.category if otm_components.category else f"{otm_components.type} (grouped)"
+def __build_singleton_name(component: TFPlanComponent):
+    return component.category or f"{component.type} (grouped)"
 
 def _build_singleton_component(otm_components: List[TFPlanComponent]) -> TFPlanComponent:
     tags = list(set(itertools.chain.from_iterable([c.tags or [] for c in otm_components])))

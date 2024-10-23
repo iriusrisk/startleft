@@ -29,7 +29,7 @@ def __files(tfplan, tfgraph, mapping_file):
 def __extract_and_order_components(otm):
     return sorted(otm['components'], key=lambda x: x['id'])
 
-def test_singleton_behaviour():
+def test_singleton():
     # GIVEN the mapping file with the singleton behaviour
     files = __files(tfplan_ingesting_logs_plan, tfplan_ingesting_logs_graph, tfplan_singleton_behaviour)
 
@@ -48,7 +48,7 @@ def test_singleton_behaviour():
     assert components[0]['name'] == 'iam (grouped)'
     assert components[0]['type'] == 'iam'
 
-def test_singleton_behaviour_group_by_category():
+def test_singleton_grouped_by_category():
     # GIVEN the mapping file with the behaviour group by category configured
     files = __files(tfplan_ingesting_logs_plan, tfplan_ingesting_logs_graph, tfplan_singleton_behaviour_group_by_category)
 
