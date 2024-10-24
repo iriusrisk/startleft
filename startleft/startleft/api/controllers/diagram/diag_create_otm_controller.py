@@ -25,8 +25,8 @@ provider_resolver = ProviderResolver(PROCESSORS)
 @check_mime_type('diag_file', 'diag_type', DiagramFileNotValidError)
 def diagram(diag_file: UploadFile = File(...),
             diag_type: DiagramType = Form(...),
-            id: str = Form(...),
-            name: str = Form(...),
+            id: str = Form(..., min_length=1, max_length=999),
+            name: str = Form(..., min_length=1, max_length=999),
             default_mapping_file: UploadFile = File(...),
             custom_mapping_file: UploadFile = File(None)):
     logger.info(

@@ -12,7 +12,7 @@ from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.iac import iac_create_otm_controller
 from tests.resources.test_resource_paths import default_cloudformation_mapping, example_json, \
     cloudformation_malformed_mapping_wrong_id, invalid_yaml, cloudformation_all_functions, \
-    cloudformation_mapping_all_functions, cloudformation_gz, visio_aws_shapes, cloudformation_multiple_files_networks, \
+    cloudformation_mapping_all_functions, cloudformation_gz, cloudformation_multiple_files_networks, \
     cloudformation_multiple_files_resources, cloudformation_ref_full_syntax, cloudformation_ref_short_syntax
 
 TESTING_IAC_TYPE = IacType.CLOUDFORMATION.value
@@ -98,6 +98,9 @@ class TestOTMControllerIaCCloudformation:
         res_body = json.loads(response.content.decode('utf-8'))
         assert res_body['status'] == '400'
         assert res_body['error_type'] == error_type
+        assert len(res_body['errors']) == 1
+        for e in res_body['errors']:
+            assert len(e['errorMessage']) > 0
 
     @responses.activate
     @patch('slp_cft.slp_cft.validate.cft_validator.CloudformationValidator.validate')
