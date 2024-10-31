@@ -36,7 +36,7 @@ def set_component_parent(component: TFPlanComponent, parent_id: str):
     component.parent = parent_id
 
 
-def _find_parent_candidates_by_type(components: [], parent_type: str) -> []:
+def _find_components_by_type(components: [], parent_type: str) -> []:
     return list(filter(lambda c: __extract_type(c.id) == parent_type, components))
 
 
@@ -79,10 +79,10 @@ class HierarchyCalculator(Transformer):
     def _find_parent_by_closest_relationship(self, component: TFPlanComponent, parent_candidates: []):
         return self.relationships_extractor.get_closest_resources(component, parent_candidates)
 
-    def _get_parent_candidates(self, parent_types: []):
-        parent_candidates = []
+    def _find_components_by_type(self, _types: []):
+        components = []
 
-        for parent_type in parent_types:
-            parent_candidates.extend(_find_parent_candidates_by_type(self.otm.components, parent_type))
+        for _type in _types:
+            components.extend(_find_components_by_type(self.otm.components, _type))
 
-        return parent_candidates
+        return components

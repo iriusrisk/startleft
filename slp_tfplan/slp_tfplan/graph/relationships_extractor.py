@@ -4,8 +4,8 @@ from typing import Union, List
 import networkx as nx
 from networkx import DiGraph
 
-from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent
 from slp_tfplan.slp_tfplan.load.tfplan_to_resource_dict import remove_name_prefix
+from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ class RelationshipsExtractor:
             if not linked_resources or path_size < min_size:
                 min_size = path_size
                 linked_resources = [target_candidate.id]
-            elif path_size == min_size:
+            elif path_size == min_size and target_candidate.id not in linked_resources:
                 linked_resources.append(target_candidate.id)
 
         return linked_resources
