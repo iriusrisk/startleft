@@ -1,1 +1,2 @@
 include startleft/data/*
+global-exclude **/tests/**
