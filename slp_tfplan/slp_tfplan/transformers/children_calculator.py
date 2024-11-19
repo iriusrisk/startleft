@@ -18,4 +18,4 @@ class ChildrenCalculator(HierarchyCalculator):
 
         return self._find_parent_by_closest_relationship(
             component,
-            self._get_parent_candidates(PARENTS_TYPES_BY_CHILDREN_TYPE[component.tf_type]))
+            self._find_components_by_type(PARENTS_TYPES_BY_CHILDREN_TYPE[component.tf_type]))

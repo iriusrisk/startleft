@@ -19,13 +19,15 @@ ingress_multiple_cidr_from_property = path + \
                                       '/tfplan/resources/ingress-multiple-cidr-from-property-tfplan-resources.json'
 ingress_multiple_cidr_from_rule = path + '/tfplan/resources/ingress-multiple-cidr-from-rule-tfplan-resources.json'
 ingress_multiple_security_groups = path + '/tfplan/resources/ingress-multiple-security-groups-tfplan-resources.json'
+aws_ingesting_click_logs = path + '/tfplan/resources/aws-ingesting-click-logs-using-terraform.gv'
 
 
 # mapping
 terraform_iriusrisk_tfplan_aws_mapping = path + '/mapping/iriusrisk-tfplan-aws-mapping.yaml'
+terraform_singleton_mapping = path + '/mapping/singleton-mapping.yaml'
+terraform_group_by_category_mapping = path + '/mapping/singleton-group-by-category-mapping.yaml'
 
 # otm
 otm_expected_elb = f'{path}/otm/expected-elb.otm'
 otm_expected_sgs = f'{path}/otm/expected-sgs.otm'
 otm_expected_official = f'{path}/otm/expected-official.otm'
-

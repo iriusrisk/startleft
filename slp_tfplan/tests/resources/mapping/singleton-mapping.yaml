@@ -1,0 +1,12 @@
+trustzones:
+  - type: b61d6911-338d-46a8-9f39-8dcd24abfe91
+    name: Public Cloud
+    risk:
+      trust_rating: 10
+    $default: true
+
+components:
+
+  - label: {$regex: ^aws_iam_\w*$}
+    type: iam
+    $singleton: true
