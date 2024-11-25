@@ -259,7 +259,7 @@ resource "aws_security_group" "webserver" {
 
 data "aws_ami" "iriusrisk_ha" {
   most_recent = true
-  owners      = ["154977180039"]
+  owners      = ["123456789012"]
 
   filter {
     name   = "name"
