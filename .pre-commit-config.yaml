@@ -1,18 +1,24 @@
 repos:
 - repo: https://github.com/returntocorp/semgrep
-  rev: 'v1.14.0'
+  rev: 'v1.89.0'
   hooks:
     - id: semgrep
-      exclude: "(.)*/tests|tests"
       args: [
+        '--metrics=off',
         '--config',
         'p/owasp-top-ten',
         '--config',
         'p/cwe-top-25',
         '--config',
         'p/gitleaks',
+        '--config',
+        'r/generic.secrets.security.detected-aws-account-id.detected-aws-account-id',
+        '--config',
+        '.semgrep/rules/detected-aws-account-id-in-arn.yaml',
+        '--config',
+        'r/generic.secrets.security.detected-aws-secret-access-key.detected-aws-secret-access-key',
         '--error',
         '--skip-unknown-extensions',
         '--exclude-rule=python.sqlalchemy.security.audit.avoid-sqlalchemy-text.avoid-sqlalchemy-text'
       ]
-      stages: [commit]
+      stages: [pre-commit]

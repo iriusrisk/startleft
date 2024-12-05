@@ -927,7 +927,7 @@
         "schema_version": 0,
         "values": {
           "acl": "private",
-          "bucket": "clicklogger-dev-firehose-delivery-bucket-154977180039",
+          "bucket": "clicklogger-dev-firehose-delivery-bucket-123456789012",
           "bucket_prefix": null,
           "force_destroy": false,
           "tags": {
@@ -2319,7 +2319,7 @@
       "before": null,
       "after": {
         "acl": "private",
-        "bucket": "clicklogger-dev-firehose-delivery-bucket-154977180039",
+        "bucket": "clicklogger-dev-firehose-delivery-bucket-123456789012",
         "bucket_prefix": null,
         "force_destroy": false,
         "tags": {
@@ -2379,7 +2379,7 @@
       "before": null,
       "after": {
         "acl": "private",
-        "bucket": "clicklogger-dev-firehose-delivery-bucket-154977180039",
+        "bucket": "clicklogger-dev-firehose-delivery-bucket-123456789012",
         "bucket_prefix": null,
         "force_destroy": false,
         "tags": {
@@ -2571,9 +2571,9 @@
           "provider_name": "registry.terraform.io/hashicorp/aws",
           "schema_version": 0,
           "values": {
-            "account_id": "154977180039",
-            "arn": "arn:aws:iam::656177851052:user/someuser",
-            "id": "194477180039",
+            "account_id": "123456789012",
+            "arn": "arn:aws:iam::123456789015:user/someuser",
+            "id": "123456789014",
             "user_id": "ANYUSERID"
           },
           "sensitive_values": {}}, {

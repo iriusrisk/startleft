@@ -368,7 +368,7 @@
             ]
         },
         {
-            "id": "c3b000fd-6108-403c-adee-282422171840",
+            "id": "c3b000fd-6108-403c-adee-123456789012",
             "name": "VPCmonitoringSecurityGroup -> VPCmonitoring",
             "source": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc",
             "destination": "b61d6911-338d-46a8-9f39-8dcd24abfe91.customvpc.privatesubnet1.vpcmonitoring",
