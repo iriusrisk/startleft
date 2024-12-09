@@ -40,20 +40,22 @@ resource "aws_acm_certificate" "acm_certificate" {
 resource "aws_kms_key" "kms_key" {
   description             = "KMS key 1"
   deletion_window_in_days = 10
+  enable_key_rotation     = true
 }
 
 resource "aws_cloudwatch_log_group" "cloudwatch_log_group_1" {
   name = "Yada"
-
+  retention_in_days = 14
   tags = {
     Environment = "production"
     Application = "serviceA"
   }
+
 }
 
 resource "aws_cloudwatch_log_group" "cloudwatch_log_group_2" {
   name = "Yada"
-
+  retention_in_days = 14
   tags = {
     Environment = "production"
     Application = "serviceA"
@@ -140,7 +142,7 @@ resource "aws_mq_broker" "mq_broker" {
 
   user {
     username = "ExampleUser"
-    password = "MindTheGap"
+    password = "******"
   }
 }
 
@@ -190,6 +192,7 @@ resource "aws_config_configuration_recorder" "config_configuration_recorder" {
 
 resource "aws_ecr_repository" "ecr_repository" {
   name = "bar"
+  image_tag_mutability = "IMMUTABLE"
 }
 
 resource "aws_ecr_lifecycle_policy" "ecr_lifecycle_policy" {
@@ -293,9 +296,9 @@ resource "aws_sns_topic" "sns_topic" {
 }
 
 resource "aws_sns_topic_subscription" "sns_topic_subscription" {
-  topic_arn = "arn:aws:sns:us-west-2:432981146916:user-updates-topic"
+  topic_arn = "arn:aws:sns:us-west-2:123456789012:user-updates-topic"
   protocol  = "sqs"
-  endpoint  = "arn:aws:sqs:us-west-2:432981146916:terraform-queue-too"
+  endpoint  = "arn:aws:sqs:us-west-2:123456789012:terraform-queue-too"
 }
 
 resource "aws_waf_ipset" "waf_ipset" {
@@ -392,6 +395,9 @@ resource "aws_kinesis_analytics_application" "kinesis_analytics_application_2" {
 resource "aws_kinesis_stream" "kinesis_stream" {
   name        = "example-stream"
   shard_count = 1
+  encryption_type = "KMS"
+  kms_key_id      = "example-kms-key-id"
+
 }
 
 resource "aws_kinesis_stream_consumer" "kinesis_stream_consumer" {

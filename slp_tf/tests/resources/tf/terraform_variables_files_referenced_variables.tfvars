@@ -10,8 +10,8 @@ iriusrisk_version        = "4.5.1"
 startleft_version        = "startleft"
 type                     = "internal"
 bastion_host_cidrs       = ["52.30.97.44/32"]
-certificate_arn          = "arn:aws:iam::154977180039:server-certificate/wildcard-iriusrisk-com-until-25-oct-2022"
-iam_instance_profile_arn = "arn:aws:iam::154977180039:instance-profile/myManagedInstanceRoleforSSM"
+certificate_arn          = "arn:aws:iam::123456789012:server-certificate/example-certificate"
+iam_instance_profile_arn = "arn:aws:iam::123456789012:instance-profile/myManagedInstanceRoleforSSM"
 
 ## vpc
 vpc_cidr              = "10.0.0.0/16"
