@@ -5,9 +5,10 @@ from otm.otm.entity.representation import RepresentationElement
 from otm.otm.entity.threat import ThreatInstance
 from sl_util.sl_util.str_utils import truncate
 
-MAX_ID_SIZE = 255
+
 MAX_NAME_SIZE = 255
 MAX_TAG_SIZE = 255
+
 
 class Component:
     def __init__(self, component_id, name, component_type=None, parent=None, parent_type: ParentType = None, source=None,

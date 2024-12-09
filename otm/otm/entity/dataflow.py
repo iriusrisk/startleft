@@ -1,8 +1,9 @@
 from sl_util.sl_util.str_utils import truncate
 
-MAX_ID_SIZE = 255
+
 MAX_NAME_SIZE = 255
 MAX_TAG_SIZE = 255
+
 
 class Dataflow:
     def __init__(self, dataflow_id, name, source_node, destination_node, bidirectional: bool = None,

@@ -1,8 +1,9 @@
 from otm.otm.entity.parent_type import ParentType
 from sl_util.sl_util.str_utils import truncate
 
-MAX_ID_SIZE = 255
+
 MAX_NAME_SIZE = 255
+
 
 class Trustzone:
     def __init__(self, trustzone_id, name, parent=None, parent_type: ParentType = None, source=None, type=type,
