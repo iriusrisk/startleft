@@ -22,7 +22,7 @@ setup(
         'python-hcl2==4.3.2',
         'requests==2.32.3',
         'fastapi>=0.115.2,<0.116.0',
-        'python-multipart==0.0.7',
+        'python-multipart==0.0.18',
         'click==8.1.7',
         'uvicorn==0.23.2',
         'shapely==2.0.1',
