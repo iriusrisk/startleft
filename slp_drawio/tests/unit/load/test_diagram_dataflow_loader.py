@@ -32,7 +32,7 @@ class TestDiagramDataflowLoader:
         assert diagram_dataflows[1].otm.name == 'pt2kyrPXSm7H56EBWWGj-8-dataflow'
         assert diagram_dataflows[1].otm.source_node == 'pt2kyrPXSm7H56EBWWGj-7'
         assert diagram_dataflows[1].otm.destination_node == 'pt2kyrPXSm7H56EBWWGj-7'
-        assert len(diagram_dataflows[1].otm.tags) == 0
+        assert not diagram_dataflows[1].otm.tags
 
         # AND the method get_dataflow_tags has been called once for each dataflow
         assert get_dataflow_tags_wrapper.call_count == len(diagram_dataflows)

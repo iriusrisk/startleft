@@ -111,8 +111,8 @@ class TestTFPlanMapper:
 
     @mark.parametrize('regex,resource_type', [
         param(r'^aws_\w*$','aws_vpc', id='aws_vpc'),
-        param(r'^a+$','a'*256, id='long_string'),
-        param(r'^(a+)+$','a'*256, id='redos_attack'),
+        param(r'^a+$','a'*255, id='long_string'),
+        param(r'^(a+)+$','a'*255, id='redos_attack'),
     ])
     def test_mapping_by_regex(self,regex,resource_type:str):
         # GIVEN a resource of some TF type

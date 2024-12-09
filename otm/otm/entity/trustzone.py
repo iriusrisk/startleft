@@ -1,4 +1,8 @@
 from otm.otm.entity.parent_type import ParentType
+from sl_util.sl_util.str_utils import truncate
+
+
+MAX_NAME_SIZE = 255
 
 
 class Trustzone:
@@ -13,6 +17,14 @@ class Trustzone:
         self.attributes = attributes
         self.trustrating = trustrating
         self.representations = representations
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = truncate(value, MAX_NAME_SIZE)
 
     def __eq__(self, other):
         return type(other) == Trustzone and self.id == other.id

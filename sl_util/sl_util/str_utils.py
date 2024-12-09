@@ -21,3 +21,6 @@ def to_number(input, default_value: int = 0) -> int:
             return w2n.word_to_num(input)
         except ValueError:
             return default_value
+
+def truncate(s: str, max_length: int) -> str:
+    return s[:max_length] if s else s
