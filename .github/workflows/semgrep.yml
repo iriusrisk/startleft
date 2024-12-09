@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - id: semgrep
-        run: semgrep ci --config=p/owasp-top-ten --config=p/cwe-top-25 --config=p/gitleaks --config .semgrep/rules/detected-aws-account-id-in-arn.yaml --config r/generic.secrets.security.detected-aws-account-id.detected-aws-account-id --config r/generic.secrets.security.detected-aws-secret-access-key.detected-aws-secret-access-key -q --skip-unknown-extensions --suppress-errors
+        run: semgrep ci --metrics=off --config=p/owasp-top-ten --config=p/cwe-top-25 --config=p/gitleaks --config .semgrep/rules/detected-aws-account-id-in-arn.yaml --config r/generic.secrets.security.detected-aws-account-id.detected-aws-account-id --config r/generic.secrets.security.detected-aws-secret-access-key.detected-aws-secret-access-key -q --skip-unknown-extensions --suppress-errors
         continue-on-error: true
 
       - name: Get branch name (pull request)
