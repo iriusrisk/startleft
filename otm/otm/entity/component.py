@@ -3,7 +3,7 @@ from typing import List
 from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.representation import RepresentationElement
 from otm.otm.entity.threat import ThreatInstance
-from str_utils import truncate
+from sl_util.sl_util.str_utils import truncate
 
 MAX_ID_SIZE = 255
 MAX_NAME_SIZE = 255
