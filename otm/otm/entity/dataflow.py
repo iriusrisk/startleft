@@ -1,3 +1,10 @@
+from sl_util.sl_util.str_utils import truncate
+
+
+MAX_NAME_SIZE = 255
+MAX_TAG_SIZE = 255
+
+
 class Dataflow:
     def __init__(self, dataflow_id, name, source_node, destination_node, bidirectional: bool = None,
                  source=None, attributes=None, tags=None):
@@ -9,6 +16,22 @@ class Dataflow:
         self.source = source
         self.attributes = attributes
         self.tags = tags
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = truncate(value, MAX_NAME_SIZE)
+
+    @property
+    def tags (self):
+        return self._tags
+
+    @tags.setter
+    def tags(self, value):
+        self._tags = [tag for tag in value if tag and len(tag) <= MAX_TAG_SIZE] if value else None
 
     def json(self):
         json = {
