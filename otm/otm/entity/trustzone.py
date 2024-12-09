@@ -18,14 +18,6 @@ class Trustzone:
         self.representations = representations
 
     @property
-    def id(self):
-        return self._id
-
-    @id.setter
-    def id(self, value):
-        self._id = truncate(value, MAX_ID_SIZE)
-
-    @property
     def name(self):
         return self._name
 
