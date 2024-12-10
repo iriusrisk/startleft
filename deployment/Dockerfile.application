@@ -4,8 +4,9 @@ WORKDIR /usr/src/app
 
 RUN apk update && \
     apk upgrade && \
-    apk --no-cache add geos geos-dev git graphviz-dev lapack libmagic libstdc++ && \
-    apk --no-cache add --virtual .builddeps g++ gcc gfortran lapack-dev musl-dev py3-pybind11-dev re2 re2-dev
+    apk add --repository=http://dl-cdn.alpinelinux.org/alpine/v3.20/main --repository=http://dl-cdn.alpinelinux.org/alpine/v3.20/community \
+                g++~=13.2 gcc~=13.2 gfortran~=13.2 libgcc~=13.2 libstdc++~=13.2 && \
+    apk --no-cache add geos geos-dev git graphviz-dev lapack lapack-dev libmagic musl-dev py3-pybind11-dev re2 re2-dev
 
 COPY . .
 
