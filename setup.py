@@ -38,9 +38,9 @@ setup(
         # Do not upgrade pygraphviz unless security issues because it is heavily dependent on the underlying OS
         'pygraphviz==1.10',
         # Be careful with numpy upgrades as it can break other dependencies
-        'numpy==1.26.4'
+        'numpy==1.26.4',
         # Install shapely the last so it does not try to install an invalid numpy version
-        'shapely==2.0.1',
+        'shapely==2.0.1'
     ],
     use_scm_version={
         'write_to': 'startleft/version.py',
