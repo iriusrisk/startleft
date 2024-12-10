@@ -25,7 +25,6 @@ setup(
         'python-multipart==0.0.18',
         'click==8.1.7',
         'uvicorn==0.23.2',
-        'shapely==2.0.1',
         'vsdx==0.5.13',
         'python-magic==0.4.27',
         'setuptools==70.3.0',
@@ -40,6 +39,8 @@ setup(
         'pygraphviz==1.10',
         # Be careful with numpy upgrades as it can break other dependencies
         'numpy==1.26.4'
+        # Install shapely the last so it does not try to install an invalid numpy version
+        'shapely==2.0.1',
     ],
     use_scm_version={
         'write_to': 'startleft/version.py',
