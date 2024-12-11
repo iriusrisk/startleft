@@ -3,6 +3,11 @@ from typing import List
 from otm.otm.entity.parent_type import ParentType
 from otm.otm.entity.representation import RepresentationElement
 from otm.otm.entity.threat import ThreatInstance
+from sl_util.sl_util.str_utils import truncate
+
+
+MAX_NAME_SIZE = 255
+MAX_TAG_SIZE = 255
 
 
 class Component:
@@ -18,6 +23,22 @@ class Component:
         self.tags = tags
         self.threats: [ThreatInstance] = threats or []
         self.representations: List[RepresentationElement] = representations
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = truncate(value, MAX_NAME_SIZE)
+
+    @property
+    def tags (self):
+        return self._tags
+
+    @tags.setter
+    def tags(self, value):
+        self._tags = [tag for tag in value if tag and len(tag) <= MAX_TAG_SIZE] if value else None
 
     def add_threat(self, threat: ThreatInstance):
         self.threats.append(threat)
