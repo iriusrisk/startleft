@@ -19,7 +19,8 @@ WORKDIR /app
 
 RUN apk update && \
     apk --no-cache add cblas geos graphviz-dev lapack libmagic re2 && \
-    adduser --disabled-password  --no-create-home startleft
+    adduser --disabled-password  --no-create-home startleft && \
+    rm -rf /usr/local/lib/python3.11/site-packages
 
 COPY --from=startleft-base /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 
