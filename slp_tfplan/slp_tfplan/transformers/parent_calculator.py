@@ -4,8 +4,8 @@ from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent, TFPlan
 from slp_tfplan.slp_tfplan.transformers.hierarchy_calculator import HierarchyCalculator
 
 PARENT_TYPES = {
-   'subnets': ['aws_subnet', 'azurerm_subnet'],
-   'vpcs': ['aws_vpc', 'azurerm_virtual_network']
+   'subnets': ['aws_subnet', 'azurerm_subnet', 'google_compute_subnetwork'],
+   'vpcs': ['aws_vpc', 'azurerm_virtual_network', 'google_compute_network']
 }
 
 class ParentCalculator(HierarchyCalculator):
