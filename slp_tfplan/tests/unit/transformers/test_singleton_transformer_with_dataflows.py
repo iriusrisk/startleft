@@ -1,5 +1,5 @@
 import pytest
-from charset_normalizer.md import List
+from typing import List
 
 from otm.otm.entity.dataflow import Dataflow
 from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanComponent
