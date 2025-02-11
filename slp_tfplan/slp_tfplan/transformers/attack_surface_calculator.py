@@ -18,6 +18,7 @@ from slp_tfplan.slp_tfplan.relationship.component_relationship_calculator import
     ComponentRelationshipType
 from slp_tfplan.slp_tfplan.transformers.dataflow.strategies.dataflow_creation_strategy import create_dataflow
 
+DATAFLOW_NAME_MAX_LENGTH = 1999
 
 def _is_valid_cidr(cidr: str) -> bool:
     return is_ip_with_mask(cidr) and is_public_ip(cidr) and not is_broadcast_ip(cidr)
@@ -62,21 +63,18 @@ def _generate_client_name(security_group_cidr: SecurityGroupCIDR, variables: Dic
     return attack_surface_client
 
 
-def _generate_protocol_tags(security_group_cidr: SecurityGroupCIDR) -> List[str]:
-    protocol = "all" if security_group_cidr.protocol == "-1" else security_group_cidr.protocol
-    from_port = "N/A" if security_group_cidr.from_port is None else security_group_cidr.from_port
-    to_port = "N/A" if security_group_cidr.to_port is None else security_group_cidr.to_port
-    return ["protocol: {}".format(protocol), "from_port: {} to_port: {}".format(from_port, to_port)]
-
-
-def _generate_cidr_blocks_tags(security_group_cidr: SecurityGroupCIDR) -> List[str]:
-    return ["ip: {}".format(ip) for ip in security_group_cidr.cidr_blocks if _is_valid_cidr(ip)]
-
-
 def _generate_security_group_cidr_tags(security_group_cidr: SecurityGroupCIDR) -> List[str]:
+    protocol = "" if security_group_cidr.protocol == "-1" else security_group_cidr.protocol
+    from_port = "" if security_group_cidr.from_port is None else security_group_cidr.from_port
+    to_port = "" if security_group_cidr.to_port is None else security_group_cidr.to_port
+    ports = str(from_port) if from_port == to_port else f'{from_port}-{to_port}'
+    ips = ["{}".format(ip) for ip in security_group_cidr.cidr_blocks if _is_valid_cidr(ip)]
+    port_separator = ':' if len(ports) > 0 else ''
+    protocol_separator = '/' if len(protocol) > 0 else ''
+
     result = []
-    result.extend(_generate_protocol_tags(security_group_cidr))
-    result.extend(_generate_cidr_blocks_tags(security_group_cidr))
+    for ip in ips:
+        result.append(f'{ip}{port_separator}{ports}{protocol_separator}{protocol}')
 
     return result
 
@@ -134,9 +132,14 @@ class AttackSurfaceCalculator:
         for component in components:
             flow = (client_component, component) if security_group.type == SecurityGroupCIDRType.INGRESS \
                 else (component, client_component)
-            self._dataflows.append(create_dataflow(*flow,
-                                                   name=security_group.description,
-                                                   tags=_generate_security_group_cidr_tags(security_group)))
+            dataflow = create_dataflow(*flow, name=security_group.description,
+                                       tags=_generate_security_group_cidr_tags(security_group))
+            if dataflow.id in [df.id for df in self._dataflows]:
+                existing_dataflow = next(df for df in self._dataflows if df.id == dataflow.id)
+                existing_dataflow.tags.extend(dataflow.tags)
+                existing_dataflow.name = f'{existing_dataflow.name} & {security_group.description}'[0:DATAFLOW_NAME_MAX_LENGTH]
+            else:
+                self._dataflows.append(dataflow)
 
     def __generate_client(self, security_group_cidr: SecurityGroupCIDR):
         client_id = _generate_client_id(security_group_cidr)
