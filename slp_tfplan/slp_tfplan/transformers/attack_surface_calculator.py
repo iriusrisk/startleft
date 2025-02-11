@@ -137,7 +137,6 @@ class AttackSurfaceCalculator:
             if dataflow.id in [df.id for df in self._dataflows]:
                 existing_dataflow = next(df for df in self._dataflows if df.id == dataflow.id)
                 existing_dataflow.tags.extend(dataflow.tags)
-                existing_dataflow.name = f'{existing_dataflow.name} & {security_group.description}'[0:DATAFLOW_NAME_MAX_LENGTH]
             else:
                 self._dataflows.append(dataflow)
 

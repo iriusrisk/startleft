@@ -230,7 +230,7 @@ class TestAttackSurfaceCalculator:
         assert len(otm.dataflows) == 1
         assert otm.dataflows[0].source_node == otm.components[1].id
         assert otm.dataflows[0].destination_node == otm.components[0].id
-        assert otm.dataflows[0].name == ' & '.join([ingress_cidr.description for ingress_cidr in ingress_cidrs])
+        assert otm.dataflows[0].name == ingress_cidrs[0].description
         assert otm.dataflows[0].tags == expected_tags
         assert not otm.dataflows[0].bidirectional
 
@@ -307,7 +307,7 @@ class TestAttackSurfaceCalculator:
         # AND it generates a dataflow from the Internet to component_a
         assert otm.dataflows[0].source_node == INTERNET_CLIENT_ID
         assert otm.dataflows[0].destination_node == _component_a.id
-        assert otm.dataflows[0].name == 'Ingress HTTP & Ingress HTTPS'
+        assert otm.dataflows[0].name == 'Ingress HTTP'
         assert otm.dataflows[0].tags == ['0.0.0.0/0:80/tcp', '0.0.0.0/0:443/tcp']
         assert not otm.dataflows[0].bidirectional
 
