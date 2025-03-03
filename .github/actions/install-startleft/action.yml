@@ -18,8 +18,8 @@ runs:
         run: python -m pip install --upgrade pip==23.0.1
         shell: bash
 
-      - name: Set setuptools to >=61 for compatibility with setuptools-scm
-        run: python -m pip install setuptools>=61.0.0
+      - name: Set setuptools to v70 for compatibility with setuptools-scm
+        run: python -m pip install setuptools==70.3.0
         shell: bash
 
       - name: Setup Graphviz
