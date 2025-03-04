@@ -18,6 +18,10 @@ runs:
         run: python -m pip install --upgrade pip==23.0.1
         shell: bash
 
+      - name: Set setuptools to v70 for compatibility with setuptools-scm
+        run: python -m pip install setuptools==70.3.0
+        shell: bash
+
       - name: Setup Graphviz
         uses: ts-graphviz/setup-graphviz@55fcdfa9328aed658432c22011bec2873cd8e69f # Securely point to hash commit for v1
 
@@ -29,7 +33,7 @@ runs:
           echo "C:\Program Files\Graphviz\bin" >> $GITHUB_PATH
 
       - name: Install dependencies
-        run: pip install -e ".[setup,test]"
+        run: pip install . && pip install -e ".[setup,test]"
         shell: bash
 
         # This step MUST be after the general installation of StartLeft
