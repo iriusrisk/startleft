@@ -29,7 +29,7 @@ setup(
         'vsdx==0.5.13',
         'python-magic==0.4.27',
         'setuptools==70.3.0',
-        'setuptools-scm==8.0.2',
+        'setuptools-scm==8.1.0',
         'defusedxml==0.7.1',
         'networkx==3.1',
         'dependency-injector==4.41.0',
