@@ -29,8 +29,8 @@ provider_resolver = ProviderResolver(PROCESSORS)
 def iac(iac_file: List[UploadFile]
         = File(...),
         iac_type: IacType = Form(...),
-        id: str = Form(...),
-        name: str = Form(...),
+        id: str = Form(..., min_length=1, max_length=999),
+        name: str = Form(..., min_length=1, max_length=999),
         mapping_file: UploadFile = File(None),
         default_mapping_file: UploadFile = File(None),
         custom_mapping_file: UploadFile = File(None)):
