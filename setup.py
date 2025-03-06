@@ -26,7 +26,7 @@ setup(
         'click==8.1.7',
         'uvicorn==0.23.2',
         'shapely==2.0.1',
-        'vsdx==0.5.13',
+        'vsdx==0.5.19',
         'python-magic==0.4.27',
         'setuptools==70.3.0',
         'setuptools-scm==8.1.0',
