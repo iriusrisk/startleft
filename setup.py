@@ -1,7 +1,11 @@
+import sys
+
 from setuptools import setup, find_packages
 
 from startleft.startleft._version.local_scheme import guess_startleft_semver_suffix
 from startleft.startleft._version.version_scheme import guess_startleft_semver
+
+pygraphviz_version = '1.10' if sys.version_info < (3, 9) else '1.13'
 
 setup(
     name='startleft',
@@ -35,7 +39,7 @@ setup(
         'xmlschema==2.5.0',
         'word2number==1.1',
         # These dependencies are heavily dependent on the underlying OS
-        'pygraphviz==1.13',
+        f'pygraphviz=={pygraphviz_version}',
         'shapely==2.0.6',
         'google-re2',
         # Numpy is a transitive dependency of fastapi, requests and python-multipart
