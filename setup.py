@@ -13,7 +13,7 @@ setup(
     keywords=['threat modeling', 'cyber security', 'appsec'],
     packages=find_packages(),
     include_package_data=True,
-    python_requires='>= 3.9, <= 3.12',
+    python_requires='>= 3.9, < 3.13',
     install_requires=[
         'pyyaml==6.0.1',
         'jsonschema==4.19.0',
@@ -25,19 +25,19 @@ setup(
         "python-multipart==0.0.19",
         'click==8.1.7',
         'uvicorn==0.23.2',
-        'shapely==2.0.1',
         'vsdx==0.5.19',
         'python-magic==0.4.27',
         'setuptools==70.3.0',
         'setuptools-scm==8.1.0',
         'defusedxml==0.7.1',
         'networkx==3.1',
-        'dependency-injector==4.41.0',
-        'google-re2==1.0',
+        'dependency-injector==4.46.0',
         'xmlschema==2.5.0',
         'word2number==1.1',
-        # Do not upgrade pygraphviz unless security issues because it is heavily dependent on the underlying OS
-        'pygraphviz==1.10',
+        # These dependencies are heavily dependent on the underlying OS
+        'pygraphviz==1.13',
+        'shapely==2.0.6',
+        'google-re2',
         # Numpy is a transitive dependency of fastapi, requests and python-multipart
         # They require different v1 versions, while v2 versions lead to import errors
         'numpy<2.0'

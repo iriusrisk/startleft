@@ -1,0 +1,14 @@
+venv
+build
+dist
+deployment
+test-reports
+**/tests
+.semgrep
+.idea
+.github
+.eggs
+.pre-commit-config.yaml
+*.egg-info/
+**/*.zip
+**/*.7z
