@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 from startleft.startleft._version.local_scheme import guess_startleft_semver_suffix
 from startleft.startleft._version.version_scheme import guess_startleft_semver
 
-pygraphviz_version = '1.10' if sys.version_info < (3, 9) else '1.13'
+pygraphviz_version = '1.10' if sys.version_info < (3, 10) else '1.13'
 
 setup(
     name='startleft',
