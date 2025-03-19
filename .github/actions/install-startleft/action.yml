@@ -25,35 +25,8 @@ runs:
       - name: Setup Graphviz
         uses: ts-graphviz/setup-graphviz@55fcdfa9328aed658432c22011bec2873cd8e69f # Securely point to hash commit for v1
 
-      - name: Set pygraphviz default version
-        env:
-          PYGRAPHVIZ_VERSION: "1.13"
-        run: echo "PYGRAPHVIZ_VERSION=$PYGRAPHVIZ_VERSION" >> "$GITHUB_ENV"
-        shell: bash
-
-      - name: Set pygraphviz version for Python 3.9
-        if: ${{ inputs.python-version == '3.9' }}
-        env:
-          PYGRAPHVIZ_VERSION: "1.10"
-        run: echo "PYGRAPHVIZ_VERSION=$PYGRAPHVIZ_VERSION" >> "$GITHUB_ENV"
-        shell: bash
-
-
-
-      - name: Configure Graphviz in Windows
-        if: runner.os == 'Windows'
-        shell: bash
-        run: |
-          pip install --global-option=build_ext --global-option="-IC:\Program files\Graphviz\include" --global-option="-LC:\Program files\Graphviz\lib" pygraphviz=="$PYGRAPHVIZ_VERSION"
-          echo "C:\Program Files\Graphviz\bin" >> $GITHUB_PATH
-
       - name: Install dependencies
         run: pip install . && pip install -e ".[setup,test]"
         shell: bash
 
-        # This step MUST be after the general installation of StartLeft
-      - name: Install libmagic in Windows
-        if: runner.os == 'Windows'
-        run: pip install python-magic-bin
-        shell: bash
 
