@@ -15,7 +15,7 @@ runs:
           python-version: ${{ inputs.python-version }}
 
       - name: Ensure pip is up-to-date
-        run: python -m ensurepip --upgrade pip
+        run: python -m ensurepip --upgrade
         shell: bash
 
       - name: Upgrade setuptools for compatibility with setuptools-scm
