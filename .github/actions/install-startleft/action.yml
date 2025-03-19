@@ -14,19 +14,19 @@ runs:
         with:
           python-version: ${{ inputs.python-version }}
 
-      - name: Update pip version to 23.0.1
-        run: python -m pip install --use-pep517 --upgrade pip==23.0.1
+      - name: Ensure pip is up-to-date
+        run: python -m ensurepip --upgrade pip
         shell: bash
 
-      - name: Set setuptools to v70 for compatibility with setuptools-scm
-        run: python -m pip install setuptools==70.3.0
+      - name: Upgrade setuptools for compatibility with setuptools-scm
+        run: python -m pip install --upgrade setuptools
         shell: bash
 
       - name: Setup Graphviz
         uses: ts-graphviz/setup-graphviz@55fcdfa9328aed658432c22011bec2873cd8e69f # Securely point to hash commit for v1
 
       - name: Install dependencies
-        run: pip install . && pip install -e ".[setup,test]"
+        run:  python -m pip install . && python -m pip install -e ".[setup,test]"
         shell: bash
 
 
