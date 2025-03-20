@@ -5,13 +5,9 @@ WORKDIR /app
 COPY . .
 
 RUN apk -U upgrade && \
-    apk add git && \
     apk add --no-cache cblas geos git lapack libmagic py3-pygraphviz py3-re2 py3-shapely re2 && \
-    cp -R /usr/lib/python3.12/site-packages /usr/local/lib/python3.12/
-
-RUN ls -a /usr/local/lib/python3.12/site-packages
-
-RUN pip install --upgrade pip && pip install .
+    cp -R /usr/lib/python3.12/site-packages /usr/local/lib/python3.12/ && \
+    pip install --upgrade pip && pip install .
 
 
 FROM python:3.12-alpine3.21
