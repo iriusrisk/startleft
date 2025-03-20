@@ -19,6 +19,7 @@ RUN apk -U upgrade && \
 
 COPY --from=startleft-base /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY --from=startleft-base /usr/local/bin/startleft /usr/local/bin/startleft
+COPY --from=startleft-base /usr/local/bin/uvicorn /usr/local/bin/uvicorn
 
 USER startleft
 
