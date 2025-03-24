@@ -1,31 +1,25 @@
-FROM python:3.11-alpine AS startleft-base
-
-WORKDIR /usr/src/app
-
-RUN apk update && \
-    apk upgrade && \
-    apk add --repository=https://dl-cdn.alpinelinux.org/alpine/v3.20/main --repository=https://dl-cdn.alpinelinux.org/alpine/v3.20/community \
-                g++~=13.2 gcc~=13.2 gfortran~=13.2 libgcc~=13.2 libstdc++~=13.2 && \
-    apk --no-cache add geos geos-dev git graphviz-dev lapack lapack-dev libmagic musl-dev py3-pybind11-dev re2 re2-dev
-
-COPY . .
-
-RUN pip install --upgrade pip && pip install .
-
-
-FROM python:3.11-alpine
+FROM python:3.12-alpine3.21 AS startleft-base
 
 WORKDIR /app
 
-RUN apk update && \
-    apk upgrade && \
-    apk --no-cache add cblas geos graphviz-dev lapack libmagic re2 && \
+COPY . .
+
+RUN apk -U upgrade && \
+    apk add --no-cache cblas geos git lapack libmagic py3-pygraphviz py3-re2 py3-shapely re2 && \
+    cp -R /usr/lib/python3.12/site-packages /usr/local/lib/python3.12/ && \
+    pip install --upgrade pip && pip install .
+
+
+FROM python:3.12-alpine3.21
+
+RUN apk -U upgrade && \
+    apk add --no-cache libmagic py3-pygraphviz py3-re2 py3-shapely && \
     adduser --disabled-password  --no-create-home startleft && \
-    rm -rf /usr/local/lib/python3.11/site-packages
+    rm -Rf /usr/local/lib/python3.12/site-packages
 
-COPY --from=startleft-base /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
-
+COPY --from=startleft-base /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY --from=startleft-base /usr/local/bin/startleft /usr/local/bin/startleft
+COPY --from=startleft-base /usr/local/bin/uvicorn /usr/local/bin/uvicorn
 
 USER startleft
 
