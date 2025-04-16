@@ -71,19 +71,22 @@ class TestDiagramMapper:
             assert diagram.default_trustzone.otm.name == expected_tz_mapping['label']
 
     @patch('slp_drawio.slp_drawio.parse.diagram_mapper._find_mapping', wraps=_find_mapping)
-    @mark.parametrize('component,mappings,find_call_count,expected_type', [
+    @mark.parametrize('component,mappings,find_call_count,expected_type,expected_tags', [
         param(build_component(name='simple-name'), [{'label': 'simple-name', 'type': 'otm-type'}], 1, 'otm-type',
-              id='by name'),
-        param(build_component(shape_type='type'), [{'label': 'type', 'type': 'otm-type'}], 2, 'otm-type',
+              ['otm-type'], id='by name'),
+        param(build_component(shape_type='type'), [{'label': 'type', 'type': 'otm-type'}], 2, 'otm-type',   ['otm-type'],
               id='by type'),
         param(build_component(name='name', shape_type='type'),
-              [{'label': 'type', 'type': 'otm-type-1'}, {'label': 'name', 'type': 'otm-type-2'}], 1, 'otm-type-2',
+              [{'label': 'type', 'type': 'otm-type-1'}, {'label': 'name', 'type': 'otm-type-2'}], 1, 'otm-type-2', ['otm-type-2'],
               id='by name and type'),
         param(build_component(name='no-match'), [{'label': 'simple-name', 'type': 'otm-type'}], 2,
-              DEFAULT_COMPONENT_TYPE, id='not match')
+              DEFAULT_COMPONENT_TYPE,  ['empty-component'], id='not match'),
+        param(build_component(name='simple-name'), [{'label': 'simple-name', 'type': 'otm-type',
+                                                     'name': 'Simple Name'}], 1, 'otm-type', ['Simple Name'],
+              id='with mapped name'),
     ])
     def test_mapping_components(self, find_mapping_wrapper, component: DiagramComponent, mappings: List,
-                                find_call_count, expected_type):
+                                find_call_count, expected_type, expected_tags):
         # GIVEN a Diagram with some components with different names and types
         diagram = build_diagram(components=[component])
 
@@ -96,6 +99,7 @@ class TestDiagramMapper:
         # THEN the type of the components are changed giving priority to mappings by name
         assert find_mapping_wrapper.call_count == find_call_count
         assert component.otm.type == expected_type
+        assert component.otm.tags == expected_tags
 
     @patch('slp_drawio.slp_drawio.parse.diagram_mapper._find_mapping', wraps=_find_mapping)
     @mark.parametrize('component,mappings,find_call_count,expected_type', [

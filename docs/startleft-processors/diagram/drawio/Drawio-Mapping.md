@@ -65,6 +65,30 @@ It is used when a group of name or types must be mapped to the same type in the 
     type: ec2
 ```
 
+#### (Optional) Set the component name as a tag
+If you specify the optional `name` in the mapping, its value will be added as a tag in the OTM component.
+
+```yaml
+  - label:  aws.s3
+    type:   s3
+    name:   AWS S3 Bucket
+```
+
+The OTM component will include, among others, the following attributes:
+
+- `type`: The type defined in the mapping file
+- `name`: The original name of the shape from the source file
+- `tags`: The name specified in the mapping file
+
+```json
+{
+  "type": "s3",
+  "name": "My Bucket",  
+  "tags": ["AWS S3 Bucket"]
+}
+```
+
+
 ### The Default Trust Zone
 The [OTM standard](../../../Open-Threat-Model-(OTM).md) defines that every component in the
 threat model must have a parent. Frequently, the original Drawio diagram has components that are not nested inside any
