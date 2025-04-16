@@ -55,15 +55,6 @@ def _create_trustzone_from_component(component: DiagramComponent) -> DiagramTrus
     )
 
 
-def _add_component_name_as_tag(component: DiagramComponent, mapping: dict):
-    tag = None
-    if mapping.get('type'):
-        tag = mapping['type']
-    if mapping.get('name'):
-        tag = mapping['name']
-    if tag:
-        component.otm.add_tag(tag)
-
 class DiagramMapper:
     def __init__(self, diagram: Diagram, mapping: DrawioMapping):
         self._diagram: Diagram = diagram
@@ -88,7 +79,7 @@ class DiagramMapper:
             mapping = _find_mapping(component.otm.name, mappings) or _find_mapping(component.shape_type, mappings)
             if mapping:
                 self.__change_component_type(component, mapping)
-                _add_component_name_as_tag(component, mapping)
+                component.otm.add_tag(mapping.get('name', mapping.get('type')))
 
         remove_from_list(self._diagram.components,
                          filter_function=lambda c: c.otm.id in [tz.otm.id for tz in self._diagram.trustzones])
