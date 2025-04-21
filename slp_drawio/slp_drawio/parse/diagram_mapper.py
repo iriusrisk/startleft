@@ -79,6 +79,7 @@ class DiagramMapper:
             mapping = _find_mapping(component.otm.name, mappings) or _find_mapping(component.shape_type, mappings)
             if mapping:
                 self.__change_component_type(component, mapping)
+                component.otm.add_tag(mapping.get('name', mapping.get('type')))
 
         remove_from_list(self._diagram.components,
                          filter_function=lambda c: c.otm.id in [tz.otm.id for tz in self._diagram.trustzones])
@@ -87,6 +88,7 @@ class DiagramMapper:
         for component in self._diagram.components:
             if not component.otm.type:
                 component.otm.type = DEFAULT_COMPONENT_TYPE
+                component.otm.add_tag(DEFAULT_COMPONENT_TYPE)
 
     def __merge_mappings(self) -> List[Dict]:
         trustzone_mappings = [{**m, 'trustzone': True} for m in self._mapping.trustzones]
