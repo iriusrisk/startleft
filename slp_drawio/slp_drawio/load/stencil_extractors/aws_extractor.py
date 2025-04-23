@@ -12,7 +12,7 @@ _AWS_EQUIVALENCES = {
 
 
 def _remove_mxgraph(text: str) -> str:
-    return re.sub(r"mxgraph\.", "", text)
+    return text.replace("mxgraph.", "")
 
 
 def _remove_mxgraph_aws(text: str) -> str:

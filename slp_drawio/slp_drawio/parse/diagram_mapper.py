@@ -71,7 +71,10 @@ def _get_component_name_from_type(shape_type: str, mapping: Dict) -> str:
                 .replace('-', ' ') \
                 .replace('/', ' ')
 
-    return (f'_{name}' if len(name) == 1 else name) if name else 'N/A'
+    if not name:
+        return 'N/A'
+
+    return f'_{name}' if len(name) == 1 else name
 
 class DiagramMapper:
     def __init__(self, diagram: Diagram, mapping: DrawioMapping):
