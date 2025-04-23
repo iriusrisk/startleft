@@ -18,7 +18,7 @@ def build_trustzone(trustzone_id: str = 'tz-id', type: str = 'tz-type', name: st
 
 
 def build_component(component_id: str = 'c-id', parent_id: str = None, name: str = None, shape_type: str = None) -> DiagramComponent:
-    component = DiagramComponent(id=component_id, name=name or component_id)
+    component = DiagramComponent(id=component_id, name=name)
     component.otm.parent = parent_id
     component.shape_type = shape_type
     return component
