@@ -1,6 +1,5 @@
 import ast
 import os
-import unittest
 from unittest import TestCase
 
 
@@ -8,7 +7,7 @@ def get_files_with_imported_library(library_name, excluded_dirs=(), excluded_fil
     if excluded_dirs is None:
         excluded_dirs = []
     this_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = f'{this_dir}/../../../'
+    project_root = f'{this_dir}/../../'
     checked_files = []
     matches = []
     for root, dirs, files in os.walk(project_root):
