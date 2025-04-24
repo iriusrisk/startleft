@@ -1,1 +1,2 @@
+from .validate.drawio_mapping_file_validator import DrawioMappingFileValidator
 from .drawio_processor import DrawioProcessor

@@ -6,10 +6,13 @@ from pytest import mark, param
 from slp_drawio.slp_drawio.load.drawio_mapping_file_loader import DrawioMapping
 from slp_drawio.slp_drawio.objects.diagram_objects import DiagramComponent, DiagramTrustZone
 from slp_drawio.slp_drawio.parse import diagram_mapper
-from slp_drawio.slp_drawio.parse.diagram_mapper import DiagramMapper, _find_mapping
+from slp_drawio.slp_drawio.parse.diagram_mapper import DiagramMapper, _find_mapping, _get_component_name_from_type
 from slp_drawio.tests.util.builders import build_diagram, build_component, build_components
 
-DEFAULT_COMPONENT_TYPE = 'empty-component'
+EMPTY_COMPONENT_MAPPING = {
+    'type': 'CD-V2-EMPTY-COMPONENT',
+    'name': 'Empty Component'
+}
 
 
 def _tz_mapping(label: str = 'label', _type: str = 'type', default: bool = False):
@@ -43,6 +46,39 @@ def test_find_mapping(component_label: str, mapping: Dict, expected_match: bool)
     else:
         assert not mapping_match
 
+@mark.parametrize('shape_type,mapping,expected_name', [
+    param(
+        'aws.s3_bucket', {'type': 'otm-type', 'name': 'S3 Bucket'}, 'S3 Bucket',
+        id='use mapping name over shape type'
+    ),
+    param(
+        'aws.instance', {'type': 'otm-type'}, 'AWS instance',
+        id='format derived name from shape type'
+    ),
+    param(
+        's', {'type': 'otm-type'}, '_S',
+        id='short shape type name'
+    ),
+    param(
+        '', {'type': 'otm-type'}, 'N/A',
+        id='empty shape type'
+    ),
+    param(
+        None, {'type': 'otm-type'}, 'N/A',
+        id='none shape type'
+    ),
+    param(
+        'aws.vpc-gateway', {'type': 'otm-type'}, 'AWS vpc gateway',
+        id='format shape string with special characters'
+    )
+])
+def test_get_component_name_from_type(shape_type: str, mapping: dict, expected_name: str):
+    # WHEN the component name is derived from the shape type and mapping
+    name = _get_component_name_from_type(shape_type, mapping)
+
+    # THEN the name matches the expected outcome
+    assert name == expected_name
+
 
 class TestDiagramMapper:
 
@@ -71,22 +107,64 @@ class TestDiagramMapper:
             assert diagram.default_trustzone.otm.name == expected_tz_mapping['label']
 
     @patch('slp_drawio.slp_drawio.parse.diagram_mapper._find_mapping', wraps=_find_mapping)
-    @mark.parametrize('component,mappings,find_call_count,expected_type,expected_tags', [
-        param(build_component(name='simple-name'), [{'label': 'simple-name', 'type': 'otm-type'}], 1, 'otm-type',
-              ['otm-type'], id='by name'),
-        param(build_component(shape_type='type'), [{'label': 'type', 'type': 'otm-type'}], 2, 'otm-type',   ['otm-type'],
-              id='by type'),
-        param(build_component(name='name', shape_type='type'),
-              [{'label': 'type', 'type': 'otm-type-1'}, {'label': 'name', 'type': 'otm-type-2'}], 1, 'otm-type-2', ['otm-type-2'],
-              id='by name and type'),
-        param(build_component(name='no-match'), [{'label': 'simple-name', 'type': 'otm-type'}], 2,
-              DEFAULT_COMPONENT_TYPE,  ['empty-component'], id='not match'),
-        param(build_component(name='simple-name'), [{'label': 'simple-name', 'type': 'otm-type',
-                                                     'name': 'Simple Name'}], 1, 'otm-type', ['Simple Name'],
-              id='with mapped name'),
+    @mark.parametrize('component,mappings,find_call_count,expected_type,expected_tags,expected_name', [
+        param(
+            build_component(name='simple-name'), 
+            [{'label': 'simple-name', 'type': 'otm-type'}], 
+            1, 
+            'otm-type',
+            ['otm-type'], 
+            'simple-name', 
+            id='by name'
+        ),
+        param(
+            build_component(shape_type='type', name=''), 
+            [{'label': 'type', 'type': 'otm-type'}], 
+            2, 
+            'otm-type',
+            ['otm-type'], 
+            'Type', 
+            id='by type'
+        ),
+        param(
+            build_component(name='name', shape_type='type'), 
+            [{'label': 'type', 'type': 'otm-type-1'}, {'label': 'name', 'type': 'otm-type-2'}], 
+            1, 
+            'otm-type-2',
+            ['otm-type-2'], 
+            'name', 
+            id='by name over type'
+        ),
+        param(
+            build_component(shape_type='simple-name', name=''),
+            [{'label': 'simple-name', 'type': 'otm-type', 'name': 'Simple Name'}], 
+            2,
+            'otm-type', 
+            ['Simple Name'], 
+            'Simple Name', 
+            id='with mapped name'
+        ),
+        param(
+            build_component(name=''),
+            [{'label': 'other', 'type': 'type-other'}], 
+            2, 
+            EMPTY_COMPONENT_MAPPING['type'], 
+            [EMPTY_COMPONENT_MAPPING['name']], 
+            'N/A',
+            id='empty shape type'
+        ),
+        param(
+            build_component(shape_type='aws.instance', name=''),
+            [{'label': 'other', 'type': 'type-other'}], 
+            2, 
+            EMPTY_COMPONENT_MAPPING['type'], 
+            [EMPTY_COMPONENT_MAPPING['name']], 
+            'AWS instance',
+            id='derived name from shape'
+        )
     ])
     def test_mapping_components(self, find_mapping_wrapper, component: DiagramComponent, mappings: List,
-                                find_call_count, expected_type, expected_tags):
+                                find_call_count, expected_type, expected_tags, expected_name):
         # GIVEN a Diagram with some components with different names and types
         diagram = build_diagram(components=[component])
 
@@ -96,10 +174,13 @@ class TestDiagramMapper:
         # WHEN DiagramMapper::map is invoked
         DiagramMapper(diagram=diagram, mapping=drawio_mapping).map()
 
-        # THEN the type of the components are changed giving priority to mappings by name
+        # THEN the type of the components is changed correctly
         assert find_mapping_wrapper.call_count == find_call_count
         assert component.otm.type == expected_type
         assert component.otm.tags == expected_tags
+
+        # AND the component name is updated correctly
+        assert component.otm.name == expected_name
 
     @patch('slp_drawio.slp_drawio.parse.diagram_mapper._find_mapping', wraps=_find_mapping)
     @mark.parametrize('component,mappings,find_call_count,expected_type', [
@@ -171,7 +252,7 @@ class TestDiagramMapper:
 
         # THEN their type is set to the default one
         for component in components:
-            assert component.otm.type == DEFAULT_COMPONENT_TYPE
+            assert component.otm.type == EMPTY_COMPONENT_MAPPING['type']
 
     def test_no_mappings(self):
         # GIVEN a diagram with some components
@@ -186,7 +267,7 @@ class TestDiagramMapper:
 
         # THEN all the components are mapped to the default component type
         for component in components:
-            assert component.otm.type == DEFAULT_COMPONENT_TYPE
+            assert component.otm.type == EMPTY_COMPONENT_MAPPING['type']
 
         # AND no default trustzone is added
         assert not diagram.default_trustzone

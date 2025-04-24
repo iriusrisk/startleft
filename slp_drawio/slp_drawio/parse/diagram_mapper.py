@@ -7,7 +7,10 @@ from sl_util.sl_util.str_utils import deterministic_uuid
 from slp_drawio.slp_drawio.load.drawio_mapping_file_loader import DrawioMapping
 from slp_drawio.slp_drawio.objects.diagram_objects import Diagram, DiagramComponent, DiagramTrustZone
 
-DEFAULT_COMPONENT_TYPE = 'empty-component'
+EMPTY_COMPONENT_MAPPING = {
+    'type': 'CD-V2-EMPTY-COMPONENT',
+    'name': 'Empty Component'
+}
 
 
 @singledispatch
@@ -27,11 +30,12 @@ def __match_by_dict(mapping_label: dict, component_label: str) -> bool:
 
 def _find_mapping(label: str, mappings: List[Dict]) -> Optional[Dict]:
     if not label:
-        return
+        return None
 
     for mapping in mappings:
         if __match(mapping['label'], label):
             return mapping
+    return None
 
 
 def _create_default_trustzone(trustzone_mapping: Dict) -> DiagramTrustZone:
@@ -55,6 +59,23 @@ def _create_trustzone_from_component(component: DiagramComponent) -> DiagramTrus
     )
 
 
+def _get_component_name_from_type(shape_type: str, mapping: Dict) -> str:
+    name = None
+    if mapping.get('type') != EMPTY_COMPONENT_MAPPING['type'] and mapping.get('name'):
+        name = mapping['name']
+    elif shape_type:
+        name = shape_type \
+                .capitalize() \
+                .replace('Aws.', 'AWS ') \
+                .replace('_', ' ') \
+                .replace('-', ' ') \
+                .replace('/', ' ')
+
+    if not name:
+        return 'N/A'
+
+    return f'_{name}' if len(name) == 1 else name
+
 class DiagramMapper:
     def __init__(self, diagram: Diagram, mapping: DrawioMapping):
         self._diagram: Diagram = diagram
@@ -66,7 +87,6 @@ class DiagramMapper:
 
         if self._diagram.components:
             self._map_components()
-            self._set_default_type_to_unmapped_components()
 
     def _add_default_trustzone(self):
         self._diagram.default_trustzone = _create_default_trustzone(
@@ -76,25 +96,24 @@ class DiagramMapper:
         mappings = self.__merge_mappings()
 
         for component in self._diagram.components:
-            mapping = _find_mapping(component.otm.name, mappings) or _find_mapping(component.shape_type, mappings)
-            if mapping:
-                self.__change_component_type(component, mapping)
-                component.otm.add_tag(mapping.get('name', mapping.get('type')))
+            mapping = \
+                _find_mapping(component.otm.name, mappings) or \
+                _find_mapping(component.shape_type, mappings) or \
+                EMPTY_COMPONENT_MAPPING
+
+            self.__update_component_data(component, mapping)
 
         remove_from_list(self._diagram.components,
                          filter_function=lambda c: c.otm.id in [tz.otm.id for tz in self._diagram.trustzones])
-
-    def _set_default_type_to_unmapped_components(self):
-        for component in self._diagram.components:
-            if not component.otm.type:
-                component.otm.type = DEFAULT_COMPONENT_TYPE
-                component.otm.add_tag(DEFAULT_COMPONENT_TYPE)
 
     def __merge_mappings(self) -> List[Dict]:
         trustzone_mappings = [{**m, 'trustzone': True} for m in self._mapping.trustzones]
         return trustzone_mappings + self._mapping.components
 
-    def __change_component_type(self, component: DiagramComponent, mapping: Dict):
+    def __update_component_data(self, component: DiagramComponent, mapping: Dict):
         component.otm.type = mapping['type']
+        component.otm.add_tag(mapping.get('name', mapping.get('type')))
+        if not component.otm.name:
+            component.otm.name = _get_component_name_from_type(component.shape_type, mapping)
         if mapping.get('trustzone', False):
             self._diagram.trustzones.append(_create_trustzone_from_component(component))
