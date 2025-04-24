@@ -1,4 +1,4 @@
-import re
+import sl_util.sl_util.secure_regex as re
 from typing import Optional
 from slp_drawio.slp_drawio.load.stencil_extractors import MxCell, register_extractor
 
