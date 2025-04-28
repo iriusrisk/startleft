@@ -58,7 +58,7 @@ setup(
             'pytest==7.4.1',
             'responses==0.23.3',
             'deepdiff==6.4.1',
-            'httpx==0.24.1',
+            'httpx==0.28.1',
             'pytest-mock==3.11.1',
             'coverage==7.3.1'
         ]
