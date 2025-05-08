@@ -12,7 +12,7 @@ def _get_shape_parent_id(mx_cell: dict, mx_cell_components: list[dict]):
 
 
 def _get_shape_name(mx_cell: dict) -> Optional[str]:
-    cell_value = mx_cell.get('value')
+    cell_value = mx_cell.get('value') or mx_cell.get('label')
     if cell_value:
         return cell_value if len(cell_value) > 1 else f'_{cell_value}'
     return None
