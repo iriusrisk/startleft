@@ -43,7 +43,8 @@ def __process_object_elements(root: dict, element_keys: list[str]) -> list[dict]
             mx_cell = element.get("mxCell", {})
             if mx_cell:
                 mx_cell["id"] = element.get("id")
-                mx_cell["value"] = element.get("value")
+                mx_cell["value"] = mx_cell.get("value") or element.get("value")
+                mx_cell["label"] = mx_cell.get("label") or element.get("label")
                 mx_cells.append(mx_cell)
     return mx_cells
 
