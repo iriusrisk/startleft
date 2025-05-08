@@ -64,6 +64,7 @@
         <xs:attribute type="xs:string" name="description"/>
         <xs:attribute type="xs:string" name="link"/>
         <xs:attribute type="xs:string" name="isThumb"/>
+        <xs:attribute type="xs:string" name="tags"/>
         <xs:attribute type="xs:string" name="ir.sourceStyle"/>
         <xs:attribute type="xs:string" name="ir.description"/>
     </xs:complexType>
