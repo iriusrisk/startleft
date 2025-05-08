@@ -14,11 +14,22 @@
         <xs:attribute type="xs:string" name="target"/>
         <xs:attribute type="xs:string" name="edge"/>
         <xs:attribute type="xs:string" name="connectable"/>
+        <xs:attribute type="xs:string" name="isThumb"/>
+    </xs:complexType>
+    <xs:complexType name="mxRectangleType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="width"/>
+                <xs:attribute type="xs:string" name="height"/>
+                <xs:attribute type="xs:string" name="as"/>
+            </xs:extension>
+        </xs:simpleContent>
     </xs:complexType>
     <xs:complexType name="mxGeometryType" mixed="true">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:element type="ArrayType" name="Array" minOccurs="0"/>
             <xs:element type="mxPointType" name="mxPoint" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="mxRectangleType" name="mxRectangle" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute type="xs:string" name="x"/>
         <xs:attribute type="xs:string" name="y"/>
@@ -35,17 +46,34 @@
                 <xs:attribute type="xs:string" name="as"/>
             </xs:extension>
         </xs:simpleContent>
-  </xs:complexType>
-  <xs:complexType name="ArrayType">
-    <xs:sequence>
-      <xs:element type="mxPointType" name="mxPoint" maxOccurs="unbounded" minOccurs="0"/>
-    </xs:sequence>
-    <xs:attribute type="xs:string" name="as"/>
     </xs:complexType>
-    <xs:complexType name="rootType">
+    <xs:complexType name="ArrayType">
+        <xs:sequence>
+            <xs:element type="mxPointType" name="mxPoint" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="as"/>
+    </xs:complexType>
+    <xs:complexType name="objectType">
         <xs:sequence>
             <xs:element type="mxCellType" name="mxCell" maxOccurs="unbounded" minOccurs="0"/>
         </xs:sequence>
+        <xs:attribute type="xs:string" name="id"/>
+        <xs:attribute type="xs:string" name="label"/>
+        <xs:attribute type="xs:string" name="placeholders"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="description"/>
+        <xs:attribute type="xs:string" name="link"/>
+        <xs:attribute type="xs:string" name="isThumb"/>
+        <xs:attribute type="xs:string" name="ir.sourceStyle"/>
+        <xs:attribute type="xs:string" name="ir.description"/>
+    </xs:complexType>
+
+    <xs:complexType name="rootType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="mxCellType" name="mxCell"/>
+            <xs:element type="objectType" name="object"/>
+            <xs:element type="objectType" name="UserObject"/>
+        </xs:choice>
     </xs:complexType>
     <xs:complexType name="mxGraphModelType">
         <xs:sequence>
@@ -67,6 +95,8 @@
         <xs:attribute type="xs:string" name="math"/>
         <xs:attribute type="xs:string" name="shadow"/>
         <xs:attribute type="xs:string" name="background"/>
+        <xs:attribute type="xs:string" name="irDrawioVersion"/>
+        <xs:attribute type="xs:string" name="irIriusRiskVersion"/>
     </xs:complexType>
     <xs:complexType name="diagramType" mixed="true">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
@@ -74,6 +104,7 @@
         </xs:sequence>
         <xs:attribute type="xs:string" name="id"/>
         <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="isThumb"/>
     </xs:complexType>
     <xs:complexType name="mxfileType">
         <xs:sequence maxOccurs="unbounded">
