@@ -22,7 +22,11 @@
         "required": ["label"],
         "properties": {
           "label": {"$ref": "#/definitions/LabelUnion"},
-          "type": {"$ref": "#/definitions/query"}
+          "type": {"$ref": "#/definitions/query"},
+          "name": {
+            "type": "string",
+            "description": "The name of the type. This is used to tag the OTM component."
+          }
         }
       }
     }

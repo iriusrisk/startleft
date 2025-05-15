@@ -33,12 +33,18 @@ class Component:
         self._name = truncate(value, MAX_NAME_SIZE)
 
     @property
-    def tags (self):
+    def tags(self):
         return self._tags
 
     @tags.setter
     def tags(self, value):
         self._tags = [tag for tag in value if tag and len(tag) <= MAX_TAG_SIZE] if value else None
+
+    def add_tag(self, tag: str):
+        if self._tags is None:
+            self._tags = []
+        if tag and len(tag) <= MAX_TAG_SIZE:
+            self._tags.append(tag)
 
     def add_threat(self, threat: ThreatInstance):
         self.threats.append(threat)
