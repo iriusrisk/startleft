@@ -1,4 +1,5 @@
 from random import randrange
+from pytest import mark, param
 
 from otm.otm.entity.parent_type import ParentType
 from slp_tfplan.slp_tfplan.transformers.singleton_transformer import SingletonTransformer
@@ -495,3 +496,98 @@ class TestSingletonTransformer:
         assert len(otm.components) == 2
         assert otm.components[0].id == component_a.id
         assert otm.components[1].id == component_c.id
+
+    @mark.parametrize("components, expected_count", [
+        param(
+            [
+                build_mocked_component({
+                    'component_name': 'component_a',
+                    'tf_type': 'type_a',
+                    'configuration': {SINGLETON_CONFIG: True, CATEGORY_CONFIG: 'Category'},
+                }),
+                build_mocked_component({
+                    'component_name': 'component_b',
+                    'tf_type': 'type_b',
+                    'configuration': {SINGLETON_CONFIG: True, CATEGORY_CONFIG: 'Category'},
+                })
+            ],
+            2,
+            id="same category but different types should not singleton"
+        ),
+        param(
+            [
+                build_mocked_component({
+                    'component_name': 'component_a',
+                    'tf_type': 'same_type',
+                    'configuration': {SINGLETON_CONFIG: True, CATEGORY_CONFIG: 'Category_A'},
+                }),
+                build_mocked_component({
+                    'component_name': 'component_b',
+                    'tf_type': 'same_type',
+                    'configuration': {SINGLETON_CONFIG: True, CATEGORY_CONFIG: 'Category_B'},
+                })
+            ],
+            2,
+            id="same type but different categories should not singleton"
+        ),
+        param(
+            [
+                build_mocked_component({
+                    'component_name': 'component_a',
+                    'tf_type': 'same_type',
+                    'configuration': {SINGLETON_CONFIG: True, CATEGORY_CONFIG: None},
+                }),
+                build_mocked_component({
+                    'component_name': 'component_b',
+                    'tf_type': 'same_type',
+                    'configuration': {SINGLETON_CONFIG: True, CATEGORY_CONFIG: 'Category'},
+                })
+            ],
+            2,
+            id="same type but one category is none should not singleton"
+        ),
+        param(
+            [
+                build_mocked_component({
+                    'component_name': 'component_a',
+                    'tf_type': 'same_type',
+                    'configuration': {SINGLETON_CONFIG: True, CATEGORY_CONFIG: 'Category'},
+                }),
+                build_mocked_component({
+                    'component_name': 'component_b',
+                    'tf_type': 'same_type',
+                    'configuration': {SINGLETON_CONFIG: True, CATEGORY_CONFIG: 'Category'},
+                })
+            ],
+            1,
+            id="same type and same category should singleton"
+        ),
+        param(
+            [
+                build_mocked_component({
+                    'component_name': 'component_a',
+                    'tf_type': 'same_type',
+                    'configuration': {SINGLETON_CONFIG: True, CATEGORY_CONFIG: None},
+                }),
+                build_mocked_component({
+                    'component_name': 'component_b',
+                    'tf_type': 'same_type',
+                    'configuration': {SINGLETON_CONFIG: True, CATEGORY_CONFIG: None},
+                })
+            ],
+            1,
+            id="same type and both categories none should singleton"
+        ),
+    ])
+    def test_singleton_category_and_type(self, components, expected_count):
+        """
+        Test if singleton is correctly applied based on type and category combinations.
+        """
+        # GIVEN an OTM with the provided components
+        otm = build_mocked_otm(components)
+
+        # WHEN SingletonTransformer::transform is invoked
+        SingletonTransformer(otm).transform()
+
+        # THEN verify the expected number of components remain after the transformation
+        assert len(otm.components) == expected_count
