@@ -1,5 +1,4 @@
 import itertools
-from typing import List, Dict
 
 from otm.otm.entity.dataflow import Dataflow
 from sl_util.sl_util.iterations_utils import remove_from_list
@@ -8,7 +7,7 @@ from slp_tfplan.slp_tfplan.objects.tfplan_objects import TFPlanOTM
 from slp_tfplan.slp_tfplan.transformers.transformer import Transformer
 
 
-def _merge_component_configurations(otm_components: List[TFPlanComponent]) -> Dict:
+def _merge_component_configurations(otm_components: list[TFPlanComponent]) -> dict:
     merge_configuration = {}
     for component in otm_components:
         merge_configuration = {
@@ -17,7 +16,7 @@ def _merge_component_configurations(otm_components: List[TFPlanComponent]) -> Di
     return merge_configuration
 
 
-def _find_equivalent_dataflows(dataflow: Dataflow, dataflows: List[Dataflow]) -> List[Dataflow]:
+def _find_equivalent_dataflows(dataflow: Dataflow, dataflows: list[Dataflow]) -> list[Dataflow]:
     equivalent_dataflows = []
     for df in dataflows:
         if _are_equivalent_dataflows(dataflow, df):
@@ -27,11 +26,7 @@ def _find_equivalent_dataflows(dataflow: Dataflow, dataflows: List[Dataflow]) ->
 
 
 def _are_sibling(component, sibling):
-    if component.category and sibling.category:
-        return component.category == sibling.category
-    if not component.category and not sibling.category:
-        return component.type == sibling.type
-    return False
+    return component.type == sibling.type and component.category == sibling.category
 
 
 def _are_equivalent_dataflows(dataflow_1: Dataflow, dataflow_2: Dataflow) -> bool:
@@ -45,7 +40,7 @@ def _are_equivalent_dataflows(dataflow_1: Dataflow, dataflow_2: Dataflow) -> boo
     return is_same_dataflow or is_reverse_bidirectional_dataflow
 
 
-def _merge_dataflows(origin_dataflow: Dataflow, dataflows: List[Dataflow]) -> Dataflow:
+def _merge_dataflows(origin_dataflow: Dataflow, dataflows: list[Dataflow]) -> Dataflow:
     for df in dataflows:
         if origin_dataflow.tags is None:
             origin_dataflow.tags = df.tags
@@ -69,7 +64,7 @@ def _merge_dataflows(origin_dataflow: Dataflow, dataflows: List[Dataflow]) -> Da
 def __build_singleton_name(component: TFPlanComponent):
     return component.category or f"{component.type} (grouped)"
 
-def _build_singleton_component(otm_components: List[TFPlanComponent]) -> TFPlanComponent:
+def _build_singleton_component(otm_components: list[TFPlanComponent]) -> TFPlanComponent:
     tags = list(set(itertools.chain.from_iterable([c.tags or [] for c in otm_components])))
     configuration = _merge_component_configurations(otm_components)
     component_id = otm_components[0].id
@@ -91,7 +86,7 @@ class SingletonTransformer(Transformer):
         self.otm_components = self.otm.components
         self.otm_dataflows = self.otm.dataflows
 
-        self.singleton_component_relations: Dict[str, TFPlanComponent] = {}
+        self.singleton_component_relations: dict[str, TFPlanComponent] = {}
 
     def transform(self):
         self.__populate_singleton_component_relations()
