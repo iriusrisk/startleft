@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Dict, Union, Optional
+from typing import Union, Optional
 
 from otm.otm.entity.component import Component
 from otm.otm.entity.dataflow import Dataflow
@@ -19,8 +19,8 @@ class TFPlanComponent(Component):
                  component_type: str,
                  parent: str,
                  parent_type: ParentType,
-                 tags: [str],
-                 clones_ids: [str] = None,
+                 tags: list[str],
+                 clones_ids: list[str] = None,
                  tf_resource_id: str = None,
                  tf_type: str = None,
                  configuration: {} = None):
@@ -68,7 +68,7 @@ class SecurityGroupCIDRType(Enum):
 
 @auto_repr
 class SecurityGroupCIDR:
-    def __init__(self, cidr_blocks: List[str], description: str, type: SecurityGroupCIDRType,
+    def __init__(self, cidr_blocks: list[str], description: str, type: SecurityGroupCIDRType,
                  from_port: int = None, to_port: int = None,
                  protocol: str = None):
         self.cidr_blocks = cidr_blocks
@@ -81,19 +81,19 @@ class SecurityGroupCIDR:
 
 @auto_repr
 class SecurityGroup:
-    def __init__(self, security_group_id: str, name: str, ingress_sgs: List[str] = None, egress_sgs: List[str] = None,
-                 ingress_cidr: List[SecurityGroupCIDR] = None, egress_cidr: List[SecurityGroupCIDR] = None):
+    def __init__(self, security_group_id: str, name: str, ingress_sgs: list[str] = None, egress_sgs: list[str] = None,
+                 ingress_cidr: list[SecurityGroupCIDR] = None, egress_cidr: list[SecurityGroupCIDR] = None):
         self.id: str = security_group_id
         self.name: str = name
-        self.ingress_sgs: List[str] = ingress_sgs
-        self.egress_sgs: List[str] = egress_sgs
-        self.ingress_cidr: List[SecurityGroupCIDR] = ingress_cidr
-        self.egress_cidr: List[SecurityGroupCIDR] = egress_cidr
+        self.ingress_sgs: list[str] = ingress_sgs
+        self.egress_sgs: list[str] = egress_sgs
+        self.ingress_cidr: list[SecurityGroupCIDR] = ingress_cidr
+        self.egress_cidr: list[SecurityGroupCIDR] = egress_cidr
 
 
 @auto_repr
 class LaunchTemplate:
-    def __init__(self, launch_template_id: str, security_groups_ids: List[str]):
+    def __init__(self, launch_template_id: str, security_groups_ids: list[str]):
         self.id = launch_template_id
         self.security_groups_ids = security_groups_ids
 
@@ -104,11 +104,11 @@ class TFPlanOTM(OTM):
     def __init__(self,
                  project_id: str,
                  project_name: str,
-                 components: List[TFPlanComponent],
-                 security_groups: List[SecurityGroup],
-                 launch_templates: List[LaunchTemplate],
-                 variables: Dict[str, Union[list, str]],
-                 dataflows: List[Dataflow],
+                 components: list[TFPlanComponent],
+                 security_groups: list[SecurityGroup],
+                 launch_templates: list[LaunchTemplate],
+                 variables: dict[str, Union[list, str]],
+                 dataflows: list[Dataflow],
                  default_trustzone: Trustzone = None):
         super().__init__(project_name, project_id, IacType.TERRAFORM)
         self.default_trustzone = default_trustzone
