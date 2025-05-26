@@ -2,17 +2,19 @@ from unittest.mock import MagicMock
 
 import pytest
 
+from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent
+
 from slp_base import MappingFileNotValidError
 from slp_visio.slp_visio.parse.mappers.diagram_component_mapper import DiagramComponentMapper
 
-tz1 = MagicMock(id='tz1')
-c1 = MagicMock(id='c1')
+tz1 = DiagramComponent(id='tz1')
+c1 = DiagramComponent(id='c1', name='Component 1')
 c1.parent = tz1
-c2 = MagicMock(id='c2')
+c2 = DiagramComponent(id='c2', name='Component 2')
 c2.parent = c1
-c3 = MagicMock(id='c3')
+c3 = DiagramComponent(id='c3', name='3')
 c3.parent = None
-c4 = MagicMock(id='c4')
+c4 = DiagramComponent(id='c4', name='Component 4')
 
 
 diagram_components = [tz1, c1, c2, c3, c4]
@@ -53,17 +55,20 @@ class TestDiagramComponentMapper:
         assert components[0].id == 'c1'
         assert components[0].type == 'type-1'
         assert components[0].parent == 'tz1'
+        assert components[0].name == c1.name
 
         assert components[1].id == 'c2'
         assert components[1].type == 'type-2'
         assert components[1].parent == 'c1'
+        assert components[1].name == c2.name
 
         assert components[2].id == 'c3'
         assert components[2].type == 'type-3'
         assert components[2].parent == default_trustzone.id
+        assert components[2].name == f"_{c3.name}"
 
     def test_not_default_trustzone(self):
-        # GIVEN the diagram component mapper without default trustzone
+        # GIVEN the diagram component mapper without a default trustzone
         diagram_component_mapper = DiagramComponentMapper(
             diagram_components,
             component_mappings,
@@ -72,15 +77,11 @@ class TestDiagramComponentMapper:
             representation_calculator
         )
 
-        # WHEN to_otm is called an exception is raised
+        # WHEN to_otm is called, expect an exception
         with pytest.raises(MappingFileNotValidError) as error:
             diagram_component_mapper.to_otm()
 
-        # THEN the exception is raised
+        # THEN an exception is raised
         assert error.value.title == 'Mapping files are not valid'
         assert error.value.detail == 'No default trust zone has been defined in the mapping file'
         assert error.value.message == 'Please, add a default trust zone'
-
-
-
-
