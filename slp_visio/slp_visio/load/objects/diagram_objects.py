@@ -72,8 +72,8 @@ class DiagramLimits:
 class Diagram:
     def __init__(self,
                  diagram_type: DiagramType,
-                 components: [DiagramComponent],
-                 connectors: [DiagramConnector],
+                 components: list[DiagramComponent],
+                 connectors: list[DiagramConnector],
                  limits: DiagramLimits = None):
         self.diagram_type = diagram_type
         self.components = components

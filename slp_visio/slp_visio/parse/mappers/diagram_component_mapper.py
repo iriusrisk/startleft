@@ -1,5 +1,3 @@
-from typing import Dict
-
 from otm.otm.entity.component import Component
 from otm.otm.entity.trustzone import Trustzone
 from slp_base import MappingFileNotValidError
@@ -8,25 +6,29 @@ from slp_visio.slp_visio.parse.mappers.diagram_mapper import DiagramMapper
 from slp_visio.slp_visio.parse.representation.representation_calculator import RepresentationCalculator
 
 
+def _normalize_component_name(name: str) -> str:
+    return f'_{name}' if len(name) == 1 else name
+
+
 class DiagramComponentMapper(DiagramMapper):
 
     def __init__(self,
-                 components: [DiagramComponent],
-                 component_mappings: Dict[str, dict],
-                 trustzone_mappings: Dict[str, dict],
+                 components: list[DiagramComponent],
+                 component_mappings: dict[str, dict],
+                 trustzone_mappings: dict[str, dict],
                  default_trustzone: Trustzone,
                  representation_calculator: RepresentationCalculator):
-        self.components: [DiagramComponent] = components
+        self.components: list[DiagramComponent] = components
         self.component_mappings = component_mappings
         self.trustzone_mappings = trustzone_mappings
         self.default_trustzone = default_trustzone
 
         self.representation_calculator = representation_calculator
 
-    def to_otm(self) -> [Component]:
+    def to_otm(self) -> list[Component]:
         return self.__map_to_otm(self.components)
 
-    def __map_to_otm(self, components: [DiagramComponent]) -> [Component]:
+    def __map_to_otm(self, components: list[DiagramComponent]) -> list[Component]:
         otm_components = []
 
         for diag_component in components:
@@ -43,7 +45,7 @@ class DiagramComponentMapper(DiagramMapper):
 
         return Component(
             component_id=diagram_component.id,
-            name=diagram_component.name,
+            name=_normalize_component_name(diagram_component.name),
             component_type=otm_type,
             parent=self.__calculate_parent_id(diagram_component),
             parent_type=self._calculate_parent_type(diagram_component),
