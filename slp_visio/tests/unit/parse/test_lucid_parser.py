@@ -62,17 +62,12 @@ class TestLucidParser:
         assert len(component_mappings) == 0
 
     @pytest.mark.parametrize('shape_type', [
-        pytest.param("AmazonEC22017", id='2017'),
-        pytest.param("DatabaseAWS19", id='AWS19'),
-        pytest.param("AWSCloudAWS2021", id='AWS2021$'),
-        pytest.param("ACAccessControlBlock", id='AC.*Block'),
-        pytest.param("AEAndroidPhoneBlock", id='AE.*Block'),
-        pytest.param("AGSUserBlock", id='AGS.*Block'),
-        pytest.param("AVMActiveDirectoryVMBlock", id='AVM.*Block'),
-        pytest.param("AzureDatabaseforPostgreSQLServersAzure2019", id='Azure2019'),
-        pytest.param("WebApplicationFirewallPoliciesWAFAzure2021", id='Azure2021$'),
+        pytest.param("AmazonEC2", id='aws shape'),
+        pytest.param("AzureCloud", id='azure shape'),
+        pytest.param("Database", id='infrastructure shape'),
+        pytest.param("GenericShape", id='generic shape'),
     ])
-    def test_catch_all_by_regex(self, shape_type):
+    def test_catch_all_applies_to_all_shapes(self, shape_type):
         # GIVEN a mapping loader with catch_all configuration
         mapping_loader = MagicMock(configuration={'catch_all': 'empty-component'})
         # AND a diagram with a shape of the given type

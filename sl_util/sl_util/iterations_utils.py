@@ -1,10 +1,10 @@
 # This weird while needs to be done because:
 # - The foreach does not work if you remove an element from the list
 # - The remove has to be invoked on the list to affect the object passed as a class attribute
-from typing import List, Union
+from typing import Union
 
 
-def remove_from_list(collection: List,
+def remove_from_list(collection: list,
                      filter_function,
                      remove_function=None) -> None:
     if collection is None:
@@ -18,7 +18,7 @@ def remove_from_list(collection: List,
             i += 1
 
 
-def remove_duplicates(duplicated_list: List) -> List:
+def remove_duplicates(duplicated_list: list) -> list:
     unique_list = []
 
     for element in duplicated_list:
@@ -28,7 +28,7 @@ def remove_duplicates(duplicated_list: List) -> List:
     return unique_list
 
 
-def compare_unordered_list_or_string(a: Union[str, List], b: Union[str, List]) -> bool:
+def compare_unordered_list_or_string(a: Union[str, list], b: Union[str, list]) -> bool:
     try:
         if isinstance(a, str) and isinstance(b, str):
             return a == b
@@ -40,13 +40,14 @@ def compare_unordered_list_or_string(a: Union[str, List], b: Union[str, List]) -
             return sorted(a) == sorted(b)
     except TypeError:
         return False
+    return False
 
 
-def remove_nones(list: List) -> List:
+def remove_nones(list: list) -> list:
     return [e for e in list if e != None]
 
 
-def remove_keys(dictionary: dict, keys_to_remove: [str]) -> dict:
+def remove_keys(dictionary: dict, keys_to_remove: list[str]) -> dict:
     filtered = dictionary.copy()
     for key_to_remove in keys_to_remove:
         if key_to_remove in filtered:
@@ -54,6 +55,6 @@ def remove_keys(dictionary: dict, keys_to_remove: [str]) -> dict:
     return filtered
 
 
-def append_if_not_exists(element, _list: List):
+def append_if_not_exists(element, _list: list):
     if element not in _list:
         _list.append(element)
