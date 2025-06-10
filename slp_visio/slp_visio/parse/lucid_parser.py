@@ -1,29 +1,16 @@
-from typing import Union, List
+from typing import Optional
 
-from sl_util.sl_util import secure_regex
 from sl_util.sl_util.iterations_utils import remove_keys
-from slp_visio.slp_visio.load.objects.diagram_objects import DiagramComponent, Diagram
+from slp_visio.slp_visio.load.objects.diagram_objects import Diagram
 from slp_visio.slp_visio.load.visio_mapping_loader import VisioMappingFileLoader
 from slp_visio.slp_visio.parse.visio_parser import VisioParser, _match_resource
-
-AWS_REGEX = [r".*2017$", r".*AWS19$", r".*AWS2021$"]
-AZURE_REGEX = [r"^AC.*Block$", r"^AE.*Block$", r"^AGS.*Block$", r"^AVM.*Block$", r".*Azure2019$", r".*Azure2021$"]
-LUCID_CATCH_ALL_REGEX = AWS_REGEX + AZURE_REGEX
-
-
-def _get_diagram_component_mapping_by_catch_all(resource: DiagramComponent, catch_all_config: [str]) \
-        -> Union[None, dict]:
-    for regex in LUCID_CATCH_ALL_REGEX:
-        if secure_regex.match(regex, resource.type):
-            return {'label': resource.type, 'type': catch_all_config}
-
 
 class LucidParser(VisioParser):
 
     def __init__(self, project_id: str, project_name: str, diagram: Diagram, mapping_loader: VisioMappingFileLoader):
         super().__init__(project_id, project_name, diagram, mapping_loader)
 
-    def _get_component_mappings(self) -> [dict]:
+    def _get_component_mappings(self) -> dict:
         """
         Returns the component mappings.
         After the component mappings are determined, the catch all mappings is determined.
@@ -36,39 +23,29 @@ class LucidParser(VisioParser):
 
         return self.__prune_skip_components({**catch_all_components, **component_mappings})
 
-    def __get_catch_all_mappings(self, ids_to_skip) -> [dict]:
-        result = {}
-        catch_all_config = self.__get_catch_all_config()
-        if not catch_all_config:
-            return result
-        for diag_component in self.diagram.components:
-            if diag_component.id in ids_to_skip:
-                continue
-            mapping = _get_diagram_component_mapping_by_catch_all(diag_component, catch_all_config)
-            if mapping:
-                result[diag_component.id] = mapping
-        return result
+    def __get_catch_all_mappings(self, ids_to_skip) -> dict:
+        catch_all_type = self.__get_catch_all_type()
+        return {
+            c.id: {'label': c.type, 'type': catch_all_type}
+            for c in self.diagram.components
+            if c.id not in ids_to_skip
+        } if catch_all_type else {}
 
-    def __get_catch_all_config(self):
-        catch_all = self.mapping_loader.configuration.get('catch_all', False)
-        if not catch_all or catch_all.lower() == 'false':
-            return
-
-        return catch_all.strip()
-
-    def __get_skip_config(self) -> List[str]:
-        return self.mapping_loader.configuration.get('skip')
+    def __get_catch_all_type(self) -> Optional[str]:
+        catch_all = self.mapping_loader.configuration.get('catch_all')
+        return catch_all.strip() if catch_all and catch_all.lower() != 'false' else None
 
     def __prune_skip_components(self, mappings: dict) -> dict:
-        ids_to_skip = self.__get_ids_to_skip()
-        return remove_keys(mappings, ids_to_skip)
+        return remove_keys(mappings, self.__get_ids_to_skip())
 
-    def __get_ids_to_skip(self) -> List[str]:
-        ids_to_skip = []
+    def __get_ids_to_skip(self) -> list[str]:
         skip_config = self.__get_skip_config()
-        if skip_config:
-            for component in self.diagram.components:
-                for skip in skip_config:
-                    if _match_resource(component.type, skip):
-                        ids_to_skip.append(component.id)
-        return ids_to_skip
+        return [
+            component.id
+            for component in self.diagram.components
+            for skip in skip_config
+            if _match_resource(component.type, skip)
+        ] if skip_config else []
+
+    def __get_skip_config(self) -> list[str]:
+        return self.mapping_loader.configuration.get('skip')
