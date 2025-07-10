@@ -49,8 +49,8 @@ class TestDrawioLoader:
 
         # AND the error has the following messages
         assert str(error.value.title) == 'Diagram file is not valid'
-        assert str(error.value.detail) == 'Diagram File is not compatible'
-        assert str(error.value.message) == 'DrawIO processor does not accept diagrams with multiple pages'
+        assert str(error.value.detail) == 'DrawIO processor does not accept diagrams with multiple pages'
+        assert str(error.value.message) == 'Diagram File is not compatible'
 
     @patch('slp_drawio.slp_drawio.load.drawio_loader.DrawIOToDict')
     def test_uncontrolled_exception(self, map_mock):

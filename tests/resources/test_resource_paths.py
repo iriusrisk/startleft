@@ -125,3 +125,7 @@ lucid_aws_with_tz_and_vpc_otm = f'{path}/lucid/lucid-aws-with-tz-and-vpc.otm'
 # MTMT
 mtmt_mapping_file_valid = f'{path}/mtmt/mapping_example.yaml'
 mtmt_mapping_file_invalid = f'{path}/mtmt/mapping_example_invalid.yaml'
+
+# DRAWIO
+drawio_multi_page = f'{path}/drawio/drawio-multi-page.drawio'
+default_drawio_mapping = f'{path}/drawio/drawio_mapping.yaml'
