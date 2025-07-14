@@ -30,8 +30,8 @@ class DrawioLoader(ProviderLoader):
 
             if is_multiple_pages(source_dict):
                 raise LoadingDiagramFileError(
-                    'Diagram file is not valid', 'Diagram File is not compatible',
-                    'DrawIO processor does not accept diagrams with multiple pages')
+                    'Diagram file is not valid', 'DrawIO processor does not accept diagrams with multiple pages',
+                    'Diagram File is not compatible')
 
             representation: DiagramRepresentation = DiagramRepresentationLoader(self.project_id, source_dict).load()
             components: [DiagramComponent] = DiagramComponentLoader(self.project_id, source_dict).load()
