@@ -18,9 +18,9 @@ def __is_diagram_encoded(diagram_tags: List) -> bool:
     return len(diagram_tags) <= 1
 
 
-def _decode_diagram(content: str) -> str:
+def _decode_diagram(content: str) -> str | None:
     tree = ElementTree.XML(content)
-    tree_tag = tree.find('diagram')
+    tree_tag = tree if tree.tag == 'mxGraphModel' else tree.find('diagram')
     if __is_diagram_encoded(list(tree_tag.iter())):
         data = base64.b64decode(tree_tag.text, validate=True)
         xml = zlib.decompress(data, wbits=-15).decode()
