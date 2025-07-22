@@ -22,7 +22,7 @@ setup(
         'jmespath==1.0.1',
         'python-hcl2==4.3.2',
         'requests==2.32.4',
-        'fastapi>=0.115.2,<0.116.0',
+        'fastapi>=0.116.1,<0.117.0',
         "python-multipart==0.0.19",
         'click==8.1.7',
         'uvicorn==0.23.2',
