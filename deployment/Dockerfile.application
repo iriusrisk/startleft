@@ -1,4 +1,4 @@
-FROM python:3.12-alpine3.21 AS startleft-base
+FROM python:3.12-alpine3.22 AS startleft-base
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ RUN apk -U upgrade && \
     pip install --upgrade pip && pip install .
 
 
-FROM python:3.12-alpine3.21
+FROM python:3.12-alpine3.22
 
 RUN apk -U upgrade && \
     apk add --no-cache libmagic py3-pygraphviz py3-re2 py3-shapely && \

@@ -1,12 +1,13 @@
 import json
 
+import pytest
 import responses
 from fastapi.testclient import TestClient
+from tests.resources import test_resource_paths
 
 from sl_util.sl_util.file_utils import get_byte_data
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.diagram import diag_create_otm_controller
-from tests.resources import test_resource_paths
 
 webapp = fastapi_server.webapp
 
@@ -48,3 +49,32 @@ class TestOTMControllerDiagramDrawio:
         assert body_response['detail'] == 'DrawIO processor does not accept diagrams with multiple pages'
         assert len(body_response['errors']) == 1
         assert body_response['errors'][0]['errorMessage'] == 'Diagram File is not compatible'
+
+    @pytest.mark.parametrize('diagram_file_path', [
+        test_resource_paths.drawio_minimal,
+        test_resource_paths.lean_ix_drawio
+    ])
+    @responses.activate
+    def test_create_otm_ok(self, diagram_file_path):
+        # Given a project_id
+        project_id: str = 'test_ok'
+        project_name: str = 'test_ok_name'
+
+        # And the source file
+        diag_file = get_byte_data(diagram_file_path)
+
+        # And the mapping file
+        mapping_file = get_byte_data(test_resource_paths.default_drawio_mapping)
+
+        # When I do post on diagram endpoint
+        files = {'diag_file': (diagram_file_path, diag_file),
+                 'default_mapping_file': ('default_mapping_file.yaml', mapping_file)}
+        body = {'diag_type': 'DRAWIO', 'id': project_id, 'name': project_name}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then
+        assert response.status_code == 201
+        assert response.headers.get('content-type') == json_mime
+        otm = json.loads(response.text)
+        assert len(otm['trustZones']) > 0
+        assert len(otm['components']) > 0

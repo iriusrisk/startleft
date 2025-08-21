@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:element name="mxfile" type="mxfileType"/>
+    <xs:element name="mxGraphModel" type="mxGraphModelType"/>
     <xs:complexType name="mxCellType" mixed="true">
         <xs:sequence>
             <xs:element type="mxGeometryType" name="mxGeometry" minOccurs="0"/>
@@ -80,6 +81,7 @@
             <xs:element type="mxCellType" name="mxCell"/>
             <xs:element type="objectType" name="object"/>
             <xs:element type="objectType" name="UserObject"/>
+            <xs:element name="lx-settings" type="lxSettingsType"/>
         </xs:choice>
     </xs:complexType>
     <xs:complexType name="mxGraphModelType">
@@ -126,6 +128,12 @@
         <xs:attribute type="xs:string" name="version"/>
         <xs:attribute type="xs:string" name="type"/>
         <xs:attribute type="xs:string" name="pages"/>
+        <xs:anyAttribute processContents="lax"/>
+    </xs:complexType>
+    <xs:complexType name="lxSettingsType">
+        <xs:sequence>
+            <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+        </xs:sequence>
         <xs:anyAttribute processContents="lax"/>
     </xs:complexType>
 </xs:schema>

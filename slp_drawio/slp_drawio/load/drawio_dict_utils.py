@@ -29,7 +29,8 @@ def __is_mx_cell_component(mx_cell: dict):
 
 
 def __get_root_element(source) -> dict:
-    return source.get("mxfile", {}).get("diagram", {}).get("mxGraphModel", {}).get("root", {})
+    return source.get("mxfile", {}).get("diagram", {}).get("mxGraphModel",
+                                                           source.get("mxGraphModel", {})).get("root", {})
 
 
 def __process_object_elements(root: dict, element_keys: list[str]) -> list[dict]:
@@ -82,7 +83,7 @@ def get_dataflow_tags(dataflow_id: str, source) -> list[str]:
 
 
 def get_diagram_size(source) -> Optional[dict]:
-    model = source.get("mxfile", {}).get("diagram", {}).get("mxGraphModel", {})
+    model = source.get("mxfile", {}).get("diagram", {}).get("mxGraphModel", source.get("mxGraphModel", {}))
     if model:
         height = model.get('pageHeight', None)
         width = model.get('pageWidth', None)

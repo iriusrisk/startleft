@@ -50,7 +50,11 @@ def test_is_multiple_pages(source, expected):
     pytest.param({'mxfile': {'diagram': {'mxGraphModel': {'pageHeight': 123, 'pageWidth': 456}}}},
                  {'height': 123, 'width': 456},
                  id='exists size'),
+    pytest.param({'mxGraphModel': {'pageHeight': 123, 'pageWidth': 456}},
+                 {'height': 123, 'width': 456},
+                 id='exists size only mxGraphModel'),
     pytest.param({'mxfile': {'diagram': {'mxGraphModel': {}}}}, None, id='not dimensions'),
+    pytest.param({'mxGraphModel': {}}, None, id='not dimensions only mxGraphModel'),
     pytest.param({}, None, id='not model')
 ])
 def test_get_diagram_size(source, expected):
