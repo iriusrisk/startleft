@@ -49,7 +49,7 @@ jobs:
           args: >
             -Dsonar.projectKey=startleft
             -Dsonar.organization=continuumsec
-            -Dsonar.python.version=3.9,3.10,3.11
+            -Dsonar.python.version=3.10,3.11,3.12
             -Dsonar.qualitygate.wait=true
             -Dsonar.python.coverage.reportPaths=coveragereport/coverage.xml
 
