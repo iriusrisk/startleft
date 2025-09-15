@@ -2,18 +2,19 @@ import json
 from unittest.mock import patch
 
 import responses
-from fastapi.testclient import TestClient
 from pytest import mark
+from fastapi.testclient import TestClient
 
 from slp_base import IacType
 from slp_base.slp_base.errors import LoadingIacFileError, IacFileNotValidError, MappingFileNotValidError, \
     LoadingMappingFileError, OTMResultError, OTMBuildingError
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.iac import iac_create_otm_controller
-from tests.resources.test_resource_paths import default_cloudformation_mapping, example_json, \
+from tests.resources.test_resource_paths import (default_cloudformation_mapping, example_json, example_template, \
     cloudformation_malformed_mapping_wrong_id, invalid_yaml, cloudformation_all_functions, \
-    cloudformation_mapping_all_functions, cloudformation_gz, cloudformation_multiple_files_networks, \
-    cloudformation_multiple_files_resources, cloudformation_ref_full_syntax, cloudformation_ref_short_syntax
+    cloudformation_mapping_all_functions, cloudformation_mapping_no_dataflows, cloudformation_gz, \
+    cloudformation_multiple_files_networks, cloudformation_multiple_files_resources, cloudformation_ref_full_syntax, \
+    cloudformation_ref_short_syntax, cloudformation_mapping_trustzone_no_id)
 
 TESTING_IAC_TYPE = IacType.CLOUDFORMATION.value
 
@@ -21,13 +22,23 @@ webapp = fastapi_server.webapp
 client = TestClient(webapp)
 
 json_mime = 'application/json'
-
+yaml_mime = 'text/yaml'
 
 def get_url():
     return iac_create_otm_controller.PREFIX + iac_create_otm_controller.URL
 
+def assert_bad_request_response(response):
+    assert response.status_code == 400
+    assert response.headers.get('content-type') == json_mime
 
-yaml_mime = 'text/yaml'
+def assert_bad_request_body_response(response, error_type, title, detail, total_errors):
+    body_response = json.loads(response.text)
+    assert body_response['status'] == '400'
+    assert body_response['error_type'] == error_type
+    assert body_response['title'] == title
+    assert body_response['detail'] == detail
+    assert len(body_response['errors']) == total_errors
+    return body_response
 
 
 class TestOTMControllerIaCCloudformation:
@@ -451,3 +462,71 @@ class TestOTMControllerIaCCloudformation:
         assert response.status_code == iac_create_otm_controller.RESPONSE_STATUS_CODE
         otm = json.loads(response.text)
         assert otm["components"][0]["name"] == "0.0.0.0/0"
+
+    @responses.activate
+    def test_create_otm_invalid_dataflows_mapping(self):
+        # Given a project_id
+        project_id: str = 'project_A_id'
+
+        # And the request files
+        iac_file = (cloudformation_all_functions, open(cloudformation_all_functions, 'rb'), json_mime)
+        mapping_file = (cloudformation_mapping_no_dataflows, open(cloudformation_mapping_no_dataflows, 'rb'), yaml_mime)
+
+        # When I do post on cloudformation endpoint
+        files = {'iac_file': iac_file, 'mapping_file': mapping_file}
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then the OTM is returned inside the response as JSON
+        assert_bad_request_response(response)
+        body_response = assert_bad_request_body_response(response, 'MappingFileNotValidError',
+            'Mapping files are not valid', 'Mapping file does not comply with the schema', 1)
+        assert (body_response['errors'][0]['errorMessage'] == "'dataflows' is a required property")
+
+    @responses.activate
+    def test_create_otm_trustzone_id_not_present(self):
+        # Given a project_id
+        project_id: str = 'project_A_id'
+
+        # And the request files
+        iac_file = (cloudformation_all_functions, open(cloudformation_all_functions, 'rb'), json_mime)
+        mapping_file = (cloudformation_mapping_trustzone_no_id, open(cloudformation_mapping_trustzone_no_id, 'rb'), yaml_mime)
+
+        # When I do post on cloudformation endpoint
+        files = {'iac_file': iac_file, 'mapping_file': mapping_file}
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then the OTM is returned inside the response as JSON
+        assert_bad_request_response(response)
+        body_response = assert_bad_request_body_response(response, 'MappingFileNotValidError',
+             'Mapping files are not valid', 'Mapping file does not comply with the schema', 1)
+        assert (body_response['errors'][0]['errorMessage'] == "'id' is a required property")
+
+    @responses.activate
+    def test_create_otm_template_ok(self):
+        # Given a project_id
+        project_id: str = 'project_A_id'
+
+        # And the request files
+        iac_file = (example_template, open(example_template, 'rb'), json_mime)
+        mapping_file = (default_cloudformation_mapping, open(default_cloudformation_mapping, 'rb'), yaml_mime)
+
+        # When I do post on cloudformation endpoint
+        files = {'iac_file': iac_file, 'mapping_file': mapping_file}
+        body = {'iac_type': TESTING_IAC_TYPE, 'id': f'{project_id}', 'name': 'project_A_name'}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then the OTM is returned inside the response as JSON
+        assert response.status_code == iac_create_otm_controller.RESPONSE_STATUS_CODE
+        assert response.headers.get('content-type') == json_mime
+
+        # And the otm is as expected
+        otm = json.loads(response.text)
+        assert otm['otmVersion'] == '0.2.0'
+        assert otm['project']['id'] == 'project_A_id'
+        assert otm['project']['name'] == 'project_A_name'
+        assert otm['project']['name'] == 'project_A_name'
+        assert len(otm['trustZones']) == 1
+        assert len(otm['components']) == 2
+        assert len(otm['dataflows']) == 0

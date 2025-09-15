@@ -14,12 +14,13 @@ cloudformation_for_security_groups_mapping = path + \
 cloudformation_malformed_mapping_wrong_id = path + '/mapping/cloudformation_malformed_mapping_wrong_id.yaml'
 cloudformation_mapping_iriusrisk = path + '/mapping/iriusrisk-cft-mapping.yaml'
 cloudformation_mapping_without_ref = path + '/mapping/iriusrisk-cft-mapping_without_ref.yaml'
-
 empty_cloudformation_mapping = path + '/mapping/empty_cloudformation_mapping.yaml'
-
 cloudformation_trustzone_types_mapping = path + '/mapping/cloudformation_trustzone_types_mapping.yaml'
 cloudformation_multiple_trustzones_same_type_mapping = \
     path + '/mapping/cloudformation_multiple_trustzones_same_type_mapping.yaml'
+cloudformation_old_default_mapping = path + '/mapping/cloudformation_old_default_mapping.yaml'
+cloudformation_new_default_mapping = path + '/mapping/cloudformation_new_default_mapping.yaml'
+cloudformation_mapping_valid_without_trustzone_type = path + '/mapping/cloudformation_mapping_valid_without_trustzone_type.yaml'
 
 # cft
 cloudformation_for_mappings_tests_json = path + '/cft/cloudformation_for_mappings_tests.json'
@@ -34,6 +35,9 @@ cloudformation_all_functions = path + '/cft/cloudformation_all_functions.json'
 cloudformation_single_file = path + '/cft/cloudformation_single_file.json'
 cloudformation_networks_file = path + '/cft/cloudformation_networks_file.json'
 cloudformation_resources_file = path + '/cft/cloudformation_resources_file.json'
+cloudformation_resources_invalid = path + '/cft/cloudformation_resources_invalid.json'
+cloudformation_react_cors_spa_stack = path + '/cft/cloudformation_react_cors_spa_stack.yaml'
+cloudformation_test = path + '/cft/cloudformation_test.yaml'
 multiple_stack_plus_s3_ec2 = path + '/cft/multiple_stack_plus_s3_ec2.yaml'
 standalone_securitygroupegress_configuration = path + '/cft/standalone_securitygroupegress_configuration.yaml'
 standalone_securitygroupingress_configuration = path + '/cft/standalone_securitygroupingress_configuration.yaml'
