@@ -1,0 +1,13 @@
+trustzones: []
+
+# The order of the components is important because parent components must be defined before child components
+components:
+  - id:     {$format: "{name}"}
+    type:   empty-component
+    name:   {$path: "_key"}
+    $source: {$root: "Resources|squash(@)[?Type=='AWS::EC2::SecurityGroup']"}
+    parent:  b61d6911-338d-46a8-9f39-8dcd24abfe91
+    tags:
+      - { $path: "Type" }
+
+dataflows: [] 

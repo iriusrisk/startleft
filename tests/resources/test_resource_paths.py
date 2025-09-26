@@ -5,6 +5,7 @@ path = os.path.dirname(__file__)
 # GENERIC
 example_json = f'{path}/example.json'
 example_yaml = f'{path}/example.yaml'
+example_template = f'{path}/example.template'
 invalid_yaml = f'{path}/invalid-yaml.yaml'
 invalid_tf = f'{path}/invalid-tf.tf'
 example_gzip = f'{path}/example.gz'
@@ -22,6 +23,7 @@ cloudformation_for_security_group_tests_json = f'{path}/cloudformation/cloudform
 cloudformation_for_security_group_tests_2_json = f'{path}/cloudformation/cloudformation_for_security_group_tests_2.json'
 cloudformation_for_security_groups_mapping = f'{path}/cloudformation/cloudformation_for_security_group_tests_mapping_definitions.yaml'
 cloudformation_gz = f'{path}/cloudformation/cloudformation.gz'
+cloudformation_empty_file = f'{path}/cloudformation/cloudformation_empty_file.json'
 cloudformation_invalid_size = f'{path}/cloudformation/cloudformation-invalid-size.json'
 cloudformation_malformed_mapping_wrong_id = f'{path}/cloudformation/cloudformation_malformed_mapping_wrong_id.yaml'
 cloudformation_component_without_parent = f'{path}/cloudformation/cloudformation_component_without_parent.json'
@@ -34,8 +36,14 @@ cloudformation_ref_full_syntax = f'{path}/cloudformation/cloudformation_ref_full
 cloudformation_ref_short_syntax = f'{path}/cloudformation/cloudformation_ref_short_syntax.yaml'
 # mapping
 default_cloudformation_mapping = f'{path}/cloudformation/cloudformation_mapping.yaml'
+old_cloudformation_default_mapping = f'{path}/cloudformation/old_cloudformation_default_mapping.yaml'
 cloudformation_mapping_component_without_parent = f'{path}/cloudformation/cloudformation_mapping_component_without_parent.yaml'
 cloudformation_mapping_all_functions = f'{path}/cloudformation/cloudformation_mapping_all_functions.yaml'
+cloudformation_mapping_no_dataflows = f'{path}/cloudformation/cloudformation_mapping_no_dataflows.yaml'
+cloudformation_mapping_trustzone_no_id = f'{path}/cloudformation/cloudformation_mapping_trustzone_no_id.yaml'
+cloudformation_custom_mapping_file = f'{path}/cloudformation/cloudformation_custom_mapping_file.yaml'
+cloudformation_wrong_mapping_file = f'{path}/cloudformation/cloudformation_wrong_mapping_file.yaml'
+
 # expected otm results
 cloudformation_for_mappings_tests_json_otm_expected = f'{path}/cloudformation/cloudformation_for_mappings_tests.otm'
 
