@@ -1,0 +1,140 @@
+digraph {
+	compound = "true"
+	newrank = "true"
+	subgraph "root" {
+		"[root] aws_api_gateway_account.click_logger_api_gateway_account (expand)" [label = "aws_api_gateway_account.click_logger_api_gateway_account", shape = "box"]
+		"[root] aws_api_gateway_authorizer.clicklogger-authorizer (expand)" [label = "aws_api_gateway_authorizer.clicklogger-authorizer", shape = "box"]
+		"[root] aws_api_gateway_deployment.clicklogger_deployment (expand)" [label = "aws_api_gateway_deployment.clicklogger_deployment", shape = "box"]
+		"[root] aws_api_gateway_integration.integration (expand)" [label = "aws_api_gateway_integration.integration", shape = "box"]
+		"[root] aws_api_gateway_integration_response.MyDemoIntegrationResponse (expand)" [label = "aws_api_gateway_integration_response.MyDemoIntegrationResponse", shape = "box"]
+		"[root] aws_api_gateway_method.method (expand)" [label = "aws_api_gateway_method.method", shape = "box"]
+		"[root] aws_api_gateway_method_response.response_200 (expand)" [label = "aws_api_gateway_method_response.response_200", shape = "box"]
+		"[root] aws_api_gateway_method_settings.general_settings (expand)" [label = "aws_api_gateway_method_settings.general_settings", shape = "box"]
+		"[root] aws_api_gateway_model.clicklogger_model (expand)" [label = "aws_api_gateway_model.clicklogger_model", shape = "box"]
+		"[root] aws_api_gateway_request_validator.clicklogger_validator (expand)" [label = "aws_api_gateway_request_validator.clicklogger_validator", shape = "box"]
+		"[root] aws_api_gateway_resource.resource (expand)" [label = "aws_api_gateway_resource.resource", shape = "box"]
+		"[root] aws_api_gateway_rest_api.click_logger_api (expand)" [label = "aws_api_gateway_rest_api.click_logger_api", shape = "box"]
+		"[root] aws_cloudwatch_log_group.click_logger_firehose_delivery_stream_log_group (expand)" [label = "aws_cloudwatch_log_group.click_logger_firehose_delivery_stream_log_group", shape = "box"]
+		"[root] aws_cloudwatch_log_group.clicklogger-api-log-group (expand)" [label = "aws_cloudwatch_log_group.clicklogger-api-log-group", shape = "box"]
+		"[root] aws_cloudwatch_log_group.lambda_click_logger_authorizer_log_group (expand)" [label = "aws_cloudwatch_log_group.lambda_click_logger_authorizer_log_group", shape = "box"]
+		"[root] aws_cloudwatch_log_group.lambda_click_logger_log_group (expand)" [label = "aws_cloudwatch_log_group.lambda_click_logger_log_group", shape = "box"]
+		"[root] aws_cloudwatch_log_stream.click_logger_firehose_delivery_stream (expand)" [label = "aws_cloudwatch_log_stream.click_logger_firehose_delivery_stream", shape = "box"]
+		"[root] aws_dynamodb_table.click-logger-table (expand)" [label = "aws_dynamodb_table.click-logger-table", shape = "box"]
+		"[root] aws_glue_catalog_database.aws_glue_click_logger_database (expand)" [label = "aws_glue_catalog_database.aws_glue_click_logger_database", shape = "box"]
+		"[root] aws_glue_catalog_table.aws_glue_click_logger_catalog_table (expand)" [label = "aws_glue_catalog_table.aws_glue_click_logger_catalog_table", shape = "box"]
+		"[root] aws_iam_policy.click_loggerlambda_logging_policy (expand)" [label = "aws_iam_policy.click_loggerlambda_logging_policy", shape = "box"]
+		"[root] aws_iam_role.click_logger_api_gateway_cloudwatch_role (expand)" [label = "aws_iam_role.click_logger_api_gateway_cloudwatch_role", shape = "box"]
+		"[root] aws_iam_role.click_logger_invocation_role (expand)" [label = "aws_iam_role.click_logger_invocation_role", shape = "box"]
+		"[root] aws_iam_role.click_logger_lambda_role (expand)" [label = "aws_iam_role.click_logger_lambda_role", shape = "box"]
+		"[root] aws_iam_role.click_logger_stream_consumer_firehose_role (expand)" [label = "aws_iam_role.click_logger_stream_consumer_firehose_role", shape = "box"]
+		"[root] aws_iam_role_policy.click_logger_api_gateway_cloudwatch_policy (expand)" [label = "aws_iam_role_policy.click_logger_api_gateway_cloudwatch_policy", shape = "box"]
+		"[root] aws_iam_role_policy.click_logger_invocation_policy (expand)" [label = "aws_iam_role_policy.click_logger_invocation_policy", shape = "box"]
+		"[root] aws_iam_role_policy.click_logger_stream_consumer_firehose_inline_policy (expand)" [label = "aws_iam_role_policy.click_logger_stream_consumer_firehose_inline_policy", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.click_loggerlambda_policy (expand)" [label = "aws_iam_role_policy_attachment.click_loggerlambda_policy", shape = "box"]
+		"[root] aws_iam_role_policy_attachment.lambda_logs (expand)" [label = "aws_iam_role_policy_attachment.lambda_logs", shape = "box"]
+		"[root] aws_kinesis_firehose_delivery_stream.click_logger_firehose_delivery_stream (expand)" [label = "aws_kinesis_firehose_delivery_stream.click_logger_firehose_delivery_stream", shape = "box"]
+		"[root] aws_lambda_function.lambda_clicklogger (expand)" [label = "aws_lambda_function.lambda_clicklogger", shape = "box"]
+		"[root] aws_lambda_function.lambda_clicklogger_authorizer (expand)" [label = "aws_lambda_function.lambda_clicklogger_authorizer", shape = "box"]
+		"[root] aws_lambda_function.lambda_clicklogger_stream_consumer (expand)" [label = "aws_lambda_function.lambda_clicklogger_stream_consumer", shape = "box"]
+		"[root] aws_lambda_permission.apigw_lambda (expand)" [label = "aws_lambda_permission.apigw_lambda", shape = "box"]
+		"[root] aws_s3_bucket.click_logger_firehose_delivery_s3_bucket (expand)" [label = "aws_s3_bucket.click_logger_firehose_delivery_s3_bucket", shape = "box"]
+		"[root] data.aws_caller_identity.current (expand)" [label = "data.aws_caller_identity.current", shape = "box"]
+		"[root] data.aws_iam_policy_document.AWSLambdaTrustPolicy (expand)" [label = "data.aws_iam_policy_document.AWSLambdaTrustPolicy", shape = "box"]
+		"[root] data.aws_region.current (expand)" [label = "data.aws_region.current", shape = "box"]
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"]" [label = "provider[\"registry.terraform.io/hashicorp/aws\"]", shape = "diamond"]
+		"[root] var.app_prefix" [label = "var.app_prefix", shape = "note"]
+		"[root] var.lambda_source_zip_path" [label = "var.lambda_source_zip_path", shape = "note"]
+		"[root] var.stage_name" [label = "var.stage_name", shape = "note"]
+		"[root] aws_api_gateway_account.click_logger_api_gateway_account (expand)" -> "[root] aws_iam_role.click_logger_api_gateway_cloudwatch_role (expand)"
+		"[root] aws_api_gateway_authorizer.clicklogger-authorizer (expand)" -> "[root] aws_api_gateway_rest_api.click_logger_api (expand)"
+		"[root] aws_api_gateway_authorizer.clicklogger-authorizer (expand)" -> "[root] aws_iam_role.click_logger_invocation_role (expand)"
+		"[root] aws_api_gateway_authorizer.clicklogger-authorizer (expand)" -> "[root] aws_lambda_function.lambda_clicklogger_authorizer (expand)"
+		"[root] aws_api_gateway_deployment.clicklogger_deployment (expand)" -> "[root] aws_api_gateway_integration.integration (expand)"
+		"[root] aws_api_gateway_integration.integration (expand)" -> "[root] aws_api_gateway_method.method (expand)"
+		"[root] aws_api_gateway_integration.integration (expand)" -> "[root] aws_lambda_function.lambda_clicklogger (expand)"
+		"[root] aws_api_gateway_integration_response.MyDemoIntegrationResponse (expand)" -> "[root] aws_api_gateway_integration.integration (expand)"
+		"[root] aws_api_gateway_integration_response.MyDemoIntegrationResponse (expand)" -> "[root] aws_api_gateway_method_response.response_200 (expand)"
+		"[root] aws_api_gateway_method.method (expand)" -> "[root] aws_api_gateway_authorizer.clicklogger-authorizer (expand)"
+		"[root] aws_api_gateway_method.method (expand)" -> "[root] aws_api_gateway_model.clicklogger_model (expand)"
+		"[root] aws_api_gateway_method.method (expand)" -> "[root] aws_api_gateway_request_validator.clicklogger_validator (expand)"
+		"[root] aws_api_gateway_method.method (expand)" -> "[root] aws_api_gateway_resource.resource (expand)"
+		"[root] aws_api_gateway_method_response.response_200 (expand)" -> "[root] aws_api_gateway_method.method (expand)"
+		"[root] aws_api_gateway_method_settings.general_settings (expand)" -> "[root] aws_api_gateway_deployment.clicklogger_deployment (expand)"
+		"[root] aws_api_gateway_model.clicklogger_model (expand)" -> "[root] aws_api_gateway_rest_api.click_logger_api (expand)"
+		"[root] aws_api_gateway_request_validator.clicklogger_validator (expand)" -> "[root] aws_api_gateway_rest_api.click_logger_api (expand)"
+		"[root] aws_api_gateway_resource.resource (expand)" -> "[root] aws_api_gateway_rest_api.click_logger_api (expand)"
+		"[root] aws_api_gateway_rest_api.click_logger_api (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_api_gateway_rest_api.click_logger_api (expand)" -> "[root] var.app_prefix"
+		"[root] aws_cloudwatch_log_group.click_logger_firehose_delivery_stream_log_group (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.click_logger_firehose_delivery_stream_log_group (expand)" -> "[root] var.app_prefix"
+		"[root] aws_cloudwatch_log_group.clicklogger-api-log-group (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_cloudwatch_log_group.clicklogger-api-log-group (expand)" -> "[root] var.app_prefix"
+		"[root] aws_cloudwatch_log_group.clicklogger-api-log-group (expand)" -> "[root] var.stage_name"
+		"[root] aws_cloudwatch_log_group.lambda_click_logger_authorizer_log_group (expand)" -> "[root] aws_lambda_function.lambda_clicklogger_authorizer (expand)"
+		"[root] aws_cloudwatch_log_group.lambda_click_logger_log_group (expand)" -> "[root] aws_lambda_function.lambda_clicklogger (expand)"
+		"[root] aws_cloudwatch_log_stream.click_logger_firehose_delivery_stream (expand)" -> "[root] aws_cloudwatch_log_group.click_logger_firehose_delivery_stream_log_group (expand)"
+		"[root] aws_dynamodb_table.click-logger-table (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_dynamodb_table.click-logger-table (expand)" -> "[root] var.app_prefix"
+		"[root] aws_dynamodb_table.click-logger-table (expand)" -> "[root] var.stage_name"
+		"[root] aws_glue_catalog_database.aws_glue_click_logger_database (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_glue_catalog_database.aws_glue_click_logger_database (expand)" -> "[root] var.app_prefix"
+		"[root] aws_glue_catalog_table.aws_glue_click_logger_catalog_table (expand)" -> "[root] aws_glue_catalog_database.aws_glue_click_logger_database (expand)"
+		"[root] aws_glue_catalog_table.aws_glue_click_logger_catalog_table (expand)" -> "[root] aws_s3_bucket.click_logger_firehose_delivery_s3_bucket (expand)"
+		"[root] aws_iam_policy.click_loggerlambda_logging_policy (expand)" -> "[root] aws_kinesis_firehose_delivery_stream.click_logger_firehose_delivery_stream (expand)"
+		"[root] aws_iam_role.click_logger_api_gateway_cloudwatch_role (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_iam_role.click_logger_api_gateway_cloudwatch_role (expand)" -> "[root] var.app_prefix"
+		"[root] aws_iam_role.click_logger_invocation_role (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_iam_role.click_logger_invocation_role (expand)" -> "[root] var.app_prefix"
+		"[root] aws_iam_role.click_logger_lambda_role (expand)" -> "[root] data.aws_iam_policy_document.AWSLambdaTrustPolicy (expand)"
+		"[root] aws_iam_role.click_logger_lambda_role (expand)" -> "[root] var.app_prefix"
+		"[root] aws_iam_role.click_logger_stream_consumer_firehose_role (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] aws_iam_role.click_logger_stream_consumer_firehose_role (expand)" -> "[root] var.app_prefix"
+		"[root] aws_iam_role_policy.click_logger_api_gateway_cloudwatch_policy (expand)" -> "[root] aws_iam_role.click_logger_api_gateway_cloudwatch_role (expand)"
+		"[root] aws_iam_role_policy.click_logger_invocation_policy (expand)" -> "[root] aws_iam_role.click_logger_invocation_role (expand)"
+		"[root] aws_iam_role_policy.click_logger_invocation_policy (expand)" -> "[root] aws_lambda_function.lambda_clicklogger_authorizer (expand)"
+		"[root] aws_iam_role_policy.click_logger_stream_consumer_firehose_inline_policy (expand)" -> "[root] aws_iam_role.click_logger_stream_consumer_firehose_role (expand)"
+		"[root] aws_iam_role_policy_attachment.click_loggerlambda_policy (expand)" -> "[root] aws_iam_role.click_logger_lambda_role (expand)"
+		"[root] aws_iam_role_policy_attachment.lambda_logs (expand)" -> "[root] aws_iam_policy.click_loggerlambda_logging_policy (expand)"
+		"[root] aws_kinesis_firehose_delivery_stream.click_logger_firehose_delivery_stream (expand)" -> "[root] aws_glue_catalog_table.aws_glue_click_logger_catalog_table (expand)"
+		"[root] aws_kinesis_firehose_delivery_stream.click_logger_firehose_delivery_stream (expand)" -> "[root] aws_iam_role.click_logger_stream_consumer_firehose_role (expand)"
+		"[root] aws_kinesis_firehose_delivery_stream.click_logger_firehose_delivery_stream (expand)" -> "[root] aws_lambda_function.lambda_clicklogger_stream_consumer (expand)"
+		"[root] aws_kinesis_firehose_delivery_stream.click_logger_firehose_delivery_stream (expand)" -> "[root] data.aws_region.current (expand)"
+		"[root] aws_lambda_function.lambda_clicklogger (expand)" -> "[root] aws_kinesis_firehose_delivery_stream.click_logger_firehose_delivery_stream (expand)"
+		"[root] aws_lambda_function.lambda_clicklogger_authorizer (expand)" -> "[root] aws_iam_role.click_logger_lambda_role (expand)"
+		"[root] aws_lambda_function.lambda_clicklogger_authorizer (expand)" -> "[root] var.lambda_source_zip_path"
+		"[root] aws_lambda_function.lambda_clicklogger_stream_consumer (expand)" -> "[root] aws_dynamodb_table.click-logger-table (expand)"
+		"[root] aws_lambda_function.lambda_clicklogger_stream_consumer (expand)" -> "[root] aws_iam_role.click_logger_lambda_role (expand)"
+		"[root] aws_lambda_function.lambda_clicklogger_stream_consumer (expand)" -> "[root] var.lambda_source_zip_path"
+		"[root] aws_lambda_permission.apigw_lambda (expand)" -> "[root] aws_api_gateway_rest_api.click_logger_api (expand)"
+		"[root] aws_lambda_permission.apigw_lambda (expand)" -> "[root] aws_lambda_function.lambda_clicklogger (expand)"
+		"[root] aws_s3_bucket.click_logger_firehose_delivery_s3_bucket (expand)" -> "[root] data.aws_caller_identity.current (expand)"
+		"[root] aws_s3_bucket.click_logger_firehose_delivery_s3_bucket (expand)" -> "[root] var.app_prefix"
+		"[root] aws_s3_bucket.click_logger_firehose_delivery_s3_bucket (expand)" -> "[root] var.stage_name"
+		"[root] data.aws_caller_identity.current (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] data.aws_iam_policy_document.AWSLambdaTrustPolicy (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] data.aws_region.current (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] output.S3 (expand)" -> "[root] aws_s3_bucket.click_logger_firehose_delivery_s3_bucket (expand)"
+		"[root] output.deployment-url (expand)" -> "[root] aws_api_gateway_deployment.clicklogger_deployment (expand)"
+		"[root] output.lambda-clicklogger (expand)" -> "[root] aws_lambda_function.lambda_clicklogger (expand)"
+		"[root] output.lambda-clicklogger-authorzer (expand)" -> "[root] aws_lambda_function.lambda_clicklogger_authorizer (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_api_gateway_account.click_logger_api_gateway_account (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_api_gateway_integration_response.MyDemoIntegrationResponse (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_api_gateway_method_settings.general_settings (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_log_group.clicklogger-api-log-group (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_log_group.lambda_click_logger_authorizer_log_group (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_log_group.lambda_click_logger_log_group (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_cloudwatch_log_stream.click_logger_firehose_delivery_stream (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_iam_role_policy.click_logger_api_gateway_cloudwatch_policy (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_iam_role_policy.click_logger_invocation_policy (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_iam_role_policy.click_logger_stream_consumer_firehose_inline_policy (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_iam_role_policy_attachment.click_loggerlambda_policy (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_iam_role_policy_attachment.lambda_logs (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_lambda_permission.apigw_lambda (expand)"
+		"[root] root" -> "[root] output.S3 (expand)"
+		"[root] root" -> "[root] output.deployment-url (expand)"
+		"[root] root" -> "[root] output.lambda-clicklogger (expand)"
+		"[root] root" -> "[root] output.lambda-clicklogger-authorzer (expand)"
+		"[root] root" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)"
+	}
+}
+

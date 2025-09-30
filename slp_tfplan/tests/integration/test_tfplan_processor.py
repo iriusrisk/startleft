@@ -7,13 +7,16 @@ from pytest import mark, param
 import slp_tfplan.tests.resources.test_resource_paths as resources
 from otm.otm.entity.otm import OTM
 from sl_util.sl_util.file_utils import get_byte_data
-from slp_base import IacFileNotValidError
+from slp_base import IacFileNotValidError, MappingFileNotValidError
+from slp_base.slp_base.errors import ErrorCode
+from slp_base.slp_base.mapping import MAX_SIZE as MAPPING_MAX_SIZE, MIN_SIZE as MAPPING_MIN_SIZE
 from slp_base.tests.util.otm import validate_and_compare
 from slp_tfplan import TFPlanProcessor
 from slp_tfplan.tests.util.builders import create_artificial_file, MIN_FILE_SIZE, MAX_TFPLAN_FILE_SIZE, \
     MAX_TFGRAPH_FILE_SIZE
 
 DEFAULT_MAPPING_FILE = get_byte_data(resources.terraform_iriusrisk_tfplan_aws_mapping)
+SECONDARY_DEFAULT_MAPPING_FILE = get_byte_data(resources.terraform_plan_default_mapping)
 
 SAMPLE_VALID_TFPLAN = get_byte_data(resources.tfplan_elb)
 SAMPLE_VALID_TFGRAPH = get_byte_data(resources.tfgraph_elb)
@@ -23,6 +26,9 @@ SAMPLE_INVALID_TFGRAPH = get_byte_data(resources.invalid_yaml)
 
 TFPLAN_OFFICIAL = get_byte_data(resources.tfplan_official)
 TFGRAPH_OFFICIAL = get_byte_data(resources.tfgraph_official)
+
+TFPLAN_AWS_COMPLETE = get_byte_data(resources.tfplan_aws_complete)
+TFGRAPH_AWS_COMPLETE = get_byte_data(resources.tfgraph_aws_complete)
 
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
@@ -87,6 +93,30 @@ def test_invalid_size(sources: List[bytes]):
     assert error.value.title == 'Terraform Plan file is not valid'
     assert error.value.message == 'Provided iac_file is not valid. Invalid size'
 
+@mark.parametrize('mappings', [
+    param([create_artificial_file(MAPPING_MIN_SIZE - 1), DEFAULT_MAPPING_FILE], id='mapping file too small'),
+    param([create_artificial_file(MAPPING_MAX_SIZE + 1), DEFAULT_MAPPING_FILE], id='mapping file too big'),
+    param([DEFAULT_MAPPING_FILE, create_artificial_file(MAPPING_MIN_SIZE - 1)], id='custom mapping file too small'),
+    param([DEFAULT_MAPPING_FILE, create_artificial_file(MAPPING_MAX_SIZE + 1)], id='custom mapping file too big')
+])
+def test_invalid_mapping_size(mappings: List[bytes]):
+    # GIVEN a valid tfplan and tfgraph
+    tfplan = get_byte_data(resources.tfplan_official)
+    tfgraph = get_byte_data(resources.tfgraph_official)
+
+    # AND a mapping file with an invalid size ('mappings' arg)
+
+    # WHEN TFPlanProcessor::process is invoked
+    # THEN a MappingFileNotValidError is raised
+    with pytest.raises(MappingFileNotValidError) as error:
+        TFPlanProcessor(SAMPLE_ID, SAMPLE_NAME, [tfplan, tfgraph], mappings).process()
+
+    # AND the error details are correct
+    assert ErrorCode.MAPPING_FILE_NOT_VALID == error.value.error_code
+    assert 'Mapping files are not valid' == error.value.title
+    assert 'Mapping files are not valid. Invalid size' == error.value.detail
+    assert 'Mapping files are not valid. Invalid size' == error.value.message
+
 def test_two_tfplan():
     # GIVEN two valid TFPLANs
     sources = [SAMPLE_VALID_TFPLAN, SAMPLE_VALID_TFPLAN]
@@ -150,3 +180,21 @@ def test_singleton_grouped_by_category():
     assert components[1].id == 'aws_cloudwatch_log_group.click_logger_firehose_delivery_stream_log_group'
     assert components[1].name == 'CloudWatch'
     assert components[1].type == 'cloudwatch'
+
+def test_aws_complete_sample():
+    # GIVEN a valid tfplan and tfgraph
+    tfplan = TFPLAN_AWS_COMPLETE
+    tfgraph = TFGRAPH_AWS_COMPLETE
+
+    # AND a mapping file with an invalid size ('mappings' arg)
+    mapping_file = SECONDARY_DEFAULT_MAPPING_FILE
+
+    # WHEN TFPlanProcessor::process is invoked
+    # THEN a MappingFileNotValidError is raised
+    otm = TFPlanProcessor(SAMPLE_ID, SAMPLE_NAME, [tfplan, tfgraph], [mapping_file]).process()
+
+    # AND the error details are correct
+    assert len(otm.representations) == 1
+    assert len(otm.trustzones) == 2
+    assert len(otm.components) == 15
+    assert len(otm.dataflows) == 8
