@@ -3,11 +3,14 @@ import json
 import pytest
 import responses
 from fastapi.testclient import TestClient
+
 from tests.resources import test_resource_paths
 
 from sl_util.sl_util.file_utils import get_byte_data
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.diagram import diag_create_otm_controller
+from tests.resources.test_resource_paths import default_drawio_mapping, custom_drawio_mapping, drawio_minimal_xml, \
+    mtmt_mapping_file_valid, terraform_aws_simple_components
 
 webapp = fastapi_server.webapp
 
@@ -51,7 +54,8 @@ class TestOTMControllerDiagramDrawio:
         assert body_response['errors'][0]['errorMessage'] == 'Diagram File is not compatible'
 
     @pytest.mark.parametrize('diagram_file_path', [
-        test_resource_paths.drawio_minimal,
+        test_resource_paths.drawio_minimal_xml,
+        test_resource_paths.drawio_minimal_drawio,
         test_resource_paths.lean_ix_drawio
     ])
     @responses.activate
@@ -78,3 +82,64 @@ class TestOTMControllerDiagramDrawio:
         otm = json.loads(response.text)
         assert len(otm['trustZones']) > 0
         assert len(otm['components']) > 0
+
+    @pytest.mark.parametrize('custom_mapping_file_path, expected_component_type', [
+        (default_drawio_mapping, 'CD-V2-EMPTY-COMPONENT'), (custom_drawio_mapping, 'vpc')])
+    @responses.activate
+    def test_custom_mapping_file_override_mapping_file(self, custom_mapping_file_path, expected_component_type):
+        # Given a project_id
+        project_id: str = 'test_ok'
+        project_name: str = 'test_ok_name'
+
+        # And the source file
+        diag_file = get_byte_data(drawio_minimal_xml)
+
+        # And the mapping files
+        default_mapping_file = get_byte_data(default_drawio_mapping)
+        custom_mapping_file = get_byte_data(custom_mapping_file_path)
+
+        # When I do post on diagram endpoint
+        files = {'diag_file': (drawio_minimal_xml, diag_file),
+                 'default_mapping_file': ('default_mapping_file.yaml', default_mapping_file),
+                 'custom_mapping_file': ('custom_mapping_file.yaml', custom_mapping_file)}
+        body = {'diag_type': 'DRAWIO', 'id': project_id, 'name': project_name}
+        response = client.post(get_url(), files=files, data=body)
+
+        # Then the OTM is returned inside the response as JSON
+        assert response.status_code == diag_create_otm_controller.RESPONSE_STATUS_CODE
+        assert response.headers.get('content-type') == json_mime
+
+        otm = json.loads(response.text)
+        assert otm['otmVersion'] == '0.2.0'
+        assert otm['project']['id'] == 'test_ok'
+        assert otm['project']['name'] == 'test_ok_name'
+        assert len(otm['trustZones']) == 1
+        assert len(otm['components']) == 4
+        assert len(otm['dataflows']) == 0
+        assert otm['components'][0]['type'] == expected_component_type
+
+    @pytest.mark.parametrize('filepath', [mtmt_mapping_file_valid, terraform_aws_simple_components])
+    def test_diagram_file_invalid_extensions(self, filepath):
+        # GIVEN a drawio file
+        drawio_file = get_byte_data(filepath)
+
+        # AND a mapping file
+        mapping_file = get_byte_data(default_drawio_mapping)
+
+        # WHEN I do post on diagram endpoint
+        files = {'diag_file': (filepath, drawio_file),
+                 'default_mapping_file': ('default_mapping_file.yaml', mapping_file)}
+        body = {'diag_type': 'DRAWIO', 'id': "project_id", 'name': "project_name"}
+        response = client.post(get_url(), files=files, data=body)
+
+        # AND the error details are correct
+        assert response.status_code == 400
+        assert response.headers.get('content-type') == json_mime
+
+        body_response = json.loads(response.text)
+        assert body_response['status'] == '400'
+        assert body_response['error_type'] == 'DiagramFileNotValidError'
+        assert body_response['title'] == 'Drawio file is not valid'
+        assert body_response['detail'] == 'Provided diag_file is not valid. It does not comply with schema'
+        assert len(body_response['errors']) == 1
+        assert body_response['errors'][0]['errorMessage'] == 'Provided diag_file is not valid. It does not comply with schema'

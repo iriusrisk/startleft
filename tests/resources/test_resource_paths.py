@@ -137,5 +137,7 @@ mtmt_mapping_file_invalid = f'{path}/mtmt/mapping_example_invalid.yaml'
 # DRAWIO
 drawio_multi_page = f'{path}/drawio/drawio-multi-page.drawio'
 default_drawio_mapping = f'{path}/drawio/drawio_mapping.yaml'
-drawio_minimal = f'{path}/drawio/aws_minimal.drawio.xml'
+drawio_minimal_xml = f'{path}/drawio/aws_minimal.drawio.xml'
+drawio_minimal_drawio = f'{path}/drawio/aws_minimal.drawio'
 lean_ix_drawio = f'{path}/drawio/lean_ix.drawio.xml'
+custom_drawio_mapping = f'{path}/drawio/custom_drawio_mapping.yaml'
