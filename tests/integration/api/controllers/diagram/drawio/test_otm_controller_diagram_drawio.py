@@ -10,7 +10,7 @@ from sl_util.sl_util.file_utils import get_byte_data
 from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.diagram import diag_create_otm_controller
 from tests.resources.test_resource_paths import default_drawio_mapping, custom_drawio_mapping, drawio_minimal_xml, \
-    mtmt_mapping_file_valid, terraform_aws_simple_components
+    terraform_aws_simple_components, invalid_extension_mtmt_file
 
 webapp = fastapi_server.webapp
 
@@ -118,7 +118,7 @@ class TestOTMControllerDiagramDrawio:
         assert len(otm['dataflows']) == 0
         assert otm['components'][0]['type'] == expected_component_type
 
-    @pytest.mark.parametrize('filepath', [mtmt_mapping_file_valid, terraform_aws_simple_components])
+    @pytest.mark.parametrize('filepath', [invalid_extension_mtmt_file, terraform_aws_simple_components])
     def test_diagram_file_invalid_extensions(self, filepath):
         # GIVEN a drawio file
         drawio_file = get_byte_data(filepath)
