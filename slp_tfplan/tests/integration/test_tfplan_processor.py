@@ -1,5 +1,4 @@
 import random
-from typing import List
 
 import pytest
 from pytest import mark, param
@@ -70,7 +69,7 @@ def test_tfplan_tfgraph_examples(tfplan: bytes, tfgraph: bytes, expected: str):
     param([SAMPLE_VALID_TFPLAN], id='one source'),
     param([SAMPLE_VALID_TFPLAN] * random.randint(3, 10), id='more than two sources')
 ])
-def test_wrong_number_of_parameters(sources: List[bytes]):
+def test_wrong_number_of_parameters(sources: list[bytes]):
     # GIVEN a wrong number of sources
 
     # WHEN TFPlanProcessor::process is invoked
@@ -88,7 +87,7 @@ def test_wrong_number_of_parameters(sources: List[bytes]):
     param([SAMPLE_VALID_TFPLAN, create_artificial_file(MIN_FILE_SIZE - 1)], id='tfgraph too small'),
     param([SAMPLE_VALID_TFPLAN, create_artificial_file(MAX_TFGRAPH_FILE_SIZE + 1)], id='tfgraph too big')
 ])
-def test_invalid_size(sources: List[bytes]):
+def test_invalid_size(sources: list[bytes]):
     # GIVEN a tfplan or tfgraph with an invalid size
 
     # WHEN TFPlanProcessor::process is invoked
@@ -106,7 +105,7 @@ def test_invalid_size(sources: List[bytes]):
     param([DEFAULT_MAPPING_FILE, create_artificial_file(MAPPING_MIN_SIZE - 1)], id='custom mapping file too small'),
     param([DEFAULT_MAPPING_FILE, create_artificial_file(MAPPING_MAX_SIZE + 1)], id='custom mapping file too big')
 ])
-def test_invalid_mapping_size(mappings: List[bytes]):
+def test_invalid_mapping_size(mappings: list[bytes]):
     # GIVEN a valid tfplan and tfgraph
     tfplan = get_byte_data(resources.tfplan_official)
     tfgraph = get_byte_data(resources.tfgraph_official)
@@ -142,7 +141,7 @@ def test_two_tfplan():
     param([SAMPLE_VALID_TFPLAN, SAMPLE_INVALID_TFGRAPH], id='invalid tfgraph'),
     param([SAMPLE_INVALID_TFPLAN, SAMPLE_INVALID_TFGRAPH], id='both invalid')
 ])
-def test_invalid_sources(sources: List[bytes]):
+def test_invalid_sources(sources: list[bytes]):
     # GIVEN some invalid tfplan
 
     # WHEN TFPlanProcessor::process is invoked
