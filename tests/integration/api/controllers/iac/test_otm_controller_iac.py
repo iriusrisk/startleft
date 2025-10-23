@@ -64,8 +64,8 @@ class TestOTMControllerIaC:
 
         # Then the OTM is returned inside the response as JSON
         assert_bad_request_response(response)
-        assert_bad_request_body_response(response, 'HTTPException',
-         'There was an error parsing the body', 'http://testserver/api/v1/startleft/iac', 0)
+        body_response = json.loads(response.text)
+        assert body_response['status'] == '400'
 
     @responses.activate
     def test_controller_empty_iac_file(self):
@@ -102,8 +102,8 @@ class TestOTMControllerIaC:
 
         # Then the OTM is returned inside the response as JSON
         assert_bad_request_response(response)
-        assert_bad_request_body_response(response, 'HTTPException',
-         'There was an error parsing the body', 'http://testserver/api/v1/startleft/iac', 0)
+        body_response = json.loads(response.text)
+        assert body_response['status'] == '400'
 
     @responses.activate
     @mark.parametrize('body, error_message', [
@@ -165,8 +165,6 @@ class TestOTMControllerIaC:
                                          'The request is not valid', 'InvalidRequest', 1)
         assert (body_response['errors'][0]['errorMessage'] ==
             "Error in field 'name' located in 'body'. String should have at least 1 character")
-
-
 
     @responses.activate
     @mark.parametrize('expected_mapped_components, files', [

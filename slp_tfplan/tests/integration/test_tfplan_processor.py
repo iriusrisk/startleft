@@ -1,5 +1,4 @@
 import random
-from typing import List
 
 import pytest
 from pytest import mark, param
@@ -7,13 +6,20 @@ from pytest import mark, param
 import slp_tfplan.tests.resources.test_resource_paths as resources
 from otm.otm.entity.otm import OTM
 from sl_util.sl_util.file_utils import get_byte_data
-from slp_base import IacFileNotValidError
+from slp_base import IacFileNotValidError, MappingFileNotValidError
+from slp_base.slp_base.errors import ErrorCode
+from slp_base.slp_base.mapping import MAX_SIZE as MAPPING_MAX_SIZE, MIN_SIZE as MAPPING_MIN_SIZE
 from slp_base.tests.util.otm import validate_and_compare
 from slp_tfplan import TFPlanProcessor
 from slp_tfplan.tests.util.builders import create_artificial_file, MIN_FILE_SIZE, MAX_TFPLAN_FILE_SIZE, \
     MAX_TFGRAPH_FILE_SIZE
 
 DEFAULT_MAPPING_FILE = get_byte_data(resources.terraform_iriusrisk_tfplan_aws_mapping)
+SECONDARY_DEFAULT_MAPPING_FILE = get_byte_data(resources.terraform_plan_default_mapping)
+CONFIG_CLIENT_MAPPING_FILE = get_byte_data(resources.terraform_plan_config_client_mapping)
+CONFIG_TRUSTZONE_MAPPING_FILE = get_byte_data(resources.terraform_plan_config_trustzone_mapping)
+CONFIG_OVERRIDE_DEFAULT = get_byte_data(resources.terraform_plan_config_override_default)
+CONFIG_OVERRIDE_CUSTOM = get_byte_data(resources.terraform_plan_config_override_custom)
 
 SAMPLE_VALID_TFPLAN = get_byte_data(resources.tfplan_elb)
 SAMPLE_VALID_TFGRAPH = get_byte_data(resources.tfgraph_elb)
@@ -23,6 +29,12 @@ SAMPLE_INVALID_TFGRAPH = get_byte_data(resources.invalid_yaml)
 
 TFPLAN_OFFICIAL = get_byte_data(resources.tfplan_official)
 TFGRAPH_OFFICIAL = get_byte_data(resources.tfgraph_official)
+
+TFPLAN_AWS_COMPLETE = get_byte_data(resources.tfplan_aws_complete)
+TFGRAPH_AWS_COMPLETE = get_byte_data(resources.tfgraph_aws_complete)
+
+TFPLAN_BASE = get_byte_data(resources.tfplan_base)
+TFGRAPH_BASE = get_byte_data(resources.tfgraph_base)
 
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
@@ -57,7 +69,7 @@ def test_tfplan_tfgraph_examples(tfplan: bytes, tfgraph: bytes, expected: str):
     param([SAMPLE_VALID_TFPLAN], id='one source'),
     param([SAMPLE_VALID_TFPLAN] * random.randint(3, 10), id='more than two sources')
 ])
-def test_wrong_number_of_parameters(sources: List[bytes]):
+def test_wrong_number_of_parameters(sources: list[bytes]):
     # GIVEN a wrong number of sources
 
     # WHEN TFPlanProcessor::process is invoked
@@ -75,7 +87,7 @@ def test_wrong_number_of_parameters(sources: List[bytes]):
     param([SAMPLE_VALID_TFPLAN, create_artificial_file(MIN_FILE_SIZE - 1)], id='tfgraph too small'),
     param([SAMPLE_VALID_TFPLAN, create_artificial_file(MAX_TFGRAPH_FILE_SIZE + 1)], id='tfgraph too big')
 ])
-def test_invalid_size(sources: List[bytes]):
+def test_invalid_size(sources: list[bytes]):
     # GIVEN a tfplan or tfgraph with an invalid size
 
     # WHEN TFPlanProcessor::process is invoked
@@ -86,6 +98,30 @@ def test_invalid_size(sources: List[bytes]):
     # AND whose information is right
     assert error.value.title == 'Terraform Plan file is not valid'
     assert error.value.message == 'Provided iac_file is not valid. Invalid size'
+
+@mark.parametrize('mappings', [
+    param([create_artificial_file(MAPPING_MIN_SIZE - 1), DEFAULT_MAPPING_FILE], id='mapping file too small'),
+    param([create_artificial_file(MAPPING_MAX_SIZE + 1), DEFAULT_MAPPING_FILE], id='mapping file too big'),
+    param([DEFAULT_MAPPING_FILE, create_artificial_file(MAPPING_MIN_SIZE - 1)], id='custom mapping file too small'),
+    param([DEFAULT_MAPPING_FILE, create_artificial_file(MAPPING_MAX_SIZE + 1)], id='custom mapping file too big')
+])
+def test_invalid_mapping_size(mappings: list[bytes]):
+    # GIVEN a valid tfplan and tfgraph
+    tfplan = get_byte_data(resources.tfplan_official)
+    tfgraph = get_byte_data(resources.tfgraph_official)
+
+    # AND a mapping file with an invalid size ('mappings' arg)
+
+    # WHEN TFPlanProcessor::process is invoked
+    # THEN a MappingFileNotValidError is raised
+    with pytest.raises(MappingFileNotValidError) as error:
+        TFPlanProcessor(SAMPLE_ID, SAMPLE_NAME, [tfplan, tfgraph], mappings).process()
+
+    # AND the error details are correct
+    assert ErrorCode.MAPPING_FILE_NOT_VALID == error.value.error_code
+    assert 'Mapping files are not valid' == error.value.title
+    assert 'Mapping files are not valid. Invalid size' == error.value.detail
+    assert 'Mapping files are not valid. Invalid size' == error.value.message
 
 def test_two_tfplan():
     # GIVEN two valid TFPLANs
@@ -105,7 +141,7 @@ def test_two_tfplan():
     param([SAMPLE_VALID_TFPLAN, SAMPLE_INVALID_TFGRAPH], id='invalid tfgraph'),
     param([SAMPLE_INVALID_TFPLAN, SAMPLE_INVALID_TFGRAPH], id='both invalid')
 ])
-def test_invalid_sources(sources: List[bytes]):
+def test_invalid_sources(sources: list[bytes]):
     # GIVEN some invalid tfplan
 
     # WHEN TFPlanProcessor::process is invoked
@@ -150,3 +186,65 @@ def test_singleton_grouped_by_category():
     assert components[1].id == 'aws_cloudwatch_log_group.click_logger_firehose_delivery_stream_log_group'
     assert components[1].name == 'CloudWatch'
     assert components[1].type == 'cloudwatch'
+
+def test_aws_complete_sample():
+    # GIVEN a valid tfplan and tfgraph
+    tfplan = TFPLAN_AWS_COMPLETE
+    tfgraph = TFGRAPH_AWS_COMPLETE
+
+    # AND a mapping file with an invalid size ('mappings' arg)
+    mapping_file = SECONDARY_DEFAULT_MAPPING_FILE
+
+    # WHEN TFPlanProcessor::process is invoked
+    otm = TFPlanProcessor(SAMPLE_ID, SAMPLE_NAME, [tfplan, tfgraph], [mapping_file]).process()
+
+    # AND the details are correct
+    assert len(otm.representations) == 1
+    assert len(otm.trustzones) == 2
+    assert len(otm.components) == 15
+    assert len(otm.dataflows) == 8
+
+def test_configuration_trustzone_no_client():
+    # GIVEN two valid TFPLANs
+    tfplan = TFPLAN_BASE
+    tfgraph = TFGRAPH_BASE
+
+    # WHEN TFPlanProcessor::process is invoked
+    # THEN a MappingFileNotValidError exception is raised
+    with pytest.raises(MappingFileNotValidError) as error:
+        TFPlanProcessor(SAMPLE_ID, SAMPLE_NAME, [tfplan, tfgraph], [CONFIG_TRUSTZONE_MAPPING_FILE]).process()
+
+    # AND the message says that no multiple tfplan files can be processed at the same time
+    assert str(error.value.title) == 'Mapping files are not valid'
+    assert str(error.value.detail) == 'Mapping file does not comply with the schema'
+    assert str(error.value.message) == "'client' is a required property"
+
+def test_configuration_client_no_trustzone():
+    # GIVEN two valid TFPLANs
+    tfplan = TFPLAN_BASE
+    tfgraph = TFGRAPH_BASE
+
+    # WHEN TFPlanProcessor::process is invoked
+    # THEN a MappingFileNotValidError exception is raised
+    with pytest.raises(MappingFileNotValidError) as error:
+        TFPlanProcessor(SAMPLE_ID, SAMPLE_NAME, [tfplan, tfgraph], [CONFIG_CLIENT_MAPPING_FILE]).process()
+
+    # AND the message says that no multiple tfplan files can be processed at the same time
+    assert str(error.value.title) == 'Mapping files are not valid'
+    assert str(error.value.detail) == 'Mapping file does not comply with the schema'
+    assert str(error.value.message) == "'trustzone' is a required property"
+
+def test_configuration_mapping_override():
+    # GIVEN two valid TFPLANs
+    tfplan = TFPLAN_BASE
+    tfgraph = TFGRAPH_BASE
+
+    # WHEN TFPlanProcessor::process is invoked
+    otm = TFPlanProcessor(SAMPLE_ID, SAMPLE_NAME, [tfplan, tfgraph],
+                          [CONFIG_OVERRIDE_DEFAULT, CONFIG_OVERRIDE_CUSTOM]).process()
+
+    # AND the details are correct
+    assert len(otm.representations) == 1
+    assert len(otm.trustzones) == 2
+    assert len(otm.components) == 15
+    assert len(otm.dataflows) == 13

@@ -12,6 +12,10 @@ tfplan_sgs = path + '/tfplan/sgs-tfplan.json'
 tfgraph_sgs = path + '/tfplan/sgs-tfgraph.gv'
 tfplan_official = path + '/tfplan/official-tfplan.json'
 tfgraph_official = path + '/tfplan/official-tfgraph.gv'
+tfplan_aws_complete = path + '/tfplan/aws-complete-tfplan.json'
+tfgraph_aws_complete = path + '/tfplan/aws-complete-tfgraph.json'
+tfplan_base = path + '/tfplan/ha-base-terraform-plan.json'
+tfgraph_base = path + '/tfplan/ha-base-terraform-plan-graph.gv'
 
 # resources tfplan
 ingress_cidr_from_property = path + '/tfplan/resources/ingress-cidr-from-property-tfplan-resources.json'
@@ -26,6 +30,12 @@ aws_ingesting_click_logs = path + '/tfplan/resources/aws-ingesting-click-logs-us
 terraform_iriusrisk_tfplan_aws_mapping = path + '/mapping/iriusrisk-tfplan-aws-mapping.yaml'
 terraform_singleton_mapping = path + '/mapping/singleton-mapping.yaml'
 terraform_group_by_category_mapping = path + '/mapping/singleton-group-by-category-mapping.yaml'
+terraform_plan_default_mapping = path + '/mapping/default-terraform-plan-mapping.yaml'
+terraform_plan_config_client_mapping = path + '/mapping/tfplan-config-client-no-trustzone-mapping.yaml'
+terraform_plan_config_trustzone_mapping = path + '/mapping/tfplan-config-trustzone-no-client-mapping.yaml'
+terraform_plan_config_override_default = path + '/mapping/tfplan-config-default.yaml'
+terraform_plan_config_override_custom = path + '/mapping/tfplan-config-custom.yaml'
+
 
 # otm
 otm_expected_elb = f'{path}/otm/expected-elb.otm'
