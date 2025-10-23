@@ -1,5 +1,3 @@
-from typing import List
-
 import pytest
 from pytest import mark, param
 
@@ -23,7 +21,7 @@ class TestDrawioProcessor:
         param([DEFAULT_MAPPING_FILE, generate_temporary_file(MAPPING_MIN_SIZE - 1)], id='custom mapping file too small'),
         param([DEFAULT_MAPPING_FILE, generate_temporary_file(MAPPING_MAX_SIZE + 1)], id='custom mapping file too big')
     ])
-    def test_invalid_mapping_size(self, mappings: List[bytes]):
+    def test_invalid_mapping_size(self, mappings: list[bytes]):
         # GIVEN a valid drawio
         drawio_file = open(SAMPLE_VALID_DRAWIO_PATH, 'rb')
 

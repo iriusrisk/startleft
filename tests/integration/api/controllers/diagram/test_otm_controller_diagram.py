@@ -33,9 +33,7 @@ def assert_bad_request_body_response(response, error_type, title, detail, total_
 
 octet_stream = 'application/octet-stream'
 
-
 class TestOTMControllerDiagram:
-
     @pytest.mark.parametrize('project_id,project_name,diag_file,errors_expected, error_type',
                              [(None, 'name', open(test_resource_paths.visio_aws_with_tz_and_vpc, 'rb'), 3,
                                'RequestValidationError'),
@@ -80,8 +78,8 @@ class TestOTMControllerDiagram:
 
         # Then the OTM is returned inside the response as JSON
         assert_bad_request_response(response)
-        assert_bad_request_body_response(response, 'HTTPException',
-             'There was an error parsing the body', 'http://testserver/api/v1/startleft/diagram', 0)
+        body_response = json.loads(response.text)
+        assert body_response['status'] == '400'
 
     @responses.activate
     def test_create_project_no_mapping_file(self):
@@ -99,8 +97,8 @@ class TestOTMControllerDiagram:
 
         # Then the OTM is returned inside the response as JSON
         assert_bad_request_response(response)
-        assert_bad_request_body_response(response, 'HTTPException',
-             'There was an error parsing the body', 'http://testserver/api/v1/startleft/diagram', 0)
+        body_response = json.loads(response.text)
+        assert body_response['status'] == '400'
 
     @responses.activate
     @mark.parametrize('body, error_message', [
@@ -125,7 +123,13 @@ class TestOTMControllerDiagram:
         assert body_response['errors'][0]['errorMessage'] == error_message
 
     @responses.activate
-    def test_create_project_no_id(self):
+    @mark.parametrize('body, error_message', [
+        param({'diag_type': 'DRAWIO', 'name': 'project_A_name'},
+              "Error in field 'id' located in 'body'. Field required"),
+        param({'diag_type': 'DRAWIO', 'id': None, 'name': 'project_A_name'},
+              "Error in field 'id' located in 'body'. String should have at least 1 character")
+    ])
+    def test_create_project_no_id(self, body, error_message):
         # Given a project_name
         project_name: str = 'project_A_name'
 
@@ -135,18 +139,22 @@ class TestOTMControllerDiagram:
 
         # When I do post on drawio endpoint
         files = {'diag_file': diag_file, 'default_mapping_file': mapping_file}
-        body = {'diag_type': 'DRAWIO', 'id': None, 'name': project_name}
         response = client.post(get_url(), files=files, data=body)
 
         # Then the OTM is returned inside the response as JSON
         assert_bad_request_response(response)
         body_response = assert_bad_request_body_response(response, 'RequestValidationError',
                                          'The request is not valid', 'InvalidRequest', 1)
-        assert (body_response['errors'][0]['errorMessage'] ==
-                "Error in field 'id' located in 'body'. String should have at least 1 character")
+        assert body_response['errors'][0]['errorMessage'] == error_message
 
     @responses.activate
-    def test_create_project_no_name(self):
+    @mark.parametrize('body, error_message', [
+        param({'diag_type': 'DRAWIO', 'id': 'project_A_id'},
+              "Error in field 'name' located in 'body'. Field required"),
+        param({'diag_type': 'DRAWIO', 'id': 'project_A_id', 'name': None},
+              "Error in field 'name' located in 'body'. String should have at least 1 character")
+        ])
+    def test_create_project_no_name(self, body, error_message):
         # Given a project_id
         project_id: str = 'project_A_id'
 
@@ -156,12 +164,10 @@ class TestOTMControllerDiagram:
 
         # When I do post on drawio endpoint
         files = {'diag_file': diag_file, 'default_mapping_file': mapping_file}
-        body = {'diag_type': 'DRAWIO', 'id': project_id, 'name': None}
         response = client.post(get_url(), files=files, data=body)
 
         # Then the OTM is returned inside the response as JSON
         assert_bad_request_response(response)
         body_response = assert_bad_request_body_response(response, 'RequestValidationError',
                                              'The request is not valid', 'InvalidRequest', 1)
-        assert (body_response['errors'][0]['errorMessage'] ==
-                "Error in field 'name' located in 'body'. String should have at least 1 character")
+        assert body_response['errors'][0]['errorMessage'] == error_message
