@@ -13,7 +13,7 @@ from startleft.startleft.api import fastapi_server
 from startleft.startleft.api.controllers.iac import iac_create_otm_controller
 from tests.resources.test_resource_paths import terraform_iriusrisk_tf_aws_mapping, \
     terraform_aws_singleton_components_unix_line_breaks, terraform_malformed_mapping_wrong_id, terraform_gz, \
-    visio_aws_shapes, invalid_tf, terraform_aws_simple_components, terraform_specific_functions, \
+    invalid_tf, terraform_aws_simple_components, terraform_specific_functions, \
     terraform_mapping_specific_functions, terraform_multiple_files_one, terraform_multiple_files_two
 
 TESTING_IAC_TYPE = IacType.TERRAFORM.value

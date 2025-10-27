@@ -78,6 +78,13 @@ terraform_mapping_extra_modules = f'{path}/terraform/terraform_mapping_extra_mod
 # expected otm results
 terraform_aws_simple_components_otm_expected = f'{path}/terraform/aws_simple_components.otm'
 
+# TERRAFORM PLAN
+terraform_plan_official = f'{path}/tfplan/official-tfplan.json'
+terraform_graph_official = f'{path}/tfplan/official-tfgraph.gv'
+# mapping
+terraform_plan_default_mapping_file = f'{path}/tfplan/iriusrisk-tfplan-aws-mapping.yaml'
+terraform_plan_custom_mapping_file = f'{path}/tfplan/iriusrisk-tfplan-custom-mapping.yaml'
+
 
 # VISIO
 visio_aws_vsdx_folder = f'{path}/visio/'

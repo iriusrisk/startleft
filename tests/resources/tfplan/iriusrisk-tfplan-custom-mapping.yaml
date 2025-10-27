@@ -1,0 +1,3 @@
+components:
+  - label: aws_dynamodb_table
+    type: empty-component
