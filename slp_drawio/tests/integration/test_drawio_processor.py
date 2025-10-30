@@ -8,6 +8,7 @@ from slp_base.slp_base.errors import ErrorCode
 from slp_base.slp_base.mapping import MAX_SIZE as MAPPING_MAX_SIZE, MIN_SIZE as MAPPING_MIN_SIZE
 from slp_drawio import DrawioProcessor
 from slp_drawio.tests.resources import test_resource_paths
+from slp_drawio.tests.resources.test_resource_paths import shape_names_with_html, default_drawio_mapping
 
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
@@ -37,3 +38,49 @@ class TestDrawioProcessor:
         assert 'Mapping files are not valid' == error.value.title
         assert 'Mapping files are not valid. Invalid size' == error.value.detail
         assert 'Mapping files are not valid. Invalid size' == error.value.message
+
+
+    @pytest.mark.parametrize('filepath', [
+        pytest.param(shape_names_with_html, id='aws_with_html'),
+    ])
+    def test_handle_html_shape_names(self, filepath: str):
+        # GIVEN the valid file
+        file = open(filepath, 'rb')
+        # AND the default mapping
+        default_drawio_mapping_file = get_byte_data(default_drawio_mapping)
+
+        # AND the processor
+        processor = DrawioProcessor('html_names', 'HTML Names', file, [default_drawio_mapping_file])
+
+        # WHEN we process the file
+        result = processor.process()
+
+        # THEN the component names are correctly parsed
+        components = result.components
+        components.sort(key=lambda c: c.name)
+        assert len(components) == 10
+        assert components[0].name == 'Bold EC2'
+        assert components[1].name == 'Combined EC2'
+        assert components[2].name == 'Courier EC2'
+        assert components[3].name == 'Drawio example with Cell names with HTML'
+        assert components[4].name == 'Font size 16 EC2'
+        assert components[5].name == 'Italic EC2'
+        assert components[6].name == 'Non HTML EC2'
+        assert components[7].name == 'Red EC2'
+        assert components[8].name == 'Strikethrough EC2'
+        assert components[9].name == 'Underline EC2'
+
+        # AND the representation attributes has the style from the html original name
+        assert 'fontStyle=1;' in components[0].representations[0].attributes['style']
+        assert 'fontStyle=15;' in components[1].representations[0].attributes['style']
+        assert 'fontFamily=Courier New;' in components[1].representations[0].attributes['style']
+        assert 'fontColor=#ff0000;' in components[1].representations[0].attributes['style']
+        assert 'fontFamily=Courier New;' in components[2].representations[0].attributes['style']
+        assert 'fontSize=16;' in components[4].representations[0].attributes['style']
+        assert 'fontStyle=2;' in components[5].representations[0].attributes['style']
+        assert 'fontStyle=0;' in components[6].representations[0].attributes['style']
+        assert 'fontColor=#ff0000;' in components[7].representations[0].attributes['style']
+        assert 'fontStyle=8;' in components[8].representations[0].attributes['style']
+        assert 'fontStyle=4;' in components[9].representations[0].attributes['style']
+
+

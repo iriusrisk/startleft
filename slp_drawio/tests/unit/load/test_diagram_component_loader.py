@@ -1,28 +1,10 @@
 import json
-from typing import Dict, List
 from unittest.mock import patch
 
-import pytest
-
 from sl_util.sl_util.file_utils import get_byte_data
-from slp_drawio.slp_drawio.load import diagram_component_loader
 from slp_drawio.slp_drawio.load.diagram_component_loader import DiagramComponentLoader
 from slp_drawio.slp_drawio.load.drawio_dict_utils import get_size, get_position
 from slp_drawio.tests.resources import test_resource_paths
-
-
-@pytest.mark.parametrize('mx_cell, components, expected', [
-    pytest.param({}, [], None, id="with mxCell without parent None"),
-    pytest.param({'parent': 1}, [{'id': 1}], 1, id="parent exists in components"),
-    pytest.param({'parent': 1}, [{'id': 2}], None, id="parent not exists in components"),
-])
-def test_get_shape_parent_id(mx_cell: Dict, components: List, expected):
-    # GIVEN a mx_cell
-    # WHEN diagram_component_loader::_get_shape_parent_id
-    parent_id = diagram_component_loader._get_shape_parent_id(mx_cell, components)
-
-    # THEN the parent is as expected
-    assert parent_id == expected
 
 
 class TestDiagramComponentLoader:
@@ -66,7 +48,7 @@ class TestDiagramComponentLoader:
         # GIVEN the mx_cell with the following attributes
         mx_cell = {
             'id': 'mx-cell-identifier',
-            'style': "spacingLeft=30;fontColor=#232F3E;dashed=0",
+            'style': "spacingLeft=30;fontColor=#232F3E;dashed=0;",
             'mxGeometry': {'x': '100', 'y': '200', 'height': '10', 'width': '20'}
         }
 
@@ -82,4 +64,4 @@ class TestDiagramComponentLoader:
         assert representation_element.representation == f"{self.PROJECT_ID}-diagram"
         assert representation_element.position == {'x': 100, 'y': 200}
         assert representation_element.size == {'height': 10, 'width': 20}
-        assert representation_element.attributes['style'] == "spacingLeft=30;fontColor=#232F3E;dashed=0"
+        assert representation_element.attributes['style'] == "spacingLeft=30;fontColor=#232F3E;dashed=0;"
