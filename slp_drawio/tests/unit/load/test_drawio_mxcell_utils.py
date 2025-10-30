@@ -41,27 +41,25 @@ def test_get_cell_name(mx_cell: Dict, expected):
 
 
 @pytest.mark.parametrize('cell_name, expected', [
-    pytest.param('<b>Bold Text</b>',
-                 'sketch=0;fontColor=originalFCfontSize=originalFSI;fontFamily=OriginalFF;fontStyle=1;', id="bold"),
-    pytest.param('<i>Italic Text</i>',
-                 'sketch=0;fontColor=originalFCfontSize=originalFSI;fontFamily=OriginalFF;fontStyle=2;', id="italic"),
-    pytest.param('<u>Underlined Text</u>',
-                 'sketch=0;fontColor=originalFCfontSize=originalFSI;fontFamily=OriginalFF;fontStyle=4;',
+    pytest.param('<b>Bold Text</b>', 'sketch=0;image;image=data:image/png,iVBORw0KGgoA;fontStyle=0;fontStyle=1;',
+                 id="bold"),
+    pytest.param('<i>Italic Text</i>', 'sketch=0;image;image=data:image/png,iVBORw0KGgoA;fontStyle=0;fontStyle=2;',
+                 id="italic"),
+    pytest.param('<u>Underlined Text</u>', 'sketch=0;image;image=data:image/png,iVBORw0KGgoA;fontStyle=0;fontStyle=4;',
                  id="underline"),
-    pytest.param('<font face="Arial" size="4" color="#fa09bc">Custom Font</font>',
-                 'sketch=0;fontColor=#fa09bc;fontFamily=Arial;fontStyle=originalFST;',
+    pytest.param('<font face="Arial" size="4" color="#fa09bc"><b><i><u>Custom Font</u></i></b></font>',
+                 'sketch=0;image;image=data:image/png,iVBORw0KGgoA;fontStyle=0;fontStyle=7;fontColor=#fa09bc;fontFamily=Arial;',
                  id="all combined"),
-    pytest.param('Plain Text',
-                 'sketch=0;fontColor=originalFCfontSize=originalFSI;fontFamily=OriginalFF;fontStyle=originalFST;',
+    pytest.param('Plain Text', 'sketch=0;image;image=data:image/png,iVBORw0KGgoA;fontStyle=0;',
                  id="plain text with no HTML"),
-    pytest.param('', 'sketch=0;fontColor=originalFCfontSize=originalFSI;fontFamily=OriginalFF;fontStyle=originalFST;',
+    pytest.param('', 'sketch=0;image;image=data:image/png,iVBORw0KGgoA;fontStyle=0;',
                  id="empty string"),
-    pytest.param(None, 'sketch=0;fontColor=originalFCfontSize=originalFSI;fontFamily=OriginalFF;fontStyle=originalFST;',
+    pytest.param(None, 'sketch=0;image;image=data:image/png,iVBORw0KGgoA;fontStyle=0;',
                  id="None value")
 ])
 def test_get_cell_style(cell_name, expected):
     # GIVEN a default styles that will be overridden
-    default_styles = 'sketch=0;fontColor=originalFCfontSize=originalFSI;fontFamily=OriginalFF;fontStyle=originalFST;'
+    default_styles = 'sketch=0;image;image=data:image/png,iVBORw0KGgoA;fontStyle=0;'
 
     # AND a mx_cell with value with HTML
     value_mx_cell = {'value': cell_name, 'style': default_styles}

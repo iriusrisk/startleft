@@ -54,3 +54,8 @@ class TestSecureRegexWrapper:
     ])
     def test_split(self, expression, value, expected):
         assert sre.findall(expression, value) == expected
+
+
+    def test_search(self):
+        assert sre.search(r"match\d+.*match\d{1}", "match1 and match2") is not None
+        assert sre.search(r"match\d+.*match\d{1}", "matchA not found") is None

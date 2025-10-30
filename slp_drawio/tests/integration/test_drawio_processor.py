@@ -1,6 +1,7 @@
 import pytest
 from pytest import mark, param
 
+from sl_util.sl_util import secure_regex as re
 from sl_util.sl_util.file_utils import get_byte_data
 from sl_util.tests.util.file_utils import generate_temporary_file
 from slp_base import MappingFileNotValidError
@@ -14,6 +15,7 @@ SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
 SAMPLE_VALID_DRAWIO_PATH = test_resource_paths.aws_minimal_xml
 DEFAULT_MAPPING_FILE = get_byte_data(test_resource_paths.default_drawio_mapping)
+
 
 class TestDrawioProcessor:
     @mark.parametrize('mappings', [
@@ -38,7 +40,6 @@ class TestDrawioProcessor:
         assert 'Mapping files are not valid' == error.value.title
         assert 'Mapping files are not valid. Invalid size' == error.value.detail
         assert 'Mapping files are not valid. Invalid size' == error.value.message
-
 
     @pytest.mark.parametrize('filepath', [
         pytest.param(shape_names_with_html, id='aws_with_html'),
@@ -72,15 +73,24 @@ class TestDrawioProcessor:
 
         # AND the representation attributes has the style from the html original name
         assert 'fontStyle=1;' in components[0].representations[0].attributes['style']
-        assert 'fontStyle=15;' in components[1].representations[0].attributes['style']
-        assert 'fontFamily=Courier New;' in components[1].representations[0].attributes['style']
-        assert 'fontColor=#ff0000;' in components[1].representations[0].attributes['style']
+        c1 = components[1].representations[0].attributes['style']
+        assert _validate_font_styles(c1, '0', '15')
+        assert 'fontFamily=Courier New;' in c1
+        assert 'fontColor=#ff0000;' in c1
         assert 'fontFamily=Courier New;' in components[2].representations[0].attributes['style']
         assert 'fontSize=16;' in components[4].representations[0].attributes['style']
-        assert 'fontStyle=2;' in components[5].representations[0].attributes['style']
+        c5 = components[5].representations[0].attributes['style']
+        assert _validate_font_styles(c5, '0', '2')
         assert 'fontStyle=0;' in components[6].representations[0].attributes['style']
         assert 'fontColor=#ff0000;' in components[7].representations[0].attributes['style']
-        assert 'fontStyle=8;' in components[8].representations[0].attributes['style']
-        assert 'fontStyle=4;' in components[9].representations[0].attributes['style']
+        assert _validate_font_styles(components[8].representations[0].attributes['style'], '0', '8')
+        assert _validate_font_styles(components[9].representations[0].attributes['style'], '0', '4')
 
 
+def _validate_font_styles(style: str, value1: str, value2: str) -> bool:
+    """
+    Returns true if in the given style string there are exactly two fontStyle
+    definitions (value1 then value2), with none before, between, or after.
+    """
+    m = re.search(fr"(.*)fontStyle\s*=\s*{value1}(.*)?fontStyle\s*=\s*{value2}(.*)", style)
+    return m and "fontStyle" not in m.group(1) and "fontStyle" not in m.group(2) and "fontStyle" not in m.group(3)
