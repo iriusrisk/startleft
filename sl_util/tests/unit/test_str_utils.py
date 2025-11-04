@@ -1,7 +1,9 @@
-from pytest import mark, param
 import random
 from unittest.mock import patch
-from sl_util.sl_util.str_utils import deterministic_uuid, to_number
+
+from pytest import mark, param
+
+from sl_util.sl_util.str_utils import deterministic_uuid, to_number, remove_html_tags_and_entities
 
 
 class TestStrUtils:
@@ -76,3 +78,26 @@ class TestStrUtils:
         number2 = to_number(source)
         # Then we obtain default value 0
         assert number1 == number2 == 0
+
+    @mark.parametrize('source, expected', [
+        param('<a href="http://example.com">Link</a>', 'Link', id='only link tag'),
+        param('<p>This is an <b>AWS</b> component.</p>', 'This is an AWS component.', id='with nested tags'),
+        param('<div><h1>DDBB</h1> <p>Postgres SQL</p></div>', 'DDBB Postgres SQL', id='with multiple nested tags'),
+        param('< p>This is an <b >AWS</b > component.< /p > <a href="http://example.com">Link</a>',
+              'This is an AWS component. Link', id='with tags and link'),
+        param('<p></p>Void tag', 'Void tag', id='void tag'),
+        param('IN < http & https', 'IN < http & https', id='with lt and ampersand'),
+        param('OUT > socket & https', 'OUT > socket & https', id='with gt and ampersand'),
+        param(' 2 < 3 socket > </3  https> <&udp> <=tcp>', '2 < 3 socket > </3 https> <&udp> <=tcp>', id='with non html gt and lt'),
+        param('No HTML tags here.', 'No HTML tags here.', id='without html tags'),
+        param('HTML&nbsp;entities&nbsp;&lt;&gt;&amp;&pound;&euro;&copy;', 'HTML entities <>&£€©', id='with html entities'),
+        param('', '', id='empty string'),
+        param(None, '', id='null value')
+    ])
+    def test_remove_html_tags_and_entities(self, source, expected):
+        # GIVEN a string with html tags
+        # WHEN removing html tags
+        result = remove_html_tags_and_entities(source)
+
+        # THEN we obtain the expected string
+        assert result == expected
