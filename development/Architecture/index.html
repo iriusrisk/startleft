@@ -1,0 +1,2306 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://iriusrisk.github.io/startleft/development/Architecture/">
+      
+      
+        <link rel="prev" href="../Create-a-new-StartLeft-Processor/">
+      
+      
+        <link rel="next" href="../Errors-Management/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.2.8">
+    
+    
+      
+        <title>Architecture - StartLeft</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.046329b4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.85d0ee34.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+        html.glightbox-open { overflow: initial; height: 100%; }
+        .gslide-title { margin-top: 0px; user-select: text; }
+        .gslide-desc { color: #666; user-select: text; }
+        .gslide-image img { background: white; }
+        
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}
+            </style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#architecture" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="StartLeft" class="md-header__button md-logo" aria-label="StartLeft" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            StartLeft
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Architecture
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/iriusrisk/startleft" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="StartLeft" class="md-nav__button md-logo" aria-label="StartLeft" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    StartLeft
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/iriusrisk/startleft" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Open-Threat-Model-%28OTM%29/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Open Threat Model (OTM)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Quickstart-Guide-for-Beginners/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quickstart Guide for Beginners
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../About/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    About this documentation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Versioning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Versioning
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/Command-Line-Interface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Command Line Interface (CLI)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/REST-API/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    REST API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Guide for Integrations
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Guide for Integrations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration/Quickstart-Guide-for-Integrations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quickstart Guide for Integrations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Guide for Developers
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Guide for Developers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Quickstart-Guide-for-Developers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quickstart Guide for Developers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Create-a-new-StartLeft-Processor/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Create a new SLP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#context" class="md-nav__link">
+    Context
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-based-architecture" class="md-nav__link">
+    Module Based Architecture
+  </a>
+  
+    <nav class="md-nav" aria-label="Module Based Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#repository-structure" class="md-nav__link">
+    Repository Structure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-structure" class="md-nav__link">
+    Module Structure
+  </a>
+  
+    <nav class="md-nav" aria-label="Module Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#production-code-package" class="md-nav__link">
+    Production Code Package
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-code-package" class="md-nav__link">
+    Test Code Package
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#main-tests-package" class="md-nav__link">
+    Main Tests Package
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modules-description" class="md-nav__link">
+    Modules Description
+  </a>
+  
+    <nav class="md-nav" aria-label="Modules Description">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#startleft" class="md-nav__link">
+    startleft
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sl_util" class="md-nav__link">
+    sl_util
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slps" class="md-nav__link">
+    SLPs
+  </a>
+  
+    <nav class="md-nav" aria-label="SLPs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#slp_base" class="md-nav__link">
+    slp_base
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#concrete-implementations" class="md-nav__link">
+    Concrete Implementations
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#otm" class="md-nav__link">
+    otm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_sl_build" class="md-nav__link">
+    _sl_build
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building" class="md-nav__link">
+    Building
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    Testing
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Errors-Management/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Errors management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Run-Configurations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Run Configurations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    StartLeft Processors (SLP)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            StartLeft Processors (SLP)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_1" >
+        
+          <label class="md-nav__link" for="__nav_9_1" id="__nav_9_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Microsoft Threat Modeling Tool (MTMT)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_1">
+            <span class="md-nav__icon md-icon"></span>
+            Microsoft Threat Modeling Tool (MTMT)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/external-threat-model/mtmt/MTMT-Quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MTMT Quickstart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/external-threat-model/mtmt/MTMT-Mapping/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MTMT Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_2" >
+        
+          <label class="md-nav__link" for="__nav_9_2" id="__nav_9_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    CloudFormation Template
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_2">
+            <span class="md-nav__icon md-icon"></span>
+            CloudFormation Template
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/iac/cft/CloudFormation-Quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CloudFormation Quickstart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/iac/cft/CloudFormation-Mapping/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CloudFormation Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/iac/cft/CloudFormation-Examples/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CloudFormation Examples
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_3" >
+        
+          <label class="md-nav__link" for="__nav_9_3" id="__nav_9_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Terraform
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_3">
+            <span class="md-nav__icon md-icon"></span>
+            Terraform
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/iac/tf/Terraform-Quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Terraform Quickstart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_3_2" >
+        
+          <label class="md-nav__link" for="__nav_9_3_2" id="__nav_9_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Terraform Mapping
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_9_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Terraform Mapping
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/iac/tf/Terraform-how-to-create-a-basic-mapping-file/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How To Create a Basic Mapping File
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/iac/tf/Terraform-how-mapping-file-works/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How Mapping File works
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/iac/tf/Terraform-how-dataflow-mapping-works/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How Dataflow Mapping File works
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/iac/tf/Terraform-domain-specific-language/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain-Specific Language
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/iac/tf/Terraform-additional-jmespath-functions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Additional JMESPath functions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/iac/tf/Terraform-Examples/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Terraform Examples
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_4" >
+        
+          <label class="md-nav__link" for="__nav_9_4" id="__nav_9_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Terraform Plan
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_4">
+            <span class="md-nav__icon md-icon"></span>
+            Terraform Plan
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/iac/tfplan/Terraform-Plan-Quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Terraform Plan Quickstart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/iac/tfplan/Terraform-Plan-how-to-create-a-mapping-file/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Terraform Plan Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/iac/tfplan/Terraform-Plan-Attack-Surface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Terraform Plan Attack Surface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_4_4" >
+        
+          <label class="md-nav__link" for="__nav_9_4_4" id="__nav_9_4_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Terraform Plan Examples
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_9_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Terraform Plan Examples
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/iac/tfplan/examples/aws-ingesting-click-logs-using-terraform/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ingesting Web Application Click Logs into AWS (by HashiCorp)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_5" >
+        
+          <label class="md-nav__link" for="__nav_9_5" id="__nav_9_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Visio
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_5">
+            <span class="md-nav__icon md-icon"></span>
+            Visio
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/diagram/visio/Visio-Quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Visio Quickstart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/diagram/visio/Visio-Mapping/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Visio Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/diagram/visio/Visio-TrustZones-Mapping/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Visio TrustZones Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/diagram/visio/Visio-Representations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Visio Representations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/diagram/visio/Visio-Summary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Visio Summary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/diagram/visio/Lucidchart-support/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lucidchart Support
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_6" >
+        
+          <label class="md-nav__link" for="__nav_9_6" id="__nav_9_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Drawio
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_6">
+            <span class="md-nav__icon md-icon"></span>
+            Drawio
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/diagram/drawio/Drawio-Quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Drawio Quickstart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/diagram/drawio/Drawio-Mapping/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Drawio Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/diagram/drawio/Drawio-Calculating-Shape-Type/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Drawio Calculating Shape Type
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_7" >
+        
+          <label class="md-nav__link" for="__nav_9_7" id="__nav_9_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Abacus
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_7">
+            <span class="md-nav__icon md-icon"></span>
+            Abacus
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/diagram/abacus/Abacus-Quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Abacus Quickstart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../startleft-processors/diagram/abacus/Abacus-Mapping/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Abacus Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#context" class="md-nav__link">
+    Context
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#module-based-architecture" class="md-nav__link">
+    Module Based Architecture
+  </a>
+  
+    <nav class="md-nav" aria-label="Module Based Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#repository-structure" class="md-nav__link">
+    Repository Structure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#module-structure" class="md-nav__link">
+    Module Structure
+  </a>
+  
+    <nav class="md-nav" aria-label="Module Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#production-code-package" class="md-nav__link">
+    Production Code Package
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-code-package" class="md-nav__link">
+    Test Code Package
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#main-tests-package" class="md-nav__link">
+    Main Tests Package
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modules-description" class="md-nav__link">
+    Modules Description
+  </a>
+  
+    <nav class="md-nav" aria-label="Modules Description">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#startleft" class="md-nav__link">
+    startleft
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sl_util" class="md-nav__link">
+    sl_util
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slps" class="md-nav__link">
+    SLPs
+  </a>
+  
+    <nav class="md-nav" aria-label="SLPs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#slp_base" class="md-nav__link">
+    slp_base
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#concrete-implementations" class="md-nav__link">
+    Concrete Implementations
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#otm" class="md-nav__link">
+    otm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_sl_build" class="md-nav__link">
+    _sl_build
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building" class="md-nav__link">
+    Building
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    Testing
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="architecture">Architecture</h1>
+<h2 id="context">Context</h2>
+<hr />
+<p>StartLeft is a modularized application that groups a set of processors that are able to convert different formats to 
+<a href="../../Open-Threat-Model-%28OTM%29/">OTM</a>. It can be used through a CLI, and it also exposes a REST API. However, the 
+point of 
+access is indifferent as, under the hood, both make use of the same conversion logic, that is implemented in a special 
+type of modules called SLPs (StartLeft Processor), described below in this page.</p>
+<p>If we take as a reference the big picture of the usage that IriusRisk makes of StartLeft, it plays the role of a service 
+consumed by the IriusRisk core through the REST API. For instance, this is a general view of project importing in IriusRisk:</p>
+<p><a class="glightbox" href="../img/iriusrisk-integration.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="img/iriusrisk-integration.png" src="../img/iriusrisk-integration.png" /></a></p>
+<h2 id="module-based-architecture">Module Based Architecture</h2>
+<hr />
+<p>The internal architecture of the StartLeft application is based on a set of modules with well-defined responsibilities and dependencies.</p>
+<p><a class="glightbox" href="../img/startleft-modules.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="img/startleft-modules.png" src="../img/startleft-modules.png" /></a></p>
+<p>The diagram above shows the different modules currently implemented in StartLeft. The main considerations about them are:</p>
+<p>All the dependencies are fixed and unidirectional and <strong>the project is configured to raise a "compile time" exception in case 
+some module tries to do a forbidden import</strong>.</p>
+<p>StartLeft does not directly import any specific processor, but relies on the configuration located in <code>_sl_build</code> and on 
+<code>slp_base</code> logic to choose the right implementation for each case. This means that <strong>new processors can be added without modifying 
+any preexisting module</strong>.</p>
+<p>The OTM does not have the <code>sl</code> or <code>slp</code> prefixes because it is intended to be released as a general lib for general definitions 
+and logic related with the standard that could be imported independently of StartLeft.</p>
+<h3 id="repository-structure">Repository Structure</h3>
+<p>All the modules are located just under the root folder in the StartLeft's repo and must also fit the following common structure:</p>
+<p><a class="glightbox" href="../img/repository-structure.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="img/repository-structure.png" src="../img/repository-structure.png" /></a></p>
+<p>Since a general Python standard for modularizing projects does not exist, the chosen one is based 
+on the one used by several Open Source projects as well as by the StartLeft project itself before the modularization. It is important 
+to notice that, with this structure, each module is being isolated as if it was an independent project. The goal of this is to 
+facilitate a future migration to independent repositories.</p>
+<h3 id="module-structure">Module Structure</h3>
+<blockquote>
+<p><strong>Note:</strong> <code>_sl_build</code> is an internal module with configuration and building purposes that does not fit the structure explained below.</p>
+</blockquote>
+<p><a class="glightbox" href="../img/module-structure.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="img/module-structure.png" src="../img/module-structure.png" /></a></p>
+<p>In the root package of each module, there are only two subpackages, and a resources folder. The first subpackage has the 
+same name as the module itself and contains the production code. The other one is called <code>tests</code> and contains specific 
+tests for that module. The resources folder contains the resources needed by each module, for example, the schemas used 
+for validating mapping files.</p>
+<p>The root folder of each module represents its main boundary and may be understood as the main project folder if the modules 
+where migrated to independent repositories. However, instead of being simply folders, they need to be 
+<a href="https://docs.python.org/3/reference/import.html#regular-packages">python regular packages</a> 
+with their own <code>__init.py__</code> file, which is an important nuance to consider. This file contains, for each module, a call to a 
+function defined in the <code>_sl_build</code> packages that overrides the native python’s import function with a custom one that avoids 
+forbidden imports between modules. In case new modules are added to StartLeft, this call must be added to their main package’s 
+<code>__init.py__</code> file.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">######################################################################</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># This folder is not actually intended to be a regular package       #</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># HOWEVER, we need to keep this __init.py__ file in order to         #</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># make it visible by other modules.                                  #</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># In future versions, this package should be moved to a lib so       #</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># that it will be an independent module instead of a &quot;false&quot; package #</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1">######################################################################</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1"># DON&#39;T REMOVE: Module importer overwritten to prevent bidirectional dependencies</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="kn">from</span><span class="w"> </span><span class="nn">_sl_build.secure_importer</span><span class="w"> </span><span class="kn">import</span> <span class="n">override_module_importer</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">override_module_importer</span><span class="p">()</span>
+</code></pre></div></p>
+<h4 id="production-code-package">Production Code Package</h4>
+<p><strong>The name of this package must match the main package</strong>. This is the place where the actual business logic code of the module is located. 
+The structure inside it is completely free, and it depends only on the needs of the logic implemented in the module.</p>
+<h4 id="test-code-package">Test Code Package</h4>
+<p>As has been already stated along this document, each module is a completely independent piece of software. Of course, 
+this also includes that it must also contain its own test code. Since each module has specific responsibilities, these are 
+the only ones that need to be tested from both a unitary and integration perspective. For example, every SLP must 
+have unitary tests for the classes implemented there, but also integration tests that verifies that the whole conversion to 
+OTM process works for every identified casuistic.</p>
+<p>Regarding the structure of the whole test code package, there is no a hard constraint about it, but, for readability reasons, 
+it is recommended to follow a common one for every module. The one chosen is split in the following packages:</p>
+<blockquote>
+<p><strong>Note</strong>: Please don’t be fanatic with the definition of unitary and integration. There are not always clear boundaries, 
+but common sense is the best way to identify what needs to be mocked or not.</p>
+</blockquote>
+<ul>
+<li><code>unit</code>. For unitary tests.</li>
+<li><code>integration</code>. For integration tests.</li>
+<li><code>resources</code>. It is also recommended to place here a test_resource_paths.py to have a unique point of access to the actual testing resources.</li>
+<li><code>util</code>. In case some general utilities need to be developed for being used in the tests, this package is the right place for them.**</li>
+</ul>
+<h3 id="main-tests-package">Main Tests Package</h3>
+<blockquote>
+<p><strong>Note:</strong>  It is necessary to evaluate the convenience to have this package, but, at least for now, it is important to keep 
+these tests to guarantee the quality of the code.</p>
+</blockquote>
+<p>At the root level of the StartLeft repository (the same as the other modules) a general tests package is located. Unlike 
+the test packages located inside each module, this one is generic to the entire the StartLeft project and contains integration tests 
+that involves logic belonging to all the modules. By definition, this package can only contain integration tests. 
+So, <strong>when a new processor or a new important behavior is added to StartLeft, we need to create their associated integration 
+tests at the project level in this package</strong>.</p>
+<h2 id="modules-description">Modules Description</h2>
+<hr />
+<h3 id="startleft">startleft</h3>
+<p>This is the main module whose origin is the initial StartLeft project that used to contain all the processing logic for 
+the first conversion formats. As part of the modularization process, it was lightened so that it does no longer implements 
+any conversion logic, and it simply exposes the CLI and REST API and makes the connection with the SLPs where the conversion 
+itself takes place.</p>
+<p><u>Main responsibilities</u>: Expose a CLI and a REST API to enable the access to the conversion to OTM logic.</p>
+<p><u>Imported by</u>:  Not imported.</p>
+<p><u>Imports</u>: <code>_sl_build</code>, <code>slp_base</code>, <code>sl_util</code>, <code>otm</code>. It also imports <code>slp_cft</code> and <code>slp_tf</code> to support the 
+search function, whose future is under evaluation.</p>
+<h3 id="sl_util">sl_util</h3>
+<p>This is currently the only module that contains common utilities for the rest of the modules of StartLeft. The <code>sl</code> prefix 
+means that it is not intended to be a very generic module like the Apache Commons in Java, but a module to place useful 
+functions for the StartLeft scope (including some OTM related utilities, for example). However, <strong>it is not a mixed bag to 
+place common logic related, for instance, with the SLPs</strong>. Business logic or domain classes should fit one of the other 
+modules or, if not, maybe a new one should be created.</p>
+<p><u>Main responsibilities</u>: Offer general (not processor specific) utilities related to StartLeft.</p>
+<p><u>Imported by</u>:  <code>startleft</code>, <code>slp_base</code>, SLPs, <code>otm</code>.</p>
+<p><u>Imports</u>: No imports.</p>
+<h3 id="slps">SLPs</h3>
+<p>The StartLeft processors are the key modules of StartLeft. They contain the specific logic for converting each format to OTM. 
+<strong>Each one is focused on converting from one and only one input format</strong> (CFT, TF, Visio, etc.). 
+One important thing to notice is that <strong>the integration tests for these modules are the most important ones in the application</strong> 
+since they validate behavior for the main purpose and responsibility of StartLeft as a whole.</p>
+<h4 id="slp_base">slp_base</h4>
+<p>This is a critical module where the whole process of conversion is defined, including all the interfaces for each step of 
+the conversion process (from loading files to the OTM validation) as well as definition of the errors that the process may 
+potentially arise.</p>
+<p><u>Main responsibilities</u>: </p>
+<ul>
+<li>Defining the main conversion process using a template pattern in the class <code>OTMProcessor</code>.</li>
+<li>Defining a set of interfaces for each step of the process (source and mapping files loading and validating, OTM conversion process and OTM validation) that must be implemented by the specific SLPs.</li>
+<li>Defining all the <a href="../Errors-Management/">possible errors</a> that may arise through the conversion process.</li>
+<li>Defining a <code>ProviderResolver</code> class to dynamically retrieve the right SLP based on the source type (CFT, TF, etc.).</li>
+</ul>
+<p><u>Imported by</u>:  <code>startleft</code>, SLPs.</p>
+<p><u>Imports</u>: <code>sl_util</code>, <code>otm</code>. </p>
+<h4 id="concrete-implementations">Concrete Implementations</h4>
+<p>Each supported provider (CFT, TF, etc.) must have its own processor in order to perform the OTM conversion. They are completely 
+independent modules and imports among them are forbidden. The goal is that they can be work in isolation so their evolution 
+is also completely independent. <strong>In case some duplication appears between two processors, the first option is to duplicate 
+the code</strong> instead of prematurely creating abstractions. Only after these duplications were consolidated, and we could identify 
+a really common casuistic, we may think about creating a common module grouping, for instance, logic related with one provider 
+type (IaC, diagram or threat modeling). Anyway, <strong>this common logic should be placed in a new dedicated module and never in 
+the <code>sl_util</code> module</strong>.</p>
+<p><u>Current implementations</u>: </p>
+<ul>
+<li><code>slp_cft</code> for Cloudformation (IaC).</li>
+<li><code>slp_tf</code> for Terraform (IaC).</li>
+<li><code>slp_visio</code> for MS Visio (Diagram).</li>
+<li><code>slp_mtmt</code> for MS Threat Modeling Tool (Threat model).</li>
+</ul>
+<p><u>Main responsibilities</u>: Implementing the interfaces defined in <code>slp_base</code> in order to actually perform the 
+ conversion process from the origin provider formats to OTM.</p>
+<p><u>Imported by</u>: No statically imported by any module. They are dynamically instanced by the <code>slp_base</code> based 
+on the module configuration placed in <code>_sl_build</code>.</p>
+<p><u>Imports</u>: Each processor is an independent module that may import different modules. However, in general:</p>
+<ul>
+<li>Must import: <code>otm</code> and <code>slp_base</code>.</li>
+<li>May import: <code>sl_util</code>.</li>
+<li>Cannot import: <code>startleft</code>.</li>
+</ul>
+<h3 id="otm">otm</h3>
+<p>Currently, we have the only public release specifically focused on the OTM standard 
+<a href="https://github.com/iriusrisk/OpenThreatModel#components-object">here</a>, that simply contains a <code>README.md</code> file with a 
+natural language description of the components of the standard. It would be interesting to extend the resources associated 
+with the standard and share them with the community (a JSON schema, some kind of validator, etc.). This module is intended 
+to be the seed for that public resources' library. This means that <strong>it has not to be understood as a part of StartLeft itself</strong> 
+(notice the absence of the <code>sl</code> prefix), but as a more generic library exclusively oriented to general OTM concerns.</p>
+<p><u>Main responsibilities</u>: Defining a set of entities that represent the OTM standard as well as providing a 
+standard building to simplify the generation of OTM instances.</p>
+<p><u>Imported by</u>: <code>startleft</code>, <code>slp_base</code>, SLPs.</p>
+<p><u>Imports</u>: Currently, it imports <code>sl_util</code>, but, for the reasons explained above, it should not import any 
+StartLeft module. 
+Thus, we should be careful about creating new dependencies between these two modules.</p>
+<h3 id="_sl_build">_sl_build</h3>
+<p>This is a special module whose existence is due to the current structure of the project. Since the multimodule management 
+is not being done by any external tool (like Maven/Gradle in Java), it is necessary to develop some ad hoc features in order 
+to manage the interaction between modules. </p>
+<p><u>Main responsibilities</u>:</p>
+<ul>
+<li>Defining the main configuration for the modules in a configuration class.</li>
+<li>Name of the module.</li>
+<li>Type of module (<code>general</code> or <code>processor</code>).</li>
+<li>Forbidden dependencies.</li>
+<li>Provider type supported by each SLP.</li>
+</ul>
+<p>Managing the imports between modules to raise an error when trying to import a forbidden dependency.</p>
+<blockquote>
+<p><strong>Note</strong>: The imports for this module are not constrained as in the other ones because this is the module that manages 
+these constraints, so it is important to be careful with the imports that are performed here.</p>
+</blockquote>
+<p><u>Imported by</u>: <code>startleft</code> to read configuration and for all the rest of the modules to override the import 
+system.</p>
+<p><u>Imports</u>: No imports allowed.</p>
+<h2 id="building">Building</h2>
+<hr />
+<p>All the modules inside StartLeft are, at the end of the day, Python modules, so <code>pip</code> does not have any problem to install a 
+project based on them. For this reason, the installation of the StartLeft project can be simply done by executing this command 
+inside the StartLeft repository's root folder:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>.
+</code></pre></div>
+<p>About the entrypoints for the application, it is important to difference between the <code>startleft</code> whole project and the <code>startleft</code> 
+module inside it. This means that, to reference some class or module inside it, it is needed to put the name two times (<code>startleft.startleft</code>).
+For example, in the <code>docker-compose</code> command or the docker <code>ENTRYPOINT</code>, the FastAPI webapp entry point must be referenced in this way:</p>
+<h2 id="testing">Testing</h2>
+<hr />
+<p>As stated before in this document, each module is an independent software unit with their own tests set. This means that 
+the tests can only be executed module by module. In PyCharm, for example, a run configuration must be created for executing 
+the tests in each module:</p>
+<p><a class="glightbox" href="../img/testing-configurations.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="img/testing-configurations.png" src="../img/testing-configurations.png" /></a></p>
+<p>For executing them from the terminal, <code>pytest</code> needs to know what is the module that is under testing:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pytest<span class="w"> </span>slp_base
+</code></pre></div>
+It is also possible to execute tests for several modules at the same time:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pytest<span class="w"> </span>slp_base<span class="w"> </span>otm<span class="w"> </span>startleft
+</code></pre></div>
+However, from the point of view of CI/CD, it is undesirable to include in the pipelines configuration the name of all 
+the modules that are required to be tested because this implies that every modification in the module structure or even 
+the addition of a new module will provoke the modification of all the pipelines. For this reason, a <code>run_tests.py</code> has been 
+created in the root of the StartLeft project. It contains the logic for retrieving all the modules in the application and
+calling pytest with all of them generating a unique report. So, the command that the pipelines must include for executing 
+the StartLeft’s tests is:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python<span class="w"> </span>run_tests.py
+</code></pre></div>
+From a development point of view, the most common scenario is that only the module under development is needed to be frequently tested. 
+However, there is no problem about executing all the tests on demand by creating a run configuration that runs that <code>run_tests.py</code> file in 
+PyCharm and execute all the tests.</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+  
+    
+  
+
+
+
+  
+
+
+<h4>Cookie consent</h4>
+<p>We use cookies to recognize your repeated visits and preferences, as well as to measure the effectiveness of our documentation and whether users find what they're searching for. With your consent, you're helping us to make our documentation better.</p>
+<input class="md-toggle" type="checkbox" id="__settings" >
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+      
+      
+        
+        
+      
+      <li class="task-list-item">
+        <label class="task-list-control">
+          <input type="checkbox" name="github" checked>
+          <span class="task-list-indicator"></span>
+          GitHub
+        </label>
+      </li>
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">Manage settings</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tracking", "search.suggest", "search.highlight", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.dfff1995.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.dff1b7c8.min.js"></script>
+      
+    
+  <script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>
+</html>
