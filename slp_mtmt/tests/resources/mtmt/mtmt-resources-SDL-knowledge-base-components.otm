@@ -1,0 +1,1028 @@
+{
+  "otmVersion": "0.2.0",
+  "project": {
+    "id": "example-project",
+    "name": "Example Project"
+  },
+  "representations": [
+    {
+      "id": "Microsoft Threat Modeling Tool",
+      "name": "Microsoft Threat Modeling Tool",
+      "type": "threat-model"
+    },
+    {
+      "id": "example-project-diagram",
+      "name": "example-project Diagram Representation",
+      "size": {
+        "height": 2000,
+        "width": 2000
+      },
+      "type": "diagram"
+    }
+  ],
+  "trustZones": [
+    {
+      "attributes": {
+        "Dataflow Order": "0",
+        "Name": "The Generic Trust Border Boundary"
+      },
+      "id": "283137d7-a5f8-4433-a1e3-85cfce467eaf",
+      "name": "The Generic Trust Border Boundary",
+      "representations": [
+        {
+          "id": "283137d7-a5f8-4433-a1e3-85cfce467eaf-representation",
+          "name": "The Generic Trust Border Boundary Representation",
+          "position": {
+            "x": 80,
+            "y": 32
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 417,
+            "width": 559
+          }
+        }
+      ],
+      "risk": {
+        "trustRating": 10
+      },
+      "type": "6376d53e-6461-412b-8e04-7b3fe2b397de"
+    },
+    {
+      "attributes": {
+        "Dataflow Order": "0",
+        "Name": "The CorpNet Trust Boundary"
+      },
+      "id": "2d580de4-73e2-4dc7-8b77-d4ac347454a3",
+      "name": "The CorpNet Trust Boundary",
+      "representations": [
+        {
+          "id": "2d580de4-73e2-4dc7-8b77-d4ac347454a3-representation",
+          "name": "The CorpNet Trust Boundary Representation",
+          "position": {
+            "x": 725,
+            "y": 41
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 403,
+            "width": 567
+          }
+        }
+      ],
+      "risk": {
+        "trustRating": 10
+      },
+      "type": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+    },
+    {
+      "attributes": {
+        "Dataflow Order": "0",
+        "Name": "Sandbox Trust Boundary Border"
+      },
+      "id": "272da05b-d876-452a-bc38-36a154b08a94",
+      "name": "Sandbox Trust Boundary Border",
+      "representations": [
+        {
+          "id": "272da05b-d876-452a-bc38-36a154b08a94-representation",
+          "name": "Sandbox Trust Boundary Border Representation",
+          "position": {
+            "x": 77,
+            "y": 474
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 142,
+            "width": 556
+          }
+        }
+      ],
+      "risk": {
+        "trustRating": 10
+      },
+      "type": "2ab4effa-40b7-4cd2-ba81-8247d29a6f2d"
+    },
+    {
+      "attributes": {
+        "Chrome JavaScript Sandbox": "No",
+        "Chrome Sandbox": "No",
+        "Dataflow Order": "0",
+        "Firefox JavaScript Sandbox": "No",
+        "Name": "Other Browsers Boundaries"
+      },
+      "id": "097dae77-1af8-4e73-ac87-cc7d2e9c71af",
+      "name": "Other Browsers Boundaries",
+      "representations": [
+        {
+          "id": "097dae77-1af8-4e73-ac87-cc7d2e9c71af-representation",
+          "name": "Other Browsers Boundaries Representation",
+          "position": {
+            "x": 740,
+            "y": 482
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 139,
+            "width": 543
+          }
+        }
+      ],
+      "risk": {
+        "trustRating": 10
+      },
+      "type": "b61d6911-338d-46a8-9f39-8dcd24abfe91"
+    }
+  ],
+  "components": [
+    {
+      "attributes": {
+        "Authenticates Itself": "Not Applicable",
+        "Microsoft": "No",
+        "Name": "Authorization Provider",
+        "Out Of Scope": "false",
+        "Type": "Not Selected"
+      },
+      "id": "25e51feb-1f6a-468a-8d6a-1e065a73841c",
+      "name": "Authorization Provider",
+      "parent": {
+        "trustZone": "283137d7-a5f8-4433-a1e3-85cfce467eaf"
+      },
+      "representations": [
+        {
+          "id": "25e51feb-1f6a-468a-8d6a-1e065a73841c-representation",
+          "name": "Authorization Provider Representation",
+          "position": {
+            "x": 41,
+            "y": 33
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "oauth2-authorization-server"
+    },
+    {
+      "attributes": {
+        "Authenticates Itself": "Not Applicable",
+        "Microsoft": "No",
+        "Name": "Browser",
+        "Out Of Scope": "false",
+        "Type": "C"
+      },
+      "id": "f93830a1-34c2-4223-82e5-9ad0673940ac",
+      "name": "Browser",
+      "parent": {
+        "trustZone": "097dae77-1af8-4e73-ac87-cc7d2e9c71af"
+      },
+      "representations": [
+        {
+          "id": "f93830a1-34c2-4223-82e5-9ad0673940ac-representation",
+          "name": "Browser Representation",
+          "position": {
+            "x": 28,
+            "y": 23
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "web-ui"
+    },
+    {
+      "attributes": {
+        "Accepts Input From": "Not Selected",
+        "ActiveX": "No",
+        "Browser Plug-in Object (BHO)": "No",
+        "Code Type": "Not Selected",
+        "Implements or Uses a Communication Protocol": "No",
+        "Implements or Uses an Authentication Mechanism": "No",
+        "Implements or Uses an Authorization Mechanism": "No",
+        "Isolation Level": "Not Selected",
+        "Name": "Browser and ActiveX Plugins",
+        "Out Of Scope": "false",
+        "Running As": "Not Selected",
+        "Sanitizes Input": "Not Selected",
+        "Sanitizes Output": "Not Selected"
+      },
+      "id": "0e4a84ff-19fd-427c-bb12-77027b33a80b",
+      "name": "Browser and ActiveX Plugins",
+      "parent": {
+        "trustZone": "283137d7-a5f8-4433-a1e3-85cfce467eaf"
+      },
+      "representations": [
+        {
+          "id": "0e4a84ff-19fd-427c-bb12-77027b33a80b-representation",
+          "name": "Browser and ActiveX Plugins Representation",
+          "position": {
+            "x": 287,
+            "y": 35
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "web-ui"
+    },
+    {
+      "attributes": {
+        "Accepts Input From": "Not Selected",
+        "Code Type": "U",
+        "Implements or Uses a Communication Protocol": "No",
+        "Implements or Uses an Authentication Mechanism": "No",
+        "Implements or Uses an Authorization Mechanism": "No",
+        "Isolation Level": "Not Selected",
+        "Name": "Browser Client",
+        "Out Of Scope": "false",
+        "Running As": "Not Selected",
+        "Sanitizes Input": "Not Selected",
+        "Sanitizes Output": "Not Selected"
+      },
+      "id": "5211a358-77bd-463d-a239-5525ea21f69c",
+      "name": "Browser Client",
+      "parent": {
+        "trustZone": "283137d7-a5f8-4433-a1e3-85cfce467eaf"
+      },
+      "representations": [
+        {
+          "id": "5211a358-77bd-463d-a239-5525ea21f69c-representation",
+          "name": "Browser Client Representation",
+          "position": {
+            "x": 406,
+            "y": 34
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "web-client"
+    },
+    {
+      "attributes": {
+        "Backup": "No",
+        "Encrypted": "No",
+        "Name": "Cloud Storage",
+        "Out Of Scope": "false",
+        "Removable Storage": "No",
+        "Shared": "No",
+        "Signed": "No",
+        "Store Type": "SQL Relational Database",
+        "Stores Credentials": "No",
+        "Stores Log Data": "No",
+        "Write Access": "No"
+      },
+      "id": "ec9a0e87-79c5-4581-b6bf-6badb19780ec",
+      "name": "Cloud Storage",
+      "parent": {
+        "trustZone": "2d580de4-73e2-4dc7-8b77-d4ac347454a3"
+      },
+      "representations": [
+        {
+          "id": "ec9a0e87-79c5-4581-b6bf-6badb19780ec-representation",
+          "name": "Cloud Storage Representation",
+          "position": {
+            "x": 34,
+            "y": 30
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "other-database"
+    },
+    {
+      "attributes": {
+        "Backup": "No",
+        "Encrypted": "No",
+        "HTTPOnly": "No",
+        "Name": "Cookies",
+        "Out Of Scope": "false",
+        "Removable Storage": "No",
+        "Shared": "No",
+        "Signed": "No",
+        "Store Type": "C",
+        "Stores Credentials": "No",
+        "Stores Log Data": "No",
+        "Write Access": "No"
+      },
+      "id": "025098b8-5d2c-4e6d-8a13-dbcfd89532a3",
+      "name": "Cookies",
+      "parent": {
+        "trustZone": "2d580de4-73e2-4dc7-8b77-d4ac347454a3"
+      },
+      "representations": [
+        {
+          "id": "025098b8-5d2c-4e6d-8a13-dbcfd89532a3-representation",
+          "name": "Cookies Representation",
+          "position": {
+            "x": 162,
+            "y": 31
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "other-database"
+    },
+    {
+      "attributes": {
+        "Backup": "No",
+        "Cached Credentials": "No",
+        "Calendar Events": "No",
+        "Contacts": "No",
+        "Encrypted": "No",
+        "Enterprise Data": "No",
+        "GPS": "No",
+        "Messaging Data (Mail, IM, SMS)": "No",
+        "Name": "Device - Android",
+        "Other Data": "No",
+        "Out Of Scope": "false",
+        "Removable Storage": "No",
+        "SIM Storage": "No",
+        "SMS messages": "No",
+        "Shared": "No",
+        "Signed": "No",
+        "Store Type": "D",
+        "Stores Credentials": "No",
+        "Stores Log Data": "No",
+        "Write Access": "No"
+      },
+      "id": "aa37c6b7-ca06-4db1-92db-bec285c6a39e",
+      "name": "Device - Android",
+      "parent": {
+        "trustZone": "2d580de4-73e2-4dc7-8b77-d4ac347454a3"
+      },
+      "representations": [
+        {
+          "id": "aa37c6b7-ca06-4db1-92db-bec285c6a39e-representation",
+          "name": "Device - Android Representation",
+          "position": {
+            "x": 295,
+            "y": 31
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "CD-GENERIC-DEVICE"
+    },
+    {
+      "attributes": {
+        "Backup": "No",
+        "Cached Credentials": "No",
+        "Calendar Events": "No",
+        "Contacts": "No",
+        "Encrypted": "No",
+        "Enterprise Data": "No",
+        "GPS": "No",
+        "Messaging Data (Mail, IM, SMS)": "No",
+        "Name": "Device -iOS",
+        "Other Data": "No",
+        "Out Of Scope": "false",
+        "Removable Storage": "No",
+        "SIM Storage": "No",
+        "SMS messages": "No",
+        "Shared": "No",
+        "Signed": "No",
+        "Store Type": "D",
+        "Stores Credentials": "No",
+        "Stores Log Data": "No",
+        "Write Access": "No"
+      },
+      "id": "a0651c78-8a15-48b3-a0ae-9c00e03218b7",
+      "name": "Device -iOS",
+      "parent": {
+        "trustZone": "2d580de4-73e2-4dc7-8b77-d4ac347454a3"
+      },
+      "representations": [
+        {
+          "id": "a0651c78-8a15-48b3-a0ae-9c00e03218b7-representation",
+          "name": "Device -iOS Representation",
+          "position": {
+            "x": 424,
+            "y": 32
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "CD-GENERIC-DEVICE"
+    },
+    {
+      "attributes": {
+        "Authenticates Itself": "Not Applicable",
+        "Microsoft": "No",
+        "Name": "External Web Application",
+        "Out Of Scope": "false",
+        "Type": "C"
+      },
+      "id": "b7e1f20f-75de-4963-9299-e3e867cef7fd",
+      "name": "External Web Application",
+      "parent": {
+        "trustZone": "283137d7-a5f8-4433-a1e3-85cfce467eaf"
+      },
+      "representations": [
+        {
+          "id": "b7e1f20f-75de-4963-9299-e3e867cef7fd-representation",
+          "name": "External Web Application Representation",
+          "position": {
+            "x": 41,
+            "y": 154
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "web-application-server-side"
+    },
+    {
+      "attributes": {
+        "Authenticates Itself": "Not Applicable",
+        "Microsoft": "No",
+        "Name": "External Web Service",
+        "Out Of Scope": "false",
+        "Type": "C"
+      },
+      "id": "b9fd7d47-1a1c-4e3d-8a9d-ae15f3e42dd0",
+      "name": "External Web Service",
+      "parent": {
+        "trustZone": "283137d7-a5f8-4433-a1e3-85cfce467eaf"
+      },
+      "representations": [
+        {
+          "id": "b9fd7d47-1a1c-4e3d-8a9d-ae15f3e42dd0-representation",
+          "name": "External Web Service Representation",
+          "position": {
+            "x": 171,
+            "y": 158
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "web-service"
+    },
+    {
+      "attributes": {
+        "Backup": "No",
+        "Encrypted": "No",
+        "File System Type": "NTFS",
+        "Name": "File System",
+        "Out Of Scope": "false",
+        "Removable Storage": "No",
+        "Shared": "No",
+        "Signed": "No",
+        "Store Type": "F",
+        "Stores Credentials": "No",
+        "Stores Log Data": "No",
+        "Write Access": "No"
+      },
+      "id": "70421840-869e-4ff2-a58c-7e5e668f259e",
+      "name": "File System",
+      "parent": {
+        "trustZone": "283137d7-a5f8-4433-a1e3-85cfce467eaf"
+      },
+      "representations": [
+        {
+          "id": "70421840-869e-4ff2-a58c-7e5e668f259e-representation",
+          "name": "File System Representation",
+          "position": {
+            "x": 291,
+            "y": 158
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "file-system"
+    },
+    {
+      "attributes": {
+        "Backup": "No",
+        "Encrypted": "No",
+        "Name": "HTML5 Local Storage",
+        "Out Of Scope": "false",
+        "Removable Storage": "No",
+        "Shared": "No",
+        "Signed": "No",
+        "Store Type": "H",
+        "Stores Credentials": "No",
+        "Stores Log Data": "No",
+        "Write Access": "No"
+      },
+      "id": "50342130-186f-43e6-ae6b-f846ee2a3d1d",
+      "name": "HTML5 Local Storage",
+      "parent": {
+        "trustZone": "283137d7-a5f8-4433-a1e3-85cfce467eaf"
+      },
+      "representations": [
+        {
+          "id": "50342130-186f-43e6-ae6b-f846ee2a3d1d-representation",
+          "name": "HTML5 Local Storage Representation",
+          "position": {
+            "x": 411,
+            "y": 162
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "other-database"
+    },
+    {
+      "attributes": {
+        "Accepts Input From": "Not Selected",
+        "Code Type": "M",
+        "Implements or Uses a Communication Protocol": "No",
+        "Implements or Uses an Authentication Mechanism": "No",
+        "Implements or Uses an Authorization Mechanism": "No",
+        "Isolation Level": "Not Selected",
+        "Name": "Managed Application",
+        "Out Of Scope": "false",
+        "Running As": "Not Selected",
+        "Sanitizes Input": "Not Selected",
+        "Sanitizes Output": "Not Selected"
+      },
+      "id": "8706b74c-eceb-45c5-89e5-56620310627e",
+      "name": "Managed Application",
+      "parent": {
+        "trustZone": "2d580de4-73e2-4dc7-8b77-d4ac347454a3"
+      },
+      "representations": [
+        {
+          "id": "8706b74c-eceb-45c5-89e5-56620310627e-representation",
+          "name": "Managed Application Representation",
+          "position": {
+            "x": 37,
+            "y": 155
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "web-application-server-side"
+    },
+    {
+      "attributes": {
+        "Backup": "No",
+        "Encrypted": "No",
+        "Name": "Non Relational Database - MongoDB",
+        "Out Of Scope": "false",
+        "Removable Storage": "No",
+        "Shared": "No",
+        "Signed": "No",
+        "Store Type": "N",
+        "Stores Credentials": "No",
+        "Stores Log Data": "No",
+        "Write Access": "No"
+      },
+      "id": "f9c7667b-2423-41e8-bff9-4b0e63b9f6e8",
+      "name": "Non Relational Database - MongoDB",
+      "parent": {
+        "trustZone": "2d580de4-73e2-4dc7-8b77-d4ac347454a3"
+      },
+      "representations": [
+        {
+          "id": "f9c7667b-2423-41e8-bff9-4b0e63b9f6e8-representation",
+          "name": "Non Relational Database - MongoDB Representation",
+          "position": {
+            "x": 163,
+            "y": 156
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "other-nosql-key-value-store"
+    },
+    {
+      "attributes": {
+        "Backup": "No",
+        "Encrypted": "No",
+        "Name": "Non Relational Database - Other NoSQL",
+        "Out Of Scope": "false",
+        "Removable Storage": "No",
+        "Shared": "No",
+        "Signed": "No",
+        "Store Type": "N",
+        "Stores Credentials": "No",
+        "Stores Log Data": "No",
+        "Write Access": "No"
+      },
+      "id": "6a0b7d08-3de6-4616-b71c-13e534a12cb6",
+      "name": "Non Relational Database - Other NoSQL",
+      "parent": {
+        "trustZone": "2d580de4-73e2-4dc7-8b77-d4ac347454a3"
+      },
+      "representations": [
+        {
+          "id": "6a0b7d08-3de6-4616-b71c-13e534a12cb6-representation",
+          "name": "Non Relational Database - Other NoSQL Representation",
+          "position": {
+            "x": 296,
+            "y": 161
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "other-nosql-key-value-store"
+    },
+    {
+      "attributes": {
+        "Backup": "No",
+        "Encrypted": "No",
+        "Name": "Non Relational Database - Riak NoSQL",
+        "Out Of Scope": "false",
+        "Removable Storage": "No",
+        "Shared": "No",
+        "Signed": "No",
+        "Store Type": "N",
+        "Stores Credentials": "No",
+        "Stores Log Data": "No",
+        "Write Access": "No"
+      },
+      "id": "cb23da22-556c-4b74-8962-225dbc9d1cfe",
+      "name": "Non Relational Database - Riak NoSQL",
+      "parent": {
+        "trustZone": "2d580de4-73e2-4dc7-8b77-d4ac347454a3"
+      },
+      "representations": [
+        {
+          "id": "cb23da22-556c-4b74-8962-225dbc9d1cfe-representation",
+          "name": "Non Relational Database - Riak NoSQL Representation",
+          "position": {
+            "x": 428,
+            "y": 162
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "other-nosql-key-value-store"
+    },
+    {
+      "attributes": {
+        "Backup": "No",
+        "Encrypted": "No",
+        "Name": "SQL Database - MySQL",
+        "Out Of Scope": "false",
+        "Removable Storage": "No",
+        "Shared": "No",
+        "Signed": "No",
+        "Store Type": "S",
+        "Stores Credentials": "No",
+        "Stores Log Data": "No",
+        "Write Access": "No"
+      },
+      "id": "23338f14-9d0d-40f3-99c7-bc28465f93b8",
+      "name": "SQL Database - MySQL",
+      "parent": {
+        "trustZone": "283137d7-a5f8-4433-a1e3-85cfce467eaf"
+      },
+      "representations": [
+        {
+          "id": "23338f14-9d0d-40f3-99c7-bc28465f93b8-representation",
+          "name": "SQL Database - MySQL Representation",
+          "position": {
+            "x": 42,
+            "y": 274
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "other-sql-database"
+    },
+    {
+      "attributes": {
+        "Backup": "No",
+        "Encrypted": "No",
+        "Name": "SQL Database - Other database",
+        "Out Of Scope": "false",
+        "Removable Storage": "No",
+        "Shared": "No",
+        "Signed": "No",
+        "Store Type": "S",
+        "Stores Credentials": "No",
+        "Stores Log Data": "No",
+        "Write Access": "No"
+      },
+      "id": "bee65e62-a5b0-47fd-bdda-fa06fd1946b6",
+      "name": "SQL Database - Other database",
+      "parent": {
+        "trustZone": "283137d7-a5f8-4433-a1e3-85cfce467eaf"
+      },
+      "representations": [
+        {
+          "id": "bee65e62-a5b0-47fd-bdda-fa06fd1946b6-representation",
+          "name": "SQL Database - Other database Representation",
+          "position": {
+            "x": 172,
+            "y": 278
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "other-sql-database"
+    },
+    {
+      "attributes": {
+        "Backup": "No",
+        "Encrypted": "No",
+        "Name": "SQL Database - PostgreSQL",
+        "Out Of Scope": "false",
+        "Removable Storage": "No",
+        "Shared": "No",
+        "Signed": "No",
+        "Store Type": "S",
+        "Stores Credentials": "No",
+        "Stores Log Data": "No",
+        "Write Access": "No"
+      },
+      "id": "6c6e70ef-c91b-4ca0-ae8c-69993ccc7ce6",
+      "name": "SQL Database - PostgreSQL",
+      "parent": {
+        "trustZone": "283137d7-a5f8-4433-a1e3-85cfce467eaf"
+      },
+      "representations": [
+        {
+          "id": "6c6e70ef-c91b-4ca0-ae8c-69993ccc7ce6-representation",
+          "name": "SQL Database - PostgreSQL Representation",
+          "position": {
+            "x": 294,
+            "y": 280
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "other-sql-database"
+    },
+    {
+      "attributes": {
+        "Backup": "No",
+        "Encrypted": "No",
+        "Name": "SQL Database - SQLite",
+        "Out Of Scope": "false",
+        "Removable Storage": "No",
+        "Shared": "No",
+        "Signed": "No",
+        "Store Type": "S",
+        "Stores Credentials": "No",
+        "Stores Log Data": "No",
+        "Write Access": "No"
+      },
+      "id": "775106cb-baf2-491b-970d-8f3571f6c26e",
+      "name": "SQL Database - SQLite",
+      "parent": {
+        "trustZone": "283137d7-a5f8-4433-a1e3-85cfce467eaf"
+      },
+      "representations": [
+        {
+          "id": "775106cb-baf2-491b-970d-8f3571f6c26e-representation",
+          "name": "SQL Database - SQLite Representation",
+          "position": {
+            "x": 414,
+            "y": 277
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "other-sql-database"
+    },
+    {
+      "attributes": {
+        "Accepts Input From": "Not Selected",
+        "Code Type": "U",
+        "Implements or Uses a Communication Protocol": "No",
+        "Implements or Uses an Authentication Mechanism": "No",
+        "Implements or Uses an Authorization Mechanism": "No",
+        "Isolation Level": "Not Selected",
+        "Name": "Web Application",
+        "Out Of Scope": "false",
+        "Running As": "Not Selected",
+        "Sanitizes Input": "Not Selected",
+        "Sanitizes Output": "Not Selected"
+      },
+      "id": "e0cb9c4b-718b-4c5c-8246-8d5cb7b63281",
+      "name": "Web Application",
+      "parent": {
+        "trustZone": "2d580de4-73e2-4dc7-8b77-d4ac347454a3"
+      },
+      "representations": [
+        {
+          "id": "e0cb9c4b-718b-4c5c-8246-8d5cb7b63281-representation",
+          "name": "Web Application Representation",
+          "position": {
+            "x": 44,
+            "y": 269
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "web-application-server-side"
+    },
+    {
+      "attributes": {
+        "Accepts Input From": "Not Selected",
+        "Code Type": "M",
+        "Implements or Uses a Communication Protocol": "No",
+        "Implements or Uses an Authentication Mechanism": "No",
+        "Implements or Uses an Authorization Mechanism": "No",
+        "Isolation Level": "Not Selected",
+        "Name": "Web Server",
+        "Out Of Scope": "false",
+        "Running As": "Not Selected",
+        "Sanitizes Input": "Not Selected",
+        "Sanitizes Output": "Not Selected"
+      },
+      "id": "ebd1333e-8126-4ac4-b9e5-095747b78b84",
+      "name": "Web Server",
+      "parent": {
+        "trustZone": "2d580de4-73e2-4dc7-8b77-d4ac347454a3"
+      },
+      "representations": [
+        {
+          "id": "ebd1333e-8126-4ac4-b9e5-095747b78b84-representation",
+          "name": "Web Server Representation",
+          "position": {
+            "x": 162,
+            "y": 272
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "generic-service"
+    },
+    {
+      "attributes": {
+        "Accepts Input From": "Not Selected",
+        "Code Type": "U",
+        "Implements or Uses a Communication Protocol": "No",
+        "Implements or Uses an Authentication Mechanism": "No",
+        "Implements or Uses an Authorization Mechanism": "No",
+        "Isolation Level": "Not Selected",
+        "Name": "Web Service",
+        "Out Of Scope": "false",
+        "Running As": "Not Selected",
+        "Sanitizes Input": "Not Selected",
+        "Sanitizes Output": "Not Selected"
+      },
+      "id": "5c18f426-ebbd-4292-aafd-c52e19f24844",
+      "name": "Web Service",
+      "parent": {
+        "trustZone": "2d580de4-73e2-4dc7-8b77-d4ac347454a3"
+      },
+      "representations": [
+        {
+          "id": "5c18f426-ebbd-4292-aafd-c52e19f24844-representation",
+          "name": "Web Service Representation",
+          "position": {
+            "x": 295,
+            "y": 272
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "web-service"
+    },
+    {
+      "attributes": {
+        "Name": "Free Text Annotation - Mapped ones",
+        "Out Of Scope": "false"
+      },
+      "id": "58b3bd9b-ea2a-4cb2-a42b-6f0acb1a5e7f",
+      "name": "Free Text Annotation - Mapped ones",
+      "parent": {
+        "trustZone": "2d580de4-73e2-4dc7-8b77-d4ac347454a3"
+      },
+      "representations": [
+        {
+          "id": "58b3bd9b-ea2a-4cb2-a42b-6f0acb1a5e7f-representation",
+          "name": "Free Text Annotation - Mapped ones Representation",
+          "position": {
+            "x": 430,
+            "y": 272
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "empty-component"
+    },
+    {
+      "attributes": {
+        "Accepts Input From": "Not Selected",
+        "Code Type": "U",
+        "Implements or Uses a Communication Protocol": "No",
+        "Implements or Uses an Authentication Mechanism": "No",
+        "Implements or Uses an Authorization Mechanism": "No",
+        "Isolation Level": "Not Selected",
+        "Name": "Thick Client",
+        "Out Of Scope": "false",
+        "Running As": "Not Selected",
+        "Sanitizes Input": "Not Selected",
+        "Sanitizes Output": "Not Selected"
+      },
+      "id": "52228c52-52d5-451f-abe0-907f6d866c16",
+      "name": "Thick Client",
+      "parent": {
+        "trustZone": "272da05b-d876-452a-bc38-36a154b08a94"
+      },
+      "representations": [
+        {
+          "id": "52228c52-52d5-451f-abe0-907f6d866c16-representation",
+          "name": "Thick Client Representation",
+          "position": {
+            "x": 25,
+            "y": 19
+          },
+          "representation": "example-project-diagram",
+          "size": {
+            "height": 82,
+            "width": 82
+          }
+        }
+      ],
+      "type": "rich-client"
+    }
+  ],
+  "dataflows": []
+}
