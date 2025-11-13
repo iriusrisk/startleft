@@ -2,13 +2,16 @@ import pytest
 
 from sl_util.sl_util.file_utils import get_byte_data
 from slp_base.slp_base.errors import OTMBuildingError, MappingFileNotValidError, IacFileNotValidError, \
-    LoadingIacFileError
+    LoadingIacFileError, ErrorCode
+from slp_base.slp_base.mapping import MAX_SIZE as MAPPING_MAX_SIZE, MIN_SIZE as MAPPING_MIN_SIZE
 from slp_base.tests.util.otm import validate_and_compare_otm, validate_and_compare
 from slp_cft import CloudformationProcessor
 from slp_cft.tests.resources import test_resource_paths
 from slp_cft.tests.resources.test_resource_paths import expected_orphan_component_is_not_mapped, \
     cft_components_with_trustzones_of_same_type_otm, cloudformation_minimal_content_otm
 from slp_cft.tests.utility import excluded_regex
+from sl_util.tests.util.file_utils import generate_temporary_file
+from slp_cft.slp_cft.validate.cft_validator import MAX_SIZE as FILE_MAX_SIZE, MIN_SIZE as FILE_MIN_SIZE
 
 SAMPLE_ID = 'id'
 SAMPLE_NAME = 'name'
@@ -17,8 +20,16 @@ SAMPLE_VALID_MAPPING_FILE = test_resource_paths.default_cloudformation_mapping
 SAMPLE_SINGLE_VALID_CFT_FILE = test_resource_paths.cloudformation_single_file
 SAMPLE_VALID_MAPPING_FILE_IR = test_resource_paths.cloudformation_mapping_iriusrisk
 SAMPLE_MAPPING_FILE_WITHOUT_REF = test_resource_paths.cloudformation_mapping_without_ref
+SAMPLE_DEFAULT_OLD_MAPPING = test_resource_paths.cloudformation_old_default_mapping
+SAMPLE_DEFAULT_NEW_MAPPING = test_resource_paths.cloudformation_new_default_mapping
+SAMPLE_MAPPING_WITHOUT_TRUSTZONE_TYPE = test_resource_paths.cloudformation_mapping_valid_without_trustzone_type
+SAMPLE_CLOUDFORMATION_MAPPING_ALL_FUNCTIONS = test_resource_paths.cloudformation_mapping_all_functions
 SAMPLE_NETWORKS_CFT_FILE = test_resource_paths.cloudformation_networks_file
 SAMPLE_RESOURCES_CFT_FILE = test_resource_paths.cloudformation_resources_file
+SAMPLE_RESOURCES_INVALID_CFT_FILE = test_resource_paths.cloudformation_resources_invalid
+SAMPLE_REACT_CORS_SPA_STACK = test_resource_paths.cloudformation_react_cors_spa_stack
+SAMPLE_CLOUDFORMATION_ALL_FUNCTIONS = test_resource_paths.cloudformation_all_functions
+SAMPLE_CLOUDFORMATION_TEST = test_resource_paths.cloudformation_test
 SAMPLE_REF_DEFAULT_JSON = test_resource_paths.cloudformation_with_ref_function_and_default_property_json
 SAMPLE_REF_DEFAULT_YAML = test_resource_paths.cloudformation_with_ref_function_and_default_property_yaml
 SAMPLE_REF_WITHOUT_DEFAULT_JSON = test_resource_paths.cloudformation_with_ref_function_and_without_default_property_json
@@ -486,7 +497,7 @@ class TestCloudformationProcessor:
         mapping_file = [get_byte_data(SAMPLE_VALID_MAPPING_FILE)]
 
         # WHEN creating OTM project from IaC file
-        # THEN raises OTMBuildingError
+        # THEN raises IacFileNotValidError
         with pytest.raises(IacFileNotValidError):
             CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, cloudformation_file, mapping_file).process()
 
@@ -522,7 +533,7 @@ class TestCloudformationProcessor:
         # GIVEN a request without any iac_file key
         mapping_file = get_byte_data(SAMPLE_VALID_MAPPING_FILE_IR)
         # WHEN the method CloudformationProcessor::process is invoked
-        # THEN an RequestValidationError is raised
+        # THEN an LoadingIacFileError is raised
         with pytest.raises(LoadingIacFileError):
             CloudformationProcessor('multiple-files', 'multiple-files', [], mapping_file).process()
 
@@ -540,22 +551,6 @@ class TestCloudformationProcessor:
         assert otm.components[0].parent_type == 'trustZone'
         assert len(otm.components) == 1
         assert otm.components[0].parent == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
-
-    def test_multiple_stack_plus_s3_ec2(self):
-        # GIVEN the file with multiple Subnet AWS::EC2::Instance different configurations
-        cloudformation_file = get_byte_data(test_resource_paths.multiple_stack_plus_s3_ec2)
-        # AND a valid iac mappings file
-        mapping_file = [get_byte_data(SAMPLE_VALID_MAPPING_FILE)]
-
-        # WHEN processing
-        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], mapping_file).process()
-
-        assert len(otm.components) == 9
-        publicSubnet1Id = [component for component in otm.components if component.name == 'PublicSubnet1'][0].id
-        assert publicSubnet1Id
-        ec2WithWrongParent = [component for component in otm.components if
-                              component.type == 'ec2' and component.parent != publicSubnet1Id]
-        assert len(ec2WithWrongParent) == 0
 
     def test_parsing_cft_json_file_with_ref(self):
         # GIVEN a cloudformation JSON  file
@@ -687,3 +682,130 @@ class TestCloudformationProcessor:
         # THEN the result should be the expected
         result, expected = validate_and_compare(otm, cft_components_with_trustzones_of_same_type_otm, None)
         assert result == expected
+
+    def test_multiple_stack_plus_s3_ec2(self):
+        # GIVEN the file with multiple Subnet AWS::EC2::Instance different configurations
+        cloudformation_file = get_byte_data(test_resource_paths.multiple_stack_plus_s3_ec2)
+        # AND a valid iac mappings file
+        mapping_file = get_byte_data(SAMPLE_VALID_MAPPING_FILE)
+
+        # WHEN processing
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
+
+        assert len(otm.components) == 9
+        publicSubnet1Id = [component for component in otm.components if component.name == 'PublicSubnet1'][0].id
+        assert publicSubnet1Id
+        ec2WithWrongParent = [component for component in otm.components if
+                              component.type == 'ec2' and component.parent != publicSubnet1Id]
+        assert len(ec2WithWrongParent) == 0
+
+    def test_improve_parsing_problems_built_in_functions(self):
+        # GIVEN a cloudformation file with built-in functions
+        cloudformation_file = get_byte_data(SAMPLE_REACT_CORS_SPA_STACK)
+        # AND a valid iac mappings file
+        mapping_file = get_byte_data(SAMPLE_DEFAULT_OLD_MAPPING)
+
+        # WHEN processing
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
+
+        assert len(otm.trustzones) == 1
+        assert len(otm.dataflows) == 1
+        assert len(otm.components) == 4
+
+    def test_checking_jmespath_functions(self):
+        # GIVEN a cloudformation file with all JMESPath functions
+        cloudformation_file = get_byte_data(SAMPLE_CLOUDFORMATION_ALL_FUNCTIONS)
+        # AND a valid iac mappings file
+        mapping_file = get_byte_data(SAMPLE_CLOUDFORMATION_MAPPING_ALL_FUNCTIONS)
+
+        # WHEN processing
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
+
+        assert len(otm.trustzones) == 1
+        assert len(otm.dataflows) == 0
+        assert len(otm.components) == 5
+
+    def test_not_present_parents(self):
+        # GIVEN a cloudformation file with all JMESPath functions
+        cloudformation_file = get_byte_data(SAMPLE_CLOUDFORMATION_TEST)
+        # AND a valid iac mappings file
+        mapping_file = get_byte_data(SAMPLE_DEFAULT_NEW_MAPPING)
+
+        # WHEN processing
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
+
+        assert len(otm.trustzones) == 1
+        assert len(otm.dataflows) == 0
+        assert len(otm.components) == 4
+
+    def test_invalid_resources_mapping_file(self):
+        # GIVEN a valid CFT file with altsource resources
+        cloudformation_file = get_byte_data(SAMPLE_VALID_CFT_FILE)
+
+        # AND a invalid format CFT mapping file
+        mapping_file = get_byte_data(SAMPLE_RESOURCES_INVALID_CFT_FILE)
+
+        # WHEN the CFT file is processed
+        # THEN an MappingFileNotValidError is raised
+        with pytest.raises(MappingFileNotValidError) as error:
+            CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
+
+        # AND the error details are correct
+        assert ErrorCode.MAPPING_FILE_NOT_VALID == error.value.error_code
+        assert 'Mapping files are not valid' == error.value.title
+        assert 'Mapping file does not comply with the schema' == error.value.detail
+        assert "'trustzones' is a required property" == error.value.message
+
+    @pytest.mark.parametrize('cft_file_size', [FILE_MAX_SIZE + 1, FILE_MIN_SIZE - 1])
+    def test_min_max_cloudformation_file_sizes(self, cft_file_size):
+        # GIVEN a max file size limit and a valid CFT file
+        max_file_size_allowed_in_bytes = 1024 * 1024
+        cloudformation_file = generate_temporary_file(cft_file_size, "test_max_size.txt")
+
+        # AND a valid CFT mapping file
+        mapping_file = get_byte_data(SAMPLE_VALID_MAPPING_FILE)
+
+        # WHEN the CFT file is processed
+        # THEN an IacFileNotValidError is raised
+        with pytest.raises(IacFileNotValidError) as error:
+            CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
+
+        # AND the error details are correct
+        assert ErrorCode.IAC_NOT_VALID == error.value.error_code
+        assert 'CloudFormation file is not valid' == error.value.title
+        assert 'Provided iac_file is not valid. Invalid size' == error.value.detail
+        assert 'Provided iac_file is not valid. Invalid size' == error.value.message
+
+    @pytest.mark.parametrize('mapping_file_size', [MAPPING_MAX_SIZE + 1, MAPPING_MIN_SIZE - 1])
+    def test_min_max_mapping_file_sizes(self, mapping_file_size):
+        # GIVEN a valid CFT file with altsource resources
+        cloudformation_file = get_byte_data(SAMPLE_VALID_CFT_FILE)
+
+        # AND a invalid size CFT mapping file
+        mapping_file = generate_temporary_file(mapping_file_size, "test_mapping_sizes.txt")
+
+        # WHEN the CFT file is processed
+        # THEN an MappingFileNotValidError is raised
+        with pytest.raises(MappingFileNotValidError) as error:
+            CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
+
+        # AND the error details are correct
+        assert ErrorCode.MAPPING_FILE_NOT_VALID == error.value.error_code
+        assert 'Mapping files are not valid' == error.value.title
+        assert 'Mapping files are not valid. Invalid size' == error.value.detail
+        assert 'Mapping files are not valid. Invalid size' == error.value.message
+
+    def test_mapping_trustzone_no_type(self):
+        # GIVEN a valid CFT file with some resources
+        cloudformation_file = get_byte_data(test_resource_paths.cloudformation_for_security_group_tests_json)
+
+        # AND a valid CFT mapping file
+        mapping_file = get_byte_data(SAMPLE_MAPPING_WITHOUT_TRUSTZONE_TYPE)
+
+        # WHEN the CFT file is processed
+        otm = CloudformationProcessor(SAMPLE_ID, SAMPLE_NAME, [cloudformation_file], [mapping_file]).process()
+
+        # THEN the number of TZs, components and dataflows are right
+        assert len(otm.trustzones) == 2
+        assert len(otm.components) == 22
+        assert len(otm.dataflows) == 22

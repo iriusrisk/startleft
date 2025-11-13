@@ -23,3 +23,7 @@ def split(pattern, text, maxsplit=0, options=None):
 
 def compile(pattern, options=None):
     return re2.compile(pattern, options)
+
+
+def search(pattern, string, options=None):
+    return re2.search(pattern, string, options)

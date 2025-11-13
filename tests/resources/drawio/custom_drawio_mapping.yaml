@@ -1,0 +1,8 @@
+trustzones:
+  - default: true
+    label: Internet (default)
+    type: f0ba7722-39b6-4c81-8290-a30a248bb8d9
+
+components:
+  - label: AWS Cloud
+    type: vpc

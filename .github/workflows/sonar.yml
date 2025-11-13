@@ -40,32 +40,30 @@ jobs:
       - name: Generate coverage report
         run: coverage xml
       - name: Analyze with SonarCloud
-        # You can pin the exact commit or the version.
-        # uses: SonarSource/sonarcloud-github-action@commithas or tag
-        uses: SonarSource/sonarcloud-github-action@49e6cd3b187936a73b8280d59ffd9da69df63ec9 #v2.1.1
+        uses: SonarSource/sonarqube-scan-action@1a6d90ebcb0e6a6b1d87e37ba693fe453195ae25 #v5.3.1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # Generate a token on Sonarcloud.io, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # SonarCloud token
+          SONAR_HOST_URL: "https://sonarcloud.io"   # Required for SonarCloud
         with:
-          # Additional arguments for the sonarcloud scanner
-          args:
+          args: >
             -Dsonar.projectKey=startleft
             -Dsonar.organization=continuumsec
-            -Dsonar.python.version=3.9,3.10,3.11
+            -Dsonar.python.version=3.10,3.11,3.12
             -Dsonar.qualitygate.wait=true
             -Dsonar.python.coverage.reportPaths=coveragereport/coverage.xml
 
-            # Args explanation
-            # Unique keys of your project and organization. You can find them in SonarCloud > Information (bottom-left menu)
-            # mandatory
-            # -Dsonar.projectKey=
-            # -Dsonar.organization=
+          # Args explanation
+          # Unique keys of your project and organization. You can find them in SonarCloud > Information (bottom-left menu)
+          # mandatory
+          # -Dsonar.projectKey=
+          # -Dsonar.organization=
 
-            # Version of supported python versions to get a more precise analysis
-            # -Dsonar.python.version=
+          # Version of supported python versions to get a more precise analysis
+          # -Dsonar.python.version=
 
-            # Flag to way for Analysis Quality Gate results, if fail the steps it will be marked as failed too.
-            # -Dsonar.qualitygate.wait=
+          # Flag to way for Analysis Quality Gate results, if fail the steps it will be marked as failed too.
+          # -Dsonar.qualitygate.wait=
 
-            # The path for coverage report to use in the SonarCloud analysis, it must be in XML format.
-            # -Dsonar.python.coverage.reportPaths=
+          # The path for coverage report to use in the SonarCloud analysis, it must be in XML format.
+          # -Dsonar.python.coverage.reportPaths=
