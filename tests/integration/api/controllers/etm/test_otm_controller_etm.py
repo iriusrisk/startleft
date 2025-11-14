@@ -22,15 +22,19 @@ PROJECT_NAME = 'project_A_name'
 webapp = fastapi_server.webapp
 client = TestClient(webapp)
 
+
 def get_url():
     return etm_create_otm_controller.PREFIX + etm_create_otm_controller.URL
+
 
 def get_file(file_path, mime_type):
     return file_path, open(file_path, 'rb'), mime_type
 
+
 def assert_bad_request_response(response):
     assert response.status_code == 400
     assert response.headers.get('content-type') == application_json
+
 
 def assert_bad_request_body_response(response, error_type, title, detail, total_errors):
     body_response = json.loads(response.text)
@@ -40,6 +44,7 @@ def assert_bad_request_body_response(response, error_type, title, detail, total_
     assert body_response['detail'] == detail
     assert len(body_response['errors']) == total_errors
     return body_response
+
 
 class TestOTMControllerEtm:
 
@@ -110,7 +115,7 @@ class TestOTMControllerEtm:
         body = {'source_type': TESTING_ETM_TYPE, 'id': PROJECT_ID, 'name': PROJECT_NAME}
         response = client.post(get_url(), files=files, data=body)
 
-        # Then the OTM is returned inside the response as JSON
+        # Then the error is as expected
         assert_bad_request_response(response)
         body_response = assert_bad_request_body_response(response, 'RequestValidationError',
                                      'The request is not valid', 'InvalidRequest', 1)
@@ -127,7 +132,7 @@ class TestOTMControllerEtm:
         body = {'source_type': TESTING_ETM_TYPE, 'id': PROJECT_ID, 'name': PROJECT_NAME}
         response = client.post(get_url(), files=files, data=body)
 
-        # Then the OTM is returned inside the response as JSON
+        # Then the error is as expected
         assert_bad_request_response(response)
         body_response = assert_bad_request_body_response(response, 'RequestValidationError',
                                  'The request is not valid', 'InvalidRequest', 1)
@@ -137,52 +142,20 @@ class TestOTMControllerEtm:
     @responses.activate
     @mark.parametrize('body, error_message', [
         param({'id': PROJECT_ID, 'name': PROJECT_NAME},
-              "Error in field 'source_type' located in 'body'. Field required"),
+              "Error in field 'source_type' located in 'body'. Field required", id="no_source_type"),
         param({'source_type': None, 'id': PROJECT_ID, 'name': PROJECT_NAME},
-              "Error in field 'source_type' located in 'body'. Input should be 'MTMT'") ])
-    def test_create_project_no_source_type(self, body, error_message):
-        # Given the request files
-        source_file = get_file(mtmt_valid_file, application_octet_stream)
-        default_mapping_file = get_file(mtmt_mapping_mvp, application_yaml[1])
-
-        # When I do post on drawio endpoint
-        files = {'source_file': source_file, 'default_mapping_file': default_mapping_file}
-        response = client.post(get_url(), files=files, data=body)
-
-        # Then the OTM is returned inside the response as JSON
-        assert_bad_request_response(response)
-        body_response = assert_bad_request_body_response(response, 'RequestValidationError',
-                                     'The request is not valid', 'InvalidRequest', 1)
-        assert body_response['errors'][0]['errorMessage'] == error_message
-
-    @responses.activate
-    @mark.parametrize('body, error_message', [
+              "Error in field 'source_type' located in 'body'. Input should be 'MTMT'", id="void_source_type"),
         param({'source_type': TESTING_ETM_TYPE, 'name': PROJECT_NAME},
-              "Error in field 'id' located in 'body'. Field required"),
+              "Error in field 'id' located in 'body'. Field required", id="no_id"),
         param({'source_type': TESTING_ETM_TYPE, 'id': None, 'name': PROJECT_NAME},
-              "Error in field 'id' located in 'body'. String should have at least 1 character") ])
-    def test_create_project_no_id(self, body, error_message):
-        # Given the request files
-        source_file = get_file(mtmt_valid_file, application_octet_stream)
-        default_mapping_file = get_file(mtmt_mapping_mvp, application_yaml[1])
-
-        # When I do post on drawio endpoint
-        files = {'source_file': source_file, 'default_mapping_file': default_mapping_file}
-        response = client.post(get_url(), files=files, data=body)
-
-        # Then the OTM is returned inside the response as JSON
-        assert_bad_request_response(response)
-        body_response = assert_bad_request_body_response(response, 'RequestValidationError',
-                                     'The request is not valid', 'InvalidRequest', 1)
-        assert body_response['errors'][0]['errorMessage'] == error_message
-
-    @responses.activate
-    @mark.parametrize('body, error_message', [
+              "Error in field 'id' located in 'body'. String should have at least 1 character", id="void_id"),
         param({'source_type': TESTING_ETM_TYPE, 'id': PROJECT_ID},
-              "Error in field 'name' located in 'body'. Field required"),
+              "Error in field 'name' located in 'body'. Field required", id="no_name"),
         param({'source_type': TESTING_ETM_TYPE, 'id': PROJECT_ID, 'name': None},
-              "Error in field 'name' located in 'body'. String should have at least 1 character") ])
-    def test_create_project_no_name(self, body, error_message):
+              "Error in field 'name' located in 'body'. String should have at least 1 character", id="void_name")
+
+    ])
+    def test_create_project_missing_field(self, body, error_message):
         # Given the request files
         source_file = get_file(mtmt_valid_file, application_octet_stream)
         default_mapping_file = get_file(mtmt_mapping_mvp, application_yaml[1])
@@ -191,11 +164,12 @@ class TestOTMControllerEtm:
         files = {'source_file': source_file, 'default_mapping_file': default_mapping_file}
         response = client.post(get_url(), files=files, data=body)
 
-        # Then the OTM is returned inside the response as JSON
+        # Then the error is as expected
         assert_bad_request_response(response)
         body_response = assert_bad_request_body_response(response, 'RequestValidationError',
                                      'The request is not valid', 'InvalidRequest', 1)
         assert body_response['errors'][0]['errorMessage'] == error_message
+
 
     @responses.activate
     def test_create_project_invalid_empty_mapping_file(self):
@@ -208,7 +182,7 @@ class TestOTMControllerEtm:
         body = {'source_type': TESTING_ETM_TYPE, 'id': PROJECT_ID, 'name': PROJECT_NAME}
         response = client.post(get_url(), files=files, data=body)
 
-        # Then the OTM is returned inside the response as JSON
+        # Then the error is as expected
         assert_bad_request_response(response)
         body_response = assert_bad_request_body_response(response, 'MappingFileNotValidError',
                  'Mapping files are not valid', 'Mapping files are not valid. Invalid size', 1)
@@ -225,7 +199,7 @@ class TestOTMControllerEtm:
         body = {'source_type': TESTING_ETM_TYPE, 'id': PROJECT_ID, 'name': PROJECT_NAME}
         response = client.post(get_url(), files=files, data=body)
 
-        # Then the OTM is returned inside the response as JSON
+        # Then the error is as expected
         assert_bad_request_response(response)
         body_response = assert_bad_request_body_response(response, 'SourceFileNotValidError',
      'Microsoft Threat Modeling Tool file is not valid', 'Invalid content type for source_file', 1)
@@ -242,7 +216,7 @@ class TestOTMControllerEtm:
         body = {'source_type': TESTING_ETM_TYPE, 'id': PROJECT_ID, 'name': PROJECT_NAME}
         response = client.post(get_url(), files=files, data=body)
 
-        # Then the OTM is returned inside the response as JSON
+        # Then the error is as expected
         assert_bad_request_response(response)
         body_response = assert_bad_request_body_response(response, 'LoadingSourceFileError',
                                      'Source file cannot be loaded', 'ParseError', 1)

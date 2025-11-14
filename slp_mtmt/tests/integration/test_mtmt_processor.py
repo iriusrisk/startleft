@@ -78,33 +78,11 @@ class TestMtmtProcessor:
     @mark.parametrize('source, expected', [
         (MTMT_EXAMPLE_POSITION, OTM_EXAMPLE_POSITION),
         (MTMT_EXAMPLE_1LINE, OTM_EXAMPLE_1LINE),
-        (MTMT_EXAMPLE_1ORPHAN, OTM_EXAMPLE_1ORPHAN)
-    ])
-    def test_coordinates_borders(self, source, expected):
-        # GIVEN a valid MTMT file
-        source_file = get_byte_data(source)
-
-        # AND a valid MTMT mapping file
-        mapping_file = get_byte_data(DEFAULT_MAPPING_FILE)
-
-        # AND the expected OTM
-        expected_otm = json.loads(get_byte_data(expected))
-
-        # WHEN the MTMT file is processed
-        otm = MTMTProcessor(SAMPLE_ID, SAMPLE_NAME, source_file, [mapping_file]).process()
-
-        # AND we get the json OTM
-        otm_json = otm.json()
-
-        # THEN we check the result is as expected
-        result, expected = validate_and_compare(otm_json, expected_otm, self.excluded_regex)
-        assert result == expected
-
-    @mark.parametrize('source,expected', [
+        (MTMT_EXAMPLE_1ORPHAN, OTM_EXAMPLE_1ORPHAN),
         (nested_trustzones_tm7, nested_trustzones_otm),
         (nested_trustzones_line_tm7, nested_trustzones_line_otm)
     ])
-    def test_nested_trust_zones(self, source, expected):
+    def test_otm_output_of_valid_mtmt(self, source, expected):
         # GIVEN a valid MTMT file
         source_file = get_byte_data(source)
 
@@ -164,9 +142,7 @@ class TestMtmtProcessor:
         param(generate_temporary_file(FILE_MAX_SIZE + 1), id='mtmt file too big')
     ])
     def test_invalid_file_size(self, source_file: bytes):
-        # GIVEN a MTMT with an invalid size
-
-        # AND a valid MTMT mapping file
+        # GIVEN a valid MTMT mapping file
         mapping_file = get_byte_data(DEFAULT_MAPPING_FILE)
 
         # WHEN MTMTProcessor::process is invoked
@@ -185,8 +161,6 @@ class TestMtmtProcessor:
     def test_invalid_mapping_file_size(self, mappings: list[bytes]):
         # GIVEN a valid MTMT file with some resources
         source_file = get_byte_data(SAMPLE_VALID_MTMT_FILE)
-
-        # AND a invalid MTMT mapping file (due to its size)
 
         # WHEN MTMTProcessor::process is invoked
         # THEN a MappingFileNotValidError is raised
