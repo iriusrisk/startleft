@@ -4,6 +4,7 @@ from http import HTTPStatus
 import responses
 from fastapi.testclient import TestClient
 from pytest import mark, param
+from slp_base.slp_base.provider_type import application_json, VALID_YAML_MIME_TYPES
 
 from slp_base import IacType
 from startleft.startleft.api import fastapi_server
@@ -18,12 +19,8 @@ PROJECT_NAME = 'project_A_name'
 webapp = fastapi_server.webapp
 client = TestClient(webapp)
 
-json_mime = 'application/json'
-yaml_mime = 'text/yaml'
-
 def get_file(file_path, mime_type):
     return file_path, open(file_path, 'rb'), mime_type
-
 
 class TestOTMControllerIaCTFPlan:
 
@@ -35,13 +32,13 @@ class TestOTMControllerIaCTFPlan:
                        ])
     def test_custom_mapping_file(self, custom_mapping_file_path, expected_component_type):
         # Given the provided files (iac, mapping and custom mapping)
-        iac_file_plan = get_file(terraform_plan_official, json_mime)
-        iac_file_graph = get_file(terraform_graph_official, json_mime)
-        mapping_file = get_file(terraform_plan_default_mapping_file, yaml_mime)
+        iac_file_plan = get_file(terraform_plan_official, application_json)
+        iac_file_graph = get_file(terraform_graph_official, application_json)
+        mapping_file = get_file(terraform_plan_default_mapping_file, VALID_YAML_MIME_TYPES[1])
         files = [('iac_file', iac_file_plan), ('iac_file', iac_file_graph),
                  ('mapping_file', mapping_file)]
         if custom_mapping_file_path:
-            custom_mapping_file = get_file(custom_mapping_file_path, yaml_mime)
+            custom_mapping_file = get_file(custom_mapping_file_path, VALID_YAML_MIME_TYPES[1])
             files.append(('custom_mapping_file', custom_mapping_file))
 
         # When I do post on Terraform Plan endpoint
@@ -51,7 +48,7 @@ class TestOTMControllerIaCTFPlan:
 
         # Then the OTM is returned inside the response as JSON
         assert HTTPStatus.CREATED == response.status_code
-        assert json_mime == response.headers.get('content-type')
+        assert application_json == response.headers.get('content-type')
 
         otm = json.loads(response.text)
         assert otm['otmVersion'] == '0.2.0'
