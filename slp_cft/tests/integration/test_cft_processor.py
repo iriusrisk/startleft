@@ -36,7 +36,6 @@ SAMPLE_REF_WITHOUT_DEFAULT_JSON = test_resource_paths.cloudformation_with_ref_fu
 OTM_EXPECTED_RESULT = test_resource_paths.otm_expected_result
 ALTSOURCE_COMPONENTS_OTM_EXPECTED = test_resource_paths.altsource_components_otm_expected
 
-
 class TestCloudformationProcessor:
     def test_altsource_components(self):
         # GIVEN a valid CFT file with altsource resources
@@ -759,8 +758,7 @@ class TestCloudformationProcessor:
     @pytest.mark.parametrize('cft_file_size', [FILE_MAX_SIZE + 1, FILE_MIN_SIZE - 1])
     def test_min_max_cloudformation_file_sizes(self, cft_file_size):
         # GIVEN a max file size limit and a valid CFT file
-        max_file_size_allowed_in_bytes = 1024 * 1024
-        cloudformation_file = generate_temporary_file(cft_file_size, "test_max_size.txt")
+        cloudformation_file = generate_temporary_file(cft_file_size, "test_max_size.txt").file.read()
 
         # AND a valid CFT mapping file
         mapping_file = get_byte_data(SAMPLE_VALID_MAPPING_FILE)
@@ -782,7 +780,7 @@ class TestCloudformationProcessor:
         cloudformation_file = get_byte_data(SAMPLE_VALID_CFT_FILE)
 
         # AND a invalid size CFT mapping file
-        mapping_file = generate_temporary_file(mapping_file_size, "test_mapping_sizes.txt")
+        mapping_file = generate_temporary_file(mapping_file_size, "test_mapping_sizes.txt").file.read()
 
         # WHEN the CFT file is processed
         # THEN an MappingFileNotValidError is raised

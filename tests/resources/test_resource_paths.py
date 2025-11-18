@@ -149,3 +149,8 @@ drawio_minimal_drawio = f'{path}/drawio/aws_minimal.drawio'
 lean_ix_drawio = f'{path}/drawio/lean_ix.drawio.xml'
 custom_drawio_mapping = f'{path}/drawio/custom_drawio_mapping.yaml'
 invalid_extension_mtmt_file = f'{path}/drawio/invalid-extension-mtmt-mobile-api.tm7'
+
+# ABACUS
+abacus_example = f'{path}/abacus/abacus_merged.json'
+abacus_default_mapping = f'{path}/abacus/default_abacus_mapping.yaml'
+abacus_custom_mapping = f'{path}/abacus/custom_trustzone_mapping.yaml'

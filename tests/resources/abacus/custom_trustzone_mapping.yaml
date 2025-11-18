@@ -1,0 +1,5 @@
+trustzones:
+  - label: SST PoC Static Content
+    type: 2ab4effa-40b7-4cd2-ba81-8247d29a6f2d
+
+components: []

@@ -17,9 +17,9 @@ def get_upload_file(source: str) -> UploadFile:
     return UploadFile(filename=os.path.split(source)[1], file=tmp_file)
 
 
-def generate_temporary_file(size_in_bytes: int, filename: str = "temp.txt") -> bytes:
+def generate_temporary_file(size_in_bytes: int, filename: str = "temp.txt") -> UploadFile:
     temporary_file = SpooledTemporaryFile()
     temporary_file.write(b'0' * size_in_bytes)
     temporary_file.seek(0)
 
-    return UploadFile(filename=filename, file=temporary_file).file.read()
+    return UploadFile(filename=filename, file=temporary_file)
