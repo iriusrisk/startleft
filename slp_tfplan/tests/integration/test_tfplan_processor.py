@@ -192,7 +192,7 @@ def test_aws_complete_sample():
     tfplan = TFPLAN_AWS_COMPLETE
     tfgraph = TFGRAPH_AWS_COMPLETE
 
-    # AND a mapping file with an invalid size ('mappings' arg)
+    # AND a valid mapping file
     mapping_file = SECONDARY_DEFAULT_MAPPING_FILE
 
     # WHEN TFPlanProcessor::process is invoked

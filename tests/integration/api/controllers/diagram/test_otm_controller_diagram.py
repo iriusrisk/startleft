@@ -5,6 +5,7 @@ import responses
 from pytest import mark
 from pytest import param
 from fastapi.testclient import TestClient
+from slp_base.slp_base.provider_type import application_json
 
 from sl_util.sl_util.file_utils import get_byte_data
 from startleft.startleft.api import fastapi_server
@@ -13,14 +14,13 @@ from tests.resources import test_resource_paths
 
 webapp = fastapi_server.webapp
 client = TestClient(webapp)
-json_mime = 'application/json'
 
 def get_url():
     return diag_create_otm_controller.PREFIX + diag_create_otm_controller.URL
 
 def assert_bad_request_response(response):
     assert response.status_code == 400
-    assert response.headers.get('content-type') == json_mime
+    assert response.headers.get('content-type') == application_json
 
 def assert_bad_request_body_response(response, error_type, title, detail, total_errors):
     body_response = json.loads(response.text)
@@ -130,9 +130,6 @@ class TestOTMControllerDiagram:
               "Error in field 'id' located in 'body'. String should have at least 1 character")
     ])
     def test_create_project_no_id(self, body, error_message):
-        # Given a project_name
-        project_name: str = 'project_A_name'
-
         # Given the request files
         diag_file = get_byte_data(test_resource_paths.drawio_minimal_xml)
         mapping_file = get_byte_data(test_resource_paths.default_drawio_mapping)
@@ -155,10 +152,7 @@ class TestOTMControllerDiagram:
               "Error in field 'name' located in 'body'. String should have at least 1 character")
         ])
     def test_create_project_no_name(self, body, error_message):
-        # Given a project_id
-        project_id: str = 'project_A_id'
-
-        # And the request files
+        # Given the request files
         diag_file = get_byte_data(test_resource_paths.drawio_minimal_xml)
         mapping_file = get_byte_data(test_resource_paths.default_drawio_mapping)
 
