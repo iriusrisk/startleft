@@ -138,8 +138,8 @@ class TestMtmtProcessor:
         assert len(otm.dataflows) == 3
 
     @mark.parametrize('source_file', [
-        param(generate_temporary_file(FILE_MIN_SIZE - 1), id='mtmt file too small'),
-        param(generate_temporary_file(FILE_MAX_SIZE + 1), id='mtmt file too big')
+        param(generate_temporary_file(FILE_MIN_SIZE - 1).file.read(), id='mtmt file too small'),
+        param(generate_temporary_file(FILE_MAX_SIZE + 1).file.read(), id='mtmt file too big')
     ])
     def test_invalid_file_size(self, source_file: bytes):
         # GIVEN a valid MTMT mapping file
@@ -155,8 +155,8 @@ class TestMtmtProcessor:
         assert error.value.message == 'Provided source_file is not valid. Invalid size'
 
     @mark.parametrize('mappings', [
-        param([generate_temporary_file(MAPPING_MIN_SIZE - 1)], id='default mapping file too small'),
-        param([generate_temporary_file(MAPPING_MAX_SIZE + 1)], id='default mapping file too big')
+        param([generate_temporary_file(MAPPING_MIN_SIZE - 1).file.read()], id='default mapping file too small'),
+        param([generate_temporary_file(MAPPING_MAX_SIZE + 1).file.read()], id='default mapping file too big')
     ])
     def test_invalid_mapping_file_size(self, mappings: list[bytes]):
         # GIVEN a valid MTMT file with some resources
