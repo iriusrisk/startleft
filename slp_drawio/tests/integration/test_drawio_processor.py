@@ -19,10 +19,10 @@ DEFAULT_MAPPING_FILE = get_byte_data(test_resource_paths.default_drawio_mapping)
 
 class TestDrawioProcessor:
     @mark.parametrize('mappings', [
-        param([generate_temporary_file(MAPPING_MIN_SIZE - 1), DEFAULT_MAPPING_FILE], id='mapping file too small'),
-        param([generate_temporary_file(MAPPING_MAX_SIZE + 1), DEFAULT_MAPPING_FILE], id='mapping file too big'),
-        param([DEFAULT_MAPPING_FILE, generate_temporary_file(MAPPING_MIN_SIZE - 1)], id='custom mapping file too small'),
-        param([DEFAULT_MAPPING_FILE, generate_temporary_file(MAPPING_MAX_SIZE + 1)], id='custom mapping file too big')
+        param([generate_temporary_file(MAPPING_MIN_SIZE - 1).file.read(), DEFAULT_MAPPING_FILE], id='mapping file too small'),
+        param([generate_temporary_file(MAPPING_MAX_SIZE + 1).file.read(), DEFAULT_MAPPING_FILE], id='mapping file too big'),
+        param([DEFAULT_MAPPING_FILE, generate_temporary_file(MAPPING_MIN_SIZE - 1).file.read()], id='custom mapping file too small'),
+        param([DEFAULT_MAPPING_FILE, generate_temporary_file(MAPPING_MAX_SIZE + 1).file.read()], id='custom mapping file too big')
     ])
     def test_invalid_mapping_size(self, mappings: list[bytes]):
         # GIVEN a valid drawio
