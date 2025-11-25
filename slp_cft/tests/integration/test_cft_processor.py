@@ -758,7 +758,7 @@ class TestCloudformationProcessor:
     @pytest.mark.parametrize('cft_file_size', [FILE_MAX_SIZE + 1, FILE_MIN_SIZE - 1])
     def test_min_max_cloudformation_file_sizes(self, cft_file_size):
         # GIVEN a max file size limit and a valid CFT file
-        cloudformation_file = generate_temporary_file(cft_file_size, "test_max_size.txt").file.read()
+        cloudformation_file = generate_temporary_file(cft_file_size, "test_max_size.txt")
 
         # AND a valid CFT mapping file
         mapping_file = get_byte_data(SAMPLE_VALID_MAPPING_FILE)
@@ -779,8 +779,8 @@ class TestCloudformationProcessor:
         # GIVEN a valid CFT file with altsource resources
         cloudformation_file = get_byte_data(SAMPLE_VALID_CFT_FILE)
 
-        # AND a invalid size CFT mapping file
-        mapping_file = generate_temporary_file(mapping_file_size, "test_mapping_sizes.txt").file.read()
+        # AND an invalid size CFT mapping file
+        mapping_file = generate_temporary_file(mapping_file_size, "test_mapping_sizes.txt")
 
         # WHEN the CFT file is processed
         # THEN an MappingFileNotValidError is raised

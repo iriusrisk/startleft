@@ -16,5 +16,3 @@ components:
     type: back-end-server
   - label: Angular v12.0.0
     type: web-client
-  - label: SST PoC Webpage
-    type: compact-server-side-web-application

@@ -1,5 +1,9 @@
+import io
+
 import pytest
 from pytest import mark, param
+from starlette.datastructures import UploadFile
+
 from sl_util.sl_util.file_utils import get_byte_data
 from sl_util.tests.util.file_utils import generate_temporary_file
 from slp_abacus import AbacusProcessor
@@ -43,7 +47,8 @@ class TestAbacusProcessor:
         # WHEN ABACUS is processing
         # THEN raises DiagramFileNotValidError
         with pytest.raises(DiagramFileNotValidError) as error:
-            AbacusProcessor(SAMPLE_ID, SAMPLE_NAME, source, [default_mapping_file]).process()
+            upload_file = UploadFile(filename="source.json", file=io.BytesIO(source))
+            AbacusProcessor(SAMPLE_ID, SAMPLE_NAME, upload_file, [default_mapping_file]).process()
 
         # AND the error details are correct
         assert ErrorCode.DIAGRAM_NOT_VALID == error.value.error_code

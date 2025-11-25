@@ -157,4 +157,4 @@ invalid_extension_mtmt_file = f'{path}/drawio/invalid-extension-mtmt-mobile-api.
 # ABACUS
 abacus_example = f'{path}/abacus/abacus_merged.json'
 abacus_default_mapping = f'{path}/abacus/default_abacus_mapping.yaml'
-abacus_custom_mapping = f'{path}/abacus/custom_trustzone_mapping.yaml'
+abacus_custom_mapping = f'{path}/abacus/custom_abacus_mapping.yaml'
