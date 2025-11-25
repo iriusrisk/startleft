@@ -31,6 +31,11 @@ OTM_EXAMPLE_1ORPHAN = test_resource_paths.position_1orphan_otm
 SAMPLE_UNMAPPED_TRUSTZONES = test_resource_paths.unmapped_trustzones_tm7
 SAMPLE_UNMAPPED_TRUSTZONES_OTM = test_resource_paths.unmapped_trustzones_otm
 SAMPLE_MODEL_NO_NAME_FIGURES = test_resource_paths.model_with_no_name_figures_tm7
+MTMT_AZURE_COMPONENTS = test_resource_paths.azure_components_tm7
+OTM_AZURE_COMPONENTS = test_resource_paths.azure_components_otm
+MTMT_SIMPLE_LINE_BOUNDARY = test_resource_paths.simple_line_boundary_tm7
+MTMT_MULTIPLE_TRUSTZONES_SAME_TYPE = test_resource_paths.multiple_trustzones_same_type_tm7
+MAPPING_MULTIPLE_TRUSTZONES_SAME_TYPE = test_resource_paths.multiple_trustzones_same_type_mapping
 
 class TestMtmtProcessor:
     excluded_regex = [
@@ -172,3 +177,75 @@ class TestMtmtProcessor:
         assert 'Mapping files are not valid' == error.value.title
         assert 'Mapping files are not valid. Invalid size' == error.value.detail
         assert 'Mapping files are not valid. Invalid size' == error.value.message
+
+    def test_run_azure_components(self):
+        # GIVEN a valid MTMT file with some resources
+        source_file = get_byte_data(MTMT_AZURE_COMPONENTS)
+
+        # AND a valid MTMT mapping file
+        mapping_file = get_byte_data(SAMPLE_VALID_MAPPING_FILE)
+
+        # WHEN the MTMT file is processed
+        otm = MTMTProcessor(SAMPLE_ID, SAMPLE_NAME, source_file, [mapping_file]).process()
+
+        # THEN we check the result is as expected
+        result, expected = validate_and_compare(otm.json(), OTM_AZURE_COMPONENTS, None)
+        assert result == expected
+
+    def test_run_simple_line_boundary(self):
+        # GIVEN a valid MTMT file with some resources
+        source_file = get_byte_data(MTMT_SIMPLE_LINE_BOUNDARY)
+
+        # AND a valid MTMT mapping file
+        mapping_file = get_byte_data(SAMPLE_VALID_MAPPING_FILE)
+
+        # WHEN the MTMT file is processed
+        otm = MTMTProcessor(SAMPLE_ID, SAMPLE_NAME, source_file, [mapping_file]).process()
+
+        # THEN we check the result is as expected
+        assert len(otm.trustzones) == 2
+        assert otm.trustzones[0].id == 'ef4b8d94-ff80-419b-b590-b1a6aad88408'
+        assert otm.trustzones[0].name == 'Generic Trust Line Boundary'
+        assert otm.trustzones[0].type == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+        assert otm.trustzones[0].trustrating == 10
+        assert otm.trustzones[1].id == '185f1c6f-3879-464c-89c9-dc6f0b0c2b21'
+        assert otm.trustzones[1].name == 'Default trustzone'
+        assert otm.trustzones[1].type == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
+        assert otm.trustzones[1].trustrating == 10
+        assert otm.components[0].parent == '185f1c6f-3879-464c-89c9-dc6f0b0c2b21'
+        assert otm.components[1].parent == 'ef4b8d94-ff80-419b-b590-b1a6aad88408'
+        assert otm.components[2].parent == '185f1c6f-3879-464c-89c9-dc6f0b0c2b21'
+        assert otm.components[3].parent == '185f1c6f-3879-464c-89c9-dc6f0b0c2b21'
+
+    def test_run_multiple_trustzones_same_type(self):
+        # GIVEN a valid MTMT file with some resources
+        source_file = get_byte_data(MTMT_MULTIPLE_TRUSTZONES_SAME_TYPE)
+
+        # AND a valid MTMT mapping file
+        mapping_file = get_byte_data(MAPPING_MULTIPLE_TRUSTZONES_SAME_TYPE)
+
+        # WHEN the MTMT file is processed
+        otm = MTMTProcessor(SAMPLE_ID, SAMPLE_NAME, source_file, [mapping_file]).process()
+
+        # THEN we check the result is as expected
+        assert len(otm.trustzones) == 5
+        assert otm.trustzones[0].id == '06de5005-eca7-41c8-8848-9d942dc7994d'
+        assert otm.trustzones[0].name == 'Local User Zone'
+        assert otm.trustzones[0].type == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
+        assert otm.trustzones[0].trustrating == 10
+        assert otm.trustzones[1].id == '1c5a9402-2016-4bc6-9861-9e7eaf725ae6'
+        assert otm.trustzones[1].name == 'Azure Trust Boundary'
+        assert otm.trustzones[1].type == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
+        assert otm.trustzones[1].trustrating == 10
+        assert otm.trustzones[2].id == '871dde5d-cd57-4436-a07d-a73f039511a2'
+        assert otm.trustzones[2].name == 'Azure Trust Boundary'
+        assert otm.trustzones[2].type == '2ab4effa-40b7-4cd2-ba81-8247d29a6f2d'
+        assert otm.trustzones[2].trustrating == 10
+        assert otm.trustzones[3].id == 'efb356d5-0b83-4b16-be28-0337c29a7d4a'
+        assert otm.trustzones[3].name == 'Remote User Zone'
+        assert otm.trustzones[3].type == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
+        assert otm.trustzones[3].trustrating == 10
+        assert otm.trustzones[4].id == 'b39375e4-1903-4c20-bf8d-fbfdde6d2d77'
+        assert otm.trustzones[4].name == 'Remote User Zone'
+        assert otm.trustzones[4].type == 'f0ba7722-39b6-4c81-8290-a30a248bb8d9'
+        assert otm.trustzones[4].trustrating == 10
