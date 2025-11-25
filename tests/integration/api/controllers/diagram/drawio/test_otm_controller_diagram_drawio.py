@@ -3,6 +3,8 @@ import json
 import pytest
 import responses
 from fastapi.testclient import TestClient
+from slp_base.slp_base.provider_type import application_json
+from tests.integration.api.controllers.diagram.test_otm_controller_diagram import get_url
 
 from tests.resources import test_resource_paths
 
@@ -13,15 +15,7 @@ from tests.resources.test_resource_paths import default_drawio_mapping, custom_d
     terraform_aws_simple_components, invalid_extension_mtmt_file
 
 webapp = fastapi_server.webapp
-
 client = TestClient(webapp)
-
-json_mime = 'application/json'
-
-
-def get_url():
-    return diag_create_otm_controller.PREFIX + diag_create_otm_controller.URL
-
 
 class TestOTMControllerDiagramDrawio:
 
@@ -44,7 +38,7 @@ class TestOTMControllerDiagramDrawio:
 
         # Then the error is returned inside the response as JSON
         assert response.status_code == 400
-        assert response.headers.get('content-type') == json_mime
+        assert response.headers.get('content-type') == application_json
         body_response = json.loads(response.text)
         assert body_response['status'] == '400'
         assert body_response['error_type'] == 'LoadingDiagramFileError'
@@ -78,7 +72,7 @@ class TestOTMControllerDiagramDrawio:
 
         # Then
         assert response.status_code == 201
-        assert response.headers.get('content-type') == json_mime
+        assert response.headers.get('content-type') == application_json
         otm = json.loads(response.text)
         assert len(otm['trustZones']) > 0
         assert len(otm['components']) > 0
@@ -107,7 +101,7 @@ class TestOTMControllerDiagramDrawio:
 
         # Then the OTM is returned inside the response as JSON
         assert response.status_code == diag_create_otm_controller.RESPONSE_STATUS_CODE
-        assert response.headers.get('content-type') == json_mime
+        assert response.headers.get('content-type') == application_json
 
         otm = json.loads(response.text)
         assert otm['otmVersion'] == '0.2.0'
@@ -134,7 +128,7 @@ class TestOTMControllerDiagramDrawio:
 
         # AND the error details are correct
         assert response.status_code == 400
-        assert response.headers.get('content-type') == json_mime
+        assert response.headers.get('content-type') == application_json
 
         body_response = json.loads(response.text)
         assert body_response['status'] == '400'
