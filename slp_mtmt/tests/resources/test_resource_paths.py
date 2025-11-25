@@ -20,6 +20,7 @@ mtmt_default_mapping = f'{path}/mapping/mtmt_default_mapping.yaml'
 mtmt_mapping_invalid_no_dataflows = f'{path}/mapping/invalid-mapping-without-dataflows.yaml'
 name_mapping_overriden = f'{path}/mapping/name_mapping_overriden.yaml'
 type_mapping_overriden = f'{path}/mapping/type_mapping_overriden.yaml'
+multiple_trustzones_same_type_mapping = f'{path}/mapping/multiple-trustzones-same-type.yaml'
 
 
 # legacy mapping
@@ -46,6 +47,9 @@ one_trustzone_tm7 = f'{path}/mtmt/one-trustzone.tm7'
 model_with_figures_without_name_file = f'{path}/mtmt/model_with_figures_without_name.tm7'
 unmapped_trustzones_tm7 = f'{path}/mtmt/mtmt-resources-SDL-knowledge-base-components.tm7'
 model_with_no_name_figures_tm7 = f'{path}/mtmt/mtmt-model-with-figures-without-name.tm7'
+azure_components_tm7 = f'{path}/mtmt/mtmt-azure-tm-template-components-default-mapping.tm7'
+simple_line_boundary_tm7 = f'{path}/mtmt/MTMT_simple_line_boundary.tm7'
+multiple_trustzones_same_type_tm7 = f'{path}/mtmt/multiple_trustzones_same_type.tm7'
 
 # OTM
 example_position_otm = f'{path}/mtmt/MTMT_example_coordinates.otm'
@@ -57,4 +61,4 @@ nested_trustzones_otm = f'{path}/otm/nested_tz.otm'
 nested_trustzones_line_otm = f'{path}/otm/nested_tz_line.otm'
 model_mtmt_source_file_otm = f'{path}/otm/test_model_tm7.otm'
 unmapped_trustzones_otm = f'{path}/mtmt/mtmt-resources-SDL-knowledge-base-components.otm'
-
+azure_components_otm = f'{path}/mtmt/mtmt-azure-tm-template-components-default-mapping.otm'
