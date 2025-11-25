@@ -212,6 +212,10 @@ class TestMtmtProcessor:
         assert otm.trustzones[1].name == 'Default trustzone'
         assert otm.trustzones[1].type == 'b61d6911-338d-46a8-9f39-8dcd24abfe91'
         assert otm.trustzones[1].trustrating == 10
+        assert otm.components[0].parent == '185f1c6f-3879-464c-89c9-dc6f0b0c2b21'
+        assert otm.components[1].parent == 'ef4b8d94-ff80-419b-b590-b1a6aad88408'
+        assert otm.components[2].parent == '185f1c6f-3879-464c-89c9-dc6f0b0c2b21'
+        assert otm.components[3].parent == '185f1c6f-3879-464c-89c9-dc6f0b0c2b21'
 
     def test_run_multiple_trustzones_same_type(self):
         # GIVEN a valid MTMT file with some resources
